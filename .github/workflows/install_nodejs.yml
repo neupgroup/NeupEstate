@@ -26,4 +26,4 @@ jobs:
             echo "${{ inputs.server_password }}" | sudo -S apt-get update -y
             echo "${{ inputs.server_password }}" | sudo -S apt-get install curl -y
             curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-            echo "${{ inputs.server_password }}" | sudo -S apt-get install -y nodejs
+            echo "${{ inputs.server_password }}" | sudo -S apt-get install nodejs -y
