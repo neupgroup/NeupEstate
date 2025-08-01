@@ -1,0 +1,42 @@
+
+import type { Metadata } from 'next';
+import { Raleway } from 'next/font/google';
+import './globals.css';
+import { cn } from '@/lib/utils';
+import { Toaster } from '@/components/ui/toaster';
+import { Providers } from '@/components/layout/providers';
+import { AccountManager } from '@/components/layout/account-manager';
+import { ActivityTracker } from '@/components/activity-tracker';
+
+const raleway = Raleway({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800'],
+  variable: '--font-raleway',
+});
+
+export const metadata: Metadata = {
+  title: 'NeupEstate',
+  description: 'A modern, user-friendly real estate website to browse property listings.',
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={cn(
+          'min-h-screen bg-background font-body antialiased flex flex-col',
+          raleway.variable
+        )}
+      >
+        <AccountManager />
+        <ActivityTracker />
+        <Providers>{children}</Providers>
+        <Toaster />
+      </body>
+    </html>
+  );
+}

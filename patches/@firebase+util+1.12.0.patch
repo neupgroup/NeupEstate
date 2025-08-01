@@ -1,0 +1,15 @@
+diff --git a/node_modules/@firebase/util/postinstall.js b/node_modules/@firebase/util/postinstall.js
+index 9213893..148d511 100644
+--- a/node_modules/@firebase/util/postinstall.js
++++ b/node_modules/@firebase/util/postinstall.js
+@@ -22,7 +22,9 @@
+ 
+ function main() {
+   const ENV_VARIABLE = 'FIREBASE_DEPRECATION_VERION';
+-  const envVariable = process.env[ENV_VARIABLE]?.trim();
++  const envVariable = process.env[ENV_VARIABLE]
++    ? process.env[ENV_VARIABLE].trim()
++    : undefined;
+ 
+   if (envVariable) {
+     const version = parseVersion(versionFromTsc);

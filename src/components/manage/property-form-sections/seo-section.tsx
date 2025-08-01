@@ -1,0 +1,84 @@
+
+"use client";
+
+import { Control } from "react-hook-form";
+import { CreatePropertyFormValues } from "@/types";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
+interface SeoSectionProps {
+    control: Control<CreatePropertyFormValues>;
+    isEditForm: boolean;
+}
+
+export function SeoSection({ control, isEditForm }: SeoSectionProps) {
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>SEO & Metadata</CardTitle>
+                <CardDescription>Optimize the listing for search engines.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                {isEditForm && (
+                     <FormField
+                        control={control}
+                        name="slug"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>URL Slug</FormLabel>
+                                <FormControl>
+                                    <Input readOnly placeholder="e.g., modern-downtown-loft-xyz123" {...field} />
+                                </FormControl>
+                                <FormDescription>
+                                    The unique URL for this property. Generated via AI Rewrite.
+                                </FormDescription>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                )}
+                <FormField
+                    control={control}
+                    name="metaTitle"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Meta Title</FormLabel>
+                            <FormControl>
+                                <Input placeholder="SEO Title (max 60 chars)" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
+                    name="metaDescription"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Meta Description</FormLabel>
+                            <FormControl>
+                                <Textarea placeholder="SEO Description (max 160 chars)" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
+                    name="metaTags"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Meta Tags (comma-separated)</FormLabel>
+                            <FormControl>
+                                <Input placeholder="e.g., loft, downtown, modern" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+            </CardContent>
+        </Card>
+    );
+}
