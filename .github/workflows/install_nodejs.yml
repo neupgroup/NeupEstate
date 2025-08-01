@@ -19,7 +19,7 @@ jobs:
       - name: SSH and Install Node.js
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.SERVER_IP }}
+          host: ${{ secrets.SSH_HOST }}
           username: root
           password: ${{ inputs.server_password }}
           script: |
