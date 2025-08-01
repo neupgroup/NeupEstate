@@ -1,4 +1,4 @@
-name: Install and Run PM2 Server Instance
+name: Install and Run PM2 Instance
 
 on:
   workflow_dispatch:
