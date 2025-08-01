@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Deploy and Manage Node.js App with PM2
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             # Check if pm2 is installed
             if ! command -v pm2 > /dev/null 2>&1; then
               echo "⚡ PM2 not found. Installing globally..."
@@ -24,9 +24,9 @@ jobs:
             else
               echo "✅ PM2 already installed."
             fi
-
+      
             cd ${{ secrets.DEPLOY_PATH }}
-
+      
             # Restart if app_001 exists, else start fresh
             if pm2 describe app_001 > /dev/null 2>&1; then
               echo "🔄 Restarting existing PM2 process 'app_001'..."
@@ -35,6 +35,6 @@ jobs:
               echo "🚀 Starting PM2 process 'app_001'..."
               pm2 start ecosystem.config.js --name app_001
             fi
-
+      
             pm2 save
           EOF
