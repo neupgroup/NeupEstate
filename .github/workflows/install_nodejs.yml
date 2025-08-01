@@ -25,6 +25,6 @@ jobs:
           script: |
             export DEBIAN_FRONTEND=noninteractive
             echo "${{ inputs.server_password }}" | sudo -S apt-get update -y
-            echo "${{ inputs.server_password }}" | sudo -S apt-get install curl -y
-            curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+            echo "${{ inputs.server_password }}" | sudo -S apt-get install wget -y
+            wget -qO- https://deb.nodesource.com/setup_20.x | sudo -E bash -
             echo "${{ inputs.server_password }}" | sudo -S apt-get install nodejs -y
