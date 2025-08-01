@@ -1,4 +1,4 @@
-name: Clean Install to Production
+name: Deploy Clean Production
 
 on:
   workflow_dispatch:
