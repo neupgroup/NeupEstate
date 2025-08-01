@@ -1,4 +1,4 @@
-name: Deploy to Server
+name: Clean Deploy to Production
 
 on:
   workflow_dispatch:
@@ -19,7 +19,7 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Full Rsync Deployment (with delete)
+      - name: Rsync Clean Code to Server (No Node Modules)
         run: |
           set -e
           rsync -avz --delete \
@@ -29,3 +29,19 @@ jobs:
             --exclude '.ssh' \
             --exclude 'keys' \
             ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}
+
+      - name: Clean Install and Restart PM2
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            cd ${{ secrets.DEPLOY_PATH }}
+
+            echo "🔄 Cleaning existing modules and lock file"
+            rm -rf node_modules package-lock.json
+
+            echo "📦 Installing fresh production-only dependencies"
+            npm install --production
+
+            echo "🚀 Restarting PM2 process"
+            pm2 restart all || pm2 start ecosystem.config.js
+            pm2 save
+          EOF
