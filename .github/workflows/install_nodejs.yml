@@ -1,4 +1,4 @@
-name: Deploy Node.js Securely
+name: Install Node.js to Server
 
 on:
   workflow_dispatch:
