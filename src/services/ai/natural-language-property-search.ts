@@ -22,8 +22,6 @@ const NaturalLanguageSearchInputSchema = z.object({
 });
 export type NaturalLanguageSearchInput = z.infer<typeof NaturalLanguageSearchInputSchema>;
 
-export type { NaturalLanguageSearchOutput };
-
 export async function naturalLanguagePropertySearch(input: NaturalLanguageSearchInput): Promise<NaturalLanguageSearchOutput> {
   return naturalLanguagePropertySearchFlow(input);
 }

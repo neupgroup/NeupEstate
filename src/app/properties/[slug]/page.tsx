@@ -18,14 +18,14 @@ import type { Property } from '@/types';
 import type { Metadata, ResolvingMetadata } from 'next';
 
 type Props = {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const slug = params.slug;
+  const { slug } = await params;
   let property: Property | null = null;
   
   try {
@@ -184,19 +184,20 @@ function generateSchema(property: Property) {
     return JSON.stringify(schema);
 }
 
-export default async function PropertyDetailPage({ params }: { params: { slug: string } }) {
+export default async function PropertyDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   let property;
   
   try {
     // First, try to find the property by its slug.
-    property = await getPropertyBySlug(params.slug);
+    property = await getPropertyBySlug(slug);
 
     // If no property is found by slug, it might be an old URL using just the ID.
     if (!property) {
-      property = await getPropertyById(params.slug);
+      property = await getPropertyById(slug);
     }
   } catch (e) {
-    await logProblem(e, `Error fetching property on detail page for slug/ID: ${params.slug}`);
+    await logProblem(e, `Error fetching property on detail page for slug/ID: ${slug}`);
     notFound();
   }
   
@@ -206,7 +207,7 @@ export default async function PropertyDetailPage({ params }: { params: { slug: s
 
   // Redirect to the canonical URL if a slug exists and the current URL doesn't match.
   // This handles both old ID-based links and outdated slugs.
-  if (property.slug && property.slug !== params.slug) {
+  if (property.slug && property.slug !== slug) {
     return redirect(`/properties/${property.slug}`);
   }
 

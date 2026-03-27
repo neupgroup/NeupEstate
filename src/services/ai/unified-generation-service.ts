@@ -10,7 +10,7 @@
  * to the appropriate provider based on the 'provider' parameter.
  */
 
-import { ai } from '@/ai/genkit';
+import { ai, resolveGoogleModel } from '@/ai/genkit';
 import * as Handlebars from 'handlebars';
 import { logProblem } from '../problem-service';
 import { z } from 'zod';
@@ -28,7 +28,7 @@ function compilePrompt(promptText: string, input: Record<string, any>): string {
 
 
 interface GenerateTextInput {
-    model: string; // The model name, e.g., 'googleai/gemini-1.5-flash-latest'
+    model: string; // The model name, e.g., 'gemini-2.5-flash'
     promptText: string;
     inputData: Record<string, any>;
     outputSchema: z.ZodTypeAny;
@@ -54,7 +54,7 @@ export async function generateText<T>(options: GenerateTextInput): Promise<T> {
         console.log(`Requesting response from model: ${modelIdentifier}`);
         
         const { output } = await ai.generate({
-            model: modelIdentifier,
+            model: resolveGoogleModel(modelIdentifier),
             prompt: compiledPrompt,
             output: {
                 format: 'json',

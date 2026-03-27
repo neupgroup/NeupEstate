@@ -21,8 +21,9 @@ function StarRating({ rating }: { rating: number }) {
     );
 }
 
-export default async function AgentDetailPage({ params }: { params: { slug: string } }) {
-    const agent = await getAgentBySlug(params.slug);
+export default async function AgentDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
+    const agent = await getAgentBySlug(slug);
     
     if (!agent) {
         notFound();

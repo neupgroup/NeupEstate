@@ -51,10 +51,10 @@ function ModelForm({
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField control={form.control} name="modelId" render={({ field }) => (
-                    <FormItem><FormLabel>Model ID (e.g., googleai/gemini-1.5-flash-latest)</FormLabel><FormControl><Input placeholder="googleai/gemini-1.5-flash-latest" {...field} /></FormControl><FormMessage /></FormItem>
+                    <FormItem><FormLabel>Model ID (e.g., gemini-2.5-flash)</FormLabel><FormControl><Input placeholder="gemini-2.5-flash" {...field} /></FormControl><FormMessage /></FormItem>
                 )}/>
                 <FormField control={form.control} name="name" render={({ field }) => (
-                    <FormItem><FormLabel>Display Name</FormLabel><FormControl><Input placeholder="Gemini 1.5 Flash" {...field} /></FormControl><FormMessage /></FormItem>
+                    <FormItem><FormLabel>Display Name</FormLabel><FormControl><Input placeholder="Gemini 2.5 Flash" {...field} /></FormControl><FormMessage /></FormItem>
                 )}/>
                 <FormField control={form.control} name="description" render={({ field }) => (
                     <FormItem><FormLabel>Description</FormLabel><FormControl><Textarea placeholder="A brief description of the model..." {...field} /></FormControl><FormMessage /></FormItem>

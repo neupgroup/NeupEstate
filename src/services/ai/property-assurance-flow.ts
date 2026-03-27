@@ -11,8 +11,6 @@ import { runPropertyApproval } from '@/services/ai/property-approval-flow';
 import { getPropertyById } from '@/services/property-service';
 import type { PropertyAssuranceResult } from '@/types';
 
-export type { PropertyAssuranceResult };
-
 export async function runPropertyAssurance(propertyId: string): Promise<PropertyAssuranceResult> {
   const steps: string[] = [];
 

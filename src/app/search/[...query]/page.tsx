@@ -2,8 +2,9 @@
 import { Suspense } from "react";
 import { SearchPageContent } from "@/components/search-page-content";
 
-export default function SearchPage({ params }: { params: { query?: string[] } }) {
-    const queryFromPath = params.query ? decodeURIComponent(params.query.join('/')) : "";
+export default async function SearchPage({ params }: { params: Promise<{ query?: string[] }> }) {
+    const resolvedParams = await params;
+    const queryFromPath = resolvedParams.query ? decodeURIComponent(resolvedParams.query.join('/')) : "";
     return (
         <Suspense fallback={<div>Loading...</div>}>
             <SearchPageContent queryFromPath={queryFromPath} />

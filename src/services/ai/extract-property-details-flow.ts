@@ -10,7 +10,7 @@
  * - ExtractPropertyDetailsOutput - The return type for the flow.
  */
 
-import { ai } from '@/ai/genkit';
+import { ai, resolveGoogleModel } from '@/ai/genkit';
 import { z } from 'zod';
 import { addProperty, updatePropertyWithExtractedData } from '@/services/property-service';
 import { ExtractedPropertySchema } from '@/types';
@@ -96,7 +96,7 @@ const extractPropertyDetailsFlow = ai.defineFlow(
         input: { schema: z.object({ url: z.string().url(), htmlContent: z.string() }) },
         output: { schema: ExtractedPropertySchema },
         prompt: promptConfig.promptText,
-        model: promptConfig.model,
+        model: resolveGoogleModel(promptConfig.model),
     });
 
     const { output } = await extractPropertyPrompt({ url: input.url, htmlContent: rawHtml });

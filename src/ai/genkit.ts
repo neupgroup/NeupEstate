@@ -1,18 +1,25 @@
-import {genkit} from 'genkit';
-import {googleAI} from '@genkit-ai/googleai';
+import { genkit } from 'genkit';
+import { googleAI } from '@genkit-ai/google-genai';
+
+export const DEFAULT_MODEL_NAME = 'gemini-2.5-flash';
+export const DEFAULT_EMBEDDER_NAME = 'gemini-embedding-001';
+
+function stripGoogleModelPrefix(identifier: string): string {
+  return identifier.startsWith('googleai/') ? identifier.slice('googleai/'.length) : identifier;
+}
+
+export function resolveGoogleModel(identifier?: string) {
+  return googleAI.model(stripGoogleModelPrefix(identifier?.trim() || DEFAULT_MODEL_NAME));
+}
 
 // By not passing an API key, Genkit will use Application Default Credentials,
 // which is required for Vertex AI models.
-// We are hardcoding a default model for the entire application for debugging.
 export const ai = genkit({
-  plugins: [
-    googleAI(),
-  ],
-  model: 'googleai/gemini-1.5-flash-latest', // Hardcoded default model
+  plugins: [googleAI()],
+  model: resolveGoogleModel(),
 });
 
 // Shared embedding model reference used by database adapters.
-export const embedder = 'googleai/text-embedding-004';
+export const embedder = googleAI.embedder(DEFAULT_EMBEDDER_NAME);
 
-// Export the googleAI plugin object so other files can use googleAI.model().
 export {googleAI};

@@ -7,26 +7,27 @@ const modelTasks = [
     id: 'default',
     name: 'Default Task Model',
     description: 'The primary model used for most AI tasks like data extraction, verification, and content generation.',
-    currentModel: 'googleai/gemini-1.5-flash-latest',
+    currentModel: 'gemini-2.5-flash',
   },
   {
     id: 'search',
     name: 'Natural Language Search',
     description: 'A model fine-tuned for parsing user search queries into structured data.',
-    currentModel: 'googleai/gemini-1.5-flash-latest',
+    currentModel: 'gemini-2.5-flash',
   },
   {
     id: 'embedding',
     name: 'Text Embedding',
     description: 'Generates vector embeddings for semantic search and recommendations.',
-    currentModel: 'text-embedding-004',
+    currentModel: 'gemini-embedding-001',
   }
 ];
 
 const availableModels = [
-    'googleai/gemini-1.5-flash-latest',
-    'googleai/gemini-pro',
-    'text-embedding-004',
+    'gemini-2.5-flash',
+    'gemini-2.5-pro',
+    'gemini-2.5-flash-lite',
+    'gemini-embedding-001',
 ];
 
 export default function ModelSelectionPage() {

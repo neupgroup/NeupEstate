@@ -8,8 +8,9 @@ import { Mail, Phone, MessageSquare } from 'lucide-react';
 import { WhatsAppIcon } from '@/components/icons';
 import { ClientLink } from '@/components/client-link';
 
-export default async function AgentContactPage({ params }: { params: { slug: string } }) {
-    const agent = await getAgentBySlug(params.slug);
+export default async function AgentContactPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
+    const agent = await getAgentBySlug(slug);
 
     if (!agent) {
         notFound();

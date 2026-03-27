@@ -9,7 +9,7 @@
  * - PropertyApprovalResult - The return type for the approval function.
  */
 
-import { ai } from '@/ai/genkit';
+import { ai, resolveGoogleModel } from '@/ai/genkit';
 import { z } from 'zod';
 import { approveProperty, getPropertyById } from '@/services/property-service';
 import { PropertyApprovalResultSchema, type PropertyApprovalResult } from '@/types';
@@ -20,8 +20,6 @@ const ApprovalInputSchema = z.object({
     propertyId: z.string(),
 });
 type ApprovalInput = z.infer<typeof ApprovalInputSchema>;
-
-export type { PropertyApprovalResult };
 
 const AIVerificationOutputSchema = z.object({
     isDataConsistent: z.boolean().describe("Whether the stored data accurately reflects the live web page content."),
@@ -86,7 +84,7 @@ const propertyApprovalFlow = ai.defineFlow(
             output: { schema: AIVerificationOutputSchema },
             tools: [fetchPageContent],
             prompt: promptConfig.promptText,
-            model: promptConfig.model,
+            model: resolveGoogleModel(promptConfig.model),
         });
 
         const { output } = await approvalPrompt({

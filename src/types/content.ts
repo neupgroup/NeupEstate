@@ -48,7 +48,7 @@ export type UpdatePromptFormValues = z.infer<typeof UpdatePromptSchema>;
 
 // AI Model
 export const CreateAIModelSchema = z.object({
-  modelId: z.string().min(3, "Model ID is required (e.g., googleai/gemini-1.5-flash-latest)."),
+  modelId: z.string().min(3, "Model ID is required (e.g., gemini-2.5-flash)."),
   name: z.string().min(3, "Display Name is required."),
   description: z.string().min(10, "Description is required."),
   costPerMillionInputTokens: z.coerce.number().min(0, "Cost must be a positive number."),
@@ -64,8 +64,8 @@ export type UpdateAIModelFormValues = z.infer<typeof UpdateAIModelSchema>;
 
 export interface AIModel {
     id: string;
-    modelId: string; // The full technical path, e.g., 'googleai/gemini-1.5-flash-latest'
-    name: string; // The user-friendly display name, e.g., 'Gemini 1.5 Flash'
+    modelId: string; // The configured model identifier, e.g., 'gemini-2.5-flash'
+    name: string; // The user-friendly display name, e.g., 'Gemini 2.5 Flash'
     description: string;
     costPerMillionInputTokens: number;
     costPerMillionOutputTokens: number;

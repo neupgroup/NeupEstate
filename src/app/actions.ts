@@ -15,7 +15,6 @@ import type { NaturalLanguageSearchOutput, Property, CreatePropertyInput, Update
 import { CreatePropertySchema, UpdatePropertySchema, CreateAgencySchema, UpdateAgencySchema, PropertyPurposeSchema, PropertyCategorySchema, PropertyUsageTypeSchema, CreateAgentSchema, UpdateAgentSchema, CreateWhatsAppTemplateSchema, WhatsAppConfigSchema, CreateConversationSchema, CreateFaqSchema, UpdateFaqSchema, CreateInquirySchema, UpdatePromptSchema, CreatePromptSchema, CreatePropertyRequestSchema, CreateSalesRequestSchema, CreateVisitRequestSchema, CreateMortgageRequestSchema, CreateContactSubmissionSchema, CreateAIModelSchema, UpdateAIModelSchema, CreateRequirementSchema, UpdateUserSchema } from "@/types";
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
 import { z } from "zod";
-import { ai, embedder } from '@/ai/genkit';
 import { runPropertyApproval as runPropertyApprovalFlow } from "@/services/ai/property-approval-flow";
 import { runPropertyAmendment as runPropertyAmendmentFlow } from "@/services/ai/property-amendment-flow";
 import { runPropertyAssurance as runPropertyAssuranceFlow } from "@/services/ai/property-assurance-flow";
@@ -980,7 +979,7 @@ export async function logUserActivity(
         }
         
         // Update account last access time using the IP from the current request
-        const headersList = headers();
+        const headersList = await headers();
         const ip = headersList.get('x-forwarded-for') || headersList.get('remote-addr') || 'unknown';
         await updateAccountAccessInfo(userId, ip);
         
@@ -1357,7 +1356,7 @@ export async function upsertRequirementAction(data: CreateRequirementFormValues,
 // Account Actions
 export async function getOrCreateTemporaryAccountAction(): Promise<{ success: boolean; accountId?: string; error?: string }> {
     try {
-        const headersList = headers();
+        const headersList = await headers();
         const ip = headersList.get('x-forwarded-for') || 'unknown';
         const accountId = await createTemporaryAccount(ip);
         return { success: true, accountId };

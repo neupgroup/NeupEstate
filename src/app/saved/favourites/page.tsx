@@ -8,7 +8,7 @@ import { ClientLink } from "@/components/client-link";
 import { cookies } from "next/headers";
 
 export default async function SavedFavouritesPage() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const userId = cookieStore.get('temp_account_id')?.value;
   
   let savedProperties = [];

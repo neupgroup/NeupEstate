@@ -9,7 +9,7 @@
  * - PropertyAmendmentResult - The return type for the amendment function.
  */
 
-import { ai } from '@/ai/genkit';
+import { ai, resolveGoogleModel } from '@/ai/genkit';
 import { z } from 'zod';
 import { getPropertyById, updatePropertyWithExtractedData } from '@/services/property-service';
 import { PropertyAmendmentResultSchema, type PropertyAmendmentResult, ExtractedPropertySchema } from '@/types';
@@ -20,8 +20,6 @@ const AmendmentInputSchema = z.object({
     propertyId: z.string(),
 });
 type AmendmentInput = z.infer<typeof AmendmentInputSchema>;
-
-export type { PropertyAmendmentResult };
 
 const AIVerificationOutputSchema = z.object({
     areChangesNeeded: z.boolean().describe("Set to true if you found any meaningful inconsistencies or missing details that require an update. Set to false if the stored data is accurate and complete."),
@@ -84,7 +82,7 @@ const propertyAmendmentFlow = ai.defineFlow(
             output: { schema: AIVerificationOutputSchema },
             tools: [fetchPageContent],
             prompt: promptConfig.promptText,
-            model: promptConfig.model,
+            model: resolveGoogleModel(promptConfig.model),
         });
 
         const { output } = await amendmentPrompt({

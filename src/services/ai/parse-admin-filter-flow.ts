@@ -14,8 +14,6 @@ import { PropertyFiltersSchema, type PropertyFilters } from '@/types';
 import { getPrompt } from '@/services/prompt-service';
 import { generateText } from './unified-generation-service';
 
-export type { PropertyFilters };
-
 const AdminFilterInputSchema = z.object({
   query: z.string().describe('The natural language query from the admin user.'),
 });

@@ -19,8 +19,6 @@ const ImageUpdateInputSchema = z.object({
 });
 type ImageUpdateInput = z.infer<typeof ImageUpdateInputSchema>;
 
-export type { PropertyImageUpdateResult };
-
 const AIImageExtractionOutputSchema = z.object({
     images: z.array(z.string()).describe("A list of all relevant property image URLs found on the page. The URLs MUST be full, absolute URLs. Filter out logos, icons, or agent photos."),
 });

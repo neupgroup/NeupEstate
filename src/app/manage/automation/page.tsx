@@ -69,7 +69,7 @@ function SitemapCheckupProgress({ results }: { results: SitemapCheckResult[] }) 
                                 <div className="mb-2">
                                     <p className="font-semibold">Checking sitemap...</p>
                                     {result.currentlyProcessingUrl && (
-                                        <p className="text-xs text-muted-foreground truncate">> {result.currentlyProcessingUrl}</p>
+                                        <p className="text-xs text-muted-foreground truncate">&gt; {result.currentlyProcessingUrl}</p>
                                     )}
                                 </div>
                             )}

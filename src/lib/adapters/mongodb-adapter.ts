@@ -12,7 +12,7 @@ import { getUsers as getMockUsers } from '@/services/user-service'; // Keep for 
 
 async function generateEmbedding(text: string): Promise<number[] | undefined> {
     try {
-        const { embedding } = await ai.embed({ model: embedder, content: text });
+        const { embedding } = await ai.embed({ embedder, content: text });
         return embedding;
     } catch (e) {
         await logProblem(e, 'mongodb-adapter-generateEmbedding');

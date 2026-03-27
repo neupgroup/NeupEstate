@@ -14,7 +14,7 @@ type ExtractedPropertyData = Omit<ExtractedPropertyDataType, 'embedding'>;
 async function generateEmbedding(text: string): Promise<number[] | undefined> {
     try {
         const { embedding } = await ai.embed({
-            model: embedder,
+            embedder,
             content: text,
         });
         return embedding;
