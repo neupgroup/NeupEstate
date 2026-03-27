@@ -3,7 +3,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useTransition, useState, useEffect } from 'react';
 import { UpdatePropertySchema, type Property, type User, type UpdatePropertyFormValues } from '@/types';
 import { updatePropertyAction, approvePropertyAction, deletePropertyAction, rewritePropertyDetailsAction } from '@/app/actions';
@@ -41,9 +41,11 @@ import { PropertyDocumentsSection } from '@/components/manage/property-form-sect
 import { SeoSection } from '@/components/manage/property-form-sections/seo-section';
 import { Skeleton } from '@/components/ui/skeleton';
 
-export default function EditPropertyPage({ params }: { params: { id: string } }) {
+export default function EditPropertyPage() {
     const [property, setProperty] = useState<Property | null>(null);
     const [users, setUsers] = useState<User[]>([]);
+    const params = useParams<{ id: string }>();
+    const propertyId = Array.isArray(params?.id) ? params.id[0] : params?.id;
     const router = useRouter();
     const { toast } = useToast();
     const [isSaving, startSaveTransition] = useTransition();
@@ -56,9 +58,11 @@ export default function EditPropertyPage({ params }: { params: { id: string } })
     });
 
     useEffect(() => {
+        if (!propertyId) return;
+
         async function loadData() {
             const [propData, userData] = await Promise.all([
-                getPropertyById(params.id),
+                getPropertyById(propertyId),
                 getUsers(),
             ]);
 
@@ -117,7 +121,7 @@ export default function EditPropertyPage({ params }: { params: { id: string } })
             });
         }
         loadData();
-    }, [params.id, router, toast, form]);
+    }, [propertyId, router, toast, form]);
 
     const category = form.watch('category');
 

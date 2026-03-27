@@ -3,7 +3,7 @@
 import {
     Home, Users, Settings, Upload, FilePlus2, Building, Wand2, Sparkles, ShieldAlert, UserCog,
     LayoutDashboard, LineChart, Package, MessageSquareHeart, FileQuestion, Landmark, CalendarCheck, FileText,
-    Banknote, Info, Quote, HelpCircle, Book, Briefcase, Contact, Newspaper, FileSearch,
+    Banknote, Quote, HelpCircle, Contact, FileSearch,
     BookOpen, Lightbulb, UserCheck, Eye, Bell, LifeBuoy, Bookmark, Star, Flame
 } from 'lucide-react';
 import { buttonVariants } from '@/components/ui/button';
@@ -85,10 +85,6 @@ export default function ManageLayout({
                 </ClientLink>
 
                 <h3 className="pt-4 pb-1 px-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">About</h3>
-                 <ClientLink href="/manage/about" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
-                    <Info className="mr-2 h-4 w-4" />
-                    About
-                </ClientLink>
                 <ClientLink href="/manage/reviews" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
                     <Star className="mr-2 h-4 w-4" />
                     Reviews
@@ -101,24 +97,7 @@ export default function ManageLayout({
                     <Bell className="mr-2 h-4 w-4" />
                     Notification
                 </ClientLink>
-                <ClientLink href="/careers" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
-                    <Briefcase className="mr-2 h-4 w-4" />
-                    Careers
-                </ClientLink>
-                <ClientLink href="/manage/newsletter" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
-                    <Newspaper className="mr-2 h-4 w-4" />
-                    Newsletter
-                </ClientLink>
-                 <ClientLink href="/manage/team" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
-                    <Users className="mr-2 h-4 w-4" />
-                    Team
-                </ClientLink>
-
                 <h3 className="pt-4 pb-1 px-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">Content</h3>
-                <ClientLink href="/manage/blogs" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
-                    <Book className="mr-2 h-4 w-4" />
-                    Blogs
-                </ClientLink>
                 <ClientLink href="/manage/market-insights" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
                     <Lightbulb className="mr-2 h-4 w-4" />
                     Market Insights

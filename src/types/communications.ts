@@ -127,14 +127,3 @@ export interface ContactSubmission {
   createdAt: string; // ISO string
 }
 
-// Newsletter
-export const CreateNewsletterSubscriptionSchema = z.object({
-    email: z.string().email("Please enter a valid email address."),
-});
-export type CreateNewsletterSubscriptionFormValues = z.infer<typeof CreateNewsletterSubscriptionSchema>;
-
-export interface NewsletterSubscription {
-    id: string;
-    email: string;
-    createdAt: string; // ISO String
-}

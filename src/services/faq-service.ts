@@ -1,31 +1,25 @@
 
 'use server';
 
-import { getFirestore } from '@/lib/firebase';
+import { prisma } from '@/lib/prisma';
 import type { FAQ, CreateFaqFormValues } from '@/types';
 import { logProblem } from './problem-service';
 
-const COLLECTION_NAME = 'faqs';
 
 export async function getFaqs({ limit = 50, offset = 0 }: { limit?: number; offset?: number } = {}): Promise<FAQ[]> {
-    const firestore = getFirestore();
-    if (!firestore) return [];
-
     try {
-        const snapshot = await firestore.collection(COLLECTION_NAME).orderBy('createdAt', 'desc').limit(limit).offset(offset).get();
-        if (snapshot.empty) {
-            return [];
-        }
-        return snapshot.docs.map(doc => {
-            const data = doc.data();
-            return {
-                id: doc.id,
-                question: data.question,
-                answer: data.answer,
-                category: data.category,
-                createdAt: data.createdAt.toDate().toISOString(),
-            } as FAQ;
+        const faqs = await prisma.faq.findMany({
+            orderBy: { createdAt: 'desc' },
+            take: limit,
+            skip: offset,
         });
+        return faqs.map(faq => ({
+            id: faq.id,
+            question: faq.question,
+            answer: faq.answer,
+            category: faq.category,
+            createdAt: faq.createdAt.toISOString(),
+        }));
     } catch (error) {
         await logProblem(error, 'getFaqs');
         return [];
@@ -33,15 +27,15 @@ export async function getFaqs({ limit = 50, offset = 0 }: { limit?: number; offs
 }
 
 export async function createFaq(faqData: CreateFaqFormValues): Promise<string> {
-    const firestore = getFirestore();
-    if (!firestore) throw new Error('Firestore not available');
-
     try {
-        const docRef = await firestore.collection(COLLECTION_NAME).add({
-            ...faqData,
-            createdAt: new Date(),
+        const faq = await prisma.faq.create({
+            data: {
+                question: faqData.question,
+                answer: faqData.answer,
+                category: faqData.category || 'General',
+            },
         });
-        return docRef.id;
+        return faq.id;
     } catch (error: any) {
         await logProblem(error, 'createFaq');
         throw new Error('Failed to create FAQ.');
@@ -49,11 +43,15 @@ export async function createFaq(faqData: CreateFaqFormValues): Promise<string> {
 }
 
 export async function updateFaq(id: string, faqData: CreateFaqFormValues): Promise<void> {
-    const firestore = getFirestore();
-    if (!firestore) throw new Error('Firestore not available');
-
     try {
-        await firestore.collection(COLLECTION_NAME).doc(id).update(faqData);
+        await prisma.faq.update({
+            where: { id },
+            data: {
+                question: faqData.question,
+                answer: faqData.answer,
+                category: faqData.category,
+            },
+        });
     } catch (error: any) {
         await logProblem(error, `updateFaq (ID: ${id})`);
         throw new Error('Failed to update FAQ.');
@@ -61,11 +59,10 @@ export async function updateFaq(id: string, faqData: CreateFaqFormValues): Promi
 }
 
 export async function deleteFaq(id: string): Promise<void> {
-    const firestore = getFirestore();
-    if (!firestore) throw new Error('Firestore not available');
-
     try {
-        await firestore.collection(COLLECTION_NAME).doc(id).delete();
+        await prisma.faq.delete({
+            where: { id },
+        });
     } catch (error: any) {
         await logProblem(error, `deleteFaq (ID: ${id})`);
         throw new Error('Failed to delete FAQ.');

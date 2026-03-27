@@ -143,6 +143,10 @@ export async function getSavedPropertiesForUser(userId: string): Promise<Propert
     return db.getSavedProperties(userId);
 }
 
+export async function getSavedProperties(userId: string): Promise<Property[]> {
+    return getSavedPropertiesForUser(userId);
+}
+
 export interface SavedPropertyEntry {
     userId: string;
     userName: string;

@@ -15,7 +15,6 @@ const navLinks = [
   { href: "/agencies", label: "Agencies" },
   { href: "/agents", label: "Agents" },
   { href: "/mortgage/request", label: "Mortgage" },
-  { href: "/about", label: "About" },
 ];
  
 export default function Header() {

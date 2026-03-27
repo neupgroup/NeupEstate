@@ -1,12 +1,6 @@
 
 import { z } from 'zod';
 
-// About Page
-export const UpdateAboutPageContentSchema = z.object({
-  missionStatement: z.string().min(20, "Mission statement is too short.").optional(),
-});
-export type UpdateAboutPageContentFormValues = z.infer<typeof UpdateAboutPageContentSchema>;
-
 // FAQ
 export const FaqCategorySchema = z.enum(["General", "Buying", "Selling", "Renting", "Technical"]);
 
@@ -51,15 +45,6 @@ export const UpdatePromptSchema = z.object({
 });
 export type UpdatePromptFormValues = z.infer<typeof UpdatePromptSchema>;
 
-
-// Career
-export interface JobOpening {
-    id: string;
-    title: string;
-    location: string;
-    type: 'Full-time' | 'Part-time' | 'Contract' | 'Internship';
-    department: string;
-}
 
 // AI Model
 export const CreateAIModelSchema = z.object({

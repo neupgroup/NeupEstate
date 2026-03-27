@@ -13,9 +13,10 @@ import { AiInterventionToggle } from '@/components/manage/ai-intervention-toggle
 import { Badge } from '@/components/ui/badge';
 import { AiFollowUpButton } from '@/components/manage/ai-follow-up-button';
 
-export default async function MessageDetailPage({ params }: { params: { id:string } }) {
-    const conversation = await getConversationById(params.id);
-    const messages = await getMessagesByConversationId(params.id);
+export default async function MessageDetailPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    const conversation = await getConversationById(id);
+    const messages = await getMessagesByConversationId(id);
     const templates = await getWhatsAppTemplates();
 
     if (!conversation) {

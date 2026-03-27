@@ -14,6 +14,8 @@ const raleway = Raleway({
   variable: '--font-raleway',
 });
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'NeupEstate',
   description: 'A modern, user-friendly real estate website to browse property listings.',

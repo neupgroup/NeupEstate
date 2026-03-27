@@ -5,8 +5,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Info, Target } from 'lucide-react';
 
-export default async function UserRequirementsPage({ params }: { params: { id: string } }) {
-    const account = await getAccountById(params.id);
+export default async function UserRequirementsPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    const account = await getAccountById(id);
 
     if (!account) {
         notFound();

@@ -4,6 +4,7 @@ import type { Property, CreatePropertyInput, PropertyFilters, ExtractedPropertyD
 import type { SavedPropertyEntry } from '@/services/property-service';
 import { FirebaseAdapter } from './adapters/firebase-adapter';
 import { MongoDBAdapter } from './adapters/mongodb-adapter';
+import { PostgresAdapter } from './adapters/postgres-adapter';
 
 // Define a common interface for all database operations.
 // This ensures that both Firebase and MongoDB adapters have the same methods.
@@ -49,7 +50,7 @@ export interface DatabaseAdapter {
     getAgencyById(id: string): Promise<Agency | null>;
     updateAgency(id: string, agencyData: UpdateAgencyInput): Promise<void>;
     deleteAgency(agencyId: string): Promise<void>;
-    
+
     // Agent methods
     createAgent(agentData: CreateAgentFormValues): Promise<string>;
     getAgents(options: { limit?: number; offset?: number }): Promise<Agent[]>;
@@ -89,6 +90,8 @@ function initializeDbAdapter(): DatabaseAdapter {
         return new FirebaseAdapter();
     } else if (provider === 'mongodb') {
         return new MongoDBAdapter();
+    } else if (provider === 'postgresql') {
+        return new PostgresAdapter();
     } else {
         throw new Error(`Unsupported database provider: ${provider}`);
     }

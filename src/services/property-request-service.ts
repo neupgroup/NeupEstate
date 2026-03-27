@@ -2,46 +2,30 @@
 
 'use server';
 
-import { getFirestore } from '@/lib/firebase';
-import type { PropertyRequest, CreatePropertyRequestFormValues } from '@/types';
+import { prisma } from '@/lib/prisma';
+import type { PropertyRequest, CreatePropertyRequestFormValues, CreateInquiryFormValues, InquiryStatus } from '@/types';
 import { logProblem } from './problem-service';
+import { createInquiry as createInquiryService, updateInquiryStatus as updateInquiryStatusService } from './inquiry-service';
 
-const COLLECTION_NAME = 'propertyRequests';
-
-// Helper to convert Firestore doc to Inquiry type
-function toPropertyRequest(doc: FirebaseFirestore.DocumentSnapshot): PropertyRequest {
-    const data = doc.data()!;
-    return {
-        id: doc.id,
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        location: data.location,
-        propertyType: data.propertyType,
-        bedrooms: data.bedrooms,
-        bathrooms: data.bathrooms,
-        budget: data.budget,
-        remarks: data.remarks,
-        status: data.status,
-        createdAt: data.createdAt.toDate().toISOString(),
-    };
-}
 
 export async function createPropertyRequest(data: CreatePropertyRequestFormValues): Promise<string> {
-    const firestore = getFirestore();
-    if (!firestore) {
-        throw new Error('Firestore is not available.');
-    }
 
     try {
-        const requestData = {
-            ...data,
-            createdAt: new Date(),
-            status: 'new', // Initial status
-        };
-
-        const docRef = await firestore.collection(COLLECTION_NAME).add(requestData);
-        return docRef.id;
+        const request = await prisma.propertyRequest.create({
+            data: {
+                name: data.name,
+                email: data.email,
+                phone: data.phone,
+                location: data.location,
+                propertyType: data.propertyType,
+                bedrooms: data.bedrooms,
+                bathrooms: data.bathrooms,
+                budget: data.budget,
+                remarks: data.remarks,
+                status: 'new',
+            },
+        });
+        return request.id;
     } catch (error) {
         await logProblem(error, 'createPropertyRequest');
         throw new Error('Failed to submit property request.');
@@ -49,17 +33,27 @@ export async function createPropertyRequest(data: CreatePropertyRequestFormValue
 }
 
 export async function getPropertyRequests({ limit = 20, offset = 0 }: { limit?: number; offset?: number } = {}): Promise<PropertyRequest[]> {
-    const firestore = getFirestore();
-    if (!firestore) return [];
 
     try {
-        const snapshot = await firestore.collection(COLLECTION_NAME).orderBy('createdAt', 'desc').limit(limit).offset(offset).get();
-        if (snapshot.empty) {
-            return [];
-        }
-        return snapshot.docs.map(toPropertyRequest);
+        const requests = await prisma.propertyRequest.findMany({
+            orderBy: { createdAt: 'desc' },
+            take: limit,
+            skip: offset,
+        });
+        return requests.map(r => ({
+            ...r,
+            createdAt: r.createdAt.toISOString(),
+        }));
     } catch (error) {
         await logProblem(error, 'getPropertyRequests');
         return [];
     }
+}
+
+export async function createInquiry(data: CreateInquiryFormValues): Promise<string> {
+    return createInquiryService(data);
+}
+
+export async function updateInquiryStatus(id: string, status: InquiryStatus): Promise<void> {
+    return updateInquiryStatusService(id, status);
 }

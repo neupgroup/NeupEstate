@@ -10,8 +10,9 @@ import { ArrowLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { getModels } from '@/services/model-service';
 
-export default async function EditPromptPage({ params }: { params: { id: string } }) {
-    const prompt = await getPromptById(params.id);
+export default async function EditPromptPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    const prompt = await getPromptById(id);
     const models = await getModels();
 
     if (!prompt) {

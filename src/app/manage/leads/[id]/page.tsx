@@ -7,8 +7,9 @@ import type { Account, UpdateUserFormValues } from '@/types';
 import { getUsers } from '@/services/user-service';
 import { LeadDetailsCard } from '@/components/manage/lead-details-card';
 
-export default async function LeadProfilePage({ params }: { params: { id: string } }) {
-    const conversation = await getConversationById(params.id);
+export default async function LeadProfilePage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    const conversation = await getConversationById(id);
 
     if (!conversation) {
         notFound();

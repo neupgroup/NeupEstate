@@ -11,5 +11,8 @@ export const ai = genkit({
   model: 'googleai/gemini-1.5-flash-latest', // Hardcoded default model
 });
 
-// Export the googleAI plugin object so other files can use googleAI.model()
+// Shared embedding model reference used by database adapters.
+export const embedder = 'googleai/text-embedding-004';
+
+// Export the googleAI plugin object so other files can use googleAI.model().
 export {googleAI};

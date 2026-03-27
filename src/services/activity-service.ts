@@ -2,25 +2,27 @@
 
 'use server';
 
-import { getFirestore } from '@/lib/firebase';
+import { prisma } from '@/lib/prisma';
 import type { CreateUserActivityInput } from '@/types';
 import { logProblem } from './problem-service';
-import { getDbAdapter } from '@/lib/database';
 
 export async function logActivity(activityData: CreateUserActivityInput): Promise<string> {
     try {
-        const firestore = getFirestore();
-        if (!firestore) {
-            throw new Error('Firestore is not available.');
-        }
-
-        const dataToSave = {
-            ...activityData,
-            activityOn: new Date(activityData.activityOn),
-        };
-
-        const docRef = await firestore.collection('activities').add(dataToSave);
-        return docRef.id;
+        const activity = await prisma.activity.create({
+            data: {
+                account: {
+                    connect: {
+                        id: activityData.accountId,
+                    },
+                },
+                activity: activityData.activity,
+                page: activityData.page,
+                propertyId: activityData.propertyId,
+                activityOn: new Date(activityData.activityOn),
+                duration: activityData.duration,
+            },
+        });
+        return activity.id;
     } catch (error: any) {
         // Log the error but don't crash the user-facing operation
         await logProblem(error, 'logActivity');
@@ -35,13 +37,13 @@ export async function logActivity(activityData: CreateUserActivityInput): Promis
  */
 export async function updateAccountAccessInfo(accountId: string, ipAddress: string): Promise<void> {
     try {
-        const db = getDbAdapter();
-        if ('updateAccountAccess' in db && typeof db.updateAccountAccess === 'function') {
-            await db.updateAccountAccess(accountId, ipAddress);
-        } else {
-             // Fallback or log if method not implemented on current adapter
-             console.warn('updateAccountAccess is not implemented on the current database adapter.');
-        }
+        await prisma.account.update({
+            where: { id: accountId },
+            data: {
+                accessedOn: new Date(),
+                lastAccessedFromIp: ipAddress,
+            },
+        });
     } catch (error) {
         await logProblem(error, 'updateAccountAccessInfo');
     }

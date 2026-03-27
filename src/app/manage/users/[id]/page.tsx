@@ -5,8 +5,9 @@ import { EditUserForm } from '@/components/manage/edit-user-form';
 import type { Account, UpdateUserFormValues } from '@/types';
 import { getUsers } from '@/services/user-service';
 
-export default async function UserDetailPage({ params }: { params: { id: string } }) {
-    const account: Account | null = await getAccountById(params.id);
+export default async function UserDetailPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    const account: Account | null = await getAccountById(id);
 
     if (!account) {
         notFound();

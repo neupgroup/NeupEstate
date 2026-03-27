@@ -8,7 +8,6 @@ import { PropertyRequirementsCTA } from "@/components/home/property-requirements
 import { RecentProperties } from "@/components/home/recent-properties";
 import { PostPropertyCTA } from "@/components/home/post-property-cta";
 import { FeaturedAgencies } from "@/components/home/featured-agencies";
-import { NewsletterSection } from "@/components/home/newsletter-section";
 import { CuratedForYouSection } from "@/components/home/curated-for-you";
 
 const SectionSkeleton = () => (
@@ -56,8 +55,6 @@ export default function Home() {
       <Suspense fallback={<SectionSkeleton />}>
         <FeaturedAgencies />
       </Suspense>
-      
-      <NewsletterSection />
       
     </main>
   );
