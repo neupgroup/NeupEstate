@@ -298,6 +298,15 @@ export async function createPropertyAction(
 ): Promise<{ success: boolean; error?: string | null; propertyId?: string | null }> {
   try {
     const validatedData = CreatePropertySchema.parse(data);
+    const orderedPurposes = validatedData.purposes?.length
+      ? validatedData.purposes
+      : validatedData.purpose
+        ? [validatedData.purpose]
+        : [];
+
+    if (orderedPurposes.length === 0) {
+      return { success: false, error: "Please select at least one purpose.", propertyId: null };
+    }
 
     if (!validatedData.pricing?.listed) {
       return { success: false, error: "Listed price is required.", propertyId: null };
@@ -314,6 +323,8 @@ export async function createPropertyAction(
 
     const serviceInput: CreatePropertyInput = {
       ...validatedData,
+      purpose: orderedPurposes[0],
+      purposes: orderedPurposes,
       location: correctedLocation, // Use the corrected location
       price: validatedData.pricing.listed,
       amenities: validatedData.amenities?.split(',').map(a => a.trim()).filter(Boolean) || [],
@@ -343,6 +354,15 @@ export async function updatePropertyAction(
 ): Promise<{ success: boolean; error?: string | null; }> {
   try {
     const validatedData = UpdatePropertySchema.parse(data);
+    const orderedPurposes = validatedData.purposes?.length
+      ? validatedData.purposes
+      : validatedData.purpose
+        ? [validatedData.purpose]
+        : [];
+
+    if (orderedPurposes.length === 0) {
+      return { success: false, error: "Please select at least one purpose." };
+    }
 
     if (!validatedData.pricing?.listed) {
         return { success: false, error: "Listed price is required." };
@@ -359,6 +379,8 @@ export async function updatePropertyAction(
 
     const serviceInput: UpdatePropertyInput = {
       ...validatedData,
+      purpose: orderedPurposes[0],
+      purposes: orderedPurposes,
       location: correctedLocation, // Use the corrected location
       price: validatedData.pricing.listed,
       amenities: validatedData.amenities?.split(',').map(a => a.trim()).filter(Boolean) || [],

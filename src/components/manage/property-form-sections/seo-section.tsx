@@ -3,7 +3,6 @@
 
 import { Control } from "react-hook-form";
 import { CreatePropertyFormValues } from "@/types";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,12 +14,12 @@ interface SeoSectionProps {
 
 export function SeoSection({ control, isEditForm }: SeoSectionProps) {
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle>SEO & Metadata</CardTitle>
-                <CardDescription>Optimize the listing for search engines.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
+        <section className="space-y-6">
+            <div className="space-y-1">
+                <h2 className="text-2xl font-semibold leading-none tracking-tight">SEO & Metadata</h2>
+                <p className="text-sm text-muted-foreground">Optimize the listing for search engines.</p>
+            </div>
+            <div className="space-y-4">
                 {isEditForm && (
                      <FormField
                         control={control}
@@ -78,7 +77,7 @@ export function SeoSection({ control, isEditForm }: SeoSectionProps) {
                         </FormItem>
                     )}
                 />
-            </CardContent>
-        </Card>
+            </div>
+        </section>
     );
 }

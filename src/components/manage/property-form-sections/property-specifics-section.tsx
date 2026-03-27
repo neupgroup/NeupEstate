@@ -3,7 +3,6 @@
 
 import { Control, useFieldArray } from "react-hook-form";
 import { CreatePropertyFormValues, AreaUnitSchema, LandFacingSchema, LandTopographySchema, LandUsageSchema, LandZoningSchema } from "@/types";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -21,12 +20,12 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
     const { fields: unitFields, append: appendUnit, remove: removeUnit } = useFieldArray({ control, name: "apartmentUnits" });
 
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Property Specifics</CardTitle>
-                <CardDescription>Provide the detailed specifications for the property.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
+        <section className="space-y-6">
+            <div className="space-y-1">
+                <h2 className="text-2xl font-semibold leading-none tracking-tight">Property Specifics</h2>
+                <p className="text-sm text-muted-foreground">Provide the detailed specifications for the property.</p>
+            </div>
+            <div className="space-y-6">
 
                 {/* Property Details Section */}
                 <h3 className="text-lg font-semibold -mb-2">Property Details</h3>
@@ -144,7 +143,7 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
                         </div>
                     </div>
                 )}
-            </CardContent>
-        </Card>
+            </div>
+        </section>
     );
 }

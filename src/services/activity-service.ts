@@ -8,11 +8,15 @@ import { logProblem } from './problem-service';
 
 export async function logActivity(activityData: CreateUserActivityInput): Promise<string> {
     try {
+        if (!activityData.userId) {
+            return '';
+        }
+
         const activity = await prisma.activity.create({
             data: {
                 account: {
                     connect: {
-                        id: activityData.accountId,
+                        id: activityData.userId,
                     },
                 },
                 activity: activityData.activity,

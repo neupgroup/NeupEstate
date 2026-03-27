@@ -10,21 +10,10 @@ import { CreatePropertySchema, type CreatePropertyFormValues, type User } from '
 import { createPropertyAction } from '@/app/actions';
 
 import { Form } from '@/components/ui/form';
-import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
 import { getUsers } from '@/services/user-service';
 
-import { BasicDetailsSection } from '@/components/manage/property-form-sections/basic-details-section';
-import { PropertySpecificsSection } from '@/components/manage/property-form-sections/property-specifics-section';
-import { RoomsAndSpaceSection } from '@/components/manage/property-form-sections/rooms-and-space-section';
-import { FeaturesAmenitiesSection } from '@/components/manage/property-form-sections/features-amenities-section';
-import { PricingDetailsSection } from '@/components/manage/property-form-sections/pricing-details-section';
-import { LocationDetailsSection } from '@/components/manage/property-form-sections/location-details-section';
-import { OwnerInfoSection } from '@/components/manage/property-form-sections/owner-info-section';
-import { PropertyPhotosSection } from '@/components/manage/property-form-sections/property-photos-section';
-import { PropertyDocumentsSection } from '@/components/manage/property-form-sections/property-documents-section';
-import { SeoSection } from '@/components/manage/property-form-sections/seo-section';
+import { ProgressivePropertySections } from '@/components/manage/progressive-property-sections';
 
 export default function CreatePropertyPage() {
     const router = useRouter();
@@ -41,9 +30,7 @@ export default function CreatePropertyPage() {
         defaultValues: {
             title: '',
             description: '',
-            purpose: 'Sale',
-            category: 'House',
-            type: 'Residential',
+            purposes: [],
             area: 1000,
             bedrooms: 1,
             bathrooms: 1,
@@ -81,14 +68,13 @@ export default function CreatePropertyPage() {
         },
     });
 
-    const category = form.watch('category');
-    const purpose = form.watch('purpose');
+    const primaryPurpose = form.watch('purposes')?.[0];
 
     useEffect(() => {
-        if (purpose === 'Sale' || purpose === 'Auction') {
+        if (primaryPurpose === 'Sale' || primaryPurpose === 'Auction') {
             form.setValue('pricing.basis', 'one-time-total(house/apartment)');
         }
-    }, [purpose, form]);
+    }, [primaryPurpose, form]);
 
     async function onSubmit(values: CreatePropertyFormValues) {
         startTransition(async () => {
@@ -113,30 +99,13 @@ export default function CreatePropertyPage() {
         <div className="max-w-6xl mx-auto">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                    
-                    <BasicDetailsSection control={form.control} />
-                    
-                    <PropertySpecificsSection control={form.control} category={category} />
-
-                    <RoomsAndSpaceSection control={form.control} category={category} />
-
-                    <FeaturesAmenitiesSection control={form.control} />
-                    
-                    <PricingDetailsSection control={form.control} />
-
-                    <LocationDetailsSection control={form.control} />
-
-                    <OwnerInfoSection control={form.control} users={users} formErrors={form.formState.errors} />
-
-                    <PropertyPhotosSection control={form.control} />
-
-                    <PropertyDocumentsSection control={form.control} />
-                    
-                    <SeoSection control={form.control} isEditForm={false} />
-
-                    <Button type="submit" disabled={isPending}>
-                        {isPending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating...</> : 'Create Property'}
-                    </Button>
+                    <ProgressivePropertySections
+                        form={form}
+                        users={users}
+                        isEditForm={false}
+                        isSubmitting={isPending}
+                        submitLabel={isPending ? 'Creating...' : 'Create Property'}
+                    />
                 </form>
             </Form>
         </div>

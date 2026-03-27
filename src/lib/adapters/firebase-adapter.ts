@@ -90,6 +90,7 @@ function toProperty(doc: FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.Do
         bathrooms: data.bathrooms || 0,
         area: data.area || 0,
         purpose: data.purpose || 'Sale',
+        purposes: Array.isArray(data.purposes) && data.purposes.length > 0 ? data.purposes : [data.purpose || 'Sale'],
         category: data.category || 'House',
         type: data.type || 'Residential',
         images: data.images || [],

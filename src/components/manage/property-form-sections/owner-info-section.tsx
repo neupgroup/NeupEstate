@@ -3,7 +3,6 @@
 
 import { Control, useFieldArray, useWatch } from "react-hook-form";
 import { CreatePropertyFormValues, User } from "@/types";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -159,18 +158,18 @@ export function OwnerInfoSection({ control, users, formErrors }: OwnerInfoSectio
     });
 
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Owner/Authorized Person Information/s</CardTitle>
-                <CardDescription>Add up to 4 owners. At least one is required.</CardDescription>
+        <section className="space-y-6">
+            <div className="space-y-1">
+                <h2 className="text-2xl font-semibold leading-none tracking-tight">Owner/Authorized Person Information/s</h2>
+                <p className="text-sm text-muted-foreground">Add up to 4 owners. At least one is required.</p>
                 <FormMessage>{formErrors.owners?.root?.message}</FormMessage>
-            </CardHeader>
-            <CardContent className="space-y-4">
+            </div>
+            <div className="space-y-4">
                 {ownerFields.map((field, index) => (
                     <OwnerDetails key={field.id} control={control} index={index} remove={removeOwner} users={users} />
                 ))}
                 <Button type="button" variant="outline" size="sm" onClick={() => appendOwner({ ownerType: 'unregistered', unregisteredOwnerName: '', unregisteredOwnerEmail: '', unregisteredOwnerPhones: [{ value: '' }], unregisteredOwnerNotes: '' })} disabled={ownerFields.length >= 4}><PlusCircle className="mr-2 h-4 w-4" />Add Owner</Button>
-            </CardContent>
-        </Card>
+            </div>
+        </section>
     );
 }

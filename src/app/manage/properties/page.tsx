@@ -24,13 +24,14 @@ const PROPERTIES_PER_PAGE = 20;
 export default async function ManagePropertiesPage({
   searchParams,
 }: {
-  searchParams?: {
+  searchParams?: Promise<{
     page?: string;
     q?: string;
-  };
+  }>;
 }) {
-  const currentPage = Number(searchParams?.page) || 1;
-  const query = searchParams?.q || '';
+  const resolvedSearchParams = await searchParams;
+  const currentPage = Number(resolvedSearchParams?.page) || 1;
+  const query = resolvedSearchParams?.q || '';
 
   let filters: PropertyFilters | undefined = undefined;
   if (query) {

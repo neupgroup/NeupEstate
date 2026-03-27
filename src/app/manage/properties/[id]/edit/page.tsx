@@ -28,17 +28,7 @@ import {
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ClientLink } from '@/components/client-link';
 import { SourceOriginationManager } from "@/components/manage/source-origination-manager";
-
-import { BasicDetailsSection } from '@/components/manage/property-form-sections/basic-details-section';
-import { PropertySpecificsSection } from '@/components/manage/property-form-sections/property-specifics-section';
-import { RoomsAndSpaceSection } from '@/components/manage/property-form-sections/rooms-and-space-section';
-import { FeaturesAmenitiesSection } from '@/components/manage/property-form-sections/features-amenities-section';
-import { PricingDetailsSection } from '@/components/manage/property-form-sections/pricing-details-section';
-import { LocationDetailsSection } from '@/components/manage/property-form-sections/location-details-section';
-import { OwnerInfoSection } from '@/components/manage/property-form-sections/owner-info-section';
-import { PropertyPhotosSection } from '@/components/manage/property-form-sections/property-photos-section';
-import { PropertyDocumentsSection } from '@/components/manage/property-form-sections/property-documents-section';
-import { SeoSection } from '@/components/manage/property-form-sections/seo-section';
+import { ProgressivePropertySections } from '@/components/manage/progressive-property-sections';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function EditPropertyPage() {
@@ -87,6 +77,7 @@ export default function EditPropertyPage() {
                 bikeParkingSpots: propData.bikeParkingSpots,
                 area: propData.area,
                 purpose: propData.purpose,
+                purposes: propData.purposes?.length ? propData.purposes : [propData.purpose],
                 category: propData.category,
                 type: propData.type,
                 amenities: Array.isArray(propData.amenities) ? propData.amenities.join(', ') : '',
@@ -122,8 +113,6 @@ export default function EditPropertyPage() {
         }
         loadData();
     }, [propertyId, router, toast, form]);
-
-    const category = form.watch('category');
 
     async function onSubmit(values: UpdatePropertyFormValues) {
         if (!property) return;
@@ -287,20 +276,13 @@ export default function EditPropertyPage() {
                         </CardHeader>
                     </Card>
 
-                    <BasicDetailsSection control={form.control} />
-                    <PropertySpecificsSection control={form.control} category={category} />
-                    <RoomsAndSpaceSection control={form.control} category={category} />
-                    <FeaturesAmenitiesSection control={form.control} />
-                    <PricingDetailsSection control={form.control} />
-                    <LocationDetailsSection control={form.control} />
-                    <OwnerInfoSection control={form.control} users={users} formErrors={form.formState.errors} />
-                    <PropertyPhotosSection control={form.control} />
-                    <PropertyDocumentsSection control={form.control} />
-                    <SeoSection control={form.control} isEditForm={true} />
-
-                    <Button type="submit" disabled={isSaving || isRewriting}>
-                        {isSaving ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving Changes...</> : 'Save Changes'}
-                    </Button>
+                    <ProgressivePropertySections
+                        form={form}
+                        users={users}
+                        isEditForm={true}
+                        isSubmitting={isSaving || isRewriting}
+                        submitLabel={isSaving ? 'Saving Changes...' : 'Save Changes'}
+                    />
                 </form>
             </Form>
 

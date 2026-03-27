@@ -19,20 +19,21 @@ function isValidImageUrl(url: string): boolean {
 
 
 // Base Enums
-const purposeOptions = ['Sale', 'Rent', 'Lease', 'Buy', 'Sell', 'Mortgage', 'Exchange', 'Auction', 'Transfer'] as const;
+export const PropertyPurposeOptions = ['Sale', 'Rent', 'Lease', 'Buy', 'Sell', 'Mortgage', 'Exchange', 'Auction', 'Transfer'] as const;
 export const PropertyPurposeSchema = z.preprocess(
     (val) => {
         if (typeof val === 'string') {
             const lowerVal = val.toLowerCase();
             const capitalizedVal = lowerVal.charAt(0).toUpperCase() + lowerVal.slice(1);
-            if (purposeOptions.map(o => o.toLowerCase()).includes(lowerVal)) {
+            if (PropertyPurposeOptions.map(o => o.toLowerCase()).includes(lowerVal)) {
                 return capitalizedVal;
             }
         }
         return val;
     },
-    z.enum(purposeOptions)
+    z.enum(PropertyPurposeOptions)
 );
+export const PropertyPurposesSchema = z.array(z.enum(PropertyPurposeOptions)).min(1, "Please select at least one purpose.");
 export const PropertyCategorySchema = z.enum(['House', 'Apartment', 'Land', 'Flat']);
 export const PropertyUsageTypeSchema = z.enum(['Residential', 'Commercial', 'Industrial', 'Agricultural', 'Vacant', 'Semi-Commercial']);
 export const AreaUnitSchema = z.enum(['sqft', 'sqm', 'aana', 'ropani', 'bigha', 'dhur']);
@@ -213,6 +214,7 @@ export interface Property {
     buildStart?: number;
     buildCompleted?: number;
     purpose: z.infer<typeof PropertyPurposeSchema>;
+    purposes?: z.infer<typeof PropertyPurposesSchema>;
     category: z.infer<typeof PropertyCategorySchema>;
     type: z.infer<typeof PropertyUsageTypeSchema>;
     images: string[];
@@ -259,7 +261,8 @@ export interface Property {
 export const CreatePropertySchema = z.object({
     title: z.string().min(3, {message: "Title must be at least 3 characters long."}),
     description: z.string().min(10, {message: "Description must be at least 10 characters long."}),
-    purpose: PropertyPurposeSchema,
+    purpose: PropertyPurposeSchema.optional(),
+    purposes: PropertyPurposesSchema,
     category: PropertyCategorySchema,
     type: PropertyUsageTypeSchema,
 
@@ -322,8 +325,9 @@ export type CreatePropertyFormValues = z.infer<typeof CreatePropertySchema>;
 export type UpdatePropertyFormValues = CreatePropertyFormValues;
 
 export type CreatePropertyInput =
-    Omit<CreatePropertyFormValues, 'amenities' | 'images' | 'metaTags' | 'pricing' | 'owners'>
+    Omit<CreatePropertyFormValues, 'amenities' | 'images' | 'metaTags' | 'pricing' | 'owners' | 'purpose'>
     & {
+    purpose: Property['purpose']; // Derived primary purpose
     price: number; // Derived top-level field
     location: string; // Derived top-level field
     amenities: string[];

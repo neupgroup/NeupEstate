@@ -12,11 +12,12 @@ const LOGS_PER_PAGE = 20;
 export default async function ProblemsPage({
   searchParams,
 }: {
-  searchParams?: {
+  searchParams?: Promise<{
     page?: string;
-  };
+  }>;
 }) {
-  const currentPage = Number(searchParams?.page) || 1;
+  const resolvedSearchParams = await searchParams;
+  const currentPage = Number(resolvedSearchParams?.page) || 1;
   const offset = (currentPage - 1) * LOGS_PER_PAGE;
   
   const { problems, totalCount } = await getProblems({

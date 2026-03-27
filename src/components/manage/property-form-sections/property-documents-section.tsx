@@ -3,7 +3,6 @@
 
 import { Control, useFieldArray } from "react-hook-form";
 import { CreatePropertyFormValues } from "@/types";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -68,12 +67,12 @@ export function PropertyDocumentsSection({ control }: PropertyDocumentsSectionPr
     });
 
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Property Documents</CardTitle>
-                <CardDescription>Add links to relevant property documents.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
+        <section className="space-y-6">
+            <div className="space-y-1">
+                <h2 className="text-2xl font-semibold leading-none tracking-tight">Property Documents</h2>
+                <p className="text-sm text-muted-foreground">Add links to relevant property documents.</p>
+            </div>
+            <div className="space-y-4">
                 {fields.map((field, index) => (
                     <DocumentGroup
                         key={field.id}
@@ -83,7 +82,7 @@ export function PropertyDocumentsSection({ control }: PropertyDocumentsSectionPr
                     />
                 ))}
                 <Button type="button" variant="outline" className="w-full" onClick={() => append({ name: '', urls: [{ value: '' }] })}><PlusCircle className="mr-2 h-4 w-4" />Add property documents (pdf/jpeg/doc)</Button>
-            </CardContent>
-        </Card>
+            </div>
+        </section>
     );
 }

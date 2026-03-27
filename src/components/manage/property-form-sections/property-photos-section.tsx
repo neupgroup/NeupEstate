@@ -4,7 +4,6 @@
 import { Control, useFieldArray, useFormContext } from "react-hook-form";
 import Link from 'next/link';
 import { CreatePropertyFormValues } from "@/types";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { FormField, FormControl, FormMessage, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -23,12 +22,12 @@ export function PropertyPhotosSection({ control }: PropertyPhotosSectionProps) {
     });
 
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Property Photos</CardTitle>
-                <CardDescription>Add URLs for the property images.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
+        <section className="space-y-6">
+            <div className="space-y-1">
+                <h2 className="text-2xl font-semibold leading-none tracking-tight">Property Photos</h2>
+                <p className="text-sm text-muted-foreground">Add URLs for the property images.</p>
+            </div>
+            <div className="space-y-4">
                 {fields.map((field, index) => (
                     <div key={field.id} className="relative">
                         <Link href={watch(`images.${index}`) || '#'} target="_blank" rel="noopener noreferrer" className="absolute left-2 top-1/2 -translate-y-1/2 z-10">
@@ -52,7 +51,7 @@ export function PropertyPhotosSection({ control }: PropertyPhotosSectionProps) {
                     </div>
                 ))}
                 <Button type="button" variant="outline" className="w-full" onClick={() => append("")}><PlusCircle className="mr-2 h-4 w-4" />Add a photo of the apartment</Button>
-            </CardContent>
-        </Card>
+            </div>
+        </section>
     );
 }
