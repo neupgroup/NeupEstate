@@ -1,5 +1,3 @@
-
-
 'use server';
 
 /**
@@ -111,7 +109,9 @@ const extractPropertyDetailsFlow = ai.defineFlow(
 
     const dataWithSource = { ...output, sourceUrl: input.url };
 
-    if (!input.saveToDb) {
+    const shouldSaveToDb = input.saveToDb !== false;
+
+    if (!shouldSaveToDb) {
         return { extractedData: dataWithSource, rawHtml };
     }
 

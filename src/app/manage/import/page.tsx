@@ -40,7 +40,10 @@ export default function ImportPropertiesPage() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setResults([]);
-    const urls = values.urls.split('\\n').filter(url => url.trim() !== '');
+    const urls = values.urls
+      .split(/\r?\n/)
+      .map((url) => url.trim())
+      .filter((url) => url !== '');
     if (urls.length === 0) {
       toast({
         variant: 'destructive',

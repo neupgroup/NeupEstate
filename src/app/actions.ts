@@ -150,13 +150,52 @@ export async function extractAndSaveProperty(
         try {
             if (!url.trim()) continue;
             const result = await extractAndSavePropertyFlow({ url });
-            results.push({ url, ...result });
+
+            if (result.error) {
+                results.push({ url, ...result });
+                continue;
+            }
+
+            if (result.propertyId) {
+                results.push({ url, ...result });
+                continue;
+            }
+
+            const fallbackMatch = result.extractedData?.sourceUrl
+                ? await getPaginatedProperties({
+                    page: 1,
+                    limit: 1,
+                    filters: { sourceUrl: result.extractedData.sourceUrl },
+                })
+                : { properties: [], totalCount: 0 };
+
+            if (fallbackMatch.properties.length > 0) {
+                results.push({
+                    url,
+                    ...result,
+                    propertyId: fallbackMatch.properties[0].id,
+                });
+                continue;
+            }
+
+            results.push({
+                url,
+                ...result,
+                error: "Property details were extracted, but no database record ID was returned.",
+            });
         } catch (e: any) {
             await logProblem(e, `extractAndSaveProperty (URL: ${url})`);
             results.push({ url, error: e.message || "An unknown error occurred." });
         }
     }
-    revalidatePath('/manage/properties');
+
+    try {
+        revalidatePath('/manage/properties');
+        revalidatePath('/properties');
+    } catch (error) {
+        console.error('Failed to revalidate property pages after manual import:', error);
+    }
+
     return { success: true, results };
 }
 
@@ -569,7 +608,12 @@ export async function getNewUrlsFromSitemapAction(sitemapId: string) {
 }
 
 export async function processSitemapUrlAction(url: string) {
-    return processSitemapUrl(url);
+    const result = await processSitemapUrl(url);
+    if (result.status === 'success') {
+        revalidatePath('/manage/properties');
+        revalidatePath('/properties');
+    }
+    return result;
 }
 
 export async function updateSitemapCheckedTimeAction(sitemapId: string) {

@@ -2,6 +2,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  basePath: '/estate',
   turbopack: {
     root: process.cwd(),
   },

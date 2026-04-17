@@ -4,15 +4,25 @@
 import { prisma } from '@/lib/prisma';
 import type { Problem } from '@/types';
 
+let suspendProblemLoggingUntil = 0;
+
 /**
  * Logs an error to the Postgres-backed problems table through Prisma.
  */
-export async function logProblem(error: any, context: string, details?: Record<string, any>): Promise<void> {
+export async function logProblem(error: unknown, context: string, details?: Record<string, unknown>): Promise<void> {
+    const normalizedError = error instanceof Error ? error : new Error(String(error));
+
+    if (Date.now() < suspendProblemLoggingUntil) {
+        console.error(`[WARN] Skipping problem logging for context: ${context} because Prisma logging is temporarily suspended.`);
+        console.error('Original Error:', normalizedError);
+        return;
+    }
+
     try {
         const problemData = {
             context,
-            message: error.message || 'An unknown error occurred.',
-            stack: error.stack || 'No stack trace available.',
+            message: normalizedError.message || 'An unknown error occurred.',
+            stack: normalizedError.stack || 'No stack trace available.',
             createdAt: new Date(),
             details: details ? safelySerializeDetails(details) : undefined,
         };
@@ -20,9 +30,13 @@ export async function logProblem(error: any, context: string, details?: Record<s
         await prisma.problem.create({
             data: problemData,
         });
-    } catch (loggingError) {
+    } catch (loggingError: unknown) {
+        if (isPrismaPoolTimeoutError(loggingError)) {
+            suspendProblemLoggingUntil = Date.now() + 30_000;
+        }
+
         console.error(`[CRITICAL] Failed to log an error to Postgres from context: ${context}.`);
-        console.error('Original Error:', error);
+        console.error('Original Error:', normalizedError);
         console.error('Logging Error:', loggingError);
     }
 }
@@ -83,7 +97,7 @@ export async function clearAllProblems(): Promise<{ success: boolean; error?: st
     }
 }
 
-function safelySerializeDetails(details: Record<string, any>): Record<string, any> {
+function safelySerializeDetails(details: Record<string, unknown>): Record<string, unknown> {
     try {
         return JSON.parse(JSON.stringify(details));
     } catch {
@@ -91,4 +105,16 @@ function safelySerializeDetails(details: Record<string, any>): Record<string, an
             serializationError: 'Failed to serialize problem details.',
         };
     }
+}
+
+function isPrismaPoolTimeoutError(error: unknown): boolean {
+    if (!error || typeof error !== 'object') {
+        return false;
+    }
+
+    const candidate = error as { code?: string; message?: string };
+    return (
+        candidate.code === 'P2024' ||
+        candidate.message?.includes('Timed out fetching a new connection from the connection pool') === true
+    );
 }

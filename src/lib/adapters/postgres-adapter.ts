@@ -8,6 +8,7 @@ import { logProblem } from '@/services/problem-service';
 
 export class PostgresAdapter implements DatabaseAdapter {
     private pool: Pool;
+    private propertyColumnsPromise: Promise<Set<string>> | null = null;
     private accountColumnMapPromise: Promise<{
         createdOn: string;
         accessedOn: string;
@@ -15,6 +16,7 @@ export class PostgresAdapter implements DatabaseAdapter {
         lastAccessedFromIp: string;
         accountType: string;
     }> | null = null;
+    private agentColumnsPromise: Promise<Set<string>> | null = null;
 
     constructor() {
         const connectionString = process.env.POSTGRES_URI || process.env.POSTGRES_URL || process.env.DATABASE_URL;
@@ -63,6 +65,261 @@ export class PostgresAdapter implements DatabaseAdapter {
         return this.accountColumnMapPromise;
     }
 
+    private async ensurePropertySchema() {
+        await this.query(`
+            ALTER TABLE properties
+            ADD COLUMN IF NOT EXISTS location TEXT,
+            ADD COLUMN IF NOT EXISTS bedrooms INTEGER,
+            ADD COLUMN IF NOT EXISTS bathrooms INTEGER,
+            ADD COLUMN IF NOT EXISTS area DOUBLE PRECISION,
+            ADD COLUMN IF NOT EXISTS purpose TEXT,
+            ADD COLUMN IF NOT EXISTS category TEXT,
+            ADD COLUMN IF NOT EXISTS type TEXT,
+            ADD COLUMN IF NOT EXISTS images JSONB,
+            ADD COLUMN IF NOT EXISTS amenities JSONB,
+            ADD COLUMN IF NOT EXISTS agency JSONB,
+            ADD COLUMN IF NOT EXISTS "isApproved" BOOLEAN,
+            ADD COLUMN IF NOT EXISTS "sourceUrl" TEXT,
+            ADD COLUMN IF NOT EXISTS slug TEXT,
+            ADD COLUMN IF NOT EXISTS "listingAgent" TEXT,
+            ADD COLUMN IF NOT EXISTS "isOwnerListing" BOOLEAN,
+            ADD COLUMN IF NOT EXISTS "fetchHistory" JSONB,
+            ADD COLUMN IF NOT EXISTS "imageFetchHistory" JSONB,
+            ADD COLUMN IF NOT EXISTS latitude DOUBLE PRECISION,
+            ADD COLUMN IF NOT EXISTS longitude DOUBLE PRECISION
+        `);
+
+        await this.query(`CREATE INDEX IF NOT EXISTS idx_properties_source_url ON properties("sourceUrl")`);
+        await this.query(`CREATE INDEX IF NOT EXISTS idx_properties_slug ON properties(slug)`);
+    }
+
+    private async getPropertyColumns() {
+        await this.ensurePropertySchema();
+
+        if (!this.propertyColumnsPromise) {
+            this.propertyColumnsPromise = (async () => {
+                const res = await this.query(
+                    `
+                        SELECT column_name
+                        FROM information_schema.columns
+                        WHERE table_schema = current_schema()
+                          AND table_name = 'properties'
+                    `
+                );
+
+                return new Set(res.rows.map((row) => String(row.column_name)));
+            })();
+        }
+
+        return this.propertyColumnsPromise;
+    }
+
+    private parseStringArray(value: unknown): string[] {
+        if (Array.isArray(value)) {
+            return value.map((item) => String(item)).filter(Boolean);
+        }
+
+        if (typeof value === 'string') {
+            try {
+                const parsed = JSON.parse(value);
+                if (Array.isArray(parsed)) {
+                    return parsed.map((item) => String(item)).filter(Boolean);
+                }
+            } catch {
+                return value
+                    .split(',')
+                    .map((item) => item.trim())
+                    .filter(Boolean);
+            }
+        }
+
+        return [];
+    }
+
+    private parseObject(value: unknown): Record<string, unknown> | null {
+        if (!value) {
+            return null;
+        }
+
+        if (typeof value === 'object' && !Array.isArray(value)) {
+            return value as Record<string, unknown>;
+        }
+
+        if (typeof value === 'string') {
+            try {
+                const parsed = JSON.parse(value);
+                if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+                    return parsed as Record<string, unknown>;
+                }
+            } catch {
+                return null;
+            }
+        }
+
+        return null;
+    }
+
+    private buildPropertyWriteValues(
+        propertyData: Partial<CreatePropertyInput> & Record<string, unknown>,
+        columns: Set<string>
+    ) {
+        const values: Record<string, unknown> = {};
+
+        if (columns.has('title') && propertyData.title !== undefined) values.title = propertyData.title;
+        if (columns.has('description') && propertyData.description !== undefined) values.description = propertyData.description;
+        if (columns.has('price')) values.price = propertyData.price ?? null;
+        if (columns.has('location')) values.location = propertyData.location ?? null;
+        if (columns.has('bedrooms')) values.bedrooms = propertyData.bedrooms ?? 0;
+        if (columns.has('bathrooms')) values.bathrooms = propertyData.bathrooms ?? 0;
+        if (columns.has('area')) values.area = propertyData.area ?? 0;
+        if (columns.has('purpose')) values.purpose = propertyData.purpose ?? null;
+        if (columns.has('category')) values.category = propertyData.category ?? null;
+        if (columns.has('type')) values.type = propertyData.type ?? null;
+        if (columns.has('images')) values.images = JSON.stringify(propertyData.images ?? []);
+        if (columns.has('amenities')) values.amenities = JSON.stringify(propertyData.amenities ?? []);
+        if (columns.has('agency')) values.agency = JSON.stringify(propertyData.agency ?? {
+            id: 'postgres-imported',
+            name: 'Imported Listing',
+            logoUrl: 'https://placehold.co/100x40.png',
+        });
+        if (columns.has('isFeatured')) values.isFeatured = propertyData.isFeatured ?? false;
+        if (columns.has('isApproved')) values.isApproved = propertyData.isApproved ?? null;
+        if (columns.has('status') && propertyData.status !== undefined) values.status = propertyData.status;
+        if (columns.has('sourceUrl')) values.sourceUrl = propertyData.sourceUrl ?? null;
+        if (columns.has('slug') && propertyData.slug !== undefined) values.slug = propertyData.slug;
+        if (columns.has('listingAgent')) values.listingAgent = propertyData.listingAgent ?? null;
+        if (columns.has('isOwnerListing')) values.isOwnerListing = propertyData.isOwnerListing ?? false;
+        if (columns.has('fetchHistory')) values.fetchHistory = JSON.stringify(propertyData.fetchHistory ?? []);
+        if (columns.has('imageFetchHistory')) values.imageFetchHistory = JSON.stringify(propertyData.imageFetchHistory ?? []);
+        if (columns.has('latitude')) values.latitude = propertyData.latitude ?? null;
+        if (columns.has('longitude')) values.longitude = propertyData.longitude ?? null;
+
+        return values;
+    }
+
+    private async getAgentColumns() {
+        if (!this.agentColumnsPromise) {
+            this.agentColumnsPromise = (async () => {
+                const res = await this.query(
+                    `
+                        SELECT column_name
+                        FROM information_schema.columns
+                        WHERE table_schema = current_schema()
+                          AND table_name = 'agents'
+                    `
+                );
+
+                return new Set(res.rows.map((row) => String(row.column_name)));
+            })();
+        }
+
+        return this.agentColumnsPromise;
+    }
+
+    private parseAgentSpecializations(value: unknown): string[] {
+        if (Array.isArray(value)) {
+            return value
+                .map((item) => String(item).trim())
+                .filter(Boolean);
+        }
+
+        if (typeof value === 'string') {
+            return value
+                .split(',')
+                .map((item) => item.trim())
+                .filter(Boolean);
+        }
+
+        return [];
+    }
+
+    private mapAgentRow(row: any): Agent {
+        return {
+            id: row.id,
+            name: row.name || 'Unnamed Agent',
+            slug: row.slug || row.id,
+            location: row.location || '',
+            registered: typeof row.registered === 'boolean' ? row.registered : Boolean(row.userId),
+            contact: {
+                email: row.email || undefined,
+                phone: row.phone || undefined,
+            },
+            userId: row.userId || undefined,
+            photoUrl: row.photoUrl || row.avatarUrl || undefined,
+            about: row.about || row.bio || undefined,
+            specializations: this.parseAgentSpecializations(row.specializations),
+            availability_hours: row.availability_hours || undefined,
+            time_slot_duration: typeof row.time_slot_duration === 'number' ? row.time_slot_duration : undefined,
+            unavailability: row.unavailability || undefined,
+        };
+    }
+
+    private async getAgentSelectQuery() {
+        const columns = await this.getAgentColumns();
+        const availableColumns = [
+            'id',
+            'name',
+            'email',
+            'phone',
+            'bio',
+            'avatarUrl',
+            'slug',
+            'location',
+            'registered',
+            'userId',
+            'about',
+            'photoUrl',
+            'specializations',
+            'availability_hours',
+            'time_slot_duration',
+            'unavailability',
+            'createdAt',
+            'updatedAt',
+        ].filter((column) => columns.has(column));
+
+        if (availableColumns.length === 0) {
+            return 'SELECT id FROM agents';
+        }
+
+        return `SELECT ${availableColumns.map((column) => `"${column}"`).join(', ')} FROM agents`;
+    }
+
+    private async getAgentOrderByClause() {
+        const columns = await this.getAgentColumns();
+
+        if (columns.has('updatedAt')) {
+            return 'ORDER BY "updatedAt" DESC, id DESC';
+        }
+
+        if (columns.has('createdAt')) {
+            return 'ORDER BY "createdAt" DESC, id DESC';
+        }
+
+        return 'ORDER BY id DESC';
+    }
+
+    private buildAgentWriteValues(agentData: any, columns: Set<string>) {
+        const values: Record<string, unknown> = {};
+
+        if (columns.has('name') && agentData.name !== undefined) values.name = agentData.name;
+        if (columns.has('email')) values.email = agentData.contact?.email ?? agentData.email ?? null;
+        if (columns.has('phone')) values.phone = agentData.contact?.phone ?? agentData.phone ?? null;
+        if (columns.has('slug') && agentData.slug !== undefined) values.slug = agentData.slug;
+        if (columns.has('location') && agentData.location !== undefined) values.location = agentData.location;
+        if (columns.has('registered') && agentData.registered !== undefined) values.registered = agentData.registered;
+        if (columns.has('userId')) values.userId = agentData.userId ?? null;
+        if (columns.has('about')) values.about = agentData.about ?? null;
+        if (columns.has('bio')) values.bio = agentData.about ?? agentData.bio ?? null;
+        if (columns.has('photoUrl')) values.photoUrl = agentData.photoUrl ?? null;
+        if (columns.has('avatarUrl')) values.avatarUrl = agentData.photoUrl ?? agentData.avatarUrl ?? null;
+        if (columns.has('specializations')) values.specializations = agentData.specializations ?? [];
+        if (columns.has('availability_hours')) values.availability_hours = agentData.availability_hours ?? null;
+        if (columns.has('time_slot_duration')) values.time_slot_duration = agentData.time_slot_duration ?? null;
+        if (columns.has('unavailability')) values.unavailability = agentData.unavailability ?? null;
+
+        return values;
+    }
+
     private async ensureSavedPropertiesTable(): Promise<void> {
         await this.query(`
             CREATE TABLE IF NOT EXISTS user_saved_properties (
@@ -79,37 +336,76 @@ export class PostgresAdapter implements DatabaseAdapter {
 
     private mapPropertyRow(row: any): Property {
         const textBlob = `${row?.title || ''} ${row?.description || ''}`.toLowerCase();
-        const purpose: Property['purpose'] = textBlob.includes('rent') ? 'Rent' : 'Sale';
+        const purpose: Property['purpose'] = row?.purpose || (textBlob.includes('rent') ? 'Rent' : 'Sale');
 
-        let category: Property['category'] = 'House';
-        if (textBlob.includes('land') || textBlob.includes('plot')) category = 'Land';
-        else if (textBlob.includes('apartment')) category = 'Apartment';
-        else if (textBlob.includes('flat')) category = 'Flat';
+        let category: Property['category'] = row?.category || 'House';
+        if (!row?.category) {
+            if (textBlob.includes('land') || textBlob.includes('plot')) category = 'Land';
+            else if (textBlob.includes('apartment')) category = 'Apartment';
+            else if (textBlob.includes('flat')) category = 'Flat';
+        }
+
+        const parsedAgency = this.parseObject(row?.agency);
+        const images = this.parseStringArray(row?.images);
+        const amenities = this.parseStringArray(row?.amenities);
+        const fetchHistory = Array.isArray(row?.fetchHistory)
+            ? row.fetchHistory
+            : (() => {
+                if (typeof row?.fetchHistory === 'string') {
+                    try {
+                        const parsed = JSON.parse(row.fetchHistory);
+                        return Array.isArray(parsed) ? parsed : [];
+                    } catch {
+                        return [];
+                    }
+                }
+                return [];
+            })();
+        const imageFetchHistory = Array.isArray(row?.imageFetchHistory)
+            ? row.imageFetchHistory
+            : (() => {
+                if (typeof row?.imageFetchHistory === 'string') {
+                    try {
+                        const parsed = JSON.parse(row.imageFetchHistory);
+                        return Array.isArray(parsed) ? parsed : [];
+                    } catch {
+                        return [];
+                    }
+                }
+                return [];
+            })();
 
         return {
             id: row.id,
             title: row.title || 'Untitled Property',
             description: row.description || '',
             price: Number(row.price || 0),
-            location: 'Nepal',
-            bedrooms: 0,
-            bathrooms: 0,
-            area: 0,
+            location: row.location || 'Nepal',
+            bedrooms: Number(row.bedrooms || 0),
+            bathrooms: Number(row.bathrooms || 0),
+            area: Number(row.area || 0),
             purpose,
             category,
-            type: 'Residential',
-            images: ['https://placehold.co/600x400.png'],
-            amenities: [],
+            type: row.type || 'Residential',
+            images: images.length > 0 ? images : ['https://placehold.co/600x400.png'],
+            amenities,
             agency: {
-                id: 'postgres-migrated',
-                name: 'NeupEstate',
-                logoUrl: 'https://placehold.co/200x80.png',
+                id: typeof parsedAgency?.id === 'string' ? parsedAgency.id : 'postgres-migrated',
+                name: typeof parsedAgency?.name === 'string' ? parsedAgency.name : 'NeupEstate',
+                logoUrl: typeof parsedAgency?.logoUrl === 'string' ? parsedAgency.logoUrl : 'https://placehold.co/200x80.png',
             },
+            listingAgent: row.listingAgent || undefined,
+            isOwnerListing: typeof row.isOwnerListing === 'boolean' ? row.isOwnerListing : undefined,
             isFeatured: Boolean(row.isFeatured),
-            isApproved: row.status ? row.status === 'approved' : true,
+            isApproved: typeof row.isApproved === 'boolean' ? row.isApproved : row.status ? row.status === 'approved' : true,
+            sourceUrl: row.sourceUrl || undefined,
             createdAt: row.createdAt ? new Date(row.createdAt).toISOString() : undefined,
             updatedAt: row.updatedAt ? new Date(row.updatedAt).toISOString() : undefined,
-            slug: row.id,
+            fetchHistory,
+            imageFetchHistory,
+            latitude: row.latitude ?? undefined,
+            longitude: row.longitude ?? undefined,
+            slug: row.slug || row.id,
         };
     }
 
@@ -143,39 +439,230 @@ export class PostgresAdapter implements DatabaseAdapter {
     // --- Property Methods ---
 
     async addProperty(propertyData: Omit<ExtractedPropertyData, 'embedding'>): Promise<string> {
-        throw new Error("Method not implemented.");
+        const columns = await this.getPropertyColumns();
+        const { isPropertyPage: _ignored, ...rest } = propertyData;
+        const id = randomUUID();
+        const now = new Date().toISOString();
+        const values = this.buildPropertyWriteValues(
+            {
+                ...rest,
+                isFeatured: false,
+                isApproved: false,
+                status: 'pending',
+                agency: {
+                    id: 'imported',
+                    name: 'Imported Listing',
+                    logoUrl: 'https://placehold.co/100x40.png',
+                },
+                slug: rest.slug ?? id,
+            },
+            columns
+        );
+        const insertValues: Record<string, unknown> = { ...values, id };
+
+        if (columns.has('createdAt')) insertValues.createdAt = now;
+        if (columns.has('updatedAt')) insertValues.updatedAt = now;
+
+        const fieldNames = Object.keys(insertValues);
+        const placeholders = fieldNames.map((_, index) => `$${index + 1}`).join(', ');
+        const params = fieldNames.map((field) => insertValues[field]);
+
+        await this.query(
+            `INSERT INTO properties (${fieldNames.map((field) => `"${field}"`).join(', ')}) VALUES (${placeholders})`,
+            params
+        );
+
+        return id;
     }
 
     async createProperty(propertyData: CreatePropertyInput): Promise<string> {
-        throw new Error("Method not implemented.");
+        const columns = await this.getPropertyColumns();
+        const id = randomUUID();
+        const now = new Date().toISOString();
+        const values = this.buildPropertyWriteValues(
+            {
+                ...propertyData,
+                isFeatured: false,
+                isApproved: true,
+                status: 'approved',
+                agency: {
+                    id: 'manual',
+                    name: 'Manually Added',
+                    logoUrl: 'https://placehold.co/100x40.png',
+                },
+                slug: propertyData.slug || id,
+            },
+            columns
+        );
+        const insertValues: Record<string, unknown> = { ...values, id };
+
+        if (columns.has('createdAt')) insertValues.createdAt = now;
+        if (columns.has('updatedAt')) insertValues.updatedAt = now;
+
+        const fieldNames = Object.keys(insertValues);
+        const placeholders = fieldNames.map((_, index) => `$${index + 1}`).join(', ');
+        const params = fieldNames.map((field) => insertValues[field]);
+
+        await this.query(
+            `INSERT INTO properties (${fieldNames.map((field) => `"${field}"`).join(', ')}) VALUES (${placeholders})`,
+            params
+        );
+
+        return id;
     }
 
     async updateProperty(id: string, propertyData: UpdatePropertyInput): Promise<void> {
-        throw new Error("Method not implemented.");
+        const columns = await this.getPropertyColumns();
+        const values = this.buildPropertyWriteValues(propertyData, columns);
+        if (columns.has('updatedAt')) {
+            values.updatedAt = new Date().toISOString();
+        }
+
+        const fieldNames = Object.keys(values);
+        if (fieldNames.length === 0) {
+            return;
+        }
+
+        const params = [...fieldNames.map((field) => values[field]), id];
+        const assignments = fieldNames
+            .map((field, index) => `"${field}" = $${index + 1}`)
+            .join(', ');
+
+        await this.query(
+            `UPDATE properties SET ${assignments} WHERE id = $${params.length}`,
+            params
+        );
     }
 
     async updatePropertyImages(id: string, images: string[]): Promise<void> {
-        throw new Error("Method not implemented.");
+        const columns = await this.getPropertyColumns();
+        const values: Record<string, unknown> = {};
+
+        if (columns.has('images')) {
+            values.images = JSON.stringify(images);
+        }
+        if (columns.has('updatedAt')) {
+            values.updatedAt = new Date().toISOString();
+        }
+
+        const fieldNames = Object.keys(values);
+        if (fieldNames.length === 0) {
+            return;
+        }
+
+        const params = [...fieldNames.map((field) => values[field]), id];
+        const assignments = fieldNames
+            .map((field, index) => `"${field}" = $${index + 1}`)
+            .join(', ');
+
+        await this.query(
+            `UPDATE properties SET ${assignments} WHERE id = $${params.length}`,
+            params
+        );
     }
 
     async addFetchToHistory(propertyId: string, data: ExtractedPropertyData): Promise<void> {
-        throw new Error("Method not implemented.");
+        const property = await this.getPropertyById(propertyId);
+        if (!property) {
+            throw new Error('Property not found.');
+        }
+
+        const columns = await this.getPropertyColumns();
+        if (!columns.has('fetchHistory')) {
+            return;
+        }
+
+        const nextHistory = [
+            { fetchedAt: new Date().toISOString(), data },
+            ...(property.fetchHistory || []),
+        ];
+
+        await this.query(
+            `UPDATE properties SET "fetchHistory" = $1, "updatedAt" = $2 WHERE id = $3`,
+            [JSON.stringify(nextHistory), new Date().toISOString(), propertyId]
+        );
     }
 
     async deleteFetchHistoryItem(propertyId: string, fetchedAt: string): Promise<void> {
-        throw new Error("Method not implemented.");
+        const property = await this.getPropertyById(propertyId);
+        if (!property) {
+            throw new Error('Property not found.');
+        }
+
+        const columns = await this.getPropertyColumns();
+        if (!columns.has('fetchHistory')) {
+            return;
+        }
+
+        const nextHistory = (property.fetchHistory || []).filter((item) => item.fetchedAt !== fetchedAt);
+        await this.query(
+            `UPDATE properties SET "fetchHistory" = $1, "updatedAt" = $2 WHERE id = $3`,
+            [JSON.stringify(nextHistory), new Date().toISOString(), propertyId]
+        );
     }
 
     async addImagesToFetchHistory(propertyId: string, images: string[]): Promise<void> {
-        throw new Error("Method not implemented.");
+        const property = await this.getPropertyById(propertyId);
+        if (!property) {
+            throw new Error('Property not found.');
+        }
+
+        const columns = await this.getPropertyColumns();
+        if (!columns.has('imageFetchHistory')) {
+            return;
+        }
+
+        const nextHistory = [
+            { fetchedAt: new Date().toISOString(), images },
+            ...(property.imageFetchHistory || []),
+        ];
+
+        await this.query(
+            `UPDATE properties SET "imageFetchHistory" = $1, "updatedAt" = $2 WHERE id = $3`,
+            [JSON.stringify(nextHistory), new Date().toISOString(), propertyId]
+        );
     }
 
     async deleteImageFetchHistoryItem(propertyId: string, fetchedAt: string): Promise<void> {
-        throw new Error("Method not implemented.");
+        const property = await this.getPropertyById(propertyId);
+        if (!property) {
+            throw new Error('Property not found.');
+        }
+
+        const columns = await this.getPropertyColumns();
+        if (!columns.has('imageFetchHistory')) {
+            return;
+        }
+
+        const nextHistory = (property.imageFetchHistory || []).filter((item) => item.fetchedAt !== fetchedAt);
+        await this.query(
+            `UPDATE properties SET "imageFetchHistory" = $1, "updatedAt" = $2 WHERE id = $3`,
+            [JSON.stringify(nextHistory), new Date().toISOString(), propertyId]
+        );
     }
 
     async updatePropertyWithExtractedData(id: string, propertyData: ExtractedPropertyData): Promise<void> {
-        throw new Error("Method not implemented.");
+        const columns = await this.getPropertyColumns();
+        const { isPropertyPage: _ignored, ...rest } = propertyData;
+        const values = this.buildPropertyWriteValues(rest, columns);
+        if (columns.has('updatedAt')) {
+            values.updatedAt = new Date().toISOString();
+        }
+
+        const fieldNames = Object.keys(values);
+        if (fieldNames.length === 0) {
+            return;
+        }
+
+        const params = [...fieldNames.map((field) => values[field]), id];
+        const assignments = fieldNames
+            .map((field, index) => `"${field}" = $${index + 1}`)
+            .join(', ');
+
+        await this.query(
+            `UPDATE properties SET ${assignments} WHERE id = $${params.length}`,
+            params
+        );
     }
 
     async getProperties(): Promise<Property[]> {
@@ -184,6 +671,7 @@ export class PostgresAdapter implements DatabaseAdapter {
     }
 
     async getPaginatedProperties(options: { page?: number; limit?: number; filters?: PropertyFilters; }): Promise<{ properties: Property[], totalCount: number }> {
+        const columns = await this.getPropertyColumns();
         const page = Math.max(1, options.page ?? 1);
         const limit = Math.max(1, options.limit ?? 20);
         const offset = (page - 1) * limit;
@@ -200,6 +688,14 @@ export class PostgresAdapter implements DatabaseAdapter {
         if (filters.status) {
             params.push(filters.status);
             where.push(`status = $${params.length}`);
+        }
+
+        if (filters.sourceUrl) {
+            if (!columns.has('sourceUrl')) {
+                return { properties: [], totalCount: 0 };
+            }
+            params.push(filters.sourceUrl);
+            where.push(`"sourceUrl" = $${params.length}`);
         }
 
         const searchTerm = filters.searchTerm?.trim();
@@ -317,7 +813,14 @@ export class PostgresAdapter implements DatabaseAdapter {
     }
 
     async getPropertyBySlug(slug: string): Promise<Property | null> {
-        // Current Postgres schema does not store slug, so fall back to ID-based lookup.
+        const columns = await this.getPropertyColumns();
+        if (columns.has('slug')) {
+            const res = await this.query('SELECT * FROM properties WHERE slug = $1 LIMIT 1', [slug]);
+            if (res.rows.length > 0) {
+                return this.mapPropertyRow(res.rows[0]);
+            }
+        }
+
         return this.getPropertyById(slug);
     }
 
@@ -326,11 +829,33 @@ export class PostgresAdapter implements DatabaseAdapter {
     }
 
     async approveProperty(propertyId: string): Promise<void> {
-        throw new Error("Method not implemented.");
+        const columns = await this.getPropertyColumns();
+        const values: Record<string, unknown> = {};
+
+        if (columns.has('status')) {
+            values.status = 'approved';
+        }
+        if (columns.has('isApproved')) {
+            values.isApproved = true;
+        }
+        if (columns.has('updatedAt')) {
+            values.updatedAt = new Date().toISOString();
+        }
+
+        const fieldNames = Object.keys(values);
+        if (fieldNames.length === 0) {
+            return;
+        }
+
+        const params = [...fieldNames.map((field) => values[field]), propertyId];
+        const assignments = fieldNames
+            .map((field, index) => `"${field}" = $${index + 1}`)
+            .join(', ');
+        await this.query(`UPDATE properties SET ${assignments} WHERE id = $${params.length}`, params);
     }
 
     async deleteProperty(propertyId: string): Promise<void> {
-        throw new Error("Method not implemented.");
+        await this.query('DELETE FROM properties WHERE id = $1', [propertyId]);
     }
 
     async isPropertySaved(userId: string, propertyId: string): Promise<boolean> {
@@ -491,31 +1016,120 @@ export class PostgresAdapter implements DatabaseAdapter {
 
     // --- Agent Methods ---
     async createAgent(agentData: any): Promise<string> {
-        throw new Error("Method not implemented.");
+        const columns = await this.getAgentColumns();
+        const id = randomUUID();
+        const now = new Date().toISOString();
+        const values = this.buildAgentWriteValues(agentData, columns);
+        const insertValues: Record<string, unknown> = { ...values };
+
+        if (columns.has('id')) insertValues.id = id;
+        if (columns.has('createdAt')) insertValues.createdAt = now;
+        if (columns.has('updatedAt')) insertValues.updatedAt = now;
+
+        const fieldNames = Object.keys(insertValues);
+        const fieldList = fieldNames.map((field) => `"${field}"`).join(', ');
+        const placeholders = fieldNames.map((_, index) => `$${index + 1}`).join(', ');
+        const params = fieldNames.map((field) => insertValues[field]);
+
+        await this.query(
+            `INSERT INTO agents (${fieldList}) VALUES (${placeholders})`,
+            params
+        );
+
+        return id;
     }
 
-    async getAgents(options: { limit?: number; offset?: number }): Promise<Agent[]> {
-        throw new Error("Method not implemented.");
+    async getAgents(options: { limit?: number; offset?: number } = {}): Promise<Agent[]> {
+        const limit = Math.max(1, options.limit ?? 20);
+        const offset = Math.max(0, options.offset ?? 0);
+        const selectQuery = await this.getAgentSelectQuery();
+        const orderBy = await this.getAgentOrderByClause();
+        const res = await this.query(
+            `${selectQuery} ${orderBy} LIMIT $1 OFFSET $2`,
+            [limit, offset]
+        );
+
+        return res.rows.map((row) => this.mapAgentRow(row));
     }
 
     async getAgentById(id: string): Promise<Agent | null> {
-        throw new Error("Method not implemented.");
+        const selectQuery = await this.getAgentSelectQuery();
+        const res = await this.query(
+            `${selectQuery} WHERE id = $1 LIMIT $2`,
+            [id, 1]
+        );
+
+        if (res.rows.length === 0) {
+            return null;
+        }
+
+        return this.mapAgentRow(res.rows[0]);
     }
 
     async getAgentBySlug(slug: string): Promise<Agent | null> {
-        throw new Error("Method not implemented.");
+        const columns = await this.getAgentColumns();
+
+        if (!columns.has('slug')) {
+            return null;
+        }
+
+        const selectQuery = await this.getAgentSelectQuery();
+        const res = await this.query(
+            `${selectQuery} WHERE "slug" = $1 LIMIT $2`,
+            [slug, 1]
+        );
+
+        if (res.rows.length === 0) {
+            return null;
+        }
+
+        return this.mapAgentRow(res.rows[0]);
     }
 
     async updateAgent(id: string, agentData: any): Promise<void> {
-        throw new Error("Method not implemented.");
+        const columns = await this.getAgentColumns();
+        const values = this.buildAgentWriteValues(agentData, columns);
+
+        if (columns.has('updatedAt')) {
+            values.updatedAt = new Date().toISOString();
+        }
+
+        const fieldNames = Object.keys(values);
+        if (fieldNames.length === 0) {
+            return;
+        }
+
+        const assignments = fieldNames
+            .map((field, index) => `"${field}" = $${index + 1}`)
+            .join(', ');
+        const params = [...fieldNames.map((field) => values[field]), id];
+
+        await this.query(
+            `UPDATE agents SET ${assignments} WHERE id = $${params.length}`,
+            params
+        );
     }
 
     async deleteAgent(agentId: string): Promise<void> {
-        throw new Error("Method not implemented.");
+        await this.query('DELETE FROM agents WHERE id = $1', [agentId]);
     }
 
     async getAgentsByLocation(location: string): Promise<Agent[]> {
-        throw new Error("Method not implemented.");
+        const columns = await this.getAgentColumns();
+
+        if (!columns.has('location')) {
+            const agents = await this.getAgents({ limit: 1000, offset: 0 });
+            return agents.filter((agent) => agent.location.toLowerCase().includes(location.toLowerCase()));
+        }
+
+        const selectQuery = await this.getAgentSelectQuery();
+        const orderBy = await this.getAgentOrderByClause();
+        const res = await this.query(
+            `${selectQuery} WHERE "location" ILIKE $1 ${orderBy}`,
+            [`%${location}%`]
+        );
+
+        return res.rows.map((row) => this.mapAgentRow(row));
     }
 
     // --- Team Member Methods ---

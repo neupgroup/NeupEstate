@@ -12,6 +12,7 @@ export interface Sitemap {
 export type SitemapLog = {
     status: 'info' | 'success' | 'skipped' | 'error';
     message: string;
+    propertyId?: string;
     rawHtml?: string;
     updatedData?: any; // Using 'any' to avoid circular dependencies with AI types
 };
