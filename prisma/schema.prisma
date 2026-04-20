@@ -16,16 +16,8 @@ datasource db {
 
 model Account {
   id                String    @id @default(cuid())
-  createdOn         DateTime?
-  accessedOn        DateTime?
-  createdFromIp     String?
-  lastAccessedFromIp String?
   registered        Boolean   @default(false)
   accountType       String    // 'brand' | 'individual' | 'dependent' | 'guest'
-  name              String?
-  location          String?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
 
   // Relations
   conversations     Conversation[]
@@ -33,7 +25,7 @@ model Account {
   preferences       UserPreference?
   savedProperties   UserSavedProperty[]
 
-  @@map("accounts")
+  @@map("account")
 }
 
 model User {

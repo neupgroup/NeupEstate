@@ -2,25 +2,17 @@
 
 PostgreSQL database configured via `DATABASE_URL`.
 
-## accounts (Account) -> change table name to account
+## account (Account)
 - id: String (cuid)
-- createdOn: DateTime? (drop)
-- accessedOn: DateTime? (drop)
-- createdFromIp: String? (drop)
-- lastAccessedFromIp: String? (drop)
-- registered: Boolean (default false) (drop)
 - accountType: String
-- name: String? (drop)
-- location: String? (drop)
-- createdAt: DateTime (default now) (drop)
-- updatedAt: DateTime (auto) (drop)
 
-## tracker (Tracker) -> create this table.
+## trackerAccount (TrackerAccount) -> create this table.
 - id: String (cuid)
 - accountId: references account (id)
 
 ## Activity
-
+- id: String (cuid)
+- trackerId: String (cuid) -> references -> trackerAccount
 
 
 
