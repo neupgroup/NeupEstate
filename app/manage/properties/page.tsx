@@ -63,6 +63,7 @@ export default async function ManagePropertiesPage({
     page: currentPage,
     limit: PROPERTIES_PER_PAGE,
     filters,
+    includeInactive: true,
   });
   const totalPages = Math.ceil(totalCount / PROPERTIES_PER_PAGE);
   

@@ -80,7 +80,7 @@ function mapPropertyRecord(record: any): Property {
     listingAgent: record.listingAgent || undefined,
     isOwnerListing: record.isOwnerListing ?? undefined,
     isFeatured: Boolean(record.isFeatured),
-    isApproved: record.isApproved ?? undefined,
+    isApproved: typeof record.isApproved === "boolean" ? record.isApproved : record.status === "approved",
     sourceUrl: record.sourceUrl || undefined,
     createdAt: record.createdAt ? record.createdAt.toISOString?.() || String(record.createdAt) : undefined,
     updatedAt: record.updatedAt ? record.updatedAt.toISOString?.() || String(record.updatedAt) : undefined,

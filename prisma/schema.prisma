@@ -31,7 +31,6 @@ model Account {
   conversations     Conversation[]
   activities        Activity[]
   preferences       UserPreference?
-  blogs             Blog[]
   savedProperties   UserSavedProperty[]
 
   @@map("accounts")
@@ -101,49 +100,6 @@ model Message {
   @@index([conversationId])
   @@index([timestamp])
   @@map("messages")
-}
-
-// ============================================================================
-// Content Management
-// ============================================================================
-
-model FAQ {
-  id        String    @id @default(cuid())
-  question  String
-  answer    String
-  category  String    @default("General") // General | Buying | Selling | Renting | Technical
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  @@index([category])
-  @@index([createdAt])
-  @@map("faqs")
-}
-
-model Blog {
-  id                String    @id @default(cuid())
-  title             String
-  slug              String    @unique
-  content           String
-  excerpt           String?
-  featuredImageUrl  String?
-  authorId          String
-  authorName        String
-  authorAvatarUrl   String?
-  tags              String[]  @default([])
-  status            String    @default("draft") // draft | published
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  publishedAt       DateTime?
-
-  // Relations
-  author            Account   @relation(fields: [authorId], references: [id], onDelete: Cascade)
-
-  @@index([authorId])
-  @@index([slug])
-  @@index([status])
-  @@index([createdAt])
-  @@map("blogs")
 }
 
 model SiteContent {

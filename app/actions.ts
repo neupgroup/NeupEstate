@@ -203,7 +203,7 @@ export async function fetchAndStoreHistoryAction(
   propertyId: string
 ): Promise<{ success: boolean; error?: string | null }> {
   try {
-    const property = await getPropertyById(propertyId);
+    const property = await getPropertyById(propertyId, { includeInactive: true });
     if (!property) {
       return { success: false, error: "Property not found." };
     }
@@ -267,7 +267,7 @@ export async function fetchPropertyImagesAction(
   propertyId: string
 ): Promise<{ success: boolean; error?: string | null }> {
   try {
-    const property = await getPropertyById(propertyId);
+    const property = await getPropertyById(propertyId, { includeInactive: true });
     if (!property?.sourceUrl) {
       return { success: false, error: "Property has no source URL to fetch images from." };
     }
@@ -452,7 +452,7 @@ export async function rewritePropertyDetailsAction(
   data?: RewritePropertyDetailsOutput;
 }> {
   try {
-    const property = await getPropertyById(propertyId);
+    const property = await getPropertyById(propertyId, { includeInactive: true });
     if (!property) {
       return { success: false, error: 'Property not found' };
     }

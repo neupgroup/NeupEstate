@@ -5,7 +5,7 @@ import { Clock, DollarSign, CalendarCheck, Home } from "lucide-react";
 import { DailySchedule } from "@/components/manage/daily-schedule";
 
 async function getStats() {
-    const allProperties = await getProperties();
+    const allProperties = await getProperties({ includeInactive: true });
     
     const listedThisWeek = allProperties.filter(p => {
         if (!p.createdAt) return false;

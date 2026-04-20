@@ -52,7 +52,7 @@ export default function EditPropertyPage() {
 
         async function loadData() {
             const [propData, userData] = await Promise.all([
-                getPropertyById(propertyId),
+                getPropertyById(propertyId, { includeInactive: true }),
                 getUsers(),
             ]);
 
