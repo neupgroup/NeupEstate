@@ -2,12 +2,10 @@
 
 'use server';
 
-import { getFirestore } from '@/lib/firebase';
+import { prisma } from '@/lib/prisma';
 import { logProblem } from './problem-service';
 import type { CreatePromptFormValues } from '@/types';
 import { getDefaultModel } from './model-service';
-
-const COLLECTION_NAME = 'prompts';
 
 export interface Prompt {
     id: string;
@@ -21,51 +19,45 @@ export interface Prompt {
 }
 
 /**
- * Gets a prompt from Firestore. If it doesn't exist, it creates it with the default value.
+ * Gets a prompt from the database. If it doesn't exist, it creates it with the default value.
  * It also resolves the final model name, using the system default if no specific model is set.
  * @param promptId The unique identifier for the prompt.
  * @param defaultPrompt The default prompt object to seed if it doesn't exist.
  * @returns The full prompt configuration object, including the Genkit-ready model name.
  */
 export async function getPrompt(promptId: string, defaultPrompt: Omit<Prompt, 'id'>): Promise<Prompt> {
-    const firestore = getFirestore();
-    if (!firestore) {
-        console.warn(`Firestore not available, returning default prompt for ${promptId}`);
-        const defaultModel = await getDefaultModel();
-        return { 
-            id: promptId, 
-            ...defaultPrompt,
-            model: defaultModel?.modelId || 'gemini-2.5-flash'
-        };
-    }
-
     try {
-        const docRef = firestore.collection(COLLECTION_NAME).doc(promptId);
-        const docSnap = await docRef.get();
         let promptData: Prompt;
+        const existing = await prisma.prompt.findUnique({ where: { id: promptId } });
 
-        if (docSnap.exists) {
-            const data = docSnap.data()!;
+        if (existing) {
             promptData = {
-                id: docSnap.id,
-                promptText: data.promptText,
-                description: data.description,
-                name: data.name,
-                model: data.model,
-                placeholders: data.placeholders || [],
+                id: existing.id,
+                promptText: existing.promptText,
+                description: existing.description,
+                name: existing.name,
+                model: existing.model || undefined,
+                placeholders: existing.placeholders || [],
             };
         } else {
-            console.log(`Prompt '${promptId}' not found, seeding with default.`);
-            const dataToSave = {
-                ...defaultPrompt,
-                id: promptId,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                placeholders: defaultPrompt.placeholders || [],
-                model: defaultPrompt.model || '',
+            const created = await prisma.prompt.create({
+                data: {
+                    id: promptId,
+                    promptText: defaultPrompt.promptText,
+                    description: defaultPrompt.description,
+                    name: defaultPrompt.name,
+                    placeholders: defaultPrompt.placeholders || [],
+                    model: defaultPrompt.model || null,
+                },
+            });
+            promptData = {
+                id: created.id,
+                promptText: created.promptText,
+                description: created.description,
+                name: created.name,
+                model: created.model || undefined,
+                placeholders: created.placeholders || [],
             };
-            await docRef.set(dataToSave);
-            promptData = { id: promptId, ...defaultPrompt };
         }
         
         let modelIdentifier = promptData.model || '';
@@ -99,28 +91,23 @@ export async function getPrompt(promptId: string, defaultPrompt: Omit<Prompt, 'i
 }
 
 /**
- * Retrieves all prompts from Firestore for the admin page.
+ * Retrieves all prompts from the database for the admin page.
  */
 export async function getPrompts(): Promise<Prompt[]> {
-    const firestore = getFirestore();
-    if (!firestore) return [];
-
     try {
-        const snapshot = await firestore.collection(COLLECTION_NAME).get();
-        if (snapshot.empty) {
-            return [];
-        }
-        return snapshot.docs.map(doc => {
-            const data = doc.data();
-            return {
-                id: doc.id,
-                promptText: data.promptText,
-                description: data.description,
-                name: data.name,
-                placeholders: data.placeholders || [],
-                model: data.model,
-            } as Prompt;
+        const prompts = await prisma.prompt.findMany({
+            orderBy: { updatedAt: 'desc' },
         });
+        return prompts.map((prompt) => ({
+            id: prompt.id,
+            promptText: prompt.promptText,
+            description: prompt.description,
+            name: prompt.name,
+            placeholders: prompt.placeholders || [],
+            model: prompt.model || undefined,
+            createdAt: prompt.createdAt.toISOString(),
+            updatedAt: prompt.updatedAt.toISOString(),
+        }));
     } catch (error) {
         await logProblem(error, 'getPrompts');
         return [];
@@ -131,23 +118,19 @@ export async function getPrompts(): Promise<Prompt[]> {
  * Retrieves a single prompt by its ID.
  */
 export async function getPromptById(id: string): Promise<Prompt | null> {
-    const firestore = getFirestore();
-    if (!firestore) return null;
-
     try {
-        const docRef = await firestore.collection(COLLECTION_NAME).doc(id).get();
-        if (!docRef.exists) {
-            return null;
-        }
-        const data = docRef.data()!;
-         return {
-            id: docRef.id,
-            promptText: data.promptText,
-            description: data.description,
-            name: data.name,
-            placeholders: data.placeholders || [],
-            model: data.model,
-        } as Prompt;
+        const prompt = await prisma.prompt.findUnique({ where: { id } });
+        if (!prompt) return null;
+        return {
+            id: prompt.id,
+            promptText: prompt.promptText,
+            description: prompt.description,
+            name: prompt.name,
+            placeholders: prompt.placeholders || [],
+            model: prompt.model || undefined,
+            createdAt: prompt.createdAt.toISOString(),
+            updatedAt: prompt.updatedAt.toISOString(),
+        };
     } catch (error) {
         await logProblem(error, `getPromptById (ID: ${id})`);
         return null;
@@ -156,29 +139,26 @@ export async function getPromptById(id: string): Promise<Prompt | null> {
 
 
 /**
- * Creates a new prompt in Firestore.
+ * Creates a new prompt in the database.
  * @param data The prompt data including the ID.
  */
 export async function createPrompt(data: CreatePromptFormValues): Promise<void> {
-    const firestore = getFirestore();
-    if (!firestore) throw new Error('Firestore is not available');
-
     try {
-        const docRef = firestore.collection(COLLECTION_NAME).doc(data.id);
-        const docSnap = await docRef.get();
-
-        if (docSnap.exists) {
+        const existing = await prisma.prompt.findUnique({ where: { id: data.id } });
+        if (existing) {
             throw new Error(`A prompt with the ID "${data.id}" already exists.`);
         }
 
-        const dataToSave = {
-            ...data,
-            placeholders: data.placeholders?.split(',').map(p => p.trim()).filter(Boolean) || [],
-            createdAt: new Date(),
-            updatedAt: new Date(),
-        };
-
-        await docRef.set(dataToSave);
+        await prisma.prompt.create({
+            data: {
+                id: data.id,
+                promptText: data.promptText,
+                description: data.description,
+                name: data.name,
+                placeholders: data.placeholders?.split(',').map((p) => p.trim()).filter(Boolean) || [],
+                model: data.model || null,
+            },
+        });
     } catch (error: any) {
         await logProblem(error, `createPrompt (ID: ${data.id})`);
         throw error; // Re-throw to be handled by the action
@@ -187,22 +167,22 @@ export async function createPrompt(data: CreatePromptFormValues): Promise<void> 
 
 
 /**
- * Updates an existing prompt in Firestore.
+ * Updates an existing prompt in the database.
  * @param id The ID of the prompt to update.
  * @param data The partial prompt data to update.
  */
 export async function updatePrompt(id: string, data: Omit<CreatePromptFormValues, 'id'>): Promise<void> {
-    const firestore = getFirestore();
-    if (!firestore) throw new Error('Firestore is not available');
-
     try {
-        const docRef = firestore.collection(COLLECTION_NAME).doc(id);
-        const dataToUpdate = {
-            ...data,
-            placeholders: data.placeholders?.split(',').map(p => p.trim()).filter(Boolean) || [],
-            updatedAt: new Date(),
-        };
-        await docRef.update(dataToUpdate);
+        await prisma.prompt.update({
+            where: { id },
+            data: {
+                promptText: data.promptText,
+                description: data.description,
+                name: data.name,
+                placeholders: data.placeholders?.split(',').map((p) => p.trim()).filter(Boolean) || [],
+                model: data.model || null,
+            },
+        });
     } catch (error: any) {
         await logProblem(error, `updatePrompt (ID: ${id})`);
         throw new Error('Failed to update prompt.');
@@ -210,16 +190,12 @@ export async function updatePrompt(id: string, data: Omit<CreatePromptFormValues
 }
 
 /**
- * Deletes a prompt from Firestore.
+ * Deletes a prompt from the database.
  * @param promptId The ID of the prompt to delete.
  */
 export async function deletePrompt(promptId: string): Promise<void> {
-    const firestore = getFirestore();
-    if (!firestore) throw new Error('Firestore not available');
-
     try {
-        const docRef = firestore.collection(COLLECTION_NAME).doc(promptId);
-        await docRef.delete();
+        await prisma.prompt.delete({ where: { id: promptId } });
     } catch (error: any) {
         await logProblem(error, `deletePrompt (ID: ${promptId})`);
         throw new Error('Failed to delete prompt from database.');

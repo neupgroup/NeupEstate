@@ -43,9 +43,9 @@ export default async function ManagePropertiesPage({
       isUrl = false;
     }
     
-    const isFirestoreId = /^[a-zA-Z0-9]{20}$/.test(query);
+    const isRecordId = /^c[a-z0-9]{24}$/.test(query);
 
-    if (isFirestoreId) {
+    if (isRecordId) {
       filters = { id: query };
     } else if (isUrl) {
       filters = { sourceUrl: query };
@@ -131,7 +131,7 @@ export default async function ManagePropertiesPage({
                 <AlertDescription>
                    {query 
                     ? "Your search returned no results. Try adjusting your query."
-                    : "No properties were found in the database. You can add one by clicking the button above or by adding a sitemap in the automation page. If you believe this is an error, please ensure your Firebase credentials are set correctly."
+                    : "No properties were found in the database. You can add one by clicking the button above or by adding a sitemap in the automation page. If you believe this is an error, please ensure your database connection is configured correctly."
                    }
                 </AlertDescription>
             </Alert>

@@ -1,22 +1,24 @@
 
 'use server';
 
-import { getFirestore } from '@/lib/firebase';
+import { prisma } from '@/lib/prisma';
 import type { WhatsAppTemplate, CreateWhatsAppTemplateInput, WhatsAppConfig } from '@/types';
 import { logProblem } from './problem-service';
 
 const CONFIG_DOC_ID = 'integration-config';
 
 export async function getWhatsAppConfig(): Promise<WhatsAppConfig> {
-    const firestore = getFirestore();
-    if (!firestore) return {};
-
     try {
-        const docRef = await firestore.collection('whatsapp').doc(CONFIG_DOC_ID).get();
-        if (!docRef.exists) {
-            return {};
-        }
-        return docRef.data() as WhatsAppConfig;
+        const config = await prisma.whatsAppConfig.findUnique({
+            where: { id: CONFIG_DOC_ID },
+        });
+        if (!config) return {};
+        return {
+            apiToken: config.apiToken || undefined,
+            phoneNumberId: config.phoneNumberId || undefined,
+            accountId: config.accountId || undefined,
+            webhookVerifyToken: config.webhookVerifyToken || undefined,
+        };
     } catch (error) {
         console.error('Error getting WhatsApp config:', error);
         return {};
@@ -24,11 +26,23 @@ export async function getWhatsAppConfig(): Promise<WhatsAppConfig> {
 }
 
 export async function updateWhatsAppConfig(config: WhatsAppConfig): Promise<void> {
-    const firestore = getFirestore();
-    if (!firestore) throw new Error('Firestore not available');
-
     try {
-        await firestore.collection('whatsapp').doc(CONFIG_DOC_ID).set(config, { merge: true });
+        await prisma.whatsAppConfig.upsert({
+            where: { id: CONFIG_DOC_ID },
+            create: {
+                id: CONFIG_DOC_ID,
+                apiToken: config.apiToken || null,
+                phoneNumberId: config.phoneNumberId || null,
+                accountId: config.accountId || null,
+                webhookVerifyToken: config.webhookVerifyToken || null,
+            },
+            update: {
+                apiToken: config.apiToken || null,
+                phoneNumberId: config.phoneNumberId || null,
+                accountId: config.accountId || null,
+                webhookVerifyToken: config.webhookVerifyToken || null,
+            },
+        });
     } catch (error: any) {
         console.error('Error updating WhatsApp config:', error);
         throw new Error('Failed to update config.');
@@ -36,9 +50,6 @@ export async function updateWhatsAppConfig(config: WhatsAppConfig): Promise<void
 }
 
 export async function createWhatsAppTemplate(templateData: CreateWhatsAppTemplateInput): Promise<string> {
-    const firestore = getFirestore();
-    if (!firestore) throw new Error('Firestore is not available.');
-
     const dataToSave = {
         ...templateData,
         // Set status based on whether it's pre-approved on Facebook's platform
@@ -46,41 +57,42 @@ export async function createWhatsAppTemplate(templateData: CreateWhatsAppTemplat
         createdAt: new Date(),
     };
 
-    const docRef = await firestore.collection('whatsappTemplates').add(dataToSave);
-    return docRef.id;
+    const template = await prisma.whatsAppTemplate.create({
+        data: {
+            name: dataToSave.name,
+            category: dataToSave.category,
+            language: dataToSave.language,
+            body: dataToSave.body,
+            status: dataToSave.status,
+            isPreapproved: Boolean(dataToSave.isPreapproved),
+        },
+    });
+    return template.id;
 }
 
 export async function getWhatsAppTemplates(): Promise<WhatsAppTemplate[]> {
-    const firestore = getFirestore();
-    if (!firestore) return [];
     try {
-        const snapshot = await firestore.collection('whatsappTemplates').orderBy('createdAt', 'desc').get();
-        if (snapshot.empty) {
-            return [];
-        }
-        return snapshot.docs.map(doc => {
-            const data = doc.data();
-            return {
-                id: doc.id,
-                name: data.name,
-                category: data.category,
-                language: data.language,
-                body: data.body,
-                status: data.status,
-                createdAt: data.createdAt.toDate().toISOString(),
-                isPreapproved: data.isPreapproved || false,
-            }
+        const templates = await prisma.whatsAppTemplate.findMany({
+            orderBy: { createdAt: 'desc' },
         });
+        return templates.map((template) => ({
+            id: template.id,
+            name: template.name,
+            category: template.category,
+            language: template.language,
+            body: template.body,
+            status: template.status,
+            createdAt: template.createdAt.toISOString(),
+            isPreapproved: template.isPreapproved,
+        }));
     } catch (error) {
-        console.error('Error getting WhatsApp templates from Firestore: ', error);
+        console.error('Error getting WhatsApp templates from database: ', error);
         return [];
     }
 }
 
 export async function deleteWhatsAppTemplate(templateId: string): Promise<void> {
-    const firestore = getFirestore();
-    if (!firestore) throw new Error('Firestore is not available.');
-    await firestore.collection('whatsappTemplates').doc(templateId).delete();
+    await prisma.whatsAppTemplate.delete({ where: { id: templateId } });
 }
 
 export async function sendWhatsAppMessage(to: string, text: string) {

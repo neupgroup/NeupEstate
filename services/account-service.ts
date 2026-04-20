@@ -69,14 +69,21 @@ export async function getAccountById(id: string): Promise<Account | null> {
  */
 export async function updateUser(id: string, data: UpdateUserFormValues): Promise<void> {
     try {
-        await prisma.account.update({
+        await prisma.user.upsert({
             where: { id },
-            data: {
+            create: {
+                id,
+                name: data.name || 'User',
+                email: data.email || [],
+                phone: data.phone || [],
+                location: data.location || null,
+            },
+            update: {
                 name: data.name,
-                location: data.location,
-                registered: data.registered !== undefined ? data.registered : undefined,
-                accountType: data.account_type,
-                accessedOn: new Date(),
+                email: data.email || [],
+                phone: data.phone || [],
+                location: data.location || null,
+                lastLogin: new Date(),
             },
         });
     } catch (error) {

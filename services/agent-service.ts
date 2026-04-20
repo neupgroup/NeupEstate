@@ -164,7 +164,7 @@ export async function deleteAgent(agentId: string): Promise<void> {
 export async function getAgentsByLocation(location: string): Promise<Agent[]> {
     const db = getDbAdapter();
     // This assumes the adapter has a method to handle location-based filtering.
-    // The current Firebase adapter does a full scan, which is not scalable.
+    // This query is still a full scan; add indexes as the dataset grows.
     // A production system would use a more efficient query or a search index.
     if ('getAgentsByLocation' in db && typeof db.getAgentsByLocation === 'function') {
         return db.getAgentsByLocation(location);

@@ -172,43 +172,35 @@ export async function createConversation(input: CreateConversationInput): Promis
 
 
 export async function deleteConversation(conversationId: string): Promise<void> {
-
-    const conversationRef = firestore.collection('conversations').doc(conversationId);
-    const messagesRef = conversationRef.collection('messages');
-    
-    // Delete all messages in the subcollection
-    const messagesSnapshot = await messagesRef.limit(500).get(); // Batch delete
-    const batch = firestore.batch();
-    messagesSnapshot.forEach(doc => {
-        batch.delete(doc.ref);
+    await prisma.message.deleteMany({
+        where: { conversationId },
     });
 
-    // Delete the conversation document itself
-    batch.delete(conversationRef);
-
-    await batch.commit();
+    await prisma.conversation.delete({
+        where: { id: conversationId },
+    });
 }
 
 export async function updateConversationAiStatus(
   conversationId: string,
   status: { leadCategory: string; leadScore: number; aiInterventionActive: boolean }
 ): Promise<void> {
-  const firestore = getFirestore();
-  if (!firestore) throw new Error('Firestore is not available');
-  const conversationRef = firestore.collection('conversations').doc(conversationId);
-  await conversationRef.update({
-    ...status,
-    assignedTo: status.aiInterventionActive ? 'AI Assistant' : 'Admin',
-  });
+    await prisma.conversation.update({
+        where: { id: conversationId },
+        data: {
+                ...status,
+                assignedTo: status.aiInterventionActive ? 'AI Assistant' : 'Admin',
+        },
+    });
 }
 
 export async function setAiIntervention(conversationId: string, active: boolean): Promise<void> {
-    const firestore = getFirestore();
-    if (!firestore) throw new Error('Firestore is not available');
-    const conversationRef = firestore.collection('conversations').doc(conversationId);
-    await conversationRef.update({ 
-        aiInterventionActive: active,
-        assignedTo: active ? 'AI Assistant' : 'Admin'
+    await prisma.conversation.update({
+        where: { id: conversationId },
+        data: {
+            aiInterventionActive: active,
+            assignedTo: active ? 'AI Assistant' : 'Admin',
+        },
     });
 }
 

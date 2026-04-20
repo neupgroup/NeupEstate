@@ -1,36 +1,12 @@
 
 'use server';
 
-import { getFirestore } from '@/lib/firebase';
+import { prisma } from '@/lib/prisma';
 import type { Inquiry, CreateInquiryFormValues, InquiryStatus } from '@/types';
 import { getPropertyById } from './property-service';
 import { logProblem } from './problem-service';
 
-const COLLECTION_NAME = 'inquiries';
-
-// Helper to convert Firestore doc to Inquiry type
-function toInquiry(doc: FirebaseFirestore.DocumentSnapshot): Inquiry {
-    const data = doc.data()!;
-    return {
-        id: doc.id,
-        propertyId: data.propertyId,
-        propertyTitle: data.propertyTitle,
-        agentName: data.agentName,
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        question: data.question,
-        createdAt: data.createdAt.toDate().toISOString(),
-        status: data.status || 'new',
-    };
-}
-
 export async function createInquiry(data: CreateInquiryFormValues): Promise<string> {
-    const firestore = getFirestore();
-    if (!firestore) {
-        throw new Error('Firestore is not available.');
-    }
-
     try {
         // Fetch property to denormalize some data for easier display
         const property = await getPropertyById(data.propertyId);
@@ -42,12 +18,22 @@ export async function createInquiry(data: CreateInquiryFormValues): Promise<stri
             ...data,
             propertyTitle: property.title,
             agentName: property.listingAgent || property.agency.name, // Use listing agent or fall back to agency name
-            createdAt: new Date(),
             status: 'new',
         };
 
-        const docRef = await firestore.collection(COLLECTION_NAME).add(inquiryData);
-        return docRef.id;
+        const inquiry = await prisma.inquiry.create({
+            data: {
+                propertyId: inquiryData.propertyId,
+                propertyTitle: inquiryData.propertyTitle,
+                agentName: inquiryData.agentName || null,
+                name: inquiryData.name,
+                email: inquiryData.email,
+                phone: inquiryData.phone || null,
+                question: inquiryData.question,
+                status: inquiryData.status,
+            },
+        });
+        return inquiry.id;
     } catch (error) {
         await logProblem(error, 'createInquiry');
         throw new Error('Failed to submit inquiry.');
@@ -55,15 +41,24 @@ export async function createInquiry(data: CreateInquiryFormValues): Promise<stri
 }
 
 export async function getInquiries({ limit = 20, offset = 0 }: { limit?: number; offset?: number } = {}): Promise<Inquiry[]> {
-    const firestore = getFirestore();
-    if (!firestore) return [];
-
     try {
-        const snapshot = await firestore.collection(COLLECTION_NAME).orderBy('createdAt', 'desc').limit(limit).offset(offset).get();
-        if (snapshot.empty) {
-            return [];
-        }
-        return snapshot.docs.map(toInquiry);
+        const inquiries = await prisma.inquiry.findMany({
+            orderBy: { createdAt: 'desc' },
+            take: limit,
+            skip: offset,
+        });
+        return inquiries.map((inquiry) => ({
+            id: inquiry.id,
+            propertyId: inquiry.propertyId,
+            propertyTitle: inquiry.propertyTitle,
+            agentName: inquiry.agentName || undefined,
+            name: inquiry.name,
+            email: inquiry.email,
+            phone: inquiry.phone || undefined,
+            question: inquiry.question,
+            createdAt: inquiry.createdAt.toISOString(),
+            status: inquiry.status as InquiryStatus,
+        }));
     } catch (error) {
         await logProblem(error, 'getInquiries');
         return [];
@@ -71,11 +66,11 @@ export async function getInquiries({ limit = 20, offset = 0 }: { limit?: number;
 }
 
 export async function updateInquiryStatus(id: string, status: InquiryStatus): Promise<void> {
-    const firestore = getFirestore();
-    if (!firestore) throw new Error('Firestore not available');
-
     try {
-        await firestore.collection(COLLECTION_NAME).doc(id).update({ status });
+        await prisma.inquiry.update({
+            where: { id },
+            data: { status },
+        });
     } catch (error) {
         await logProblem(error, `updateInquiryStatus (ID: ${id})`);
         throw new Error('Failed to update inquiry status.');

@@ -2,12 +2,10 @@
 
 import type { Property, CreatePropertyInput, PropertyFilters, ExtractedPropertyData, UpdatePropertyInput, User, Agency, CreateAgencyInput, UpdateAgencyInput, TeamMember, CreateTeamMemberFormValues, UpdateTeamMemberFormValues, Requirement, CreateRequirementFormValues, Account, UpdateUserFormValues, Agent, CreateAgentFormValues } from '@/types';
 import type { SavedPropertyEntry } from '@/services/property-service';
-import { FirebaseAdapter } from '@/lib/adapters/firebase-adapter';
-import { MongoDBAdapter } from '@/lib/adapters/mongodb-adapter';
-import { PostgresAdapter } from '@/lib/adapters/postgres-adapter';
+import { PrismaAdapter } from '@/lib/adapters/prisma-adapter';
 
 // Define a common interface for all database operations.
-// This ensures that both Firebase and MongoDB adapters have the same methods.
+// Prisma provides the single backing store for these methods.
 export interface DatabaseAdapter {
     // Property methods
     addProperty(propertyData: Omit<ExtractedPropertyData, 'embedding'>): Promise<string>;
@@ -84,17 +82,7 @@ export interface DatabaseAdapter {
 let dbAdapterInstance: DatabaseAdapter | null = null;
 
 function initializeDbAdapter(): DatabaseAdapter {
-    const provider = process.env.DATABASE_PROVIDER || 'firebase';
-
-    if (provider === 'firebase') {
-        return new FirebaseAdapter();
-    } else if (provider === 'mongodb') {
-        return new MongoDBAdapter();
-    } else if (provider === 'postgresql') {
-        return new PostgresAdapter();
-    } else {
-        throw new Error(`Unsupported database provider: ${provider}`);
-    }
+    return new PrismaAdapter();
 }
 
 export function getDbAdapter(): DatabaseAdapter {

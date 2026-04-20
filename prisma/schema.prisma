@@ -32,8 +32,26 @@ model Account {
   activities        Activity[]
   preferences       UserPreference?
   blogs             Blog[]
+  savedProperties   UserSavedProperty[]
 
   @@map("accounts")
+}
+
+model User {
+  id          String    @id @default(cuid())
+  name        String
+  email       Json?     // Array of { type, value }
+  phone       Json?     // Array of { type, value }
+  location    String?
+  role        String?   // Admin | Agent | User
+  lastLogin   DateTime?
+  avatarUrl   String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([role])
+  @@index([lastLogin])
+  @@map("users")
 }
 
 // ============================================================================
@@ -317,67 +335,264 @@ model SitemapEntry {
 }
 
 // ============================================================================
-// Property Catalog (from existing schema)
+// AI Configuration
+// ============================================================================
+
+model AIModel {
+  id                           String   @id @default(cuid())
+  modelId                      String
+  name                         String
+  description                  String?
+  costPerMillionInputTokens    Float    @default(0)
+  costPerMillionOutputTokens   Float    @default(0)
+  isDefault                    Boolean  @default(false)
+  createdAt                    DateTime @default(now())
+  updatedAt                    DateTime @updatedAt
+
+  @@index([isDefault])
+  @@map("ai_models")
+}
+
+model Prompt {
+  id           String   @id
+  promptText   String
+  description  String
+  name         String
+  placeholders String[] @default([])
+  model        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("prompts")
+}
+
+// ============================================================================
+// WhatsApp Integration
+// ============================================================================
+
+model WhatsAppConfig {
+  id                 String   @id
+  apiToken           String?
+  phoneNumberId      String?
+  accountId          String?
+  webhookVerifyToken String?
+  updatedAt          DateTime @updatedAt
+
+  @@map("whatsapp_config")
+}
+
+model WhatsAppTemplate {
+  id            String   @id @default(cuid())
+  name          String
+  category      String
+  language      String
+  body          String
+  status        String
+  isPreapproved Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  @@index([status])
+  @@index([createdAt])
+  @@map("whatsapp_templates")
+}
+
+// ============================================================================
+// Contact & Inquiry
+// ============================================================================
+
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  body      String
+  status    String   @default("new")
+  createdAt DateTime @default(now())
+
+  @@index([status])
+  @@index([createdAt])
+  @@map("contact_submissions")
+}
+
+model Inquiry {
+  id            String   @id @default(cuid())
+  propertyId    String
+  propertyTitle String
+  agentName     String?
+  name          String
+  email         String
+  phone         String?
+  question      String
+  status        String   @default("new")
+  createdAt     DateTime @default(now())
+
+  @@index([propertyId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("inquiries")
+}
+
+// ============================================================================
+// Property Catalog
 // ============================================================================
 
 model Property {
-  id              String    @id @default(cuid())
-  title           String?
-  description     String?
-  price           Int?
-  status          String?
-  isFeatured      Boolean   @default(false)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id                String    @id @default(cuid())
+  title             String?
+  description       String?
+  price             Int?
+  location          String?
+  bedrooms          Int?
+  bathrooms         Int?
+  area              Float?
+  areaUnit          String?
+  facing            String?
+  buildStart        Int?
+  buildCompleted    Int?
+  purpose           String?
+  purposes          String[]  @default([])
+  category          String?
+  type              String?
+  images            String[]  @default([])
+  amenities         String[]  @default([])
+  agency            Json?
+  listingAgent      String?
+  isOwnerListing    Boolean   @default(false)
+  isFeatured        Boolean   @default(false)
+  isApproved        Boolean   @default(false)
+  status            String?   @default("pending")
+  sourceUrl         String?
+  slug              String?   @unique
+  floors            Int?
+  onFloor           Int?
+  roadAccess        Float?
+  latitude          Float?
+  longitude         Float?
+  fetchHistory      Json?
+  imageFetchHistory Json?
+  kitchens          Int?
+  diningRooms       Int?
+  livingRooms       Int?
+  carParkingSpots   Int?
+  bikeParkingSpots  Int?
+  metaTitle         String?
+  metaDescription   String?
+  metaTags          String[]  @default([])
+  landDetails       Json?
+  plots             Json?
+  apartmentDetails  Json?
+  apartmentUnits    Json?
+  structuredLocation Json?
+  pricing           Json?
+  roadAccessDetails Json?
+  distancing        Json?
+  earnings          Json?
+  owner             Json?
+  owners            Json?
+  documents         Json?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  savedBy           UserSavedProperty[]
 
   @@index([price])
+  @@index([location])
+  @@index([purpose])
+  @@index([category])
+  @@index([type])
+  @@index([slug])
+  @@index([sourceUrl])
   @@map("properties")
 }
 
 // ============================================================================
-// Agency References (from existing adapter pattern)
+// Agency, Agent, Team, Reviews
 // ============================================================================
 
 model Agency {
-  id              String    @id @default(cuid())
-  name            String
-  description     String?
-  contactEmail    String?
-  contactPhone    String?
-  website         String?
-  logoUrl         String?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id                String   @id @default(cuid())
+  name              String
+  logoUrl           String?
+  website           String?
+  registeredName    String?
+  contactEmail      String?
+  contactPhone      String?
+  mainLocation      String?
+  branches          String[] @default([])
+  contactPersonName String?
+  contactPersonRole String?
+  description       String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
+  @@index([name])
   @@map("agencies")
 }
 
 model Agent {
-  id              String    @id @default(cuid())
-  name            String
-  email           String?
-  phone           String?
-  agencyId        String?
-  bio             String?
-  avatarUrl       String?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id                String   @id @default(cuid())
+  name              String
+  slug              String?  @unique
+  location          String?
+  registered        Boolean  @default(false)
+  userId            String?
+  email             String?
+  phone             String?
+  about             String?
+  photoUrl          String?
+  specializations   String[] @default([])
+  availabilityHours String?
+  timeSlotDuration  Int?
+  unavailability    Json?
+  agencyId          String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
   @@index([agencyId])
+  @@index([slug])
   @@map("agents")
 }
 
-model Team {
-  id              String    @id @default(cuid())
-  name            String
-  description     String?
-  imageUrl        String?
-  position        Int?      // For ordering
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+model TeamMember {
+  id          String   @id @default(cuid())
+  orgId       String?
+  userId      String?
+  name        String
+  slug        String?  @unique
+  position    String
+  socialMedia Json?
+  about       String
+  moreDetails String?
+  photoUrl    String?
+  registered  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  @@map("teams")
+  @@index([slug])
+  @@map("team_members")
 }
+
+model Review {
+  id          String   @id @default(cuid())
+  targetId    String
+  targetType  String
+  targetName  String
+  authorName  String
+  authorEmail String?
+  rating      Int
+  reviewText  String
+  createdAt   DateTime @default(now())
+
+  @@index([targetId])
+  @@index([targetType])
+  @@index([createdAt])
+  @@map("reviews")
+}
+
+// ============================================================================
+// Requirements
+// ============================================================================
 
 model Requirement {
   id              String    @id @default(cuid())
@@ -397,4 +612,23 @@ model Requirement {
   @@index([userId])
   @@index([createdAt])
   @@map("requirements")
+}
+
+// ============================================================================
+// Saved Properties
+// ============================================================================
+
+model UserSavedProperty {
+  userId        String
+  propertyId    String
+  propertyTitle String?
+  savedAt       DateTime @default(now())
+
+  account       Account  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  property      Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@id([userId, propertyId])
+  @@index([savedAt])
+  @@index([propertyId])
+  @@map("user_saved_properties")
 }

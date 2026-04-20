@@ -1,8 +1,6 @@
 
-// src/services/sitemap-service.ts
 'use server';
 
-import { getFirestore } from '@/lib/firebase';
 import { prisma } from '@/lib/prisma';
 import type { Sitemap, SitemapLog } from '@/types';
 import * as cheerio from 'cheerio';
@@ -10,21 +8,6 @@ import { extractAndSaveProperty as extractAndSavePropertyFlow } from '@/services
 import { fetchPageSourceCode } from '@/services/activities/fetch-page-source2';
 
 export async function addSitemap(url: string): Promise<string> {
-    const firestore = getFirestore();
-
-    if (firestore) {
-        const existing = await firestore.collection('sitemaps').where('url', '==', url).limit(1).get();
-        if (!existing.empty) {
-            throw new Error('This sitemap URL is already being tracked.');
-        }
-
-        const docRef = await firestore.collection('sitemaps').add({
-            url,
-            lastChecked: null,
-        });
-        return docRef.id;
-    }
-
     const existing = await prisma.sitemapEntry.findUnique({
         where: { url },
         select: { id: true },
@@ -43,38 +26,16 @@ export async function addSitemap(url: string): Promise<string> {
 }
 
 export async function getSitemaps(): Promise<Sitemap[]> {
-    const firestore = getFirestore();
-
     try {
-        if (!firestore) {
-            const rows = await prisma.sitemapEntry.findMany({
-                orderBy: { updatedAt: 'desc' },
-            });
-
-            return rows.map((row) => ({
-                id: row.id,
-                url: row.url,
-                lastChecked: row.lastmod?.toISOString(),
-            }));
-        }
-
-        const snapshot = await firestore.collection('sitemaps').get();
-        return snapshot.docs.map(doc => {
-            const data = doc.data();
-            const lastCheckedTimestamp = data.lastChecked;
-            let lastChecked: string | undefined = undefined;
-
-            // Defensively check if it's a Firestore Timestamp object before converting
-            if (lastCheckedTimestamp && typeof lastCheckedTimestamp.toDate === 'function') {
-                lastChecked = lastCheckedTimestamp.toDate().toISOString();
-            }
-            
-            return {
-                id: doc.id,
-                url: data.url,
-                lastChecked,
-            };
+        const rows = await prisma.sitemapEntry.findMany({
+            orderBy: { updatedAt: 'desc' },
         });
+
+        return rows.map((row) => ({
+            id: row.id,
+            url: row.url,
+            lastChecked: row.lastmod?.toISOString(),
+        }));
     } catch (error) {
         console.error("Error fetching sitemaps:", error);
         // It's crucial to log the error but still return a valid (empty) array
@@ -84,60 +45,27 @@ export async function getSitemaps(): Promise<Sitemap[]> {
 }
 
 async function getExistingSourceUrls(): Promise<Set<string>> {
-    const firestore = getFirestore();
-
-    if (firestore) {
-        const snapshot = await firestore.collection('properties').where('sourceUrl', '!=', null).get();
-        const urls = snapshot.docs.map(doc => doc.data().sourceUrl);
-        return new Set(urls);
-    }
-
-    const hasSourceUrlColumn = await prisma.$queryRaw<Array<{ exists: boolean }>>`
-        SELECT EXISTS (
-            SELECT 1
-            FROM information_schema.columns
-            WHERE table_schema = current_schema()
-              AND table_name = 'properties'
-              AND column_name = 'sourceUrl'
-        ) AS exists
-    `;
-
-    if (!hasSourceUrlColumn[0]?.exists) {
-        return new Set();
-    }
-
-    const rows = await prisma.$queryRaw<Array<{ sourceUrl: string | null }>>`
-        SELECT "sourceUrl"
-        FROM properties
-        WHERE "sourceUrl" IS NOT NULL
-    `;
+    const rows = await prisma.property.findMany({
+        where: { sourceUrl: { not: null } },
+        select: { sourceUrl: true },
+    });
 
     return new Set(rows.map((row) => row.sourceUrl).filter((url): url is string => Boolean(url)));
 }
 
 export async function getNewUrlsFromSitemap(sitemapId: string): Promise<{ sitemapUrl: string, newUrls: string[], logs: SitemapLog[] }> {
-    const firestore = getFirestore();
     const logs: SitemapLog[] = [];
 
-    let sitemapUrl: string;
-    if (firestore) {
-        const sitemapRef = await firestore.collection('sitemaps').doc(sitemapId).get();
-        if (!sitemapRef.exists) {
-            throw new Error('Sitemap not found.');
-        }
-        sitemapUrl = (sitemapRef.data() as Omit<Sitemap, 'id'>).url;
-    } else {
-        const sitemap = await prisma.sitemapEntry.findUnique({
-            where: { id: sitemapId },
-            select: { url: true },
-        });
+    const sitemap = await prisma.sitemapEntry.findUnique({
+        where: { id: sitemapId },
+        select: { url: true },
+    });
 
-        if (!sitemap) {
-            throw new Error('Sitemap not found.');
-        }
-
-        sitemapUrl = sitemap.url;
+    if (!sitemap) {
+        throw new Error('Sitemap not found.');
     }
+
+    const sitemapUrl = sitemap.url;
 
     logs.push({ status: 'info', message: `Accessing sitemap: ${sitemapUrl}` });
 
@@ -150,12 +78,6 @@ export async function getNewUrlsFromSitemap(sitemapId: string): Promise<{ sitema
 
         if (sitemapUrls.length > 0) {
             const existingUrls = await getExistingSourceUrls();
-            if (!firestore && existingUrls.size === 0) {
-                logs.push({
-                    status: 'info',
-                    message: 'Duplicate filtering is unavailable in the current Postgres schema because properties.sourceUrl is missing. Treating all sitemap URLs as new.',
-                });
-            }
             const newUrlsToImport = sitemapUrls.filter(url => !existingUrls.has(url));
             logs.push({ status: 'info', message: `${newUrlsToImport.length} of them are new and will be processed.` });
             return { sitemapUrl, newUrls: newUrlsToImport, logs };
@@ -196,13 +118,6 @@ export async function processSitemapUrl(url: string): Promise<SitemapLog> {
 }
 
 export async function updateSitemapCheckedTime(sitemapId: string): Promise<void> {
-    const firestore = getFirestore();
-
-    if (firestore) {
-        await firestore.collection('sitemaps').doc(sitemapId).update({ lastChecked: new Date() });
-        return;
-    }
-
     await prisma.sitemapEntry.update({
         where: { id: sitemapId },
         data: { lastmod: new Date() },

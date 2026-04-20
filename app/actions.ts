@@ -93,9 +93,9 @@ export async function searchProperties(
     } else {
       // It's a regular search, likely with a text query `q`.
       let parsedQueryFilters: PropertyFilters = {};
-      const isFirestoreId = q && typeof q === 'string' && /^[a-zA-Z0-9]{20}$/.test(q as string);
+      const isRecordId = q && typeof q === 'string' && /^c[a-z0-9]{24}$/.test(q as string);
 
-      if (isFirestoreId) {
+      if (isRecordId) {
         parsedQueryFilters = { id: q as string };
       } else if (q && typeof q === 'string') {
         try {

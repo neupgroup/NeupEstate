@@ -6,7 +6,7 @@ import { getDbAdapter } from '@/lib/database';
 import type { Property, CreatePropertyInput, PropertyFilters, ExtractedPropertyData as ExtractedPropertyDataType, UpdatePropertyInput, User } from '@/types';
 
 // The service layer now delegates all database operations to the active adapter.
-// It is no longer concerned with whether the backend is Firebase or MongoDB.
+// It is no longer concerned with which database provider backs the adapter.
 
 export async function addProperty(propertyData: Omit<ExtractedPropertyDataType, 'embedding'>): Promise<string> {
     const db = getDbAdapter();
