@@ -110,14 +110,20 @@ export default async function AgentDetailPage({ params }: { params: Promise<{ sl
                                 <CardContent className="p-6">
                                     <div className="flex justify-between items-start">
                                         <div>
-                                            <h4 className="font-semibold">{review.authorName}</h4>
+                                            <h4 className="font-semibold">Reviewer: {review.reviewedBy}</h4>
                                             <p className="text-sm text-muted-foreground">
-                                                Reviewed on {new Date(review.createdAt).toLocaleDateString()}
+                                                Reviewed on {new Date(review.reviewedOn).toLocaleDateString()}
                                             </p>
                                         </div>
                                         <StarRating rating={review.rating} />
                                     </div>
-                                    <p className="mt-2 text-sm text-gray-700 italic">"{review.reviewText}"</p>
+                                    <p className="mt-2 text-sm text-gray-700 italic">"{review.review}"</p>
+                                    {review.response && (
+                                        <div className="mt-3 rounded-md bg-muted/40 p-3 text-sm">
+                                            <p className="font-medium">Response</p>
+                                            <p className="text-muted-foreground">{review.response}</p>
+                                        </div>
+                                    )}
                                 </CardContent>
                             </Card>
                         ))}

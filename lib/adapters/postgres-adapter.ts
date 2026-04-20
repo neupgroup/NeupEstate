@@ -322,16 +322,16 @@ export class PostgresAdapter implements DatabaseAdapter {
 
     private async ensureSavedPropertiesTable(): Promise<void> {
         await this.query(`
-            CREATE TABLE IF NOT EXISTS user_saved_properties (
-                user_id TEXT NOT NULL,
+            CREATE TABLE IF NOT EXISTS saved_property (
+                id TEXT PRIMARY KEY,
+                account_id TEXT NOT NULL,
                 property_id TEXT NOT NULL,
-                property_title TEXT,
-                saved_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-                PRIMARY KEY (user_id, property_id)
+                saved_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
             )
         `);
-        await this.query('CREATE INDEX IF NOT EXISTS idx_user_saved_properties_saved_at ON user_saved_properties(saved_at DESC)');
-        await this.query('CREATE INDEX IF NOT EXISTS idx_user_saved_properties_property_id ON user_saved_properties(property_id)');
+        await this.query('CREATE INDEX IF NOT EXISTS idx_saved_property_saved_at ON saved_property(saved_at DESC)');
+        await this.query('CREATE INDEX IF NOT EXISTS idx_saved_property_property_id ON saved_property(property_id)');
+        await this.query('CREATE INDEX IF NOT EXISTS idx_saved_property_account_id ON saved_property(account_id)');
     }
 
     private mapPropertyRow(row: any): Property {
@@ -861,7 +861,7 @@ export class PostgresAdapter implements DatabaseAdapter {
     async isPropertySaved(userId: string, propertyId: string): Promise<boolean> {
         await this.ensureSavedPropertiesTable();
         const res = await this.query(
-            'SELECT 1 FROM user_saved_properties WHERE user_id = $1 AND property_id = $2 LIMIT 1',
+            'SELECT 1 FROM saved_property WHERE account_id = $1 AND property_id = $2 LIMIT 1',
             [userId, propertyId]
         );
         return res.rows.length > 0;
@@ -873,23 +873,19 @@ export class PostgresAdapter implements DatabaseAdapter {
 
         if (currentlySaved) {
             await this.query(
-                'DELETE FROM user_saved_properties WHERE user_id = $1 AND property_id = $2',
+                'DELETE FROM saved_property WHERE account_id = $1 AND property_id = $2',
                 [userId, propertyId]
             );
             return { saved: false };
         }
 
-        const propertyRes = await this.query('SELECT title FROM properties WHERE id = $1 LIMIT 1', [propertyId]);
-        const propertyTitle = propertyRes.rows[0]?.title || 'Property';
-
+        const id = randomUUID();
         await this.query(
             `
-                INSERT INTO user_saved_properties (user_id, property_id, property_title, saved_at)
+                INSERT INTO saved_property (id, account_id, property_id, saved_at)
                 VALUES ($1, $2, $3, NOW())
-                ON CONFLICT (user_id, property_id)
-                DO UPDATE SET property_title = EXCLUDED.property_title, saved_at = NOW()
             `,
-            [userId, propertyId, propertyTitle]
+            [id, userId, propertyId]
         );
 
         return { saved: true };
@@ -900,10 +896,10 @@ export class PostgresAdapter implements DatabaseAdapter {
         const res = await this.query(
             `
                 SELECT p.*
-                FROM user_saved_properties usp
-                INNER JOIN properties p ON p.id = usp.property_id
-                WHERE usp.user_id = $1
-                ORDER BY usp.saved_at DESC
+                FROM saved_property sp
+                INNER JOIN properties p ON p.id = sp.property_id
+                WHERE sp.account_id = $1
+                ORDER BY sp.saved_at DESC
             `,
             [userId]
         );
@@ -915,22 +911,22 @@ export class PostgresAdapter implements DatabaseAdapter {
         const res = await this.query(
             `
                 SELECT
-                    usp.user_id,
+                    sp.account_id,
                     COALESCE(a.name, 'Unknown User') AS user_name,
-                    usp.property_id,
-                    COALESCE(usp.property_title, p.title, 'Unknown Property') AS property_title,
-                    usp.saved_at
-                FROM user_saved_properties usp
-                LEFT JOIN accounts a ON a.id = usp.user_id
-                LEFT JOIN properties p ON p.id = usp.property_id
-                ORDER BY usp.saved_at DESC
+                    sp.property_id,
+                    COALESCE(p.title, 'Unknown Property') AS property_title,
+                    sp.saved_at
+                FROM saved_property sp
+                LEFT JOIN accounts a ON a.id = sp.account_id
+                LEFT JOIN properties p ON p.id = sp.property_id
+                ORDER BY sp.saved_at DESC
                 LIMIT $1
             `,
             [limit]
         );
 
         return res.rows.map(row => ({
-            userId: row.user_id,
+            userId: row.account_id,
             userName: row.user_name,
             propertyId: row.property_id,
             propertyTitle: row.property_title,
@@ -943,10 +939,10 @@ export class PostgresAdapter implements DatabaseAdapter {
         const res = await this.query(
             `
                 SELECT a.*
-                FROM user_saved_properties usp
-                INNER JOIN accounts a ON a.id = usp.user_id
-                WHERE usp.property_id = $1
-                ORDER BY usp.saved_at DESC
+                FROM saved_property sp
+                INNER JOIN accounts a ON a.id = sp.account_id
+                WHERE sp.property_id = $1
+                ORDER BY sp.saved_at DESC
             `,
             [propertyId]
         );

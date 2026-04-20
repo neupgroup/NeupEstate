@@ -317,7 +317,6 @@ export class MongoDBAdapter implements DatabaseAdapter {
         }
         
         const isSaved = await this.isPropertySaved(userId, propertyId);
-        const property = await this.getPropertyById(propertyId);
 
         if (isSaved) {
             await this.users.updateOne({ id: userId }, { $pull: { savedProperties: { propertyId: new ObjectId(propertyId) } } });
@@ -325,7 +324,6 @@ export class MongoDBAdapter implements DatabaseAdapter {
         } else {
             const savedEntry = {
                 propertyId: new ObjectId(propertyId),
-                propertyTitle: property?.title,
                 savedAt: new Date(),
             };
             await this.users.updateOne({ id: userId }, { $push: { savedProperties: savedEntry } });
@@ -350,19 +348,29 @@ export class MongoDBAdapter implements DatabaseAdapter {
             { $unwind: "$savedProperties" },
             { $sort: { "savedProperties.savedAt": -1 } },
             { $limit: limit },
-            { 
+            {
                 $project: {
                     _id: 0,
                     userId: "$id",
                     userName: "$name",
                     propertyId: { $toString: "$savedProperties.propertyId" },
-                    propertyTitle: "$savedProperties.propertyTitle",
                     savedAt: { $toString: "$savedProperties.savedAt" },
                 }
             }
         ];
         const results = await this.users.aggregate(pipeline).toArray();
-        return results as SavedPropertyEntry[];
+        if (results.length === 0) return [];
+
+        const propertyIds = results.map((entry: any) => new ObjectId(entry.propertyId));
+        const properties = await this.properties
+            .find({ _id: { $in: propertyIds } }, { projection: { title: 1 } })
+            .toArray();
+        const titleById = new Map(properties.map((property) => [property._id.toString(), property.title || "Unknown Property"]));
+
+        return results.map((entry: any) => ({
+            ...entry,
+            propertyTitle: titleById.get(entry.propertyId) || "Unknown Property",
+        })) as SavedPropertyEntry[];
     }
 
     async getUsersBySavedProperty(propertyId: string): Promise<User[]> {

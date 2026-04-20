@@ -191,12 +191,11 @@ export type UpdateTeamMemberFormValues = z.infer<typeof CreateTeamMemberSchema>;
 // Review
 export interface Review {
   id: string;
-  targetId: string;
-  targetType: 'agent' | 'agency';
-  targetName: string; // denormalized for easy display
-  authorName: string;
-  authorEmail?: string;
+  reviewedBy: string;
   rating: number; // 1-5
-  reviewText: string;
-  createdAt: string; // ISO string
+  review: string;
+  reviewedOn: string; // ISO string
+  response?: string;
+  responseBy?: string;
+  responseOn?: string; // ISO string
 }

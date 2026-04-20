@@ -556,34 +556,28 @@ export class PrismaAdapter implements DatabaseAdapter {
   }
 
   async isPropertySaved(userId: string, propertyId: string): Promise<boolean> {
-    const existing = await prisma.userSavedProperty.findUnique({
-      where: { userId_propertyId: { userId, propertyId } },
+    const existing = await prisma.savedProperty.findFirst({
+      where: { accountId: userId, propertyId },
     });
     return Boolean(existing);
   }
 
   async toggleSavedProperty(userId: string, propertyId: string): Promise<{ saved: boolean }> {
-    const existing = await prisma.userSavedProperty.findUnique({
-      where: { userId_propertyId: { userId, propertyId } },
+    const existing = await prisma.savedProperty.findFirst({
+      where: { accountId: userId, propertyId },
     });
 
     if (existing) {
-      await prisma.userSavedProperty.delete({
-        where: { userId_propertyId: { userId, propertyId } },
+      await prisma.savedProperty.deleteMany({
+        where: { accountId: userId, propertyId },
       });
       return { saved: false };
     }
 
-    const property = await prisma.property.findUnique({
-      where: { id: propertyId },
-      select: { title: true },
-    });
-
-    await prisma.userSavedProperty.create({
+    await prisma.savedProperty.create({
       data: {
-        userId,
+        accountId: userId,
         propertyId,
-        propertyTitle: property?.title || "Property",
         savedAt: new Date(),
       },
     });
@@ -592,8 +586,8 @@ export class PrismaAdapter implements DatabaseAdapter {
   }
 
   async getSavedProperties(userId: string): Promise<Property[]> {
-    const saved = await prisma.userSavedProperty.findMany({
-      where: { userId },
+    const saved = await prisma.savedProperty.findMany({
+      where: { accountId: userId },
       include: { property: true },
       orderBy: { savedAt: "desc" },
     });
@@ -605,7 +599,7 @@ export class PrismaAdapter implements DatabaseAdapter {
   }
 
   async getLatestSavedProperties(limit: number): Promise<SavedPropertyEntry[]> {
-    const saved = await prisma.userSavedProperty.findMany({
+    const saved = await prisma.savedProperty.findMany({
       orderBy: { savedAt: "desc" },
       take: limit,
       include: {
@@ -615,16 +609,16 @@ export class PrismaAdapter implements DatabaseAdapter {
     });
 
     return saved.map((entry) => ({
-      userId: entry.userId,
+      userId: entry.accountId,
       userName: entry.account?.name || "Unknown User",
       propertyId: entry.propertyId,
-      propertyTitle: entry.propertyTitle || entry.property?.title || "Unknown Property",
+      propertyTitle: entry.property?.title || "Unknown Property",
       savedAt: entry.savedAt.toISOString(),
     }));
   }
 
   async getUsersBySavedProperty(propertyId: string): Promise<User[]> {
-    const saved = await prisma.userSavedProperty.findMany({
+    const saved = await prisma.savedProperty.findMany({
       where: { propertyId },
       include: { account: true },
       orderBy: { savedAt: "desc" },

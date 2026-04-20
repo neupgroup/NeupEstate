@@ -23,7 +23,7 @@ model Account {
   conversations     Conversation[]
   activities        Activity[]
   preferences       UserPreference?
-  savedProperties   UserSavedProperty[]
+  savedProperties   SavedProperty[]
 
   @@map("account")
 }
@@ -442,7 +442,7 @@ model Property {
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
 
-  savedBy           UserSavedProperty[]
+  savedBy           SavedProperty[]
 
   @@index([price])
   @@index([location])
@@ -522,20 +522,19 @@ model TeamMember {
 }
 
 model Review {
-  id          String   @id @default(cuid())
-  targetId    String
-  targetType  String
-  targetName  String
-  authorName  String
-  authorEmail String?
-  rating      Int
-  reviewText  String
-  createdAt   DateTime @default(now())
+  id         String   @id @default(cuid())
+  reviewedBy String
+  rating     Int
+  review     String   @db.VarChar(255)
+  reviewedOn DateTime
+  response   String?  @db.VarChar(255)
+  responseBy String?
+  responseOn DateTime?
 
-  @@index([targetId])
-  @@index([targetType])
-  @@index([createdAt])
-  @@map("reviews")
+  @@index([reviewedBy])
+  @@index([responseBy])
+  @@index([reviewedOn])
+  @@map("review")
 }
 
 // ============================================================================
@@ -566,17 +565,17 @@ model Requirement {
 // Saved Properties
 // ============================================================================
 
-model UserSavedProperty {
-  userId        String
-  propertyId    String
-  propertyTitle String?
-  savedAt       DateTime @default(now())
+model SavedProperty {
+  id          String   @id @default(cuid())
+  accountId   String
+  propertyId  String
+  savedAt     DateTime @default(now())
 
-  account       Account  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  property      Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  account     Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  property    Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
-  @@id([userId, propertyId])
-  @@index([savedAt])
+  @@index([accountId])
   @@index([propertyId])
-  @@map("user_saved_properties")
+  @@index([savedAt])
+  @@map("saved_property")
 }

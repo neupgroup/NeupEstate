@@ -3,30 +3,237 @@
 PostgreSQL database configured via `DATABASE_URL`.
 
 ## account (Account)
-- id: String (cuid)
+- id: String (cuid) (logged in -> just id, not logged in -> track.id will be the id format)
 - accountType: String
+- mainId: String (references -> Account.id)
+- lastActiveOn: Timestamp
 
-## trackerAccount (TrackerAccount) -> create this table.
+## activity (Activity)
 - id: String (cuid)
-- accountId: references account (id)
+- trackerId: String (cuid) -> references -> trackerAccount (id)
+- title: String
+- details: JSON [duration:timeSpentOnThatPage, onPage:url, property:ifPropertyTheIdOfProperty]
+- activityOn: DATETIME (default)
+- ipAddress: String
 
-## Activity
-- id: String (cuid)
-- trackerId: String (cuid) -> references -> trackerAccount
+## property (Property)
+- id: String (cuid, primary key)
+- slug: String (unique)
+- title: String (varchar 255)
+- description: Text
+- coverImage: String (varchar 255)
+- type: Enum (HOUSE, APARTMENT, LAND, COMMERCIAL)
+- purpose: Enum (SALE, RENT, LEASE)
+- status: Enum (PENDING, ACTIVE, SOLD, RENTED, ARCHIVED)
+- currency: String (varchar 10)
+- displayPrice: Decimal(18,2)
+- displayPriceUnit: String (varchar 24)
+- areaUnit: String (varchar 64)
+- locationText: String (varchar 255)
+- geoLocation: String (varchar 63)
+- structuredLocation: String (location > location > location)
+- agency: String (nullable, references Agency.id)
+- agent: String (nullable, references Agent.id)
+- createdAt: DateTime (default now)
+- isFeatured: Boolean (default false)
+- isApproved: Boolean (default false)
+- isDeleted: Boolean (default false)
+
+## property_link (PropertyLink)
+- id: String (cuid, primary key)
+- primaryId: String (references Property.id)
+- secondaryId: String (references Property.id)
+
+## property_media (PropertyMedia)
+- id: String (cuid, primary key)
+- propertyId: String (references Property.id, indexed)
+- type: String (video/audio/photo/gif)
+- url: String (varchar 500)
+- alt: String (varchar 255)
+- sortOrder: Int (default 0)
+- isPrimary: Boolean (default false)
+- createdAt: DateTime (default now)
+- isDeleted: Boolean (default false)
+
+## property_house_detail (PropertyHouseDetail)
+- propertyId: String (cuid, primary key, unique, references Property.id)
+- bedrooms: Int
+- bathrooms: Int
+- floors: Int
+- kitchens: Int
+- livingRooms: Int
+- diningRooms: Int
+- carParkingSpots: Int
+- bikeParkingSpots: Int
+- furnished: Boolean
+- buildYear: Int
+- area: Decimal(12,2)
+- facing: String (varchar 50)
+- roadAccess: Decimal(8,2)
+
+## Property_apartment_detail (PropertyApartmentDetail)
+- propertyId: String (cuid, primary key, unique, references Property.id)
+- bedrooms: Int
+- bathrooms: Int
+- onFloor: Int
+- totalFloors: Int
+- balconies: Int
+- lifts: Int
+- carParkingSpots: Int
+- bikeParkingSpots: Int
+- furnished: Boolean
+- blockName: String (varchar 100)
+- unitNumber: String (varchar 100)
+- superArea: Decimal(12,2)
+- builtUpArea: Decimal(12,2)
+- maintenanceFee: Decimal(18,2)
+
+## property_land_detail (PropertyLandDetail)
+- propertyId: String (cuid, primary key, unique, references Property.id)
+- area: Decimal(12,2)
+- facing: String (varchar 50)
+- roadAccess: Decimal(8,2)
+- plotShape: String (varchar 100)
+- cornerPlot: Boolean
+- waterAvailable: Boolean
+- electricityAvailable: Boolean
+- boundaryWall: Boolean
+
+## property_commercial_detail (PropertyCommercialDetail)
+- propertyId: String (cuid, primary key, unique, references Property.id)
+- floor: Int
+- washrooms: Int
+- parkingSpots: Int
+- frontage: Decimal(12,2)
+- usableArea: Decimal(12,2)
+- buildingType: String (varchar 100)
+
+## property_price (PropertyPrice)
+- id: String (cuid, primary key, unique)
+- propertyId: String (cuid, references Property.id)
+- for: String (land, land_rental)
+- currency: String (varchar 10)
+- unit: String (varchar)
+- price: Decimal (18,2)
+- priceUnit: String (varchar 24)
 
 
 
-## users (User)
+
+## agencies (Agency)
 - id: String (cuid)
 - name: String
-- email: Json? (array of { type, value })
-- phone: Json? (array of { type, value })
-- location: String?
-- role: String?
-- lastLogin: DateTime?
-- avatarUrl: String?
+- logoUrl: String?
+- website: String?
+- registeredName: String?
+- contactEmail: String?
+- contactPhone: String?
+- mainLocation: String?
+- branches: String[] (default [])
+- contactPersonName: String?
+- contactPersonRole: String?
+- description: String?
 - createdAt: DateTime (default now)
 - updatedAt: DateTime (auto)
+
+## agents (Agent)
+- id: String (cuid)
+- name: String
+- slug: String? (unique)
+- location: String?
+- registered: Boolean (default false)
+- userId: String?
+- email: String?
+- phone: String?
+- about: String?
+- photoUrl: String?
+- specializations: String[] (default [])
+- availabilityHours: String?
+- timeSlotDuration: Int?
+- unavailability: Json?
+- agencyId: String?
+- createdAt: DateTime (default now)
+- updatedAt: DateTime (auto)
+
+
+## reviews (Review) -> change to review (Review)
+- id: String (cuid)
+- reviewedBy: String (references Account.id)
+- rating: Int
+- review: String (varchar 255)
+- reviewedOn: DateTime, not nullable
+- response: String (varchar 255)
+- responseBy: String (references Account.id)
+- responseOn: Datetime, nullable
+
+
+
+
+
+
+
+## requirements (Requirement)
+- id: String (cuid)
+- trackerId: String (cuid, references TrackerAccount.id)
+- currency: String (varchar 8)
+- pricingUnit: String (varchar 24)
+- minPrice: Int?
+- maxPrice: Int?
+- location: String?
+- locationGeo: String (varchar 48) -> locationGeoCoordinates -> cases like 1 mile radius.
+- locationStructured: String or JSON
+- purpose: String (buy/sell/buy_rental/sell_rental)
+- type: String[] (default [])
+- urgency: String?
+- requiredTime: String?
+- paymentMethod: String[] (default [])
+- loan: Boolean (default false)
+- createdAt: DateTime (default now)
+- updatedAt: DateTime (auto)
+
+## user_saved_properties (UserSavedProperty) -> change to saved_property (SavedProperty)
+- id: String (cuid, primary key)
+- accountId: String (cuid, primary key, references Account.id)
+- propertyId: String (references Property.id)
+- savedAt: DateTime (default now)
+
+## reacted_properties (ReactedProperty) -> make this table
+- id: String (cuid, primary key)
+- trackedId: String (references TrackerAccount.id)
+- propertyId: String (references Property.id)
+- onType: String (reacted on sell, reacted on property rental per unit per month cost)
+- reaction: Enum (Liked/Disliked/Reported)
+- reactedAt: Datetime (default now)
+
+## property_views (PropertyViews) -> make this table
+- id: String (cuid, primary key)
+- accountId: String (references Account.id)
+- propertyId: String (references Property.id)
+- onType: String (reacted on sell, reacted on property rental per unit per month cost)
+- viewedAt: Datetime (default now)
+- timeViewed: Int (time in milliseconds)
+- viewedOn: String (homepage/feed/propertyPage/ad)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## conversations (Conversation)
 - id: String (cuid)
@@ -62,15 +269,6 @@ PostgreSQL database configured via `DATABASE_URL`.
 - section: String?
 - createdAt: DateTime (default now)
 - updatedAt: DateTime (auto)
-
-## activities (Activity)
-- id: String (cuid)
-- trackerId: String
-- activity: String
-- page: String?
-- propertyId: String?
-- activityOn: DateTime (default now)
-- duration: Int?
 
 ## user_preferences (UserPreference)
 - id: String (cuid)
@@ -150,7 +348,7 @@ PostgreSQL database configured via `DATABASE_URL`.
 - details: Json?
 - createdAt: DateTime (default now)
 
-## newsletter_subscriptions (NewsletterSubscription)
+## newsletter_subscriptions (NewsletterSubscription) -> drop table.
 - id: String (cuid)
 - email: String (unique)
 - createdAt: DateTime (default now)
@@ -224,142 +422,3 @@ PostgreSQL database configured via `DATABASE_URL`.
 - question: String
 - status: String (default "new")
 - createdAt: DateTime (default now)
-
-## properties (Property)
-- id: String (cuid)
-- title: String?
-- description: String?
-- price: Int?
-- location: String?
-- bedrooms: Int?
-- bathrooms: Int?
-- area: Float?
-- areaUnit: String?
-- facing: String?
-- buildStart: Int?
-- buildCompleted: Int?
-- purpose: String?
-- purposes: String[] (default [])
-- category: String?
-- type: String?
-- images: String[] (default [])
-- amenities: String[] (default [])
-- agency: Json?
-- listingAgent: String?
-- isOwnerListing: Boolean (default false)
-- isFeatured: Boolean (default false)
-- isApproved: Boolean (default false)
-- status: String? (default "pending")
-- sourceUrl: String?
-- slug: String? (unique)
-- floors: Int?
-- onFloor: Int?
-- roadAccess: Float?
-- latitude: Float?
-- longitude: Float?
-- fetchHistory: Json?
-- imageFetchHistory: Json?
-- kitchens: Int?
-- diningRooms: Int?
-- livingRooms: Int?
-- carParkingSpots: Int?
-- bikeParkingSpots: Int?
-- metaTitle: String?
-- metaDescription: String?
-- metaTags: String[] (default [])
-- landDetails: Json?
-- plots: Json?
-- apartmentDetails: Json?
-- apartmentUnits: Json?
-- structuredLocation: Json?
-- pricing: Json?
-- roadAccessDetails: Json?
-- distancing: Json?
-- earnings: Json?
-- owner: Json?
-- owners: Json?
-- documents: Json?
-- createdAt: DateTime (default now)
-- updatedAt: DateTime (auto)
-
-## agencies (Agency)
-- id: String (cuid)
-- name: String
-- logoUrl: String?
-- website: String?
-- registeredName: String?
-- contactEmail: String?
-- contactPhone: String?
-- mainLocation: String?
-- branches: String[] (default [])
-- contactPersonName: String?
-- contactPersonRole: String?
-- description: String?
-- createdAt: DateTime (default now)
-- updatedAt: DateTime (auto)
-
-## agents (Agent)
-- id: String (cuid)
-- name: String
-- slug: String? (unique)
-- location: String?
-- registered: Boolean (default false)
-- userId: String?
-- email: String?
-- phone: String?
-- about: String?
-- photoUrl: String?
-- specializations: String[] (default [])
-- availabilityHours: String?
-- timeSlotDuration: Int?
-- unavailability: Json?
-- agencyId: String?
-- createdAt: DateTime (default now)
-- updatedAt: DateTime (auto)
-
-## team_members (TeamMember)
-- id: String (cuid)
-- orgId: String?
-- userId: String?
-- name: String
-- slug: String? (unique)
-- position: String
-- socialMedia: Json?
-- about: String
-- moreDetails: String?
-- photoUrl: String?
-- registered: Boolean (default false)
-- createdAt: DateTime (default now)
-- updatedAt: DateTime (auto)
-
-## reviews (Review)
-- id: String (cuid)
-- targetId: String
-- targetType: String
-- targetName: String
-- authorName: String
-- authorEmail: String?
-- rating: Int
-- reviewText: String
-- createdAt: DateTime (default now)
-
-## requirements (Requirement)
-- id: String (cuid)
-- userId: String
-- minBudget: Int?
-- maxBudget: Int?
-- location: String?
-- propertyType: String[] (default [])
-- purpose: String?
-- urgency: String?
-- requiredTime: String?
-- paymentMethod: String[] (default [])
-- loan: Boolean (default false)
-- createdAt: DateTime (default now)
-- updatedAt: DateTime (auto)
-
-## user_saved_properties (UserSavedProperty)
-- userId: String
-- propertyId: String
-- propertyTitle: String?
-- savedAt: DateTime (default now)
