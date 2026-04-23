@@ -252,20 +252,6 @@ model Problem {
 }
 
 // ============================================================================
-// Newsletter
-// ============================================================================
-
-model NewsletterSubscription {
-  id        String    @id @default(cuid())
-  email     String    @unique
-  createdAt DateTime  @default(now())
-
-  @@index([email])
-  @@index([createdAt])
-  @@map("newsletter_subscriptions")
-}
-
-// ============================================================================
 // Sitemaps & SEO
 // ============================================================================
 
