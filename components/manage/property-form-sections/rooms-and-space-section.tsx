@@ -35,33 +35,36 @@ function RoomCard({ config, onRemove }: { config: RoomConfig; onRemove: () => vo
         setValue(config.key, Math.max(0, next) as any, { shouldDirty: true, shouldValidate: true });
 
     return (
-        <div className="rounded-xl border-2 border-primary bg-primary/5 p-4">
-            <div className="flex items-center justify-between mb-3">
-                <span className="flex items-center gap-2 font-semibold text-sm">
+        <div className="rounded-2xl border bg-card shadow-sm p-4 space-y-3">
+            <div className="flex items-center justify-between">
+                <span className="flex items-center gap-2 text-base font-bold">
                     <span>{config.emoji}</span>
-                    <span>{config.label}</span>
+                    <span className="text-primary">{config.label}</span>
                 </span>
                 <button
                     type="button"
                     onClick={onRemove}
-                    className="flex h-6 w-6 items-center justify-center rounded-full bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors"
+                    className="flex h-8 w-8 items-center justify-center rounded-full bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors"
                 >
-                    <X className="h-3 w-3" />
+                    <X className="h-4 w-4" />
                 </button>
             </div>
-            <div className="flex items-center gap-3">
-                <span className="text-2xl font-bold text-primary w-8">{value}</span>
-                <div className="flex gap-2">
-                    {[-1, +1, +2].map((delta) => (
-                        <button
-                            key={delta}
-                            type="button"
-                            onClick={() => set(value + delta)}
-                            className="rounded-lg border-2 border-border px-3 py-1.5 text-sm font-semibold hover:border-primary hover:text-primary transition-colors"
-                        >
-                            {delta > 0 ? `+${delta}` : delta}
-                        </button>
-                    ))}
+            <div className="rounded-xl bg-muted p-3 space-y-2">
+                <p className="text-xs text-muted-foreground font-medium">Number of Rooms</p>
+                <div className="flex items-center justify-between">
+                    <span className="text-2xl font-bold text-primary">{value}</span>
+                    <div className="flex gap-2">
+                        {[-1, +1, +2].map((delta) => (
+                            <button
+                                key={delta}
+                                type="button"
+                                onClick={() => set(value + delta)}
+                                className="rounded-xl border-2 border-border bg-background px-3 py-1.5 text-sm font-bold hover:border-primary hover:text-primary transition-colors"
+                            >
+                                {delta > 0 ? `+${delta}` : delta}
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
@@ -74,7 +77,7 @@ export function RoomsAndSpaceSection({ category }: RoomsAndSpaceSectionProps) {
 
     if (category === 'Land') return null;
 
-    const active = ROOMS.filter((r) => added.includes(r.key));
+    const active = added.map((key) => ROOMS.find((r) => r.key === key)!);
     const inactive = ROOMS.filter((r) => !added.includes(r.key));
 
     const add = (config: RoomConfig) => {
