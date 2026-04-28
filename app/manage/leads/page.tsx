@@ -1,99 +1,65 @@
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { AlertCircle } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ClientLink } from "@/components/client-link";
-import { getConversations } from "@/services/conversation-service";
-import { RelativeTime } from "@/components/manage/relative-time";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { getLeads } from '@/services/lead-service';
+import { ClientLink } from '@/components/client-link';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Plus } from 'lucide-react';
 
 export default async function ManageLeadsPage() {
-  const conversations = await getConversations();
+    const leads = await getLeads();
 
-  // Filter for conversations that have a lead score and sort them
-  const leads = conversations
-    .filter(c => c.leadScore !== undefined)
-    .sort((a, b) => (b.leadScore ?? 0) - (a.leadScore ?? 0));
+    return (
+        <div className="space-y-6">
+            <div className="flex items-center justify-between">
+                <div>
+                    <h2 className="text-2xl font-semibold leading-none tracking-tight">Leads</h2>
+                    <p className="text-sm text-muted-foreground mt-1">{leads.length} lead{leads.length !== 1 ? 's' : ''}</p>
+                </div>
+                <ClientLink href="/manage/leads/create">
+                    <Button size="sm"><Plus className="h-4 w-4 mr-1" />New Lead</Button>
+                </ClientLink>
+            </div>
 
-  return (
-    <div className="space-y-6">
-      <div className="flex flex-row items-center justify-between">
-        <div>
-            <h2 className="text-2xl font-semibold leading-none tracking-tight">Client Leads</h2>
-            <p className="text-sm text-muted-foreground">
-                Showing {leads.length} conversations, ranked by AI lead score.
-            </p>
-        </div>
-        <ClientLink href="/manage/leads/create">
-            <Button size="sm"><Plus className="h-4 w-4 mr-1" />New Lead</Button>
-        </ClientLink>
-      </div>
-      <div>
-        {leads.length > 0 ? (
-            <Table>
-            <TableHeader>
-                <TableRow>
-                    <TableHead>Customer</TableHead>
-                    <TableHead className="w-[80px]">Score</TableHead>
-                    <TableHead>Last Interaction</TableHead>
-                    <TableHead className="w-[150px] text-right">Interaction On</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {leads.map((lead) => {
-                  const linkHref = `/manage/leads/${lead.id}`;
-                  
-                  return (
-                    <TableRow key={lead.id}>
-                        <TableCell>
-                            <ClientLink href={linkHref} className="hover:underline">
-                                <div className="flex items-center gap-3">
-                                    <Avatar className="h-8 w-8">
-                                        <AvatarImage src={lead.customerAvatarUrl} alt={lead.customerName} data-ai-hint="person portrait" />
-                                        <AvatarFallback>{lead.customerName.charAt(0)}</AvatarFallback>
-                                    </Avatar>
-                                    <span className="font-medium">
-                                        {lead.customerName}
-                                    </span>
+            {leads.length === 0 ? (
+                <p className="text-sm text-muted-foreground py-12 text-center">No leads yet. Create one to get started.</p>
+            ) : (
+                <div className="space-y-3">
+                    {leads.map((lead) => {
+                        const contact = lead.client.contact as any;
+                        const req = lead.requirement as Record<string, any> | null;
+                        return (
+                            <ClientLink
+                                key={lead.id}
+                                href={`/manage/clients/${lead.client.id}`}
+                                className="block rounded-lg border border-border px-5 py-4 hover:border-primary hover:bg-primary/5 transition-colors"
+                            >
+                                <div className="flex items-start justify-between gap-4">
+                                    <div className="space-y-1 min-w-0">
+                                        <p className="font-semibold">{lead.client.firstName} {lead.client.lastName}</p>
+                                        <div className="flex items-center gap-3 flex-wrap">
+                                            {contact?.phone && <span className="text-sm text-muted-foreground">{contact.phone}</span>}
+                                            {contact?.email && <span className="text-sm text-muted-foreground">{contact.email}</span>}
+                                        </div>
+                                        {req && (req.location || req.minBudget || req.maxBudget) && (
+                                            <p className="text-xs text-muted-foreground">
+                                                {[
+                                                    req.location,
+                                                    req.minBudget && req.maxBudget ? `${req.minBudget.toLocaleString()} – ${req.maxBudget.toLocaleString()}` :
+                                                    req.minBudget ? `From ${req.minBudget.toLocaleString()}` :
+                                                    req.maxBudget ? `Up to ${req.maxBudget.toLocaleString()}` : null,
+                                                ].filter(Boolean).join(' · ')}
+                                            </p>
+                                        )}
+                                    </div>
+                                    <div className="flex items-center gap-2 shrink-0">
+                                        <Badge variant="outline">{lead.type}</Badge>
+                                        <Badge variant="outline" className="capitalize">{lead.priority.toLowerCase()}</Badge>
+                                    </div>
                                 </div>
                             </ClientLink>
-                        </TableCell>
-                        <TableCell>
-                            <span className="font-semibold">{lead.leadScore}/10</span>
-                        </TableCell>
-                        <TableCell>
-                            <p className="text-sm text-muted-foreground font-normal truncate max-w-md">
-                                {lead.lastMessageSender === 'agent' && 'You: '}
-                                {lead.lastMessageSnippet}
-                            </p>
-                        </TableCell>
-                         <TableCell className="text-right text-xs text-muted-foreground">
-                            <RelativeTime timestamp={lead.lastMessageAt} />
-                        </TableCell>
-                    </TableRow>
-                  )
-                })}
-            </TableBody>
-            </Table>
-        ) : (
-            <Alert>
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>No Leads Found</AlertTitle>
-                <AlertDescription>
-                   No conversations have been scored by the AI yet. New incoming messages will be automatically analyzed and ranked here.
-                </AlertDescription>
-            </Alert>
-        )}
-      </div>
-    </div>
-  );
+                        );
+                    })}
+                </div>
+            )}
+        </div>
+    );
 }
