@@ -117,6 +117,7 @@ model Property {
   fetchHistory       PropertyFetchHistory[]
   owners             PropertyOwner[]
   documents          PropertyDocument[]
+  changes            PropertyChange[]
   links              PropertyLink[]           @relation("PrimaryLinks")
   linkedBy           PropertyLink[]           @relation("SecondaryLinks")
   savedBy            SavedProperty[]
@@ -291,6 +292,19 @@ model PropertyDocument {
 
   @@index([propertyId])
   @@map("property_document")
+}
+
+model PropertyChange {
+  id         String   @id @default(cuid())
+  propertyId String
+  data       Json
+  modifiedOn DateTime @default(now())
+
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@index([propertyId])
+  @@index([modifiedOn])
+  @@map("property_change")
 }
 
 // ============================================================================
