@@ -153,3 +153,40 @@ export async function getClientById(id: string) {
         return null;
     }
 }
+
+export async function getClientActivity(clientId: string) {
+    try {
+        const leads = await prisma.clientLead.findMany({
+            where: { clientId },
+            select: { id: true, type: true, priority: true },
+        });
+        const leadIds = leads.map((l) => l.id);
+        const activities = await prisma.leadActivity.findMany({
+            where: { leadId: { in: leadIds } },
+            orderBy: { activityOn: 'desc' },
+        });
+        return { leads, activities };
+    } catch (e) {
+        await logProblem(e, `getClientActivity ${clientId}`);
+        return { leads: [], activities: [] };
+    }
+}
+
+export async function getLeadActivity(leadId: string) {
+    try {
+        const [lead, activities] = await Promise.all([
+            prisma.clientLead.findUnique({
+                where: { id: leadId },
+                include: { client: true },
+            }),
+            prisma.leadActivity.findMany({
+                where: { leadId },
+                orderBy: { activityOn: 'desc' },
+            }),
+        ]);
+        return { lead, activities };
+    } catch (e) {
+        await logProblem(e, `getLeadActivity ${leadId}`);
+        return { lead: null, activities: [] };
+    }
+}
