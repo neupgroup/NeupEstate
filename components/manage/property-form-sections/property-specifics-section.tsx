@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { SelectionCards } from "@/components/ui/selection-cards";
 import { AreaInput } from "@/components/ui/area-input";
+import { CounterCard } from "@/components/ui/counter-card";
 import { PlusCircle, Trash2 } from "lucide-react";
 
 interface PropertySpecificsSectionProps {
@@ -94,7 +95,7 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
                 <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <AreaInput label="House Area" />
-                        <AreaInput label="Property (Land) Area" name="landDetails.area" unitName="landDetails.areaUnit" />
+                        <AreaInput label="Property (Land) Area" name="landDetails.area" />
                     </div>
                     <SelectionField name="facing"             label="House Facing"           options={LandFacingSchema.options} />
                     <SelectionField name="landDetails.facing" label="Property (Land) Facing" options={LandFacingSchema.options} />
@@ -112,8 +113,8 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
             {/* ── House / Bungalow / Villa / Multiplex ── */}
             {isHouse && (
                 <div className="space-y-6">
+                    <CounterCard name="floors" label="Total Floors" emoji="🏢" sublabel="Number of Floors" steps={[-1, 1, 2]} />
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                        <FF control={control} name="floors"         label="Total Floors"     placeholder="e.g., 3"    type="number" />
                         <FF control={control} name="buildStart"     label="Build Start Year" placeholder="e.g., 2018" type="number" />
                         <FF control={control} name="buildCompleted" label="Build End Year"   placeholder="e.g., 2020" type="number" />
                         <FF control={control} name="roadAccess"     label="Road Access (ft)" placeholder="e.g., 20"   type="number" />
@@ -125,11 +126,13 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
             {/* ── Flat ── */}
             {isFlat && (
                 <div className="space-y-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <CounterCard name="onFloor" label="On Floor"     emoji="📏" sublabel="Floor Number"    steps={[-1, 1, 2]} />
+                        <CounterCard name="floors"  label="Total Floors" emoji="🏢" sublabel="Number of Floors" steps={[-1, 1, 2]} />
+                    </div>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                        <FF control={control} name="onFloor"         label="On Floor"         placeholder="e.g., 5"    type="number" />
-                        <FF control={control} name="floors"          label="Total Floors"     placeholder="e.g., 12"   type="number" />
-                        <FF control={control} name="buildStart"      label="Build Start Year" placeholder="e.g., 2018" type="number" />
-                        <FF control={control} name="buildCompleted"  label="Build End Year"   placeholder="e.g., 2020" type="number" />
+                        <FF control={control} name="buildStart"     label="Build Start Year" placeholder="e.g., 2018" type="number" />
+                        <FF control={control} name="buildCompleted" label="Build End Year"   placeholder="e.g., 2020" type="number" />
                     </div>
                     <SelectionField name="apartmentDetails.furnishing" label="Furnishing" options={FurnishingStatusSchema.options} />
                 </div>
@@ -138,11 +141,13 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
             {/* ── Apartment / Penthouse ── */}
             {isApartment && (
                 <div className="space-y-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <CounterCard name="onFloor" label="On Floor"     emoji="📏" sublabel="Floor Number"    steps={[-1, 1, 2]} />
+                        <CounterCard name="floors"  label="Total Floors" emoji="🏢" sublabel="Number of Floors" steps={[-1, 1, 2]} />
+                    </div>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                        <FF control={control} name="onFloor"         label="On Floor"         placeholder="e.g., 5"    type="number" />
-                        <FF control={control} name="floors"          label="Total Floors"     placeholder="e.g., 12"   type="number" />
-                        <FF control={control} name="buildStart"      label="Build Start Year" placeholder="e.g., 2018" type="number" />
-                        <FF control={control} name="buildCompleted"  label="Build End Year"   placeholder="e.g., 2020" type="number" />
+                        <FF control={control} name="buildStart"     label="Build Start Year" placeholder="e.g., 2018" type="number" />
+                        <FF control={control} name="buildCompleted" label="Build End Year"   placeholder="e.g., 2020" type="number" />
                     </div>
                     <SelectionField name="apartmentDetails.furnishing" label="Furnishing" options={FurnishingStatusSchema.options} />
 
@@ -171,7 +176,7 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
                                         <FormItem><FormLabel>Bathrooms</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
                                     )} />
                                     <div className="col-span-2">
-                                        <AreaInput label="Area" name={`apartmentUnits.${index}.area`} unitName={`apartmentUnits.${index}.areaUnit`} placeholder="e.g., 800" />
+                                        <AreaInput label="Area" name={`apartmentUnits.${index}.area`} />
                                     </div>
                                     <SelectionField name={`apartmentUnits.${index}.furnishing`} label="Furnishing" options={FurnishingStatusSchema.options} />
                                 </div>
@@ -212,7 +217,7 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
                                         <FormItem><FormLabel>Plot ID</FormLabel><FormControl><Input placeholder="e.g., PLOT-A" {...field} /></FormControl><FormMessage /></FormItem>
                                     )} />
                                     <div className="col-span-2">
-                                        <AreaInput label="Area" name={`plots.${index}.area`} unitName={`plots.${index}.areaUnit`} placeholder="e.g., 500" />
+                                        <AreaInput label="Area" name={`plots.${index}.area`} />
                                     </div>
                                     <FF control={control} name={`plots.${index}.frontage`} label="Frontage (ft)" type="number" />
                                     <FF control={control} name={`plots.${index}.depth`}    label="Depth (ft)"    type="number" />
@@ -230,11 +235,13 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
 
             {/* ── Commercial / Shop Space ── */}
             {isCommercial && (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                    <FF control={control} name="floors"         label="Floor Number"     placeholder="e.g., 2"    type="number" />
-                    <FF control={control} name="buildStart"     label="Build Start Year" placeholder="e.g., 2015" type="number" />
-                    <FF control={control} name="buildCompleted" label="Build End Year"   placeholder="e.g., 2017" type="number" />
-                    <FF control={control} name="roadAccess"     label="Road Access (ft)" placeholder="e.g., 30"   type="number" />
+                <div className="space-y-6">
+                    <CounterCard name="floors" label="Floor Number" emoji="🏢" sublabel="Floor Number" steps={[-1, 1, 2]} />
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                        <FF control={control} name="buildStart"     label="Build Start Year" placeholder="e.g., 2015" type="number" />
+                        <FF control={control} name="buildCompleted" label="Build End Year"   placeholder="e.g., 2017" type="number" />
+                        <FF control={control} name="roadAccess"     label="Road Access (ft)" placeholder="e.g., 30"   type="number" />
+                    </div>
                 </div>
             )}
 

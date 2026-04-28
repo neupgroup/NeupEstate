@@ -4,11 +4,11 @@
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { CreatePropertyFormValues } from "@/types";
-import { X } from "lucide-react";
+import { CounterCard } from "@/components/ui/counter-card";
 
 interface RoomsAndSpaceSectionProps {
     control: any;
-    category: CreatePropertyFormValues['category'];
+    category: string | undefined;
 }
 
 type RoomConfig = {
@@ -26,50 +26,6 @@ const ROOMS: RoomConfig[] = [
     { key: "carParkingSpots",  label: "Car Parking",  emoji: "🚗" },
     { key: "bikeParkingSpots", label: "Bike Parking", emoji: "🏍️" },
 ];
-
-function RoomCard({ config, onRemove }: { config: RoomConfig; onRemove: () => void }) {
-    const { watch, setValue } = useFormContext<CreatePropertyFormValues>();
-    const value = Number(watch(config.key) ?? 1);
-
-    const set = (next: number) =>
-        setValue(config.key, Math.max(0, next) as any, { shouldDirty: true, shouldValidate: true });
-
-    return (
-        <div className="rounded-2xl border bg-card shadow-sm p-4 space-y-3">
-            <div className="flex items-center justify-between">
-                <span className="flex items-center gap-2 text-base font-bold">
-                    <span>{config.emoji}</span>
-                    <span className="text-primary">{config.label}</span>
-                </span>
-                <button
-                    type="button"
-                    onClick={onRemove}
-                    className="flex h-8 w-8 items-center justify-center rounded-full bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors"
-                >
-                    <X className="h-4 w-4" />
-                </button>
-            </div>
-            <div className="rounded-xl bg-muted p-3 space-y-2">
-                <p className="text-xs text-muted-foreground font-medium">Number of Rooms</p>
-                <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-primary">{value}</span>
-                    <div className="flex gap-2">
-                        {[-1, +1, +2].map((delta) => (
-                            <button
-                                key={delta}
-                                type="button"
-                                onClick={() => set(value + delta)}
-                                className="rounded-xl border-2 border-border bg-background px-3 py-1.5 text-sm font-bold hover:border-primary hover:text-primary transition-colors"
-                            >
-                                {delta > 0 ? `+${delta}` : delta}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-}
 
 export function RoomsAndSpaceSection({ category }: RoomsAndSpaceSectionProps) {
     const { watch, setValue } = useFormContext<CreatePropertyFormValues>();
@@ -95,7 +51,15 @@ export function RoomsAndSpaceSection({ category }: RoomsAndSpaceSectionProps) {
             {active.length > 0 && (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                     {active.map((r) => (
-                        <RoomCard key={r.key} config={r} onRemove={() => remove(r)} />
+                        <CounterCard
+                            key={r.key}
+                            name={r.key}
+                            label={r.label}
+                            emoji={r.emoji}
+                            sublabel="Number of Rooms"
+                            steps={[-1, 1, 2]}
+                            onRemove={() => remove(r)}
+                        />
                     ))}
                 </div>
             )}
