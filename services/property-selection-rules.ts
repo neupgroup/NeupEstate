@@ -82,6 +82,20 @@ export function getDisabledNatures(categories: string[]): Set<string> {
 }
 
 /**
+ * Returns which natures should be disabled given the currently selected natures.
+ */
+export function getDisabledNaturesByNature(selectedNatures: string[]): Set<string> {
+    const disabled = new Set<string>();
+    if (selectedNatures.includes("Commercial")) {
+        disabled.add("Agricultural");
+    }
+    if (selectedNatures.includes("Agricultural")) {
+        disabled.add("Commercial");
+    }
+    return disabled;
+}
+
+/**
  * Returns the nature that should be auto-selected given the current categories.
  */
 export function getAutoSelectedNature(categories: string[]): PropertyNature | undefined {

@@ -5,7 +5,7 @@ import { CreatePropertyFormValues, PropertyCategorySchema, PropertyPurposeOption
 import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
-import { deriveSelectionState } from "@/services/property-selection-rules";
+import { deriveSelectionState, getDisabledNaturesByNature } from "@/services/property-selection-rules";
 import { useEffect } from "react";
 
 interface BasicDetailsSectionProps {
@@ -70,6 +70,8 @@ export function BasicDetailsSection({ control }: BasicDetailsSectionProps) {
 
     const { disabledCategories, disabledPurposes, disabledNatures, autoNature } =
         deriveSelectionState(selectedCategories, selectedPurposes as string[]);
+    const disabledNaturesByNature = getDisabledNaturesByNature(selectedTypes);
+    const allDisabledNatures = new Set([...disabledNatures, ...disabledNaturesByNature]);
 
     // Auto-select nature when all categories imply it
     useEffect(() => {
@@ -103,7 +105,7 @@ export function BasicDetailsSection({ control }: BasicDetailsSectionProps) {
     };
 
     const toggleType = (option: string) => {
-        if (disabledNatures.has(option)) return;
+        if (allDisabledNatures.has(option)) return;
         const isSelected = selectedTypes.includes(option);
         const next = isSelected
             ? selectedTypes.filter((t) => t !== option)
@@ -159,7 +161,7 @@ export function BasicDetailsSection({ control }: BasicDetailsSectionProps) {
                             options={PropertyUsageTypeSchema.options}
                             selected={selectedTypes}
                             onToggle={toggleType}
-                            disabled={disabledNatures}
+                            disabled={allDisabledNatures}
                             multi
                         />
                         <FormMessage />
