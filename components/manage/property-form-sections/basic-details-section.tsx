@@ -3,61 +3,12 @@
 import { Control, useFormContext } from "react-hook-form";
 import { CreatePropertyFormValues, PropertyCategorySchema, PropertyPurposeOptions, PropertyUsageTypeSchema } from "@/types";
 import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { cn } from "@/lib/utils";
-import { Check } from "lucide-react";
+import { SelectionCards } from "@/components/ui/selection-cards";
 import { deriveSelectionState, getDisabledNaturesByNature } from "@/services/property-selection-rules";
 import { useEffect } from "react";
 
 interface BasicDetailsSectionProps {
     control: Control<CreatePropertyFormValues>;
-}
-
-type SelectionCardsProps = {
-    options: readonly string[];
-    selected: string[];
-    onToggle: (option: string) => void;
-    disabled?: Set<string>;
-    multi?: boolean;
-    lockLastSelected?: boolean;
-};
-
-function SelectionCards({ options, selected, onToggle, disabled = new Set(), multi = false, lockLastSelected = false }: SelectionCardsProps) {
-    return (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {options.map((option) => {
-                const isSelected = selected.includes(option);
-                const isDisabled = disabled.has(option);
-                const isLocked = lockLastSelected && isSelected && selected.length === 1;
-                const showNumber = multi && isSelected && selected.length > 1;
-
-                return (
-                    <button
-                        key={option}
-                        type="button"
-                        onClick={() => !isDisabled && !isLocked && onToggle(option)}
-                        aria-pressed={isSelected}
-                        disabled={isDisabled}
-                        className={cn(
-                            "flex items-center gap-2 rounded-lg border-2 px-3 py-2 text-sm font-medium transition-all text-left",
-                            isSelected && !isDisabled
-                                ? "border-primary bg-primary/10 text-primary"
-                                : "border-border bg-background text-foreground hover:border-muted-foreground",
-                            isDisabled && "opacity-50 cursor-not-allowed select-none",
-                            isLocked && "cursor-default"
-                        )}
-                    >
-                        <span className={cn(
-                            "flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold",
-                            isSelected && !isDisabled ? "border-primary bg-primary text-white" : "border-muted-foreground"
-                        )}>
-                            {showNumber ? selected.indexOf(option) + 1 : isSelected ? <Check className="h-2.5 w-2.5" /> : null}
-                        </span>
-                        <span>{option}</span>
-                    </button>
-                );
-            })}
-        </div>
-    );
 }
 
 export function BasicDetailsSection({ control }: BasicDetailsSectionProps) {
