@@ -4,7 +4,7 @@ import { ChevronLeft } from 'lucide-react';
 
 export default function CreateLeadPage() {
     return (
-        <div className="space-y-6">
+        <div className="max-w-6xl mx-auto space-y-6">
             <div>
                 <ClientLink
                     href="/manage/leads"
