@@ -102,6 +102,10 @@ export default function ManageLayout({
                     <Lightbulb className="mr-2 h-4 w-4" />
                     Market Insights
                 </ClientLink>
+                <ClientLink href="/manage/competition" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
+                    <Eye className="mr-2 h-4 w-4" />
+                    Competition
+                </ClientLink>
 
                 <h3 className="pt-4 pb-1 px-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">Management</h3>
                  <ClientLink href="/manage/agents" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>

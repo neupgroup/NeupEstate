@@ -16,6 +16,12 @@ PostgreSQL database configured via `DATABASE_URL`.
 - activityOn: DATETIME (default)
 - ipAddress: String
 
+## location (Location) -> make this table.
+- id: String (cuid)
+- name: String
+- type: String (country/province/region/district/state/city/locality)
+- parentId: String (references Location.id), nullable
+
 ## property (Property)
 - id: String (cuid, primary key)
 - slug: String (unique)
@@ -29,19 +35,20 @@ PostgreSQL database configured via `DATABASE_URL`.
 - displayPrice: Decimal(18,2)
 - displayPriceUnit: String (varchar 24)
 - areaUnit: String (varchar 64)
-- locationText: String (varchar 255)
+- locationText: String (varchar 255) -> drop this field.
 - geoLocation: String (varchar 63)
-- structuredLocation: String (location > location > location)
+- structuredLocation: String (location > location > location) -> change this field name to location, refereneces -> Location.id
 - agency: String (nullable, references Agency.id)
 - agent: String (nullable, references Agent.id)
 - createdAt: DateTime (default now)
 - isFeatured: Boolean (default false)
 - isApproved: Boolean (default false)
 - isDeleted: Boolean (default false)
+- customId: String, nullable -> add this field.
 
 ## property_link (PropertyLink)
 - id: String (cuid, primary key)
-- primaryId: String (references Property.id)
+- primaryId: String (references Property.id)x
 - secondaryId: String (references Property.id)
 
 ## property_media (PropertyMedia)
@@ -118,25 +125,31 @@ PostgreSQL database configured via `DATABASE_URL`.
 - priceUnit: String (varchar 24)
 
 
-
-
-## agencies (Agency)
+## agencies (Agency) -> change to agency (Agency)
 - id: String (cuid)
 - name: String
 - logoUrl: String?
-- website: String?
+- website: String? -> drop field
 - registeredName: String?
 - contactEmail: String?
 - contactPhone: String?
 - mainLocation: String?
 - branches: String[] (default [])
-- contactPersonName: String?
-- contactPersonRole: String?
-- description: String?
-- createdAt: DateTime (default now)
-- updatedAt: DateTime (auto)
+- contactPersonName: String? -> drop field
+- contactPersonRole: String? -> drop field
+- description: String? 
 
-## agents (Agent)
+## agency_branch (AgencyBranch) -> make this table.
+- id: String (cuid)
+- agencyId: String (references Agency.id)
+- name: String
+- location: String (references Location.id)
+- contactEmail: String?
+- contactPhone: String?
+- description: String?
+- order: Int (default 0)
+
+## agents (Agent) -> change to agent (Agent)
 - id: String (cuid)
 - name: String
 - slug: String? (unique)
@@ -148,12 +161,10 @@ PostgreSQL database configured via `DATABASE_URL`.
 - about: String?
 - photoUrl: String?
 - specializations: String[] (default [])
-- availabilityHours: String?
-- timeSlotDuration: Int?
-- unavailability: Json?
-- agencyId: String?
-- createdAt: DateTime (default now)
-- updatedAt: DateTime (auto)
+- availabilityHours: String? -> drop this field
+- timeSlotDuration: Int? -> drop this field
+- unavailability: Json? -> drop this field.
+- agencyId: String? -> references Agency.id
 
 
 ## reviews (Review) -> change to review (Review)
@@ -168,11 +179,7 @@ PostgreSQL database configured via `DATABASE_URL`.
 
 
 
-
-
-
-
-## requirements (Requirement)
+## requirements (Requirement) -> change to requirement (Requirement)
 - id: String (cuid)
 - trackerId: String (cuid, references TrackerAccount.id)
 - currency: String (varchar 8)
@@ -197,7 +204,7 @@ PostgreSQL database configured via `DATABASE_URL`.
 - propertyId: String (references Property.id)
 - savedAt: DateTime (default now)
 
-## reacted_properties (ReactedProperty) -> make this table
+## reacted_property (ReactedProperty) -> make this table
 - id: String (cuid, primary key)
 - trackedId: String (references TrackerAccount.id)
 - propertyId: String (references Property.id)
@@ -205,7 +212,7 @@ PostgreSQL database configured via `DATABASE_URL`.
 - reaction: Enum (Liked/Disliked/Reported)
 - reactedAt: Datetime (default now)
 
-## property_views (PropertyViews) -> make this table
+## property_view (PropertyView) -> make this table
 - id: String (cuid, primary key)
 - accountId: String (references Account.id)
 - propertyId: String (references Property.id)
@@ -270,9 +277,9 @@ PostgreSQL database configured via `DATABASE_URL`.
 - createdAt: DateTime (default now)
 - updatedAt: DateTime (auto)
 
-## user_preferences (UserPreference)
+## user_preferences (UserPreference) -> change to preferences (Preference)
 - id: String (cuid)
-- accountId: String (unique)
+- accountId: String (unique) -> add references Account.id
 - updatedAt: DateTime (auto)
 - preferences: Json (default "{}")
 - totalViews: Int (default 0)
@@ -383,7 +390,7 @@ PostgreSQL database configured via `DATABASE_URL`.
 - createdAt: DateTime (default now)
 - updatedAt: DateTime (auto)
 
-## whatsapp_config (WhatsAppConfig)
+## whatsapp_config (WhatsAppConfig) -> drop this table.
 - id: String
 - apiToken: String?
 - phoneNumberId: String?
@@ -391,7 +398,7 @@ PostgreSQL database configured via `DATABASE_URL`.
 - webhookVerifyToken: String?
 - updatedAt: DateTime (auto)
 
-## whatsapp_templates (WhatsAppTemplate)
+## whatsapp_templates (WhatsAppTemplate) -> drop this table.
 - id: String (cuid)
 - name: String
 - category: String
@@ -401,7 +408,7 @@ PostgreSQL database configured via `DATABASE_URL`.
 - isPreapproved: Boolean (default false)
 - createdAt: DateTime (default now)
 
-## contact_submissions (ContactSubmission)
+## contact_submissions (ContactSubmission) -> change to contact_submission (ContactSubmission)
 - id: String (cuid)
 - name: String
 - email: String
@@ -411,7 +418,7 @@ PostgreSQL database configured via `DATABASE_URL`.
 - status: String (default "new")
 - createdAt: DateTime (default now)
 
-## inquiries (Inquiry)
+## inquiries (Inquiry) -> change to inquiry (Inquiry)
 - id: String (cuid)
 - propertyId: String
 - propertyTitle: String
@@ -422,3 +429,18 @@ PostgreSQL database configured via `DATABASE_URL`.
 - question: String
 - status: String (default "new")
 - createdAt: DateTime (default now)
+
+## account_role (AccountRole) -> make this table.
+- id: String (cuid)
+- name: String (unique)
+- description: String
+- permissions: String[] (default [])
+- createdAt: DateTime (default now)
+- updatedAt: DateTime (auto)
+
+## account_access (AccountAccess) -> make this table.
+- id: String (cuid)
+- accountId: String (references Account.id)
+- assetType: String
+- assetId: String, nullable
+- roleId: String (references AccountRole.id)
