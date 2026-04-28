@@ -152,7 +152,6 @@ export function ProgressivePropertySections({
         <div className="space-y-1">
             {steps.slice(0, unlockedUpTo + 1).map((step, i) => {
                 const isActive = i === activeIndex;
-                const isUnlocked = i <= unlockedUpTo;
                 return (
                     <Section
                         key={step.id}
@@ -160,8 +159,7 @@ export function ProgressivePropertySections({
                         title={step.title}
                         description={step.description}
                         isActive={isActive}
-                        isUnlocked={isUnlocked}
-                        onOpen={() => isUnlocked ? goTo(i) : undefined}
+                        onOpen={() => goTo(i)}
                     >
                         {step.render()}
                         <div className="flex items-center gap-3 mt-6">
@@ -190,12 +188,11 @@ interface SectionProps {
     title: string;
     description: string;
     isActive: boolean;
-    isUnlocked: boolean;
     onOpen: () => void;
     children: React.ReactNode;
 }
 
-function Section({ index, title, description, isActive, isUnlocked, onOpen, children }: SectionProps) {
+function Section({ index, title, description, isActive, onOpen, children }: SectionProps) {
     const bodyRef = useRef<HTMLDivElement>(null);
     const [height, setHeight] = useState<number>(0);
     const [settled, setSettled] = useState(false);
@@ -222,16 +219,14 @@ function Section({ index, title, description, isActive, isUnlocked, onOpen, chil
             <button
                 type="button"
                 onClick={onOpen}
-                disabled={!isUnlocked}
                 className={cn(
                     "w-full text-left py-4 px-1 group",
-                    isUnlocked && !isActive && "cursor-pointer",
-                    !isUnlocked && "cursor-default opacity-40",
+                    !isActive && "cursor-pointer",
                 )}
             >
                 <div className="flex items-baseline gap-3">
                     <span className={cn(
-                        "text-xs font-mono tabular-nums transition-colors",
+                        "text-lg font-semibold transition-colors leading-tight shrink-0",
                         isActive ? "text-primary" : "text-muted-foreground"
                     )}>
                         {String(index + 1).padStart(2, "0")}
@@ -243,14 +238,14 @@ function Section({ index, title, description, isActive, isUnlocked, onOpen, chil
                         )}>
                             {title}
                         </h2>
-                        {/* Description + separator only when active */}
-                        <div className={cn(
-                            "overflow-hidden transition-all duration-300",
-                            isActive ? "max-h-10 opacity-100 mt-0.5" : "max-h-0 opacity-0"
-                        )}>
-                            <p className="text-sm text-muted-foreground">{description}</p>
-                        </div>
                     </div>
+                </div>
+                {/* Description + separator only when active */}
+                <div className={cn(
+                    "overflow-hidden transition-all duration-300",
+                    isActive ? "max-h-10 opacity-100 mt-1" : "max-h-10 opacity-100 mt-1"
+                )}>
+                    <p className="text-sm text-muted-foreground">{description}</p>
                 </div>
                 {isActive && <hr className="mt-3 border-primary" />}
             </button>
