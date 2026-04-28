@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import type { CreatePropertyFormValues, User } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -15,13 +15,14 @@ import { PropertyPhotosSection } from "@/components/manage/property-form-section
 import { PropertyDocumentsSection } from "@/components/manage/property-form-sections/property-documents-section";
 import { TitleDescriptionSection } from "@/components/manage/property-form-sections/title-description-section";
 import { SeoSection } from "@/components/manage/property-form-sections/seo-section";
+import { cn } from "@/lib/utils";
 
 type PropertyFormStep = {
     id: string;
     title: string;
     description: string;
     fields: Array<keyof CreatePropertyFormValues | string>;
-    render: () => JSX.Element | null;
+    render: () => React.ReactElement | null;
 };
 
 interface ProgressivePropertySectionsProps {
@@ -39,141 +40,239 @@ export function ProgressivePropertySections({
     isSubmitting,
     submitLabel,
 }: ProgressivePropertySectionsProps) {
-    const [visibleCount, setVisibleCount] = useState(1);
-    const category = form.watch("category");
+    const [activeIndex, setActiveIndex] = useState<number>(0);
+    const [unlockedUpTo, setUnlockedUpTo] = useState<number>(0);
+    const category = (form.watch("categories" as any) as unknown) as string | undefined;
 
-    const steps = useMemo<PropertyFormStep[]>(() => {
-        const sections: PropertyFormStep[] = [
-            {
-                id: "basics",
-                title: "Basic Information",
-                description: "Set the listing purpose, property type, and nature.",
-                fields: ["purposes", "category", "type"],
-                render: () => <BasicDetailsSection control={form.control} />,
-            },
-            {
-                id: "specifics",
-                title: "Property Specifics",
-                description: "Enter the size, age, floors, and structural details.",
-                fields: ["area", "areaUnit", "buildStart", "buildCompleted", "facing", "floors", "onFloor", "landDetails", "plots", "apartmentUnits"],
-                render: () => <PropertySpecificsSection control={form.control} category={category} />,
-            },
-            ...(category === "Land"
-                ? []
-                : [
-                    {
-                        id: "rooms",
-                        title: "Rooms & Space",
-                        description: "Specify the number of rooms, parking, and other spaces.",
-                        fields: ["bedrooms", "bathrooms", "kitchens", "diningRooms", "livingRooms", "carParkingSpots", "bikeParkingSpots"],
-                        render: () => <RoomsAndSpaceSection control={form.control} category={category} />,
-                    } satisfies PropertyFormStep,
-                ]),
-            {
-                id: "features",
-                title: "Features & Amenities",
-                description: "List the key features and amenities available at the property.",
-                fields: ["amenities"],
-                render: () => <FeaturesAmenitiesSection control={form.control} />,
-            },
-            {
-                id: "pricing",
-                title: "Pricing Details",
-                description: "Set the listed price, payment basis, and negotiability.",
-                fields: ["pricing"],
-                render: () => <PricingDetailsSection control={form.control} />,
-            },
-            {
-                id: "location",
-                title: "Location Details",
-                description: "Provide the address, geo-coordinates, and nearby landmarks.",
-                fields: ["structuredLocation"],
-                render: () => <LocationDetailsSection control={form.control} />,
-            },
-            {
-                id: "owners",
-                title: "Owner Information",
-                description: "Add the owner or authorized person's contact details.",
-                fields: ["owners"],
-                render: () => <OwnerInfoSection control={form.control} users={users} formErrors={form.formState.errors} />,
-            },
-            {
-                id: "photos",
-                title: "Property Photos",
-                description: "Upload photos that best represent the property.",
-                fields: ["images"],
-                render: () => <PropertyPhotosSection control={form.control} />,
-            },
-            {
-                id: "documents",
-                title: "Property Documents",
-                description: "Attach ownership documents, blueprints, or legal papers.",
-                fields: ["documents"],
-                render: () => <PropertyDocumentsSection control={form.control} />,
-            },
-            {
-                id: "copy",
-                title: "Title & Description",
-                description: "Write a compelling title and description for the listing.",
-                fields: ["title", "description"],
-                render: () => <TitleDescriptionSection control={form.control} />,
-            },
-            {
-                id: "seo",
-                title: "SEO & Metadata",
-                description: "Optimise the listing for search engines with meta tags and slug.",
-                fields: isEditForm ? ["slug", "metaTitle", "metaDescription", "metaTags"] : ["metaTitle", "metaDescription", "metaTags"],
-                render: () => <SeoSection control={form.control} isEditForm={isEditForm} />,
-            },
-        ];
+    const steps = useMemo<PropertyFormStep[]>(() => [
+        {
+            id: "basics",
+            title: "Basic Information",
+            description: "Set the listing purpose, property type, and nature.",
+            fields: ["purposes", "category", "type"],
+            render: () => <BasicDetailsSection control={form.control} />,
+        },
+        {
+            id: "specifics",
+            title: "Property Specifics",
+            description: "Enter the size, age, floors, and structural details.",
+            fields: ["area", "areaUnit", "buildStart", "buildCompleted", "facing", "floors", "onFloor", "landDetails", "plots", "apartmentUnits"],
+            render: () => <PropertySpecificsSection control={form.control} category={category} />,
+        },
+        ...(category === "Land" ? [] : [{
+            id: "rooms",
+            title: "Rooms & Space",
+            description: "Specify the number of rooms, parking, and other spaces.",
+            fields: ["bedrooms", "bathrooms", "kitchens", "diningRooms", "livingRooms", "carParkingSpots", "bikeParkingSpots"],
+            render: () => <RoomsAndSpaceSection control={form.control} category={category} />,
+        } satisfies PropertyFormStep]),
+        {
+            id: "features",
+            title: "Features & Amenities",
+            description: "List the key features and amenities available at the property.",
+            fields: ["amenities"],
+            render: () => <FeaturesAmenitiesSection control={form.control} />,
+        },
+        {
+            id: "pricing",
+            title: "Pricing Details",
+            description: "Set the listed price, payment basis, and negotiability.",
+            fields: ["pricing"],
+            render: () => <PricingDetailsSection control={form.control} />,
+        },
+        {
+            id: "location",
+            title: "Location Details",
+            description: "Provide the address, geo-coordinates, and nearby landmarks.",
+            fields: ["structuredLocation"],
+            render: () => <LocationDetailsSection control={form.control} />,
+        },
+        {
+            id: "owners",
+            title: "Owner Information",
+            description: "Add the owner or authorized person's contact details.",
+            fields: ["owners"],
+            render: () => <OwnerInfoSection control={form.control} users={users} formErrors={form.formState.errors} />,
+        },
+        {
+            id: "photos",
+            title: "Property Photos",
+            description: "Upload photos that best represent the property.",
+            fields: ["images"],
+            render: () => <PropertyPhotosSection control={form.control} />,
+        },
+        {
+            id: "documents",
+            title: "Property Documents",
+            description: "Attach ownership documents, blueprints, or legal papers.",
+            fields: ["documents"],
+            render: () => <PropertyDocumentsSection control={form.control} />,
+        },
+        {
+            id: "copy",
+            title: "Title & Description",
+            description: "Write a compelling title and description for the listing.",
+            fields: ["title", "description"],
+            render: () => <TitleDescriptionSection control={form.control} />,
+        },
+        {
+            id: "seo",
+            title: "SEO & Metadata",
+            description: "Optimise the listing for search engines with meta tags and slug.",
+            fields: isEditForm ? ["slug", "metaTitle", "metaDescription", "metaTags"] : ["metaTitle", "metaDescription", "metaTags"],
+            render: () => <SeoSection control={form.control} isEditForm={isEditForm} />,
+        },
+    ], [category, form.control, form.formState.errors, isEditForm, users]);
 
-        return sections;
-    }, [category, form.control, form.formState.errors, isEditForm, users]);
+    async function goTo(i: number) {
+        // Validate current section before moving forward
+        if (i > activeIndex) {
+            const isValid = await form.trigger(steps[activeIndex].fields as any, { shouldFocus: true });
+            if (!isValid) return;
+        }
+        setActiveIndex(i);
+        setUnlockedUpTo((prev) => Math.max(prev, i));
+    }
+
+    async function handleNext() {
+        const isValid = await form.trigger(steps[activeIndex].fields as any, { shouldFocus: true });
+        if (!isValid) return;
+        const next = Math.min(activeIndex + 1, steps.length - 1);
+        setActiveIndex(next);
+        setUnlockedUpTo((prev) => Math.max(prev, next));
+    }
+
+    function handlePrev() {
+        setActiveIndex((i) => Math.max(i - 1, 0));
+    }
+
+    const isLastStep = activeIndex === steps.length - 1;
+
+    return (
+        <div className="space-y-1">
+            {steps.slice(0, unlockedUpTo + 1).map((step, i) => {
+                const isActive = i === activeIndex;
+                const isUnlocked = i <= unlockedUpTo;
+                return (
+                    <Section
+                        key={step.id}
+                        index={i}
+                        title={step.title}
+                        description={step.description}
+                        isActive={isActive}
+                        isUnlocked={isUnlocked}
+                        onOpen={() => isUnlocked ? goTo(i) : undefined}
+                    >
+                        {step.render()}
+                        <div className="flex items-center gap-3 mt-6">
+                            {activeIndex > 0 && (
+                                <Button type="button" variant="outline" onClick={handlePrev}>
+                                    Previous
+                                </Button>
+                            )}
+                            {isLastStep ? (
+                                <Button type="submit" disabled={isSubmitting}>{submitLabel}</Button>
+                            ) : (
+                                <Button type="button" onClick={handleNext}>
+                                    Next
+                                </Button>
+                            )}
+                        </div>
+                    </Section>
+                );
+            })}
+        </div>
+    );
+}
+
+interface SectionProps {
+    index: number;
+    title: string;
+    description: string;
+    isActive: boolean;
+    isUnlocked: boolean;
+    onOpen: () => void;
+    children: React.ReactNode;
+}
+
+function Section({ index, title, description, isActive, isUnlocked, onOpen, children }: SectionProps) {
+    const bodyRef = useRef<HTMLDivElement>(null);
+    const [height, setHeight] = useState<number>(0);
+    const [settled, setSettled] = useState(false);
 
     useEffect(() => {
-        if (visibleCount > steps.length) {
-            setVisibleCount(steps.length);
+        if (!bodyRef.current) return;
+        if (isActive) {
+            setSettled(false);
+            // Force a reflow so transition fires from 0
+            setHeight(bodyRef.current.scrollHeight);
+        } else {
+            setSettled(false);
+            setHeight(0);
         }
-    }, [visibleCount, steps.length]);
+    }, [isActive]);
 
-    const visibleSteps = steps.slice(0, visibleCount);
-    const isAllVisible = visibleCount >= steps.length;
-    const lastVisibleStep = steps[visibleCount - 1];
-
-    async function handleContinue() {
-        const isValid = await form.trigger(lastVisibleStep.fields as any, { shouldFocus: true });
-        if (!isValid) return;
-        setVisibleCount((c) => Math.min(c + 1, steps.length));
+    function onTransitionEnd() {
+        if (isActive) setSettled(true); // release fixed height so content can reflow
     }
 
     return (
-        <div className="space-y-16">
-            {visibleSteps.map((step, i) => {
-                const isLast = i === visibleSteps.length - 1;
-                return (
-                    <div key={step.id}>
-                        <div className="mb-4">
-                            <h2 className="text-2xl font-bold text-primary">{i + 1}. {step.title}</h2>
-                            <p className="text-sm text-muted-foreground mt-1">{step.description}</p>
-                            <hr className="mt-2 border-primary" />
+        <div className={cn("border-b border-border/40 last:border-b-0")}>
+            {/* Header — always visible, clickable when unlocked */}
+            <button
+                type="button"
+                onClick={onOpen}
+                disabled={!isUnlocked}
+                className={cn(
+                    "w-full text-left py-4 px-1 group",
+                    isUnlocked && !isActive && "cursor-pointer",
+                    !isUnlocked && "cursor-default opacity-40",
+                )}
+            >
+                <div className="flex items-baseline gap-3">
+                    <span className={cn(
+                        "text-xs font-mono tabular-nums transition-colors",
+                        isActive ? "text-primary" : "text-muted-foreground"
+                    )}>
+                        {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <div>
+                        <h2 className={cn(
+                            "text-lg font-semibold transition-colors leading-tight",
+                            isActive ? "text-primary" : "text-foreground group-hover:text-primary"
+                        )}>
+                            {title}
+                        </h2>
+                        {/* Description + separator only when active */}
+                        <div className={cn(
+                            "overflow-hidden transition-all duration-300",
+                            isActive ? "max-h-10 opacity-100 mt-0.5" : "max-h-0 opacity-0"
+                        )}>
+                            <p className="text-sm text-muted-foreground">{description}</p>
                         </div>
-                        {step.render()}
-                        {isLast && (
-                            <div className="flex mt-6">
-                                {isAllVisible ? (
-                                    <Button type="submit" disabled={isSubmitting}>
-                                        {submitLabel}
-                                    </Button>
-                                ) : (
-                                    <Button type="button" onClick={handleContinue}>
-                                        Continue
-                                    </Button>
-                                )}
-                            </div>
-                        )}
                     </div>
-                );
-            })}
+                </div>
+                {isActive && <hr className="mt-3 border-primary" />}
+            </button>
+
+            {/* Body — height animates open/closed */}
+            <div
+                style={settled ? undefined : { height: `${height}px` }}
+                className={cn(
+                    "overflow-hidden",
+                    !settled && "transition-[height] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                )}
+                onTransitionEnd={onTransitionEnd}
+            >
+                <div ref={bodyRef} className="px-1 pb-6">
+                    <div className={cn(
+                        "transition-opacity duration-300",
+                        isActive ? "opacity-100" : "opacity-0"
+                    )}>
+                        {children}
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
