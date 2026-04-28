@@ -42,7 +42,7 @@ function SelectionCards({ options, selected, onToggle, disabled = new Set(), mul
                             isSelected && !isDisabled
                                 ? "border-primary bg-primary/10 text-primary"
                                 : "border-border bg-background text-foreground hover:border-muted-foreground",
-                            isDisabled && "opacity-30 cursor-not-allowed pointer-events-none",
+                            isDisabled && "opacity-50 cursor-not-allowed select-none",
                             isLocked && "cursor-default"
                         )}
                     >
