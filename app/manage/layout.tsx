@@ -51,6 +51,10 @@ export default function ManageLayout({
                     <Flame className="mr-2 h-4 w-4" />
                     Leads
                 </ClientLink>
+                <ClientLink href="/manage/clients" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
+                    <UserCheck className="mr-2 h-4 w-4" />
+                    Clients
+                </ClientLink>
                 <ClientLink href="/manage/messages" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
                     <MessageSquareHeart className="mr-2 h-4 w-4" />
                     Messages

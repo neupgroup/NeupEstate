@@ -124,3 +124,32 @@ export async function getLeadById(id: string) {
         return null;
     }
 }
+
+export async function getClients() {
+    try {
+        return await prisma.crmClient.findMany({
+            orderBy: { createdAt: 'desc' },
+            include: { leads: true },
+        });
+    } catch (e) {
+        await logProblem(e, 'getClients');
+        return [];
+    }
+}
+
+export async function getClientById(id: string) {
+    try {
+        return await prisma.crmClient.findUnique({
+            where: { id },
+            include: {
+                leads: {
+                    include: { activities: { orderBy: { activityOn: 'desc' } } },
+                    orderBy: { createdAt: 'desc' },
+                },
+            },
+        });
+    } catch (e) {
+        await logProblem(e, `getClientById ${id}`);
+        return null;
+    }
+}
