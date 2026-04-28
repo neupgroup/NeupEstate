@@ -42,6 +42,7 @@ export function ProgressivePropertySections({
 }: ProgressivePropertySectionsProps) {
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const [unlockedUpTo, setUnlockedUpTo] = useState<number>(0);
+    const [nextError, setNextError] = useState<string | null>(null);
     const category = (form.watch("categories" as any) as unknown) as string | undefined;
 
     const steps = useMemo<PropertyFormStep[]>(() => [
@@ -125,24 +126,32 @@ export function ProgressivePropertySections({
     ], [category, form.control, form.formState.errors, isEditForm, users]);
 
     async function goTo(i: number) {
-        // Validate current section before moving forward
         if (i > activeIndex) {
             const isValid = await form.trigger(steps[activeIndex].fields as any, { shouldFocus: true });
-            if (!isValid) return;
+            if (!isValid) {
+                setNextError("Please fix the errors above before continuing.");
+                return;
+            }
         }
+        setNextError(null);
         setActiveIndex(i);
         setUnlockedUpTo((prev) => Math.max(prev, i));
     }
 
     async function handleNext() {
         const isValid = await form.trigger(steps[activeIndex].fields as any, { shouldFocus: true });
-        if (!isValid) return;
+        if (!isValid) {
+            setNextError("Please fix the errors above before continuing.");
+            return;
+        }
+        setNextError(null);
         const next = Math.min(activeIndex + 1, steps.length - 1);
         setActiveIndex(next);
         setUnlockedUpTo((prev) => Math.max(prev, next));
     }
 
     function handlePrev() {
+        setNextError(null);
         setActiveIndex((i) => Math.max(i - 1, 0));
     }
 
@@ -162,18 +171,29 @@ export function ProgressivePropertySections({
                         onOpen={() => goTo(i)}
                     >
                         {step.render()}
-                        <div className="flex items-center gap-2 mt-4 mb-6">
-                            {activeIndex > 0 && (
-                                <Button type="button" variant="outline" size="sm" onClick={handlePrev}>
-                                    Previous
-                                </Button>
-                            )}
-                            {isLastStep ? (
-                                <Button type="submit" size="sm" disabled={isSubmitting}>{submitLabel}</Button>
-                            ) : (
-                                <Button type="button" size="sm" onClick={handleNext}>
-                                    Next
-                                </Button>
+                        <div className="flex flex-col gap-2 mt-4 mb-6">
+                            <div className="flex items-center gap-2">
+                                {activeIndex > 0 && (
+                                    <Button type="button" variant="outline" size="sm" onClick={handlePrev}>
+                                        Previous
+                                    </Button>
+                                )}
+                                {isLastStep ? (
+                                    <Button type="submit" size="sm" disabled={isSubmitting}>{submitLabel}</Button>
+                                ) : (
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        variant={nextError ? "outline" : "default"}
+                                        className={cn(nextError && "border-destructive text-destructive hover:bg-destructive/10")}
+                                        onClick={handleNext}
+                                    >
+                                        Next
+                                    </Button>
+                                )}
+                            </div>
+                            {nextError && (
+                                <p className="text-sm text-destructive">{nextError}</p>
                             )}
                         </div>
                     </Section>
