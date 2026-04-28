@@ -13,7 +13,7 @@
 import { z } from 'zod';
 import { getPrompt } from '@/services/prompt-service';
 import { generateText } from './unified-generation-service';
-import { getDbAdapter } from '@/lib/database';
+import { getAccountById } from '@/services/account-service';
 
 const ChatHistoryItemSchema = z.object({
   role: z.enum(['user', 'model']),
@@ -71,11 +71,10 @@ const defaultPrompt = {
 
 async function whatsappChatAgentFlow(input: ChatWithAiInput): Promise<ChatWithAiOutput> {
     const promptConfig = await getPrompt(PROMPT_ID, defaultPrompt);
-    const db = getDbAdapter();
 
     let userProfile = null;
     if (input.userId) {
-        userProfile = await db.getAccountById(input.userId);
+        userProfile = await getAccountById(input.userId);
     }
     
     const inputForPrompt = {

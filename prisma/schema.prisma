@@ -44,10 +44,16 @@ enum Reaction {
 // ============================================================================
 
 model Account {
-  id           String   @id
-  accountType  String
-  mainId       String?
-  lastActiveOn DateTime @updatedAt
+  id                   String   @id
+  accountType          String
+  mainId               String?
+  registered           Boolean  @default(false)
+  name                 String?
+  location             String?
+  createdOn            DateTime @default(now())
+  accessedOn           DateTime @default(now())
+  createdFromIp        String?
+  lastAccessedFromIp   String?
 
   @@map("account")
 }
@@ -86,7 +92,17 @@ model Property {
   structuredLocation String
   agency             String?
   agent              String?
+  pricing            Json?
+  roadAccessDetails  Json?
+  distancing         Json?
+  earnings           Json?
+  landDetails        Json?
+  plots              Json?
+  apartmentDetails   Json?
+  metaTags           String[]        @default([])
+  amenities          String[]        @default([])
   createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
   isFeatured         Boolean         @default(false)
   isApproved         Boolean         @default(false)
   isDeleted          Boolean         @default(false)
@@ -98,6 +114,9 @@ model Property {
   landDetail         PropertyLandDetail?
   commercialDetail   PropertyCommercialDetail?
   prices             PropertyPrice[]
+  fetchHistory       PropertyFetchHistory[]
+  owners             PropertyOwner[]
+  documents          PropertyDocument[]
   links              PropertyLink[]           @relation("PrimaryLinks")
   linkedBy           PropertyLink[]           @relation("SecondaryLinks")
   savedBy            SavedProperty[]
@@ -228,22 +247,68 @@ model PropertyPrice {
   @@map("property_price")
 }
 
+model PropertyFetchHistory {
+  id         String   @id @default(cuid())
+  propertyId String
+  sourceUrl  String?
+  fetchedAt  DateTime @default(now())
+  type       String   @default("data") // data | images
+  data       Json?
+  images     String[] @default([])
+
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@index([propertyId])
+  @@index([fetchedAt])
+  @@map("property_fetch_history")
+}
+
+model PropertyOwner {
+  id                      String   @id @default(cuid())
+  propertyId              String
+  ownerType               String   // registered | unregistered
+  userId                  String?
+  unregisteredName        String?
+  unregisteredEmail       String?
+  unregisteredPhones      Json?
+  unregisteredNotes       String?
+  sortOrder               Int      @default(0)
+
+  property                Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@index([propertyId])
+  @@map("property_owner")
+}
+
+model PropertyDocument {
+  id         String   @id @default(cuid())
+  propertyId String
+  name       String
+  urls       Json
+  sortOrder  Int      @default(0)
+
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@index([propertyId])
+  @@map("property_document")
+}
+
 // ============================================================================
 // Agency & Agent
 // ============================================================================
 
 model Agency {
-  id              String   @id @default(cuid())
-  name            String
-  logoUrl         String?
-  registeredName  String?
-  contactEmail    String?
-  contactPhone    String?
-  mainLocation    String?
-  branches        String[] @default([])
-  description     String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id             String   @id @default(cuid())
+  name           String
+  logoUrl        String?
+  registeredName String?
+  contactEmail   String?
+  contactPhone   String?
+  mainLocation   String?
+  branches       String[] @default([])
+  description    String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@index([name])
   @@map("agencies")
@@ -296,25 +361,21 @@ model Review {
 // ============================================================================
 
 model Requirement {
-  id                    String   @id @default(cuid())
-  trackerId             String
-  currency              String   @db.VarChar(8)
-  pricingUnit           String   @db.VarChar(24)
-  minPrice              Int?
-  maxPrice              Int?
-  location              String?
-  locationGeoCoordinates String? @db.VarChar(48)
-  locationStructured    String?
-  purpose               String?
-  type                  String[] @default([])
-  urgency               String?
-  requiredTime          String?
-  paymentMethod         String[] @default([])
-  loan                  Boolean  @default(false)
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+  id            String   @id @default(cuid())
+  userId        String
+  minBudget     Int?
+  maxBudget     Int?
+  location      String?
+  propertyType  String[] @default([])
+  purpose       String?
+  urgency       String?
+  requiredTime  String?
+  paymentMethod String[] @default([])
+  loan          Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  @@index([trackerId])
+  @@index([userId])
   @@map("requirements")
 }
 

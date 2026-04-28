@@ -4,7 +4,7 @@ import { getConversationByPhone, createMessage, createConversation, getMessagesB
 import { logProblem } from '@/services/problem-service';
 import { getWhatsAppConfig, sendWhatsAppMessage } from '@/services/whatsapp-service';
 import { chatWithAi } from '@/services/ai/whatsapp-chat-agent-flow';
-import { getDbAdapter } from '@/lib/database';
+import { createTemporaryAccount, updateAccountAccess } from '@/services/account-service';
 
 export const dynamic = 'force-dynamic';
 
@@ -51,14 +51,12 @@ export async function POST(req: NextRequest) {
             const from = message.from; // Customer's phone number
             const text = message.text.body;
             const customerName = contact?.profile?.name || 'Unknown User';
-            const db = getDbAdapter();
 
             let conversation = await getConversationByPhone(from);
             let accountId: string | undefined = undefined;
 
             if (!conversation) {
-                // If no conversation, we assume it's a new user. Create a temp account.
-                accountId = await db.createTemporaryAccount(req.ip || 'unknown');
+                accountId = await createTemporaryAccount(req.ip || 'unknown');
 
                 const newConversationId = await createConversation({
                     customerName: customerName,
@@ -79,9 +77,8 @@ export async function POST(req: NextRequest) {
             // Save the customer's message first
             await createMessage(conversation.id, text, 'customer');
             
-            // Update account access time
             if (accountId) {
-                await db.updateAccountAccess(accountId, req.ip || 'unknown');
+                await updateAccountAccess(accountId, req.ip || 'unknown');
             }
 
 
