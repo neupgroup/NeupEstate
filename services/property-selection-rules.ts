@@ -85,6 +85,7 @@ export function getDisabledNatures(categories: string[]): Set<string> {
  * Returns the nature that should be auto-selected given the current categories.
  */
 export function getAutoSelectedNature(categories: string[]): PropertyNature | undefined {
+    if (categories.length === 0) return undefined;
     if (categories.every(c => APARTMENT_GROUP.includes(c as any))) {
         return "Residential";
     }

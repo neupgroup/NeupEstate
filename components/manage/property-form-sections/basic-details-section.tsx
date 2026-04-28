@@ -5,7 +5,7 @@ import { CreatePropertyFormValues, PropertyCategorySchema, PropertyPurposeOption
 import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
-import { deriveSelectionState, canDeselect } from "@/services/property-selection-rules";
+import { deriveSelectionState } from "@/services/property-selection-rules";
 import { useEffect } from "react";
 
 interface BasicDetailsSectionProps {
@@ -95,7 +95,6 @@ export function BasicDetailsSection({ control }: BasicDetailsSectionProps) {
     };
 
     const toggleCategory = (option: string) => {
-        if (!canDeselect(selectedCategories, option)) return;
         const isSelected = selectedCategories.includes(option);
         const next = isSelected
             ? selectedCategories.filter((c) => c !== option)
@@ -105,7 +104,6 @@ export function BasicDetailsSection({ control }: BasicDetailsSectionProps) {
 
     const toggleType = (option: string) => {
         if (disabledNatures.has(option)) return;
-        if (!canDeselect(selectedTypes, option)) return;
         const isSelected = selectedTypes.includes(option);
         const next = isSelected
             ? selectedTypes.filter((t) => t !== option)
@@ -145,7 +143,6 @@ export function BasicDetailsSection({ control }: BasicDetailsSectionProps) {
                             onToggle={toggleCategory}
                             disabled={disabledCategories}
                             multi
-                            lockLastSelected
                         />
                         <FormMessage />
                     </FormItem>
@@ -164,7 +161,6 @@ export function BasicDetailsSection({ control }: BasicDetailsSectionProps) {
                             onToggle={toggleType}
                             disabled={disabledNatures}
                             multi
-                            lockLastSelected
                         />
                         <FormMessage />
                     </FormItem>
