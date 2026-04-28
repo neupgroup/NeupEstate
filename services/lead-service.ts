@@ -190,3 +190,53 @@ export async function getLeadActivity(leadId: string) {
         return { lead: null, activities: [] };
     }
 }
+
+export interface MergeClientsInput {
+    keepClientId: string;
+    dropClientId: string;
+    mergedData: {
+        firstName: string;
+        lastName: string;
+        email?: string;
+        phone?: string;
+        source?: string;
+    };
+}
+
+export async function mergeClients(data: MergeClientsInput): Promise<void> {
+    try {
+        await prisma.$transaction(async (tx) => {
+            // Move all leads from dropped client to kept client
+            await tx.clientLead.updateMany({
+                where: { clientId: data.dropClientId },
+                data:  { clientId: data.keepClientId },
+            });
+
+            // Move all links from dropped client to kept client
+            await tx.clientLink.updateMany({
+                where: { clientId: data.dropClientId },
+                data:  { clientId: data.keepClientId },
+            });
+
+            // Update kept client with merged data
+            await tx.crmClient.update({
+                where: { id: data.keepClientId },
+                data: {
+                    firstName: data.mergedData.firstName,
+                    lastName:  data.mergedData.lastName,
+                    source:    data.mergedData.source || null,
+                    contact: {
+                        email: data.mergedData.email || null,
+                        phone: data.mergedData.phone || null,
+                    },
+                },
+            });
+
+            // Delete the dropped client
+            await tx.crmClient.delete({ where: { id: data.dropClientId } });
+        });
+    } catch (e) {
+        await logProblem(e, 'mergeClients');
+        throw new Error('Failed to merge clients.');
+    }
+}
