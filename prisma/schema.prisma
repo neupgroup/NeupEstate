@@ -442,6 +442,86 @@ model PropertyView {
 }
 
 // ============================================================================
+// CRM — Client & Leads
+// ============================================================================
+
+enum LeadType {
+  BUYER
+  SELLER
+  TENANT
+  LANDLORD
+}
+
+enum LeadPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model CrmClient {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  contact   Json
+  source    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  links     ClientLink[]
+  leads     ClientLead[]
+
+  @@index([lastName])
+  @@map("client")
+}
+
+model ClientLink {
+  id        String    @id @default(cuid())
+  trackerId String
+  clientId  String
+
+  client    CrmClient @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@index([trackerId])
+  @@index([clientId])
+  @@map("client_link")
+}
+
+model ClientLead {
+  id          String       @id @default(cuid())
+  clientId    String
+  type        LeadType
+  requirement Json?
+  priority    LeadPriority @default(MEDIUM)
+  leadOwner   String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  client      CrmClient      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  activities  LeadActivity[]
+
+  @@index([clientId])
+  @@index([type])
+  @@index([priority])
+  @@map("client_lead")
+}
+
+model LeadActivity {
+  id         String     @id @default(cuid())
+  leadId     String
+  data       Json
+  activityOn DateTime   @default(now())
+  activityBy String
+
+  lead       ClientLead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@index([leadId])
+  @@index([activityOn])
+  @@index([activityBy])
+  @@map("lead_activity")
+}
+
+// ============================================================================
 // Conversations & Messages
 // ============================================================================
 
