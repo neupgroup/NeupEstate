@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Control, useFormContext } from "react-hook-form";
@@ -6,44 +5,52 @@ import { CreatePropertyFormValues, PropertyCategorySchema, PropertyPurposeOption
 import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
+import { deriveSelectionState, canDeselect } from "@/services/property-selection-rules";
+import { useEffect } from "react";
 
 interface BasicDetailsSectionProps {
     control: Control<CreatePropertyFormValues>;
 }
 
-type MultiSelectCardProps = {
+type SelectionCardsProps = {
     options: readonly string[];
     selected: string[];
     onToggle: (option: string) => void;
+    disabled?: Set<string>;
     multi?: boolean;
+    lockLastSelected?: boolean;
 };
 
-function SelectionCards({ options, selected, onToggle, multi = false }: MultiSelectCardProps) {
+function SelectionCards({ options, selected, onToggle, disabled = new Set(), multi = false, lockLastSelected = false }: SelectionCardsProps) {
     return (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {options.map((option) => {
-                const idx = selected.indexOf(option);
-                const isSelected = idx !== -1;
+                const isSelected = selected.includes(option);
+                const isDisabled = disabled.has(option);
+                const isLocked = lockLastSelected && isSelected && selected.length === 1;
                 const showNumber = multi && isSelected && selected.length > 1;
 
                 return (
                     <button
                         key={option}
                         type="button"
-                        onClick={() => onToggle(option)}
+                        onClick={() => !isDisabled && !isLocked && onToggle(option)}
                         aria-pressed={isSelected}
+                        disabled={isDisabled}
                         className={cn(
                             "flex items-center gap-2 rounded-lg border-2 px-3 py-2 text-sm font-medium transition-all text-left",
-                            isSelected
+                            isSelected && !isDisabled
                                 ? "border-primary bg-primary/10 text-primary"
-                                : "border-border bg-background text-foreground hover:border-muted-foreground"
+                                : "border-border bg-background text-foreground hover:border-muted-foreground",
+                            isDisabled && "opacity-30 cursor-not-allowed pointer-events-none",
+                            isLocked && "cursor-default"
                         )}
                     >
                         <span className={cn(
                             "flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold",
-                            isSelected ? "border-primary bg-primary text-white" : "border-muted-foreground"
+                            isSelected && !isDisabled ? "border-primary bg-primary text-white" : "border-muted-foreground"
                         )}>
-                            {showNumber ? idx + 1 : isSelected ? <Check className="h-2.5 w-2.5" /> : null}
+                            {showNumber ? selected.indexOf(option) + 1 : isSelected ? <Check className="h-2.5 w-2.5" /> : null}
                         </span>
                         <span>{option}</span>
                     </button>
@@ -56,80 +63,113 @@ function SelectionCards({ options, selected, onToggle, multi = false }: MultiSel
 export function BasicDetailsSection({ control }: BasicDetailsSectionProps) {
     const { watch, setValue } = useFormContext<CreatePropertyFormValues>();
     const selectedPurposes = watch("purposes") || [];
-    const selectedCategory = watch("category") ? [watch("category")] : [];
-    const selectedType = watch("type") ? [watch("type")] : [];
+    const selectedCategories = (watch("categories" as any) as unknown as string[]) || [];
+    const selectedTypes = (watch("types" as any) as unknown as string[]) || [];
+    const selectedCategory = selectedCategories[0];
+    const selectedType = selectedTypes[0];
+
+    const { disabledCategories, disabledPurposes, disabledNatures, autoNature } =
+        deriveSelectionState(selectedCategories, selectedPurposes as string[]);
+
+    // Auto-select nature when all categories imply it
+    useEffect(() => {
+        if (autoNature && !selectedTypes.includes(autoNature)) {
+            setValue("types" as any, [autoNature], { shouldDirty: true });
+        }
+    }, [JSON.stringify(selectedCategories)]);
+
+    // Clear disabled purposes when categories change
+    useEffect(() => {
+        const cleaned = (selectedPurposes as string[]).filter((p) => !disabledPurposes.has(p));
+        if (cleaned.length !== selectedPurposes.length) {
+            setValue("purposes", cleaned as any, { shouldDirty: true });
+            setValue("purpose", cleaned[0] as any, { shouldDirty: true });
+        }
+    }, [JSON.stringify(selectedCategories)]);
 
     const togglePurpose = (option: string) => {
-        const next = selectedPurposes.includes(option as any)
-            ? selectedPurposes.filter((o) => o !== option)
-            : [...selectedPurposes, option as any];
-        setValue("purposes", next, { shouldDirty: true, shouldValidate: true });
-        setValue("purpose", next[0], { shouldDirty: true, shouldValidate: true });
+        const current = selectedPurposes as string[];
+        const next = current.includes(option) ? current.filter((o) => o !== option) : [...current, option];
+        setValue("purposes", next as any, { shouldDirty: true, shouldValidate: true });
+        setValue("purpose", next[0] as any, { shouldDirty: true, shouldValidate: true });
     };
 
     const toggleCategory = (option: string) => {
-        // single-value field — toggle off if same, else set new
-        const current = selectedCategory[0];
-        setValue("category", current === option ? (undefined as any) : option as any, { shouldDirty: true, shouldValidate: true });
+        if (!canDeselect(selectedCategories, option)) return;
+        const isSelected = selectedCategories.includes(option);
+        const next = isSelected
+            ? selectedCategories.filter((c) => c !== option)
+            : [...selectedCategories, option];
+        setValue("categories" as any, next, { shouldDirty: true, shouldValidate: true });
     };
 
     const toggleType = (option: string) => {
-        const current = selectedType[0];
-        setValue("type", current === option ? (undefined as any) : option as any, { shouldDirty: true, shouldValidate: true });
+        if (disabledNatures.has(option)) return;
+        if (!canDeselect(selectedTypes, option)) return;
+        const isSelected = selectedTypes.includes(option);
+        const next = isSelected
+            ? selectedTypes.filter((t) => t !== option)
+            : [...selectedTypes, option];
+        setValue("types" as any, next, { shouldDirty: true, shouldValidate: true });
     };
 
     return (
         <section className="space-y-8">
-            <div className="space-y-8">
-                <FormField
-                    control={control}
-                    name="purposes"
-                    render={() => (
-                        <FormItem>
-                            <FormLabel className="text-base font-semibold">Property Purpose</FormLabel>
-                            <SelectionCards
-                                options={PropertyPurposeOptions}
-                                selected={selectedPurposes}
-                                onToggle={togglePurpose}
-                                multi
-                            />
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+            <FormField
+                control={control}
+                name="purposes"
+                render={() => (
+                    <FormItem>
+                        <FormLabel className="text-base font-semibold">Property Purpose</FormLabel>
+                        <SelectionCards
+                            options={PropertyPurposeOptions}
+                            selected={selectedPurposes as string[]}
+                            onToggle={togglePurpose}
+                            disabled={disabledPurposes}
+                            multi
+                        />
+                        <FormMessage />
+                    </FormItem>
+                )}
+            />
 
-                <FormField
-                    control={control}
-                    name="category"
-                    render={() => (
-                        <FormItem>
-                            <FormLabel className="text-base font-semibold">Property Type</FormLabel>
-                            <SelectionCards
-                                options={PropertyCategorySchema.options}
-                                selected={selectedCategory}
-                                onToggle={toggleCategory}
-                            />
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+            <FormField
+                control={control}
+                name={"categories" as any}
+                render={() => (
+                    <FormItem>
+                        <FormLabel className="text-base font-semibold">Property Type</FormLabel>
+                        <SelectionCards
+                            options={PropertyCategorySchema.options}
+                            selected={selectedCategories}
+                            onToggle={toggleCategory}
+                            disabled={disabledCategories}
+                            multi
+                            lockLastSelected
+                        />
+                        <FormMessage />
+                    </FormItem>
+                )}
+            />
 
-                <FormField
-                    control={control}
-                    name="type"
-                    render={() => (
-                        <FormItem>
-                            <FormLabel className="text-base font-semibold">Property Nature</FormLabel>
-                            <SelectionCards
-                                options={PropertyUsageTypeSchema.options}
-                                selected={selectedType}
-                                onToggle={toggleType}
-                            />
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-            </div>
+            <FormField
+                control={control}
+                name={"types" as any}
+                render={() => (
+                    <FormItem>
+                        <FormLabel className="text-base font-semibold">Property Nature</FormLabel>
+                        <SelectionCards
+                            options={PropertyUsageTypeSchema.options}
+                            selected={selectedTypes}
+                            onToggle={toggleType}
+                            disabled={disabledNatures}
+                            multi
+                            lockLastSelected
+                        />
+                        <FormMessage />
+                    </FormItem>
+                )}
+            />
         </section>
     );
 }

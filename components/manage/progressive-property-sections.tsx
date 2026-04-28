@@ -162,16 +162,16 @@ export function ProgressivePropertySections({
                         onOpen={() => goTo(i)}
                     >
                         {step.render()}
-                        <div className="flex items-center gap-3 mt-6">
+                        <div className="flex items-center gap-2 mt-4 mb-6">
                             {activeIndex > 0 && (
-                                <Button type="button" variant="outline" onClick={handlePrev}>
+                                <Button type="button" variant="outline" size="sm" onClick={handlePrev}>
                                     Previous
                                 </Button>
                             )}
                             {isLastStep ? (
-                                <Button type="submit" disabled={isSubmitting}>{submitLabel}</Button>
+                                <Button type="submit" size="sm" disabled={isSubmitting}>{submitLabel}</Button>
                             ) : (
-                                <Button type="button" onClick={handleNext}>
+                                <Button type="button" size="sm" onClick={handleNext}>
                                     Next
                                 </Button>
                             )}
