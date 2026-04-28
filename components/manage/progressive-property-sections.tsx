@@ -43,7 +43,8 @@ export function ProgressivePropertySections({
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const [unlockedUpTo, setUnlockedUpTo] = useState<number>(0);
     const [nextError, setNextError] = useState<string | null>(null);
-    const category = (form.watch("categories" as any) as unknown) as string | undefined;
+    const categories = (form.watch("categories" as any) as unknown as string[]) || [];
+    const category = categories[0] as string | undefined;
 
     const steps = useMemo<PropertyFormStep[]>(() => [
         {
@@ -60,7 +61,7 @@ export function ProgressivePropertySections({
             fields: ["area", "areaUnit", "buildStart", "buildCompleted", "facing", "floors", "onFloor", "landDetails", "plots", "apartmentUnits"],
             render: () => <PropertySpecificsSection control={form.control} category={category} />,
         },
-        ...(category === "Land" ? [] : [{
+        ...(categories.includes("Land") ? [] : [{
             id: "rooms",
             title: "Rooms & Space",
             description: "Specify the number of rooms, parking, and other spaces.",
