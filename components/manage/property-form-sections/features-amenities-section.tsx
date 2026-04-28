@@ -13,10 +13,6 @@ interface FeaturesAmenitiesSectionProps {
 export function FeaturesAmenitiesSection({ control }: FeaturesAmenitiesSectionProps) {
     return (
         <section className="space-y-6">
-            <div className="space-y-1">
-                <h2 className="text-2xl font-semibold leading-none tracking-tight">Features and Amenities</h2>
-                <p className="text-sm text-muted-foreground">List all available amenities.</p>
-            </div>
             <div>
                 <FormField
                     control={control}

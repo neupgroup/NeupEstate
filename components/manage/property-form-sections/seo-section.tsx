@@ -15,10 +15,6 @@ interface SeoSectionProps {
 export function SeoSection({ control, isEditForm }: SeoSectionProps) {
     return (
         <section className="space-y-6">
-            <div className="space-y-1">
-                <h2 className="text-2xl font-semibold leading-none tracking-tight">SEO & Metadata</h2>
-                <p className="text-sm text-muted-foreground">Optimize the listing for search engines.</p>
-            </div>
             <div className="space-y-4">
                 {isEditForm && (
                      <FormField

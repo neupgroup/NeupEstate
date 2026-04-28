@@ -13,10 +13,6 @@ interface TitleDescriptionSectionProps {
 export function TitleDescriptionSection({ control }: TitleDescriptionSectionProps) {
     return (
         <section className="space-y-6">
-            <div className="space-y-1">
-                <h2 className="text-2xl font-semibold leading-none tracking-tight">Title & Description</h2>
-                <p className="text-sm text-muted-foreground">Keep the main listing copy right before the SEO fields.</p>
-            </div>
             <div className="space-y-6">
                 <FormField
                     control={control}

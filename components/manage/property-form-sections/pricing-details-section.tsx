@@ -15,10 +15,6 @@ interface PricingDetailsSectionProps {
 export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
     return (
         <section className="space-y-6">
-            <div className="space-y-1">
-                <h2 className="text-2xl font-semibold leading-none tracking-tight">Pricing Details</h2>
-                <p className="text-sm text-muted-foreground">Set the financial details for the listing.</p>
-            </div>
             <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <FormField control={control} name="pricing.listed" render={({ field }) => (<FormItem><FormLabel>Listed Price</FormLabel><FormControl><Input type="number" placeholder="e.g., 150000" {...field} /></FormControl><FormMessage /></FormItem>)} />

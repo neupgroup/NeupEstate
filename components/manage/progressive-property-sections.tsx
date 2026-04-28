@@ -19,6 +19,7 @@ import { SeoSection } from "@/components/manage/property-form-sections/seo-secti
 type PropertyFormStep = {
     id: string;
     title: string;
+    description: string;
     fields: Array<keyof CreatePropertyFormValues | string>;
     render: () => JSX.Element | null;
 };
@@ -38,20 +39,22 @@ export function ProgressivePropertySections({
     isSubmitting,
     submitLabel,
 }: ProgressivePropertySectionsProps) {
-    const [currentStepIndex, setCurrentStepIndex] = useState(0);
+    const [visibleCount, setVisibleCount] = useState(1);
     const category = form.watch("category");
 
     const steps = useMemo<PropertyFormStep[]>(() => {
         const sections: PropertyFormStep[] = [
             {
                 id: "basics",
-                title: "Property Basics",
+                title: "Basic Information",
+                description: "Set the listing purpose, property type, and nature.",
                 fields: ["purposes", "category", "type"],
                 render: () => <BasicDetailsSection control={form.control} />,
             },
             {
                 id: "specifics",
                 title: "Property Specifics",
+                description: "Enter the size, age, floors, and structural details.",
                 fields: ["area", "areaUnit", "buildStart", "buildCompleted", "facing", "floors", "onFloor", "landDetails", "plots", "apartmentUnits"],
                 render: () => <PropertySpecificsSection control={form.control} category={category} />,
             },
@@ -61,55 +64,64 @@ export function ProgressivePropertySections({
                     {
                         id: "rooms",
                         title: "Rooms & Space",
+                        description: "Specify the number of rooms, parking, and other spaces.",
                         fields: ["bedrooms", "bathrooms", "kitchens", "diningRooms", "livingRooms", "carParkingSpots", "bikeParkingSpots"],
                         render: () => <RoomsAndSpaceSection control={form.control} category={category} />,
                     } satisfies PropertyFormStep,
                 ]),
             {
                 id: "features",
-                title: "Features and Amenities",
+                title: "Features & Amenities",
+                description: "List the key features and amenities available at the property.",
                 fields: ["amenities"],
                 render: () => <FeaturesAmenitiesSection control={form.control} />,
             },
             {
                 id: "pricing",
                 title: "Pricing Details",
+                description: "Set the listed price, payment basis, and negotiability.",
                 fields: ["pricing"],
                 render: () => <PricingDetailsSection control={form.control} />,
             },
             {
                 id: "location",
                 title: "Location Details",
+                description: "Provide the address, geo-coordinates, and nearby landmarks.",
                 fields: ["structuredLocation"],
                 render: () => <LocationDetailsSection control={form.control} />,
             },
             {
                 id: "owners",
                 title: "Owner Information",
+                description: "Add the owner or authorized person's contact details.",
                 fields: ["owners"],
                 render: () => <OwnerInfoSection control={form.control} users={users} formErrors={form.formState.errors} />,
             },
             {
                 id: "photos",
                 title: "Property Photos",
+                description: "Upload photos that best represent the property.",
                 fields: ["images"],
                 render: () => <PropertyPhotosSection control={form.control} />,
             },
             {
                 id: "documents",
                 title: "Property Documents",
+                description: "Attach ownership documents, blueprints, or legal papers.",
                 fields: ["documents"],
                 render: () => <PropertyDocumentsSection control={form.control} />,
             },
             {
                 id: "copy",
                 title: "Title & Description",
+                description: "Write a compelling title and description for the listing.",
                 fields: ["title", "description"],
                 render: () => <TitleDescriptionSection control={form.control} />,
             },
             {
                 id: "seo",
                 title: "SEO & Metadata",
+                description: "Optimise the listing for search engines with meta tags and slug.",
                 fields: isEditForm ? ["slug", "metaTitle", "metaDescription", "metaTags"] : ["metaTitle", "metaDescription", "metaTags"],
                 render: () => <SeoSection control={form.control} isEditForm={isEditForm} />,
             },
@@ -119,45 +131,49 @@ export function ProgressivePropertySections({
     }, [category, form.control, form.formState.errors, isEditForm, users]);
 
     useEffect(() => {
-        if (currentStepIndex >= steps.length) {
-            setCurrentStepIndex(Math.max(steps.length - 1, 0));
+        if (visibleCount > steps.length) {
+            setVisibleCount(steps.length);
         }
-    }, [currentStepIndex, steps.length]);
+    }, [visibleCount, steps.length]);
 
-    const currentStep = steps[currentStepIndex];
-    const isLastStep = currentStepIndex === steps.length - 1;
+    const visibleSteps = steps.slice(0, visibleCount);
+    const isAllVisible = visibleCount >= steps.length;
+    const lastVisibleStep = steps[visibleCount - 1];
 
     async function handleContinue() {
-        const isValid = await form.trigger(currentStep.fields as any, { shouldFocus: true });
+        const isValid = await form.trigger(lastVisibleStep.fields as any, { shouldFocus: true });
         if (!isValid) return;
-        setCurrentStepIndex((index) => Math.min(index + 1, steps.length - 1));
-    }
-
-    function handleBack() {
-        setCurrentStepIndex((index) => Math.max(index - 1, 0));
+        setVisibleCount((c) => Math.min(c + 1, steps.length));
     }
 
     return (
-        <div className="space-y-6">
-            {currentStep?.render()}
-
-            <div className="flex flex-wrap items-center gap-3">
-                {isLastStep ? (
-                    <Button type="submit" disabled={isSubmitting}>
-                        {submitLabel}
-                    </Button>
-                ) : (
-                    <Button type="button" onClick={handleContinue}>
-                        Continue
-                    </Button>
-                )}
-
-                {currentStepIndex > 0 && (
-                    <Button type="button" variant="outline" onClick={handleBack}>
-                        Back
-                    </Button>
-                )}
-            </div>
+        <div className="space-y-16">
+            {visibleSteps.map((step, i) => {
+                const isLast = i === visibleSteps.length - 1;
+                return (
+                    <div key={step.id}>
+                        <div className="mb-4">
+                            <h2 className="text-2xl font-bold text-primary">{i + 1}. {step.title}</h2>
+                            <p className="text-sm text-muted-foreground mt-1">{step.description}</p>
+                            <hr className="mt-2 border-primary" />
+                        </div>
+                        {step.render()}
+                        {isLast && (
+                            <div className="flex mt-6">
+                                {isAllVisible ? (
+                                    <Button type="submit" disabled={isSubmitting}>
+                                        {submitLabel}
+                                    </Button>
+                                ) : (
+                                    <Button type="button" onClick={handleContinue}>
+                                        Continue
+                                    </Button>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                );
+            })}
         </div>
     );
 }

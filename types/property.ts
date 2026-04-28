@@ -19,7 +19,7 @@ function isValidImageUrl(url: string): boolean {
 
 
 // Base Enums
-export const PropertyPurposeOptions = ['Sale', 'Rent', 'Lease', 'Buy', 'Sell', 'Mortgage', 'Exchange', 'Auction', 'Transfer'] as const;
+export const PropertyPurposeOptions = ['Sale', 'Rent', 'Lease', 'Exchange'] as const;
 export const PropertyPurposeSchema = z.preprocess(
     (val) => {
         if (typeof val === 'string') {
@@ -34,8 +34,8 @@ export const PropertyPurposeSchema = z.preprocess(
     z.enum(PropertyPurposeOptions)
 );
 export const PropertyPurposesSchema = z.array(z.enum(PropertyPurposeOptions)).min(1, "Please select at least one purpose.");
-export const PropertyCategorySchema = z.enum(['House', 'Apartment', 'Land', 'Flat']);
-export const PropertyUsageTypeSchema = z.enum(['Residential', 'Commercial', 'Industrial', 'Agricultural', 'Vacant', 'Semi-Commercial']);
+export const PropertyCategorySchema = z.enum(['House', 'Bungalow', 'Villa', 'Multiplex', 'Land', 'Apartment', 'Penthouse', 'Commercial Space', 'Shop Space', 'Flat']);
+export const PropertyUsageTypeSchema = z.enum(['Residential', 'Semi-Commercial', 'Commercial', 'Industrial', 'Agricultural']);
 export const AreaUnitSchema = z.enum(['sqft', 'sqm', 'aana', 'ropani', 'bigha', 'dhur']);
 export const LandFacingSchema = z.enum(['North', 'South', 'East', 'West', 'North-East', 'North-West', 'South-East', 'South-West']);
 
@@ -263,8 +263,8 @@ export const CreatePropertySchema = z.object({
     description: z.string().min(10, {message: "Description must be at least 10 characters long."}),
     purpose: PropertyPurposeSchema.optional(),
     purposes: PropertyPurposesSchema,
-    category: PropertyCategorySchema,
-    type: PropertyUsageTypeSchema,
+    categories: z.array(PropertyCategorySchema).min(1, "Please select at least one property type."),
+    types: z.array(PropertyUsageTypeSchema).min(1, "Please select at least one property nature."),
 
     // Property Details
     area: z.coerce.number().min(0),

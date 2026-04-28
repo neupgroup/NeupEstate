@@ -68,10 +68,6 @@ export function PropertyDocumentsSection({ control }: PropertyDocumentsSectionPr
 
     return (
         <section className="space-y-6">
-            <div className="space-y-1">
-                <h2 className="text-2xl font-semibold leading-none tracking-tight">Property Documents</h2>
-                <p className="text-sm text-muted-foreground">Add links to relevant property documents.</p>
-            </div>
             <div className="space-y-4">
                 {fields.map((field, index) => (
                     <DocumentGroup

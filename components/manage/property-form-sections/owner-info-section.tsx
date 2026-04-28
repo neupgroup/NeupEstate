@@ -159,11 +159,7 @@ export function OwnerInfoSection({ control, users, formErrors }: OwnerInfoSectio
 
     return (
         <section className="space-y-6">
-            <div className="space-y-1">
-                <h2 className="text-2xl font-semibold leading-none tracking-tight">Owner/Authorized Person Information/s</h2>
-                <p className="text-sm text-muted-foreground">Add up to 4 owners. At least one is required.</p>
                 <FormMessage>{formErrors.owners?.root?.message}</FormMessage>
-            </div>
             <div className="space-y-4">
                 {ownerFields.map((field, index) => (
                     <OwnerDetails key={field.id} control={control} index={index} remove={removeOwner} users={users} />

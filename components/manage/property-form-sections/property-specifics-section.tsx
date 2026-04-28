@@ -21,10 +21,6 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
 
     return (
         <section className="space-y-6">
-            <div className="space-y-1">
-                <h2 className="text-2xl font-semibold leading-none tracking-tight">Property Specifics</h2>
-                <p className="text-sm text-muted-foreground">Provide the detailed specifications for the property.</p>
-            </div>
             <div className="space-y-6">
 
                 {/* Property Details Section */}

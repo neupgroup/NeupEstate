@@ -13,10 +13,6 @@ interface LocationDetailsSectionProps {
 export function LocationDetailsSection({ control }: LocationDetailsSectionProps) {
     return (
         <section className="space-y-6">
-            <div className="space-y-1">
-                <h2 className="text-2xl font-semibold leading-none tracking-tight">Location Details</h2>
-                <p className="text-sm text-muted-foreground">Enter the full address of the property.</p>
-            </div>
             <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <FormField control={control} name="structuredLocation.country" render={({ field }) => (<FormItem><FormLabel>Country</FormLabel><FormControl><Input placeholder="e.g., Nepal" {...field} /></FormControl><FormMessage /></FormItem>)} />
