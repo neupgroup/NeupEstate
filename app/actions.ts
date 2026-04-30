@@ -471,7 +471,7 @@ export async function rewritePropertyDetailsAction(
     // This is tricky because rewritePropertyDetails doesn't know about the new schemas.
     // It will only update the fields it knows about. We should preserve the detailed fields.
     const updatePayload: UpdatePropertyInput = {
-        ...(property as UpdatePropertyInput), // Start with existing data to preserve details
+        ...(property as unknown as UpdatePropertyInput), // Start with existing data to preserve details
         title: rewrittenData.rewrittenTitle,
         description: rewrittenData.rewrittenDescription,
         location: rewrittenData.rewrittenLocation,

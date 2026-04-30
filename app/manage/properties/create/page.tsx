@@ -71,7 +71,7 @@ export default function CreatePropertyPage() {
     const primaryPurpose = form.watch('purposes')?.[0];
 
     useEffect(() => {
-        if (primaryPurpose === 'Sale' || primaryPurpose === 'Auction') {
+        if (primaryPurpose === 'Sale') {
             form.setValue('pricing.basis', 'one-time-total(house/apartment)');
         }
     }, [primaryPurpose, form]);
