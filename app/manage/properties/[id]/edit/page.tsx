@@ -226,7 +226,7 @@ export default function EditPropertyPage() {
                                     <CardTitle>Edit Property</CardTitle>
                                     <CardDescription>Update the details for "{property.title}".</CardDescription>
                                     {property.isApproved && (
-                                        <ClientLink
+                                        <a
                                             href={`/properties/${property.slug || property.id}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
@@ -234,7 +234,7 @@ export default function EditPropertyPage() {
                                         >
                                             View on site
                                             <ExternalLink className="h-4 w-4" />
-                                        </ClientLink>
+                                        </a>
                                     )}
                                 </div>
                                 <div className="flex flex-row sm:flex-col lg:flex-row gap-2 self-start sm:self-end">

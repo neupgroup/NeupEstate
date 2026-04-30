@@ -10,7 +10,8 @@ import { Section } from '@/components/home/_components/section';
 import { SectionTitle } from '@/components/home/_components/section-title';
 import { RecommendedProperties } from "@/components/recommended-properties";
 import { getRequirementByUserId } from '@/services/requirements-service';
-import type { Requirement, RequirementsFormValues } from '@/types';
+import type { Requirement, CreateRequirementFormValues } from '@/types';
+import type { RequirementsFormValues } from '@/components/profile/user-requirements-form';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ClientLink } from '@/components/client-link';
@@ -74,6 +75,7 @@ function UserProfileHeader() {
                                 data-ai-hint="person portrait"
                                 className="rounded-md object-cover"
                                 layout="fill"
+                                fallbackSrc="https://placehold.co/200x200.png"
                             />
                         </div>
                         <div className="pb-2">
@@ -164,12 +166,12 @@ function RecommendedForYouSection({ requirements }: { requirements: Requirement[
     const propertyTypesArray = firstReq.propertyType ? (Array.isArray(firstReq.propertyType) ? firstReq.propertyType : [firstReq.propertyType]) : [];
     
     const requirementsForClient: RequirementsFormValues = {
-        purpose: firstReq.purpose as 'Buy' | 'Rent',
+        purpose: (firstReq.purpose === 'Sale' ? 'Buy' : 'Rent') as 'Buy' | 'Rent',
         propertyType: propertyTypesArray[0] as any,
         minPrice: firstReq.minBudget,
         maxPrice: firstReq.maxBudget,
         location: PRESET_LOCATIONS.includes(firstReq.location || '') ? firstReq.location! : '',
-        otherLocation: PRESET_LOCATIONS.includes(firstReq.location || '') ? '' : firstReq.location!,
+        otherLocation: PRESET_LOCATIONS.includes(firstReq.location || '') ? '' : (firstReq.location || ''),
         paymentMethod: firstReq.paymentMethod as any,
         requiredTime: firstReq.requiredTime as any,
     };

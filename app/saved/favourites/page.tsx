@@ -11,7 +11,7 @@ export default async function SavedFavouritesPage() {
   const cookieStore = await cookies();
   const userId = cookieStore.get('temp_account_id')?.value;
   
-  let savedProperties = [];
+  let savedProperties: any[] = [];
   if (userId) {
     savedProperties = await getSavedProperties(userId);
   }

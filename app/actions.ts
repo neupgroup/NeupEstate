@@ -1286,7 +1286,7 @@ export async function getSavedPropertiesForUser(userId: string): Promise<Propert
   }
 }
 
-export async function getUsersBySavedProperty(propertyId: string): Promise<User[]> {
+export async function getUsersBySavedProperty(propertyId: string): Promise<any[]> {
   try {
     return await getUsersBySavedPropertyService(propertyId);
   } catch (e) {

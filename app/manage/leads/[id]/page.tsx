@@ -32,7 +32,7 @@ export default async function LeadProfilePage({ params }: { params: Promise<{ id
         };
     }
 
-    let userProfile: UpdateUserFormValues = { id: account.id };
+    let userProfile: UpdateUserFormValues = { id: account.id, name: '' };
 
     if (account.registered) {
         const allUsers = await getUsers();

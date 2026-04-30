@@ -253,7 +253,7 @@ export default function AutomationPage() {
             for (const [index, url] of newUrls.entries()) {
                 if (isCancelled) {
                     finalSummaryMessage = `Process cancelled by user. Imported: ${importedCount}, Skipped: ${skippedCount}.`;
-                    logs.push({ status: 'info', message: "Processing cancelled." });
+                    setCheckResults(prev => prev.map(r => r.sitemapId === sitemapId ? { ...r, logs: [...r.logs, { status: 'info', message: "Processing cancelled." }] } : r));
                     break;
                 }
                 

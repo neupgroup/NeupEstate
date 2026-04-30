@@ -49,7 +49,7 @@ export default function CreateAgentPage() {
     // When the switch is toggled, reset the form values
     useEffect(() => {
         form.reset({
-            registered: isRegistered,
+            registered: isRegistered as any,
             location: '',
             name: '',
             email: '',
@@ -127,7 +127,7 @@ export default function CreateAgentPage() {
                                         <SelectContent>
                                             {users.map(user => (
                                                 <SelectItem key={user.id} value={user.id}>
-                                                    {user.name} ({user.email})
+                                                    {user.name} ({Array.isArray(user.email) ? user.email[0]?.value : user.email})
                                                 </SelectItem>
                                             ))}
                                         </SelectContent>

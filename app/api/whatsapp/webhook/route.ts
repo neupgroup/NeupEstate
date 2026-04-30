@@ -56,13 +56,12 @@ export async function POST(req: NextRequest) {
             let accountId: string | undefined = undefined;
 
             if (!conversation) {
-                accountId = await createTemporaryAccount(req.ip || 'unknown');
+                accountId = await createTemporaryAccount(req.headers.get("x-forwarded-for") || 'unknown');
 
                 const newConversationId = await createConversation({
                     customerName: customerName,
                     customerPhone: from,
                     notes: `New incoming chat. First message: "${text}"`,
-                    userId: accountId, // Link conversation to the new account
                 });
                 conversation = await getConversationById(newConversationId);
             } else {
@@ -78,7 +77,7 @@ export async function POST(req: NextRequest) {
             await createMessage(conversation.id, text, 'customer');
             
             if (accountId) {
-                await updateAccountAccess(accountId, req.ip || 'unknown');
+                await updateAccountAccess(accountId, req.headers.get("x-forwarded-for") || 'unknown');
             }
 
 

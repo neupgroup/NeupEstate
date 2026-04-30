@@ -47,9 +47,9 @@ export default async function VisitRequestsPage() {
                                         {req.phone && <div className="text-sm text-muted-foreground flex items-center gap-2"><Phone className="h-4 w-4" />{req.phone}</div>}
                                     </TableCell>
                                     <TableCell>
-                                        <ClientLink href={`/properties/${req.propertyId}`} target="_blank" className="font-medium hover:underline flex items-center gap-2">
+                                        <a href={`/properties/${req.propertyId}`} target="_blank" rel="noopener noreferrer" className="font-medium hover:underline flex items-center gap-2">
                                             <Home className="h-4 w-4" /> {req.propertyTitle}
-                                        </ClientLink>
+                                        </a>
                                     </TableCell>
                                     <TableCell>
                                         <Badge variant={req.status === 'new' ? 'default' : 'secondary'}>{req.status}</Badge>

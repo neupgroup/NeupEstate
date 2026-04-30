@@ -32,7 +32,7 @@ export default async function AgentsPage() {
                 <ClientLink href={`/agents/${agent.slug}`}>
                     <CardHeader className="p-0">
                         <SafeImage
-                            src={agent.photoUrl}
+                            src={agent.photoUrl ?? ''}
                             alt={`${agent.name}`}
                             width={400}
                             height={300}

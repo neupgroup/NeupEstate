@@ -213,11 +213,11 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
 
   let ownerName = 'N/A';
   if (property.owner) {
-      if (property.owner.ownerType === 'registered' && property.owner.userId) {
+      if (property.owner?.ownerType === 'registered' && property.owner.userId) {
           const users = await getUsers();
-          const user = users.find(u => u.id === property.owner.userId);
+          const user = users.find(u => u.id === property.owner!.userId);
           ownerName = user ? user.name : 'Registered User (Not Found)';
-      } else if (property.owner.ownerType === 'unregistered') {
+      } else if (property.owner?.ownerType === 'unregistered') {
           ownerName = property.owner.unregisteredOwnerName || 'Unregistered Owner';
       }
   }
@@ -416,9 +416,9 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
               <div className="mt-6 border-t pt-6">
                   <h2 className="text-2xl font-headline font-semibold mb-4">Apartment Building Details</h2>
                    <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-2">
-                      {property.apartmentDetails.buildingArea && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Building Area</p><p className="font-semibold">{property.apartmentDetails.buildingArea} {property.apartmentDetails.areaUnit}</p></div>}
+                      {(property.apartmentDetails as any).buildingArea && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Building Area</p><p className="font-semibold">{(property.apartmentDetails as any).buildingArea} {(property.apartmentDetails as any).areaUnit}</p></div>}
                       {property.apartmentDetails.furnishing && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Furnishing</p><p className="font-semibold">{property.apartmentDetails.furnishing}</p></div>}
-                      {property.apartmentDetails.buildStart && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Built</p><p className="font-semibold">{property.apartmentDetails.buildStart} - {property.apartmentDetails.buildCompleted}</p></div>}
+                      {(property.apartmentDetails as any).buildStart && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Built</p><p className="font-semibold">{(property.apartmentDetails as any).buildStart} - {(property.apartmentDetails as any).buildCompleted}</p></div>}
                   </div>
               </div>
             )}

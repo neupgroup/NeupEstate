@@ -14,7 +14,7 @@ export default async function UserDetailPage({ params }: { params: Promise<{ id:
     }
 
     // Attempt to get more detailed user info if it's a registered user
-    let userProfile: UpdateUserFormValues = { id: account.id };
+    let userProfile: UpdateUserFormValues = { id: account.id, name: '' };
 
     if (account.registered) {
         const allUsers = await getUsers();

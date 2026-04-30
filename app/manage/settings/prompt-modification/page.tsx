@@ -64,7 +64,7 @@ export default function AiConfigurationPage() {
                             Modify the prompt details below. Changes will be reflected immediately across the application.
                         </DialogDescription>
                     </DialogHeader>
-                    {selectedPrompt && <PromptEditForm prompt={selectedPrompt} onFinished={handleDialogClose} />}
+                    {selectedPrompt && <PromptEditForm prompt={selectedPrompt} mode="edit" models={[]} />}
                 </DialogContent>
             </Dialog>
 
