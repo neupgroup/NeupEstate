@@ -114,7 +114,7 @@ export function SavedPropertiesDashboard({ initialSavedProperties }: { initialSa
                                 {propertyUsersResult.map(user => (
                                     <TableRow key={user.id}>
                                         <TableCell>{user.name} ({user.id})</TableCell>
-                                        <TableCell>{user.email}</TableCell>
+                                        <TableCell>{Array.isArray(user.email) ? user.email[0]?.value : user.email}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>

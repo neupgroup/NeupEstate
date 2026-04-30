@@ -36,8 +36,8 @@ export function RecommendedProperties({ requirements }: RecommendedPropertiesPro
         if (requirements.purpose) {
             searchFilters.purpose = [requirements.purpose === 'Buy' ? 'Sale' : 'Rent'];
         }
-        if (requirements.propertyTypes && requirements.propertyTypes.length > 0) {
-            searchFilters.category = requirements.propertyTypes;
+        if (requirements.propertyType) {
+            searchFilters.category = [requirements.propertyType] as any;
         }
         if (requirements.minPrice) {
             searchFilters.minPrice = requirements.minPrice;

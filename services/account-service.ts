@@ -69,7 +69,7 @@ export async function getAccountById(id: string): Promise<Account | null> {
  */
 export async function updateUser(id: string, data: UpdateUserFormValues): Promise<void> {
     try {
-        await prisma.user.upsert({
+        await (prisma as any).account.upsert({
             where: { id },
             create: {
                 id,

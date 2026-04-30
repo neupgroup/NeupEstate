@@ -94,7 +94,7 @@ function OwnerDetails({ control, index, remove, users }: { control: Control<Crea
                                 <FormControl><SelectTrigger><SelectValue placeholder="Select a registered user" /></SelectTrigger></FormControl>
                                 <SelectContent>
                                     {users.map(user => (
-                                        <SelectItem key={user.id} value={user.id}>{user.name} ({user.email})</SelectItem>
+                                        <SelectItem key={user.id} value={user.id}>{user.name} ({Array.isArray(user.email) ? user.email[0]?.value : user.email})</SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>

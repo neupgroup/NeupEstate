@@ -12,7 +12,7 @@ export function PropertyCollections() {
             <p className="mt-2 text-muted-foreground mb-6 max-w-2xl">
                 Based on your interests, our AI has curated a list of properties you might love.
             </p>
-            <RecommendedProperties />
+            <RecommendedProperties requirements={null} />
         </Section>
     );
 }

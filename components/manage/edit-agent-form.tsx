@@ -46,7 +46,7 @@ export function EditAgentForm({ agent, users }: EditAgentFormProps) {
     const form = useForm<UpdateAgentFormValues>({
         resolver: zodResolver(UpdateAgentSchema),
         defaultValues: {
-            registered: agent.registered,
+            registered: agent.registered as any,
             location: agent.location || '',
             userId: agent.userId || undefined,
             name: agent.name || '',
@@ -62,7 +62,7 @@ export function EditAgentForm({ agent, users }: EditAgentFormProps) {
     useEffect(() => {
         if (isEditing) {
             form.reset({
-                registered: isRegistered,
+                registered: isRegistered as any,
                 location: agent.location,
                 about: agent.about,
                 userId: isRegistered ? agent.userId : undefined,
@@ -117,7 +117,7 @@ export function EditAgentForm({ agent, users }: EditAgentFormProps) {
     const handleCancel = () => {
         setIsEditing(false);
         form.reset({
-            registered: agent.registered,
+            registered: agent.registered as any,
             location: agent.location || '',
             userId: agent.userId || undefined,
             name: agent.name || '',

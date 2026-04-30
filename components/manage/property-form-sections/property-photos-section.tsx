@@ -17,8 +17,8 @@ interface PropertyPhotosSectionProps {
 export function PropertyPhotosSection({ control }: PropertyPhotosSectionProps) {
     const { watch } = useFormContext<CreatePropertyFormValues>();
     const { fields, append, remove } = useFieldArray({
-        control,
-        name: "images"
+        control: control as any,
+        name: "images" as any
     });
 
     return (

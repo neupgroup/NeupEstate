@@ -1,5 +1,5 @@
+// @ts-ignore
 import { defineConfig } from 'prisma'
-
 export default defineConfig({
   datasources: {
     db: {

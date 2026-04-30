@@ -51,7 +51,7 @@ export function AdminPropertyRow({ property }: AdminPropertyRowProps) {
             </TableCell>
             <TableCell className="text-right">
                 {property.isApproved && (
-                    <ClientLink 
+                    <a 
                         href={propertyUrl} 
                         target="_blank" 
                         rel="noopener noreferrer"
@@ -60,7 +60,7 @@ export function AdminPropertyRow({ property }: AdminPropertyRowProps) {
                     >
                         View
                         <ExternalLink className="h-3 w-3" />
-                    </ClientLink>
+                    </a>
                 )}
             </TableCell>
         </TableRow>

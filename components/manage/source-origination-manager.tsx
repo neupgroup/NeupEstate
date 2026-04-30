@@ -338,7 +338,7 @@ export function SourceOriginationManager({ property }: SourceOriginationManagerP
                                         </div>
                                         <div className="flex flex-wrap gap-2">
                                             {item.images.map((img, index) => (
-                                                <SafeImage key={index} src={img} alt={`Fetched image ${index + 1}`} width={80} height={80} className="rounded-md object-cover border" data-ai-hint="house interior" />
+                                                <SafeImage key={index} src={img} alt={`Fetched image ${index + 1}`} width={80} height={80} className="rounded-md object-cover border" data-ai-hint="house interior" fallbackSrc="https://placehold.co/80x80.png" />
                                             ))}
                                         </div>
                                     </CardContent>

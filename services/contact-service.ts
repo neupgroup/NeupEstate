@@ -40,7 +40,7 @@ export async function getContactSubmissions({ limit = 20, offset = 0 }: { limit?
             body: submission.body,
             status: submission.status,
             createdAt: submission.createdAt.toISOString(),
-        }));
+        })) as any[];
     } catch (error) {
         await logProblem(error, 'getContactSubmissions');
         return [];

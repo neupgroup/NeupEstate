@@ -11,20 +11,21 @@ import { PropertyCard } from "@/components/property-card";
 const MOCK_USER_ID = "usr-1";
 
 export async function CuratedForYouSection() {
-    const requirements = await getRequirementByUserId(MOCK_USER_ID);
+    const requirementsArray = await getRequirementByUserId(MOCK_USER_ID);
+    const requirements = Array.isArray(requirementsArray) ? requirementsArray[0] : requirementsArray;
 
     let requirementsForClient: RequirementsFormValues | null = null;
     if (requirements) {
         const PRESET_LOCATIONS = ["Kathmandu", "Lalitpur", "Bhaktapur", "Pokhara"];
         requirementsForClient = {
             purpose: requirements.purpose as 'Buy' | 'Rent' || 'Buy',
-            propertyType: requirements.propertyType || "House",
+            propertyType: (Array.isArray(requirements.propertyType) ? requirements.propertyType[0] : requirements.propertyType) as any || "House",
             minPrice: requirements.minBudget,
             maxPrice: requirements.maxBudget,
             location: requirements.location || '',
             otherLocation: PRESET_LOCATIONS.includes(requirements.location || '') ? '' : requirements.location || '',
             paymentMethod: requirements.paymentMethod || [],
-            requiredTime: requirements.requiredTime || "Within 3 months",
+            requiredTime: (requirements.requiredTime || "within 3 months") as any,
         };
     }
 

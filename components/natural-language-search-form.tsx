@@ -85,13 +85,13 @@ export function NaturalLanguageSearchForm() {
           <Lightbulb className="h-4 w-4" />
           <AlertTitle>AI Search Results</AlertTitle>
           <AlertDescription>
-            <p><strong>Summary:</strong> {searchResult.summary}</p>
+            <p><strong>Summary:</strong> {(searchResult as any).summary}</p>
             <ul className="mt-2 list-disc list-inside text-sm">
-                <li>Location: {searchResult.location}</li>
-                <li>Type: {searchResult.propertyType}</li>
-                <li>Price: ${searchResult.minPrice.toLocaleString()} - ${searchResult.maxPrice.toLocaleString()}</li>
-                <li>Features: {searchResult.bedrooms} bed, {searchResult.bathrooms} bath, {searchResult.squareFootage.toLocaleString()} sqft</li>
-                <li>Amenities: {searchResult.amenities.join(', ')}</li>
+                <li>Location: {(searchResult as any).location}</li>
+                <li>Type: {(searchResult as any).propertyType}</li>
+                <li>Price: ${(searchResult as any).minPrice?.toLocaleString()} - ${(searchResult as any).maxPrice?.toLocaleString()}</li>
+                <li>Features: {(searchResult as any).bedrooms} bed, {(searchResult as any).bathrooms} bath, {(searchResult as any).squareFootage?.toLocaleString()} sqft</li>
+                <li>Amenities: {(searchResult as any).amenities?.join(', ')}</li>
             </ul>
           </AlertDescription>
         </Alert>

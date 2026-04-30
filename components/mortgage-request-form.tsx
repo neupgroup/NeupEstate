@@ -74,7 +74,7 @@ export function MortgageRequestForm() {
                             <FormLabel className="text-base">Preferred Contact Methods</FormLabel>
                         </div>
                         <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                            {['call', 'email', 'whatsapp'].map((item) => (
+                            {(['call', 'email', 'whatsapp'] as const).map((item) => (
                                 <FormField
                                 key={item}
                                 control={form.control}

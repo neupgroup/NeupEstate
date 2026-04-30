@@ -6,7 +6,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { UpdatePromptSchema, CreatePromptSchema, type UpdatePromptFormValues, type CreatePromptFormValues, type Prompt, type AIModel } from '@/types';
+import { UpdatePromptSchema, CreatePromptSchema, type UpdatePromptFormValues, type CreatePromptFormValues, type AIModel } from '@/types';
+import type { Prompt } from '@/services/prompt-service';
 import { updatePromptAction, createPromptAction } from '@/app/actions';
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';

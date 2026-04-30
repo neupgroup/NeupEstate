@@ -52,7 +52,7 @@ export default function CreateAgentPage() {
     // When the switch is toggled, reset the form values
     useEffect(() => {
         form.reset({
-            registered: isRegistered,
+            registered: isRegistered as any,
             location: '',
             name: '',
             email: '',

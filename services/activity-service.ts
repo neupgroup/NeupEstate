@@ -12,7 +12,7 @@ export async function logActivity(activityData: CreateUserActivityInput): Promis
             return '';
         }
 
-        const activity = await prisma.activity.create({
+        const activity = await (prisma.activity.create as any)({
             data: {
                 account: {
                     connect: {

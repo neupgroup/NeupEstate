@@ -13,11 +13,11 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, React.ComponentProps<'tex
 
     const handleInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
       if (internalRef.current) {
-        internalRef.current.style.height = 'auto'; // Reset height
-        internalRef.current.style.height = `${internalRef.current.scrollHeight}px`; // Set to scroll height
+        internalRef.current.style.height = 'auto';
+        internalRef.current.style.height = `${internalRef.current.scrollHeight}px`;
       }
       if (props.onInput) {
-        props.onInput(e);
+        props.onInput(e as any);
       }
     };
 
