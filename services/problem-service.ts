@@ -24,7 +24,7 @@ export async function logProblem(error: unknown, context: string, details?: Reco
             message: normalizedError.message || 'An unknown error occurred.',
             stack: normalizedError.stack || 'No stack trace available.',
             createdAt: new Date(),
-            details: details ? safelySerializeDetails(details) : undefined,
+            details: details ? (safelySerializeDetails(details) as any) : undefined,
         };
 
         await prisma.problem.create({

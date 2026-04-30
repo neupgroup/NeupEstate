@@ -78,10 +78,10 @@ export async function getWhatsAppTemplates(): Promise<WhatsAppTemplate[]> {
         return templates.map((template) => ({
             id: template.id,
             name: template.name,
-            category: template.category,
-            language: template.language,
+            category: template.category as WhatsAppTemplate['category'],
+            language: template.language as WhatsAppTemplate['language'],
             body: template.body,
-            status: template.status,
+            status: template.status as WhatsAppTemplate['status'],
             createdAt: template.createdAt.toISOString(),
             isPreapproved: template.isPreapproved,
         }));

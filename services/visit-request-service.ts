@@ -54,8 +54,10 @@ export async function getVisitRequests({ limit = 20, offset = 0 }: { limit?: num
         });
         return requests.map(r => ({
             ...r,
+            phone: r.phone ?? undefined,
             preferred_date: r.preferredDate,
-            preferred_time: r.preferredTime || undefined,
+            preferred_time: r.preferredTime ?? undefined,
+            status: r.status as VisitRequest['status'],
             createdAt: r.createdAt.toISOString(),
         }));
     } catch (error) {

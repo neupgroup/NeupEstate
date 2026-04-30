@@ -42,6 +42,14 @@ export async function getPropertyRequests({ limit = 20, offset = 0 }: { limit?: 
         });
         return requests.map(r => ({
             ...r,
+            phone: r.phone ?? undefined,
+            location: r.location ?? undefined,
+            propertyType: r.propertyType as PropertyRequest['propertyType'],
+            bedrooms: r.bedrooms ?? undefined,
+            bathrooms: r.bathrooms ?? undefined,
+            budget: r.budget ?? undefined,
+            remarks: r.remarks ?? undefined,
+            status: r.status as PropertyRequest['status'],
             createdAt: r.createdAt.toISOString(),
         }));
     } catch (error) {

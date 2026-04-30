@@ -15,7 +15,7 @@ export async function getModels(): Promise<AIModel[]> {
             id: model.id,
             modelId: model.modelId,
             name: model.name,
-            description: model.description || undefined,
+            description: model.description ?? '',
             costPerMillionInputTokens: model.costPerMillionInputTokens ?? 0,
             costPerMillionOutputTokens: model.costPerMillionOutputTokens ?? 0,
             isDefault: model.isDefault,
@@ -36,7 +36,7 @@ export async function getDefaultModel(): Promise<AIModel | null> {
             id: model.id,
             modelId: model.modelId,
             name: model.name,
-            description: model.description || undefined,
+            description: model.description ?? '',
             costPerMillionInputTokens: model.costPerMillionInputTokens ?? 0,
             costPerMillionOutputTokens: model.costPerMillionOutputTokens ?? 0,
             isDefault: model.isDefault,
@@ -80,7 +80,7 @@ export async function updateModel(id: string, data: Omit<UpdateAIModelFormValues
             await setDefaultModel(id);
         }
 
-        const { id: formId, ...updateData } = data;
+        const { id: _formId, ...updateData } = data as any;
         await prisma.aIModel.update({
             where: { id },
             data: {

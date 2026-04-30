@@ -42,6 +42,7 @@ export const CreateRequirementSchema = z.object({
   location: z.string().optional(),
   paymentMethod: z.array(PaymentMethodSchema).optional(),
   requiredTime: UrgencySchema.optional(),
+  urgency: UrgencySchema.optional(),
   loan: z.boolean().optional(),
 });
 

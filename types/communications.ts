@@ -69,7 +69,11 @@ export const CreateConversationSchema = z.object({
   notes: z.string().min(5, "Please provide a brief summary or subject.").max(200, "Notes cannot exceed 200 characters."),
 });
 export type CreateConversationFormValues = z.infer<typeof CreateConversationSchema>;
-export type CreateConversationInput = CreateConversationFormValues;
+export type CreateConversationInput = CreateConversationFormValues & {
+  customerEmail?: string;
+  customerAvatarUrl?: string;
+  userId?: string;
+};
 
 // WhatsApp
 export const WhatsAppTemplateCategorySchema = z.enum(["MARKETING", "UTILITY", "AUTHENTICATION"]);

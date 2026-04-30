@@ -37,6 +37,8 @@ export async function getSalesRequests({ limit = 20, offset = 0 }: { limit?: num
         });
         return requests.map(r => ({
             ...r,
+            remarks: r.remarks ?? undefined,
+            status: r.status as SalesRequest['status'],
             createdAt: r.createdAt.toISOString(),
         }));
     } catch (error) {

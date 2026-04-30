@@ -39,6 +39,9 @@ export async function getMortgageRequests({ limit = 20, offset = 0 }: { limit?: 
         });
         return requests.map(r => ({
             ...r,
+            moreDetails: r.moreDetails ?? undefined,
+            contactMethods: r.contactMethods as MortgageRequest['contactMethods'],
+            status: r.status as MortgageRequest['status'],
             createdAt: r.createdAt.toISOString(),
         }));
     } catch (error) {

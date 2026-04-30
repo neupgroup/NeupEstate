@@ -331,7 +331,7 @@ export async function createProperty(d: CreatePropertyInput): Promise<string> {
   try {
     const coreData = buildCoreData({ ...d, status: 'approved', isApproved: true });
     const created = await prisma.property.create({
-      data: { ...coreData, slug: coreData.slug || undefined },
+      data: { ...coreData, slug: coreData.slug || d.title?.toLowerCase().replace(/\s+/g, '-') || 'property' } as any,
     });
     if (!created.slug) await prisma.property.update({ where: { id: created.id }, data: { slug: created.id } });
     await upsertDetailTable(created.id, created.type, d);
@@ -344,7 +344,7 @@ export async function addProperty(d: Omit<ExtractedPropertyData, 'embedding'>): 
   try {
     const { isPropertyPage: _, ...rest } = d as any;
     const coreData = buildCoreData({ ...rest, status: 'pending', isApproved: false });
-    const created = await prisma.property.create({ data: coreData });
+    const created = await prisma.property.create({ data: coreData as any });
     if (!created.slug) await prisma.property.update({ where: { id: created.id }, data: { slug: created.id } });
     await upsertDetailTable(created.id, created.type, rest);
     await upsertMedia(created.id, rest.images ?? []);
@@ -358,8 +358,8 @@ export async function addProperty(d: Omit<ExtractedPropertyData, 'embedding'>): 
 export async function updateProperty(id: string, d: UpdatePropertyInput): Promise<void> {
   try {
     const coreData = buildCoreData(d);
-    await prisma.property.update({ where: { id }, data: coreData });
-    await upsertDetailTable(id, mapTypeToEnum(d.category), d);
+    await prisma.property.update({ where: { id }, data: coreData as any });
+    await upsertDetailTable(id, mapTypeToEnum((d as any).category ?? d.categories?.[0]), d);
     if (d.images) await upsertMedia(id, d.images);
   } catch (e) { await logProblem(e, `updateProperty ${id}`); throw new Error('Failed to update property.'); }
 }

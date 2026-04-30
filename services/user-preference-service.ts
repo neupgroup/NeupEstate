@@ -15,6 +15,7 @@ const WEIGHTS = {
     inquiry: 12,
     visit_request: 20,
     mortgage_request: 25,
+    page_view: 0,
 };
 
 function getBudgetRange(price: number): string {
