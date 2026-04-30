@@ -149,7 +149,7 @@ export async function extractAndSaveProperty(
     for (const url of urls) {
         try {
             if (!url.trim()) continue;
-            const result = await extractAndSavePropertyFlow({ url });
+            const result = await extractAndSavePropertyFlow({ url, saveToDb: true });
 
             if (result.error) {
                 results.push({ url, ...result });
