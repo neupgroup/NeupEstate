@@ -119,3 +119,5 @@ export function RecommendedProperties() {
     </div>
   );
 }
+
+export default RecommendedProperties;
