@@ -6,7 +6,6 @@
     "dev": "next dev --port 37828 --turbo",
     "prebuild": "prisma generate",
     "build": "next build",
-    "prestart": "prisma generate && npm run build",
     "start": "next start --port 37828",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
