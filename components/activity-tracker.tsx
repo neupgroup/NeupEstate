@@ -5,22 +5,29 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { logUserActivity } from '@/app/actions';
 import type { PropertyActivityEvent } from '@/types';
+import { getActiveAccount } from '@/services/account/getAccount';
 
-const ACTIVE_TIME_INTERVAL = 5000; // Log active time every 5 seconds
-const INACTIVITY_TIMEOUT = 60000; // 1 minute of inactivity
-const GEOLOCATION_TIMEOUT = 120000; // 2 minutes
-const COOKIE_NAME = 'temp_account_id';
+const ACTIVE_TIME_INTERVAL = 5000;
+const INACTIVITY_TIMEOUT = 60000;
+const GEOLOCATION_TIMEOUT = 120000;
+const TEMP_COOKIE = 'temp_account_id';
+const AUTH_COOKIE = 'auth_accounts';
 
 function getCookie(name: string): string | null {
   if (typeof document === 'undefined') return null;
-  const nameEQ = name + "=";
+  const nameEQ = name + '=';
   const ca = document.cookie.split(';');
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+  for (let c of ca) {
+    c = c.trim();
+    if (c.startsWith(nameEQ)) return decodeURIComponent(c.substring(nameEQ.length));
   }
   return null;
+}
+
+function getAccountId(): string | null {
+  const active = getActiveAccount(getCookie(AUTH_COOKIE));
+  if (active) return active.aid;
+  return getCookie(TEMP_COOKIE);
 }
 
 export function ActivityTracker() {
@@ -39,7 +46,7 @@ export function ActivityTracker() {
     const propertyId = pathname.startsWith('/properties/') ? pathname.split('/')[2] : undefined;
 
     const sendData = useCallback(async () => {
-        const userId = getCookie(COOKIE_NAME);
+        const userId = getAccountId();
         if (!userId) return;
 
         const now = Date.now();

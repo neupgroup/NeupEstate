@@ -3,52 +3,68 @@
 PostgreSQL database configured via `DATABASE_URL`.
 
 ## account (Account)
-- id: String (cuid) (logged in -> just id, not logged in -> track.id will be the id format)
+- id: String (primary key — cuid for registered, track.id format for unregistered)
 - accountType: String
-- mainId: String (references -> Account.id)
-- lastActiveOn: Timestamp
+- mainId: String?
+- registered: Boolean (default false)
+- name: String?
+- location: String?
+- createdOn: DateTime (default now)
+- accessedOn: DateTime (default now)
+- createdFromIp: String?
+- lastAccessedFromIp: String?
 
 ## activity (Activity)
-- id: String (cuid)
-- trackerId: String (cuid) -> references -> trackerAccount (id)
+- id: String (cuid, primary key)
+- trackerId: String (references Account.id, indexed)
 - title: String
-- details: JSON [duration:timeSpentOnThatPage, onPage:url, property:ifPropertyTheIdOfProperty]
-- activityOn: DATETIME (default)
+- details: Json [duration:timeSpentOnThatPage, onPage:url, property:ifPropertyTheIdOfProperty]
+- activityOn: DateTime (default now)
 - ipAddress: String
 
 ## location (Location) -> make this table.
 - id: String (cuid)
 - name: String
 - type: String (country/province/region/district/state/city/locality)
-- parentId: String (references Location.id), nullable
+- parentId: String? (references Location.id)
 
 ## property (Property)
 - id: String (cuid, primary key)
 - slug: String (unique)
 - title: String (varchar 255)
-- description: Text
+- description: String (Text)
 - coverImage: String (varchar 255)
 - type: Enum (HOUSE, APARTMENT, LAND, COMMERCIAL)
 - purpose: Enum (SALE, RENT, LEASE)
-- status: Enum (PENDING, ACTIVE, SOLD, RENTED, ARCHIVED)
+- status: Enum (PENDING, ACTIVE, SOLD, RENTED, ARCHIVED) (default PENDING)
 - currency: String (varchar 10)
-- displayPrice: Decimal(18,2)
+- displayPrice: Decimal (18,2)
 - displayPriceUnit: String (varchar 24)
 - areaUnit: String (varchar 64)
 - locationText: String (varchar 255) -> drop this field.
 - geoLocation: String (varchar 63)
-- structuredLocation: String (location > location > location) -> change this field name to location, refereneces -> Location.id
-- agency: String (nullable, references Agency.id)
-- agent: String (nullable, references Agent.id)
+- structuredLocation: String -> change field name to location, references Location.id
+- agency: String? (references Agency.id)
+- agent: String? (references Agent.id)
+- pricing: Json?
+- roadAccessDetails: Json?
+- distancing: Json?
+- earnings: Json?
+- landDetails: Json?
+- plots: Json?
+- apartmentDetails: Json?
+- metaTags: String[] (default [])
+- amenities: String[] (default [])
 - createdAt: DateTime (default now)
+- updatedAt: DateTime (auto)
 - isFeatured: Boolean (default false)
 - isApproved: Boolean (default false)
 - isDeleted: Boolean (default false)
-- customId: String, nullable -> add this field.
+- customId: String?
 
 ## property_link (PropertyLink)
 - id: String (cuid, primary key)
-- primaryId: String (references Property.id)x
+- primaryId: String (references Property.id)
 - secondaryId: String (references Property.id)
 
 ## property_media (PropertyMedia)
@@ -74,11 +90,11 @@ PostgreSQL database configured via `DATABASE_URL`.
 - bikeParkingSpots: Int
 - furnished: Boolean
 - buildYear: Int
-- area: Decimal(12,2)
+- area: Decimal (12,2)
 - facing: String (varchar 50)
-- roadAccess: Decimal(8,2)
+- roadAccess: Decimal (8,2)
 
-## Property_apartment_detail (PropertyApartmentDetail)
+## property_apartment_detail (PropertyApartmentDetail)
 - propertyId: String (cuid, primary key, unique, references Property.id)
 - bedrooms: Int
 - bathrooms: Int
@@ -91,15 +107,15 @@ PostgreSQL database configured via `DATABASE_URL`.
 - furnished: Boolean
 - blockName: String (varchar 100)
 - unitNumber: String (varchar 100)
-- superArea: Decimal(12,2)
-- builtUpArea: Decimal(12,2)
-- maintenanceFee: Decimal(18,2)
+- superArea: Decimal (12,2)
+- builtUpArea: Decimal (12,2)
+- maintenanceFee: Decimal (18,2)
 
 ## property_land_detail (PropertyLandDetail)
 - propertyId: String (cuid, primary key, unique, references Property.id)
-- area: Decimal(12,2)
+- area: Decimal (12,2)
 - facing: String (varchar 50)
-- roadAccess: Decimal(8,2)
+- roadAccess: Decimal (8,2)
 - plotShape: String (varchar 100)
 - cornerPlot: Boolean
 - waterAvailable: Boolean
@@ -111,33 +127,64 @@ PostgreSQL database configured via `DATABASE_URL`.
 - floor: Int
 - washrooms: Int
 - parkingSpots: Int
-- frontage: Decimal(12,2)
-- usableArea: Decimal(12,2)
+- frontage: Decimal (12,2)
+- usableArea: Decimal (12,2)
 - buildingType: String (varchar 100)
 
 ## property_price (PropertyPrice)
-- id: String (cuid, primary key, unique)
-- propertyId: String (cuid, references Property.id)
-- for: String (land, land_rental)
+- id: String (cuid, primary key)
+- propertyId: String (references Property.id, indexed)
+- for: String
 - currency: String (varchar 10)
-- unit: String (varchar)
+- unit: String
 - price: Decimal (18,2)
 - priceUnit: String (varchar 24)
 
+## property_fetch_history (PropertyFetchHistory)
+- id: String (cuid, primary key)
+- propertyId: String (references Property.id, indexed)
+- sourceUrl: String?
+- fetchedAt: DateTime (default now, indexed)
+- type: String (default "data") (data/images)
+- data: Json?
+- images: String[] (default [])
+
+## property_owner (PropertyOwner)
+- id: String (cuid, primary key)
+- propertyId: String (references Property.id, indexed)
+- ownerType: String (registered/unregistered)
+- userId: String?
+- unregisteredName: String?
+- unregisteredEmail: String?
+- unregisteredPhones: Json?
+- unregisteredNotes: String?
+- sortOrder: Int (default 0)
+
+## property_document (PropertyDocument)
+- id: String (cuid, primary key)
+- propertyId: String (references Property.id, indexed)
+- name: String
+- urls: Json
+- sortOrder: Int (default 0)
+
+## property_change (PropertyChange)
+- id: String (cuid, primary key)
+- propertyId: String (references Property.id, indexed)
+- data: Json
+- modifiedOn: DateTime (default now, indexed)
 
 ## agencies (Agency) -> change to agency (Agency)
-- id: String (cuid)
-- name: String
+- id: String (cuid, primary key)
+- name: String (indexed)
 - logoUrl: String?
-- website: String? -> drop field
 - registeredName: String?
 - contactEmail: String?
 - contactPhone: String?
 - mainLocation: String?
 - branches: String[] (default [])
-- contactPersonName: String? -> drop field
-- contactPersonRole: String? -> drop field
-- description: String? 
+- description: String?
+- createdAt: DateTime (default now)
+- updatedAt: DateTime (auto)
 
 ## agency_branch (AgencyBranch) -> make this table.
 - id: String (cuid)
@@ -150,9 +197,9 @@ PostgreSQL database configured via `DATABASE_URL`.
 - order: Int (default 0)
 
 ## agents (Agent) -> change to agent (Agent)
-- id: String (cuid)
+- id: String (cuid, primary key)
 - name: String
-- slug: String? (unique)
+- slug: String? (unique, indexed)
 - location: String?
 - registered: Boolean (default false)
 - userId: String?
@@ -163,34 +210,29 @@ PostgreSQL database configured via `DATABASE_URL`.
 - specializations: String[] (default [])
 - availabilityHours: String? -> drop this field
 - timeSlotDuration: Int? -> drop this field
-- unavailability: Json? -> drop this field.
-- agencyId: String? -> references Agency.id
+- unavailability: Json? -> drop this field
+- agencyId: String? (references Agency.id, indexed)
+- createdAt: DateTime (default now)
+- updatedAt: DateTime (auto)
 
-
-## reviews (Review) -> change to review (Review)
-- id: String (cuid)
-- reviewedBy: String (references Account.id)
+## review (Review)
+- id: String (cuid, primary key)
+- reviewedBy: String (references Account.id, indexed)
 - rating: Int
 - review: String (varchar 255)
-- reviewedOn: DateTime, not nullable
-- response: String (varchar 255)
-- responseBy: String (references Account.id)
-- responseOn: Datetime, nullable
-
-
+- reviewedOn: DateTime
+- response: String? (varchar 255)
+- responseBy: String?
+- responseOn: DateTime?
 
 ## requirements (Requirement) -> change to requirement (Requirement)
-- id: String (cuid)
-- trackerId: String (cuid, references TrackerAccount.id)
-- currency: String (varchar 8)
-- pricingUnit: String (varchar 24)
-- minPrice: Int?
-- maxPrice: Int?
+- id: String (cuid, primary key)
+- userId: String (indexed)
+- minBudget: Int?
+- maxBudget: Int?
 - location: String?
-- locationGeo: String (varchar 48) -> locationGeoCoordinates -> cases like 1 mile radius.
-- locationStructured: String or JSON
-- purpose: String (buy/sell/buy_rental/sell_rental)
-- type: String[] (default [])
+- propertyType: String[] (default [])
+- purpose: String?
 - urgency: String?
 - requiredTime: String?
 - paymentMethod: String[] (default [])
@@ -198,53 +240,63 @@ PostgreSQL database configured via `DATABASE_URL`.
 - createdAt: DateTime (default now)
 - updatedAt: DateTime (auto)
 
-## user_saved_properties (UserSavedProperty) -> change to saved_property (SavedProperty)
+## saved_property (SavedProperty)
 - id: String (cuid, primary key)
-- accountId: String (cuid, primary key, references Account.id)
-- propertyId: String (references Property.id)
+- accountId: String (references Account.id, indexed)
+- propertyId: String (references Property.id, indexed)
 - savedAt: DateTime (default now)
 
-## reacted_property (ReactedProperty) -> make this table
+## reacted_properties (ReactedProperty) -> change map to reacted_property
 - id: String (cuid, primary key)
-- trackedId: String (references TrackerAccount.id)
-- propertyId: String (references Property.id)
-- onType: String (reacted on sell, reacted on property rental per unit per month cost)
+- trackedId: String (references Account.id, indexed)
+- propertyId: String (references Property.id, indexed)
+- onType: String
 - reaction: Enum (Liked/Disliked/Reported)
-- reactedAt: Datetime (default now)
+- reactedAt: DateTime (default now)
 
-## property_view (PropertyView) -> make this table
+## property_views (PropertyView) -> change map to property_view
 - id: String (cuid, primary key)
-- accountId: String (references Account.id)
-- propertyId: String (references Property.id)
-- onType: String (reacted on sell, reacted on property rental per unit per month cost)
-- viewedAt: Datetime (default now)
+- accountId: String (references Account.id, indexed)
+- propertyId: String (references Property.id, indexed)
+- onType: String
+- viewedAt: DateTime (default now)
 - timeViewed: Int (time in milliseconds)
 - viewedOn: String (homepage/feed/propertyPage/ad)
 
+## client (CrmClient)
+- id: String (cuid, primary key)
+- firstName: String (indexed by lastName)
+- lastName: String
+- contact: Json
+- source: String?
+- createdAt: DateTime (default now)
+- updatedAt: DateTime (auto)
 
+## client_link (ClientLink)
+- id: String (cuid, primary key)
+- trackerId: String (indexed)
+- clientId: String (references CrmClient.id, indexed)
 
+## client_lead (ClientLead)
+- id: String (cuid, primary key)
+- clientId: String (references CrmClient.id, indexed)
+- type: Enum (BUYER/SELLER/TENANT/LANDLORD, indexed)
+- requirement: Json?
+- priority: Enum (LOW/MEDIUM/HIGH/URGENT, default MEDIUM, indexed)
+- leadOwner: String?
+- createdAt: DateTime (default now)
+- updatedAt: DateTime (auto)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+## lead_activity (LeadActivity)
+- id: String (cuid, primary key)
+- leadId: String (references ClientLead.id, indexed)
+- data: Json
+- activityOn: DateTime (default now, indexed)
+- activityBy: String (indexed)
 
 ## conversations (Conversation)
-- id: String (cuid)
-- accountId: String?
+- id: String (cuid, primary key)
+- accountId: String? (indexed)
 - customerName: String
 - customerPhone: String
 - customerEmail: String?
@@ -252,7 +304,7 @@ PostgreSQL database configured via `DATABASE_URL`.
 - notes: String?
 - assignedTo: String (default "AI Assistant")
 - subject: String
-- lastMessageAt: DateTime (default now)
+- lastMessageAt: DateTime (default now, indexed)
 - lastMessageSnippet: String?
 - lastMessageSender: String (default "agent")
 - isRead: Boolean (default true)
@@ -263,23 +315,23 @@ PostgreSQL database configured via `DATABASE_URL`.
 - updatedAt: DateTime (auto)
 
 ## messages (Message)
-- id: String (cuid)
-- conversationId: String
+- id: String (cuid, primary key)
+- conversationId: String (references Conversation.id, indexed)
 - sender: String
 - text: String
 - timestamp: DateTime (default now)
 
 ## site_content (SiteContent)
-- id: String (cuid)
+- id: String (cuid, primary key)
 - key: String (unique)
 - value: String
-- section: String?
+- section: String? (indexed)
 - createdAt: DateTime (default now)
 - updatedAt: DateTime (auto)
 
 ## user_preferences (UserPreference) -> change to preferences (Preference)
-- id: String (cuid)
-- accountId: String (unique) -> add references Account.id
+- id: String (cuid, primary key)
+- accountId: String (unique, references Account.id)
 - updatedAt: DateTime (auto)
 - preferences: Json (default "{}")
 - totalViews: Int (default 0)
@@ -292,7 +344,7 @@ PostgreSQL database configured via `DATABASE_URL`.
 - totalTimeSpentInSeconds: Int (default 0)
 
 ## property_requests (PropertyRequest)
-- id: String (cuid)
+- id: String (cuid, primary key)
 - name: String
 - email: String
 - phone: String?
@@ -307,7 +359,7 @@ PostgreSQL database configured via `DATABASE_URL`.
 - updatedAt: DateTime (auto)
 
 ## mortgage_requests (MortgageRequest)
-- id: String (cuid)
+- id: String (cuid, primary key)
 - name: String
 - email: String
 - phone: String
@@ -321,7 +373,7 @@ PostgreSQL database configured via `DATABASE_URL`.
 - updatedAt: DateTime (auto)
 
 ## sales_requests (SalesRequest)
-- id: String (cuid)
+- id: String (cuid, primary key)
 - name: String
 - email: String
 - phone: String
@@ -333,10 +385,10 @@ PostgreSQL database configured via `DATABASE_URL`.
 - updatedAt: DateTime (auto)
 
 ## visit_requests (VisitRequest)
-- id: String (cuid)
-- propertyId: String
+- id: String (cuid, primary key)
+- propertyId: String (indexed)
 - propertyTitle: String
-- agentId: String
+- agentId: String (indexed)
 - agentName: String
 - name: String
 - email: String
@@ -348,20 +400,15 @@ PostgreSQL database configured via `DATABASE_URL`.
 - updatedAt: DateTime (auto)
 
 ## problems (Problem)
-- id: String (cuid)
+- id: String (cuid, primary key)
 - context: String
 - message: String
 - stack: String?
 - details: Json?
 - createdAt: DateTime (default now)
 
-## newsletter_subscriptions (NewsletterSubscription) -> drop table.
-- id: String (cuid)
-- email: String (unique)
-- createdAt: DateTime (default now)
-
 ## sitemaps (SitemapEntry)
-- id: String (cuid)
+- id: String (cuid, primary key)
 - url: String (unique)
 - priority: Float (default 0.5)
 - frequency: String (default "weekly")
@@ -370,7 +417,7 @@ PostgreSQL database configured via `DATABASE_URL`.
 - updatedAt: DateTime (auto)
 
 ## ai_models (AIModel)
-- id: String (cuid)
+- id: String (cuid, primary key)
 - modelId: String
 - name: String
 - description: String?
@@ -381,7 +428,7 @@ PostgreSQL database configured via `DATABASE_URL`.
 - updatedAt: DateTime (auto)
 
 ## prompts (Prompt)
-- id: String
+- id: String (primary key)
 - promptText: String
 - description: String
 - name: String
@@ -399,7 +446,7 @@ PostgreSQL database configured via `DATABASE_URL`.
 - updatedAt: DateTime (auto)
 
 ## whatsapp_templates (WhatsAppTemplate) -> drop this table.
-- id: String (cuid)
+- id: String (cuid, primary key)
 - name: String
 - category: String
 - language: String
@@ -409,7 +456,7 @@ PostgreSQL database configured via `DATABASE_URL`.
 - createdAt: DateTime (default now)
 
 ## contact_submissions (ContactSubmission) -> change to contact_submission (ContactSubmission)
-- id: String (cuid)
+- id: String (cuid, primary key)
 - name: String
 - email: String
 - phone: String?
@@ -419,8 +466,8 @@ PostgreSQL database configured via `DATABASE_URL`.
 - createdAt: DateTime (default now)
 
 ## inquiries (Inquiry) -> change to inquiry (Inquiry)
-- id: String (cuid)
-- propertyId: String
+- id: String (cuid, primary key)
+- propertyId: String (indexed)
 - propertyTitle: String
 - agentName: String?
 - name: String
@@ -428,6 +475,34 @@ PostgreSQL database configured via `DATABASE_URL`.
 - phone: String?
 - question: String
 - status: String (default "new")
+- createdAt: DateTime (default now)
+
+## team_members (TeamMember)
+- id: String (cuid, primary key)
+- orgId: String?
+- userId: String?
+- name: String
+- slug: String? (unique)
+- position: String
+- socialMedia: Json?
+- about: String
+- moreDetails: String?
+- photoUrl: String?
+- registered: Boolean (default false)
+- createdAt: DateTime (default now)
+- updatedAt: DateTime (auto)
+
+## faqs (FAQ)
+- id: String (cuid, primary key)
+- question: String
+- answer: String
+- category: String (default "General")
+- createdAt: DateTime (default now)
+- updatedAt: DateTime (auto)
+
+## newsletter_subscriptions (NewsletterSubscription) -> drop table.
+- id: String (cuid, primary key)
+- email: String (unique)
 - createdAt: DateTime (default now)
 
 ## account_role (AccountRole) -> make this table.
@@ -442,5 +517,5 @@ PostgreSQL database configured via `DATABASE_URL`.
 - id: String (cuid)
 - accountId: String (references Account.id)
 - assetType: String
-- assetId: String, nullable
+- assetId: String?
 - roleId: String (references AccountRole.id)
