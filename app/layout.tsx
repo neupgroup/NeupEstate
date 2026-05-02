@@ -17,8 +17,11 @@ const raleway = Raleway({
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'NeupEstate',
+  title: 'Neup.Estate',
   description: 'A modern, user-friendly real estate website to browse property listings.',
+  icons: {
+    icon: '/logo.png',
+  },
 };
 
 export default function RootLayout({

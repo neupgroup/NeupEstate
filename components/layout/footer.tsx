@@ -9,7 +9,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* About Section */}
           <div className="md:col-span-1">
-            <h3 className="text-lg font-headline font-bold mb-4">NeupEstate</h3>
+            <h3 className="text-lg font-headline font-bold mb-4">Neup.Estate</h3>
             <p className="text-sm text-muted-foreground">
               Your modern solution to finding the perfect property. We simplify the search, so you can find home faster.
             </p>
@@ -50,7 +50,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-8 pt-8 border-t border-border text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} NeupEstate, a company of Neup Group Private Limited. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Neup.Estate, a company of Neup Group Private Limited. All rights reserved.</p>
         </div>
       </div>
     </footer>

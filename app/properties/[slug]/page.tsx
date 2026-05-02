@@ -36,12 +36,12 @@ export async function generateMetadata(
 
   if (!property) {
     return {
-      title: 'Property Not Found | NeupEstate',
+      title: 'Property Not Found | Neup.Estate',
       description: 'The property you are looking for does not exist or has been removed.',
     }
   }
 
-  const siteName = 'NeupEstate';
+  const siteName = 'Neup.Estate';
   const title = `${property.title} | ${siteName}`;
   const description = property.description.substring(0, 160);
   const imageUrl = property.images && property.images.length > 0 ? property.images[0] : 'https://placehold.co/1200x630.png';

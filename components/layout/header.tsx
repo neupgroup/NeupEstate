@@ -48,7 +48,7 @@ export default function Header() {
         {/* Left */}
         <div className="flex-1 flex justify-start">
             <Link href="/" className="flex items-center">
-            <span className="font-bold font-headline text-lg">NeupEstate</span>
+            <span className="font-bold font-headline text-lg">Neup.Estate</span>
             </Link>
         </div>
 
@@ -84,7 +84,7 @@ export default function Header() {
               <SheetContent side="right">
                 <div className="flex flex-col space-y-4 p-4">
                     <Link href="/" className="mb-4 flex items-center">
-                        <span className="font-bold font-headline text-lg">NeupEstate</span>
+                        <span className="font-bold font-headline text-lg">Neup.Estate</span>
                     </Link>
                     <div className="flex flex-col space-y-1">
                       {renderNavLinks(true)}
