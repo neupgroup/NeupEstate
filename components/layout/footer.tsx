@@ -9,7 +9,10 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* About Section */}
           <div className="md:col-span-1">
-            <h3 className="text-lg font-headline font-bold mb-4">Neup.Estate</h3>
+            <div className="flex items-center gap-2 mb-4">
+              <img src="/estate/logo.png" alt="Neup.Estate Logo" className="h-7 w-7 object-contain" />
+              <h3 className="text-lg font-headline font-bold">Neup.Estate</h3>
+            </div>
             <p className="text-sm text-muted-foreground">
               Your modern solution to finding the perfect property. We simplify the search, so you can find home faster.
             </p>

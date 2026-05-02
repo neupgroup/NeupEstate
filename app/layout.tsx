@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title: 'Neup.Estate',
   description: 'A modern, user-friendly real estate website to browse property listings.',
   icons: {
-    icon: '/logo.png',
+    icon: '/estate/logo.png',
   },
 };
 
