@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ClientLink } from '@/components/client-link';
-import { BarChart2, TrendingUp, ListChecks } from 'lucide-react';
+import { BarChart2, TrendingUp, ListChecks, Swords } from 'lucide-react';
 
 const sections = [
   {
@@ -14,6 +14,12 @@ const sections = [
     icon: <TrendingUp className="h-6 w-6 text-primary" />,
     title: 'Sales Intelligence',
     description: 'Track sales velocity, conversion rates, and revenue insights to drive better outcomes.',
+  },
+  {
+    href: '/manage/intelligence/competition',
+    icon: <Swords className="h-6 w-6 text-primary" />,
+    title: 'Competition',
+    description: 'Manage competitors, track their listings and sources, and benchmark against your portfolio.',
   },
 ];
 

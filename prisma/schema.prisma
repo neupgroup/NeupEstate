@@ -819,3 +819,65 @@ model FAQ {
 
   @@map("faqs")
 }
+
+// ============================================================================
+// Competitor Intelligence
+// ============================================================================
+
+model Competitor {
+  id          String               @id @default(cuid())
+  name        String
+  description String?
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+
+  sources     CompetitorSource[]
+  properties  CompetitorProperty[]
+
+  @@map("competitors")
+}
+
+model CompetitorSource {
+  id           String     @id @default(cuid())
+  competitorId String
+  type         String     // sitemap | link | manual
+  value        String
+  createdAt    DateTime   @default(now())
+
+  competitor   Competitor @relation(fields: [competitorId], references: [id], onDelete: Cascade)
+
+  @@index([competitorId])
+  @@map("competitor_sources")
+}
+
+model CompetitorProperty {
+  id           String               @id @default(cuid())
+  competitorId String
+  title        String
+  description  String?
+  source       String               // URL the property was found at
+  details      Json?
+  listedOn     DateTime?
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+
+  competitor   Competitor           @relation(fields: [competitorId], references: [id], onDelete: Cascade)
+  tracking     CompetitorTracking[]
+
+  @@index([competitorId])
+  @@index([source])
+  @@map("competitor_properties")
+}
+
+model CompetitorTracking {
+  id                   String             @id @default(cuid())
+  competitorPropertyId String
+  ourPropertyId        String?
+  createdAt            DateTime           @default(now())
+
+  competitorProperty   CompetitorProperty @relation(fields: [competitorPropertyId], references: [id], onDelete: Cascade)
+
+  @@index([competitorPropertyId])
+  @@index([ourPropertyId])
+  @@map("competitor_tracking")
+}
