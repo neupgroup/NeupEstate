@@ -3,13 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 37828 --turbo",
-    "prebuild": "prisma generate",
+    "dev": "next dev --port 37828",
     "build": "next build",
     "start": "next start --port 37828",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
-    "postinstall": "patch-package"
+    "typecheck": "tsc --noEmit"
   },
   "engines": {
     "node": ">=20.9.0"

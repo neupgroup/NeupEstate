@@ -1,7 +1,8 @@
 import { getCompetitorsAction } from './actions';
-import { CompetitionClient } from './client';
+import type { Competitor } from './types';
+import { CompetitionIndexClient } from './index-client';
 
 export default async function IntelligenceCompetitionPage() {
   const competitors = await getCompetitorsAction();
-  return <CompetitionClient initialCompetitors={competitors} />;
+  return <CompetitionIndexClient initialCompetitors={competitors} />;
 }
