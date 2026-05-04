@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ClientLink } from '@/components/client-link';
 import { BarChart2, TrendingUp, ListChecks, Swords } from 'lucide-react';
+import { TrackChangesButton } from './track-changes-button';
 
 const sections = [
   {
@@ -26,14 +27,17 @@ const sections = [
 export default function IntelligencePage() {
   return (
     <div className="space-y-8">
-      <div>
-        <h2 className="text-2xl font-semibold tracking-tight flex items-center gap-2">
-          <BarChart2 className="h-6 w-6" />
-          Intelligence
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1">
-          Data-driven insights across your listings and sales pipeline.
-        </p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h2 className="text-2xl font-semibold tracking-tight flex items-center gap-2">
+            <BarChart2 className="h-6 w-6" />
+            Intelligence
+          </h2>
+          <p className="text-sm text-muted-foreground mt-1">
+            Data-driven insights across your listings and sales pipeline.
+          </p>
+        </div>
+        <TrackChangesButton />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
