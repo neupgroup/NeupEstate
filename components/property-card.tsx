@@ -13,7 +13,7 @@ import { SafeImage } from "./safe-image";
 import { toggleSavePropertyAction } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import { isPropertySaved } from "@/services/property-service";
-import { getClientAccountId } from "@/lib/get-account-id";
+import { getClientAccountId } from "@/services/account/get-account-id";
 
 interface PropertyCardProps {
   property: Property;

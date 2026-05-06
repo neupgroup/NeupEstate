@@ -16,17 +16,36 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ClientLink } from '@/components/client-link';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { StartWithNeupEstate } from '@/components/home/start-with-neupestate';
-import { getClientAccountId } from '@/lib/get-account-id';
+import { getClientAccountId } from '@/services/account/get-account-id';
 import { useNeupUser, getInitials } from '@/lib/neup-user-context';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { getActiveAccount } from '@/services/account/getAccount';
+
+function readCookieClient(name: string): string | null {
+  if (typeof document === 'undefined') return null;
+  const nameEQ = name + '=';
+  for (let c of document.cookie.split(';')) {
+    c = c.trim();
+    if (c.startsWith(nameEQ)) return decodeURIComponent(c.substring(nameEQ.length));
+  }
+  return null;
+}
 
 
 function UserProfileHeader() {
     const user = useNeupUser();
-    const [accountId, setAccountId] = useState<string | null>(null);
+    // Read the two IDs separately so we can show the right one
+    const [aid, setAid] = useState<string | null>(null);
+    const [tempId, setTempId] = useState<string | null>(null);
 
     useEffect(() => {
-        setAccountId(getClientAccountId());
+        // Prefer aid from auth_accounts (def === 1)
+        const active = getActiveAccount(readCookieClient('auth_accounts'));
+        if (active?.aid) {
+            setAid(active.aid);
+        } else {
+            setTempId(readCookieClient('temp_account_id'));
+        }
     }, []);
 
     if (user === undefined) {
@@ -49,7 +68,14 @@ function UserProfileHeader() {
 
     const displayName = user?.displayName ?? 'Guest User';
     const displayImage = user?.displayImage ?? null;
-    const neupId = user?.neupId ?? null;
+    // neupId from whoami takes priority; fall back to aid, then temp
+    const handleLine = user?.neupId
+        ? `@${user.neupId}`
+        : aid
+        ? `@${aid}`
+        : tempId
+        ? `guest:${tempId}`
+        : null;
     const isVerified = user?.verified ?? false;
 
     return (
@@ -72,14 +98,9 @@ function UserProfileHeader() {
                             </Avatar>
                         </div>
                         <div className="pb-2">
-                            {neupId && (
+                            {handleLine && (
                                 <p className="text-xs font-mono text-white/70">
-                                    @{neupId}
-                                </p>
-                            )}
-                            {!neupId && accountId && (
-                                <p className="text-xs font-mono text-white/70">
-                                    @g.{accountId}
+                                    {handleLine}
                                 </p>
                             )}
                             <h1 className="text-2xl md:text-3xl font-bold font-headline text-white shadow-sm flex items-center gap-2">

@@ -39,7 +39,7 @@ import { createModel as createModelService, updateModel as updateModelService, d
 import { createRequirement as createRequirementService, updateRequirement as updateRequirementService } from '@/services/requirements-service';
 import { createTemporaryAccount, updateUser } from '@/services/account-service';
 import { headers } from 'next/headers';
-import { getIdentity } from '@/lib/get-identity';
+import { getIdentity } from '@/services/neupid/get-identity';
 
 // ---------------------------------------------------------------------------
 // Identity guard

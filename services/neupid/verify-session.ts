@@ -5,7 +5,7 @@
  * Server-only — never call this from browser code.
  */
 
-import { authClient } from './neupid-grpc';
+import { authClient } from './grpc-client';
 
 export type NeupUser = {
   accountId: string;

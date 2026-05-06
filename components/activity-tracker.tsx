@@ -5,7 +5,7 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { logUserActivity } from '@/app/actions';
 import type { PropertyActivityEvent } from '@/types';
-import { getClientAccountId } from '@/lib/get-account-id';
+import { getClientAccountId } from '@/services/account/get-account-id';
 
 const ACTIVE_TIME_INTERVAL = 5000;
 const INACTIVITY_TIMEOUT = 60000;

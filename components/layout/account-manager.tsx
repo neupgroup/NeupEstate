@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { getOrCreateTemporaryAccountAction } from '@/app/actions';
-import { getClientAccountId } from '@/lib/get-account-id';
+import { getClientAccountId } from '@/services/account/get-account-id';
 
 const TEMP_COOKIE = 'temp_account_id';
 

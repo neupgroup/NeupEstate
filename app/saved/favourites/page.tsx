@@ -5,7 +5,7 @@ import { PropertyCard } from "@/components/property-card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Heart, AlertCircle } from "lucide-react";
 import { ClientLink } from "@/components/client-link";
-import { getServerAccountId } from "@/lib/get-account-id";
+import { getServerAccountId } from "@/services/account/get-account-id";
 
 export default async function SavedFavouritesPage() {
   const userId = await getServerAccountId();
