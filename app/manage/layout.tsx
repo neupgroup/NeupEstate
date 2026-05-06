@@ -10,6 +10,7 @@ import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ClientLink } from '@/components/client-link';
 import { WhatsAppIcon } from '@/components/icons';
+import { SidebarUserCard } from '@/components/manage/sidebar-user-card';
 
 export default function ManageLayout({
   children,
@@ -21,7 +22,7 @@ export default function ManageLayout({
       <div className="grid grid-cols-1 gap-8 md:grid-cols-[240px_1fr] items-start">
 
         <aside className="hidden md:block sticky top-16 self-start border-r h-[calc(100vh-4rem)] bg-secondary">
-            <nav className={cn("flex flex-col space-y-1 p-4 overflow-y-auto h-full")}>
+            <nav className={cn("flex flex-col space-y-1 p-4 overflow-y-auto h-[calc(100%-5rem)]")}>
                 
                 <ClientLink href="/manage" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
                     <LayoutDashboard className="mr-2 h-4 w-4" />
@@ -133,6 +134,10 @@ export default function ManageLayout({
                     Support
                 </ClientLink>
             </nav>
+            {/* User identity card pinned to the bottom of the sidebar */}
+            <div className="absolute bottom-0 left-0 right-0 p-3 border-t bg-secondary">
+                <SidebarUserCard />
+            </div>
         </aside>
 
         <main className="py-8">{children}</main>

@@ -2,42 +2,40 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getUsers } from '@/services/user-service';
 import { SafeImage } from '@/components/safe-image';
 import { Button } from '@/components/ui/button';
-import { Edit2, MapPin, Wand2, Plus, AlertCircle, Camera, Fingerprint } from 'lucide-react';
+import { Edit2, MapPin, Wand2, Plus, AlertCircle, Camera, BadgeCheck } from 'lucide-react';
 import { Section } from '@/components/home/_components/section';
 import { SectionTitle } from '@/components/home/_components/section-title';
 import { RecommendedProperties } from "@/components/recommended-properties";
 import { getRequirementByUserId } from '@/services/requirements-service';
-import type { Requirement, CreateRequirementFormValues } from '@/types';
+import type { Requirement } from '@/types';
 import type { RequirementsFormValues } from '@/components/profile/user-requirements-form';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ClientLink } from '@/components/client-link';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { StartWithNeupEstate } from '@/components/home/start-with-neupestate';
 import { getClientAccountId } from '@/lib/get-account-id';
+import { useNeupUser, getInitials } from '@/lib/neup-user-context';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 
 function UserProfileHeader() {
-    const [isLoading, setIsLoading] = useState(true);
+    const user = useNeupUser();
     const [accountId, setAccountId] = useState<string | null>(null);
 
-
     useEffect(() => {
-        setIsLoading(true);
-        const tempAccountId = getClientAccountId();
-        setAccountId(tempAccountId);
-        setIsLoading(false);
+        setAccountId(getClientAccountId());
     }, []);
 
-    if (isLoading) {
+    if (user === undefined) {
+        // Still loading — show skeleton
         return (
-             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="relative h-48 bg-secondary rounded-lg">
                     <div className="absolute bottom-4 left-4 z-20 flex items-end gap-4">
-                         <Skeleton className="relative h-24 w-24 md:h-32 md:w-32 border-4 border-background rounded-lg flex-shrink-0" />
+                        <Skeleton className="h-24 w-24 md:h-32 md:w-32 border-4 border-background rounded-lg flex-shrink-0" />
                         <div className="pb-2 space-y-2">
                             <Skeleton className="h-4 w-32" />
                             <Skeleton className="h-8 w-48" />
@@ -46,47 +44,66 @@ function UserProfileHeader() {
                     </div>
                 </div>
             </div>
-        )
+        );
     }
-    
+
+    const displayName = user?.displayName ?? 'Guest User';
+    const displayImage = user?.displayImage ?? null;
+    const neupId = user?.neupId ?? null;
+    const isVerified = user?.verified ?? false;
+
     return (
         <div className="w-full bg-background pt-8">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                 <div className="relative h-48 bg-slate-200 rounded-lg">
-                    <div className="w-full h-full object-cover rounded-lg absolute inset-0 z-0 bg-slate-200" data-ai-hint="abstract texture" />
+                <div className="relative h-48 bg-slate-200 rounded-lg">
+                    <div className="w-full h-full object-cover rounded-lg absolute inset-0 z-0 bg-slate-200" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg z-10" />
                     <div className="absolute bottom-4 left-4 z-20 flex items-end gap-4">
-                         <div className="relative h-24 w-24 md:h-32 md:w-32 border-4 border-background rounded-lg flex-shrink-0">
-                            <SafeImage
-                                src={"https://placehold.co/200x200.png"}
-                                alt="Guest User"
-                                data-ai-hint="person portrait"
-                                className="rounded-md object-cover"
-                                layout="fill"
-                                fallbackSrc="https://placehold.co/200x200.png"
-                            />
+                        <div className="relative h-24 w-24 md:h-32 md:w-32 border-4 border-background rounded-lg flex-shrink-0 overflow-hidden bg-secondary">
+                            <Avatar className="h-full w-full rounded-lg">
+                                <AvatarImage
+                                    src={displayImage ?? undefined}
+                                    alt={displayName}
+                                    className="object-cover"
+                                />
+                                <AvatarFallback className="rounded-lg text-2xl font-bold">
+                                    {getInitials(displayName)}
+                                </AvatarFallback>
+                            </Avatar>
                         </div>
                         <div className="pb-2">
-                            {accountId && (
-                                <p className="text-xs font-mono text-white/70 flex items-center gap-1.5">
-                                    {`@g.${accountId}`}
+                            {neupId && (
+                                <p className="text-xs font-mono text-white/70">
+                                    @{neupId}
                                 </p>
                             )}
-                            <h1 className="text-2xl md:text-3xl font-bold font-headline text-white shadow-sm">Guest User</h1>
-                            <p className="text-gray-200 text-sm flex items-center gap-1">
-                                <MapPin className="h-4 w-4" />
-                                New York, NY
-                            </p>
+                            {!neupId && accountId && (
+                                <p className="text-xs font-mono text-white/70">
+                                    @g.{accountId}
+                                </p>
+                            )}
+                            <h1 className="text-2xl md:text-3xl font-bold font-headline text-white shadow-sm flex items-center gap-2">
+                                {displayName}
+                                {isVerified && (
+                                    <BadgeCheck className="h-6 w-6 text-primary" />
+                                )}
+                            </h1>
+                            {user?.accountType && (
+                                <p className="text-gray-200 text-sm flex items-center gap-1 capitalize">
+                                    <MapPin className="h-4 w-4" />
+                                    {user.accountType} account
+                                </p>
+                            )}
                         </div>
                     </div>
-                     <Button size="sm" variant="secondary" className="absolute top-4 right-4 z-20" disabled>
+                    <Button size="sm" variant="secondary" className="absolute top-4 right-4 z-20" disabled>
                         <Camera className="mr-2 h-4 w-4" />
                         Edit Profile
                     </Button>
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 function ViewRequirements({ requirements, isLoading }: { requirements: Requirement[], isLoading: boolean }) {
