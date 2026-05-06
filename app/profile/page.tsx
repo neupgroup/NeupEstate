@@ -16,6 +16,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ClientLink } from '@/components/client-link';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { StartWithNeupEstate } from '@/components/home/start-with-neupestate';
 
 const COOKIE_NAME = 'temp_account_id';
 
@@ -235,6 +236,8 @@ export default function ProfilePage() {
             </Section>
             
             <RecommendedForYouSection requirements={requirements} />
+
+            <StartWithNeupEstate />
         </main>
     );
 }
