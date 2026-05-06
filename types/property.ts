@@ -356,6 +356,7 @@ export const CreatePropertyRequestSchema = z.object({
   bathrooms: z.coerce.number().optional(),
   budget: z.coerce.number().optional(),
   remarks: z.string().optional(),
+  submittedBy: z.string().optional(), // Verified accountId from gRPC session
 });
 export type CreatePropertyRequestFormValues = z.infer<typeof CreatePropertyRequestSchema>;
 
@@ -370,6 +371,7 @@ export interface PropertyRequest {
   bathrooms?: number;
   budget?: number;
   remarks?: string;
+  submittedBy?: string; // Verified accountId
   status: z.infer<typeof PropertyRequestStatusSchema>;
   createdAt: string; // ISO string
 }
@@ -384,6 +386,7 @@ export const CreateSalesRequestSchema = z.object({
   propertyLocation: z.string().min(5, "Please provide a property location."),
   propertyType: z.string().min(3, "Please specify the property type."),
   remarks: z.string().optional(),
+  submittedBy: z.string().optional(), // Verified accountId from gRPC session
 });
 export type CreateSalesRequestFormValues = z.infer<typeof CreateSalesRequestSchema>;
 
@@ -395,6 +398,7 @@ export interface SalesRequest {
   propertyLocation: string;
   propertyType: string;
   remarks?: string;
+  submittedBy?: string; // Verified accountId
   status: z.infer<typeof SalesRequestStatusSchema>;
   createdAt: string; // ISO string
 }
@@ -409,6 +413,7 @@ export const CreateVisitRequestSchema = z.object({
   phone: z.string().optional(),
   preferred_date: z.string().min(1, "Please select a date."),
   preferred_time: z.string().optional(),
+  submittedBy: z.string().optional(), // Verified accountId from gRPC session
 });
 export type CreateVisitRequestFormValues = z.infer<typeof CreateVisitRequestSchema>;
 
@@ -423,6 +428,7 @@ export interface VisitRequest {
     phone?: string;
     preferred_date: string; // YYYY-MM-DD
     preferred_time?: string; // HH:mm
+    submittedBy?: string; // Verified accountId
     status: z.infer<typeof VisitRequestStatusSchema>;
     createdAt: string; // ISO string
 }

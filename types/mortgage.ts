@@ -14,6 +14,7 @@ export const CreateMortgageRequestSchema = z.object({
   income: z.coerce.number().min(1, "Please enter your approximate annual income."),
   moreDetails: z.string().optional(),
   contactMethods: z.array(ContactMethodSchema).nonempty({ message: "Please select at least one contact method." }),
+  submittedBy: z.string().optional(), // Verified accountId from gRPC session
 });
 
 export type CreateMortgageRequestFormValues = z.infer<typeof CreateMortgageRequestSchema>;
@@ -28,6 +29,7 @@ export interface MortgageRequest {
   income: number;
   moreDetails?: string;
   contactMethods: z.infer<typeof ContactMethodSchema>[];
+  submittedBy?: string; // Verified accountId
   status: z.infer<typeof MortgageRequestStatusSchema>;
   createdAt: string; // ISO string
 }

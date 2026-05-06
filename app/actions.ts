@@ -39,6 +39,24 @@ import { createModel as createModelService, updateModel as updateModelService, d
 import { createRequirement as createRequirementService, updateRequirement as updateRequirementService } from '@/services/requirements-service';
 import { createTemporaryAccount, updateUser } from '@/services/account-service';
 import { headers } from 'next/headers';
+import { getIdentity } from '@/lib/get-identity';
+
+// ---------------------------------------------------------------------------
+// Identity guard
+// ---------------------------------------------------------------------------
+// Call this at the top of any action that requires a verified session.
+// Returns the verified accountId on success, or throws with a structured error
+// that callers can surface directly to the UI.
+async function requireIdentity(): Promise<string> {
+  const identity = await getIdentity();
+  if (!identity.authenticated) {
+    throw Object.assign(new Error('Authentication required. Please sign in and try again.'), {
+      code: 'UNAUTHENTICATED',
+      reason: identity.reason,
+    });
+  }
+  return identity.user.accountId;
+}
 
 
 export async function naturalLanguagePropertySearch(
@@ -335,6 +353,8 @@ export async function createPropertyAction(
   data: CreatePropertyFormValues
 ): Promise<{ success: boolean; error?: string | null; propertyId?: string | null }> {
   try {
+    const actorId = await requireIdentity();
+
     const validatedData = CreatePropertySchema.parse(data);
     const orderedPurposes = validatedData.purposes?.length
       ? validatedData.purposes
@@ -391,6 +411,7 @@ export async function updatePropertyAction(
   data: UpdatePropertyFormValues
 ): Promise<{ success: boolean; error?: string | null; }> {
   try {
+    await requireIdentity();
     const validatedData = UpdatePropertySchema.parse(data);
     const orderedPurposes = validatedData.purposes?.length
       ? validatedData.purposes
@@ -502,6 +523,7 @@ export async function createAgencyAction(
   data: CreateAgencyFormValues
 ): Promise<{ success: boolean; error?: string | null; agencyId?: string | null }> {
   try {
+    await requireIdentity();
     const validatedData = CreateAgencySchema.parse(data);
     const serviceInput: CreateAgencyInput = {
       ...validatedData,
@@ -526,6 +548,7 @@ export async function updateAgencyAction(
   data: UpdateAgencyFormValues
 ): Promise<{ success: boolean; error?: string | null; }> {
   try {
+    await requireIdentity();
     const validatedData = UpdateAgencySchema.parse(data);
     const serviceInput: UpdateAgencyInput = {
       ...validatedData,
@@ -736,6 +759,7 @@ export async function createAgentAction(
   data: CreateAgentFormValues
 ): Promise<{ success: boolean; error?: string | null; agentId?: string | null }> {
   try {
+    await requireIdentity();
     const validatedData = CreateAgentSchema.parse(data);
     const agentId = await createAgentService(validatedData);
     revalidatePath('/manage/agents');
@@ -754,6 +778,7 @@ export async function updateAgentAction(
   data: UpdateAgentFormValues
 ): Promise<{ success: boolean; error?: string | null; }> {
   try {
+    await requireIdentity();
     const validatedData = UpdateAgentSchema.parse(data);
     await updateAgentService(id, validatedData);
     revalidatePath('/manage/agents');
@@ -926,8 +951,9 @@ export async function createConversationAction(data: CreateConversationFormValue
   conversationId?: string | null;
 }> {
   try {
+    const actorId = await requireIdentity();
     const validatedData = CreateConversationSchema.parse(data);
-    const conversationId = await createConversationService(validatedData);
+    const conversationId = await createConversationService({ ...validatedData, userId: actorId });
     revalidatePath('/manage/messages');
     return { success: true, conversationId, error: null };
   } catch (e: any) {
@@ -1133,7 +1159,8 @@ export async function createInquiryAction(
   data: CreateInquiryFormValues
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const validatedData = CreateInquirySchema.parse(data);
+    const actorId = await requireIdentity();
+    const validatedData = CreateInquirySchema.parse({ ...data, submittedBy: actorId });
     await createInquiryService(validatedData);
     return { success: true };
   } catch (e: any) {
@@ -1262,10 +1289,14 @@ export async function setDefaultModelAction(id: string): Promise<{ success: bool
 // Saved Properties Action
 export async function toggleSavePropertyAction(userId: string, propertyId: string): Promise<{ saved: boolean }> {
   try {
-    if (!userId) {
+    // Verify identity via gRPC — use the verified accountId, not the client-supplied userId
+    const identity = await getIdentity();
+    const verifiedUserId = identity.authenticated ? identity.user.accountId : userId;
+
+    if (!verifiedUserId) {
         throw new Error("User ID is required to save a property.");
     }
-    const result = await toggleSavedPropertyService(userId, propertyId);
+    const result = await toggleSavedPropertyService(verifiedUserId, propertyId);
     revalidatePath('/saved'); // Revalidate the saved properties page
     revalidatePath('/manage/saved');
     return result;
@@ -1298,7 +1329,8 @@ export async function getUsersBySavedProperty(propertyId: string): Promise<any[]
 // Property Request Action
 export async function createPropertyRequestAction(data: CreatePropertyRequestFormValues): Promise<{ success: boolean; error?: string }> {
     try {
-        const validatedData = CreatePropertyRequestSchema.parse(data);
+        const actorId = await requireIdentity();
+        const validatedData = CreatePropertyRequestSchema.parse({ ...data, submittedBy: actorId });
         await createPropertyRequestService(validatedData);
         revalidatePath('/manage/requests');
         return { success: true };
@@ -1314,7 +1346,8 @@ export async function createPropertyRequestAction(data: CreatePropertyRequestFor
 // Sales Request Action
 export async function createSalesRequestAction(data: CreateSalesRequestFormValues): Promise<{ success: boolean; error?: string }> {
     try {
-        const validatedData = CreateSalesRequestSchema.parse(data);
+        const actorId = await requireIdentity();
+        const validatedData = CreateSalesRequestSchema.parse({ ...data, submittedBy: actorId });
         await createSalesRequestService(validatedData);
         revalidatePath('/manage/sales-requests');
         return { success: true };
@@ -1330,7 +1363,8 @@ export async function createSalesRequestAction(data: CreateSalesRequestFormValue
 // Visit Request Action
 export async function createVisitRequestAction(data: CreateVisitRequestFormValues): Promise<{ success: boolean; error?: string }> {
     try {
-        const validatedData = CreateVisitRequestSchema.parse(data);
+        const actorId = await requireIdentity();
+        const validatedData = CreateVisitRequestSchema.parse({ ...data, submittedBy: actorId });
         await createVisitRequestService(validatedData);
         revalidatePath('/manage/visit-requests');
         return { success: true };
@@ -1346,7 +1380,8 @@ export async function createVisitRequestAction(data: CreateVisitRequestFormValue
 // Mortgage Request Action
 export async function createMortgageRequestAction(data: CreateMortgageRequestFormValues): Promise<{ success: boolean; error?: string }> {
     try {
-        const validatedData = CreateMortgageRequestSchema.parse(data);
+        const actorId = await requireIdentity();
+        const validatedData = CreateMortgageRequestSchema.parse({ ...data, submittedBy: actorId });
         await createMortgageRequestService(validatedData);
         revalidatePath('/manage/mortgage-requests');
         return { success: true };
@@ -1362,7 +1397,8 @@ export async function createMortgageRequestAction(data: CreateMortgageRequestFor
 // Contact Submission Action
 export async function createContactSubmissionAction(data: CreateContactSubmissionFormValues): Promise<{ success: boolean; error?: string }> {
     try {
-        const validatedData = CreateContactSubmissionSchema.parse(data);
+        const actorId = await requireIdentity();
+        const validatedData = CreateContactSubmissionSchema.parse({ ...data, submittedBy: actorId });
         await createContactSubmissionService(validatedData);
         revalidatePath('/manage/contact');
         return { success: true };
@@ -1378,7 +1414,9 @@ export async function createContactSubmissionAction(data: CreateContactSubmissio
 // Requirement Actions
 export async function upsertRequirementAction(data: CreateRequirementFormValues, requirementId?: string): Promise<{ success: boolean, error?: string | null }> {
     try {
-        const validatedData = CreateRequirementSchema.parse(data);
+        const actorId = await requireIdentity();
+        // Always use the verified accountId — ignore any userId the client may have sent
+        const validatedData = CreateRequirementSchema.parse({ ...data, userId: actorId });
 
         if (requirementId) {
             await updateRequirementService(requirementId, validatedData);

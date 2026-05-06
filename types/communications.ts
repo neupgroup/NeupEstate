@@ -11,6 +11,7 @@ export const CreateInquirySchema = z.object({
   email: z.string().email("Please enter a valid email address."),
   phone: z.string().optional(),
   question: z.string().min(10, "Your question must be at least 10 characters long."),
+  submittedBy: z.string().optional(), // Verified accountId from gRPC session
 });
 export type CreateInquiryFormValues = z.infer<typeof CreateInquirySchema>;
 
@@ -23,6 +24,7 @@ export interface Inquiry {
   email: string;
   phone?: string;
   question: string;
+  submittedBy?: string; // Verified accountId
   createdAt: string; // ISO string
   status: InquiryStatus;
 }
@@ -117,6 +119,7 @@ export const CreateContactSubmissionSchema = z.object({
   phone: z.string().optional(),
   subject: z.string().min(3, "Subject is required."),
   body: z.string().min(10, "Message must be at least 10 characters long."),
+  submittedBy: z.string().optional(), // Verified accountId from gRPC session
 });
 export type CreateContactSubmissionFormValues = z.infer<typeof CreateContactSubmissionSchema>;
 
@@ -127,6 +130,7 @@ export interface ContactSubmission {
   phone?: string;
   subject: string;
   body: string;
+  submittedBy?: string; // Verified accountId
   status: z.infer<typeof ContactSubmissionStatusSchema>;
   createdAt: string; // ISO string
 }
