@@ -5,30 +5,11 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { logUserActivity } from '@/app/actions';
 import type { PropertyActivityEvent } from '@/types';
-import { getActiveAccount } from '@/services/account/getAccount';
+import { getClientAccountId } from '@/lib/get-account-id';
 
 const ACTIVE_TIME_INTERVAL = 5000;
 const INACTIVITY_TIMEOUT = 60000;
 const GEOLOCATION_TIMEOUT = 120000;
-const TEMP_COOKIE = 'temp_account_id';
-const AUTH_COOKIE = 'auth_accounts';
-
-function getCookie(name: string): string | null {
-  if (typeof document === 'undefined') return null;
-  const nameEQ = name + '=';
-  const ca = document.cookie.split(';');
-  for (let c of ca) {
-    c = c.trim();
-    if (c.startsWith(nameEQ)) return decodeURIComponent(c.substring(nameEQ.length));
-  }
-  return null;
-}
-
-function getAccountId(): string | null {
-  const active = getActiveAccount(getCookie(AUTH_COOKIE));
-  if (active) return active.aid;
-  return getCookie(TEMP_COOKIE);
-}
 
 export function ActivityTracker() {
     const pathname = usePathname();
@@ -46,7 +27,7 @@ export function ActivityTracker() {
     const propertyId = pathname.startsWith('/properties/') ? pathname.split('/')[2] : undefined;
 
     const sendData = useCallback(async () => {
-        const userId = getAccountId();
+        const userId = getClientAccountId();
         if (!userId) return;
 
         const now = Date.now();

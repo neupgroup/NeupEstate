@@ -5,11 +5,10 @@ import { PropertyCard } from "@/components/property-card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Heart, AlertCircle } from "lucide-react";
 import { ClientLink } from "@/components/client-link";
-import { cookies } from "next/headers";
+import { getServerAccountId } from "@/lib/get-account-id";
 
 export default async function SavedFavouritesPage() {
-  const cookieStore = await cookies();
-  const userId = cookieStore.get('temp_account_id')?.value;
+  const userId = await getServerAccountId();
   
   let savedProperties: any[] = [];
   if (userId) {

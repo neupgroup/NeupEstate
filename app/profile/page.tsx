@@ -17,20 +17,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ClientLink } from '@/components/client-link';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { StartWithNeupEstate } from '@/components/home/start-with-neupestate';
-
-const COOKIE_NAME = 'temp_account_id';
-
-function getCookie(name: string): string | null {
-  if (typeof document === 'undefined') return null;
-  const nameEQ = name + "=";
-  const ca = document.cookie.split(';');
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-  }
-  return null;
-}
+import { getClientAccountId } from '@/lib/get-account-id';
 
 
 function UserProfileHeader() {
@@ -40,7 +27,7 @@ function UserProfileHeader() {
 
     useEffect(() => {
         setIsLoading(true);
-        const tempAccountId = getCookie(COOKIE_NAME);
+        const tempAccountId = getClientAccountId();
         setAccountId(tempAccountId);
         setIsLoading(false);
     }, []);
@@ -197,7 +184,7 @@ export default function ProfilePage() {
     const [userId, setUserId] = useState<string | null>(null);
 
     useEffect(() => {
-        const id = getCookie(COOKIE_NAME);
+        const id = getClientAccountId();
         setUserId(id);
 
         async function fetchRequirements() {

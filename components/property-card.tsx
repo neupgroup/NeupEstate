@@ -13,6 +13,7 @@ import { SafeImage } from "./safe-image";
 import { toggleSavePropertyAction } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import { isPropertySaved } from "@/services/property-service";
+import { getClientAccountId } from "@/lib/get-account-id";
 
 interface PropertyCardProps {
   property: Property;
@@ -21,7 +22,6 @@ interface PropertyCardProps {
   rating?: number;
 }
 
-const COOKIE_NAME = 'temp_account_id';
 const FALLBACK_IMAGES = [
     'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
     'https://media.istockphoto.com/id/1026205392/photo/beautiful-luxury-home-exterior-at-twilight.jpg?s=612x612&w=0&k=20&c=HOCqYY0noIVxnp5uQf1MJJEVpsH_d4WtVQ6-OwVoeDo=',
@@ -29,18 +29,6 @@ const FALLBACK_IMAGES = [
     'https://media.istockphoto.com/id/1255835530/photo/modern-custom-suburban-home-exterior.jpg?s=612x612&w=0&k=20&c=0Dqjm3NunXjZtWVpsUvNKg2A4rK2gMvJ-827nb4AMU4='
 ];
 
-
-function getCookie(name: string): string | null {
-  if (typeof document === 'undefined') return null;
-  const nameEQ = name + "=";
-  const ca = document.cookie.split(';');
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-  }
-  return null;
-}
 
 export function PropertyCard({ property, propertyCount, reviewCount, rating }: PropertyCardProps) {
   const [isFavorited, setIsFavorited] = useState(false);
@@ -56,7 +44,8 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
   useEffect(() => {
     // Set fallback image on client mount to avoid hydration mismatch
     setFallbackImage(FALLBACK_IMAGES[Math.floor(Math.random() * FALLBACK_IMAGES.length)]);
-    const currentUserId = getCookie(COOKIE_NAME);
+    // Prefer aid from auth_accounts; fall back to temp_account_id
+    const currentUserId = getClientAccountId();
     setUserId(currentUserId);
 
     async function checkInitialState() {
