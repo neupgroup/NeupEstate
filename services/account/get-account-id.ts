@@ -5,14 +5,14 @@
  * client and server, with a consistent priority:
  *
  *   1. auth_accounts cookie  →  use aid from the entry where def === 1
- *   2. temp_account_id cookie  →  anonymous / guest fallback
+ *   2. temp_account_id cookie  →  guest fallback (value is a track.* ID)
  *
  * Client usage (inside 'use client' components):
- *   import { getClientAccountId } from '@/lib/get-account-id';
+ *   import { getClientAccountId } from '@/services/account/get-account-id';
  *   const accountId = getClientAccountId(); // reads document.cookie
  *
  * Server usage (Server Components / Route Handlers):
- *   import { getServerAccountId } from '@/lib/get-account-id';
+ *   import { getServerAccountId } from '@/services/account/get-account-id';
  *   const accountId = await getServerAccountId(); // reads next/headers cookies
  */
 

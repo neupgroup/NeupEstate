@@ -4,35 +4,79 @@
 
 import { prisma } from '@/lib/prisma';
 import { logProblem } from './problem-service';
-import type { Account, User, UpdateUserFormValues } from '@/types';
+import type { Account, UpdateUserFormValues } from '@/types';
+
+// ---------------------------------------------------------------------------
+// Resolve account — the single entry point for establishing an account ID.
+//
+// Authenticated user:  aid from auth_accounts cookie (passed in by the client)
+//   → upsert into DB as a registered-type account, return aid
+//
+// Guest user:  no aid present
+//   → generate track.{randomId}, upsert into DB as guest, return the id
+// ---------------------------------------------------------------------------
 
 /**
- * Creates a new temporary account for an anonymous user.
- * @returns The unique ID of the newly created account.
+ * Ensures an account row exists for the given ID and returns it.
+ *
+ * For authenticated users pass `aid` (from auth_accounts cookie).
+ * For guests pass `null` — a new `track.{random}` ID will be generated.
+ *
+ * @param aid       The account ID from auth_accounts (null for guests)
+ * @param ipAddress The request IP for audit purposes
+ * @returns         The resolved account ID (aid or the generated track.* id)
+ */
+export async function resolveAccount(
+  aid: string | null,
+  ipAddress: string,
+): Promise<string> {
+  if (aid) {
+    // Authenticated — upsert so the row exists, update last access
+    await prisma.account.upsert({
+      where: { id: aid },
+      create: {
+        id: aid,
+        accountType: 'individual',
+        registered: true,
+        createdFromIp: ipAddress,
+        lastAccessedFromIp: ipAddress,
+        createdOn: new Date(),
+        accessedOn: new Date(),
+      },
+      update: {
+        accessedOn: new Date(),
+        lastAccessedFromIp: ipAddress,
+      },
+    });
+    return aid;
+  }
+
+  // Guest — generate a stable track.* ID and upsert
+  const guestId = `track.${Math.random().toString(36).slice(2, 11)}${Math.random().toString(36).slice(2, 6)}`;
+  await prisma.account.create({
+    data: {
+      id: guestId,
+      accountType: 'guest',
+      registered: false,
+      createdFromIp: ipAddress,
+      lastAccessedFromIp: ipAddress,
+      createdOn: new Date(),
+      accessedOn: new Date(),
+    },
+  });
+  return guestId;
+}
+
+/**
+ * @deprecated Use resolveAccount() instead.
+ * Kept temporarily so the WhatsApp webhook still compiles while it is migrated.
  */
 export async function createTemporaryAccount(ipAddress: string): Promise<string> {
-    try {
-        const account = await prisma.account.create({
-            data: {
-                id: `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-                createdFromIp: ipAddress,
-                lastAccessedFromIp: ipAddress,
-                createdOn: new Date(),
-                accessedOn: new Date(),
-                registered: false,
-                accountType: 'guest',
-            },
-        });
-        return account.id;
-    } catch (error) {
-        await logProblem(error, 'createTemporaryAccount');
-        throw new Error("Failed to create temporary account in the database.");
-    }
+  return resolveAccount(null, ipAddress);
 }
 
 /**
  * Fetches all accounts from the database.
- * @returns A promise that resolves to an array of Account objects.
  */
 export async function getAccounts(): Promise<Account[]> {
     try {
@@ -46,14 +90,10 @@ export async function getAccounts(): Promise<Account[]> {
 
 /**
  * Fetches a single account by its ID.
- * @param id The ID of the account to fetch.
- * @returns A promise that resolves to an Account object or null if not found.
  */
 export async function getAccountById(id: string): Promise<Account | null> {
     try {
-        const account = await prisma.account.findUnique({
-            where: { id },
-        });
+        const account = await prisma.account.findUnique({ where: { id } });
         return account ? mapPrismaAccountToType(account) : null;
     } catch (error) {
         await logProblem(error, `getAccountById (ID: ${id})`);
@@ -63,9 +103,6 @@ export async function getAccountById(id: string): Promise<Account | null> {
 
 /**
  * Updates a user's profile information.
- * @param id The ID of the user to update.
- * @param data The user data to update.
- * @returns A promise that resolves when the update is complete.
  */
 export async function updateUser(id: string, data: UpdateUserFormValues): Promise<void> {
     try {
@@ -93,9 +130,7 @@ export async function updateUser(id: string, data: UpdateUserFormValues): Promis
 }
 
 /**
- * Updates account access timestamp.
- * @param id The account ID.
- * @param ipAddress The IP address from which account was accessed.
+ * Updates account access timestamp and IP.
  */
 export async function updateAccountAccess(id: string, ipAddress: string): Promise<void> {
     try {
@@ -111,9 +146,6 @@ export async function updateAccountAccess(id: string, ipAddress: string): Promis
     }
 }
 
-/**
- * Maps Prisma Account to Account type.
- */
 function mapPrismaAccountToType(account: any): Account {
     const baseAccount = {
         id: account.id,

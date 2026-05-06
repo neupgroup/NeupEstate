@@ -37,7 +37,7 @@ import { createMortgageRequest as createMortgageRequestService } from '@/service
 import { createContactSubmission as createContactSubmissionService } from '@/services/contact-service';
 import { createModel as createModelService, updateModel as updateModelService, deleteModel as deleteModelService, setDefaultModel as setDefaultModelService } from '@/services/model-service';
 import { createRequirement as createRequirementService, updateRequirement as updateRequirementService } from '@/services/requirements-service';
-import { createTemporaryAccount, updateUser } from '@/services/account-service';
+import { resolveAccount, updateUser } from '@/services/account-service';
 import { headers } from 'next/headers';
 import { getIdentity } from '@/services/neupid/get-identity';
 
@@ -1436,16 +1436,36 @@ export async function upsertRequirementAction(data: CreateRequirementFormValues,
 }
 
 // Account Actions
-export async function getOrCreateTemporaryAccountAction(): Promise<{ success: boolean; accountId?: string; error?: string }> {
+
+/**
+ * Resolves the account for the current visitor.
+ *
+ * - If `aid` is provided (authenticated user from auth_accounts cookie):
+ *     upserts the account in the DB and returns the aid.
+ * - If `aid` is null (guest):
+ *     creates a new `track.*` account in the DB and returns its ID.
+ *
+ * The returned ID should be stored in the `temp_account_id` cookie by the
+ * client only when the user is a guest (no aid). Authenticated users already
+ * have their ID in the auth_accounts cookie.
+ */
+export async function resolveAccountAction(
+  aid: string | null,
+): Promise<{ success: boolean; accountId?: string; error?: string }> {
     try {
         const headersList = await headers();
         const ip = headersList.get('x-forwarded-for') || 'unknown';
-        const accountId = await createTemporaryAccount(ip);
+        const accountId = await resolveAccount(aid, ip);
         return { success: true, accountId };
     } catch (error: any) {
-        await logProblem(error, 'getOrCreateTemporaryAccountAction');
-        return { success: false, error: "Failed to create temporary account." };
+        await logProblem(error, 'resolveAccountAction');
+        return { success: false, error: 'Failed to resolve account.' };
     }
+}
+
+/** @deprecated Use resolveAccountAction(null) instead. */
+export async function getOrCreateTemporaryAccountAction(): Promise<{ success: boolean; accountId?: string; error?: string }> {
+    return resolveAccountAction(null);
 }
 
 export async function updateUserAction(data: UpdateUserFormValues): Promise<{ success: boolean; error?: string }> {
