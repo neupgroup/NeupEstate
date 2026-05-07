@@ -58,6 +58,15 @@ async function requireIdentity(): Promise<string> {
   return identity.user.accountId;
 }
 
+/**
+ * Public server action — safe to call from client components.
+ * Returns the verified accountId, or null if the user is not authenticated.
+ */
+export async function getCurrentAccountId(): Promise<string | null> {
+  const identity = await getIdentity();
+  return identity.authenticated ? identity.user.accountId : null;
+}
+
 
 export async function naturalLanguagePropertySearch(
   query: string

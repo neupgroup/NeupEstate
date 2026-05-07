@@ -7,12 +7,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useTransition, useEffect, useState } from 'react';
 import { CreatePropertySchema, type CreatePropertyFormValues, type User } from '@/types';
-import { createPropertyAction } from '@/app/actions';
+import { createPropertyAction, getCurrentAccountId } from '@/app/actions';
 
 import { Form } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { getUsers } from '@/services/user-service';
-import { getIdentity } from '@/services/neupid/get-identity';
 import { useAgencyCustomization } from '@/hooks/use-agency-customization';
 
 import { ProgressivePropertySections } from '@/components/manage/progressive-property-sections';
@@ -27,9 +26,7 @@ export default function CreatePropertyPage() {
     useEffect(() => {
         getUsers().then(setUsers);
         // Resolve the current user's accountId for agency customization lookup
-        getIdentity().then(result => {
-            if (result.authenticated) setAccountId(result.user.accountId);
-        });
+        getCurrentAccountId().then(id => setAccountId(id));
     }, []);
 
     const { rule: agencyRule } = useAgencyCustomization(accountId, 'property');

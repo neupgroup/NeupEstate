@@ -6,10 +6,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams, useRouter } from 'next/navigation';
 import { useTransition, useState, useEffect } from 'react';
 import { UpdatePropertySchema, type Property, type User, type UpdatePropertyFormValues } from '@/types';
-import { updatePropertyAction, approvePropertyAction, deletePropertyAction, rewritePropertyDetailsAction } from '@/app/actions';
+import { updatePropertyAction, approvePropertyAction, deletePropertyAction, rewritePropertyDetailsAction, getCurrentAccountId } from '@/app/actions';
 import { getPropertyById } from "@/services/property-service";
 import { getUsers } from "@/services/user-service";
-import { getIdentity } from '@/services/neupid/get-identity';
 import { useAgencyCustomization } from '@/hooks/use-agency-customization';
 
 import { Form } from '@/components/ui/form';
@@ -56,13 +55,13 @@ export default function EditPropertyPage() {
         if (!propertyId) return;
 
         async function loadData() {
-            const [propData, userData, identity] = await Promise.all([
+            const [propData, userData, resolvedAccountId] = await Promise.all([
                 getPropertyById(propertyId, { includeInactive: true }),
                 getUsers(),
-                getIdentity(),
+                getCurrentAccountId(),
             ]);
 
-            if (identity.authenticated) setAccountId(identity.user.accountId);
+            if (resolvedAccountId) setAccountId(resolvedAccountId);
 
             if (!propData) {
                 toast({ variant: 'destructive', title: 'Error', description: 'Property not found.' });
