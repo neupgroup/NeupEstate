@@ -324,8 +324,40 @@ model Agency {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
+  maps           AgencyMap[]
+  customizations AgencyCustomization[]
+
   @@index([name])
   @@map("agencies")
+}
+
+model AgencyMap {
+  id               String   @id @default(cuid())
+  agencyAccountId  String   // references Account.id — the agency's own account
+  accountId        String   // references Account.id — the member account
+  role             String   // e.g. "admin" | "agent" | "viewer"
+  lockIn           Boolean  @default(false)
+
+  agency           Agency   @relation(fields: [agencyAccountId], references: [id], onDelete: Cascade)
+
+  @@index([agencyAccountId])
+  @@index([accountId])
+  @@map("agency_map")
+}
+
+model AgencyCustomization {
+  id             String   @id @default(cuid())
+  agencyId       String   // references Agency.id (the agency's account id)
+  customizeFor   String   // "lead" | "property"
+  customization  Json     // { required: string[], optional: string[] }
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  agency         Agency   @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+
+  @@unique([agencyId, customizeFor])
+  @@index([agencyId])
+  @@map("agency_customization")
 }
 
 model Agent {

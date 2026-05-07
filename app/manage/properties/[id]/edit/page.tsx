@@ -9,6 +9,8 @@ import { UpdatePropertySchema, type Property, type User, type UpdatePropertyForm
 import { updatePropertyAction, approvePropertyAction, deletePropertyAction, rewritePropertyDetailsAction } from '@/app/actions';
 import { getPropertyById } from "@/services/property-service";
 import { getUsers } from "@/services/user-service";
+import { getIdentity } from '@/services/neupid/get-identity';
+import { useAgencyCustomization } from '@/hooks/use-agency-customization';
 
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
@@ -42,6 +44,9 @@ export default function EditPropertyPage() {
     const [isApproving, startApproveTransition] = useTransition();
     const [isDeleting, startDeleteTransition] = useTransition();
     const [isRewriting, startRewriteTransition] = useTransition();
+    const [accountId, setAccountId] = useState<string | null>(null);
+
+    const { rule: agencyRule } = useAgencyCustomization(accountId, 'property');
 
     const form = useForm<UpdatePropertyFormValues>({
         resolver: zodResolver(UpdatePropertySchema),
@@ -51,10 +56,13 @@ export default function EditPropertyPage() {
         if (!propertyId) return;
 
         async function loadData() {
-            const [propData, userData] = await Promise.all([
+            const [propData, userData, identity] = await Promise.all([
                 getPropertyById(propertyId, { includeInactive: true }),
                 getUsers(),
+                getIdentity(),
             ]);
+
+            if (identity.authenticated) setAccountId(identity.user.accountId);
 
             if (!propData) {
                 toast({ variant: 'destructive', title: 'Error', description: 'Property not found.' });
@@ -285,6 +293,7 @@ export default function EditPropertyPage() {
                         isEditForm={true}
                         isSubmitting={isSaving || isRewriting}
                         submitLabel={isSaving ? 'Saving Changes...' : 'Save Changes'}
+                        agencyRule={agencyRule}
                     />
                 </form>
             </Form>

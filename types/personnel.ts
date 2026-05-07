@@ -37,6 +37,55 @@ export type CreateAgencyInput = Omit<CreateAgencyFormValues, 'branches'> & {
 };
 export type UpdateAgencyInput = CreateAgencyInput;
 
+// ── AgencyMap ────────────────────────────────────────────────────────────────
+
+export const AgencyMapRoleSchema = z.enum(['admin', 'agent', 'viewer']);
+export type AgencyMapRole = z.infer<typeof AgencyMapRoleSchema>;
+
+export interface AgencyMap {
+  id: string;
+  agencyAccountId: string; // references Agency.id (the agency's account)
+  accountId: string;       // references Account.id (the member)
+  role: AgencyMapRole;
+  lockIn: boolean;
+}
+
+export const CreateAgencyMapSchema = z.object({
+  agencyAccountId: z.string().min(1, 'Agency is required.'),
+  accountId: z.string().min(1, 'Account is required.'),
+  role: AgencyMapRoleSchema,
+  lockIn: z.boolean().default(false),
+});
+export type CreateAgencyMapInput = z.infer<typeof CreateAgencyMapSchema>;
+
+// ── AgencyCustomization ──────────────────────────────────────────────────────
+
+export const AgencyCustomizeForSchema = z.enum(['lead', 'property']);
+export type AgencyCustomizeFor = z.infer<typeof AgencyCustomizeForSchema>;
+
+/** The shape stored in the `customization` JSON column */
+export const AgencyCustomizationRuleSchema = z.object({
+  required: z.array(z.string()).default([]),
+  optional: z.array(z.string()).default([]),
+});
+export type AgencyCustomizationRule = z.infer<typeof AgencyCustomizationRuleSchema>;
+
+export interface AgencyCustomization {
+  id: string;
+  agencyId: string;
+  customizeFor: AgencyCustomizeFor;
+  customization: AgencyCustomizationRule;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export const CreateAgencyCustomizationSchema = z.object({
+  agencyId: z.string().min(1, 'Agency is required.'),
+  customizeFor: AgencyCustomizeForSchema,
+  customization: AgencyCustomizationRuleSchema,
+});
+export type CreateAgencyCustomizationInput = z.infer<typeof CreateAgencyCustomizationSchema>;
+
 // User
 const UserEmailSchema = z.object({
     type: z.enum(['primary', 'work', 'other']).default('primary'),

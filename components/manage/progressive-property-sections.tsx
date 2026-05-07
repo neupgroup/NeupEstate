@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
-import type { CreatePropertyFormValues, User } from "@/types";
+import type { AgencyCustomizationRule, CreatePropertyFormValues, User } from "@/types";
 import { Button } from "@/components/ui/button";
 import { BasicDetailsSection } from "@/components/manage/property-form-sections/basic-details-section";
 import { PropertySpecificsSection } from "@/components/manage/property-form-sections/property-specifics-section";
@@ -16,6 +16,7 @@ import { PropertyDocumentsSection } from "@/components/manage/property-form-sect
 import { TitleDescriptionSection } from "@/components/manage/property-form-sections/title-description-section";
 import { SeoSection } from "@/components/manage/property-form-sections/seo-section";
 import { cn } from "@/lib/utils";
+import { evaluateAgencyCustomization } from "@/lib/evaluate-agency-customization";
 
 type PropertyFormStep = {
     id: string;
@@ -31,6 +32,8 @@ interface ProgressivePropertySectionsProps {
     isEditForm: boolean;
     isSubmitting: boolean;
     submitLabel: string;
+    /** Optional agency customization rule — enforced on top of Zod validation */
+    agencyRule?: AgencyCustomizationRule | null;
 }
 
 export function ProgressivePropertySections({
@@ -39,6 +42,7 @@ export function ProgressivePropertySections({
     isEditForm,
     isSubmitting,
     submitLabel,
+    agencyRule,
 }: ProgressivePropertySectionsProps) {
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const [unlockedUpTo, setUnlockedUpTo] = useState<number>(0);
@@ -162,6 +166,22 @@ export function ProgressivePropertySections({
                 setNextError(msgs.length > 0 ? msgs.join(" ") : "Please fix the errors above before continuing.");
                 return;
             }
+            // Agency rule check — only for fields belonging to this step
+            if (agencyRule) {
+                const stepFields = steps[activeIndex].fields as string[];
+                const stepRule = {
+                    required: agencyRule.required.filter(f =>
+                        stepFields.some(sf => f === sf || f.startsWith(sf + '.') || sf.startsWith(f + '.'))
+                    ),
+                    optional: agencyRule.optional,
+                };
+                const agencyErrors = evaluateAgencyCustomization(stepRule, form.getValues() as any);
+                const agencyMsgs = Object.values(agencyErrors);
+                if (agencyMsgs.length > 0) {
+                    setNextError(agencyMsgs.join(' '));
+                    return;
+                }
+            }
         }
         setNextError(null);
         setActiveIndex(i);
@@ -174,6 +194,22 @@ export function ProgressivePropertySections({
             const msgs = collectStepErrors(steps[activeIndex].fields as string[]);
             setNextError(msgs.length > 0 ? msgs.join(" ") : "Please fix the errors above before continuing.");
             return;
+        }
+        // Agency rule check — only for fields belonging to this step
+        if (agencyRule) {
+            const stepFields = steps[activeIndex].fields as string[];
+            const stepRule = {
+                required: agencyRule.required.filter(f =>
+                    stepFields.some(sf => f === sf || f.startsWith(sf + '.') || sf.startsWith(f + '.'))
+                ),
+                optional: agencyRule.optional,
+            };
+            const agencyErrors = evaluateAgencyCustomization(stepRule, form.getValues() as any);
+            const agencyMsgs = Object.values(agencyErrors);
+            if (agencyMsgs.length > 0) {
+                setNextError(agencyMsgs.join(' '));
+                return;
+            }
         }
         setNextError(null);
         const next = Math.min(activeIndex + 1, steps.length - 1);

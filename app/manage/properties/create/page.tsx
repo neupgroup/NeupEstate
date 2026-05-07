@@ -5,13 +5,15 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { useTransition, useEffect } from 'react';
+import { useTransition, useEffect, useState } from 'react';
 import { CreatePropertySchema, type CreatePropertyFormValues, type User } from '@/types';
 import { createPropertyAction } from '@/app/actions';
 
 import { Form } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { getUsers } from '@/services/user-service';
+import { getIdentity } from '@/services/neupid/get-identity';
+import { useAgencyCustomization } from '@/hooks/use-agency-customization';
 
 import { ProgressivePropertySections } from '@/components/manage/progressive-property-sections';
 
@@ -20,10 +22,17 @@ export default function CreatePropertyPage() {
     const { toast } = useToast();
     const [isPending, startTransition] = useTransition();
     const [users, setUsers] = React.useState<User[]>([]);
+    const [accountId, setAccountId] = useState<string | null>(null);
 
     useEffect(() => {
         getUsers().then(setUsers);
+        // Resolve the current user's accountId for agency customization lookup
+        getIdentity().then(result => {
+            if (result.authenticated) setAccountId(result.user.accountId);
+        });
     }, []);
+
+    const { rule: agencyRule } = useAgencyCustomization(accountId, 'property');
 
     const form = useForm<CreatePropertyFormValues>({
         resolver: zodResolver(CreatePropertySchema),
@@ -105,6 +114,7 @@ export default function CreatePropertyPage() {
                         isEditForm={false}
                         isSubmitting={isPending}
                         submitLabel={isPending ? 'Creating...' : 'Create Property'}
+                        agencyRule={agencyRule}
                     />
                 </form>
             </Form>
