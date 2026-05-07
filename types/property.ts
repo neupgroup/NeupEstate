@@ -39,12 +39,46 @@ export const PropertyUsageTypeSchema = z.enum(['Residential', 'Semi-Commercial',
 export const AreaUnitSchema = z.enum(['sqft', 'sqm', 'aana', 'ropani', 'bigha', 'dhur']);
 export const LandFacingSchema = z.enum(['North', 'South', 'East', 'West', 'North-East', 'North-West', 'South-East', 'South-West']);
 
+// Area value schema — matches the nested shape written by AreaInput
+export const AreaValueSchema = z.object({
+    // Aana system
+    ropani: z.coerce.number().optional(),
+    aana:   z.coerce.number().optional(),
+    paisa:  z.coerce.number().optional(),
+    daam:   z.coerce.number().optional(),
+    // Kattha system
+    bigha:  z.coerce.number().optional(),
+    kattha: z.coerce.number().optional(),
+    dhur:   z.coerce.number().optional(),
+    // Metric
+    sqft:   z.coerce.number().optional(),
+    sqm:    z.coerce.number().optional(),
+}).optional();
+export type AreaValue = z.infer<typeof AreaValueSchema>;
+
+/** Convert an AreaValue object to a single sqft number for storage */
+export function areaValueToSqft(v: AreaValue | number | undefined | null): number {
+    if (v == null) return 0;
+    if (typeof v === 'number') return v;
+    // Conversion factors to sqft
+    const ropani = (v.ropani ?? 0) * 5476;
+    const aana   = (v.aana   ?? 0) * 342.25;
+    const paisa  = (v.paisa  ?? 0) * 85.56;
+    const daam   = (v.daam   ?? 0) * 21.39;
+    const bigha  = (v.bigha  ?? 0) * 72900;
+    const kattha = (v.kattha ?? 0) * 3645;
+    const dhur   = (v.dhur   ?? 0) * 182.25;
+    const sqft   = (v.sqft   ?? 0);
+    const sqm    = (v.sqm    ?? 0) * 10.7639;
+    return ropani + aana + paisa + daam + bigha + kattha + dhur + sqft + sqm;
+}
+
 // Land Schemas
 export const LandUsageSchema = z.enum(['Vacant', 'Developed', 'Under-Construction']);
 export const LandZoningSchema = z.enum(['Residential', 'Commercial', 'Industrial', 'Agricultural']);
 export const LandTopographySchema = z.enum(['Flat', 'Hilly', 'Sloped']);
 export const LandDetailsSchema = z.object({
-    area: z.coerce.number({invalid_type_error: "Area must be a number"}).optional(),
+    area: AreaValueSchema,
     areaUnit: AreaUnitSchema.optional(),
     frontage: z.coerce.number({invalid_type_error: "Frontage must be a number"}).optional(),
     depth: z.coerce.number({invalid_type_error: "Depth must be a number"}).optional(),
@@ -56,7 +90,7 @@ export const LandDetailsSchema = z.object({
 export type LandDetails = z.infer<typeof LandDetailsSchema>;
 export const PlotDetailsSchema = z.object({
     id: z.string().min(1, "Plot ID is required."),
-    area: z.coerce.number({invalid_type_error: "Area must be a number"}).min(1, "Area is required."),
+    area: AreaValueSchema,
     areaUnit: AreaUnitSchema.optional(),
     frontage: z.coerce.number({invalid_type_error: "Frontage must be a number"}).optional(),
     depth: z.coerce.number({invalid_type_error: "Depth must be a number"}).optional(),
@@ -74,7 +108,7 @@ export const ApartmentDetailsSchema = z.object({
 export type ApartmentDetails = z.infer<typeof ApartmentDetailsSchema>;
 export const ApartmentUnitSchema = z.object({
     id: z.string().min(1, "Unit ID is required."),
-    area: z.coerce.number().optional(),
+    area: AreaValueSchema,
     areaUnit: AreaUnitSchema.optional(),
     onFloor: z.coerce.number().optional(),
     furnishing: FurnishingStatusSchema.optional(),
@@ -267,7 +301,7 @@ export const CreatePropertySchema = z.object({
     types: z.array(PropertyUsageTypeSchema).min(1, "Please select at least one property nature."),
 
     // Property Details
-    area: z.coerce.number().min(0),
+    area: AreaValueSchema,
     areaUnit: AreaUnitSchema.optional(),
     facing: LandFacingSchema.optional(),
     buildStart: emptyStringToUndefinedInt,
@@ -319,17 +353,53 @@ export const CreatePropertySchema = z.object({
                 message: "One or more image URLs are from an unauthorized domain. Please use allowed domains like placehold.co, lalpurjanepal.com.np, or neupgroup.com."
             }
         ),
+}).superRefine((data, ctx) => {
+    const HOUSE_TYPES      = ["House", "Bungalow", "Villa", "Multiplex"];
+    const APARTMENT_TYPES  = ["Apartment", "Penthouse"];
+    const FLAT_TYPES       = ["Flat"];
+    const COMMERCIAL_TYPES = ["Commercial Space", "Shop Space"];
+    const HAS_DUAL_FACING  = [...HOUSE_TYPES, ...COMMERCIAL_TYPES, ...FLAT_TYPES];
+
+    const category = (data as any).categories?.[0] as string | undefined;
+
+    if (category && HAS_DUAL_FACING.includes(category)) {
+        if (!data.facing) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                path: ["facing"],
+                message: "Please choose a house direction before continuing.",
+            });
+        }
+        if (!data.landDetails?.facing) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                path: ["landDetails", "facing"],
+                message: "Please choose a land direction before continuing.",
+            });
+        }
+    }
+
+    if (category && APARTMENT_TYPES.includes(category)) {
+        if (!data.facing) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                path: ["facing"],
+                message: "Please choose a property direction before continuing.",
+            });
+        }
+    }
 });
 export const UpdatePropertySchema = CreatePropertySchema;
 export type CreatePropertyFormValues = z.infer<typeof CreatePropertySchema>;
 export type UpdatePropertyFormValues = CreatePropertyFormValues;
 
 export type CreatePropertyInput =
-    Omit<CreatePropertyFormValues, 'amenities' | 'images' | 'metaTags' | 'pricing' | 'owners' | 'purpose'>
+    Omit<CreatePropertyFormValues, 'amenities' | 'images' | 'metaTags' | 'pricing' | 'owners' | 'purpose' | 'area' | 'landDetails' | 'plots' | 'apartmentUnits'>
     & {
     purpose: Property['purpose']; // Derived primary purpose
     price: number; // Derived top-level field
     location: string; // Derived top-level field
+    area: number; // Converted to sqft
     amenities: string[];
     images: string[];
     metaTags?: string[];

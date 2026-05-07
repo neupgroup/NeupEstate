@@ -12,7 +12,7 @@ import { addSitemap, getNewUrlsFromSitemap, processSitemapUrl, updateSitemapChec
 import { clearAllProblems } from "@/services/problem-service";
 import { logProblem } from "@/services/problem-service";
 import type { NaturalLanguageSearchOutput, Property, CreatePropertyInput, UpdatePropertyInput, CreateAgencyInput, UpdateAgencyInput, PropertyApprovalResult, CreatePropertyFormValues, UpdatePropertyFormValues, CreateAgencyFormValues, UpdateAgencyFormValues, PropertyFilters, ExtractedPropertyData, SitemapLog, PropertyAmendmentResult, RewritePropertyDetailsOutput, PropertyAssuranceResult, Agent, CreateAgentFormValues, UpdateAgentFormValues, StructuredLocation, CreateWhatsAppTemplateFormValues, WhatsAppConfig, WhatsAppTemplate, CreateConversationFormValues, CreateUserActivityInput, PropertyImageUpdateResult, CreateFaqFormValues, UpdateFaqFormValues, CreateInquiryFormValues, InquiryStatus, UpdatePromptFormValues, CreatePromptFormValues, User, CreatePropertyRequestFormValues, CreateSalesRequestFormValues, CreateVisitRequestFormValues, CreateMortgageRequestFormValues, CreateContactSubmissionFormValues, PropertyActivityEvent, UserPreferences, AIModel, CreateAIModelFormValues, UpdateAIModelFormValues, CreateRequirementFormValues, Requirement, UpdateUserFormValues } from "@/types";
-import { CreatePropertySchema, UpdatePropertySchema, CreateAgencySchema, UpdateAgencySchema, PropertyPurposeSchema, PropertyCategorySchema, PropertyUsageTypeSchema, CreateAgentSchema, UpdateAgentSchema, CreateWhatsAppTemplateSchema, WhatsAppConfigSchema, CreateConversationSchema, CreateFaqSchema, UpdateFaqSchema, CreateInquirySchema, UpdatePromptSchema, CreatePromptSchema, CreatePropertyRequestSchema, CreateSalesRequestSchema, CreateVisitRequestSchema, CreateMortgageRequestSchema, CreateContactSubmissionSchema, CreateAIModelSchema, UpdateAIModelSchema, CreateRequirementSchema, UpdateUserSchema } from "@/types";
+import { CreatePropertySchema, UpdatePropertySchema, CreateAgencySchema, UpdateAgencySchema, PropertyPurposeSchema, PropertyCategorySchema, PropertyUsageTypeSchema, CreateAgentSchema, UpdateAgentSchema, CreateWhatsAppTemplateSchema, WhatsAppConfigSchema, CreateConversationSchema, CreateFaqSchema, UpdateFaqSchema, CreateInquirySchema, UpdatePromptSchema, CreatePromptSchema, CreatePropertyRequestSchema, CreateSalesRequestSchema, CreateVisitRequestSchema, CreateMortgageRequestSchema, CreateContactSubmissionSchema, CreateAIModelSchema, UpdateAIModelSchema, CreateRequirementSchema, UpdateUserSchema, areaValueToSqft } from "@/types";
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
 import { z } from "zod";
 import { runPropertyApproval as runPropertyApprovalFlow } from "@/services/ai/property-approval-flow";
@@ -385,6 +385,7 @@ export async function createPropertyAction(
       purposes: orderedPurposes,
       location: correctedLocation, // Use the corrected location
       price: validatedData.pricing.listed,
+      area: areaValueToSqft(validatedData.area),
       amenities: validatedData.amenities?.split(',').map(a => a.trim()).filter(Boolean) || [],
       images: validatedData.images?.filter(img => img.trim() !== '') || [],
       metaTags: validatedData.metaTags?.split(',').map(tag => tag.trim()).filter(Boolean) || [],
@@ -393,6 +394,12 @@ export async function createPropertyAction(
         options: Array.isArray(validatedData.pricing.options) ? validatedData.pricing.options : validatedData.pricing.options?.split(',').map(o => o.trim()).filter(Boolean) as any,
       } : undefined,
       owners: validatedData.owners,
+      landDetails: validatedData.landDetails ? {
+        ...validatedData.landDetails,
+        area: areaValueToSqft(validatedData.landDetails.area),
+      } : undefined,
+      plots: validatedData.plots?.map(p => ({ ...p, area: areaValueToSqft(p.area) })),
+      apartmentUnits: validatedData.apartmentUnits?.map(u => ({ ...u, area: areaValueToSqft(u.area) })),
     };
     const propertyId = await createPropertyService(serviceInput);
     revalidatePath('/manage/properties');
@@ -442,6 +449,7 @@ export async function updatePropertyAction(
       purposes: orderedPurposes,
       location: correctedLocation, // Use the corrected location
       price: validatedData.pricing.listed,
+      area: areaValueToSqft(validatedData.area),
       amenities: validatedData.amenities?.split(',').map(a => a.trim()).filter(Boolean) || [],
       images: validatedData.images?.filter(img => img.trim() !== '') || [],
       metaTags: validatedData.metaTags?.split(',').map(tag => tag.trim()).filter(Boolean) || [],
@@ -450,6 +458,12 @@ export async function updatePropertyAction(
         options: Array.isArray(validatedData.pricing.options) ? validatedData.pricing.options : validatedData.pricing.options?.split(',').map(o => o.trim()).filter(Boolean) as any,
       } : undefined,
       owners: validatedData.owners,
+      landDetails: validatedData.landDetails ? {
+        ...validatedData.landDetails,
+        area: areaValueToSqft(validatedData.landDetails.area),
+      } : undefined,
+      plots: validatedData.plots?.map(p => ({ ...p, area: areaValueToSqft(p.area) })),
+      apartmentUnits: validatedData.apartmentUnits?.map(u => ({ ...u, area: areaValueToSqft(u.area) })),
     };
     await updatePropertyService(id, serviceInput);
     revalidatePath('/manage/properties');

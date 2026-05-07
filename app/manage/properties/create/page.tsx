@@ -31,7 +31,7 @@ export default function CreatePropertyPage() {
             title: '',
             description: '',
             purposes: [],
-            area: 1000,
+            area: undefined,
             bedrooms: 1,
             bathrooms: 1,
             kitchens: 1,

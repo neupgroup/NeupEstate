@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useFormState } from "react-hook-form";
 import { cn } from "@/lib/utils";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -68,7 +68,8 @@ interface AreaInputProps {
 }
 
 export function AreaInput({ label = "Total Area", name = "area", className }: AreaInputProps) {
-    const { watch, setValue } = useFormContext();
+    const { watch, setValue, control } = useFormContext();
+    const { errors } = useFormState({ control, name: name as any });
     const [activeSystem, setActiveSystem] = useState<SystemKey>("aana");
 
     const system = SYSTEMS.find((s) => s.key === activeSystem)!;
@@ -79,8 +80,29 @@ export function AreaInput({ label = "Total Area", name = "area", className }: Ar
     const set = (unit: string, next: number) =>
         setValue(`${name}.${unit}` as any, Math.max(0, next), { shouldDirty: true });
 
+    // Dig out the error message for this field (may be nested)
+    function getErrorMessage(): string | undefined {
+        const parts = name.split(".");
+        let node: any = errors;
+        for (const part of parts) {
+            node = node?.[part];
+            if (!node) return undefined;
+        }
+        if (typeof node?.message === "string") return node.message;
+        // Check sub-field errors
+        if (node && typeof node === "object") {
+            for (const key of Object.keys(node)) {
+                if (typeof node[key]?.message === "string") return node[key].message;
+            }
+        }
+        return undefined;
+    }
+
+    const errorMessage = getErrorMessage();
+
     return (
-        <div className={cn("rounded-2xl border bg-card shadow-sm p-4 space-y-4", className)}>
+        <div className={cn("space-y-1", className)}>
+        <div className={cn("rounded-2xl border bg-card shadow-sm p-4 space-y-4", errorMessage && "border-destructive")}>
             {/* Header */}
             <div className="flex items-center justify-between">
                 <span className="flex items-center gap-2 text-base font-bold">
@@ -151,6 +173,10 @@ export function AreaInput({ label = "Total Area", name = "area", className }: Ar
                     );
                 })}
             </div>
+        </div>
+        {errorMessage && (
+            <p className="text-sm font-medium text-destructive">{errorMessage}</p>
+        )}
         </div>
     );
 }

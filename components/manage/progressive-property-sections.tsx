@@ -58,7 +58,7 @@ export function ProgressivePropertySections({
             id: "specifics",
             title: "Property Specifics",
             description: "Enter the size, age, floors, and structural details.",
-            fields: ["area", "areaUnit", "buildStart", "buildCompleted", "facing", "floors", "onFloor", "landDetails", "plots", "apartmentUnits"],
+            fields: ["area", "areaUnit", "buildStart", "buildCompleted", "facing", "landDetails.facing", "floors", "onFloor", "landDetails", "plots", "apartmentUnits"],
             render: () => <PropertySpecificsSection control={form.control} category={category} />,
         },
         ...(categories.includes("Land") ? [] : [{
@@ -126,11 +126,40 @@ export function ProgressivePropertySections({
         },
     ], [category, form.control, form.formState.errors, isEditForm, users]);
 
+    function collectStepErrors(fields: string[]): string[] {
+        const errors = form.formState.errors as Record<string, any>;
+        const messages: string[] = [];
+
+        function extractMessages(obj: any, path: string) {
+            if (!obj || typeof obj !== "object") return;
+            if (typeof obj.message === "string" && obj.message) {
+                messages.push(obj.message);
+                return;
+            }
+            for (const key of Object.keys(obj)) {
+                extractMessages(obj[key], `${path}.${key}`);
+            }
+        }
+
+        for (const field of fields) {
+            const parts = field.split(".");
+            let node: any = errors;
+            for (const part of parts) {
+                node = node?.[part];
+                if (!node) break;
+            }
+            if (node) extractMessages(node, field);
+        }
+
+        return [...new Set(messages)];
+    }
+
     async function goTo(i: number) {
         if (i > activeIndex) {
             const isValid = await form.trigger(steps[activeIndex].fields as any, { shouldFocus: true });
             if (!isValid) {
-                setNextError("Please fix the errors above before continuing.");
+                const msgs = collectStepErrors(steps[activeIndex].fields as string[]);
+                setNextError(msgs.length > 0 ? msgs.join(" ") : "Please fix the errors above before continuing.");
                 return;
             }
         }
@@ -142,7 +171,8 @@ export function ProgressivePropertySections({
     async function handleNext() {
         const isValid = await form.trigger(steps[activeIndex].fields as any, { shouldFocus: true });
         if (!isValid) {
-            setNextError("Please fix the errors above before continuing.");
+            const msgs = collectStepErrors(steps[activeIndex].fields as string[]);
+            setNextError(msgs.length > 0 ? msgs.join(" ") : "Please fix the errors above before continuing.");
             return;
         }
         setNextError(null);
