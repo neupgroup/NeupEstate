@@ -15,6 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getUsers } from '@/services/user-service';
 import { PropertyQA } from '@/components/property-q-a';
 import type { Property } from '@/types';
+import { areaValueToSqft } from '@/types';
 import type { Metadata, ResolvingMetadata } from 'next';
 
 type Props = {
@@ -373,7 +374,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
               <div className="mt-6 border-t pt-6">
                   <h2 className="text-2xl font-headline font-semibold mb-4">Land Details</h2>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-2">
-                      {property.landDetails.area && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Area</p><p className="font-semibold">{property.landDetails.area} {property.landDetails.areaUnit}</p></div>}
+                      {property.landDetails.area && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Area</p><p className="font-semibold">{areaValueToSqft(property.landDetails.area).toLocaleString()} {property.landDetails.areaUnit}</p></div>}
                       {property.landDetails.frontage && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Frontage</p><p className="font-semibold">{property.landDetails.frontage} ft</p></div>}
                       {property.landDetails.depth && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Depth</p><p className="font-semibold">{property.landDetails.depth} ft</p></div>}
                       {property.landDetails.facing && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Facing</p><p className="font-semibold">{property.landDetails.facing}</p></div>}
@@ -401,7 +402,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
                           {property.plots.map((plot) => (
                               <TableRow key={plot.id}>
                                   <TableCell className="font-medium">{plot.id}</TableCell>
-                                  <TableCell>{plot.area} {plot.areaUnit}</TableCell>
+                                  <TableCell>{areaValueToSqft(plot.area).toLocaleString()} {plot.areaUnit}</TableCell>
                                   <TableCell>{plot.frontage ? `${plot.frontage} ft` : 'N/A'}</TableCell>
                                   <TableCell>{plot.zoning || 'N/A'}</TableCell>
                                   <TableCell>{plot.topography || 'N/A'}</TableCell>
@@ -434,7 +435,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
                               </CardHeader>
                               <CardContent>
                                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                      {unit.area && <div className="flex items-center gap-2"><SquareGanttChart className="h-4 w-4 text-muted-foreground" /> {unit.area} {unit.areaUnit}</div>}
+                                      {unit.area && <div className="flex items-center gap-2"><SquareGanttChart className="h-4 w-4 text-muted-foreground" /> {areaValueToSqft(unit.area).toLocaleString()} {unit.areaUnit}</div>}
                                       {unit.furnishing && <div className="flex items-center gap-2"><Box className="h-4 w-4 text-muted-foreground" /> {unit.furnishing}</div>}
                                       {unit.bedrooms && <div className="flex items-center gap-2"><BedDouble className="h-4 w-4 text-muted-foreground" /> {unit.bedrooms} Beds</div>}
                                       {unit.bathrooms && <div className="flex items-center gap-2"><Bath className="h-4 w-4 text-muted-foreground" /> {unit.bathrooms} Baths</div>}

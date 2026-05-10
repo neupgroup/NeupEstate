@@ -35,7 +35,7 @@ export function SidebarUserCard() {
       <Avatar className="h-9 w-9 flex-shrink-0">
         <AvatarImage src={user.displayImage || undefined} alt={user.displayName} />
         <AvatarFallback className="text-xs font-semibold">
-          {getInitials(user.displayName)}
+          {getInitials(user.displayName ?? '')}
         </AvatarFallback>
       </Avatar>
       <div className="flex flex-col min-w-0 flex-1">

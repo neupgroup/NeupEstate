@@ -100,7 +100,7 @@ export default function EditPropertyPage() {
                 slug: propData.slug || '',
                 landDetails: propData.landDetails ? {
                     ...propData.landDetails,
-                    area: propData.landDetails.area ? { sqft: propData.landDetails.area } : undefined,
+                    area: propData.landDetails.area,
                 } : {},
                 plots: propData.plots || [],
                 apartmentDetails: propData.apartmentDetails || {},

@@ -45,7 +45,6 @@ export async function updateAccountAccessInfo(accountId: string, ipAddress: stri
             where: { id: accountId },
             data: {
                 accessedOn: new Date(),
-                lastAccessedFromIp: ipAddress,
             },
         });
     } catch (error) {

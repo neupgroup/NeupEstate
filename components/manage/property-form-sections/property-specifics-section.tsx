@@ -226,7 +226,7 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
                                 </div>
                             </div>
                         ))}
-                        <Button type="button" variant="outline" size="sm" onClick={() => appendPlot({ id: `plot-${plotFields.length + 1}`, area: 0 })}>
+                        <Button type="button" variant="outline" size="sm" onClick={() => appendPlot({ id: `plot-${plotFields.length + 1}`, area: undefined })}>
                             <PlusCircle className="mr-2 h-4 w-4" />Add Plot
                         </Button>
                     </div>

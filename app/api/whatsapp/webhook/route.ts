@@ -4,7 +4,7 @@ import { getConversationByPhone, createMessage, createConversation, getMessagesB
 import { logProblem } from '@/services/problem-service';
 import { getWhatsAppConfig, sendWhatsAppMessage } from '@/services/whatsapp-service';
 import { chatWithAi } from '@/services/ai/whatsapp-chat-agent-flow';
-import { createTemporaryAccount, updateAccountAccess } from '@/services/account-service';
+import { createTemporaryAccount, updateAccountAccessInfo } from '@/services/account-service';
 
 export const dynamic = 'force-dynamic';
 
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
             let accountId: string | undefined = undefined;
 
             if (!conversation) {
-                accountId = await createTemporaryAccount(req.headers.get("x-forwarded-for") || 'unknown');
+                accountId = await createTemporaryAccount();
 
                 const newConversationId = await createConversation({
                     customerName: customerName,
@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
             await createMessage(conversation.id, text, 'customer');
             
             if (accountId) {
-                await updateAccountAccess(accountId, req.headers.get("x-forwarded-for") || 'unknown');
+                await updateAccountAccessInfo(accountId);
             }
 
 

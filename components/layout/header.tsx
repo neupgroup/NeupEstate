@@ -57,7 +57,7 @@ export default function Header() {
             alt={user.displayName}
           />
           <AvatarFallback className="text-xs font-semibold">
-            {getInitials(user.displayName)}
+            {getInitials(user.displayName ?? '')}
           </AvatarFallback>
         </>
       ) : (
