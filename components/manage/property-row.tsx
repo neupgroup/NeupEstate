@@ -2,86 +2,75 @@
 
 import type { Property } from '@/types';
 import { Badge } from "@/components/ui/badge";
-import { ChevronRight, CheckCircle, Clock, Home, Archive } from "lucide-react";
+import {
+    CheckCircle, Clock, Home, Archive,
+    Building2, LandPlot, Store, Layers,
+} from "lucide-react";
 import { ClientLink } from '@/components/client-link';
 import { cn } from '@/lib/utils';
 
-interface AdminPropertyRowProps {
-    property: Property;
-}
+// ─── Status badge ─────────────────────────────────────────────────────────────
 
 function StatusBadge({ property }: { property: Property }) {
-    const status = property.status;
+    const s = property.status;
+    if (s === 'ACTIVE')   return <Badge variant="default"   className="shrink-0 text-[11px]"><CheckCircle className="mr-1 h-3 w-3" />Active</Badge>;
+    if (s === 'PENDING')  return <Badge variant="secondary" className="shrink-0 text-[11px]"><Clock       className="mr-1 h-3 w-3" />Pending</Badge>;
+    if (s === 'SOLD')     return <Badge variant="outline"   className="shrink-0 text-[11px] border-green-500 text-green-700"><Home className="mr-1 h-3 w-3" />Sold</Badge>;
+    if (s === 'RENTED')   return <Badge variant="outline"   className="shrink-0 text-[11px] border-blue-500 text-blue-700"><Home className="mr-1 h-3 w-3" />Rented</Badge>;
+    if (s === 'ARCHIVED') return <Badge variant="outline"   className="shrink-0 text-[11px] text-muted-foreground"><Archive className="mr-1 h-3 w-3" />Archived</Badge>;
+    return <Badge variant={property.isApproved ? 'default' : 'secondary'} className="shrink-0 text-[11px]">{property.isApproved ? 'Active' : 'Pending'}</Badge>;
+}
 
-    if (status === 'ACTIVE') {
-        return (
-            <Badge variant="default" className="shrink-0">
-                <CheckCircle className="mr-1 h-3 w-3" />
-                Active
-            </Badge>
-        );
-    }
-    if (status === 'PENDING') {
-        return (
-            <Badge variant="secondary" className="shrink-0">
-                <Clock className="mr-1 h-3 w-3" />
-                Pending
-            </Badge>
-        );
-    }
-    if (status === 'SOLD') {
-        return (
-            <Badge variant="outline" className="shrink-0 border-green-500 text-green-700">
-                <Home className="mr-1 h-3 w-3" />
-                Sold
-            </Badge>
-        );
-    }
-    if (status === 'RENTED') {
-        return (
-            <Badge variant="outline" className="shrink-0 border-blue-500 text-blue-700">
-                <Home className="mr-1 h-3 w-3" />
-                Rented
-            </Badge>
-        );
-    }
-    if (status === 'ARCHIVED') {
-        return (
-            <Badge variant="outline" className="shrink-0 text-muted-foreground">
-                <Archive className="mr-1 h-3 w-3" />
-                Archived
-            </Badge>
-        );
-    }
-    // Fallback
+// ─── Thumbnail ────────────────────────────────────────────────────────────────
+
+function Thumbnail({ property }: { property: Property }) {
+    const cover = property.images?.[0];
+
+    const Icon =
+        property.category === 'Land'                                          ? LandPlot  :
+        property.category === 'Apartment' || property.category === 'Flat'    ? Layers     :
+        property.category === 'Commercial Space' || property.category === 'Shop Space' ? Store :
+        Building2;
+
     return (
-        <Badge variant={property.isApproved ? 'default' : 'secondary'} className="shrink-0">
-            {property.isApproved ? 'Active' : 'Pending'}
-        </Badge>
+        <div className="h-14 w-14 shrink-0 rounded-xl overflow-hidden border border-border bg-muted flex items-center justify-center">
+            {cover ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                    src={cover}
+                    alt={property.title}
+                    className="h-full w-full object-cover"
+                />
+            ) : (
+                <Icon className="h-6 w-6 text-muted-foreground" />
+            )}
+        </div>
     );
 }
 
+// ─── Price formatter ──────────────────────────────────────────────────────────
+
 function formatPrice(price: number, purpose: string) {
-    const formatted = new Intl.NumberFormat('en-US', {
+    const f = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
         maximumFractionDigits: 0,
     }).format(price);
-    return purpose === 'Rent' ? `${formatted}/mo` : formatted;
+    return purpose === 'Rent' ? `${f}/mo` : f;
 }
 
-export function AdminPropertyRow({ property }: AdminPropertyRowProps) {
+// ─── Row ──────────────────────────────────────────────────────────────────────
+
+export function AdminPropertyRow({ property }: { property: Property }) {
     return (
         <ClientLink
             href={`/manage/properties/${property.id}/edit`}
-            className={cn(
-                "flex items-center justify-between gap-4 px-5 py-4",
-                "hover:bg-muted/50 transition-colors group"
-            )}
+            className="flex items-center gap-4 px-5 py-4 hover:bg-muted/40 transition-colors group"
         >
-            {/* Left — title + meta */}
-            <div className="min-w-0 flex-1 space-y-0.5">
-                <p className="font-semibold text-sm leading-snug truncate group-hover:text-primary transition-colors">
+            <Thumbnail property={property} />
+
+            <div className="min-w-0 flex-1 space-y-1">
+                <p className="text-sm font-semibold leading-snug truncate group-hover:text-primary transition-colors">
                     {property.title}
                 </p>
                 <p className="text-xs text-muted-foreground truncate">
@@ -93,11 +82,7 @@ export function AdminPropertyRow({ property }: AdminPropertyRowProps) {
                 </p>
             </div>
 
-            {/* Right — status + arrow */}
-            <div className="flex items-center gap-3 shrink-0">
-                <StatusBadge property={property} />
-                <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
-            </div>
+            <StatusBadge property={property} />
         </ClientLink>
     );
 }
