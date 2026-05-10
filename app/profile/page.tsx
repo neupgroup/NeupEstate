@@ -31,7 +31,6 @@ function readCookieClient(name: string): string | null {
   return null;
 }
 
-
 function UserProfileHeader() {
     const user = useNeupUser();
     // Read the two IDs separately so we can show the right one
@@ -39,12 +38,14 @@ function UserProfileHeader() {
     const [tempId, setTempId] = useState<string | null>(null);
 
     useEffect(() => {
-        // Prefer aid from auth_accounts (def === 1)
-        const active = getActiveAccount(readCookieClient('auth_accounts'));
-        if (active?.aid) {
-            setAid(active.aid);
-        } else {
-            setTempId(readCookieClient('temp_account_id'));
+        const raw = readCookieClient('auth_account');
+        const account = getActiveAccount(raw);
+        if (account?.aid) {
+            if (account.guest === 1) {
+                setTempId(account.aid);
+            } else {
+                setAid(account.aid);
+            }
         }
     }, []);
 

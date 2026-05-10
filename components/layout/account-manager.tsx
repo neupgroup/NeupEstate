@@ -3,20 +3,17 @@
 /**
  * AccountManager
  *
- * Runs once on mount. Decides whether the user is already authenticated
- * (auth_accounts cookie has an entry with def === true) or needs to go
- * through Silent SSO.
+ * Runs once on mount. Checks the auth_account JWT cookie (set by NeupID on
+ * the shared domain). If the user is already identified (registered or guest),
+ * upserts the account row. If not, runs Silent SSO.
  *
  * Flow:
- *   1. Check auth_accounts cookie for def === true entry
- *      → If found: user is authenticated, just upsert the account row
- *      → If not found: run Silent SSO
- *
- *   2. Silent SSO result:
- *      → authenticated: POST /api/auth/callback with the code
- *                        → server exchanges code, sets auth_accounts cookie
- *      → no_session / timeout: create/reuse a guest track.* account
- *      → other failures: silently ignore (don't block the page)
+ *   1. Check auth_account cookie — if aid is present, upsert and done.
+ *   2. No cookie → run Silent SSO via the NeupID iframe bridge.
+ *      → authenticated: POST /api/auth/callback to upsert the DB row.
+ *        NeupID already set the auth_account cookie on the shared domain.
+ *      → no_session / timeout / failure: silently ignore — the whoisthisthat
+ *        bridge (triggered by proxy.ts) will handle identification on next nav.
  */
 
 import { useEffect } from 'react';
@@ -24,8 +21,7 @@ import { resolveAccountAction } from '@/app/actions';
 import { getActiveAccount } from '@/services/account/getAccount';
 import { initSilentSSO, generatePKCE } from '@/lib/neupid-silent-sso';
 
-const TEMP_COOKIE = 'temp_account_id';
-const AUTH_COOKIE = 'auth_accounts';
+const AUTH_COOKIE = 'auth_account';
 const APP_ID = process.env.NEXT_PUBLIC_NEUPID_APP_ID ?? '';
 
 function readCookie(name: string): string | null {
@@ -38,42 +34,22 @@ function readCookie(name: string): string | null {
   return null;
 }
 
-function setCookie(name: string, value: string, days: number) {
-  const date = new Date();
-  date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${date.toUTCString()}; path=/`;
-}
-
-async function handleGuestFallback() {
-  const existing = readCookie(TEMP_COOKIE);
-  if (existing) return; // already have a guest ID
-  const result = await resolveAccountAction(null);
-  if (result.success && result.accountId) {
-    setCookie(TEMP_COOKIE, result.accountId, 365);
-  }
-}
-
 export function AccountManager() {
   useEffect(() => {
     const run = async () => {
-      // Step 1: Check if already authenticated via the new cookie format
-      const authRaw = readCookie(AUTH_COOKIE);
-      const active = getActiveAccount(authRaw);
+      // Step 1: Check if already identified via the auth_account JWT cookie
+      const raw = readCookie(AUTH_COOKIE);
+      const account = getActiveAccount(raw);
 
-      if (active?.aid) {
-        // Already authenticated — upsert account row and done
-        await resolveAccountAction(active.aid);
+      if (account?.aid) {
+        // Already identified (registered or guest) — upsert account row
+        await resolveAccountAction(account.guest === 1 ? null : account.aid);
         return;
       }
 
-      // Step 2: No authenticated session — try Silent SSO
-      if (!APP_ID) {
-        // No app ID configured — fall back to guest
-        await handleGuestFallback();
-        return;
-      }
+      // Step 2: No cookie — try Silent SSO to get a session
+      if (!APP_ID) return;
 
-      // Generate PKCE for secure exchange
       const { verifier, challenge } = await generatePKCE();
       sessionStorage.setItem('neupid_pkce_verifier', verifier);
 
@@ -82,7 +58,6 @@ export function AccountManager() {
         codeChallenge: challenge,
         onResult: async (result) => {
           if (result.authenticated) {
-            // Exchange the code server-side
             const codeVerifier = sessionStorage.getItem('neupid_pkce_verifier') ?? undefined;
             sessionStorage.removeItem('neupid_pkce_verifier');
 
@@ -94,20 +69,15 @@ export function AccountManager() {
               });
 
               if (res.ok) {
-                // Cookie is now set by the server — reload to pick it up
+                // NeupID has set the auth_account cookie — reload to pick it up
                 window.location.reload();
-              } else {
-                // Exchange failed — fall back to guest
-                await handleGuestFallback();
               }
+              // If exchange failed, proxy.ts will redirect to whoisthisthat on next nav
             } catch {
-              await handleGuestFallback();
+              // Silently ignore — proxy.ts handles identification
             }
-          } else {
-            // no_session, timeout, origin_not_registered, rate_limited
-            // Don't redirect — just fall back to guest for anonymous browsing
-            await handleGuestFallback();
           }
+          // no_session / timeout: proxy.ts whoisthisthat redirect handles it
         },
       });
     };

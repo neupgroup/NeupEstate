@@ -1,91 +1,73 @@
 /**
  * get-identity.ts
  *
- * Server-side identity resolution using the Silent SSO cookie format.
+ * Server-side identity resolution from the auth_account JWT cookie.
  *
- * The `auth_accounts` cookie is set by /api/auth/callback after a successful
- * NeupID code exchange:
- *   [{ aid: "<ssid>", def: true }]
+ * Cookie name : auth_account (singular, set by NeupID on the shared domain)
  *
- * Guest accounts are resolved from the `temp_account_id` cookie. Their IDs
- * follow the `track.*` prefix convention set by account-service.ts.
+ * JWT payload shape:
+ *   { aid, sid, skey, nid?, guest? }
+ *   - aid   : account ID (always present — registered and guest)
+ *   - nid   : NeupID handle (registered accounts only, absent for guests)
+ *   - guest : 1 for guest accounts, absent for registered
  *
- * Both authenticated and guest sessions return authenticated: true.
- * Use the `guest` flag to distinguish between them.
+ * Result shape:
+ *   authenticated: true,  guest: false  → registered account  (aid + nid)
+ *   authenticated: true,  guest: true   → guest account       (aid only)
+ *   authenticated: false                → no cookie / bad token
  *
  * Usage:
  *   const result = await getIdentity();
  *   if (result.authenticated) {
- *     console.log(result.account.accountId); // the ssid or track.* id
- *     console.log(result.guest);             // true if guest session
+ *     console.log(result.account.accountId);
+ *     console.log(result.guest); // true = guest
  *   }
  */
 
 import { cookies } from 'next/headers';
+import { getActiveAccount } from '@/services/account/getAccount';
 
 export type IdentityResult =
-  | { authenticated: true;  guest: false; account: { accountId: string } }
+  | { authenticated: true;  guest: false; account: { accountId: string; nid: string } }
   | { authenticated: true;  guest: true;  account: { accountId: string } }
   | { authenticated: false; reason: string };
 
-type AuthEntry = {
-  aid?: string;
-  def?: boolean | number;
-};
-
-function parseAuthCookie(raw: string | undefined): string | null {
-  if (!raw) return null;
-  try {
-    const entries: AuthEntry[] = JSON.parse(raw);
-    const active = entries.find(
-      (e) => e?.def === true || e?.def === 1
-    );
-    return active?.aid ?? null;
-  } catch {
-    return null;
-  }
-}
-
 /**
- * Resolves the current identity from cookies.
+ * Resolves the current identity from the auth_account JWT cookie.
  *
- * Priority:
- *   1. auth_accounts cookie (def === true)  →  authenticated, guest: false
- *   2. temp_account_id cookie (track.* id)  →  authenticated, guest: true
- *   3. Neither present                       →  authenticated: false
- *
- * @param authCookieValue  - Optional raw auth_accounts value (for Route Handlers).
- * @param tempCookieValue  - Optional raw temp_account_id value (for Route Handlers).
- *   When omitted, both are read from the Next.js cookie store.
+ * @param cookieValue - Optional raw cookie value (for Route Handlers that
+ *   need to pass it manually). When omitted, reads from the Next.js store.
  */
-export async function getIdentity(
-  authCookieValue?: string,
-  tempCookieValue?: string,
-): Promise<IdentityResult> {
-  let rawAuth = authCookieValue;
-  let rawTemp = tempCookieValue;
+export async function getIdentity(cookieValue?: string): Promise<IdentityResult> {
+  let raw = cookieValue;
 
-  if (rawAuth === undefined || rawTemp === undefined) {
+  if (raw === undefined) {
     try {
-      const cookieStore = await cookies();
-      if (rawAuth === undefined) rawAuth = cookieStore.get('auth_accounts')?.value;
-      if (rawTemp === undefined) rawTemp = cookieStore.get('temp_account_id')?.value;
+      const store = await cookies();
+      raw = store.get('auth_account')?.value;
     } catch {
       return { authenticated: false, reason: 'no_request_context' };
     }
   }
 
-  // 1. Authenticated session
-  const accountId = parseAuthCookie(rawAuth);
-  if (accountId) {
-    return { authenticated: true, guest: false, account: { accountId } };
+  const account = getActiveAccount(raw);
+
+  if (!account) {
+    return { authenticated: false, reason: 'no_active_session' };
   }
 
-  // 2. Guest session
-  const guestId = rawTemp?.trim();
-  if (guestId && guestId.startsWith('track.')) {
-    return { authenticated: true, guest: true, account: { accountId: guestId } };
+  if (account.guest === 1) {
+    return { authenticated: true, guest: true, account: { accountId: account.aid } };
   }
 
-  return { authenticated: false, reason: 'no_active_session' };
+  if (!account.nid) {
+    // aid present but no nid and not flagged as guest — treat as unverified
+    return { authenticated: false, reason: 'incomplete_session' };
+  }
+
+  return {
+    authenticated: true,
+    guest: false,
+    account: { accountId: account.aid, nid: account.nid },
+  };
 }

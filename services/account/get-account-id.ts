@@ -1,22 +1,21 @@
 /**
  * get-account-id.ts
  *
- * Utilities for resolving the current user's account ID on both client and server.
- *
- * Priority:
- *   1. auth_accounts cookie with def === true  →  authenticated user (ssid)
- *   2. temp_account_id cookie                  →  anonymous guest fallback
+ * Utilities for resolving the current user's account ID from the
+ * auth_account JWT cookie (set by NeupID on the shared domain).
  *
  * Client usage:
  *   import { getClientAccountId } from '@/services/account/get-account-id';
- *   const accountId = getClientAccountId();
+ *   const accountId = getClientAccountId(); // string | null
  *
  * Server usage:
  *   import { getServerAccountId } from '@/services/account/get-account-id';
- *   const accountId = await getServerAccountId();
+ *   const accountId = await getServerAccountId(); // string | null
  */
 
 import { getActiveAccount } from '@/services/account/getAccount';
+
+const COOKIE_NAME = 'auth_account';
 
 // ─── Client-side ─────────────────────────────────────────────────────────────
 
@@ -31,38 +30,42 @@ function readCookieClient(name: string): string | null {
 }
 
 /**
- * Returns the resolved account ID on the client side.
- * Prefers the authenticated ssid from auth_accounts; falls back to
- * temp_account_id for anonymous users.
+ * Returns the account ID (aid) from the auth_account JWT cookie.
+ * Works for both registered and guest accounts.
+ * Returns null if no cookie is present or the token is malformed.
  */
 export function getClientAccountId(): string | null {
-  const active = getActiveAccount(readCookieClient('auth_accounts'));
-  if (active?.aid) return active.aid;
-  return readCookieClient('temp_account_id');
+  const account = getActiveAccount(readCookieClient(COOKIE_NAME));
+  return account?.aid ?? null;
 }
 
 /**
- * Returns true if the current browser session has an authenticated account
- * (i.e. auth_accounts cookie has an entry with def === true).
- * Use this to decide whether to trigger Silent SSO.
+ * Returns true if the current browser session has a registered
+ * (non-guest) authenticated account.
  */
 export function isClientAuthenticated(): boolean {
-  const active = getActiveAccount(readCookieClient('auth_accounts'));
-  return !!active?.aid;
+  const account = getActiveAccount(readCookieClient(COOKIE_NAME));
+  return !!account?.aid && !account.guest && !!account.nid;
+}
+
+/**
+ * Returns true if the current browser session has any identified account
+ * (registered or guest).
+ */
+export function isClientIdentified(): boolean {
+  return !!getActiveAccount(readCookieClient(COOKIE_NAME))?.aid;
 }
 
 // ─── Server-side ─────────────────────────────────────────────────────────────
 
 /**
- * Returns the resolved account ID on the server side.
- * Prefers the authenticated ssid from auth_accounts; falls back to
- * temp_account_id for anonymous users.
+ * Returns the account ID (aid) from the auth_account JWT cookie.
+ * Works for both registered and guest accounts.
+ * Returns null if no cookie is present or the token is malformed.
  */
 export async function getServerAccountId(): Promise<string | null> {
   const { cookies } = await import('next/headers');
   const store = await cookies();
-  const authRaw = store.get('auth_accounts')?.value;
-  const active = getActiveAccount(authRaw);
-  if (active?.aid) return active.aid;
-  return store.get('temp_account_id')?.value ?? null;
+  const raw = store.get(COOKIE_NAME)?.value;
+  return getActiveAccount(raw)?.aid ?? null;
 }

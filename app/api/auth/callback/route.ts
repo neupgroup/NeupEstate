@@ -3,10 +3,11 @@
  *
  * Server-side handler for the NeupID Silent SSO code exchange.
  * Receives the authorization code from the client, exchanges it with NeupID
- * for the full identity, upserts the account row, and sets the auth cookie.
+ * for the full identity, and upserts the account row in the DB.
  *
- * This endpoint is server-to-server with NeupID — the browser never calls
- * the NeupID /exchange endpoint directly.
+ * NOTE: The auth_account JWT cookie is set directly by NeupID on the shared
+ * neupgroup.com domain — this endpoint does NOT set any auth cookie.
+ * It only persists the account record and returns the identity to the client.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -16,7 +17,7 @@ import { logProblem } from '@/services/problem-service';
 const NEUPID_EXCHANGE_URL =
   'https://neupgroup.com/account/bridge/silent.v1/auth/exchange';
 
-const APP_ID = process.env.NEUPID_APP_ID!;
+const APP_ID     = process.env.NEUPID_APP_ID!;
 const APP_SECRET = process.env.NEUPID_APP_SECRET!;
 
 export async function POST(req: NextRequest) {
@@ -81,11 +82,9 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // Build the auth_accounts cookie entry
-    // Format: [{ aid, def }] — minimal, no session triplet needed anymore
-    const authEntry = JSON.stringify([{ aid: accountId, def: true }]);
-
-    const response = NextResponse.json({
+    // Return the identity to the client — the auth_account JWT cookie is
+    // already set by NeupID on the shared domain, no cookie work needed here.
+    return NextResponse.json({
       success: true,
       accountId,
       neupId,
@@ -94,17 +93,6 @@ export async function POST(req: NextRequest) {
       accountType,
       verified,
     });
-
-    // Set the auth_accounts cookie (httpOnly, secure in production)
-    response.cookies.set('auth_accounts', authEntry, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 60 * 60 * 24 * 28, // 28 days — matches NeupID expires_on
-    });
-
-    return response;
   } catch (e) {
     await logProblem(e, 'POST /api/auth/callback');
     return NextResponse.json({ error: 'internal_error' }, { status: 500 });

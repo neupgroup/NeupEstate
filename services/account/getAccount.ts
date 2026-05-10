@@ -1,53 +1,94 @@
 /**
  * getAccount.ts
  *
- * Cookie parsing utilities for the auth_accounts cookie.
+ * Utilities for parsing the auth_account JWT cookie.
  *
- * New format (set by /api/auth/callback after Silent SSO):
- *   [{ aid: "<ssid>", def: true }]
+ * Cookie name: auth_account (singular, set by NeupID on the shared domain)
  *
- * An entry is considered "active" (authenticated) when:
- *   - def === true (boolean) or def === 1 (legacy number)
- *   - aid is a non-empty string
+ * JWT payload shape:
+ *   {
+ *     aid   : string   — account ID (always present)
+ *     sid   : string   — session ID
+ *     skey  : string   — session key
+ *     nid?  : string   — NeupID handle (registered accounts only)
+ *     guest?: 1        — set to 1 for guest accounts, absent for registered
+ *   }
  *
- * If NO entry with def === true exists, the user is not authenticated via
- * Silent SSO and the Silent SSO flow should be triggered.
+ * NOTE: Signature verification happens in proxy.ts (Edge runtime).
+ *       These helpers only decode the payload — do not use them for
+ *       security-sensitive decisions; use proxy.ts / get-identity.ts instead.
  */
 
-export type AuthEntry = {
+export type JwtPayload = {
   aid?: string;
-  def?: boolean | number;
+  sid?: string;
+  skey?: string;
+  nid?: string;
+  guest?: number;
 };
 
 export type ActiveAccount = {
   aid: string;
+  nid?: string;
+  guest?: number;
 };
 
-/**
- * Parses the `auth_accounts` cookie and returns the active authenticated
- * account, or null if no authenticated entry exists.
- *
- * "Active" means: an entry where `def === true` (or `def === 1`) and `aid`
- * is a non-empty string.
- */
-export function getActiveAccount(cookieValue: string | null | undefined): ActiveAccount | null {
-  if (!cookieValue) return null;
+// ---------------------------------------------------------------------------
+// Base64url decode (browser + Node compatible)
+// ---------------------------------------------------------------------------
+
+function b64urlDecode(str: string): string {
+  const s = str.replace(/-/g, '+').replace(/_/g, '/');
+  const pad = s.length % 4;
+  return atob(pad ? s + '='.repeat(4 - pad) : s);
+}
+
+// ---------------------------------------------------------------------------
+// JWT payload decoder (no signature verification — decode only)
+// ---------------------------------------------------------------------------
+
+export function decodeJwtPayload(token: string): JwtPayload | null {
   try {
-    const entries: AuthEntry[] = JSON.parse(cookieValue);
-    const active = entries.find(
-      (e) => (e?.def === true || e?.def === 1) && e?.aid
-    );
-    if (!active?.aid) return null;
-    return { aid: active.aid };
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+    return JSON.parse(b64urlDecode(parts[1]));
   } catch {
     return null;
   }
 }
 
+// ---------------------------------------------------------------------------
+// Public helpers
+// ---------------------------------------------------------------------------
+
 /**
- * Returns true if the auth_accounts cookie contains an authenticated entry.
- * Use this on the client side to decide whether to trigger Silent SSO.
+ * Parses the auth_account JWT cookie value and returns the active account,
+ * or null if the token is missing or malformed.
+ */
+export function getActiveAccount(cookieValue: string | null | undefined): ActiveAccount | null {
+  if (!cookieValue) return null;
+  const payload = decodeJwtPayload(cookieValue.trim());
+  if (!payload?.aid) return null;
+  return {
+    aid:   payload.aid,
+    nid:   payload.nid,
+    guest: payload.guest,
+  };
+}
+
+/**
+ * Returns true if the auth_account cookie represents a registered
+ * (non-guest) account with a valid aid and nid.
  */
 export function hasAuthenticatedSession(cookieValue: string | null | undefined): boolean {
-  return getActiveAccount(cookieValue) !== null;
+  const account = getActiveAccount(cookieValue);
+  return !!account?.aid && !account.guest && !!account.nid;
+}
+
+/**
+ * Returns true if the auth_account cookie represents any identified account
+ * (registered or guest) — i.e. aid is present.
+ */
+export function hasIdentifiedSession(cookieValue: string | null | undefined): boolean {
+  return !!getActiveAccount(cookieValue)?.aid;
 }
