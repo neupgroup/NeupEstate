@@ -14,7 +14,6 @@ import { OwnerInfoSection } from "@/components/manage/property-form-sections/own
 import { PropertyPhotosSection } from "@/components/manage/property-form-sections/property-photos-section";
 import { PropertyDocumentsSection } from "@/components/manage/property-form-sections/property-documents-section";
 import { TitleDescriptionSection } from "@/components/manage/property-form-sections/title-description-section";
-import { SeoSection } from "@/components/manage/property-form-sections/seo-section";
 import { cn } from "@/lib/utils";
 import { evaluateAgencyCustomization } from "@/lib/evaluate-agency-customization";
 
@@ -120,13 +119,6 @@ export function ProgressivePropertySections({
             description: "Write a compelling title and description for the listing.",
             fields: ["title", "description"],
             render: () => <TitleDescriptionSection control={form.control} />,
-        },
-        {
-            id: "seo",
-            title: "SEO & Metadata",
-            description: "Optimise the listing for search engines with meta tags and slug.",
-            fields: isEditForm ? ["slug", "metaTitle", "metaDescription", "metaTags"] : ["metaTitle", "metaDescription", "metaTags"],
-            render: () => <SeoSection control={form.control} isEditForm={isEditForm} />,
         },
     ], [category, form.control, form.formState.errors, isEditForm, users]);
 

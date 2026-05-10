@@ -94,10 +94,6 @@ export default function EditPropertyPage() {
                 floors: propData.floors ?? undefined,
                 onFloor: propData.onFloor ?? undefined,
                 roadAccess: propData.roadAccess ?? undefined,
-                metaTitle: propData.metaTitle || '',
-                metaDescription: propData.metaDescription || '',
-                metaTags: Array.isArray(propData.metaTags) ? propData.metaTags.join(', ') : '',
-                slug: propData.slug || '',
                 landDetails: propData.landDetails ? {
                     ...propData.landDetails,
                     area: propData.landDetails.area,
@@ -195,15 +191,9 @@ export default function EditPropertyPage() {
             if (result.success && result.data) {
                 form.setValue('title', result.data.rewrittenTitle, { shouldValidate: true, shouldDirty: true });
                 form.setValue('description', result.data.rewrittenDescription, { shouldValidate: true, shouldDirty: true });
-                form.setValue('metaTitle', result.data.rewrittenMetaTitle, { shouldValidate: true, shouldDirty: true });
-                form.setValue('metaDescription', result.data.rewrittenMetaDescription, { shouldValidate: true, shouldDirty: true });
-                form.setValue('metaTags', result.data.rewrittenMetaTags.join(', '), { shouldValidate: true, shouldDirty: true });
-                if (result.data.finalSlug) {
-                    form.setValue('slug', result.data.finalSlug, { shouldValidate: true, shouldDirty: true });
-                }
                 toast({
                     title: "Rewrite Successful",
-                    description: "The property details and SEO fields have been updated.",
+                    description: "The property title and description have been updated.",
                 });
             } else {
                 toast({

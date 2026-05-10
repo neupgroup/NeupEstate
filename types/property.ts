@@ -274,9 +274,6 @@ export interface Property {
     livingRooms?: number;
     carParkingSpots?: number;
     bikeParkingSpots?: number;
-    metaTitle?: string;
-    metaDescription?: string;
-    metaTags?: string[];
     slug?: string;
     landDetails?: LandDetails;
     plots?: PlotDetails[];
@@ -322,11 +319,8 @@ export const CreatePropertySchema = z.object({
     roadAccess: emptyStringToUndefinedNumber,
     amenities: z.string().optional(), // Raw string from textarea
 
-    // SEO Fields
-    metaTitle: z.string().max(60).optional(),
-    metaDescription: z.string().max(160).optional(),
-    metaTags: z.string().optional(),
-    slug: z.string().optional(),
+    // SEO Fields — removed
+    // metaTitle, metaDescription, metaTags, slug are no longer part of the form
 
     // Listing/Agent Details
     listingAgent: z.string().optional(),
@@ -353,53 +347,18 @@ export const CreatePropertySchema = z.object({
                 message: "One or more image URLs are from an unauthorized domain. Please use allowed domains like placehold.co, lalpurjanepal.com.np, or neupgroup.com."
             }
         ),
-}).superRefine((data, ctx) => {
-    const HOUSE_TYPES      = ["House", "Bungalow", "Villa", "Multiplex"];
-    const APARTMENT_TYPES  = ["Apartment", "Penthouse"];
-    const FLAT_TYPES       = ["Flat"];
-    const COMMERCIAL_TYPES = ["Commercial Space", "Shop Space"];
-    const HAS_DUAL_FACING  = [...HOUSE_TYPES, ...COMMERCIAL_TYPES, ...FLAT_TYPES];
-
-    const category = (data as any).categories?.[0] as string | undefined;
-
-    if (category && HAS_DUAL_FACING.includes(category)) {
-        if (!data.facing) {
-            ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                path: ["facing"],
-                message: "Please choose a house direction before continuing.",
-            });
-        }
-        if (!data.landDetails?.facing) {
-            ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                path: ["landDetails", "facing"],
-                message: "Please choose a land direction before continuing.",
-            });
-        }
-    }
-
-    if (category && APARTMENT_TYPES.includes(category)) {
-        if (!data.facing) {
-            ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                path: ["facing"],
-                message: "Please choose a property direction before continuing.",
-            });
-        }
-    }
 });
 export const UpdatePropertySchema = CreatePropertySchema;
 export type CreatePropertyFormValues = z.infer<typeof CreatePropertySchema>;
 export type UpdatePropertyFormValues = CreatePropertyFormValues;
 
 export type CreatePropertyInput =
-    Omit<CreatePropertyFormValues, 'amenities' | 'images' | 'metaTags' | 'pricing' | 'owners' | 'purpose' | 'area' | 'landDetails' | 'plots' | 'apartmentUnits'>
+    Omit<CreatePropertyFormValues, 'amenities' | 'images' | 'pricing' | 'owners' | 'purpose' | 'area' | 'landDetails' | 'plots' | 'apartmentUnits'>
     & {
-    purpose: Property['purpose']; // Derived primary purpose
-    price: number; // Derived top-level field
-    location: string; // Derived top-level field
-    area: number; // Converted to sqft
+    purpose: Property['purpose'];
+    price: number;
+    location: string;
+    area: number;
     amenities: string[];
     images: string[];
     metaTags?: string[];

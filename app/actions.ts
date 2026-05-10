@@ -20,7 +20,6 @@ import { runPropertyAmendment as runPropertyAmendmentFlow } from "@/services/ai/
 import { runPropertyAssurance as runPropertyAssuranceFlow } from "@/services/ai/property-assurance-flow";
 import { rewritePropertyDetails } from "@/services/ai/rewrite-property-details-flow";
 import { parseAdminFilter } from "@/services/ai/parse-admin-filter-flow";
-import { extractCorrectedLocation } from "@/services/ai/extract-location-flow";
 import { getWhatsAppConfig, createWhatsAppTemplate, deleteWhatsAppTemplate, updateWhatsAppConfig, sendWhatsAppMessage as sendWhatsAppMessageService } from '@/services/whatsapp-service';
 import { createMessage as createMessageService, createConversation as createConversationService, deleteConversation as deleteConversationService, getConversationById, getMessagesByConversationId, setAiIntervention as setAiInterventionService } from '@/services/conversation-service';
 import { generateFollowUpMessages } from '@/services/ai/ai-follow-up-flow';
@@ -380,23 +379,15 @@ export async function createPropertyAction(
 
     const locationString = formatLocationString(validatedData.structuredLocation);
 
-    // AI step to correct location
-    const correctedLocation = await extractCorrectedLocation({
-        title: validatedData.title,
-        description: validatedData.description,
-        location: locationString
-    });
-
     const serviceInput: CreatePropertyInput = {
       ...validatedData,
       purpose: orderedPurposes[0],
       purposes: orderedPurposes,
-      location: correctedLocation, // Use the corrected location
+      location: locationString,
       price: validatedData.pricing.listed,
       area: areaValueToSqft(validatedData.area),
       amenities: validatedData.amenities?.split(',').map(a => a.trim()).filter(Boolean) || [],
       images: validatedData.images?.filter(img => img.trim() !== '') || [],
-      metaTags: validatedData.metaTags?.split(',').map(tag => tag.trim()).filter(Boolean) || [],
       pricing: validatedData.pricing ? {
         ...validatedData.pricing,
         options: Array.isArray(validatedData.pricing.options) ? validatedData.pricing.options : validatedData.pricing.options?.split(',').map(o => o.trim()).filter(Boolean) as any,
@@ -444,23 +435,15 @@ export async function updatePropertyAction(
     
     const locationString = formatLocationString(validatedData.structuredLocation);
 
-    // AI step to correct location
-    const correctedLocation = await extractCorrectedLocation({
-        title: validatedData.title,
-        description: validatedData.description,
-        location: locationString
-    });
-
     const serviceInput: UpdatePropertyInput = {
       ...validatedData,
       purpose: orderedPurposes[0],
       purposes: orderedPurposes,
-      location: correctedLocation, // Use the corrected location
+      location: locationString,
       price: validatedData.pricing.listed,
       area: areaValueToSqft(validatedData.area),
       amenities: validatedData.amenities?.split(',').map(a => a.trim()).filter(Boolean) || [],
       images: validatedData.images?.filter(img => img.trim() !== '') || [],
-      metaTags: validatedData.metaTags?.split(',').map(tag => tag.trim()).filter(Boolean) || [],
       pricing: validatedData.pricing ? {
         ...validatedData.pricing,
         options: Array.isArray(validatedData.pricing.options) ? validatedData.pricing.options : validatedData.pricing.options?.split(',').map(o => o.trim()).filter(Boolean) as any,
@@ -504,36 +487,21 @@ export async function rewritePropertyDetailsAction(
       title: property.title,
       description: property.description,
       location: property.location,
-      existingSlug: property.slug,
     });
-    
-    const finalSlug = rewrittenData.generatedSlug
-      ? `${rewrittenData.generatedSlug}-${propertyId}`.substring(0, 120) // Limit slug length
-      : property.slug;
 
-    // This is tricky because rewritePropertyDetails doesn't know about the new schemas.
-    // It will only update the fields it knows about. We should preserve the detailed fields.
     const updatePayload: UpdatePropertyInput = {
-        ...(property as unknown as UpdatePropertyInput), // Start with existing data to preserve details
+        ...(property as unknown as UpdatePropertyInput),
         title: rewrittenData.rewrittenTitle,
         description: rewrittenData.rewrittenDescription,
         location: rewrittenData.rewrittenLocation,
-        metaTitle: rewrittenData.rewrittenMetaTitle,
-        metaDescription: rewrittenData.rewrittenMetaDescription,
-        metaTags: rewrittenData.rewrittenMetaTags,
-        slug: finalSlug,
     };
-
 
     await updatePropertyService(propertyId, updatePayload);
 
     revalidatePath(`/manage/properties/${propertyId}/edit`);
     revalidatePath(`/manage/properties`);
-    if (finalSlug) {
-      revalidatePath(`/properties/${finalSlug}`);
-    }
 
-    return { success: true, data: { ...rewrittenData, finalSlug } };
+    return { success: true, data: rewrittenData };
   } catch (e: any) {
     await logProblem(e, `rewritePropertyDetailsAction (ID: ${propertyId})`);
     return { success: false, error: e.message || "Failed to rewrite property details." };
