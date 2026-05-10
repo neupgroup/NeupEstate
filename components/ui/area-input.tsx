@@ -58,11 +58,65 @@ const SYSTEMS: System[] = [
     },
 ];
 
+// All unit keys across all systems
+const ALL_UNITS = ["ropani", "aana", "paisa", "daam", "bigha", "kattha", "dhur", "sqft", "sqm"];
+
+// ─── Conversion helpers ───────────────────────────────────────────────────────
+
+// Factors: 1 unit = N sqft
+const TO_SQFT: Record<string, number> = {
+    ropani: 5476,
+    aana:   342.25,
+    paisa:  85.56,
+    daam:   21.39,
+    bigha:  72900,
+    kattha: 3645,
+    dhur:   182.25,
+    sqft:   1,
+    sqm:    10.7639,
+};
+
+function toSqft(values: Record<string, number>): number {
+    return Object.entries(values).reduce((sum, [k, v]) => sum + (v || 0) * (TO_SQFT[k] ?? 0), 0);
+}
+
+/**
+ * Decompose a sqft total into the units of the target system.
+ * For Aana/Kattha: integer decomposition (cascade down).
+ * For sqft/sqm: single decimal value.
+ */
+function fromSqft(sqft: number, system: SystemKey): Record<string, number> {
+    if (sqft <= 0) return {};
+
+    if (system === "feet") {
+        return { sqft: Math.round(sqft * 100) / 100 };
+    }
+    if (system === "meter") {
+        return { sqm: Math.round((sqft / 10.7639) * 100) / 100 };
+    }
+    if (system === "aana") {
+        let rem = sqft;
+        const ropani = Math.floor(rem / 5476);   rem -= ropani * 5476;
+        const aana   = Math.floor(rem / 342.25); rem -= aana   * 342.25;
+        const paisa  = Math.floor(rem / 85.56);  rem -= paisa  * 85.56;
+        const daam   = Math.floor(rem / 21.39);
+        return { ropani, aana, paisa, daam };
+    }
+    if (system === "kattha") {
+        let rem = sqft;
+        const bigha  = Math.floor(rem / 72900); rem -= bigha  * 72900;
+        const kattha = Math.floor(rem / 3645);  rem -= kattha * 3645;
+        const dhur   = Math.floor(rem / 182.25);
+        return { bigha, kattha, dhur };
+    }
+    return {};
+}
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 interface AreaInputProps {
     label?: string;
-    /** Base field name — values stored as `{name}.system`, `{name}.ropani`, etc. */
+    /** Base field name — values stored as `{name}.ropani`, `{name}.sqft`, etc. */
     name?: string;
     className?: string;
 }
@@ -80,6 +134,34 @@ export function AreaInput({ label = "Total Area", name = "area", className }: Ar
     const set = (unit: string, next: number) =>
         setValue(`${name}.${unit}` as any, Math.max(0, next), { shouldDirty: true });
 
+    function switchSystem(next: SystemKey) {
+        if (next === activeSystem) return;
+
+        // 1. Read current values and convert to sqft
+        const currentValues: Record<string, number> = {};
+        for (const u of ALL_UNITS) {
+            currentValues[u] = get(u);
+        }
+        const totalSqft = toSqft(currentValues);
+
+        // 2. Clear all unit fields
+        for (const u of ALL_UNITS) {
+            setValue(`${name}.${u}` as any, undefined, { shouldDirty: true });
+        }
+
+        // 3. Write converted values into the new system (only if there was something)
+        if (totalSqft > 0) {
+            const converted = fromSqft(totalSqft, next);
+            for (const [u, v] of Object.entries(converted)) {
+                if (v > 0) {
+                    setValue(`${name}.${u}` as any, v, { shouldDirty: true });
+                }
+            }
+        }
+
+        setActiveSystem(next);
+    }
+
     // Dig out the error message for this field (may be nested)
     function getErrorMessage(): string | undefined {
         const parts = name.split(".");
@@ -89,7 +171,6 @@ export function AreaInput({ label = "Total Area", name = "area", className }: Ar
             if (!node) return undefined;
         }
         if (typeof node?.message === "string") return node.message;
-        // Check sub-field errors
         if (node && typeof node === "object") {
             for (const key of Object.keys(node)) {
                 if (typeof node[key]?.message === "string") return node[key].message;
@@ -115,7 +196,7 @@ export function AreaInput({ label = "Total Area", name = "area", className }: Ar
                         <button
                             key={s.key}
                             type="button"
-                            onClick={() => setActiveSystem(s.key)}
+                            onClick={() => switchSystem(s.key)}
                             className={cn(
                                 "px-3 py-1 text-xs font-semibold transition-colors",
                                 activeSystem === s.key

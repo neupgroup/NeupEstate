@@ -3,8 +3,6 @@
 import { Control, useFieldArray, useFormContext } from "react-hook-form";
 import {
     CreatePropertyFormValues,
-    AreaUnitSchema,
-    LandFacingSchema,
     LandTopographySchema,
     LandUsageSchema,
     LandZoningSchema,
@@ -12,12 +10,14 @@ import {
 } from "@/types";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { SelectionCards } from "@/components/ui/selection-cards";
 import { AreaInput } from "@/components/ui/area-input";
 import { CounterCard } from "@/components/ui/counter-card";
+import { CompassPicker } from "@/components/ui/compass-picker";
+import { YearPickerCard } from "@/components/ui/year-picker-card";
+import { RoadAccessCard } from "@/components/ui/road-access-card";
 import { PlusCircle, Trash2 } from "lucide-react";
 
 interface PropertySpecificsSectionProps {
@@ -63,6 +63,26 @@ function SelectionField({ name, label, options }: { name: string; label: string;
     );
 }
 
+function CompassField({ name, label, variant }: { name: string; label: string; variant?: "house" | "land" }) {
+    const { watch, setValue } = useFormContext<CreatePropertyFormValues>();
+    const value = watch(name as any) as string | undefined;
+    return (
+        <FormField name={name as any} render={() => (
+            <FormItem>
+                <FormControl>
+                    <CompassPicker
+                        label={label}
+                        variant={variant}
+                        value={value}
+                        onChange={(dir) => setValue(name as any, dir ?? null, { shouldDirty: true, shouldValidate: true })}
+                    />
+                </FormControl>
+                <FormMessage />
+            </FormItem>
+        )} />
+    );
+}
+
 function CheckboxField({ control, name, label }: { control: any; name: any; label: string }) {
     return (
         <FormField control={control} name={name} render={({ field }) => (
@@ -97,8 +117,10 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
                         <AreaInput label="House Area" />
                         <AreaInput label="Property (Land) Area" name="landDetails.area" />
                     </div>
-                    <SelectionField name="facing"             label="House Facing"           options={LandFacingSchema.options} />
-                    <SelectionField name="landDetails.facing" label="Property (Land) Facing" options={LandFacingSchema.options} />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                        <CompassField name="facing"             label="House Facing" variant="house" />
+                        <CompassField name="landDetails.facing" label="Land Facing"  variant="land" />
+                    </div>
                 </div>
             )}
 
@@ -106,7 +128,7 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
             {isApartment && (
                 <div className="space-y-6">
                     <AreaInput label="Total Area" />
-                    <SelectionField name="facing" label="Property Facing" options={LandFacingSchema.options} />
+                    <CompassField name="facing" label="Property Facing" variant="house" />
                 </div>
             )}
 
@@ -114,11 +136,11 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
             {isHouse && (
                 <div className="space-y-6">
                     <CounterCard name="floors" label="Total Floors" emoji="🏢" sublabel="Number of Floors" steps={[-1, 1, 2]} />
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                        <FF control={control} name="buildStart"     label="Build Start Year" placeholder="e.g., 2018" type="number" />
-                        <FF control={control} name="buildCompleted" label="Build End Year"   placeholder="e.g., 2020" type="number" />
-                        <FF control={control} name="roadAccess"     label="Road Access (ft)" placeholder="e.g., 20"   type="number" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <YearPickerCard name="buildStart"     label="Build Start Year" emoji="🏗️" />
+                        <YearPickerCard name="buildCompleted" label="Build End Year"   emoji="🏁" />
                     </div>
+                    <RoadAccessCard name="roadAccess" />
                     <CheckboxField control={control} name="apartmentDetails.furnishing" label="Furnished" />
                 </div>
             )}
@@ -130,9 +152,9 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
                         <CounterCard name="onFloor" label="On Floor"     emoji="📏" sublabel="Floor Number"    steps={[-1, 1, 2]} />
                         <CounterCard name="floors"  label="Total Floors" emoji="🏢" sublabel="Number of Floors" steps={[-1, 1, 2]} />
                     </div>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                        <FF control={control} name="buildStart"     label="Build Start Year" placeholder="e.g., 2018" type="number" />
-                        <FF control={control} name="buildCompleted" label="Build End Year"   placeholder="e.g., 2020" type="number" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <YearPickerCard name="buildStart"     label="Build Start Year" emoji="🏗️" />
+                        <YearPickerCard name="buildCompleted" label="Build End Year"   emoji="🏁" />
                     </div>
                     <SelectionField name="apartmentDetails.furnishing" label="Furnishing" options={FurnishingStatusSchema.options} />
                 </div>
@@ -145,9 +167,9 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
                         <CounterCard name="onFloor" label="On Floor"     emoji="📏" sublabel="Floor Number"    steps={[-1, 1, 2]} />
                         <CounterCard name="floors"  label="Total Floors" emoji="🏢" sublabel="Number of Floors" steps={[-1, 1, 2]} />
                     </div>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                        <FF control={control} name="buildStart"     label="Build Start Year" placeholder="e.g., 2018" type="number" />
-                        <FF control={control} name="buildCompleted" label="Build End Year"   placeholder="e.g., 2020" type="number" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <YearPickerCard name="buildStart"     label="Build Start Year" emoji="🏗️" />
+                        <YearPickerCard name="buildCompleted" label="Build End Year"   emoji="🏁" />
                     </div>
                     <SelectionField name="apartmentDetails.furnishing" label="Furnishing" options={FurnishingStatusSchema.options} />
 
@@ -192,11 +214,11 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
             {/* ── Land ── */}
             {isLand && (
                 <div className="space-y-6">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                         <FF control={control} name="landDetails.frontage" label="Frontage (ft)"    placeholder="e.g., 20" type="number" />
                         <FF control={control} name="landDetails.depth"    label="Depth (ft)"       placeholder="e.g., 50" type="number" />
-                        <FF control={control} name="roadAccess"           label="Road Access (ft)" placeholder="e.g., 16" type="number" />
                     </div>
+                    <RoadAccessCard name="roadAccess" />
                     <SelectionField name="landDetails.usage"      label="Usage"      options={LandUsageSchema.options} />
                     <SelectionField name="landDetails.zoning"     label="Zoning"     options={LandZoningSchema.options} />
                     <SelectionField name="landDetails.topography" label="Topography" options={LandTopographySchema.options} />
@@ -237,11 +259,11 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
             {isCommercial && (
                 <div className="space-y-6">
                     <CounterCard name="floors" label="Floor Number" emoji="🏢" sublabel="Floor Number" steps={[-1, 1, 2]} />
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                        <FF control={control} name="buildStart"     label="Build Start Year" placeholder="e.g., 2015" type="number" />
-                        <FF control={control} name="buildCompleted" label="Build End Year"   placeholder="e.g., 2017" type="number" />
-                        <FF control={control} name="roadAccess"     label="Road Access (ft)" placeholder="e.g., 30"   type="number" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <YearPickerCard name="buildStart"     label="Build Start Year" emoji="🏗️" />
+                        <YearPickerCard name="buildCompleted" label="Build End Year"   emoji="🏁" />
                     </div>
+                    <RoadAccessCard name="roadAccess" />
                 </div>
             )}
 
