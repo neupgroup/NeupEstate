@@ -400,7 +400,7 @@ export async function createPropertyAction(
       plots: validatedData.plots?.map(p => ({ ...p, area: areaValueToSqft(p.area) })) as unknown as PlotDetails[],
       apartmentUnits: validatedData.apartmentUnits?.map(u => ({ ...u, area: areaValueToSqft(u.area) })) as unknown as ApartmentUnit[],
     };
-    const propertyId = await createPropertyService(serviceInput);
+    const propertyId = await createPropertyService({ ...serviceInput, creatorId: actorId });
     revalidatePath('/manage/properties');
     return { success: true, propertyId, error: null };
   } catch (e: any) {

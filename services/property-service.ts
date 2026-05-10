@@ -124,6 +124,7 @@ function mapRecord(record: any): Property {
     listingAgent:     record.agent || undefined,
     isFeatured:       Boolean(record.isFeatured),
     isApproved:       Boolean(record.isApproved),
+    status:           record.status as Property['status'],
     createdAt:        record.createdAt?.toISOString?.() || String(record.createdAt),
     updatedAt:        record.updatedAt?.toISOString?.() || String(record.updatedAt),
     floors, onFloor, roadAccess, latitude, longitude,
@@ -259,20 +260,22 @@ export async function getPropertiesByAgent(agentId: string, opts: { includeInact
 
 function buildCoreData(d: Partial<CreatePropertyInput> & Record<string, any>) {
   const geo = (d.latitude != null && d.longitude != null) ? `${d.latitude},${d.longitude}` : '';
+  const truncate = (s: string | undefined | null, max: number) =>
+    s ? s.substring(0, max) : '';
   return {
-    slug:              d.slug || undefined,
-    title:             d.title ?? '',
+    slug:              d.slug ? d.slug.substring(0, 120) : undefined,
+    title:             truncate(d.title, 255),
     description:       d.description ?? '',
-    coverImage:        Array.isArray(d.images) && d.images[0] ? d.images[0] : '',
+    coverImage:        truncate(Array.isArray(d.images) && d.images[0] ? d.images[0] : '', 255),
     type:              mapTypeToEnum(d.category),
     purpose:           mapPurposeToEnum(d.purpose),
     status:            mapStatusToEnum(d.status),
-    currency:          d.pricing?.currency ?? 'NPR',
+    currency:          truncate(d.pricing?.currency ?? 'NPR', 10),
     displayPrice:      d.price ?? 0,
-    displayPriceUnit:  d.pricing?.basis ?? '',
-    areaUnit:          d.areaUnit ?? '',
-    locationText:      d.location ?? '',
-    geoLocation:       geo,
+    displayPriceUnit:  truncate(d.pricing?.basis ?? '', 24),
+    areaUnit:          truncate(d.areaUnit ?? '', 64),
+    locationText:      truncate(d.location ?? '', 255),
+    geoLocation:       truncate(geo, 63),
     structuredLocation: d.structuredLocation ? JSON.stringify(d.structuredLocation) : '',
     agency:            typeof d.agency === 'object' ? d.agency?.id : (d.agency ?? null),
     agent:             d.listingAgent ?? null,
@@ -328,15 +331,56 @@ async function upsertMedia(propertyId: string, images: string[]) {
   }
 }
 
-export async function createProperty(d: CreatePropertyInput): Promise<string> {
+export async function createProperty(d: CreatePropertyInput & { creatorId?: string }): Promise<string> {
   try {
     const coreData = buildCoreData({ ...d, status: 'approved', isApproved: true });
+    const generatedSlug = (d.title ?? 'property')
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .substring(0, 80);
     const created = await prisma.property.create({
-      data: { ...coreData, slug: coreData.slug || d.title?.toLowerCase().replace(/\s+/g, '-') || 'property' } as any,
+      data: { ...coreData, slug: coreData.slug || generatedSlug } as any,
     });
     if (!created.slug) await prisma.property.update({ where: { id: created.id }, data: { slug: created.id } });
     await upsertDetailTable(created.id, created.type, d);
     await upsertMedia(created.id, d.images ?? []);
+
+    // Write PropertyOwner rows from the form's owners array
+    const formOwners = d.owners ?? [];
+    if (formOwners.length > 0) {
+      await prisma.propertyOwner.createMany({
+        data: formOwners.map((o: any, i: number) => ({
+          propertyId: created.id,
+          ownerType: o.ownerType,
+          userId: o.ownerType === 'registered' ? (o.userId || null) : null,
+          unregisteredName: o.unregisteredOwnerName || null,
+          unregisteredEmail: o.unregisteredOwnerEmail || null,
+          unregisteredPhones: o.unregisteredOwnerPhones || null,
+          unregisteredNotes: o.unregisteredOwnerNotes || null,
+          sortOrder: i,
+        })),
+      });
+    }
+
+    // Always ensure the creator (logged-in user) is linked as a registered owner
+    // so the property appears in their /manage/properties view
+    if (d.creatorId) {
+      const alreadyLinked = formOwners.some(
+        (o: any) => o.ownerType === 'registered' && o.userId === d.creatorId
+      );
+      if (!alreadyLinked) {
+        await prisma.propertyOwner.create({
+          data: {
+            propertyId: created.id,
+            ownerType: 'registered',
+            userId: d.creatorId,
+            sortOrder: formOwners.length,
+          },
+        });
+      }
+    }
+
     return created.id;
   } catch (e) { await logProblem(e, 'createProperty'); throw new Error('Failed to create property.'); }
 }

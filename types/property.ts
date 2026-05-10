@@ -258,6 +258,7 @@ export interface Property {
     isOwnerListing?: boolean;
     isFeatured?: boolean;
     isApproved?: boolean;
+    status?: 'PENDING' | 'ACTIVE' | 'SOLD' | 'RENTED' | 'ARCHIVED';
     sourceUrl?: string;
     createdAt?: string; // ISO 8601 date string
     updatedAt?: string; // ISO 8601 date string
