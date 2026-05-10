@@ -82,6 +82,7 @@ export default function EditPropertyPage() {
                 livingRooms: propData.livingRooms,
                 carParkingSpots: propData.carParkingSpots,
                 bikeParkingSpots: propData.bikeParkingSpots,
+                // area is stored as a sqft number in the DB — wrap it back into AreaValue shape
                 area: propData.area ? { sqft: propData.area } : undefined,
                 purpose: propData.purpose,
                 purposes: propData.purposes?.length ? propData.purposes : [propData.purpose],
@@ -96,11 +97,26 @@ export default function EditPropertyPage() {
                 roadAccess: propData.roadAccess ?? undefined,
                 landDetails: propData.landDetails ? {
                     ...propData.landDetails,
-                    area: propData.landDetails.area,
+                    // landDetails.area is also stored as a sqft number — wrap it back
+                    area: propData.landDetails.area != null
+                        ? (typeof propData.landDetails.area === 'number'
+                            ? { sqft: propData.landDetails.area }
+                            : propData.landDetails.area)
+                        : undefined,
                 } : {},
-                plots: propData.plots || [],
+                plots: (propData.plots ?? []).map((p: any) => ({
+                    ...p,
+                    area: p.area != null
+                        ? (typeof p.area === 'number' ? { sqft: p.area } : p.area)
+                        : undefined,
+                })),
                 apartmentDetails: propData.apartmentDetails || {},
-                apartmentUnits: propData.apartmentUnits || [],
+                apartmentUnits: (propData.apartmentUnits ?? []).map((u: any) => ({
+                    ...u,
+                    area: u.area != null
+                        ? (typeof u.area === 'number' ? { sqft: u.area } : u.area)
+                        : undefined,
+                })),
                 structuredLocation: propData.structuredLocation || {},
                 pricing: propData.pricing ? {
                     ...propData.pricing,
