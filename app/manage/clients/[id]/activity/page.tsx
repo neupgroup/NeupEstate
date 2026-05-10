@@ -1,13 +1,17 @@
 import { notFound } from 'next/navigation';
 import { getClientById, getClientActivity } from '@/services/lead-service';
+import { checkAuthenticationForWeb, getAccountIdFromJWT } from '@/services/neupid/check-auth-web';
 import { ClientLink } from '@/components/client-link';
 import { ChevronLeft } from 'lucide-react';
 import { ActivityList } from '@/components/manage/activity-list';
 
 export default async function ClientActivityPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
+    await checkAuthenticationForWeb();
+    const accountId = await getAccountIdFromJWT();
+
     const [client, { leads, activities }] = await Promise.all([
-        getClientById(id),
+        getClientById(id, accountId!),
         getClientActivity(id),
     ]);
 

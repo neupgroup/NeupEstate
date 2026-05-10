@@ -1,10 +1,13 @@
 import { getClients } from '@/services/lead-service';
+import { checkAuthenticationForWeb, getAccountIdFromJWT } from '@/services/neupid/check-auth-web';
 import { ClientLink } from '@/components/client-link';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 
 export default async function ClientsPage() {
-    const clients = await getClients();
+    await checkAuthenticationForWeb();
+    const accountId = await getAccountIdFromJWT();
+    const clients = await getClients(accountId!);
 
     return (
         <div className="space-y-6">

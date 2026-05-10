@@ -54,7 +54,7 @@ async function requireIdentity(): Promise<string> {
       reason: identity.reason,
     });
   }
-  return identity.user.accountId;
+  return identity.account.accountId;
 }
 
 /**
@@ -63,7 +63,7 @@ async function requireIdentity(): Promise<string> {
  */
 export async function getCurrentAccountId(): Promise<string | null> {
   const identity = await getIdentity();
-  return identity.authenticated ? identity.user.accountId : null;
+  return identity.authenticated ? identity.account.accountId : null;
 }
 
 
@@ -1311,7 +1311,7 @@ export async function toggleSavePropertyAction(userId: string, propertyId: strin
   try {
     // Verify identity via gRPC — use the verified accountId, not the client-supplied userId
     const identity = await getIdentity();
-    const verifiedUserId = identity.authenticated ? identity.user.accountId : userId;
+    const verifiedUserId = identity.authenticated ? identity.account.accountId : userId;
 
     if (!verifiedUserId) {
         throw new Error("User ID is required to save a property.");

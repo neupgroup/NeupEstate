@@ -1,10 +1,13 @@
 import { getClients } from '@/services/lead-service';
+import { checkAuthenticationForWeb, getAccountIdFromJWT } from '@/services/neupid/check-auth-web';
 import { ClientLink } from '@/components/client-link';
 import { ChevronLeft } from 'lucide-react';
 import { MergeClientsForm } from '@/components/manage/merge-clients-form';
 
 export default async function MergeClientsPage() {
-    const clients = await getClients();
+    await checkAuthenticationForWeb();
+    const accountId = await getAccountIdFromJWT();
+    const clients = await getClients(accountId!);
 
     return (
         <div className="max-w-2xl space-y-6">

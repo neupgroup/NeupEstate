@@ -154,7 +154,7 @@ export async function getProperties(opts: { includeInactive?: boolean } = {}): P
   } catch (e) { await logProblem(e, 'getProperties'); return []; }
 }
 
-export async function getPaginatedProperties(opts: { page?: number; limit?: number; filters?: PropertyFilters; includeInactive?: boolean } = {}): Promise<{ properties: Property[]; totalCount: number }> {
+export async function getPaginatedProperties(opts: { page?: number; limit?: number; filters?: PropertyFilters; includeInactive?: boolean; ownerAccountId?: string } = {}): Promise<{ properties: Property[]; totalCount: number }> {
   try {
     const page = Math.max(1, opts.page ?? 1);
     const limit = Math.max(1, opts.limit ?? 20);
@@ -171,6 +171,7 @@ export async function getPaginatedProperties(opts: { page?: number; limit?: numb
     ];
     if (Number.isFinite(filters.minPrice)) where.displayPrice = { ...where.displayPrice, gte: filters.minPrice };
     if (Number.isFinite(filters.maxPrice)) where.displayPrice = { ...where.displayPrice, lte: filters.maxPrice };
+    if (opts.ownerAccountId) where.owners = { some: { userId: opts.ownerAccountId } };
 
     const [totalCount, records] = await Promise.all([
       prisma.property.count({ where }),

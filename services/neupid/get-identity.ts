@@ -1,31 +1,31 @@
 /**
  * get-identity.ts
  *
- * Server-side identity resolution using the new Silent SSO cookie format.
+ * Server-side identity resolution using the Silent SSO cookie format.
  *
  * The `auth_accounts` cookie is set by /api/auth/callback after a successful
- * NeupID code exchange. It contains a JSON array with at least one entry:
+ * NeupID code exchange:
  *   [{ aid: "<ssid>", def: true }]
  *
- * If an entry with `def === true` exists, the user is authenticated — no
- * external call needed. The `aid` is the stable ssid from NeupID.
+ * Guest accounts are resolved from the `temp_account_id` cookie. Their IDs
+ * follow the `track.*` prefix convention set by account-service.ts.
  *
- * Usage in a Server Component or Server Action:
+ * Both authenticated and guest sessions return authenticated: true.
+ * Use the `guest` flag to distinguish between them.
  *
+ * Usage:
  *   const result = await getIdentity();
  *   if (result.authenticated) {
- *     console.log(result.user.accountId); // the ssid
+ *     console.log(result.account.accountId); // the ssid or track.* id
+ *     console.log(result.guest);             // true if guest session
  *   }
  */
 
 import { cookies } from 'next/headers';
 
-export type NeupUser = {
-  accountId: string; // ssid from NeupID
-};
-
 export type IdentityResult =
-  | { authenticated: true; user: NeupUser }
+  | { authenticated: true;  guest: false; account: { accountId: string } }
+  | { authenticated: true;  guest: true;  account: { accountId: string } }
   | { authenticated: false; reason: string };
 
 type AuthEntry = {
@@ -33,10 +33,6 @@ type AuthEntry = {
   def?: boolean | number;
 };
 
-/**
- * Parses the auth_accounts cookie and returns the authenticated account ID
- * if an entry with def === true exists.
- */
 function parseAuthCookie(raw: string | undefined): string | null {
   if (!raw) return null;
   try {
@@ -51,28 +47,45 @@ function parseAuthCookie(raw: string | undefined): string | null {
 }
 
 /**
- * Resolves the current user's identity from the auth_accounts cookie.
- * No external calls — purely cookie-based.
+ * Resolves the current identity from cookies.
  *
- * @param cookieValue - Optional raw cookie value (for Route Handlers).
- *   When omitted, reads from the Next.js cookie store.
+ * Priority:
+ *   1. auth_accounts cookie (def === true)  →  authenticated, guest: false
+ *   2. temp_account_id cookie (track.* id)  →  authenticated, guest: true
+ *   3. Neither present                       →  authenticated: false
+ *
+ * @param authCookieValue  - Optional raw auth_accounts value (for Route Handlers).
+ * @param tempCookieValue  - Optional raw temp_account_id value (for Route Handlers).
+ *   When omitted, both are read from the Next.js cookie store.
  */
-export async function getIdentity(cookieValue?: string): Promise<IdentityResult> {
-  let rawCookie = cookieValue;
+export async function getIdentity(
+  authCookieValue?: string,
+  tempCookieValue?: string,
+): Promise<IdentityResult> {
+  let rawAuth = authCookieValue;
+  let rawTemp = tempCookieValue;
 
-  if (rawCookie === undefined) {
+  if (rawAuth === undefined || rawTemp === undefined) {
     try {
       const cookieStore = await cookies();
-      rawCookie = cookieStore.get('auth_accounts')?.value;
+      if (rawAuth === undefined) rawAuth = cookieStore.get('auth_accounts')?.value;
+      if (rawTemp === undefined) rawTemp = cookieStore.get('temp_account_id')?.value;
     } catch {
       return { authenticated: false, reason: 'no_request_context' };
     }
   }
 
-  const accountId = parseAuthCookie(rawCookie);
-  if (!accountId) {
-    return { authenticated: false, reason: 'no_active_session' };
+  // 1. Authenticated session
+  const accountId = parseAuthCookie(rawAuth);
+  if (accountId) {
+    return { authenticated: true, guest: false, account: { accountId } };
   }
 
-  return { authenticated: true, user: { accountId } };
+  // 2. Guest session
+  const guestId = rawTemp?.trim();
+  if (guestId && guestId.startsWith('track.')) {
+    return { authenticated: true, guest: true, account: { accountId: guestId } };
+  }
+
+  return { authenticated: false, reason: 'no_active_session' };
 }

@@ -1,11 +1,14 @@
 import { getLeads } from '@/services/lead-service';
+import { checkAuthenticationForWeb, getAccountIdFromJWT } from '@/services/neupid/check-auth-web';
 import { ClientLink } from '@/components/client-link';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Plus } from 'lucide-react';
 
 export default async function ManageLeadsPage() {
-    const leads = await getLeads();
+    await checkAuthenticationForWeb();
+    const accountId = await getAccountIdFromJWT();
+    const leads = await getLeads(accountId!);
 
     return (
         <div className="space-y-6">

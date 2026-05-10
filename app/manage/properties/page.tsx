@@ -1,5 +1,6 @@
 
 import { getPaginatedProperties } from "@/services/property-service";
+import { checkAuthenticationForWeb, getAccountIdFromJWT } from "@/services/neupid/check-auth-web";
 import {
   Table,
   TableBody,
@@ -29,6 +30,8 @@ export default async function ManagePropertiesPage({
     q?: string;
   }>;
 }) {
+  await checkAuthenticationForWeb();
+  const accountId = await getAccountIdFromJWT();
   const resolvedSearchParams = await searchParams;
   const currentPage = Number(resolvedSearchParams?.page) || 1;
   const query = resolvedSearchParams?.q || '';
@@ -64,6 +67,7 @@ export default async function ManagePropertiesPage({
     limit: PROPERTIES_PER_PAGE,
     filters,
     includeInactive: true,
+    ownerAccountId: accountId ?? undefined,
   });
   const totalPages = Math.ceil(totalCount / PROPERTIES_PER_PAGE);
   

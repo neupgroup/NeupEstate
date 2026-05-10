@@ -1,12 +1,15 @@
 import { notFound } from 'next/navigation';
 import { getClientById } from '@/services/lead-service';
+import { checkAuthenticationForWeb, getAccountIdFromJWT } from '@/services/neupid/check-auth-web';
 import { ClientLink } from '@/components/client-link';
 import { ChevronLeft } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 export default async function ClientDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const client = await getClientById(id);
+    await checkAuthenticationForWeb();
+    const accountId = await getAccountIdFromJWT();
+    const client = await getClientById(id, accountId!);
 
     if (!client) notFound();
 

@@ -101,9 +101,10 @@ export async function createLead(data: CreateLeadInput): Promise<string> {
     }
 }
 
-export async function getLeads() {
+export async function getLeads(accountId: string) {
     try {
         return await prisma.clientLead.findMany({
+            where: { leadOwner: accountId },
             include: { client: true },
             orderBy: { createdAt: 'desc' },
         });
@@ -125,11 +126,12 @@ export async function getLeadById(id: string) {
     }
 }
 
-export async function getClients() {
+export async function getClients(accountId: string) {
     try {
         return await prisma.crmClient.findMany({
+            where: { leads: { some: { leadOwner: accountId } } },
             orderBy: { createdAt: 'desc' },
-            include: { leads: true },
+            include: { leads: { where: { leadOwner: accountId } } },
         });
     } catch (e) {
         await logProblem(e, 'getClients');
@@ -137,12 +139,16 @@ export async function getClients() {
     }
 }
 
-export async function getClientById(id: string) {
+export async function getClientById(id: string, accountId: string) {
     try {
-        return await prisma.crmClient.findUnique({
-            where: { id },
+        return await prisma.crmClient.findFirst({
+            where: {
+                id,
+                leads: { some: { leadOwner: accountId } },
+            },
             include: {
                 leads: {
+                    where: { leadOwner: accountId },
                     include: { activities: { orderBy: { activityOn: 'desc' } } },
                     orderBy: { createdAt: 'desc' },
                 },
