@@ -850,6 +850,52 @@ model FAQ {
 }
 
 // ============================================================================
+// Authorization
+// ============================================================================
+
+model AuthzRoleCapability {
+  id                     String  @id @default(uuid())
+  roleId                 String  @map("role_id")
+  capabilityId           String  @map("capability_id")
+  scope                  String?
+  denormalizedCapability Json?   @map("denormalized_capability")
+  roleName               String? @map("role_name")
+
+  @@index([roleId])
+  @@index([capabilityId])
+  @@map("authz_role_capability")
+}
+
+model AuthzAccountAccessGrant {
+  id              String  @id @default(uuid())
+  ownerAccountId  String  @map("owner_account_id")
+  targetAccountId String  @map("target_account_id")
+  roleId          String  @map("role_id")
+  portfolioId     String? @map("portfolio_id")
+
+  @@index([ownerAccountId], map: "authz_account_access_grant_owner_account_id_idx")
+  @@index([targetAccountId], map: "authz_account_access_grant_target_account_id_idx")
+  @@index([roleId], map: "authz_account_access_grant_role_id_idx")
+  @@map("authz_account_access_grant")
+}
+
+model AuthzAssetsAccessGrant {
+  id          String  @id @default(uuid())
+  assetId     String  @map("asset_id")
+  accountId   String  @map("account_id")
+  roleId      String  @map("role_id")
+  portfolioId String? @map("portfolio_id")
+  assetType   String? @map("asset_type")
+
+  @@index([assetId], map: "authz_assets_access_grant_asset_id_idx")
+  @@index([accountId], map: "authz_assets_access_grant_account_id_idx")
+  @@index([roleId], map: "authz_assets_access_grant_role_id_idx")
+  @@index([portfolioId], map: "authz_assets_access_grant_portfolio_id_idx")
+  @@index([assetType], map: "authz_assets_access_grant_asset_type_idx")
+  @@map("authz_assets_access_grant")
+}
+
+// ============================================================================
 // Competitor Intelligence
 // ============================================================================
 
