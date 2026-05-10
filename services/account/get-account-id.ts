@@ -1,26 +1,24 @@
 /**
  * get-account-id.ts
  *
- * Shared utilities for resolving the current user's account ID on both
- * client and server, with a consistent priority:
+ * Utilities for resolving the current user's account ID on both client and server.
  *
- *   1. auth_accounts cookie  →  use aid from the entry where def === 1
- *   2. temp_account_id cookie  →  guest fallback (value is a track.* ID)
+ * Priority:
+ *   1. auth_accounts cookie with def === true  →  authenticated user (ssid)
+ *   2. temp_account_id cookie                  →  anonymous guest fallback
  *
- * Client usage (inside 'use client' components):
+ * Client usage:
  *   import { getClientAccountId } from '@/services/account/get-account-id';
- *   const accountId = getClientAccountId(); // reads document.cookie
+ *   const accountId = getClientAccountId();
  *
- * Server usage (Server Components / Route Handlers):
+ * Server usage:
  *   import { getServerAccountId } from '@/services/account/get-account-id';
- *   const accountId = await getServerAccountId(); // reads next/headers cookies
+ *   const accountId = await getServerAccountId();
  */
 
 import { getActiveAccount } from '@/services/account/getAccount';
 
-// ---------------------------------------------------------------------------
-// Client-side helper (browser only)
-// ---------------------------------------------------------------------------
+// ─── Client-side ─────────────────────────────────────────────────────────────
 
 function readCookieClient(name: string): string | null {
   if (typeof document === 'undefined') return null;
@@ -34,8 +32,8 @@ function readCookieClient(name: string): string | null {
 
 /**
  * Returns the resolved account ID on the client side.
- * Prefers the authenticated `aid` from `auth_accounts`; falls back to
- * `temp_account_id` for anonymous users.
+ * Prefers the authenticated ssid from auth_accounts; falls back to
+ * temp_account_id for anonymous users.
  */
 export function getClientAccountId(): string | null {
   const active = getActiveAccount(readCookieClient('auth_accounts'));
@@ -43,17 +41,22 @@ export function getClientAccountId(): string | null {
   return readCookieClient('temp_account_id');
 }
 
-// ---------------------------------------------------------------------------
-// Server-side helper (Server Components / Route Handlers / Server Actions)
-// ---------------------------------------------------------------------------
+/**
+ * Returns true if the current browser session has an authenticated account
+ * (i.e. auth_accounts cookie has an entry with def === true).
+ * Use this to decide whether to trigger Silent SSO.
+ */
+export function isClientAuthenticated(): boolean {
+  const active = getActiveAccount(readCookieClient('auth_accounts'));
+  return !!active?.aid;
+}
+
+// ─── Server-side ─────────────────────────────────────────────────────────────
 
 /**
  * Returns the resolved account ID on the server side.
- * Prefers the authenticated `aid` from `auth_accounts`; falls back to
- * `temp_account_id` for anonymous users.
- *
- * Must be called inside a request context (Server Component, Server Action,
- * or Route Handler).
+ * Prefers the authenticated ssid from auth_accounts; falls back to
+ * temp_account_id for anonymous users.
  */
 export async function getServerAccountId(): Promise<string | null> {
   const { cookies } = await import('next/headers');

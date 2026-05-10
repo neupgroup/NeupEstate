@@ -38,7 +38,6 @@ import { createContactSubmission as createContactSubmissionService } from '@/ser
 import { createModel as createModelService, updateModel as updateModelService, deleteModel as deleteModelService, setDefaultModel as setDefaultModelService } from '@/services/model-service';
 import { createRequirement as createRequirementService, updateRequirement as updateRequirementService } from '@/services/requirements-service';
 import { resolveAccount, updateUser } from '@/services/account-service';
-import { headers } from 'next/headers';
 import { getIdentity } from '@/services/neupid/get-identity';
 
 // ---------------------------------------------------------------------------
@@ -1071,10 +1070,8 @@ export async function logUserActivity(
             return { success: true }; // No data to log, not an error.
         }
         
-        // Update account last access time using the IP from the current request
-        const headersList = await headers();
-        const ip = headersList.get('x-forwarded-for') || headersList.get('remote-addr') || 'unknown';
-        await updateAccountAccessInfo(userId, ip);
+        // Update account last access time
+        await updateAccountAccessInfo(userId);
         
         // Log general activities to a separate collection
         for (const event of events) {
@@ -1476,9 +1473,7 @@ export async function resolveAccountAction(
   aid: string | null,
 ): Promise<{ success: boolean; accountId?: string; error?: string }> {
     try {
-        const headersList = await headers();
-        const ip = headersList.get('x-forwarded-for') || 'unknown';
-        const accountId = await resolveAccount(aid, ip);
+        const accountId = await resolveAccount(aid);
         return { success: true, accountId };
     } catch (error: any) {
         await logProblem(error, 'resolveAccountAction');

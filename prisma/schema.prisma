@@ -44,16 +44,13 @@ enum Reaction {
 // ============================================================================
 
 model Account {
-  id                   String   @id
+  id                   String   @id // ssid from NeupID Silent SSO
   accountType          String
-  mainId               String?
+  mainId               String?  // references Account.id
   registered           Boolean  @default(false)
-  name                 String?
-  location             String?
   createdOn            DateTime @default(now())
+  sessionId            String?  // nullable — current session ID from NeupID
   accessedOn           DateTime @default(now())
-  createdFromIp        String?
-  lastAccessedFromIp   String?
 
   @@map("account")
 }

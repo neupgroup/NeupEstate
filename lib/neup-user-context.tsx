@@ -3,16 +3,16 @@
 /**
  * neup-user-context.tsx
  *
- * Fetches the authenticated user's identity from the NeupID whoami endpoint
- * once per session, caches it in sessionStorage, and exposes it to the entire
- * React tree via context.
+ * Provides the authenticated user's identity to the React tree.
  *
- * The whoami endpoint reads the NeupID session cookie directly from the
- * browser — no session triplet needed on our side.
+ * With the new Silent SSO flow, the auth_accounts cookie (set httpOnly by
+ * /api/auth/callback) contains the ssid as `aid`. We expose a minimal
+ * identity object derived from that — no external fetch needed for the
+ * account ID itself.
  *
- * Usage:
- *   import { useNeupUser } from '@/lib/neup-user-context';
- *   const user = useNeupUser(); // NeupUser | null
+ * For richer profile data (displayName, avatar, etc.) the app can call
+ * /api/auth/me or use the data returned from the /api/auth/callback response
+ * stored in sessionStorage.
  */
 
 import {
@@ -22,7 +22,6 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { getActiveAccount } from '@/services/account/getAccount';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -30,38 +29,18 @@ import { getActiveAccount } from '@/services/account/getAccount';
 
 export type NeupUser = {
   accountId: string;
-  neupId: string;
-  displayName: string;
-  displayImage: string;
-  accountType: string;
-  verified: boolean;
+  neupId?: string;
+  displayName?: string;
+  displayImage?: string;
+  accountType?: string;
+  verified?: boolean;
 };
 
 // ---------------------------------------------------------------------------
-// Helpers
+// Session storage cache key
 // ---------------------------------------------------------------------------
 
 const SESSION_KEY = 'neup_user';
-const AUTH_COOKIE = 'auth_accounts';
-const WHOAMI_URL =
-  (process.env.NEXT_PUBLIC_NEUPID_WHOAMI_URL as string | undefined) ??
-  'https://neupgroup.com/account/bridge/api.v1/auth/whoami';
-
-function readCookie(name: string): string | null {
-  if (typeof document === 'undefined') return null;
-  const nameEQ = name + '=';
-  for (let c of document.cookie.split(';')) {
-    c = c.trim();
-    if (c.startsWith(nameEQ)) return decodeURIComponent(c.substring(nameEQ.length));
-  }
-  return null;
-}
-
-function hasAuthCookie(): boolean {
-  const raw = readCookie(AUTH_COOKIE);
-  const active = getActiveAccount(raw);
-  return !!active?.aid;
-}
 
 function readFromSession(): NeupUser | null {
   try {
@@ -76,9 +55,7 @@ function readFromSession(): NeupUser | null {
 function writeToSession(user: NeupUser) {
   try {
     sessionStorage.setItem(SESSION_KEY, JSON.stringify(user));
-  } catch {
-    // sessionStorage unavailable (private browsing edge cases)
-  }
+  } catch {}
 }
 
 function clearSession() {
@@ -97,12 +74,6 @@ export function NeupUserProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<NeupUser | null>(null);
 
   useEffect(() => {
-    // Only attempt whoami if the auth_accounts cookie is present
-    if (!hasAuthCookie()) {
-      clearSession();
-      return;
-    }
-
     // Return cached value immediately to avoid a flash
     const cached = readFromSession();
     if (cached) {
@@ -110,22 +81,19 @@ export function NeupUserProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    // Fetch from whoami endpoint — the browser sends the NeupID session cookie
-    // automatically because credentials: 'include' is set.
+    // The auth_accounts cookie is httpOnly — we can't read it from JS.
+    // Instead, call our own /api/auth/me endpoint which reads it server-side.
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch(WHOAMI_URL, {
-          method: 'GET',
-          credentials: 'include',
-        });
+        const res = await fetch('/api/auth/me', { credentials: 'include' });
         if (!res.ok) {
           clearSession();
           return;
         }
         const data = await res.json();
         if (cancelled) return;
-        if (data?.success) {
+        if (data?.accountId) {
           const neupUser: NeupUser = {
             accountId: data.accountId,
             neupId: data.neupId,
@@ -140,14 +108,11 @@ export function NeupUserProvider({ children }: { children: ReactNode }) {
           clearSession();
         }
       } catch {
-        // Network error or CORS — silently fail; user stays null
         clearSession();
       }
     })();
 
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, []);
 
   return (
@@ -157,17 +122,10 @@ export function NeupUserProvider({ children }: { children: ReactNode }) {
   );
 }
 
-/**
- * Returns the authenticated NeupUser from sessionStorage/whoami, or null if
- * the user is not logged in or the fetch hasn't completed yet.
- */
 export function useNeupUser(): NeupUser | null {
   return useContext(NeupUserContext);
 }
 
-/**
- * Returns initials from a display name for use in AvatarFallback.
- */
 export function getInitials(name: string): string {
   return name
     .split(' ')
