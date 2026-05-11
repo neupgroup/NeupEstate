@@ -853,7 +853,7 @@ model FAQ {
 // Authorization
 // ============================================================================
 
-model AuthzRoleCapability {
+model RoleCapability {
   id                     String  @id @default(uuid())
   roleId                 String  @map("role_id")
   capabilityId           String  @map("capability_id")
