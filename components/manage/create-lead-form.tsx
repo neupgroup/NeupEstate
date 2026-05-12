@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { SelectionCards } from '@/components/ui/selection-cards';
 import { cn } from '@/lib/utils';
 import { Search, UserPlus, ChevronRight } from 'lucide-react';
+import { PriceInput } from '@/components/ui/price-input';
 
 type SearchedClient = {
     id: string;
@@ -353,10 +354,30 @@ export function CreateLeadForm() {
                                 )} />
                                 <div className="grid grid-cols-2 gap-4">
                                     <FormField control={reqForm.control} name="minBudget" render={({ field }) => (
-                                        <FormItem><FormLabel>Min Budget</FormLabel><FormControl><Input type="number" placeholder="e.g. 5000000" {...field} /></FormControl><FormMessage /></FormItem>
+                                        <FormItem>
+                                            <FormLabel>Min Budget</FormLabel>
+                                            <FormControl>
+                                                <PriceInput
+                                                    placeholder="e.g. 5000000"
+                                                    value={field.value?.toString() ?? ''}
+                                                    onChange={(raw) => field.onChange(raw ? Number(raw) : undefined)}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
                                     )} />
                                     <FormField control={reqForm.control} name="maxBudget" render={({ field }) => (
-                                        <FormItem><FormLabel>Max Budget</FormLabel><FormControl><Input type="number" placeholder="e.g. 20000000" {...field} /></FormControl><FormMessage /></FormItem>
+                                        <FormItem>
+                                            <FormLabel>Max Budget</FormLabel>
+                                            <FormControl>
+                                                <PriceInput
+                                                    placeholder="e.g. 20000000"
+                                                    value={field.value?.toString() ?? ''}
+                                                    onChange={(raw) => field.onChange(raw ? Number(raw) : undefined)}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
                                     )} />
                                 </div>
                                 <FormField control={reqForm.control} name="location" render={({ field }) => (

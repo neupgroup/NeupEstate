@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search, X, SlidersHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { PriceInput } from '@/components/ui/price-input';
 
 // ─── Quick filter definitions ─────────────────────────────────────────────────
 
@@ -260,11 +261,10 @@ export function AdminPropertySearch() {
                         {/* Min price */}
                         <div className="space-y-1">
                             <label className="text-xs font-medium text-muted-foreground">Min Price</label>
-                            <Input
-                                type="number"
+                            <PriceInput
                                 placeholder="0"
                                 value={minPrice}
-                                onChange={e => setMinPrice(e.target.value)}
+                                onChange={setMinPrice}
                                 className="h-8 text-sm"
                             />
                         </div>
@@ -272,11 +272,10 @@ export function AdminPropertySearch() {
                         {/* Max price */}
                         <div className="space-y-1">
                             <label className="text-xs font-medium text-muted-foreground">Max Price</label>
-                            <Input
-                                type="number"
+                            <PriceInput
                                 placeholder="Any"
                                 value={maxPrice}
-                                onChange={e => setMaxPrice(e.target.value)}
+                                onChange={setMaxPrice}
                                 className="h-8 text-sm"
                             />
                         </div>

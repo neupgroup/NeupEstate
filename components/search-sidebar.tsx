@@ -11,6 +11,7 @@ import { Minus, Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import type { PropertyFilters } from '@/types';
 import { Badge } from '@/components/ui/badge';
+import { PriceInput } from '@/components/ui/price-input';
 
 type StepperMode = 'any' | 'exact' | 'more' | 'less';
 type StepperState = {
@@ -224,8 +225,8 @@ export function SearchSidebar({ initialFilters }: { initialFilters?: PropertyFil
 
           <FilterSection title="Price Range">
             <div className="flex flex-col gap-2">
-              <Input name="minPrice" placeholder="Min Price" type="number" value={minPrice} onChange={(e) => setMinPrice(e.target.value)} />
-              <Input name="maxPrice" placeholder="Max Price" type="number" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} />
+              <PriceInput value={minPrice} onChange={setMinPrice} placeholder="Min Price" name="minPrice" />
+              <PriceInput value={maxPrice} onChange={setMaxPrice} placeholder="Max Price" name="maxPrice" />
             </div>
           </FilterSection>
           
