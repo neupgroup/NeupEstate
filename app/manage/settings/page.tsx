@@ -28,7 +28,7 @@ export default function SettingsPage() {
             <div className="block px-4 py-3 font-medium opacity-50 cursor-not-allowed">
                 Pages Management
             </div>
-              <ClientLink href="/manage/agencies" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
+              <ClientLink href="/manage/agency" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
                 Agency Details
             </ClientLink>
         </div>

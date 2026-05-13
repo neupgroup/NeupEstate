@@ -520,7 +520,7 @@ export async function createAgencyAction(
       branches: validatedData.branches?.split('\\n').map(b => b.trim()).filter(Boolean) || [],
     };
     const agencyId = await createAgencyService(serviceInput);
-    revalidatePath('/manage/agencies');
+    revalidatePath('/manage/agency');
     revalidatePath('/agencies');
     return { success: true, agencyId, error: null };
   } catch (e: any)
@@ -545,7 +545,7 @@ export async function updateAgencyAction(
       branches: validatedData.branches?.split('\\n').map(b => b.trim()).filter(Boolean) || [],
     };
     await updateAgencyService(id, serviceInput);
-    revalidatePath('/manage/agencies');
+    revalidatePath('/manage/agency');
     revalidatePath('/agencies');
     revalidatePath(`/manage/agencies/${id}/edit`);
     return { success: true, error: null };
@@ -561,7 +561,7 @@ export async function updateAgencyAction(
 export async function deleteAgencyAction(agencyId: string) {
     try {
         await deleteAgencyService(agencyId);
-        revalidatePath('/manage/agencies');
+        revalidatePath('/manage/agency');
         revalidatePath('/agencies');
         return { success: true };
     } catch (error: any) {
