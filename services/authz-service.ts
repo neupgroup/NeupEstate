@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import { logProblem } from './problem-service';
 
 // ============================================================================
@@ -18,11 +19,19 @@ export async function insertRoleCapability(data: {
   roleId: string;
   capabilityId: string;
   scope?: string | null;
-  denormalizedCapability?: object | null;
+  denormalizedCapability?: Prisma.InputJsonValue | null;
   roleName?: string | null;
 }): Promise<string> {
   try {
-    const record = await prisma.authzRoleCapability.create({ data });
+    const record = await prisma.roleCapability.create({
+      data: {
+        ...data,
+        denormalizedCapability:
+          data.denormalizedCapability === null
+            ? Prisma.DbNull
+            : data.denormalizedCapability,
+      },
+    });
     return record.id;
   } catch (e) {
     await logProblem(e, 'authz:insertRoleCapability');
@@ -36,12 +45,26 @@ export async function updateRoleCapability(
     roleId: string;
     capabilityId: string;
     scope: string | null;
-    denormalizedCapability: object | null;
+    denormalizedCapability: Prisma.InputJsonValue | null;
     roleName: string | null;
   }>,
 ): Promise<void> {
   try {
-    await prisma.authzRoleCapability.update({ where: { id }, data });
+    await prisma.roleCapability.update({
+      where: { id },
+      data: {
+        ...(data.roleId !== undefined        && { roleId: data.roleId }),
+        ...(data.capabilityId !== undefined  && { capabilityId: data.capabilityId }),
+        ...(data.scope !== undefined         && { scope: data.scope }),
+        ...(data.roleName !== undefined      && { roleName: data.roleName }),
+        ...(Object.prototype.hasOwnProperty.call(data, 'denormalizedCapability') && {
+          denormalizedCapability:
+            data.denormalizedCapability === null
+              ? Prisma.DbNull
+              : data.denormalizedCapability,
+        }),
+      },
+    });
   } catch (e) {
     await logProblem(e, `authz:updateRoleCapability ${id}`);
     throw new Error('Failed to update role capability.');
@@ -50,7 +73,7 @@ export async function updateRoleCapability(
 
 export async function deleteRoleCapability(id: string): Promise<void> {
   try {
-    await prisma.authzRoleCapability.delete({ where: { id } });
+    await prisma.roleCapability.delete({ where: { id } });
   } catch (e) {
     await logProblem(e, `authz:deleteRoleCapability ${id}`);
     throw new Error('Failed to delete role capability.');
@@ -59,7 +82,7 @@ export async function deleteRoleCapability(id: string): Promise<void> {
 
 export async function deleteRoleCapabilities(ids: string[]): Promise<number> {
   try {
-    const result = await prisma.authzRoleCapability.deleteMany({
+    const result = await prisma.roleCapability.deleteMany({
       where: { id: { in: ids } },
     });
     return result.count;
@@ -71,7 +94,7 @@ export async function deleteRoleCapabilities(ids: string[]): Promise<number> {
 
 export async function deleteAllRoleCapabilities(): Promise<number> {
   try {
-    const result = await prisma.authzRoleCapability.deleteMany();
+    const result = await prisma.roleCapability.deleteMany();
     return result.count;
   } catch (e) {
     await logProblem(e, 'authz:deleteAllRoleCapabilities');
