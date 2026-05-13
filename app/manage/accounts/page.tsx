@@ -1,7 +1,9 @@
-import { notFound, redirect } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import Image from 'next/image';
+import { cookies } from 'next/headers';
 import { getAccountById } from '@/services/account-service';
-import { getIdentity } from '@/services/neupid/get-identity';
+import { getAccountInformation } from '@/services/account/lookup';
+import { getActiveAccount } from '@/services/account/getAccount';
 import { getRequirementByUserId } from '@/services/requirements-service';
 import { getSavedProperties, getPaginatedProperties } from '@/services/property-service';
 import { prisma } from '@/lib/prisma';
@@ -20,59 +22,84 @@ import {
   CalendarDays,
   AtSign,
   BadgeCheck,
+  SearchX,
 } from 'lucide-react';
 
-// ─── Root guard ──────────────────────────────────────────────────────────────
+// ─── Resolve which account to display ────────────────────────────────────────
+//
+// Priority:
+//   1. ?accountId=  — explicit UUID
+//   2. ?neupId=     — resolved via NeupID HTTP lookup
+//   3. (no params)  — the logged-in user's aid from the auth_account cookie
+//
+// The middleware (proxy.ts) already verified the JWT signature with the
+// AUTH_PUBLIC_KEY before this page renders, so we only decode here.
 
-async function assertRootAccess() {
-  const rootId = process.env.ROOT_ACCOUNT_ID;
-  if (!rootId) {
-    // ROOT_ACCOUNT_ID not configured — deny access
-    redirect('/manage');
+async function resolveTarget(
+  qAccountId: string | undefined,
+  qNeupId: string | undefined,
+): Promise<{ accountId: string; neupIdHandle: string | null } | null> {
+  // 1. Explicit accountId
+  if (qAccountId?.trim()) {
+    return { accountId: qAccountId.trim(), neupIdHandle: null };
   }
 
-  const identity = await getIdentity();
-  if (!identity.authenticated || identity.guest) {
-    redirect('/manage');
+  // 2. neupId — resolve to accountId via NeupID
+  if (qNeupId?.trim()) {
+    const info = await getAccountInformation({ neupId: qNeupId.trim() });
+    if (!info.found) return null;
+    return { accountId: info.account.accountId, neupIdHandle: qNeupId.trim() };
   }
 
-  if (identity.account.accountId !== rootId) {
-    redirect('/manage');
-  }
+  // 3. Default — use the logged-in user from the cookie
+  const store = await cookies();
+  const raw = store.get('auth_account')?.value;
+  const session = getActiveAccount(raw);
+
+  // Middleware guarantees aid is present on /manage routes, but guard anyway
+  if (!session?.aid) redirect('/');
+
+  return { accountId: session.aid, neupIdHandle: session.nid ?? null };
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default async function AccountDetailPage({
-  params,
+export default async function ManageAccountPage({
+  searchParams,
 }: {
-  params: Promise<{ id: string }>;
+  searchParams: Promise<{ accountId?: string; neupId?: string }>;
 }) {
-  await assertRootAccess();
+  const { accountId: qAccountId, neupId: qNeupId } = await searchParams;
 
-  const { id } = await params;
-  const account = await getAccountById(id);
-  if (!account) notFound();
+  const resolved = await resolveTarget(qAccountId, qNeupId);
+  if (!resolved) {
+    return <AccountNotFound query={qAccountId ?? qNeupId ?? ''} />;
+  }
 
-  // Fetch all related data in parallel
+  const { accountId, neupIdHandle } = resolved;
+
+  const account = await getAccountById(accountId);
+  if (!account) {
+    return <AccountNotFound query={accountId} />;
+  }
+
   const [requirements, savedProperties, ownedProperties, recentActivity] =
     await Promise.all([
-      getRequirementByUserId(id),
-      account.registered ? getSavedProperties(id) : Promise.resolve([]),
-      getPaginatedProperties({ ownerAccountId: id, includeInactive: true, limit: 10 }),
+      getRequirementByUserId(accountId),
+      account.registered ? getSavedProperties(accountId) : Promise.resolve([]),
+      getPaginatedProperties({ ownerAccountId: accountId, includeInactive: true, limit: 10 }),
       prisma.activity.findMany({
-        where: { trackerId: id },
+        where: { trackerId: accountId },
         orderBy: { activityOn: 'desc' },
         take: 20,
       }),
     ]);
 
   const isRegistered = account.registered;
-  const neupId = isRegistered ? (account as any).nid ?? null : null;
 
   return (
     <div className="space-y-8">
-      {/* Back link */}
+      {/* Back */}
       <ClientLink
         href="/manage/users"
         className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
@@ -114,17 +141,17 @@ export default async function AccountDetailPage({
             </Badge>
           </div>
 
-          {/* NeupID handle — only for permanent (registered) accounts */}
-          {neupId && (
+          {/* NeupID handle — only shown for registered accounts */}
+          {neupIdHandle && (
             <div className="flex items-center gap-1 text-sm text-muted-foreground">
               <AtSign className="h-3.5 w-3.5" />
-              <span>{neupId}</span>
+              <span>{neupIdHandle.replace(/^@/, '')}</span>
             </div>
           )}
 
           <p className="font-mono text-xs text-muted-foreground break-all">{account.id}</p>
 
-          {/* Download button — refresh display info from NeupID */}
+          {/* Download — refresh display info from NeupID */}
           <div className="pt-1">
             <AccountRefreshButton
               accountId={account.id}
@@ -137,7 +164,7 @@ export default async function AccountDetailPage({
       {/* ── Two-column layout ── */}
       <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-6 items-start">
 
-        {/* ── Left column — account info ── */}
+        {/* ── Left — account info ── */}
         <div className="space-y-4">
           <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Account Info
@@ -163,10 +190,10 @@ export default async function AccountDetailPage({
                 }),
                 icon: <Clock className="h-3.5 w-3.5 text-muted-foreground" />,
               },
-              ...(neupId
+              ...(neupIdHandle
                 ? [{
                     label: 'NeupID',
-                    value: neupId,
+                    value: neupIdHandle.replace(/^@/, ''),
                     icon: <AtSign className="h-3.5 w-3.5 text-muted-foreground" />,
                   }]
                 : []),
@@ -185,10 +212,10 @@ export default async function AccountDetailPage({
           </h3>
           <div className="grid grid-cols-2 gap-3">
             {[
-              { label: 'Saved', value: savedProperties.length },
-              { label: 'Properties', value: ownedProperties.totalCount },
+              { label: 'Saved',        value: savedProperties.length },
+              { label: 'Properties',   value: ownedProperties.totalCount },
               { label: 'Requirements', value: requirements?.length ?? 0 },
-              { label: 'Activity', value: recentActivity.length },
+              { label: 'Activity',     value: recentActivity.length },
             ].map(({ label, value }) => (
               <div key={label} className="rounded-lg border px-4 py-3 text-center">
                 <p className="text-2xl font-bold">{value}</p>
@@ -198,7 +225,7 @@ export default async function AccountDetailPage({
           </div>
         </div>
 
-        {/* ── Right column ── */}
+        {/* ── Right — data panels ── */}
         <div className="space-y-6">
 
           {/* Activity */}
@@ -213,7 +240,7 @@ export default async function AccountDetailPage({
               {recentActivity.length === 0 ? (
                 <p className="text-sm text-muted-foreground">No activity recorded.</p>
               ) : (
-                <div className="space-y-1 divide-y">
+                <div className="divide-y">
                   {recentActivity.map((a) => (
                     <div key={a.id} className="flex items-start gap-3 py-2 text-sm">
                       <span className="text-xs text-muted-foreground tabular-nums shrink-0 pt-0.5">
@@ -313,12 +340,12 @@ export default async function AccountDetailPage({
                       </div>
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                         {[
-                          r.location      && { label: 'Location',   value: r.location },
-                          r.minBudget     && { label: 'Min budget',  value: `${r.minBudget.toLocaleString()}` },
-                          r.maxBudget     && { label: 'Max budget',  value: `${r.maxBudget.toLocaleString()}` },
-                          r.urgency       && { label: 'Urgency',     value: r.urgency },
-                          r.requiredTime  && { label: 'Timeline',    value: r.requiredTime },
-                          r.loan          && { label: 'Loan',        value: 'Yes' },
+                          r.location     && { label: 'Location',   value: r.location },
+                          r.minBudget    && { label: 'Min budget',  value: r.minBudget.toLocaleString() },
+                          r.maxBudget    && { label: 'Max budget',  value: r.maxBudget.toLocaleString() },
+                          r.urgency      && { label: 'Urgency',     value: r.urgency },
+                          r.requiredTime && { label: 'Timeline',    value: r.requiredTime },
+                          r.loan         && { label: 'Loan',        value: 'Yes' },
                         ]
                           .filter(Boolean)
                           .map((item: any) => (
@@ -342,6 +369,27 @@ export default async function AccountDetailPage({
           </Card>
 
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Not found ────────────────────────────────────────────────────────────────
+
+function AccountNotFound({ query }: { query: string }) {
+  return (
+    <div className="space-y-4">
+      <ClientLink
+        href="/manage/users"
+        className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+      >
+        <ChevronLeft className="h-4 w-4" />
+        Back to Users
+      </ClientLink>
+      <div className="flex flex-col items-center justify-center py-20 gap-3 text-center">
+        <SearchX className="h-10 w-10 text-muted-foreground" />
+        <p className="text-lg font-medium">Account not found</p>
+        {query && <p className="text-sm text-muted-foreground font-mono">{query}</p>}
       </div>
     </div>
   );

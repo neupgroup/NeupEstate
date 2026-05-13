@@ -24,24 +24,28 @@ export async function GET(_req: NextRequest) {
   try {
     const row = await prisma.account.findUnique({
       where: { id: account.aid },
-      select: { id: true, accountType: true, registered: true },
+      select: { id: true, accountType: true, registered: true, displayName: true, displayImage: true },
     });
 
     return NextResponse.json({
-      accountId: account.aid,
-      nid:       account.nid   ?? null,
-      guest:     account.guest === 1,
-      accountType: row?.accountType ?? (account.guest === 1 ? 'guest' : 'individual'),
-      registered:  row?.registered  ?? (account.guest !== 1),
+      accountId:    account.aid,
+      nid:          account.nid   ?? null,
+      guest:        account.guest === 1,
+      accountType:  row?.accountType  ?? (account.guest === 1 ? 'guest' : 'individual'),
+      registered:   row?.registered   ?? (account.guest !== 1),
+      displayName:  row?.displayName  ?? null,
+      displayImage: row?.displayImage ?? null,
     });
   } catch {
     // DB unavailable — return what we have from the JWT
     return NextResponse.json({
-      accountId:   account.aid,
-      nid:         account.nid ?? null,
-      guest:       account.guest === 1,
-      accountType: account.guest === 1 ? 'guest' : 'individual',
-      registered:  account.guest !== 1,
+      accountId:    account.aid,
+      nid:          account.nid ?? null,
+      guest:        account.guest === 1,
+      accountType:  account.guest === 1 ? 'guest' : 'individual',
+      registered:   account.guest !== 1,
+      displayName:  null,
+      displayImage: null,
     });
   }
 }

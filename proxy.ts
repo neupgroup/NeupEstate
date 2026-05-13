@@ -198,6 +198,12 @@ export default async function proxy(request: NextRequest) {
   const raw = request.cookies.get('auth_account')?.value;
   const payload = raw ? await verifyJwt(raw.trim()) : null;
 
+  // Forward the verified account ID downstream so server components can use
+  // it without re-parsing the JWT (signature already verified here).
+  if (payload?.aid) {
+    requestHeaders.set('x-account-id', payload.aid);
+  }
+
   // ── 5. /manage/* — full auth required ────────────────────────────────────
   //    Must have: valid JWT, aid, nid, no guest flag
   if (pathname.startsWith('/manage')) {

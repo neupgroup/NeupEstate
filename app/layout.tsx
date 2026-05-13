@@ -7,6 +7,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { Providers } from '@/components/layout/providers';
 import { AccountManager } from '@/components/layout/account-manager';
 import { ActivityTracker } from '@/components/activity-tracker';
+import { createAccount } from '@/services/account/create-account';
 
 const raleway = Raleway({
   subsets: ['latin'],
@@ -24,11 +25,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Ensure an account row exists for every request — runs server-side,
+  // no client JS needed. Uses the x-account-id header set by proxy.ts.
+  await createAccount();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
