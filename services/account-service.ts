@@ -142,3 +142,31 @@ export async function updateUser(id: string, _data: any): Promise<void> {
   await updateAccountAccessInfo(id);
 }
 
+/**
+ * Fetches the latest displayName and displayImage from NeupID and writes
+ * them back to the local account row.
+ *
+ * Returns the updated fields, or null if the lookup failed.
+ */
+export async function refreshAccountDisplayInfo(
+  id: string,
+): Promise<{ displayName: string | null; displayImage: string | null } | null> {
+  try {
+    const info = await getAccountInformation({ accountId: id });
+    if (!info.found) return null;
+
+    const displayName  = info.account.displayName  || null;
+    const displayImage = info.account.displayImage || null;
+
+    await prisma.account.update({
+      where: { id },
+      data: { displayName, displayImage },
+    });
+
+    return { displayName, displayImage };
+  } catch (error) {
+    await logProblem(error, `refreshAccountDisplayInfo (ID: ${id})`);
+    return null;
+  }
+}
+
