@@ -117,6 +117,10 @@ export default function ManageLayout({
                 </ClientLink>
 
                 <h3 className="pt-4 pb-1 px-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">Management</h3>
+                <ClientLink href="/manage/agency" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
+                    <Building className="mr-2 h-4 w-4" />
+                    My Agency
+                </ClientLink>
                  <ClientLink href="/manage/agents" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
                     <Users className="mr-2 h-4 w-4" />
                     Agents

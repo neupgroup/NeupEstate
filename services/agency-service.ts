@@ -14,6 +14,9 @@ function mapRecord(a: any): Agency {
     contactPhone:   a.contactPhone || undefined,
     mainLocation:   a.mainLocation || undefined,
     branches:       a.branches || [],
+    description:    a.description || undefined,
+    createdAt:      a.createdAt?.toISOString(),
+    updatedAt:      a.updatedAt?.toISOString(),
   };
 }
 

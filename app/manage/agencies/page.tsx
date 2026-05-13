@@ -13,6 +13,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { SafeImage } from "@/components/safe-image";
 import { buttonVariants } from "@/components/ui/button";
 import { ClientLink } from "@/components/client-link";
+import { ApiRequestButton } from "@/components/api-request-button";
 
 export default async function ManageAgenciesPage() {
   const agencies = await getAgencies();
@@ -26,11 +27,19 @@ export default async function ManageAgenciesPage() {
                 {agencies.length} agencies found.
             </p>
         </div>
-        <ClientLink href="/manage/agencies/create" className={buttonVariants()}>
-            <Building className="mr-2 h-4 w-4"/>
-            Create Agency
-        </ClientLink>
+        <div className="flex gap-2">
+          <ClientLink href="/manage/agencies/select-brand" className={buttonVariants({ variant: 'outline' })}>
+              <Building className="mr-2 h-4 w-4"/>
+              Create from Brand
+          </ClientLink>
+          <ClientLink href="/manage/agencies/create" className={buttonVariants()}>
+              <Building className="mr-2 h-4 w-4"/>
+              Create Manual
+          </ClientLink>
+        </div>
       </div>
+      
+      <ApiRequestButton />
       <div>
         {agencies.length > 0 ? (
             <Table>

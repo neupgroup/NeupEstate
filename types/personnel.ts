@@ -13,8 +13,11 @@ export interface Agency {
   contactPhone?: string;
   mainLocation?: string;
   branches?: string[];
+  description?: string;
   contactPersonName?: string;
   contactPersonRole?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export const CreateAgencySchema = z.object({
