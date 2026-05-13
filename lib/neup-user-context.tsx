@@ -87,10 +87,22 @@ export function NeupUserProvider({ children }: { children: ReactNode }) {
     (async () => {
       try {
         const res = await fetch('/api/auth/me', { credentials: 'include' });
+
+        // JWT invalid or missing — redirect to NeupID login
+        if (res.status === 401) {
+          const body = await res.json().catch(() => ({}));
+          clearSession();
+          if (body?.redirectTo && typeof window !== 'undefined') {
+            window.location.href = body.redirectTo;
+          }
+          return;
+        }
+
         if (!res.ok) {
           clearSession();
           return;
         }
+
         const data = await res.json();
         if (cancelled) return;
         if (data?.accountId) {

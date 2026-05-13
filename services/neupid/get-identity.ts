@@ -2,6 +2,7 @@
  * get-identity.ts
  *
  * Server-side identity resolution from the auth_account JWT cookie.
+ * Now uses the centralized auth service for JWT verification.
  *
  * Cookie name : auth_account (singular, set by NeupID on the shared domain)
  *
@@ -24,8 +25,7 @@
  *   }
  */
 
-import { cookies } from 'next/headers';
-import { getActiveAccount } from '@/services/account/getAccount';
+import { getAuthenticatedAccount, getAuthCookieServer, decodeAuthJWT } from '@/services/auth';
 
 export type IdentityResult =
   | { authenticated: true;  guest: false; account: { accountId: string; nid: string } }
@@ -39,29 +39,44 @@ export type IdentityResult =
  *   need to pass it manually). When omitted, reads from the Next.js store.
  */
 export async function getIdentity(cookieValue?: string): Promise<IdentityResult> {
-  let raw = cookieValue;
-
-  if (raw === undefined) {
-    try {
-      const store = await cookies();
-      raw = store.get('auth_account')?.value;
-    } catch {
-      return { authenticated: false, reason: 'no_request_context' };
+  // If a specific cookie value is provided, decode it (for backward compatibility)
+  // Otherwise use the centralized auth service
+  if (cookieValue !== undefined) {
+    const account = decodeAuthJWT(cookieValue);
+    
+    if (!account) {
+      return { authenticated: false, reason: 'no_active_session' };
     }
+
+    if (account.guest === 1) {
+      return { authenticated: true, guest: true, account: { accountId: account.aid } };
+    }
+
+    if (!account.nid) {
+      return { authenticated: false, reason: 'incomplete_session' };
+    }
+
+    return {
+      authenticated: true,
+      guest: false,
+      account: { accountId: account.aid, nid: account.nid },
+    };
   }
 
-  const account = getActiveAccount(raw);
+  // Use centralized auth service with verification
+  const result = await getAuthenticatedAccount();
 
-  if (!account) {
-    return { authenticated: false, reason: 'no_active_session' };
+  if (!result.success) {
+    return { authenticated: false, reason: result.reason };
   }
+
+  const account = result.account;
 
   if (account.guest === 1) {
     return { authenticated: true, guest: true, account: { accountId: account.aid } };
   }
 
   if (!account.nid) {
-    // aid present but no nid and not flagged as guest — treat as unverified
     return { authenticated: false, reason: 'incomplete_session' };
   }
 

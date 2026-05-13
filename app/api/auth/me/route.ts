@@ -1,26 +1,38 @@
 /**
  * GET /api/auth/me
  *
- * Returns the current user's identity decoded from the auth_account JWT cookie.
- * Since the cookie is httpOnly, client components can't read it directly —
- * they call this endpoint instead.
+ * Returns the current user's identity from the auth_account JWT cookie.
+ *
+ * Flow:
+ *  1. Verify JWT signature and decode account using centralized auth service
+ *  2. If invalid/missing, returns 401 with redirectTo for NeupID login
+ *  3. Enriches with displayName / displayImage from the local account table
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import { getActiveAccount } from '@/services/account/getAccount';
+import { getAuthenticatedAccount } from '@/services/auth';
 import { prisma } from '@/lib/prisma';
 
-export async function GET(_req: NextRequest) {
-  const store = await cookies();
-  const raw = store.get('auth_account')?.value;
-  const account = getActiveAccount(raw);
+const AUTH_START = 'https://neupgroup.com/account/auth/start';
 
-  if (!account?.aid) {
-    return NextResponse.json({ accountId: null });
+export async function GET(req: NextRequest) {
+  // ── Step 1: verify JWT and get account ───────────────────────────────────
+  const result = await getAuthenticatedAccount();
+
+  if (!result.success) {
+    // Build the redirectTo URL so the client can bounce the user to NeupID
+    const currentUrl = req.nextUrl.href;
+    const redirectTo = `${AUTH_START}?redirectsTo=${encodeURIComponent(currentUrl)}`;
+
+    return NextResponse.json(
+      { accountId: null, reason: result.reason, redirectTo },
+      { status: 401 },
+    );
   }
 
-  // Look up the account row for any stored metadata
+  const account = result.account;
+
+  // ── Step 2: enrich with DB display fields ────────────────────────────────
   try {
     const row = await prisma.account.findUnique({
       where: { id: account.aid },
@@ -28,23 +40,23 @@ export async function GET(_req: NextRequest) {
     });
 
     return NextResponse.json({
-      accountId:    account.aid,
-      nid:          account.nid   ?? null,
-      guest:        account.guest === 1,
-      accountType:  row?.accountType  ?? (account.guest === 1 ? 'guest' : 'individual'),
-      registered:   row?.registered   ?? (account.guest !== 1),
-      displayName:  row?.displayName  ?? null,
+      accountId: account.aid,
+      neupId: account.nid ?? null,
+      guest: account.guest === 1,
+      accountType: row?.accountType ?? (account.guest === 1 ? 'guest' : 'individual'),
+      registered: row?.registered ?? (account.guest !== 1),
+      displayName: row?.displayName ?? null,
       displayImage: row?.displayImage ?? null,
     });
   } catch {
-    // DB unavailable — return what we have from the JWT
+    // DB unavailable — return what we have from the verified JWT
     return NextResponse.json({
-      accountId:    account.aid,
-      nid:          account.nid ?? null,
-      guest:        account.guest === 1,
-      accountType:  account.guest === 1 ? 'guest' : 'individual',
-      registered:   account.guest !== 1,
-      displayName:  null,
+      accountId: account.aid,
+      neupId: account.nid ?? null,
+      guest: account.guest === 1,
+      accountType: account.guest === 1 ? 'guest' : 'individual',
+      registered: account.guest !== 1,
+      displayName: null,
       displayImage: null,
     });
   }

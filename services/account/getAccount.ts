@@ -3,6 +3,9 @@
  *
  * Utilities for parsing the auth_account JWT cookie.
  *
+ * DEPRECATED: Use @/services/auth instead for new code.
+ * This file is kept for backward compatibility.
+ *
  * Cookie name: auth_account (singular, set by NeupID on the shared domain)
  *
  * JWT payload shape:
@@ -14,10 +17,11 @@
  *     guest?: 1        — set to 1 for guest accounts, absent for registered
  *   }
  *
- * NOTE: Signature verification happens in proxy.ts (Edge runtime).
- *       These helpers only decode the payload — do not use them for
- *       security-sensitive decisions; use proxy.ts / get-identity.ts instead.
+ * NOTE: These helpers only decode the payload without verification.
+ *       For verified authentication, use @/services/auth instead.
  */
+
+import { decodeAuthJWT, type AuthAccountPayload } from '@/services/auth';
 
 export type JwtPayload = {
   aid?: string;
@@ -34,40 +38,27 @@ export type ActiveAccount = {
 };
 
 // ---------------------------------------------------------------------------
-// Base64url decode (browser + Node compatible)
+// Public helpers (delegating to centralized auth service)
 // ---------------------------------------------------------------------------
 
-function b64urlDecode(str: string): string {
-  const s = str.replace(/-/g, '+').replace(/_/g, '/');
-  const pad = s.length % 4;
-  return atob(pad ? s + '='.repeat(4 - pad) : s);
-}
-
-// ---------------------------------------------------------------------------
-// JWT payload decoder (no signature verification — decode only)
-// ---------------------------------------------------------------------------
-
+/**
+ * Decode a JWT payload without verifying the signature.
+ * 
+ * @deprecated Use decodeAuthJWT from @/services/auth instead
+ */
 export function decodeJwtPayload(token: string): JwtPayload | null {
-  try {
-    const parts = token.split('.');
-    if (parts.length !== 3) return null;
-    return JSON.parse(b64urlDecode(parts[1]));
-  } catch {
-    return null;
-  }
+  return decodeAuthJWT(token);
 }
-
-// ---------------------------------------------------------------------------
-// Public helpers
-// ---------------------------------------------------------------------------
 
 /**
  * Parses the auth_account JWT cookie value and returns the active account,
  * or null if the token is missing or malformed.
+ * 
+ * @deprecated Use getClientAccount from @/services/auth instead
  */
 export function getActiveAccount(cookieValue: string | null | undefined): ActiveAccount | null {
   if (!cookieValue) return null;
-  const payload = decodeJwtPayload(cookieValue.trim());
+  const payload = decodeAuthJWT(cookieValue.trim());
   if (!payload?.aid) return null;
   return {
     aid:   payload.aid,
@@ -79,6 +70,8 @@ export function getActiveAccount(cookieValue: string | null | undefined): Active
 /**
  * Returns true if the auth_account cookie represents a registered
  * (non-guest) account with a valid aid and nid.
+ * 
+ * @deprecated Use isClientAuthenticated from @/services/auth instead
  */
 export function hasAuthenticatedSession(cookieValue: string | null | undefined): boolean {
   const account = getActiveAccount(cookieValue);
@@ -88,6 +81,8 @@ export function hasAuthenticatedSession(cookieValue: string | null | undefined):
 /**
  * Returns true if the auth_account cookie represents any identified account
  * (registered or guest) — i.e. aid is present.
+ * 
+ * @deprecated Use isClientIdentified from @/services/auth instead
  */
 export function hasIdentifiedSession(cookieValue: string | null | undefined): boolean {
   return !!getActiveAccount(cookieValue)?.aid;
