@@ -4,6 +4,7 @@
 
 import { prisma } from '@/lib/prisma';
 import { logProblem } from './problem-service';
+import { getAccountInformation } from '@/services/account/lookup';
 import type { Account } from '@/types';
 
 /**
@@ -12,6 +13,9 @@ import type { Account } from '@/types';
  * For authenticated users pass the ssid (aid from auth_accounts cookie).
  * For guests pass null — a new track.{random} ID will be generated.
  *
+ * On first create for a registered account, fetches displayName and
+ * displayImage from NeupID and stores them for fast local access.
+ *
  * @param aid       The ssid from auth_accounts (null for guests)
  * @returns         The resolved account ID
  */
@@ -19,19 +23,44 @@ export async function resolveAccount(
   aid: string | null,
 ): Promise<string> {
   if (aid) {
-    await prisma.account.upsert({
-      where: { id: aid },
-      create: {
+    // Check if the account already exists
+    const existing = await prisma.account.findUnique({ where: { id: aid } });
+
+    if (existing) {
+      // Already exists — just bump accessedOn
+      await prisma.account.update({
+        where: { id: aid },
+        data: { accessedOn: new Date() },
+      });
+      return aid;
+    }
+
+    // First time — fetch display info from NeupID before creating the row
+    let displayName: string | undefined;
+    let displayImage: string | undefined;
+
+    try {
+      const info = await getAccountInformation({ accountId: aid });
+      if (info.found) {
+        displayName  = info.account.displayName  || undefined;
+        displayImage = info.account.displayImage || undefined;
+      }
+    } catch {
+      // Non-fatal — proceed without display info if NeupID is unreachable
+    }
+
+    await prisma.account.create({
+      data: {
         id: aid,
         accountType: 'individual',
         registered: true,
         createdOn: new Date(),
         accessedOn: new Date(),
-      },
-      update: {
-        accessedOn: new Date(),
+        displayName:  displayName  ?? null,
+        displayImage: displayImage ?? null,
       },
     });
+
     return aid;
   }
 
@@ -90,6 +119,8 @@ function mapRecord(account: any): Account {
     id: account.id,
     created_on: account.createdOn?.toISOString() ?? new Date().toISOString(),
     accessed_on: account.accessedOn?.toISOString() ?? new Date().toISOString(),
+    display_name:  account.displayName  ?? undefined,
+    display_image: account.displayImage ?? undefined,
   };
 
   if (account.registered) {

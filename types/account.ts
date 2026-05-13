@@ -10,6 +10,8 @@ const BaseAccountSchema = z.object({
   accessed_on: z.string(), // ISO string
   created_from_ip: z.string().optional(),
   last_accessed_from_ip: z.string().optional(),
+  display_name: z.string().optional(),   // denormalized from NeupID
+  display_image: z.string().optional(),  // denormalized from NeupID
 });
 
 export const RegisteredAccountSchema = BaseAccountSchema.extend({

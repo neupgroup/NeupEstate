@@ -51,6 +51,8 @@ model Account {
   createdOn            DateTime @default(now())
   sessionId            String?  // nullable — current session ID from NeupID
   accessedOn           DateTime @default(now())
+  displayName          String?  // denormalized from NeupID — set on first create
+  displayImage         String?  // denormalized from NeupID — set on first create
 
   @@map("account")
 }
