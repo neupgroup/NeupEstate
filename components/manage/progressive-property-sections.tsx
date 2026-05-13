@@ -334,7 +334,7 @@ function Section({ index, title, description, isActive, onOpen, children }: Sect
                 style={settled ? undefined : { height: `${height}px` }}
                 className={cn(
                     "overflow-hidden",
-                    !settled && "transition-[height] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                    !settled && "transition-[height] duration-500 ease-in-out"
                 )}
                 onTransitionEnd={onTransitionEnd}
             >

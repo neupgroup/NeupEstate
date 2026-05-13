@@ -95,7 +95,7 @@ function Section({
 
             <div
                 style={settled ? undefined : { height: `${height}px` }}
-                className={cn('overflow-hidden', !settled && 'transition-[height] duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]')}
+                className={cn('overflow-hidden', !settled && 'transition-[height] duration-500 ease-in-out')}
                 onTransitionEnd={() => { if (isActive) setSettled(true); }}
             >
                 <div ref={bodyRef} className="px-1 pb-6">

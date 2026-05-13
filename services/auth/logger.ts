@@ -16,7 +16,8 @@ const MAX_LOG_SIZE = 10 * 1024 * 1024; // 10MB
 
 // ─── Runtime Detection ───────────────────────────────────────────────────────
 
-const isNodeRuntime = typeof process !== 'undefined' && process.versions?.node;
+const isServer = typeof window === 'undefined';
+const isNodeRuntime = isServer && typeof process !== 'undefined' && process.versions?.node;
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -152,7 +153,7 @@ export async function logAuthError(
     context: context ? { ...context, token: undefined } : undefined,
   };
 
-  // Log to console
+  // Log to console (works everywhere)
   const consolePrefix = `[Auth ${level.toUpperCase()}] ${timestamp}`;
   
   switch (level) {
@@ -171,10 +172,12 @@ export async function logAuthError(
       break;
   }
 
-  // Log to file (async, don't block)
-  writeToFile(log).catch(err => {
-    console.error('[Auth Logger] Failed to write log:', err);
-  });
+  // Log to file (only in Node.js runtime, async, don't block)
+  if (isNodeRuntime) {
+    writeToFile(log).catch(err => {
+      console.error('[Auth Logger] Failed to write log:', err);
+    });
+  }
 }
 
 /**
