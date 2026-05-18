@@ -1,30 +1,43 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { MapPin, Camera, BadgeCheck } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getInitials } from '@/lib/neup-user-context';
+import {
+  getDisplayImage,
+  getName,
+  getNeupid,
+  getSessionStorageData,
+  loadProfileSessionData,
+  type ProfileSessionData,
+} from '@/lib/profile-session';
 
-type ProfileHeaderProps = {
-  accountId: string;
-  neupId?: string | null;
-  displayName?: string | null;
-  displayImage?: string | null;
-  accountType?: string;
-  verified?: boolean;
-};
+export function ProfileHeader() {
+  const [profile, setProfile] = useState<ProfileSessionData | null>(() => getSessionStorageData());
 
-export function ProfileHeader({
-  accountId,
-  neupId,
-  displayName,
-  displayImage,
-  accountType,
-  verified,
-}: ProfileHeaderProps) {
-  const handleLine = neupId
-    ? `@${neupId}`
-    : `#${accountId}`;
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      const nextProfile = await loadProfileSessionData();
+      if (!cancelled && nextProfile) {
+        setProfile(nextProfile);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const displayName = profile?.displayName ?? getName();
+  const displayImage = profile?.displayImage ?? getDisplayImage();
+  const neupid = profile?.neupid ?? getNeupid();
+  const verified = profile?.verified ?? false;
+  const accountType = profile?.accountType ?? null;
+  const handleLine = neupid ? `@${neupid}` : null;
 
   return (
     <div className="w-full bg-background pt-8">
@@ -52,7 +65,7 @@ export function ProfileHeader({
                 </p>
               )}
               <h1 className="text-2xl md:text-3xl font-bold font-headline text-white shadow-sm flex items-center gap-2">
-                {displayName ?? 'User'}
+                {displayName}
                 {verified && (
                   <BadgeCheck className="h-6 w-6 text-primary" />
                 )}

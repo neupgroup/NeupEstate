@@ -16,6 +16,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthenticatedAccount, buildHandshakeGrantUrl, fetchWhoami, fetchAccessInfo } from '@/services/auth';
 import { getAuthCookieServer } from '@/services/auth/cookie';
+import { prisma } from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   // Verify authentication
@@ -30,17 +31,41 @@ export async function GET(request: NextRequest) {
 
   const { aid, nid, guest, sid, skey } = authResult.account;
 
+  let displayName: string | null = null;
+  let displayImage: string | null = null;
+  let accountType: string | null = null;
+  let verified = guest !== 1;
+
+  try {
+    const accountRow = await prisma.account.findUnique({
+      where: { id: aid },
+      select: {
+        displayName: true,
+        displayImage: true,
+        accountType: true,
+        registered: true,
+      },
+    });
+
+    displayName = accountRow?.displayName ?? null;
+    displayImage = accountRow?.displayImage ?? null;
+    accountType = accountRow?.accountType ?? null;
+    verified = accountRow?.registered ?? verified;
+  } catch {
+    // Keep auth response usable even if profile lookup fails.
+  }
+
   // Try to fetch extended user information from bridge
   const token = await getAuthCookieServer();
   
-  let profile = null;
+  let bridgeProfile = null;
   let access = null;
 
   if (token) {
     // Attempt to fetch whoami data (user profile)
     const whoamiResult = await fetchWhoami(token);
     if (whoamiResult.success) {
-      profile = whoamiResult.data;
+      bridgeProfile = whoamiResult.data;
     }
 
     // Attempt to fetch access info (roles/permissions/teams)
@@ -58,7 +83,16 @@ export async function GET(request: NextRequest) {
       guest: guest === 1,
       sid,
       skey,
-      profile,
+      displayName,
+      displayImage,
+      accountType,
+      verified,
+      profile: {
+        displayName,
+        displayImage,
+        neupid: nid ?? null,
+      },
+      bridgeProfile,
       access,
     },
   });
