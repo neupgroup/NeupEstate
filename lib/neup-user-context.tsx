@@ -5,14 +5,11 @@
  *
  * Provides the authenticated user's identity to the React tree.
  *
- * With the new Silent SSO flow, the auth_accounts cookie (set httpOnly by
- * /api/auth/callback) contains the ssid as `aid`. We expose a minimal
- * identity object derived from that — no external fetch needed for the
- * account ID itself.
+ * The auth_account cookie is httpOnly, so the provider fetches /api/auth/me
+ * and caches the server-confirmed identity in sessionStorage.
  *
- * For richer profile data (displayName, avatar, etc.) the app can call
- * /api/auth/me or use the data returned from the /api/auth/callback response
- * stored in sessionStorage.
+ * For richer profile data (displayName, avatar, etc.) the app can use the
+ * data returned from /api/auth/me.
  */
 
 import {
@@ -77,11 +74,11 @@ export function NeupUserProvider({ children }: { children: ReactNode }) {
     // Return cached value immediately to avoid a flash
     const cached = readFromSession();
     if (cached) {
-      setUser(cached);
+      queueMicrotask(() => setUser(cached));
       return;
     }
 
-    // The auth_accounts cookie is httpOnly — we can't read it from JS.
+    // The auth_account cookie is httpOnly — we can't read it from JS.
     // Instead, call our own /api/auth/me endpoint which reads it server-side.
     let cancelled = false;
     (async () => {

@@ -1,10 +1,13 @@
 import { getBrandAccounts } from "@/services/neupid/get-brand-accounts";
 import { prisma } from "@/lib/prisma";
+import { requireAuth } from "@/services/auth/account";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, Building } from "lucide-react";
 import { BrandAccountCard } from "./brand-account-card";
 
 export default async function ManageAgencyPage() {
+  // Require authentication — redirects to login if not authenticated
+  const authAccount = await requireAuth();
   const brandAccountsResult = await getBrandAccounts();
 
   if (!brandAccountsResult.success) {

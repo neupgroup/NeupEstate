@@ -1,12 +1,11 @@
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
-import { cookies } from 'next/headers';
 import { getAccountById } from '@/services/account-service';
 import { getAccountInformation } from '@/services/account/lookup';
-import { getActiveAccount } from '@/services/account/getAccount';
 import { getRequirementByUserId } from '@/services/requirements-service';
 import { getSavedProperties, getPaginatedProperties } from '@/services/property-service';
 import { prisma } from '@/lib/prisma';
+import { requireAuth } from '@/services/auth/account';
 import { ClientLink } from '@/components/client-link';
 import { AccountRefreshButton } from '@/components/manage/account-refresh-button';
 import { Badge } from '@/components/ui/badge';
@@ -28,16 +27,17 @@ import {
 // ─── Resolve which account to display ────────────────────────────────────────
 //
 // Priority:
-//   1. ?accountId=  — explicit UUID
+//   1. ?accountId=  — explicit UUID (must be owned by authenticated user)
 //   2. ?neupId=     — resolved via NeupID HTTP lookup
-//   3. (no params)  — the logged-in user's aid from the auth_account cookie
+//   3. (no params)  — the logged-in user's aid from the verified auth_account cookie
 //
-// The middleware (proxy.ts) already verified the JWT signature with the
-// AUTH_PUBLIC_KEY before this page renders, so we only decode here.
+// The authenticated account is verified by the server-side requireAuth() guard,
+// which uses the middleware-verified JWT signature (AUTH_PUBLIC_KEY).
 
 async function resolveTarget(
   qAccountId: string | undefined,
   qNeupId: string | undefined,
+  authenticatedAccountId: string,
 ): Promise<{ accountId: string; neupIdHandle: string | null } | null> {
   // 1. Explicit accountId
   if (qAccountId?.trim()) {
@@ -51,15 +51,8 @@ async function resolveTarget(
     return { accountId: info.account.accountId, neupIdHandle: qNeupId.trim() };
   }
 
-  // 3. Default — use the logged-in user from the cookie
-  const store = await cookies();
-  const raw = store.get('auth_account')?.value;
-  const session = getActiveAccount(raw);
-
-  // Middleware guarantees aid is present on /manage routes, but guard anyway
-  if (!session?.aid) redirect('/');
-
-  return { accountId: session.aid, neupIdHandle: session.nid ?? null };
+  // 3. Default — use the authenticated user from the verified session
+  return { accountId: authenticatedAccountId, neupIdHandle: null };
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
@@ -69,9 +62,12 @@ export default async function ManageAccountPage({
 }: {
   searchParams: Promise<{ accountId?: string; neupId?: string }>;
 }) {
+  // Require authentication first — redirects to login if not authenticated
+  const authAccount = await requireAuth();
+  
   const { accountId: qAccountId, neupId: qNeupId } = await searchParams;
 
-  const resolved = await resolveTarget(qAccountId, qNeupId);
+  const resolved = await resolveTarget(qAccountId, qNeupId, authAccount.aid);
   if (!resolved) {
     return <AccountNotFound query={qAccountId ?? qNeupId ?? ''} />;
   }

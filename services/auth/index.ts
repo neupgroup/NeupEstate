@@ -33,6 +33,15 @@ export {
   getAuthCookieServer,
 } from './cookie';
 
+export {
+  buildAuthCallbackUrl,
+  buildHandshakeGrantUrl,
+  buildWhoamiUrl,
+  buildAccessUrl,
+  fetchWhoami,
+  fetchAccessInfo,
+} from './bridge';
+
 // JWT operations (if needed separately)
 export {
   verifyAuthJWT,

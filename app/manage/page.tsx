@@ -1,6 +1,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { getProperties } from "@/services/property-service";
+import { requireAuth } from "@/services/auth/account";
 import { Clock, DollarSign, CalendarCheck, Home } from "lucide-react";
 import { DailySchedule } from "@/components/manage/daily-schedule";
 
@@ -47,6 +48,9 @@ const StatCard = ({ title, value, icon, description }: { title: string, value: s
 }
 
 export default async function ManageDashboardPage() {
+    // Require authentication — redirects to login if not authenticated
+    const authAccount = await requireAuth();
+    
     const stats = await getStats();
 
     return (

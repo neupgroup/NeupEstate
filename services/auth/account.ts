@@ -22,6 +22,7 @@
 import { redirect } from 'next/navigation';
 import { getAuthCookieClient, getAuthCookieServer } from './cookie';
 import { verifyAuthJWT, decodeAuthJWT, type AuthAccountPayload } from './jwt';
+import { buildHandshakeGrantUrl } from './bridge';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -44,9 +45,34 @@ export type AccountInfo = {
   guest: boolean;
 };
 
-// ─── Constants ───────────────────────────────────────────────────────────────
+// ─── Constants ───────────────────────────────────────────────────────────
 
-const NEUP_AUTH_START = 'https://neupgroup.com/account/auth/start';
+const DEFAULT_REDIRECT_PATH = '/';
+
+async function getRedirectPath(request?: { url?: string; nextUrl?: { href?: string } }): Promise<string> {
+  if (request?.nextUrl?.href) {
+    return request.nextUrl.href;
+  }
+
+  if (request?.url) {
+    return request.url;
+  }
+
+  try {
+    const { headers } = await import('next/headers');
+    const headerStore = await headers();
+    const pathname = headerStore.get('x-next-pathname') ?? '';
+    if (pathname) {
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://neupgroup.com/estate';
+      return new URL(pathname, baseUrl).toString();
+    }
+  } catch {
+    // ignore header lookup failures and fall back to a safe default
+  }
+
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://neupgroup.com/estate';
+  return new URL(DEFAULT_REDIRECT_PATH, baseUrl).toString();
+}
 
 // ─── Server-side (verified) ──────────────────────────────────────────────────
 
@@ -176,7 +202,7 @@ export async function getAccountInfo(): Promise<AccountInfo | null> {
  * This is the simplest way to protect a page or API route.
  *
  * If authentication succeeds, returns the verified account payload.
- * If authentication fails, redirects to neupgroup.com/account/auth/start and never returns.
+ * If authentication fails, redirects to the handshake grant flow and never returns.
  *
  * Usage in Server Components:
  *   const account = await requireAuth();
@@ -193,17 +219,8 @@ export async function requireAuth(request?: { url?: string; nextUrl?: { href?: s
   const result = await getAuthenticatedAccount();
 
   if (!result.success) {
-    // Build the redirect URL with the current page as redirectsTo
-    let redirectUrl = NEUP_AUTH_START;
-
-    if (request) {
-      const currentUrl = request.nextUrl?.href || request.url;
-      if (currentUrl) {
-        redirectUrl = `${NEUP_AUTH_START}?redirectsTo=${encodeURIComponent(currentUrl)}`;
-      }
-    }
-
-    redirect(redirectUrl);
+    const redirectPath = await getRedirectPath(request);
+    redirect(buildHandshakeGrantUrl(request, redirectPath));
   }
 
   return result.account;
@@ -224,17 +241,8 @@ export async function requireRegisteredAuth(request?: { url?: string; nextUrl?: 
   const result = await getAuthenticatedAccount();
 
   if (!result.success || result.account.guest === 1 || !result.account.nid) {
-    // Build the redirect URL with the current page as redirectsTo
-    let redirectUrl = NEUP_AUTH_START;
-
-    if (request) {
-      const currentUrl = request.nextUrl?.href || request.url;
-      if (currentUrl) {
-        redirectUrl = `${NEUP_AUTH_START}?redirectsTo=${encodeURIComponent(currentUrl)}`;
-      }
-    }
-
-    redirect(redirectUrl);
+    const redirectPath = await getRedirectPath(request);
+    redirect(buildHandshakeGrantUrl(request, redirectPath));
   }
 
   return result.account;

@@ -6,26 +6,14 @@ import type { NextRequest } from 'next/server';
  *
  * auth_account cookie is a JWT signed with AUTH_PUBLIC_KEY (RS256).
  *
- * Payload shape:
- *   { aid, sid, skey, nid, guest? }
- *   - aid   : account ID (present for all accounts, including guests)
- *   - sid   : session ID
- *   - skey  : session key
- *   - nid   : NeupID (only set for fully registered accounts)
- *   - guest : 1 if guest, unset if registered
- *
  * Rules:
  *   1. /bridge/*       → always pass through
  *   2. Static/_next    → always pass through
  *   3. /manage/*       → full auth required:
  *                        - valid JWT, aid present, nid present, no guest flag
- *                        → redirect to neupgroup.com/account/auth/start on failure
- *   4. All other paths → identification required:
- *                        - if auth_account cookie is missing or invalid,
- *                          redirect to whoisthisthat bridge (sets cookie
- *                          automatically, same domain) then bounces back
- *                        - guests (aid present, guest: 1) are allowed through
- *                        - registered users are allowed through
+ *                        → redirect to the documented handshake grant flow on failure
+ *   4. All other paths → pass through and let page-level auth determine whether
+ *                        the session is required.
  */
 
 // ---------------------------------------------------------------------------
@@ -131,25 +119,34 @@ async function verifyJwt(token: string): Promise<JwtPayload | null> {
 // URL constants
 // ---------------------------------------------------------------------------
 
-const BASE_PATH          = '/estate';
-const AUTH_START_URL     = 'https://neupgroup.com/account/auth/start';
-const WHOISTHISTHAT_URL  = 'https://neupgroup.com/account/bridge/silent.v1/whoisthisthat';
+const BASE_PATH = '/estate';
+const NEUPID_BASE = 'https://neupgroup.com/account';
 
 // ---------------------------------------------------------------------------
 // Redirect helpers
 // ---------------------------------------------------------------------------
 
-function redirectToAuthStart(request: NextRequest, pathname: string): NextResponse {
-  const dest = new URL(AUTH_START_URL);
-  if (pathname && pathname !== '/') {
-    dest.searchParams.set('redirects', BASE_PATH + pathname + request.nextUrl.search);
-  }
-  return NextResponse.redirect(dest);
+function buildCallbackUrl(request: NextRequest): string {
+  return new URL('/api/auth/callback', request.url).toString();
 }
 
-function redirectToWhoisthisthat(request: NextRequest, pathname: string): NextResponse {
-  const dest = new URL(WHOISTHISTHAT_URL);
-  dest.searchParams.set('redirectsTo', BASE_PATH + pathname + request.nextUrl.search);
+function redirectToHandshake(request: NextRequest, pathname: string): NextResponse {
+  const appId = process.env.NEUPID_APP_ID ?? process.env.NEXT_PUBLIC_NEUPID_APP_ID ?? '';
+  const dest = new URL(`${NEUPID_BASE}/bridge/handshake.v1/auth/grant`);
+
+  if (!appId) {
+    dest.pathname = '/account/auth/start';
+    if (pathname && pathname !== '/') {
+      dest.searchParams.set('redirectsTo', BASE_PATH + pathname + request.nextUrl.search);
+    }
+    return NextResponse.redirect(dest);
+  }
+
+  dest.searchParams.set('app', appId);
+  dest.searchParams.set('authenticatesTo', buildCallbackUrl(request));
+  if (pathname && pathname !== '/') {
+    dest.searchParams.set('redirectsTo', new URL(BASE_PATH + pathname + request.nextUrl.search, request.url).toString());
+  }
   return NextResponse.redirect(dest);
 }
 
@@ -208,15 +205,9 @@ export default async function proxy(request: NextRequest) {
   //    Must have: valid JWT, aid, nid, no guest flag
   if (pathname.startsWith('/manage')) {
     if (!payload || !payload.aid || !payload.nid || payload.guest === 1) {
-      return redirectToAuthStart(request, pathname);
+      return redirectToHandshake(request, pathname);
     }
     return pass();
-  }
-
-  // ── 6. All other paths — identification required ─────────────────────────
-  //    Guests are allowed. Missing/invalid cookie → whoisthisthat bridge.
-  if (!payload || !payload.aid) {
-    return redirectToWhoisthisthat(request, pathname);
   }
 
   return pass();

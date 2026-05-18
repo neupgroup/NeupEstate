@@ -1,100 +1,78 @@
 /**
- * POST /api/auth/callback
+ * /api/auth/callback
  *
- * Server-side handler for the NeupID Silent SSO code exchange.
- * Receives the authorization code from the client, exchanges it with NeupID
- * for the full identity, and upserts the account row in the DB.
+ * This endpoint is called after the user completes authentication with Neup.Account.
+ * The Neup.Account bridge has already set the auth_account cookie on the client.
+ * 
+ * This route simply:
+ * 1. Receives the callback
+ * 2. Reads the aid from the cookie (if present)
+ * 3. Upserts the account in the database
+ * 4. Redirects to the requested destination
  *
- * NOTE: The auth_account JWT cookie is set directly by NeupID on the shared
- * neupgroup.com domain — this endpoint does NOT set any auth cookie.
- * It only persists the account record and returns the identity to the client.
+ * Cookie management is handled entirely by Neup.Account, not by this app.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { logProblem } from '@/services/problem-service';
+import { getAuthenticatedAccount } from '@/services/auth';
 
-const NEUPID_EXCHANGE_URL =
-  'https://neupgroup.com/account/bridge/silent.v1/auth/exchange';
+function getRedirectTarget(request: NextRequest): string {
+  const redirectsTo = request.nextUrl.searchParams.get('redirectsTo');
+  if (redirectsTo) {
+    return redirectsTo;
+  }
 
-const APP_ID     = process.env.NEUPID_APP_ID!;
-const APP_SECRET = process.env.NEUPID_APP_SECRET!;
+  const returnTo = request.nextUrl.searchParams.get('returnTo');
+  if (returnTo) {
+    return returnTo;
+  }
 
-export async function POST(req: NextRequest) {
+  return '/';
+}
+
+async function handleCallback(request: NextRequest) {
   try {
-    const body = await req.json();
-    const { code, codeVerifier } = body as { code?: string; codeVerifier?: string };
+    // Get the authenticated account from the cookie
+    // (Neup.Account bridge has already set it)
+    const authResult = await getAuthenticatedAccount();
 
-    if (!code) {
-      return NextResponse.json({ error: 'missing_code' }, { status: 400 });
+    // If authentication is successful and we have an aid, upsert the account
+    if (authResult.success && authResult.account.aid) {
+      const { aid, nid, guest } = authResult.account;
+
+      await prisma.account.upsert({
+        where: { id: aid },
+        create: {
+          id: aid,
+          accountType: guest === 1 ? 'guest' : 'individual',
+          registered: guest !== 1,
+          displayName: nid ?? aid,
+          createdOn: new Date(),
+          accessedOn: new Date(),
+        },
+        update: {
+          accessedOn: new Date(),
+          displayName: nid ?? aid,
+          registered: guest !== 1,
+        },
+      });
     }
 
-    if (!APP_ID || !APP_SECRET) {
-      return NextResponse.json({ error: 'server_misconfigured' }, { status: 500 });
-    }
-
-    // Exchange the code with NeupID (server-to-server)
-    const exchangeBody: Record<string, string> = {
-      appId: APP_ID,
-      appSecret: APP_SECRET,
-      code,
-    };
-    if (codeVerifier) exchangeBody.codeVerifier = codeVerifier;
-
-    const exchangeRes = await fetch(NEUPID_EXCHANGE_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(exchangeBody),
-    });
-
-    const identity = await exchangeRes.json();
-
-    if (!exchangeRes.ok || !identity.success) {
-      return NextResponse.json(
-        { error: identity.error ?? 'exchange_failed' },
-        { status: 401 }
-      );
-    }
-
-    const { accountId, neupId, displayName, displayImage, accountType, verified } = identity as {
-      accountId: string;
-      neupId: string;
-      displayName: string;
-      displayImage: string;
-      accountType: string;
-      verified: boolean;
-    };
-
-    // Upsert the account row — id is the ssid (accountId from NeupID)
-    await prisma.account.upsert({
-      where: { id: accountId },
-      create: {
-        id: accountId,
-        accountType: accountType ?? 'individual',
-        registered: true,
-        createdOn: new Date(),
-        accessedOn: new Date(),
-      },
-      update: {
-        accessedOn: new Date(),
-        accountType: accountType ?? 'individual',
-        registered: true,
-      },
-    });
-
-    // Return the identity to the client — the auth_account JWT cookie is
-    // already set by NeupID on the shared domain, no cookie work needed here.
-    return NextResponse.json({
-      success: true,
-      accountId,
-      neupId,
-      displayName,
-      displayImage,
-      accountType,
-      verified,
-    });
-  } catch (e) {
-    await logProblem(e, 'POST /api/auth/callback');
+    // Always redirect to the requested destination
+    const redirectTarget = getRedirectTarget(request);
+    return NextResponse.redirect(new URL(redirectTarget, request.url));
+  } catch (error) {
+    await logProblem(error, 'GET /api/auth/callback');
     return NextResponse.json({ error: 'internal_error' }, { status: 500 });
   }
+}
+
+export async function GET(req: NextRequest) {
+  return await handleCallback(req);
+}
+
+export async function POST(req: NextRequest) {
+  return await handleCallback(req);
 }

@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Loader2, Building2, CheckCircle, AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { SafeImage } from '@/components/safe-image';
-import { fetchBrandAccountsAction } from '@/app/manage/agencies/actions';
+// import { fetchBrandAccountsAction } from '@/app/manage/agencies/actions';
 
 interface BrandAccount {
   id: string;
@@ -36,6 +36,9 @@ export function ApiRequestButton() {
     setData(null);
 
     try {
+      // TODO: fetchBrandAccountsAction is not yet implemented
+      setError('This feature is not yet available');
+      /*
       const result = await fetchBrandAccountsAction();
       
       if (!result.success) {
@@ -43,6 +46,7 @@ export function ApiRequestButton() {
       } else {
         setData(result);
       }
+      */
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred');
     } finally {

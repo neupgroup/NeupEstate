@@ -11,18 +11,15 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthenticatedAccount } from '@/services/auth';
+import { buildHandshakeGrantUrl } from '@/services/auth';
 import { prisma } from '@/lib/prisma';
-
-const AUTH_START = 'https://neupgroup.com/account/auth/start';
 
 export async function GET(req: NextRequest) {
   // ── Step 1: verify JWT and get account ───────────────────────────────────
   const result = await getAuthenticatedAccount();
 
   if (!result.success) {
-    // Build the redirectTo URL so the client can bounce the user to NeupID
-    const currentUrl = req.nextUrl.href;
-    const redirectTo = `${AUTH_START}?redirectsTo=${encodeURIComponent(currentUrl)}`;
+    const redirectTo = buildHandshakeGrantUrl(req, req.nextUrl.href);
 
     return NextResponse.json(
       { accountId: null, reason: result.reason, redirectTo },
