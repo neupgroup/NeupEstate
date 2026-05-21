@@ -125,9 +125,9 @@ export default function ManageLayout({
                     <Users className="mr-2 h-4 w-4" />
                     Agents
                 </ClientLink>
-                <ClientLink href="/manage/teams" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
+                <ClientLink href="/manage/team" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
                     <UsersRound className="mr-2 h-4 w-4" />
-                    Teams
+                    Team
                 </ClientLink>
                 <ClientLink href="/manage/users" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
                     <UserCog className="mr-2 h-4 w-4" />
