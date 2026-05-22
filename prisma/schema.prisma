@@ -45,6 +45,7 @@ enum Reaction {
 
 model Account {
   id                   String   @id // ssid from NeupID Silent SSO
+  neupId               String?  @unique
   accountType          String
   mainId               String?  // references Account.id
   registered           Boolean  @default(false)

@@ -36,16 +36,46 @@ export async function createAccount(): Promise<void> {
     if (!aid) return;
 
     // Check if the row already exists
-    const existing = await prisma.account.findUnique({
-      where: { id: aid },
-      select: { id: true },
-    });
+    let existing: { id: string; neupId?: string | null; displayName?: string | null; displayImage?: string | null } | null = null;
+    try {
+      existing = await prisma.account.findUnique({
+        where: { id: aid },
+        select: { id: true, neupId: true, displayName: true, displayImage: true },
+      });
+    } catch (err: any) {
+      // If the neupId column doesn't exist yet (migration not applied), fall back
+      // to a safer select that omits the column so the app can continue running.
+      try {
+        existing = await prisma.account.findUnique({
+          where: { id: aid },
+          select: { id: true, displayName: true, displayImage: true },
+        });
+      } catch (e) {
+        // If even this fails, rethrow to be handled by outer catch
+        throw e;
+      }
+    }
 
     if (existing) {
-      // Row exists — bump accessedOn and return
+      // Row exists — bump accessedOn and return (but update any missing denormalized fields)
+      const updateData: any = { accessedOn: new Date() };
+      // If some display fields are missing, attempt to fetch them below
+      if (!existing.displayName || !existing.displayImage || !existing.neupId) {
+        try {
+          const info = await getAccountInformation({ accountId: aid });
+          if (info.found) {
+            if (!existing.displayName && info.account.displayName) updateData.displayName = info.account.displayName;
+            if (!existing.displayImage && info.account.displayImage) updateData.displayImage = info.account.displayImage;
+            if (!existing.neupId && info.account.neupId) updateData.neupId = info.account.neupId;
+          }
+        } catch {
+          // ignore lookup errors
+        }
+      }
+
       await prisma.account.update({
         where: { id: aid },
-        data: { accessedOn: new Date() },
+        data: updateData,
       });
       return;
     }
@@ -61,6 +91,8 @@ export async function createAccount(): Promise<void> {
         displayName  = info.account.displayName  || null;
         displayImage = info.account.displayImage || null;
         accountType  = info.account.accountType  || 'individual';
+        // include neupId when creating
+        var neupIdFromLookup = info.account.neupId || null;
       }
     } catch {
       // Non-fatal — create the row without display info if NeupID is unreachable
@@ -69,6 +101,7 @@ export async function createAccount(): Promise<void> {
     await prisma.account.create({
       data: {
         id: aid,
+        neupId: neupIdFromLookup ?? null,
         accountType,
         registered: true,
         createdOn:  new Date(),

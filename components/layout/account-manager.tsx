@@ -15,7 +15,7 @@ import { resolveAccountAction } from '@/app/actions';
 export function AccountManager() {
   useEffect(() => {
     const run = async () => {
-      const res = await fetch('/api/auth/me', { credentials: 'include' });
+      const res = await fetch('/bridge/api.v1/auth/me', { credentials: 'include' });
 
       if (res.status === 401) {
         const body = await res.json().catch(() => ({}));

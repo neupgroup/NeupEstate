@@ -86,6 +86,16 @@ export default function Header() {
   // Close on route change
   useEffect(() => { setMenuOpen(false); }, [pathname]);
 
+  // DEBUG: log the current user object and sessionStorage entry
+  useEffect(() => {
+    try {
+      console.log('Header user (useNeupUser):', user);
+      console.log('Header session neup_user:', sessionStorage.getItem('neup_user'));
+    } catch (err) {
+      // ignore in non-browser environments
+    }
+  }, [user]);
+
   // Lock / unlock body scroll when shutter is open
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -203,24 +213,44 @@ export default function Header() {
             <TooltipProvider delayDuration={200}>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link href="/profile" className="hidden sm:block">
+                  <Link href="/profile" className="block">
                     <UserAvatar />
                   </Link>
                 </TooltipTrigger>
                 {user && (
-                  <TooltipContent side="bottom" align="end" className="p-3 max-w-[200px]">
+                  <TooltipContent side="bottom" align="end" className="p-3 max-w-[220px]">
                     <div className="flex flex-col gap-0.5">
                       <div className="flex items-center gap-1.5">
-                        <span className="font-semibold text-sm truncate">{user.displayName}</span>
+                        <span className="font-semibold text-sm truncate">{user.verified ? (user.displayName ?? 'User') : 'Guest User'}</span>
                         {user.verified && <BadgeCheck className="h-3.5 w-3.5 text-primary shrink-0" />}
                       </div>
-                      <span className="text-xs text-muted-foreground">@{user.neupId}</span>
-                      <span className="text-xs text-muted-foreground capitalize">{user.accountType}</span>
+                      {user.verified ? (
+                        <>
+                          <span className="text-xs text-muted-foreground">@{user.neupId}</span>
+                          <span className="text-xs text-muted-foreground capitalize">{user.accountType}</span>
+                        </>
+                      ) : (
+                        <Link href="/profile" className="text-xs text-primary font-semibold">Sign In Now</Link>
+                      )}
                     </div>
                   </TooltipContent>
                 )}
               </Tooltip>
             </TooltipProvider>
+
+            {/* Inline name/cta — desktop */}
+            {user && (
+              <div className="flex flex-col items-end mr-2">
+                <Link href="/profile" className="text-sm font-semibold truncate">
+                  {user.verified ? (user.displayName ?? 'User') : 'Guest User'}
+                </Link>
+                {user.verified ? (
+                  <span className="text-xs text-muted-foreground">@{user.neupId}</span>
+                ) : (
+                  <Link href="/profile" className="text-xs text-primary font-semibold">Sign In Now</Link>
+                )}
+              </div>
+            )}
 
             {/* Burger — mobile only */}
             <Button
@@ -247,17 +277,8 @@ export default function Header() {
         className={cn(
           "md:hidden fixed inset-x-0 top-16 z-40 bg-card border-t",
           "transition-[clip-path] duration-300 ease-in-out",
-          menuOpen ? "pointer-events-auto" : "pointer-events-none"
+          menuOpen ? "pointer-events-auto [clip-path:inset(0_0_0_0)] shadow-[0_8px_24px_0_rgba(0,0,0,0.18)]" : "pointer-events-none [clip-path:inset(0_0_100%_0)] shadow-none"
         )}
-        style={{
-          clipPath: menuOpen ? "inset(0 0 0 0)" : "inset(0 0 100% 0)",
-          maxHeight: "calc(100svh - 4rem)",
-          overflowY: "auto",
-          display: "flex",
-          flexDirection: "column",
-          // Shadow on the bottom edge — visible while the shutter is open
-          boxShadow: menuOpen ? "0 8px 24px 0 rgba(0,0,0,0.18)" : "none",
-        }}
       >
         {/* User identity */}
         {user && (
@@ -269,10 +290,14 @@ export default function Header() {
             <UserAvatar />
             <div className="flex flex-col min-w-0">
               <div className="flex items-center gap-1">
-                <span className="text-sm font-semibold truncate">{user.displayName}</span>
+                <span className="text-sm font-semibold truncate">{user.verified ? (user.displayName ?? 'User') : 'Guest User'}</span>
                 {user.verified && <BadgeCheck className="h-3.5 w-3.5 text-primary shrink-0" />}
               </div>
-              <span className="text-xs text-muted-foreground">@{user.neupId}</span>
+              {user.verified ? (
+                <span className="text-xs text-muted-foreground">@{user.neupId}</span>
+              ) : (
+                <span className="text-xs text-primary font-semibold">Sign In Now</span>
+              )}
             </div>
           </Link>
         )}

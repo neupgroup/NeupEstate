@@ -5,11 +5,11 @@
  *
  * Provides the authenticated user's identity to the React tree.
  *
- * The auth_account cookie is httpOnly, so the provider fetches /api/auth/me
+ * The auth_account cookie is httpOnly, so the provider fetches /bridge/api.v1/auth/me
  * and caches the server-confirmed identity in sessionStorage.
  *
  * For richer profile data (displayName, avatar, etc.) the app can use the
- * data returned from /api/auth/me.
+ * data returned from /bridge/api.v1/auth/me.
  */
 
 import {
@@ -79,11 +79,11 @@ export function NeupUserProvider({ children }: { children: ReactNode }) {
     }
 
     // The auth_account cookie is httpOnly — we can't read it from JS.
-    // Instead, call our own /api/auth/me endpoint which reads it server-side.
+    // Instead, call our own bridge auth endpoint which reads it server-side.
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch('/api/auth/me', { credentials: 'include' });
+        const res = await fetch('/bridge/api.v1/auth/me', { credentials: 'include' });
 
         // JWT invalid or missing — redirect to NeupID login
         if (res.status === 401) {

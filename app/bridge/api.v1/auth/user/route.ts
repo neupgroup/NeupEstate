@@ -37,20 +37,40 @@ export async function GET(request: NextRequest) {
   let verified = guest !== 1;
 
   try {
-    const accountRow = await prisma.account.findUnique({
-      where: { id: aid },
-      select: {
-        displayName: true,
-        displayImage: true,
-        accountType: true,
-        registered: true,
-      },
-    });
+    let accountRow: any = null;
+    try {
+      accountRow = await prisma.account.findUnique({
+        where: { id: aid },
+        select: {
+          neupId: true,
+          displayName: true,
+          displayImage: true,
+          accountType: true,
+          registered: true,
+        },
+      });
+    } catch (err: any) {
+      // Fall back if DB schema hasn't been migrated yet (no neupId column)
+      try {
+        accountRow = await prisma.account.findUnique({
+          where: { id: aid },
+          select: {
+            displayName: true,
+            displayImage: true,
+            accountType: true,
+            registered: true,
+          },
+        });
+      } catch {
+        accountRow = null;
+      }
+    }
 
     displayName = accountRow?.displayName ?? null;
     displayImage = accountRow?.displayImage ?? null;
     accountType = accountRow?.accountType ?? null;
     verified = accountRow?.registered ?? verified;
+    const neupidFromDb = accountRow?.neupId ?? null;
   } catch {
     // Keep auth response usable even if profile lookup fails.
   }
@@ -90,7 +110,7 @@ export async function GET(request: NextRequest) {
       profile: {
         displayName,
         displayImage,
-        neupid: nid ?? null,
+        neupid: neupidFromDb ?? nid ?? null,
       },
       bridgeProfile,
       access,
