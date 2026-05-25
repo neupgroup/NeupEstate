@@ -5,11 +5,11 @@
  *
  * Provides the authenticated user's identity to the React tree.
  *
- * The auth_account cookie is httpOnly, so the provider fetches /bridge/api.v1/auth/me
+ * The auth_account cookie is httpOnly, so the provider fetches /api/auth/me
  * and caches the server-confirmed identity in sessionStorage.
  *
  * For richer profile data (displayName, avatar, etc.) the app can use the
- * data returned from /bridge/api.v1/auth/me.
+ * data returned from /api/auth/me.
  */
 
 import {
@@ -42,23 +42,33 @@ const SESSION_KEY = 'neup_user';
 function readFromSession(): NeupUser | null {
   try {
     const raw = sessionStorage.getItem(SESSION_KEY);
+    console.log('[NeupUserProvider] readFromSession raw:', raw);
     if (!raw) return null;
-    return JSON.parse(raw) as NeupUser;
+    const parsed = JSON.parse(raw) as NeupUser;
+    console.log('[NeupUserProvider] readFromSession parsed:', parsed);
+    return parsed;
   } catch {
+    console.log('[NeupUserProvider] readFromSession parse failed');
     return null;
   }
 }
 
 function writeToSession(user: NeupUser) {
   try {
+    console.log('[NeupUserProvider] writeToSession user:', user);
     sessionStorage.setItem(SESSION_KEY, JSON.stringify(user));
-  } catch {}
+  } catch (error) {
+    console.log('[NeupUserProvider] writeToSession failed:', error);
+  }
 }
 
 function clearSession() {
   try {
+    console.log('[NeupUserProvider] clearSession');
     sessionStorage.removeItem(SESSION_KEY);
-  } catch {}
+  } catch (error) {
+    console.log('[NeupUserProvider] clearSession failed:', error);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -71,9 +81,11 @@ export function NeupUserProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<NeupUser | null>(null);
 
   useEffect(() => {
+    console.log('[NeupUserProvider] effect start');
     // Return cached value immediately to avoid a flash
     const cached = readFromSession();
     if (cached) {
+      console.log('[NeupUserProvider] using cached user:', cached);
       queueMicrotask(() => setUser(cached));
       return;
     }
@@ -83,24 +95,30 @@ export function NeupUserProvider({ children }: { children: ReactNode }) {
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch('/bridge/api.v1/auth/me', { credentials: 'include' });
+        console.log('[NeupUserProvider] fetching /api/auth/me');
+        const res = await fetch('/api/auth/me', { credentials: 'include' });
+        console.log('[NeupUserProvider] /api/auth/me status:', res.status);
 
         // JWT invalid or missing — redirect to NeupID login
         if (res.status === 401) {
           const body = await res.json().catch(() => ({}));
+          console.log('[NeupUserProvider] auth 401 response body:', body);
           clearSession();
           if (body?.redirectTo && typeof window !== 'undefined') {
+            console.log('[NeupUserProvider] redirecting to:', body.redirectTo);
             window.location.href = body.redirectTo;
           }
           return;
         }
 
         if (!res.ok) {
+          console.log('[NeupUserProvider] non-ok response, clearing session');
           clearSession();
           return;
         }
 
         const data = await res.json();
+        console.log('[NeupUserProvider] auth/me payload:', data);
         if (cancelled) return;
         if (data?.accountId) {
           const neupUser: NeupUser = {
@@ -111,17 +129,23 @@ export function NeupUserProvider({ children }: { children: ReactNode }) {
             accountType: data.accountType,
             verified: data.verified,
           };
+          console.log('[NeupUserProvider] mapped neupUser:', neupUser);
           writeToSession(neupUser);
           setUser(neupUser);
         } else {
+          console.log('[NeupUserProvider] missing accountId in payload');
           clearSession();
         }
-      } catch {
+      } catch (error) {
+        console.log('[NeupUserProvider] fetch failed:', error);
         clearSession();
       }
     })();
 
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+      console.log('[NeupUserProvider] effect cleanup (cancelled=true)');
+    };
   }, []);
 
   return (

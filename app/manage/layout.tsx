@@ -1,5 +1,6 @@
 
 
+import { cookies } from 'next/headers';
 import {
     Home, Users, Settings, Upload, FilePlus2, Building, Wand2, Sparkles, ShieldAlert, UserCog,
     LayoutDashboard, LineChart, Package, MessageSquareHeart, FileQuestion, Landmark, CalendarCheck, FileText,
@@ -11,12 +12,20 @@ import { cn } from '@/lib/utils';
 import { ClientLink } from '@/components/client-link';
 import { WhatsAppIcon } from '@/components/icons';
 import { SidebarUserCard } from '@/components/manage/sidebar-user-card';
+import { createAccountInApp } from '@/logica/auth/account';
 
-export default function ManageLayout({
+export default async function ManageLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = await cookies();
+  const authCookie = cookieStore.get('auth_account')?.value ?? null;
+
+  if (authCookie) {
+    await createAccountInApp(authCookie).catch(() => null);
+  }
+
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
       <div className="grid grid-cols-1 gap-8 md:grid-cols-[240px_1fr] items-start">

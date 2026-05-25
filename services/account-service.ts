@@ -137,9 +137,20 @@ function mapRecord(account: any): Account {
   };
 }
 
-// Keep updateUser for backward compat — it now only updates accessedOn
-export async function updateUser(id: string, _data: any): Promise<void> {
-  await updateAccountAccessInfo(id);
+// Keep updateUser for backward compat — now updates account display fields used by manage/users/[id].
+export async function updateUser(id: string, data: any): Promise<void> {
+  const nextDisplayName =
+    typeof data?.name === 'string' && data.name.trim().length > 0
+      ? data.name.trim()
+      : undefined;
+
+  await prisma.account.update({
+    where: { id },
+    data: {
+      ...(nextDisplayName ? { displayName: nextDisplayName } : {}),
+      accessedOn: new Date(),
+    },
+  });
 }
 
 /**
@@ -169,4 +180,3 @@ export async function refreshAccountDisplayInfo(
     return null;
   }
 }
-

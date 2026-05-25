@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { Menu, X, User, BadgeCheck } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNeupUser, getInitials } from "@/lib/neup-user-context";
+import { loadProfileSessionData, type ProfileSessionData } from "@/lib/profile-session";
 import {
   Tooltip,
   TooltipContent,
@@ -79,9 +80,49 @@ const manageNav: ManageNavItem[] = [
 export default function Header() {
   const pathname = usePathname();
   const user = useNeupUser();
+  const [profileFallback, setProfileFallback] = useState<ProfileSessionData | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const effectiveUser = user ?? (profileFallback ? {
+    accountId: profileFallback.accountId ?? "",
+    neupId: profileFallback.neupid ?? undefined,
+    displayName: profileFallback.displayName ?? undefined,
+    displayImage: profileFallback.displayImage ?? undefined,
+    accountType: profileFallback.accountType ?? undefined,
+    verified: profileFallback.verified ?? false,
+  } : null);
+
   const isManage = pathname.startsWith("/manage");
+  const displayName = effectiveUser?.verified ? (effectiveUser.displayName ?? "User") : "Guest User";
+  const handleText = effectiveUser?.verified && effectiveUser?.neupId ? `@${effectiveUser.neupId}` : null;
+
+  useEffect(() => {
+    if (user) return;
+    let mounted = true;
+    (async () => {
+      const profile = await loadProfileSessionData();
+      if (!mounted) return;
+      console.log("[Header] profile-session fallback loaded:", profile);
+      setProfileFallback(profile);
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, [user]);
+
+  useEffect(() => {
+    console.log("[Header] computed identity:", {
+      pathname,
+      isManage,
+      hasUser: !!user,
+      hasEffectiveUser: !!effectiveUser,
+      user,
+      effectiveUser,
+      profileFallback,
+      displayName,
+      handleText,
+    });
+  }, [pathname, isManage, user, effectiveUser, profileFallback, displayName, handleText]);
 
   // Close on route change
   useEffect(() => { setMenuOpen(false); }, [pathname]);
@@ -157,14 +198,16 @@ export default function Header() {
 
   const UserAvatar = () => (
     <Avatar className="h-8 w-8">
-      {user ? (
+      {effectiveUser ? (
         <>
-          <AvatarImage src={user.displayImage || undefined} alt={user.displayName} />
+          {console.log("[Header] rendering UserAvatar with user:", effectiveUser)}
+          <AvatarImage src={effectiveUser?.displayImage || undefined} alt={effectiveUser?.displayName} />
           <AvatarFallback className="text-xs font-semibold">
-            {getInitials(user.displayName ?? "")}
+            {getInitials(effectiveUser?.displayName ?? "")}
           </AvatarFallback>
         </>
       ) : (
+        console.log("[Header] rendering UserAvatar without user"),
         <AvatarFallback>
           <User className="h-4 w-4" />
         </AvatarFallback>
@@ -217,20 +260,20 @@ export default function Header() {
                     <UserAvatar />
                   </Link>
                 </TooltipTrigger>
-                {user && (
+                {effectiveUser && (
                   <TooltipContent side="bottom" align="end" className="p-3 max-w-[220px]">
                     <div className="flex flex-col gap-0.5">
                       <div className="flex items-center gap-1.5">
-                        <span className="font-semibold text-sm truncate">{user.verified ? (user.displayName ?? 'User') : 'Guest User'}</span>
-                        {user.verified && <BadgeCheck className="h-3.5 w-3.5 text-primary shrink-0" />}
+                        <span className="font-semibold text-sm truncate">{displayName}</span>
+                        {effectiveUser.verified && <BadgeCheck className="h-3.5 w-3.5 text-primary shrink-0" />}
                       </div>
-                      {user.verified ? (
+                      {handleText ? (
                         <>
-                          <span className="text-xs text-muted-foreground">@{user.neupId}</span>
-                          <span className="text-xs text-muted-foreground capitalize">{user.accountType}</span>
+                          <span className="text-xs text-muted-foreground">{handleText}</span>
+                          <span className="text-xs text-muted-foreground capitalize">{effectiveUser.accountType}</span>
                         </>
                       ) : (
-                        <Link href="/profile" className="text-xs text-primary font-semibold">Sign In Now</Link>
+                        <Link href="/profile" className="text-xs text-primary font-semibold">Sign In to Save</Link>
                       )}
                     </div>
                   </TooltipContent>
@@ -239,15 +282,15 @@ export default function Header() {
             </TooltipProvider>
 
             {/* Inline name/cta — desktop */}
-            {user && (
+            {effectiveUser && (
               <div className="flex flex-col items-end mr-2">
                 <Link href="/profile" className="text-sm font-semibold truncate">
-                  {user.verified ? (user.displayName ?? 'User') : 'Guest User'}
+                  {displayName}
                 </Link>
-                {user.verified ? (
-                  <span className="text-xs text-muted-foreground">@{user.neupId}</span>
+                {handleText ? (
+                  <span className="text-xs text-muted-foreground">{handleText}</span>
                 ) : (
-                  <Link href="/profile" className="text-xs text-primary font-semibold">Sign In Now</Link>
+                  <Link href="/profile" className="text-xs text-primary font-semibold">Sign In to Save</Link>
                 )}
               </div>
             )}
@@ -281,7 +324,7 @@ export default function Header() {
         )}
       >
         {/* User identity */}
-        {user && (
+        {effectiveUser && (
           <Link
             href="/profile"
             onClick={() => setMenuOpen(false)}
@@ -290,13 +333,13 @@ export default function Header() {
             <UserAvatar />
             <div className="flex flex-col min-w-0">
               <div className="flex items-center gap-1">
-                <span className="text-sm font-semibold truncate">{user.verified ? (user.displayName ?? 'User') : 'Guest User'}</span>
-                {user.verified && <BadgeCheck className="h-3.5 w-3.5 text-primary shrink-0" />}
+                <span className="text-sm font-semibold truncate">{displayName}</span>
+                {effectiveUser.verified && <BadgeCheck className="h-3.5 w-3.5 text-primary shrink-0" />}
               </div>
-              {user.verified ? (
-                <span className="text-xs text-muted-foreground">@{user.neupId}</span>
+              {handleText ? (
+                <span className="text-xs text-muted-foreground">{handleText}</span>
               ) : (
-                <span className="text-xs text-primary font-semibold">Sign In Now</span>
+                <span className="text-xs text-primary font-semibold">Sign In to Save</span>
               )}
             </div>
           </Link>
@@ -314,7 +357,7 @@ export default function Header() {
                 onClick={() => setMenuOpen(false)}
                 className={cn(buttonVariants({ size: "default" }), "w-full")}
               >
-                {user ? "My Profile" : "Sign In"}
+                {effectiveUser ? "My Profile" : "Sign In"}
               </Link>
             </div>
           )}

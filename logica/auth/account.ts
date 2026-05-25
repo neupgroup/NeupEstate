@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { fetchWhoami } from "@/services/auth/bridge";
 import { verifyAuthJWT } from "@/services/auth/jwt";
+import { getAccountInformation } from "@/services/account/lookup";
 
 type AccountInfoSuccess = {
   success: true;
@@ -32,6 +33,12 @@ type WhoamiLike = {
   } | null;
 };
 
+type AccountProfile = {
+  displayName: string | null;
+  displayImage: string | null;
+  neupId: string | null;
+};
+
 // Normalizes profile fields from the Neup whoami response.
 function extractProfile(data: unknown): {
   displayName: string | null;
@@ -60,6 +67,34 @@ function extractProfile(data: unknown): {
   return { displayName, displayImage, neupId };
 }
 
+// Resolves profile from whoami and falls back to public account lookup by accountId.
+async function resolveProfile(token: string, aid: string, nid?: string): Promise<AccountProfile> {
+  const base: AccountProfile = {
+    displayName: null,
+    displayImage: null,
+    neupId: nid ?? null,
+  };
+
+  const whoami = await fetchWhoami(token);
+  if (whoami.success) {
+    const profile = extractProfile(whoami.data);
+    if (profile.displayName || profile.displayImage || profile.neupId) {
+      return profile;
+    }
+  }
+
+  const lookup = await getAccountInformation({ accountId: aid });
+  if (lookup.found) {
+    return {
+      displayName: lookup.account.displayName ?? null,
+      displayImage: lookup.account.displayImage ?? null,
+      neupId: lookup.account.neupId ?? (nid ?? null),
+    };
+  }
+
+  return base;
+}
+
 // Resolves account profile data by cookie: DB first, then Neup whoami + DB upsert.
 export async function getAccountInfo(authAccountCookie: string): Promise<GetAccountInfoResult> {
   if (!authAccountCookie?.trim()) {
@@ -71,7 +106,7 @@ export async function getAccountInfo(authAccountCookie: string): Promise<GetAcco
     return { success: false, reason: verification.reason };
   }
 
-  const { aid, guest } = verification.payload;
+  const { aid, guest, nid } = verification.payload;
 
   const existing = await prisma.account.findUnique({
     where: { id: aid },
@@ -91,12 +126,7 @@ export async function getAccountInfo(authAccountCookie: string): Promise<GetAcco
     };
   }
 
-  const whoami = await fetchWhoami(authAccountCookie.trim());
-  if (!whoami.success) {
-    return { success: false, reason: `whoamiFailed:${whoami.status}` };
-  }
-
-  const profile = extractProfile(whoami.data);
+  const profile = await resolveProfile(authAccountCookie.trim(), aid, nid);
 
   await prisma.account.upsert({
     where: { id: aid },
@@ -111,9 +141,9 @@ export async function getAccountInfo(authAccountCookie: string): Promise<GetAcco
       accessedOn: new Date(),
     },
     update: {
-      neupId: profile.neupId,
-      displayName: profile.displayName,
-      displayImage: profile.displayImage,
+      ...(profile.neupId ? { neupId: profile.neupId } : {}),
+      ...(profile.displayName ? { displayName: profile.displayName } : {}),
+      ...(profile.displayImage ? { displayImage: profile.displayImage } : {}),
       accessedOn: new Date(),
     },
   });
@@ -140,18 +170,8 @@ export async function createAccountInApp(
     return { success: false, reason: verification.reason };
   }
 
-  const { aid, guest } = verification.payload;
-
-  let profile: { displayName: string | null; displayImage: string | null; neupId: string | null } = {
-    displayName: null,
-    displayImage: null,
-    neupId: verification.payload.nid ?? null,
-  };
-
-  const whoami = await fetchWhoami(token);
-  if (whoami.success) {
-    profile = extractProfile(whoami.data);
-  }
+  const { aid, guest, nid } = verification.payload;
+  const profile = await resolveProfile(token, aid, nid);
 
   await prisma.account.upsert({
     where: { id: aid },
@@ -166,9 +186,9 @@ export async function createAccountInApp(
       accessedOn: new Date(),
     },
     update: {
-      neupId: profile.neupId,
-      displayName: profile.displayName,
-      displayImage: profile.displayImage,
+      ...(profile.neupId ? { neupId: profile.neupId } : {}),
+      ...(profile.displayName ? { displayName: profile.displayName } : {}),
+      ...(profile.displayImage ? { displayImage: profile.displayImage } : {}),
       accessedOn: new Date(),
     },
   });

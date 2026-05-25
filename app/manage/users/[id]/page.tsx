@@ -13,8 +13,15 @@ export default async function UserDetailPage({ params }: { params: Promise<{ id:
         notFound();
     }
 
-    // Attempt to get more detailed user info if it's a registered user
-    let userProfile: UpdateUserFormValues = { id: account.id, name: '' };
+    // Attempt to get more detailed user info if it's a registered user.
+    // Always fall back to account display_name so the form never renders blank.
+    let userProfile: UpdateUserFormValues = {
+        id: account.id,
+        name: account.display_name || 'User',
+        location: account.location || '',
+        email: [],
+        phone: [],
+    };
 
     if (account.registered) {
         const allUsers = await getUsers();
@@ -22,8 +29,8 @@ export default async function UserDetailPage({ params }: { params: Promise<{ id:
         if (registeredUser) {
             userProfile = { 
                 id: account.id,
-                name: registeredUser.name,
-                location: registeredUser.location,
+                name: registeredUser.name || account.display_name || 'User',
+                location: registeredUser.location || account.location || '',
                 email: Array.isArray(registeredUser.email) ? registeredUser.email : [],
                 phone: Array.isArray(registeredUser.phone) ? registeredUser.phone : [],
             };
@@ -34,7 +41,7 @@ export default async function UserDetailPage({ params }: { params: Promise<{ id:
         const conversation = await getConversationByAccountId(account.id);
         userProfile = {
             id: account.id,
-            name: conversation?.customerName || account.name || 'Guest User',
+            name: conversation?.customerName || account.display_name || 'Guest User',
             location: account.location || 'Not set',
             email: [],
             phone: conversation?.customerPhone ? [{ type: 'primary', value: conversation.customerPhone }] : [],
