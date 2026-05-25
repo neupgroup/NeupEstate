@@ -15,6 +15,9 @@ type AccountInfoFailure = {
 };
 
 export type GetAccountInfoResult = AccountInfoSuccess | AccountInfoFailure;
+export type CreateAccountInAppResult =
+  | { success: true; accountId: string }
+  | { success: false; reason: string };
 
 type WhoamiLike = {
   displayName?: string | null;
@@ -121,4 +124,54 @@ export async function getAccountInfo(authAccountCookie: string): Promise<GetAcco
     neupId: profile.neupId,
     displayImage: profile.displayImage,
   };
+}
+
+// Verifies auth_account cookie and creates/updates the account row in app DB.
+export async function createAccountInApp(
+  authAccountCookie: string
+): Promise<CreateAccountInAppResult> {
+  if (!authAccountCookie?.trim()) {
+    return { success: false, reason: "cookieNotFound" };
+  }
+
+  const token = authAccountCookie.trim();
+  const verification = await verifyAuthJWT(token);
+  if (!verification.valid) {
+    return { success: false, reason: verification.reason };
+  }
+
+  const { aid, guest } = verification.payload;
+
+  let profile: { displayName: string | null; displayImage: string | null; neupId: string | null } = {
+    displayName: null,
+    displayImage: null,
+    neupId: verification.payload.nid ?? null,
+  };
+
+  const whoami = await fetchWhoami(token);
+  if (whoami.success) {
+    profile = extractProfile(whoami.data);
+  }
+
+  await prisma.account.upsert({
+    where: { id: aid },
+    create: {
+      id: aid,
+      neupId: profile.neupId,
+      accountType: guest === 1 ? "guest" : "individual",
+      registered: guest !== 1,
+      displayName: profile.displayName,
+      displayImage: profile.displayImage,
+      createdOn: new Date(),
+      accessedOn: new Date(),
+    },
+    update: {
+      neupId: profile.neupId,
+      displayName: profile.displayName,
+      displayImage: profile.displayImage,
+      accessedOn: new Date(),
+    },
+  });
+
+  return { success: true, accountId: aid };
 }
