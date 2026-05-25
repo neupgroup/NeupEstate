@@ -6,12 +6,14 @@ type AccountPayload = {
   nid?: string;
 };
 
+
 type GetAccountResult =
   | { success: false; reason: "keyNotFound" | "invalidSignature" | "cookieNotFound" }
   | { success: true; aid?: string; sid?: string; skey?: string; guest?: number; nid?: string };
 
 const ACCOUNT_COOKIE_NAME = "auth_account";
 const AUTH_PUBLIC_KEY_ENV_NAME = "AUTH_PUBLIC_KEY";
+
 
 // Converts a base64url-encoded JWT segment into raw bytes.
 function b64urlToBytes(str: string): Uint8Array {
@@ -22,12 +24,20 @@ function b64urlToBytes(str: string): Uint8Array {
   return Uint8Array.from(binary, (char) => char.charCodeAt(0));
 }
 
+
+// Converts a typed array into an exact ArrayBuffer slice for Web Crypto APIs.
+function toArrayBuffer(bytes: Uint8Array): ArrayBuffer {
+  return bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
+}
+
+
 // Decodes a base64url-encoded JWT segment into a UTF-8 string.
 function b64urlDecode(str: string): string {
   const base64 = str.replace(/-/g, "+").replace(/_/g, "/");
   const pad = base64.length % 4;
   return atob(pad ? base64 + "=".repeat(4 - pad) : base64);
 }
+
 
 // Extracts and parses the JWT payload without verifying the signature.
 function decodePayload(token: string): AccountPayload | null {
@@ -39,6 +49,7 @@ function decodePayload(token: string): AccountPayload | null {
     return null;
   }
 }
+
 
 // Reads a cookie value from document.cookie on the client.
 function getCookieClient(name: string): string | null {
@@ -52,6 +63,7 @@ function getCookieClient(name: string): string | null {
   }
   return null;
 }
+
 
 // Imports the RSA public key from the env var configured in this file.
 async function importPublicKey(): Promise<CryptoKey | null> {
@@ -67,7 +79,8 @@ async function importPublicKey(): Promise<CryptoKey | null> {
       .replace(/\r/g, "")
       .trim();
 
-    const derBuffer = Uint8Array.from(atob(pemBody), (char) => char.charCodeAt(0));
+    const derBytes = Uint8Array.from(atob(pemBody), (char) => char.charCodeAt(0));
+    const derBuffer = toArrayBuffer(derBytes);
 
     return await crypto.subtle.importKey(
       "spki",
@@ -80,6 +93,7 @@ async function importPublicKey(): Promise<CryptoKey | null> {
     return null;
   }
 }
+
 
 // Verifies JWT signature with RS256 and returns a structured auth result.
 async function verifyAndDecode(token: string): Promise<GetAccountResult> {
@@ -94,7 +108,7 @@ async function verifyAndDecode(token: string): Promise<GetAccountResult> {
 
   try {
     const signingInput = new TextEncoder().encode(`${parts[0]}.${parts[1]}`);
-    const signature = b64urlToBytes(parts[2]);
+    const signature = toArrayBuffer(b64urlToBytes(parts[2]));
     const valid = await crypto.subtle.verify(
       { name: "RSASSA-PKCS1-v1_5" },
       publicKey,
@@ -118,6 +132,7 @@ async function verifyAndDecode(token: string): Promise<GetAccountResult> {
     return { success: false, reason: "invalidSignature" };
   }
 }
+
 
 // Reads auth_account cookie, verifies it, and returns the account payload.
 export async function getAccount(): Promise<GetAccountResult> {
