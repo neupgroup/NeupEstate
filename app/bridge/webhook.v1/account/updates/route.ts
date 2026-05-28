@@ -15,26 +15,43 @@ type EncryptedEnvelope = {
 };
 
 type AccountUpdatePayload = {
+  success?: boolean;
   eventId: string;
   eventType: "account.updated";
-  sourceAppId: "neup.account";
+  sourceAppId?: string;
   occurredAt: string;
   appId: string;
-  connectionId?: string;
-  changedFields?: string[];
-  account?: {
+  connectionId: string;
+  changedFields: string[];
+  account: {
+    id: string;
     neupId?: string;
+    isMinor?: boolean;
+    accountType?: string;
+  };
+  profile?: {
     displayName?: string;
     displayImage?: string;
     gender?: string;
     dateOfBirth?: string;
-    role?: string;
-    isMinor?: boolean;
-    accountType?: string;
   };
+  role?: {
+    id?: string;
+    name?: string;
+  };
+  access?: unknown;
 };
 
-type AccountUpdateAction = "updated_name" | "updated_role" | "deleted_account";
+type SupportedChangedField =
+  | "neupId"
+  | "displayName"
+  | "displayImage"
+  | "gender"
+  | "dateOfBirth"
+  | "role"
+  | "access"
+  | "isMinor"
+  | "accountType";
 
 function fail(error: string, reason?: string, status = 400) {
   return NextResponse.json(
@@ -82,6 +99,15 @@ function decryptEnvelope(ivB64: string, tagB64: string, dataB64: string, appSecr
   return plain.toString("utf8");
 }
 
+function webhookLog(eventId: string | undefined, message: string, details?: Record<string, unknown>) {
+  const prefix = `[bridge/webhook.v1/account/updates][eventId:${eventId ?? "unknown"}]`;
+  if (details) {
+    console.log(`${prefix} ${message}`, details);
+    return;
+  }
+  console.log(`${prefix} ${message}`);
+}
+
 function isValidEnvelope(body: EncryptedEnvelope): body is Required<EncryptedEnvelope> {
   return (
     body.eventType === "account.updated" &&
@@ -94,95 +120,171 @@ function isValidEnvelope(body: EncryptedEnvelope): body is Required<EncryptedEnv
 
 function isValidPayload(input: unknown): input is AccountUpdatePayload {
   const payload = input as AccountUpdatePayload;
+  const allowedChangedFields: SupportedChangedField[] = [
+    "neupId",
+    "displayName",
+    "displayImage",
+    "gender",
+    "dateOfBirth",
+    "role",
+    "access",
+    "isMinor",
+    "accountType",
+  ];
+
   return (
     !!payload &&
+    payload.success === true &&
     payload.eventType === "account.updated" &&
-    payload.sourceAppId === "neup.account" &&
     typeof payload.eventId === "string" &&
     typeof payload.occurredAt === "string" &&
-    typeof payload.appId === "string"
+    typeof payload.appId === "string" &&
+    typeof payload.connectionId === "string" &&
+    Array.isArray(payload.changedFields) &&
+    payload.changedFields.every(
+      (field) =>
+        typeof field === "string" &&
+        allowedChangedFields.includes(field as SupportedChangedField)
+    ) &&
+    !!payload.account &&
+    typeof payload.account.id === "string"
   );
 }
 
-function deriveActions(payload: AccountUpdatePayload): AccountUpdateAction[] {
-  const actions = new Set<AccountUpdateAction>();
-  const changedFields = new Set((payload.changedFields ?? []).map((field) => field.toLowerCase().trim()));
-
-  const hasChangedField = (names: string[]) => names.some((name) => changedFields.has(name.toLowerCase()));
-
-  if (
-    hasChangedField(["displayname", "account.displayname", "name"]) ||
-    typeof payload.account?.displayName === "string"
-  ) {
-    actions.add("updated_name");
-  }
-
-  if (
-    hasChangedField(["role", "account.role", "roleid"]) ||
-    typeof payload.account?.role === "string"
-  ) {
-    actions.add("updated_role");
-  }
-
-  if (
-    hasChangedField(["deleted", "isdeleted", "account.deleted", "account.isdeleted"]) ||
-    payload.account?.accountType?.toLowerCase() === "deleted"
-  ) {
-    actions.add("deleted_account");
-  }
-
-  return Array.from(actions);
-}
-
 async function persistAccountUpdate(payload: AccountUpdatePayload) {
-  const account = payload.account ?? {};
-  const neupId = account.neupId?.trim() || undefined;
-  const connectionId = payload.connectionId?.trim() || undefined;
+  webhookLog(payload.eventId, "Has asked to update account/user.");
+  const accountId = payload.account.id.trim();
+  if (!accountId) throw new Error("Missing account.id.");
 
-  const updateData = {
-    ...(neupId ? { neupId } : {}),
-    ...(typeof account.displayName === "string" ? { displayName: account.displayName } : {}),
-    ...(typeof account.displayImage === "string" ? { displayImage: account.displayImage } : {}),
-    ...(typeof account.accountType === "string" ? { accountType: account.accountType } : {}),
-    ...(connectionId ? { connectionId } : {}),
-    ...(typeof account.role === "string" ? { roleId: account.role } : {}),
-    accessedOn: new Date(),
-  };
+  const connectionId = payload.connectionId.trim();
+  if (!connectionId) throw new Error("Missing connectionId.");
+  webhookLog(payload.eventId, "Looking for user.", { accountId, connectionId });
 
-  if (neupId) {
-    await prisma.account.upsert({
-      where: { neupId },
-      update: updateData,
-      create: {
-        id: crypto.randomUUID(),
-        neupId,
-        accountType: account.accountType || "individual",
-        displayName: account.displayName ?? null,
-        displayImage: account.displayImage ?? null,
-        connectionId: connectionId ?? null,
-        roleId: account.role ?? null,
-        createdOn: new Date(),
+  const changedFields = new Set(payload.changedFields);
+  const hasChangedField = (field: SupportedChangedField): boolean => changedFields.has(field);
+
+  let resolvedRoleId: string | undefined;
+  if (payload.role && typeof payload.role.id === "string") {
+    webhookLog(payload.eventId, "Has asked to update role of user.");
+    const roleId = payload.role.id.trim();
+    if (roleId) {
+      resolvedRoleId = roleId;
+      webhookLog(payload.eventId, "Looking for role.", { roleId });
+
+      const existingRole = await prisma.authzRole.findUnique({
+        where: { id: roleId },
+        select: { id: true },
+      });
+
+      if (!existingRole) {
+        webhookLog(payload.eventId, "Role not found in authz_role table.", { roleId });
+        throw new Error(`Role does not exist in authz_role: ${roleId}`);
+      }
+      webhookLog(payload.eventId, "Role found in authz_role table.", { roleId });
+    }
+  }
+
+  // Direct role mapping contract:
+  // set account.role_id from payload.role.id for rows matching account.id or connectionId.
+  if (resolvedRoleId) {
+    webhookLog(payload.eventId, "Updating role on account table.", {
+      roleId: resolvedRoleId,
+      accountId,
+      connectionId,
+    });
+    const roleUpdateResult = await prisma.account.updateMany({
+      where: {
+        OR: [{ id: accountId }, { connectionId }],
+      },
+      data: {
+        roleId: resolvedRoleId,
         accessedOn: new Date(),
       },
     });
-    return;
+
+    if (roleUpdateResult.count === 0) {
+      webhookLog(payload.eventId, "No matching user found for role update.", {
+        roleId: resolvedRoleId,
+        accountId,
+        connectionId,
+      });
+      throw new Error("No account matched by account.id or connectionId for role update.");
+    }
+    webhookLog(payload.eventId, "Updated role on database table.", {
+      roleId: resolvedRoleId,
+      updatedRows: roleUpdateResult.count,
+    });
   }
 
-  if (connectionId) {
-    const result = await prisma.account.updateMany({
-      where: { connectionId },
+  const updateData = {
+    ...(hasChangedField("neupId") && typeof payload.account.neupId === "string"
+      ? { neupId: payload.account.neupId.trim() }
+      : {}),
+    ...(hasChangedField("displayName") && typeof payload.profile?.displayName === "string"
+      ? { displayName: payload.profile.displayName }
+      : {}),
+    ...(hasChangedField("displayImage") && typeof payload.profile?.displayImage === "string"
+      ? { displayImage: payload.profile.displayImage }
+      : {}),
+    ...(hasChangedField("accountType") && typeof payload.account.accountType === "string"
+      ? { accountType: payload.account.accountType }
+      : {}),
+    connectionId,
+    ...(resolvedRoleId ? { roleId: resolvedRoleId } : {}),
+    accessedOn: new Date(),
+  };
+
+  webhookLog(payload.eventId, "Upserting account with changed fields.");
+  await prisma.account.upsert({
+    where: { id: accountId },
+    update: updateData,
+    create: {
+      id: accountId,
+      neupId:
+        hasChangedField("neupId") && typeof payload.account.neupId === "string"
+          ? payload.account.neupId.trim()
+          : null,
+      accountType:
+        hasChangedField("accountType") && typeof payload.account.accountType === "string"
+          ? payload.account.accountType
+          : "individual",
+      displayName:
+        hasChangedField("displayName") && typeof payload.profile?.displayName === "string"
+          ? payload.profile.displayName
+          : null,
+      displayImage:
+        hasChangedField("displayImage") && typeof payload.profile?.displayImage === "string"
+          ? payload.profile.displayImage
+          : null,
+      connectionId,
+      roleId: resolvedRoleId ?? null,
+      createdOn: new Date(),
+      accessedOn: new Date(),
+    },
+  });
+
+  if (
+    hasChangedField("neupId") &&
+    typeof payload.account.neupId === "string" &&
+    payload.account.neupId.trim().length > 0
+  ) {
+    webhookLog(payload.eventId, "Syncing secondary rows by neupId.");
+    await prisma.account.updateMany({
+      where: {
+        neupId: payload.account.neupId.trim(),
+        NOT: { id: accountId },
+      },
       data: updateData,
     });
-
-    if (result.count > 0) return;
   }
-
-  throw new Error("No matching account target to persist update.");
+  webhookLog(payload.eventId, "Finished persistence for this payload.");
 }
 
 export async function POST(req: NextRequest) {
+  webhookLog(undefined, "Received webhook request.");
   const appSecret = getAppSecret();
   if (!appSecret) {
+    webhookLog(undefined, "Misconfigured secret.");
     return fail("misconfigured_secret", "Set BRIDGE_APP_SECRET or NEUP_APP_SECRET.", 500);
   }
 
@@ -191,6 +293,7 @@ export async function POST(req: NextRequest) {
   const signature = req.headers.get("x-bridge-signature") || "";
 
   if (encHeader.toLowerCase() !== "aes-256-gcm" || sigAlgHeader.toLowerCase() !== "hmac-sha256") {
+    webhookLog(undefined, "Invalid encryption/signature headers.");
     return fail("invalid_headers", "Unsupported bridge encryption/signature headers.");
   }
 
@@ -198,46 +301,78 @@ export async function POST(req: NextRequest) {
   try {
     body = (await req.json()) as EncryptedEnvelope;
   } catch {
+    webhookLog(undefined, "Invalid JSON body.");
     return fail("invalid_body", "Body must be valid JSON.");
   }
 
   if (!isValidEnvelope(body)) {
+    webhookLog(undefined, "Missing required encrypted envelope fields.");
     return fail("invalid_body", "Missing required encrypted envelope fields.");
   }
 
   if (!verifySignature(body.iv, body.tag, body.data, signature, appSecret)) {
+    webhookLog(undefined, "Invalid signature.");
     return fail("invalid_signature");
   }
+  webhookLog(undefined, "Signature verified.");
 
   let decryptedText = "";
   try {
     decryptedText = decryptEnvelope(body.iv, body.tag, body.data, appSecret);
   } catch (error) {
     await logProblem(error, "bridge/webhook.v1/account/updates decrypt");
+    webhookLog(undefined, "Failed to decrypt payload.");
     return fail("decrypt_failed");
   }
+  webhookLog(undefined, "Payload decrypted.");
 
-  let payload: unknown;
+  let parsed: unknown;
   try {
-    payload = JSON.parse(decryptedText);
+    parsed = JSON.parse(decryptedText);
   } catch {
+    webhookLog(undefined, "Decrypted payload is not valid JSON.");
     return fail("decrypt_failed", "Decrypted payload is not valid JSON.");
   }
 
-  if (!isValidPayload(payload)) {
+  const payloads = Array.isArray(parsed) ? parsed : [parsed];
+  if (!payloads.length || !payloads.every(isValidPayload)) {
+    webhookLog(undefined, "Invalid payload shape.");
     return fail("invalid_payload", "Decrypted payload shape is invalid.");
   }
+  webhookLog((payloads[0] as AccountUpdatePayload).eventId, "Payload validated.", {
+    payloadCount: payloads.length,
+  });
 
+  const mergedChangedFields = new Set<string>();
   try {
-    await persistAccountUpdate(payload);
+    for (const payload of payloads) {
+      webhookLog(payload.eventId, "Processing payload.");
+      await persistAccountUpdate(payload);
+      for (const field of payload.changedFields) mergedChangedFields.add(field);
+    }
   } catch (error) {
     await logProblem(error, "bridge/webhook.v1/account/updates persist");
+    if (error instanceof Error && error.message.startsWith("Role does not exist in authz_role:")) {
+      webhookLog(undefined, "Role does not exist. Sending failure response.", { reason: error.message });
+      return NextResponse.json(
+        {
+          success: false,
+          error: "role_not_exists",
+          reason: error.message,
+        },
+        { status: 400 }
+      );
+    }
+    webhookLog(undefined, "Persistence failed. Sending failure response.");
     return fail("record_failed");
   }
 
+  webhookLog((payloads[0] as AccountUpdatePayload).eventId, "Response sent.", {
+    changedFields: Array.from(mergedChangedFields),
+  });
   return NextResponse.json({
     success: true,
-    action: deriveActions(payload),
+    changedFields: Array.from(mergedChangedFields),
   });
 }
 

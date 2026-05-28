@@ -15,23 +15,22 @@ type EncryptedEnvelope = {
   data?: string;
 };
 
-type RoleEventType = "role.created" | "role.updated" | "role.removed";
-type RoleAction = "created_role" | "updated_role" | "removed_role";
+type RoleEventType = "role.updated" | "role.deleted";
+type RoleAction = "created_role" | "updated_role" | "deleted_role";
 
 type RolePayload = {
+  success?: boolean;
   eventId: string;
   eventType: RoleEventType;
   sourceAppId?: string;
   occurredAt?: string;
   appId: string;
-  roleId?: string;
   role?: {
-    id?: string;
-    name?: string;
+    id: string;
+    name: string;
     description?: string | null;
     scope?: string | null;
-    permissions?: unknown;
-    appId?: string;
+    permissions?: string[];
   };
 };
 
@@ -92,30 +91,52 @@ function isValidEnvelope(body: EncryptedEnvelope): body is Required<EncryptedEnv
 }
 
 function isRoleEventType(eventType: unknown): eventType is RoleEventType {
-  return eventType === "role.created" || eventType === "role.updated" || eventType === "role.removed";
+  return eventType === "role.updated" || eventType === "role.deleted";
 }
 
 function isValidRolePayload(input: unknown): input is RolePayload {
   const payload = input as RolePayload;
+  const role = payload?.role;
+  if (
+    !payload ||
+    payload.success !== true ||
+    typeof payload.eventId !== "string" ||
+    !isRoleEventType(payload.eventType) ||
+    typeof payload.appId !== "string" ||
+    !role ||
+    typeof role.id !== "string" ||
+    typeof role.name !== "string"
+  ) {
+    return false;
+  }
+
+  if (payload.eventType === "role.updated") {
+    return (
+      (role.description === undefined || role.description === null || typeof role.description === "string") &&
+      (role.scope === undefined || role.scope === null || typeof role.scope === "string") &&
+      Array.isArray(role.permissions) &&
+      role.permissions.every((permission) => typeof permission === "string")
+    );
+  }
+
+  // role.deleted: only identity fields are expected; extra role fields are ignored.
   return (
-    !!payload &&
-    typeof payload.eventId === "string" &&
-    isRoleEventType(payload.eventType) &&
-    typeof payload.appId === "string"
+    role.description === undefined &&
+    role.scope === undefined &&
+    role.permissions === undefined
   );
 }
 
 function getRoleId(payload: RolePayload): string | undefined {
-  const candidate = payload.role?.id ?? payload.roleId;
+  const candidate = payload.role?.id;
   if (typeof candidate !== "string") return undefined;
   const trimmed = candidate.trim();
   return trimmed.length > 0 ? trimmed : undefined;
 }
 
 function toAction(eventType: RoleEventType): RoleAction {
-  if (eventType === "role.created") return "created_role";
   if (eventType === "role.updated") return "updated_role";
-  return "removed_role";
+  return "deleted_role";
 }
 
 function normalizeJsonValue(value: unknown): Prisma.InputJsonValue | Prisma.NullableJsonNullValueInput | undefined {
@@ -124,33 +145,36 @@ function normalizeJsonValue(value: unknown): Prisma.InputJsonValue | Prisma.Null
   return value as Prisma.InputJsonValue;
 }
 
-async function persistRoleEvent(payload: RolePayload) {
+async function persistRoleEvent(payload: RolePayload): Promise<RoleAction> {
   const roleId = getRoleId(payload);
   if (!roleId) throw new Error("Missing role id.");
 
-  if (payload.eventType === "role.removed") {
+  if (payload.eventType === "role.deleted") {
     await prisma.authzRole.deleteMany({
       where: { id: roleId },
     });
-    return;
+    return "deleted_role";
   }
 
-  const role = payload.role ?? {};
-  const appId = (role.appId ?? payload.appId)?.trim();
+  const role = payload.role;
+  if (!role) throw new Error("Missing role.");
+  const appId = payload.appId?.trim();
   if (!appId) throw new Error("Missing appId.");
 
-  const name =
-    typeof role.name === "string" && role.name.trim().length > 0
-      ? role.name.trim()
-      : roleId;
+  const name = role.name.trim().length > 0 ? role.name.trim() : roleId;
 
   const updateData = {
     name,
     appId,
     description: typeof role.description === "string" ? role.description : null,
     scope: typeof role.scope === "string" ? role.scope : null,
-    permissions: normalizeJsonValue(role.permissions),
+    permissions: normalizeJsonValue(role.permissions ?? []),
   };
+
+  const existingRole = await prisma.authzRole.findUnique({
+    where: { id: roleId },
+    select: { id: true },
+  });
 
   await prisma.authzRole.upsert({
     where: { id: roleId },
@@ -160,6 +184,8 @@ async function persistRoleEvent(payload: RolePayload) {
       ...updateData,
     },
   });
+
+  return existingRole ? "updated_role" : "created_role";
 }
 
 export async function POST(req: NextRequest) {
@@ -214,8 +240,8 @@ export async function POST(req: NextRequest) {
   const actions: RoleAction[] = [];
   try {
     for (const payload of payloads) {
-      await persistRoleEvent(payload);
-      actions.push(toAction(payload.eventType));
+      const action = await persistRoleEvent(payload);
+      actions.push(action);
     }
   } catch (error) {
     await logProblem(error, "bridge/webhook.v1/roles persist");
