@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server';
 /**
  * proxy.ts — Next.js Edge Middleware
  *
- * auth_account cookie is a JWT signed with AUTH_PUBLIC_KEY (RS256).
+ * auth_account cookie is a JWT signed with NEUP_AUTH_PUBLIC_KEY (RS256).
  *
  * Rules:
  *   1. /bridge/*       → always pass through
@@ -37,7 +37,7 @@ let _cachedKey: CryptoKey | null | undefined = undefined;
 async function getPublicKey(): Promise<CryptoKey | null> {
   if (_cachedKey !== undefined) return _cachedKey;
 
-  const pem = process.env.AUTH_PUBLIC_KEY;
+  const pem = process.env.NEUP_AUTH_PUBLIC_KEY;
   if (!pem) {
     _cachedKey = null;
     return null;
@@ -131,7 +131,7 @@ function buildCallbackUrl(request: NextRequest): string {
 }
 
 function redirectToHandshake(request: NextRequest, pathname: string): NextResponse {
-  const appId = process.env.NEUPID_APP_ID ?? process.env.NEXT_PUBLIC_NEUPID_APP_ID ?? '';
+  const appId = process.env.NEUP_APP_ID ?? '';
   const dest = new URL(`${NEUPID_BASE}/bridge/handshake.v1/auth/grant`);
 
   if (!appId) {
