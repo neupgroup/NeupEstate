@@ -1,43 +1,32 @@
-'use client';
-
-import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { MapPin, Camera, BadgeCheck } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { getInitials } from '@/lib/neup-user-context';
-import {
-  getDisplayImage,
-  getName,
-  getNeupid,
-  getSessionStorageData,
-  loadProfileSessionData,
-  type ProfileSessionData,
-} from '@/lib/profile-session';
+type ProfileHeaderProps = {
+  displayName: string;
+  displayImage: string | null;
+  neupId: string | null;
+  verified: boolean;
+  accountType: string | null;
+};
 
-export function ProfileHeader() {
-  const [profile, setProfile] = useState<ProfileSessionData | null>(() => getSessionStorageData());
+function getInitials(name: string): string {
+  return name
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((n) => n[0].toUpperCase())
+    .join('');
+}
 
-  useEffect(() => {
-    let cancelled = false;
-
-    (async () => {
-      const nextProfile = await loadProfileSessionData();
-      if (!cancelled && nextProfile) {
-        setProfile(nextProfile);
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  const displayName = profile?.displayName ?? getName();
-  const displayImage = profile?.displayImage ?? getDisplayImage();
-  const neupid = profile?.neupid ?? getNeupid();
-  const verified = profile?.verified ?? false;
-  const accountType = profile?.accountType ?? null;
-  const handleLine = neupid ? `@${neupid}` : null;
+export function ProfileHeader({
+  displayName,
+  displayImage,
+  neupId,
+  verified,
+  accountType,
+}: ProfileHeaderProps) {
+  const resolvedName = displayName?.trim() ? displayName : 'Guest User';
+  const handleLine = neupId?.trim() ? `@${neupId}` : 'Sign In Now';
 
   return (
     <div className="w-full bg-background pt-8">
@@ -50,22 +39,18 @@ export function ProfileHeader() {
               <Avatar className="h-full w-full rounded-lg">
                 <AvatarImage
                   src={displayImage ?? undefined}
-                  alt={displayName ?? 'User'}
+                  alt={resolvedName}
                   className="object-cover"
                 />
                 <AvatarFallback className="rounded-lg text-2xl font-bold">
-                  {getInitials(displayName ?? 'User')}
+                  {getInitials(resolvedName)}
                 </AvatarFallback>
               </Avatar>
             </div>
             <div className="pb-2">
-              {handleLine && (
-                <p className="text-xs font-mono text-white/70">
-                  {handleLine}
-                </p>
-              )}
+              <p className="text-xs font-mono text-white/70">{handleLine}</p>
               <h1 className="text-2xl md:text-3xl font-bold font-headline text-white shadow-sm flex items-center gap-2">
-                {displayName}
+                {resolvedName}
                 {verified && (
                   <BadgeCheck className="h-6 w-6 text-primary" />
                 )}

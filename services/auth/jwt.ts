@@ -2,7 +2,7 @@
  * jwt.ts
  *
  * JWT verification and decoding service for auth_account tokens.
- * Uses the RSA public key from AUTH_PUBLIC_KEY environment variable.
+ * Uses the RSA public key from NEUP_AUTH_PUBLIC_KEY environment variable.
  */
 
 import { logJWTVerificationError, logJWTDecodingError } from './logger';
@@ -68,13 +68,13 @@ export function decodeJwtPayload(token: string): AuthAccountPayload | null {
 }
 
 /**
- * Import the RSA public key from the PEM string stored in AUTH_PUBLIC_KEY.
+ * Import the RSA public key from the PEM string stored in NEUP_AUTH_PUBLIC_KEY.
  * Supports "-----BEGIN PUBLIC KEY-----" (SPKI) format.
  */
 async function importPublicKey(): Promise<CryptoKey> {
-  const pem = process.env.AUTH_PUBLIC_KEY;
+  const pem = process.env.NEUP_AUTH_PUBLIC_KEY ?? process.env.AUTH_PUBLIC_KEY;
   if (!pem) {
-    const error = new Error('AUTH_PUBLIC_KEY env var is not set');
+    const error = new Error('NEUP_AUTH_PUBLIC_KEY env var is not set');
     await logJWTVerificationError('missing_public_key', null, error);
     throw error;
   }
@@ -108,7 +108,7 @@ async function importPublicKey(): Promise<CryptoKey> {
 
 /**
  * Verifies the JWT signature of the auth_account cookie value using the
- * RSA public key from AUTH_PUBLIC_KEY (RS256).
+ * RSA public key from NEUP_AUTH_PUBLIC_KEY (RS256).
  *
  * Also checks that the token is not expired and contains required fields.
  *

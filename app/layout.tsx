@@ -6,10 +6,10 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { Providers } from '@/components/layout/providers';
-import { AccountManager } from '@/components/layout/account-manager';
 import { ActivityTracker } from '@/components/activity-tracker';
 import { createAccount } from '@/services/account/create-account';
 import { createAccountInApp } from '@/logica/auth/account';
+import { getAuthenticatedMeData } from '@/services/auth/me';
 
 const raleway = Raleway({
   subsets: ['latin'],
@@ -43,6 +43,18 @@ export default async function RootLayout({
   // no client JS needed. Uses the x-account-id header set by proxy.ts.
   await createAccount();
 
+  const me = await getAuthenticatedMeData();
+  const initialUser = me
+    ? {
+        accountId: me.accountId,
+        neupId: me.neupId ?? undefined,
+        displayName: me.displayName ?? undefined,
+        displayImage: me.displayImage ?? undefined,
+        accountType: me.accountType,
+        verified: me.registered,
+      }
+    : null;
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -51,9 +63,8 @@ export default async function RootLayout({
           raleway.variable
         )}
       >
-        <AccountManager />
         <ActivityTracker />
-        <Providers>{children}</Providers>
+        <Providers initialUser={initialUser}>{children}</Providers>
         <Toaster />
       </body>
     </html>

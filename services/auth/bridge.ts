@@ -28,7 +28,13 @@ function getAppOrigin(request?: RequestLike): string {
 }
 
 function getAppId(): string {
-  return process.env.NEUPID_APP_ID ?? process.env.NEXT_PUBLIC_NEUPID_APP_ID ?? '';
+  return (
+    process.env.NEUP_APP_ID ??
+    process.env.NEXT_PUBLIC_NEUP_APP_ID ??
+    process.env.NEUPID_APP_ID ??
+    process.env.NEXT_PUBLIC_NEUPID_APP_ID ??
+    ''
+  );
 }
 
 /**

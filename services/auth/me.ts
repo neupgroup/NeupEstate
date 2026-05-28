@@ -10,6 +10,16 @@ type MeRow = {
   displayImage?: string | null;
 };
 
+export type AuthenticatedMe = {
+  accountId: string;
+  neupId: string | null;
+  guest: boolean;
+  accountType: string;
+  registered: boolean;
+  displayName: string | null;
+  displayImage: string | null;
+};
+
 function readAccountRow(accountId: string) {
   return prisma.account.findUnique({
     where: { id: accountId },
@@ -35,16 +45,9 @@ async function readAccountRowFallback(accountId: string) {
   }) as Promise<MeRow | null>;
 }
 
-export async function getAuthenticatedMeResponse(req: NextRequest) {
+export async function getAuthenticatedMeData(): Promise<AuthenticatedMe | null> {
   const result = await getAuthenticatedAccount();
-
-  if (!result.success) {
-    const redirectTo = buildHandshakeGrantUrl(req, req.nextUrl.href);
-    return NextResponse.json(
-      { accountId: null, reason: result.reason, redirectTo },
-      { status: 401 },
-    );
-  }
+  if (!result.success) return null;
 
   const account = result.account;
 
@@ -57,7 +60,7 @@ export async function getAuthenticatedMeResponse(req: NextRequest) {
       row = await readAccountRowFallback(account.aid);
     }
 
-    return NextResponse.json({
+    return {
       accountId: account.aid,
       neupId: row?.neupId ?? account.nid ?? null,
       guest: account.guest === 1,
@@ -65,9 +68,9 @@ export async function getAuthenticatedMeResponse(req: NextRequest) {
       registered: row?.registered ?? (account.guest !== 1),
       displayName: row?.displayName ?? null,
       displayImage: row?.displayImage ?? null,
-    });
+    };
   } catch {
-    return NextResponse.json({
+    return {
       accountId: account.aid,
       neupId: account.nid ?? null,
       guest: account.guest === 1,
@@ -75,6 +78,19 @@ export async function getAuthenticatedMeResponse(req: NextRequest) {
       registered: account.guest !== 1,
       displayName: null,
       displayImage: null,
-    });
+    };
   }
+}
+
+export async function getAuthenticatedMeResponse(req: NextRequest) {
+  const result = await getAuthenticatedAccount();
+  if (!result.success) {
+    const redirectTo = buildHandshakeGrantUrl(req, req.nextUrl.href);
+    return NextResponse.json(
+      { accountId: null, reason: result.reason, redirectTo },
+      { status: 401 },
+    );
+  }
+  const me = await getAuthenticatedMeData();
+  return NextResponse.json(me);
 }

@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 import { Menu, X, User, BadgeCheck } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNeupUser, getInitials } from "@/lib/neup-user-context";
-import { loadProfileSessionData, type ProfileSessionData } from "@/lib/profile-session";
 import {
   Tooltip,
   TooltipContent,
@@ -80,35 +79,13 @@ const manageNav: ManageNavItem[] = [
 export default function Header() {
   const pathname = usePathname();
   const user = useNeupUser();
-  const [profileFallback, setProfileFallback] = useState<ProfileSessionData | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const effectiveUser = user ?? (profileFallback ? {
-    accountId: profileFallback.accountId ?? "",
-    neupId: profileFallback.neupid ?? undefined,
-    displayName: profileFallback.displayName ?? undefined,
-    displayImage: profileFallback.displayImage ?? undefined,
-    accountType: profileFallback.accountType ?? undefined,
-    verified: profileFallback.verified ?? false,
-  } : null);
+  const effectiveUser = user;
 
   const isManage = pathname.startsWith("/manage");
-  const displayName = effectiveUser?.verified ? (effectiveUser.displayName ?? "User") : "Guest User";
-  const handleText = effectiveUser?.verified && effectiveUser?.neupId ? `@${effectiveUser.neupId}` : null;
-
-  useEffect(() => {
-    if (user) return;
-    let mounted = true;
-    (async () => {
-      const profile = await loadProfileSessionData();
-      if (!mounted) return;
-      console.log("[Header] profile-session fallback loaded:", profile);
-      setProfileFallback(profile);
-    })();
-    return () => {
-      mounted = false;
-    };
-  }, [user]);
+  const displayName = effectiveUser?.displayName?.trim() ? effectiveUser.displayName : "Guest User";
+  const handleText = effectiveUser?.neupId?.trim() ? `@${effectiveUser.neupId}` : "Sign In Now";
 
   useEffect(() => {
     console.log("[Header] computed identity:", {
@@ -118,11 +95,10 @@ export default function Header() {
       hasEffectiveUser: !!effectiveUser,
       user,
       effectiveUser,
-      profileFallback,
       displayName,
       handleText,
     });
-  }, [pathname, isManage, user, effectiveUser, profileFallback, displayName, handleText]);
+  }, [pathname, isManage, user, effectiveUser, displayName, handleText]);
 
   // Close on route change
   useEffect(() => { setMenuOpen(false); }, [pathname]);
@@ -267,14 +243,8 @@ export default function Header() {
                         <span className="font-semibold text-sm truncate">{displayName}</span>
                         {effectiveUser.verified && <BadgeCheck className="h-3.5 w-3.5 text-primary shrink-0" />}
                       </div>
-                      {handleText ? (
-                        <>
-                          <span className="text-xs text-muted-foreground">{handleText}</span>
-                          <span className="text-xs text-muted-foreground capitalize">{effectiveUser.accountType}</span>
-                        </>
-                      ) : (
-                        <Link href="/profile" className="text-xs text-primary font-semibold">Sign In to Save</Link>
-                      )}
+                      <span className="text-xs text-muted-foreground">{handleText}</span>
+                      <span className="text-xs text-muted-foreground capitalize">{effectiveUser.accountType}</span>
                     </div>
                   </TooltipContent>
                 )}
@@ -287,11 +257,7 @@ export default function Header() {
                 <Link href="/profile" className="text-sm font-semibold truncate">
                   {displayName}
                 </Link>
-                {handleText ? (
-                  <span className="text-xs text-muted-foreground">{handleText}</span>
-                ) : (
-                  <Link href="/profile" className="text-xs text-primary font-semibold">Sign In to Save</Link>
-                )}
+                <span className="text-xs text-muted-foreground">{handleText}</span>
               </div>
             )}
 
@@ -336,11 +302,7 @@ export default function Header() {
                 <span className="text-sm font-semibold truncate">{displayName}</span>
                 {effectiveUser.verified && <BadgeCheck className="h-3.5 w-3.5 text-primary shrink-0" />}
               </div>
-              {handleText ? (
-                <span className="text-xs text-muted-foreground">{handleText}</span>
-              ) : (
-                <span className="text-xs text-primary font-semibold">Sign In to Save</span>
-              )}
+              <span className="text-xs text-muted-foreground">{handleText}</span>
             </div>
           </Link>
         )}
