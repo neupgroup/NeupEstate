@@ -3,14 +3,47 @@
 
 import { prisma } from '@/lib/prisma';
 import type { Problem } from '@/types';
+import { promises as fsp } from 'fs';
+import path from 'path';
 
 let suspendProblemLoggingUntil = 0;
+const ERROR_LOG_DIR = path.join(process.cwd(), 'logs');
+const ERROR_LOG_FILE = path.join(ERROR_LOG_DIR, 'errors.log');
+
+type ErrorLogEntry = {
+    timestamp: string;
+    context: string;
+    message: string;
+    stack: string;
+    details?: Record<string, unknown>;
+    source: 'problem-service';
+};
+
+async function appendErrorLog(entry: ErrorLogEntry): Promise<void> {
+    try {
+        await fsp.mkdir(ERROR_LOG_DIR, { recursive: true });
+        await fsp.appendFile(ERROR_LOG_FILE, `${JSON.stringify(entry)}\n`, 'utf8');
+    } catch (fileError) {
+        console.error('[CRITICAL] Failed to write to logs/errors.log');
+        console.error('Log write error:', fileError);
+    }
+}
 
 /**
  * Logs an error to the Postgres-backed problems table through Prisma.
  */
 export async function logProblem(error: unknown, context: string, details?: Record<string, unknown>): Promise<void> {
     const normalizedError = error instanceof Error ? error : new Error(String(error));
+    const serializedDetails = details ? safelySerializeDetails(details) : undefined;
+
+    await appendErrorLog({
+        timestamp: new Date().toISOString(),
+        context,
+        message: normalizedError.message || 'An unknown error occurred.',
+        stack: normalizedError.stack || 'No stack trace available.',
+        details: serializedDetails,
+        source: 'problem-service',
+    });
 
     if (Date.now() < suspendProblemLoggingUntil) {
         console.error(`[WARN] Skipping problem logging for context: ${context} because Prisma logging is temporarily suspended.`);
@@ -24,7 +57,7 @@ export async function logProblem(error: unknown, context: string, details?: Reco
             message: normalizedError.message || 'An unknown error occurred.',
             stack: normalizedError.stack || 'No stack trace available.',
             createdAt: new Date(),
-            details: details ? (safelySerializeDetails(details) as any) : undefined,
+            details: serializedDetails as any,
         };
 
         await prisma.problem.create({
@@ -70,6 +103,13 @@ export async function getProblems({ limit = 20, offset = 0 }: { limit?: number; 
 
     } catch (error: any) {
         console.error("Error fetching problems from Postgres:", error);
+        await appendErrorLog({
+            timestamp: new Date().toISOString(),
+            context: 'getProblems',
+            message: error?.message ?? 'Error fetching problems from Postgres',
+            stack: error?.stack ?? 'No stack trace available.',
+            source: 'problem-service',
+        });
         const fallbackProblem: Problem = {
             id: 'local-error-2',
             context: 'getProblems',
@@ -93,6 +133,13 @@ export async function clearAllProblems(): Promise<{ success: boolean; error?: st
     } catch (error: any) {
         // Don't try to log an error that happens while clearing logs to avoid loops.
         console.error("Failed to clear problems table:", error);
+        await appendErrorLog({
+            timestamp: new Date().toISOString(),
+            context: 'clearAllProblems',
+            message: error?.message ?? 'Failed to clear problems table',
+            stack: error?.stack ?? 'No stack trace available.',
+            source: 'problem-service',
+        });
         return { success: false, error: (error as Error).message };
     }
 }
