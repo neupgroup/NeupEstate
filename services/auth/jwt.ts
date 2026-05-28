@@ -72,7 +72,7 @@ export function decodeJwtPayload(token: string): AuthAccountPayload | null {
  * Supports "-----BEGIN PUBLIC KEY-----" (SPKI) format.
  */
 async function importPublicKey(): Promise<CryptoKey> {
-  const pem = process.env.NEUP_AUTH_PUBLIC_KEY ?? process.env.AUTH_PUBLIC_KEY;
+  const pem = process.env.NEUP_AUTH_PUBLIC_KEY;
   if (!pem) {
     const error = new Error('NEUP_AUTH_PUBLIC_KEY env var is not set');
     await logJWTVerificationError('missing_public_key', null, error);

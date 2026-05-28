@@ -66,17 +66,11 @@ function readUsersFromResponse(body: unknown): unknown[] {
 }
 
 function getAppId(): string {
-  return (
-    process.env.NEUP_APP_ID ??
-    process.env.NEXT_PUBLIC_NEUP_APP_ID ??
-    process.env.NEUPID_APP_ID ??
-    process.env.NEXT_PUBLIC_NEUPID_APP_ID ??
-    ''
-  );
+  return process.env.NEUP_APP_ID ?? '';
 }
 
 function getAppSecret(): string {
-  return process.env.NEUP_APP_SECRET ?? process.env.NEUPID_APP_SECRET ?? '';
+  return process.env.NEUP_APP_SECRET ?? '';
 }
 
 export async function fetchApplicationUsers(input?: {
