@@ -42,7 +42,6 @@ type TeamRow = {
   accessedOn: Date;
   displayName: string | null;
   displayImage: string | null;
-  mainId: string | null;
 };
 
 function getInitials(name: string | null | undefined) {
@@ -128,7 +127,7 @@ export default async function ManageTeamPage() {
   const lockedMembers = agencyMembers.filter((member) => member.lockIn).length;
   const adminMembers = agencyMembers.filter((member) => member.role === 'admin').length;
 
-  const agencyDisplayName = agencyAccount?.displayName ?? agencyAccountId;
+  const agencyDisplayName = agencyAccount?.display_name ?? agencyAccountId;
 
   return (
     <div className="space-y-8">
@@ -171,10 +170,10 @@ export default async function ManageTeamPage() {
           <div className="flex items-center gap-4 min-w-0">
             <Avatar className="h-12 w-12 border">
               <AvatarImage
-                src={agencyAccount?.displayImage || undefined}
+                src={agencyAccount?.display_image || undefined}
                 alt={agencyDisplayName}
               />
-              <AvatarFallback>{getInitials(agencyAccount?.displayName ?? null)}</AvatarFallback>
+              <AvatarFallback>{getInitials(agencyAccount?.display_name ?? null)}</AvatarFallback>
             </Avatar>
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">

@@ -18,7 +18,7 @@ export default async function UserDetailPage({ params }: { params: Promise<{ id:
     let userProfile: UpdateUserFormValues = {
         id: account.id,
         name: account.display_name || 'User',
-        location: account.location || '',
+        location: '',
         email: [],
         phone: [],
     };
@@ -30,7 +30,7 @@ export default async function UserDetailPage({ params }: { params: Promise<{ id:
             userProfile = { 
                 id: account.id,
                 name: registeredUser.name || account.display_name || 'User',
-                location: registeredUser.location || account.location || '',
+                location: registeredUser.location || '',
                 email: Array.isArray(registeredUser.email) ? registeredUser.email : [],
                 phone: Array.isArray(registeredUser.phone) ? registeredUser.phone : [],
             };
@@ -42,7 +42,7 @@ export default async function UserDetailPage({ params }: { params: Promise<{ id:
         userProfile = {
             id: account.id,
             name: conversation?.customerName || account.display_name || 'Guest User',
-            location: account.location || 'Not set',
+            location: 'Not set',
             email: [],
             phone: conversation?.customerPhone ? [{ type: 'primary', value: conversation.customerPhone }] : [],
         };

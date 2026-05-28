@@ -83,6 +83,7 @@ export async function createAccount(): Promise<void> {
     // First visit — fetch display info from NeupID
     let displayName: string | null = null;
     let displayImage: string | null = null;
+    let neupIdFromLookup: string | null = null;
     let accountType = 'individual';
 
     try {
@@ -92,7 +93,7 @@ export async function createAccount(): Promise<void> {
         displayImage = info.account.displayImage || null;
         accountType  = info.account.accountType  || 'individual';
         // include neupId when creating
-        var neupIdFromLookup = info.account.neupId || null;
+        neupIdFromLookup = info.account.neupId || null;
       }
     } catch {
       // Non-fatal — create the row without display info if NeupID is unreachable
