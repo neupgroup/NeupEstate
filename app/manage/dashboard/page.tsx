@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { getProperties } from "@/services/property-service";
 import { Clock, DollarSign, CalendarCheck, Home } from "lucide-react";
 import { DailySchedule } from "@/components/manage/daily-schedule";
+import { requirePagePermission } from "@/logica/auth/page-guard";
+import { PERMISSIONS } from "@/logica/auth/permissions";
 
 async function getStats() {
     const allProperties = await getProperties({ includeInactive: true });
@@ -46,6 +48,7 @@ const StatCard = ({ title, value, icon, description }: { title: string, value: s
 }
 
 export default async function ManageDashboardPage() {
+    await requirePagePermission(PERMISSIONS.manage.dashboardView);
     const stats = await getStats();
 
     return (

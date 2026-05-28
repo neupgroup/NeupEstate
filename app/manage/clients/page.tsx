@@ -3,8 +3,11 @@ import { checkAuthenticationForWeb, getAccountIdFromJWT } from '@/services/neupi
 import { ClientLink } from '@/components/client-link';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
+import { requirePagePermission } from '@/logica/auth/page-guard';
+import { PERMISSIONS } from '@/logica/auth/permissions';
 
 export default async function ClientsPage() {
+    await requirePagePermission(PERMISSIONS.manage.selfClientView);
     await checkAuthenticationForWeb();
     const accountId = await getAccountIdFromJWT();
     const clients = await getClients(accountId!);

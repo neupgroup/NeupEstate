@@ -1,7 +1,10 @@
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Bell } from 'lucide-react';
+import { requirePagePermission } from '@/logica/auth/page-guard';
+import { PERMISSIONS } from '@/logica/auth/permissions';
 
-export default function NotificationsPage() {
+export default async function NotificationsPage() {
+    await requirePagePermission(PERMISSIONS.manage.notificationView);
     return (
         <div className="space-y-6">
             <div>

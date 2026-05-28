@@ -9,6 +9,8 @@ import { AdminPropertySearch } from "@/components/manage/admin-property-search";
 import { parseAdminFilter } from "@/services/ai/parse-admin-filter-flow";
 import type { PropertyFilters } from "@/types";
 import { ClientLink } from "@/components/client-link";
+import { requirePagePermission } from "@/logica/auth/page-guard";
+import { PERMISSIONS } from "@/logica/auth/permissions";
 
 const PROPERTIES_PER_PAGE = 10;
 
@@ -17,6 +19,7 @@ export default async function ManagePropertiesPage({
 }: {
   searchParams?: Promise<Record<string, string | undefined>>;
 }) {
+  await requirePagePermission(PERMISSIONS.manage.propertySelfView);
   await checkAuthenticationForWeb();
   const accountId = await getAccountIdFromJWT();
   const sp = await searchParams ?? {};

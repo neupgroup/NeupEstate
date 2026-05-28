@@ -38,6 +38,8 @@ import { createModel as createModelService, updateModel as updateModelService, d
 import { createRequirement as createRequirementService, updateRequirement as updateRequirementService } from '@/services/requirements-service';
 import { resolveAccount, updateUser } from '@/services/account-service';
 import { getIdentity } from '@/services/neupid/get-identity';
+import { requirePermission } from '@/logica/auth/authorization';
+import { PERMISSIONS } from '@/logica/auth/permissions';
 
 // ---------------------------------------------------------------------------
 // Identity guard
@@ -360,6 +362,7 @@ export async function createPropertyAction(
   data: CreatePropertyFormValues
 ): Promise<{ success: boolean; error?: string | null; propertyId?: string | null }> {
   try {
+    await requirePermission(PERMISSIONS.manage.propertySelfCreate);
     const actorId = await requireIdentity();
 
     const validatedData = CreatePropertySchema.parse(data);
@@ -417,6 +420,7 @@ export async function updatePropertyAction(
   data: UpdatePropertyFormValues
 ): Promise<{ success: boolean; error?: string | null; }> {
   try {
+    await requirePermission(PERMISSIONS.manage.propertySelfUpdate);
     await requireIdentity();
     const validatedData = UpdatePropertySchema.parse(data);
     const orderedPurposes = validatedData.purposes?.length
@@ -513,6 +517,7 @@ export async function createAgencyAction(
   data: CreateAgencyFormValues
 ): Promise<{ success: boolean; error?: string | null; agencyId?: string | null }> {
   try {
+    await requirePermission(PERMISSIONS.public.createAgency);
     await requireIdentity();
     const validatedData = CreateAgencySchema.parse(data);
     const serviceInput: CreateAgencyInput = {
@@ -538,6 +543,7 @@ export async function updateAgencyAction(
   data: UpdateAgencyFormValues
 ): Promise<{ success: boolean; error?: string | null; }> {
   try {
+    await requirePermission(PERMISSIONS.public.createAgency);
     await requireIdentity();
     const validatedData = UpdateAgencySchema.parse(data);
     const serviceInput: UpdateAgencyInput = {
@@ -560,6 +566,7 @@ export async function updateAgencyAction(
 
 export async function deleteAgencyAction(agencyId: string) {
     try {
+        await requirePermission(PERMISSIONS.public.createAgency);
         await deleteAgencyService(agencyId);
         revalidatePath('/manage/agency');
         revalidatePath('/agencies');
@@ -584,6 +591,7 @@ export async function approvePropertyAction(propertyId: string) {
 
 export async function deletePropertyAction(propertyId: string) {
     try {
+        await requirePermission(PERMISSIONS.manage.propertySelfDelete);
         await deletePropertyService(propertyId);
         revalidatePath('/manage/properties');
         return { success: true };
@@ -1076,6 +1084,7 @@ export async function createFaqAction(
   data: CreateFaqFormValues
 ): Promise<{ success: boolean; error?: string | null; faqId?: string | null }> {
   try {
+    await requirePermission(PERMISSIONS.manage.faqCreate);
     const validatedData = CreateFaqSchema.parse(data);
     const faqId = await createFaqService(validatedData);
     revalidatePath('/manage/faq');
@@ -1095,6 +1104,7 @@ export async function updateFaqAction(
   data: UpdateFaqFormValues
 ): Promise<{ success: boolean; error?: string | null; }> {
   try {
+    await requirePermission(PERMISSIONS.manage.faqUpdate);
     const validatedData = UpdateFaqSchema.parse(data);
     await updateFaqService(id, validatedData);
     revalidatePath('/manage/faq');
@@ -1111,6 +1121,7 @@ export async function updateFaqAction(
 
 export async function deleteFaqAction(faqId: string): Promise<{ success: boolean, error?: string }> {
     try {
+        await requirePermission(PERMISSIONS.manage.faqDelete);
         await deleteFaqService(faqId);
         revalidatePath('/manage/faq');
         revalidatePath('/faq');
@@ -1147,6 +1158,7 @@ export async function createInquiryAction(
   data: CreateInquiryFormValues
 ): Promise<{ success: boolean; error?: string }> {
   try {
+    await requirePermission(PERMISSIONS.public.propertyInquire);
     const actorId = await requireIdentity();
     const validatedData = CreateInquirySchema.parse({ ...data, submittedBy: actorId });
     await createInquiryService(validatedData);
@@ -1277,6 +1289,7 @@ export async function setDefaultModelAction(id: string): Promise<{ success: bool
 // Saved Properties Action
 export async function toggleSavePropertyAction(userId: string, propertyId: string): Promise<{ saved: boolean }> {
   try {
+    await requirePermission(PERMISSIONS.public.propertySave);
     // Verify identity via gRPC — use the verified accountId, not the client-supplied userId
     const identity = await getIdentity();
     const verifiedUserId = identity.authenticated ? identity.account.accountId : userId;
@@ -1317,6 +1330,7 @@ export async function getUsersBySavedProperty(propertyId: string): Promise<any[]
 // Property Request Action
 export async function createPropertyRequestAction(data: CreatePropertyRequestFormValues): Promise<{ success: boolean; error?: string }> {
     try {
+        await requirePermission(PERMISSIONS.public.requirementCreate);
         const actorId = await requireIdentity();
         const validatedData = CreatePropertyRequestSchema.parse({ ...data, submittedBy: actorId });
         await createPropertyRequestService(validatedData);
@@ -1368,6 +1382,7 @@ export async function createVisitRequestAction(data: CreateVisitRequestFormValue
 // Mortgage Request Action
 export async function createMortgageRequestAction(data: CreateMortgageRequestFormValues): Promise<{ success: boolean; error?: string }> {
     try {
+        await requirePermission(PERMISSIONS.public.mortgageRequest);
         const actorId = await requireIdentity();
         const validatedData = CreateMortgageRequestSchema.parse({ ...data, submittedBy: actorId });
         await createMortgageRequestService(validatedData);
@@ -1385,6 +1400,7 @@ export async function createMortgageRequestAction(data: CreateMortgageRequestFor
 // Contact Submission Action
 export async function createContactSubmissionAction(data: CreateContactSubmissionFormValues): Promise<{ success: boolean; error?: string }> {
     try {
+        await requirePermission(PERMISSIONS.public.contactPost);
         const actorId = await requireIdentity();
         const validatedData = CreateContactSubmissionSchema.parse({ ...data, submittedBy: actorId });
         await createContactSubmissionService(validatedData);
@@ -1402,6 +1418,7 @@ export async function createContactSubmissionAction(data: CreateContactSubmissio
 // Requirement Actions
 export async function upsertRequirementAction(data: CreateRequirementFormValues, requirementId?: string): Promise<{ success: boolean, error?: string | null }> {
     try {
+        await requirePermission(PERMISSIONS.public.requirementCreate);
         const actorId = await requireIdentity();
         // Always use the verified accountId — ignore any userId the client may have sent
         const validatedData = CreateRequirementSchema.parse({ ...data, userId: actorId });

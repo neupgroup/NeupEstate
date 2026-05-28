@@ -2,8 +2,11 @@
 import { ContactForm } from '@/components/contact-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Mail } from 'lucide-react';
+import { requirePagePermission } from '@/logica/auth/page-guard';
+import { PERMISSIONS } from '@/logica/auth/permissions';
 
-export default function ContactPage() {
+export default async function ContactPage() {
+    await requirePagePermission(PERMISSIONS.public.contactView);
     return (
         <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <Card className="max-w-3xl mx-auto">

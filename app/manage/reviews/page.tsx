@@ -2,6 +2,8 @@
 import { getReviews } from '@/services/review-service';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Star } from 'lucide-react';
+import { requirePagePermission } from '@/logica/auth/page-guard';
+import { PERMISSIONS } from '@/logica/auth/permissions';
 
 function StarRating({ rating }: { rating: number }) {
     return (
@@ -14,6 +16,7 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 export default async function ManageReviewsPage() {
+    await requirePagePermission(PERMISSIONS.manage.selfReviewsView);
     const reviews = await getReviews();
 
     return (

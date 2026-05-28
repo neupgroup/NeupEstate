@@ -2,8 +2,11 @@
 import { getFaqs } from '@/services/faq-service';
 import { FaqAdminClient } from '@/components/manage/faq-admin-client';
 import type { FAQ } from '@/types';
+import { requirePagePermission } from '@/logica/auth/page-guard';
+import { PERMISSIONS } from '@/logica/auth/permissions';
 
 export default async function ManageFaqPage() {
+    await requirePagePermission(PERMISSIONS.manage.faqView);
     const faqs = await getFaqs();
     
     // Group FAQs by category

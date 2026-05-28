@@ -2,6 +2,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ClientLink } from '@/components/client-link';
 import { BarChart2, TrendingUp, ListChecks, Swords } from 'lucide-react';
 import { TrackChangesButton } from './track-changes-button';
+import { requirePagePermission } from '@/logica/auth/page-guard';
+import { PERMISSIONS } from '@/logica/auth/permissions';
 
 const sections = [
   {
@@ -24,7 +26,8 @@ const sections = [
   },
 ];
 
-export default function IntelligencePage() {
+export default async function IntelligencePage() {
+  await requirePagePermission(PERMISSIONS.manage.intelligenceListingsView);
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">

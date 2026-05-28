@@ -1,8 +1,11 @@
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Info } from 'lucide-react';
+import { requirePagePermission } from '@/logica/auth/page-guard';
+import { PERMISSIONS } from '@/logica/auth/permissions';
 
-export default function CollectionPage() {
+export default async function CollectionPage() {
+    await requirePagePermission(PERMISSIONS.manage.propertyCollectionSelfView);
     return (
         <div className="space-y-6">
             <div>

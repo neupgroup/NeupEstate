@@ -4,8 +4,11 @@ import { ClientLink } from '@/components/client-link';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Plus } from 'lucide-react';
+import { requirePagePermission } from '@/logica/auth/page-guard';
+import { PERMISSIONS } from '@/logica/auth/permissions';
 
 export default async function ManageLeadsPage() {
+    await requirePagePermission(PERMISSIONS.manage.selfLeadView);
     await checkAuthenticationForWeb();
     const accountId = await getAccountIdFromJWT();
     const leads = await getLeads(accountId!);

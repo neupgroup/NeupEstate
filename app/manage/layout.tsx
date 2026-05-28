@@ -12,6 +12,8 @@ import { cn } from '@/lib/utils';
 import { ClientLink } from '@/components/client-link';
 import { WhatsAppIcon } from '@/components/icons';
 import { createAccountInApp } from '@/logica/auth/account';
+import { hasPermission } from '@/logica/auth/authorization';
+import { PERMISSIONS } from '@/logica/auth/permissions';
 
 export default async function ManageLayout({
   children,
@@ -25,6 +27,30 @@ export default async function ManageLayout({
     await createAccountInApp(authCookie).catch(() => null);
   }
 
+  const [
+    canDashboard,
+    canAnalytics,
+    canIntelListings,
+    canPropertyView,
+    canCollectionView,
+    canLeadsView,
+    canClientsView,
+    canReviewsView,
+    canFaqView,
+    canNotificationView,
+  ] = await Promise.all([
+    hasPermission(PERMISSIONS.manage.dashboardView),
+    hasPermission(PERMISSIONS.manage.analyticsView),
+    hasPermission(PERMISSIONS.manage.intelligenceListingsView),
+    hasPermission(PERMISSIONS.manage.propertySelfView),
+    hasPermission(PERMISSIONS.manage.propertyCollectionSelfView),
+    hasPermission(PERMISSIONS.manage.selfLeadView),
+    hasPermission(PERMISSIONS.manage.selfClientView),
+    hasPermission(PERMISSIONS.manage.selfReviewsView),
+    hasPermission(PERMISSIONS.manage.faqView),
+    hasPermission(PERMISSIONS.manage.notificationView),
+  ]);
+
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
       <div className="grid grid-cols-1 gap-8 md:grid-cols-[240px_1fr] items-start">
@@ -32,42 +58,42 @@ export default async function ManageLayout({
         <aside className="hidden md:block sticky top-16 self-start border-r h-[calc(100vh-4rem)] bg-secondary">
             <nav className={cn("flex flex-col space-y-1 p-4 overflow-y-auto h-[calc(100%-5rem)]")}>
                 
-                <ClientLink href="/manage" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
+                {canDashboard && <ClientLink href="/manage" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
                     <LayoutDashboard className="mr-2 h-4 w-4" />
                     Dashboard
-                </ClientLink>
-                <ClientLink href="/manage/analytics" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
+                </ClientLink>}
+                {canAnalytics && <ClientLink href="/manage/analytics" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
                     <LineChart className="mr-2 h-4 w-4" />
                     Analytics
-                </ClientLink>
-                <ClientLink href="/manage/intelligence" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
+                </ClientLink>}
+                {canIntelListings && <ClientLink href="/manage/intelligence" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
                     <BarChart2 className="mr-2 h-4 w-4" />
                     Intelligence
-                </ClientLink>
+                </ClientLink>}
                 <ClientLink href="/manage/schedule" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
                     <CalendarCheck className="mr-2 h-4 w-4" />
                     Schedule
                 </ClientLink>
 
                 <h3 className="pt-4 pb-1 px-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">Property</h3>
-                <ClientLink href="/manage/properties" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
+                {canPropertyView && <ClientLink href="/manage/properties" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
                     <Home className="mr-2 h-4 w-4" />
                     Properties
-                </ClientLink>
-                <ClientLink href="/manage/collection" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
+                </ClientLink>}
+                {canCollectionView && <ClientLink href="/manage/collection" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
                     <Package className="mr-2 h-4 w-4" />
                     Collection
-                </ClientLink>
+                </ClientLink>}
                 
                 <h3 className="pt-4 pb-1 px-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">Clients</h3>
-                <ClientLink href="/manage/leads" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
+                {canLeadsView && <ClientLink href="/manage/leads" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
                     <Flame className="mr-2 h-4 w-4" />
                     Leads
-                </ClientLink>
-                <ClientLink href="/manage/clients" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
+                </ClientLink>}
+                {canClientsView && <ClientLink href="/manage/clients" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
                     <UserCheck className="mr-2 h-4 w-4" />
                     Clients
-                </ClientLink>
+                </ClientLink>}
                 <ClientLink href="/manage/messages" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
                     <MessageSquareHeart className="mr-2 h-4 w-4" />
                     Messages
@@ -102,18 +128,18 @@ export default async function ManageLayout({
                 </ClientLink>
 
                 <h3 className="pt-4 pb-1 px-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">About</h3>
-                <ClientLink href="/manage/reviews" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
+                {canReviewsView && <ClientLink href="/manage/reviews" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
                     <Star className="mr-2 h-4 w-4" />
                     Reviews
-                </ClientLink>
-                <ClientLink href="/manage/faq" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
+                </ClientLink>}
+                {canFaqView && <ClientLink href="/manage/faq" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
                     <HelpCircle className="mr-2 h-4 w-4" />
                     FAQs
-                </ClientLink>
-                <ClientLink href="/manage/notifications" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
+                </ClientLink>}
+                {canNotificationView && <ClientLink href="/manage/notifications" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
                     <Bell className="mr-2 h-4 w-4" />
                     Notification
-                </ClientLink>
+                </ClientLink>}
                 <h3 className="pt-4 pb-1 px-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">Content</h3>
                 <ClientLink href="/manage/market-insights" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
                     <Lightbulb className="mr-2 h-4 w-4" />

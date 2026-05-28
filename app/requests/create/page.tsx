@@ -3,8 +3,11 @@
 import { PropertyRequestForm } from '@/components/property-request-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileSearch } from 'lucide-react';
+import { requirePagePermission } from '@/logica/auth/page-guard';
+import { PERMISSIONS } from '@/logica/auth/permissions';
 
-export default function CreateRequestPage() {
+export default async function CreateRequestPage() {
+    await requirePagePermission(PERMISSIONS.public.requirementCreate);
     return (
         <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <Card className="max-w-3xl mx-auto">
