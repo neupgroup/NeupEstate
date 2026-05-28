@@ -206,3 +206,12 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ success: true });
 }
 
+export async function GET() {
+  return NextResponse.json(
+    {
+      success: false,
+      error: "invalid_request_method",
+    },
+    { status: 400 }
+  );
+}
