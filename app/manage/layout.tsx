@@ -11,7 +11,6 @@ import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ClientLink } from '@/components/client-link';
 import { WhatsAppIcon } from '@/components/icons';
-import { SidebarUserCard } from '@/components/manage/sidebar-user-card';
 import { createAccountInApp } from '@/logica/auth/account';
 
 export default async function ManageLayout({
@@ -151,10 +150,6 @@ export default async function ManageLayout({
                     Support
                 </ClientLink>
             </nav>
-            {/* User identity card pinned to the bottom of the sidebar */}
-            <div className="absolute bottom-0 left-0 right-0 p-3 border-t bg-secondary">
-                <SidebarUserCard />
-            </div>
         </aside>
 
         <main className="py-8">{children}</main>

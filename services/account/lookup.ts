@@ -15,9 +15,10 @@ export type AccountInfo = {
 
 export type AccountLookupMeta = {
   request: {
-    method: 'GET';
+    method: 'POST';
     url: string;
     headers: Record<string, string>;
+    body: Record<string, string>;
   };
   response?: {
     status: number;
@@ -39,6 +40,14 @@ export type AccountLookupInput =
 // ---------------------------------------------------------------------------
 
 const LOOKUP_BASE = 'https://neupgroup.com/account/bridge/api.v1/accounts/lookup';
+
+function getAppId(): string {
+  return process.env.NEUP_APP_ID ?? '';
+}
+
+function getAppSecret(): string {
+  return process.env.NEUP_APP_SECRET ?? '';
+}
 
 function headersToObject(headers: Headers): Record<string, string> {
   const out: Record<string, string> = {};
@@ -64,14 +73,28 @@ function safeJsonParse(value: string): unknown {
 export async function getAccountInformation(
   input: AccountLookupInput,
 ): Promise<AccountLookupResult> {
-  const params = new URLSearchParams();
-  if (input.accountId) {
-    params.set('accountId', input.accountId);
-  } else {
-    params.set('neupId', input.neupId!);
+  const url = LOOKUP_BASE;
+  const appId = getAppId();
+  const appSecret = getAppSecret();
+
+  if (!appId || !appSecret) {
+    return {
+      found: false,
+      error: 'missing_app_credentials',
+      meta: {
+        request: {
+          method: 'POST',
+          url,
+          headers: { 'Content-Type': 'application/json' },
+          body: {},
+        },
+      },
+    };
   }
 
-  const url = `${LOOKUP_BASE}?${params.toString()}`;
+  const requestBody: Record<string, string> = input.accountId
+    ? { accountId: input.accountId, appId, appSecret }
+    : { neupId: input.neupId!, appId, appSecret };
 
   const incomingHeaders = await headers();
   const inboundOrigin = incomingHeaders.get('origin') ?? '';
@@ -85,17 +108,19 @@ export async function getAccountInformation(
 
   const meta: AccountLookupMeta = {
     request: {
-      method: 'GET',
+      method: 'POST',
       url,
       headers: requestHeaders,
+      body: requestBody,
     },
   };
 
   let res: Response;
   try {
     res = await fetch(url, {
-      method: 'GET',
+      method: 'POST',
       headers: requestHeaders,
+      body: JSON.stringify(requestBody),
       cache: 'no-store',
     });
   } catch (err: any) {
@@ -133,11 +158,38 @@ export async function getAccountInformation(
     return { found: false, error: `upstream_error_${res.status}`, meta };
   }
 
-  const body = responseBody as { success?: boolean; account?: AccountInfo } | null;
-  if (!body || !body.success || !body.account) {
+  const body = responseBody as {
+    success?: boolean;
+    account?: AccountInfo;
+    profile?: {
+      accountId?: string;
+      displayName?: string;
+      displayImage?: string;
+      primaryNeupId?: string;
+    };
+    role?: string | null;
+  } | null;
+  if (!body || !body.success) {
     return { found: false, error: 'not_found', meta };
   }
 
-  return { found: true, account: body.account, meta };
-}
+  if (body.account) {
+    return { found: true, account: body.account, meta };
+  }
 
+  if (body.profile?.accountId) {
+    return {
+      found: true,
+      account: {
+        accountId: body.profile.accountId,
+        displayName: body.profile.displayName ?? '',
+        displayImage: body.profile.displayImage ?? '',
+        accountType: body.role ?? 'individual',
+        neupId: body.profile.primaryNeupId ?? '',
+      },
+      meta,
+    };
+  }
+
+  return { found: false, error: 'not_found', meta };
+}

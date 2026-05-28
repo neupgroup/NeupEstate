@@ -87,31 +87,8 @@ export default function Header() {
   const displayName = effectiveUser?.displayName?.trim() ? effectiveUser.displayName : "Guest User";
   const handleText = effectiveUser?.neupId?.trim() ? `@${effectiveUser.neupId}` : "Sign In Now";
 
-  useEffect(() => {
-    console.log("[Header] computed identity:", {
-      pathname,
-      isManage,
-      hasUser: !!user,
-      hasEffectiveUser: !!effectiveUser,
-      user,
-      effectiveUser,
-      displayName,
-      handleText,
-    });
-  }, [pathname, isManage, user, effectiveUser, displayName, handleText]);
-
   // Close on route change
   useEffect(() => { setMenuOpen(false); }, [pathname]);
-
-  // DEBUG: log the current user object and sessionStorage entry
-  useEffect(() => {
-    try {
-      console.log('Header user (useNeupUser):', user);
-      console.log('Header session neup_user:', sessionStorage.getItem('neup_user'));
-    } catch (err) {
-      // ignore in non-browser environments
-    }
-  }, [user]);
 
   // Lock / unlock body scroll when shutter is open
   useEffect(() => {
@@ -176,14 +153,12 @@ export default function Header() {
     <Avatar className="h-8 w-8">
       {effectiveUser ? (
         <>
-          {console.log("[Header] rendering UserAvatar with user:", effectiveUser)}
           <AvatarImage src={effectiveUser?.displayImage || undefined} alt={effectiveUser?.displayName} />
           <AvatarFallback className="text-xs font-semibold">
             {getInitials(effectiveUser?.displayName ?? "")}
           </AvatarFallback>
         </>
       ) : (
-        console.log("[Header] rendering UserAvatar without user"),
         <AvatarFallback>
           <User className="h-4 w-4" />
         </AvatarFallback>
@@ -199,7 +174,7 @@ export default function Header() {
           {/* Logo */}
           <div className="flex-1 flex justify-start">
             <Link href="/" className="flex items-center gap-2">
-              <img src="/estate/logo.png" alt="Neup.Estate Logo" className="h-7 w-7 object-contain" />
+              <img src="/estate/logo.png" alt="Neup.Estate Logo" className="h-9 w-9 object-contain" />
               <span className="font-bold font-headline text-lg">Neup.Estate</span>
             </Link>
           </div>
@@ -227,7 +202,17 @@ export default function Header() {
           )}
 
           {/* Right side */}
-          <div className="flex flex-1 items-center justify-end space-x-3">
+          <div className="flex flex-1 items-center justify-end space-x-1.5">
+            {/* Inline name/cta — desktop */}
+            {effectiveUser && (
+              <div className="flex flex-col items-end mr-1">
+                <Link href="/profile" className="text-sm font-semibold truncate">
+                  {displayName}
+                </Link>
+                <span className="text-xs text-muted-foreground">{handleText}</span>
+              </div>
+            )}
+
             {/* Avatar + tooltip — desktop */}
             <TooltipProvider delayDuration={200}>
               <Tooltip>
@@ -250,16 +235,6 @@ export default function Header() {
                 )}
               </Tooltip>
             </TooltipProvider>
-
-            {/* Inline name/cta — desktop */}
-            {effectiveUser && (
-              <div className="flex flex-col items-end mr-2">
-                <Link href="/profile" className="text-sm font-semibold truncate">
-                  {displayName}
-                </Link>
-                <span className="text-xs text-muted-foreground">{handleText}</span>
-              </div>
-            )}
 
             {/* Burger — mobile only */}
             <Button
