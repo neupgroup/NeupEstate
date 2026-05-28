@@ -47,7 +47,6 @@ export async function GET(request: NextRequest) {
           displayName: true,
           displayImage: true,
           accountType: true,
-          registered: true,
         },
       });
     } catch (err: any) {
@@ -59,7 +58,6 @@ export async function GET(request: NextRequest) {
             displayName: true,
             displayImage: true,
             accountType: true,
-            registered: true,
           },
         });
       } catch {
@@ -70,7 +68,7 @@ export async function GET(request: NextRequest) {
     displayName = accountRow?.displayName ?? null;
     displayImage = accountRow?.displayImage ?? null;
     accountType = accountRow?.accountType ?? null;
-    verified = accountRow?.registered ?? verified;
+    verified = (accountRow?.accountType ?? (guest === 1 ? 'guest' : 'individual')) !== 'guest';
     neupidFromDb = accountRow?.neupId ?? null;
   } catch {
     // Keep auth response usable even if profile lookup fails.

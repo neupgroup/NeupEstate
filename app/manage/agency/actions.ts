@@ -45,7 +45,6 @@ export async function createAccountAction(input: CreateAccountInput): Promise<Ac
         accountType: input.accountType,
         displayName: input.displayName,
         displayImage: input.displayImage,
-        registered: true,
       }
     });
 

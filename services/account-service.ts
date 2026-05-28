@@ -53,7 +53,6 @@ export async function resolveAccount(
       data: {
         id: aid,
         accountType: 'individual',
-        registered: true,
         createdOn: new Date(),
         accessedOn: new Date(),
         displayName:  displayName  ?? null,
@@ -70,7 +69,6 @@ export async function resolveAccount(
     data: {
       id: guestId,
       accountType: 'guest',
-      registered: false,
       createdOn: new Date(),
       accessedOn: new Date(),
     },
@@ -123,7 +121,7 @@ function mapRecord(account: any): Account {
     display_image: account.displayImage ?? undefined,
   };
 
-  if (account.registered) {
+  if (account.accountType !== 'guest') {
     return {
       ...base,
       registered: true,

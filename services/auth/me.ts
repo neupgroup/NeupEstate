@@ -5,7 +5,6 @@ import { buildHandshakeGrantUrl, getAuthenticatedAccount } from '@/services/auth
 type MeRow = {
   neupId?: string | null;
   accountType?: string | null;
-  registered?: boolean | null;
   displayName?: string | null;
   displayImage?: string | null;
 };
@@ -26,7 +25,6 @@ function readAccountRow(accountId: string) {
     select: {
       neupId: true,
       accountType: true,
-      registered: true,
       displayName: true,
       displayImage: true,
     },
@@ -38,7 +36,6 @@ async function readAccountRowFallback(accountId: string) {
     where: { id: accountId },
     select: {
       accountType: true,
-      registered: true,
       displayName: true,
       displayImage: true,
     },
@@ -65,7 +62,7 @@ export async function getAuthenticatedMeData(): Promise<AuthenticatedMe | null> 
       neupId: row?.neupId ?? account.nid ?? null,
       guest: account.guest === 1,
       accountType: row?.accountType ?? (account.guest === 1 ? 'guest' : 'individual'),
-      registered: row?.registered ?? (account.guest !== 1),
+      registered: (row?.accountType ?? (account.guest === 1 ? 'guest' : 'individual')) !== 'guest',
       displayName: row?.displayName ?? null,
       displayImage: row?.displayImage ?? null,
     };

@@ -86,18 +86,22 @@ export default async function ManageTeamPage() {
         select: {
           id: true,
           accountType: true,
-          registered: true,
           createdOn: true,
           accessedOn: true,
           displayName: true,
           displayImage: true,
-          mainId: true,
         },
       })
     : [];
 
   const accountMap = new Map<string, TeamRow>(
-    relatedAccounts.map((account) => [account.id, account]),
+    relatedAccounts.map((account) => [
+      account.id,
+      {
+        ...account,
+        registered: account.accountType !== 'guest',
+      },
+    ]),
   );
 
   const memberRows = agencyMembers

@@ -44,16 +44,16 @@ enum Reaction {
 // ============================================================================
 
 model Account {
-  id                   String   @id // ssid from NeupID Silent SSO
-  neupId               String?  @unique
-  accountType          String
-  mainId               String?  // references Account.id
-  registered           Boolean  @default(false)
-  createdOn            DateTime @default(now())
-  sessionId            String?  // nullable — current session ID from NeupID
-  accessedOn           DateTime @default(now())
-  displayName          String?  // denormalized from NeupID — set on first create
-  displayImage         String?  // denormalized from NeupID — set on first create
+  id           String    @id // ssid from NeupID Silent SSO
+  neupId       String?   @unique @map("neup_id")
+  accountType  String
+  createdOn    DateTime  @default(now()) @map("created_on")
+  accessedOn   DateTime  @default(now()) @map("accessed_on")
+  displayName  String?   // denormalized from NeupID — set on first create
+  displayImage String?   // denormalized from NeupID — set on first create
+  connectionId String?
+  roleId       String?   @map("role_id")
+  role         AuthzRole? @relation(fields: [roleId], references: [id], onDelete: SetNull)
 
   @@map("account")
 }
@@ -855,6 +855,20 @@ model FAQ {
 // ============================================================================
 // Authorization
 // ============================================================================
+
+model AuthzRole {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  appId       String   @map("app_id")
+  scope       String?
+  permissions Json?
+  updatedOn   DateTime @updatedAt
+
+  accounts    Account[]
+
+  @@map("authz_role")
+}
 
 model RoleCapability {
   id                     String  @id @default(uuid())

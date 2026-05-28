@@ -47,7 +47,6 @@ async function handleCallback(request: NextRequest) {
         create: {
           id: aid,
           accountType: guest === 1 ? 'guest' : 'individual',
-          registered: guest !== 1,
           displayName: nid ?? aid,
           createdOn: new Date(),
           accessedOn: new Date(),
@@ -55,7 +54,6 @@ async function handleCallback(request: NextRequest) {
         update: {
           accessedOn: new Date(),
           displayName: nid ?? aid,
-          registered: guest !== 1,
         },
       });
     }

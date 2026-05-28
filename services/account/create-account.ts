@@ -104,7 +104,6 @@ export async function createAccount(): Promise<void> {
         id: aid,
         neupId: neupIdFromLookup ?? null,
         accountType,
-        registered: true,
         createdOn:  new Date(),
         accessedOn: new Date(),
         displayName,
