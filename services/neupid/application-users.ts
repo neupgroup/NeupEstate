@@ -97,19 +97,30 @@ export async function fetchApplicationUsers(input?: {
   url.searchParams.set('limit', String(limit));
 
   let response: Response;
+  const requestBody = {
+    'app-id': appId,
+    app_secret: appSecret,
+  };
   try {
     response = await fetch(url.toString(), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        'app-id': appId,
-        app_secret: appSecret,
-      }),
+      body: JSON.stringify(requestBody),
       cache: 'no-store',
     });
   } catch (error: any) {
+    await logApiExchange({
+      context: 'neupid/application-users:fetchApplicationUsers',
+      request: {
+        method: 'POST',
+        url: url.toString(),
+        headers: { 'Content-Type': 'application/json' },
+        body: requestBody,
+      },
+      error: error?.message ?? 'network_error',
+    });
     return {
       success: false,
       users: [],
@@ -119,11 +130,27 @@ export async function fetchApplicationUsers(input?: {
   }
 
   let body: unknown = null;
+  let responseText = '';
   try {
-    body = await response.json();
+    responseText = await response.text();
+    body = responseText ? JSON.parse(responseText) : null;
   } catch {
     // Keep body null, status will capture failure state below.
   }
+
+  await logApiExchange({
+    context: 'neupid/application-users:fetchApplicationUsers',
+    request: {
+      method: 'POST',
+      url: url.toString(),
+      headers: { 'Content-Type': 'application/json' },
+      body: requestBody,
+    },
+    response: {
+      status: response.status,
+      body: responseText || body,
+    },
+  });
 
   if (!response.ok) {
     const upstreamMessage =
@@ -151,3 +178,4 @@ export async function fetchApplicationUsers(input?: {
 }
 
 export type { ApplicationUser, FetchApplicationUsersResult };
+import { logApiExchange } from '@/services/api-log-service';

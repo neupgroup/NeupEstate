@@ -6,6 +6,7 @@ import { getRequirementByUserId } from '@/services/requirements-service';
 import { getSavedProperties, getPaginatedProperties } from '@/services/property-service';
 import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/services/auth/account';
+import { logProblem } from '@/services/problem-service';
 import { ClientLink } from '@/components/client-link';
 import { AccountRefreshButton } from '@/components/manage/account-refresh-button';
 import { Badge } from '@/components/ui/badge';
@@ -46,9 +47,22 @@ async function resolveTarget(
 
   // 2. neupId — resolve to accountId via NeupID
   if (qNeupId?.trim()) {
-    const info = await getAccountInformation({ neupId: qNeupId.trim() });
+    const neupId = qNeupId.trim();
+    const info = await getAccountInformation({ neupId });
+    if (!info.found) {
+      await logProblem(
+        new Error(`NeupID lookup failed: ${info.error}`),
+        'manage/accounts:resolveTarget',
+        {
+          accountId: null,
+          lookupError: info.error,
+          request: info.meta.request,
+          response: info.meta.response ?? null,
+        },
+      );
+    }
     if (!info.found) return null;
-    return { accountId: info.account.accountId, neupIdHandle: qNeupId.trim() };
+    return { accountId: info.account.accountId, neupIdHandle: neupId };
   }
 
   // 3. Default — use the authenticated user from the verified session
@@ -69,6 +83,11 @@ export default async function ManageAccountPage({
 
   const resolved = await resolveTarget(qAccountId, qNeupId, authAccount.aid);
   if (!resolved) {
+    await logProblem(
+      new Error('Unable to resolve account target for /manage/accounts'),
+      'manage/accounts:target_not_resolved',
+      { qAccountId: qAccountId ?? null, qNeupId: qNeupId ?? null, authAid: authAccount.aid },
+    );
     return <AccountNotFound query={qAccountId ?? qNeupId ?? ''} />;
   }
 
@@ -76,6 +95,11 @@ export default async function ManageAccountPage({
 
   const account = await getAccountById(accountId);
   if (!account) {
+    await logProblem(
+      new Error(`Account not found in local DB: ${accountId}`),
+      'manage/accounts:account_not_found',
+      { accountId, neupIdHandle: neupIdHandle ?? null },
+    );
     return <AccountNotFound query={accountId} />;
   }
 

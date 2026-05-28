@@ -1,22 +1,5 @@
-/**
- * lookup.ts
- *
- * getAccountInformation — resolves public profile fields for an account
- * by either accountId (UUID) or neupId (handle, e.g. "@neupcloud").
- *
- * Calls the NeupID public HTTP endpoint:
- *   GET https://neupgroup.com/account/bridge/api.v1/accounts/lookup
- *
- * Server-only — never import this in client components.
- *
- * Usage:
- *   const result = await getAccountInformation({ accountId: 'eb58bed4-...' });
- *   const result = await getAccountInformation({ neupId: '@neupcloud' });
- *
- *   if (result.found) {
- *     console.log(result.account.displayName);
- *   }
- */
+import { headers } from 'next/headers';
+import { logApiExchange } from '@/services/api-log-service';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -30,36 +13,58 @@ export type AccountInfo = {
   neupId: string;
 };
 
+export type AccountLookupMeta = {
+  request: {
+    method: 'GET';
+    url: string;
+    headers: Record<string, string>;
+  };
+  response?: {
+    status: number;
+    headers: Record<string, string>;
+    body: unknown;
+  };
+};
+
 export type AccountLookupResult =
-  | { found: true;  account: AccountInfo }
-  | { found: false; error: string };
+  | { found: true; account: AccountInfo; meta: AccountLookupMeta }
+  | { found: false; error: string; meta: AccountLookupMeta };
 
 export type AccountLookupInput =
   | { accountId: string; neupId?: never }
-  | { neupId: string;    accountId?: never };
+  | { neupId: string; accountId?: never };
 
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
 
-const LOOKUP_BASE =
-  'https://neupgroup.com/account/bridge/api.v1/accounts/lookup';
+const LOOKUP_BASE = 'https://neupgroup.com/account/bridge/api.v1/accounts/lookup';
+
+function headersToObject(headers: Headers): Record<string, string> {
+  const out: Record<string, string> = {};
+  headers.forEach((value, key) => {
+    out[key] = value;
+  });
+  return out;
+}
+
+function safeJsonParse(value: string): unknown {
+  if (!value) return null;
+  try {
+    return JSON.parse(value);
+  } catch {
+    return value;
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Service function
 // ---------------------------------------------------------------------------
 
-/**
- * Fetches public account information from the NeupID HTTP API.
- *
- * @param input - Either `{ accountId }` or `{ neupId }` — exactly one required.
- * @returns AccountLookupResult
- */
 export async function getAccountInformation(
   input: AccountLookupInput,
 ): Promise<AccountLookupResult> {
   const params = new URLSearchParams();
-
   if (input.accountId) {
     params.set('accountId', input.accountId);
   } else {
@@ -68,36 +73,71 @@ export async function getAccountInformation(
 
   const url = `${LOOKUP_BASE}?${params.toString()}`;
 
+  const incomingHeaders = await headers();
+  const inboundOrigin = incomingHeaders.get('origin') ?? '';
+  const inboundCookie = incomingHeaders.get('cookie') ?? '';
+
+  const requestHeaders: Record<string, string> = {
+    'Content-Type': 'application/json',
+    Origin: inboundOrigin,
+    Cookie: inboundCookie,
+  };
+
+  const meta: AccountLookupMeta = {
+    request: {
+      method: 'GET',
+      url,
+      headers: requestHeaders,
+    },
+  };
+
   let res: Response;
   try {
     res = await fetch(url, {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      // Don't cache — always want fresh identity data
+      headers: requestHeaders,
       cache: 'no-store',
     });
   } catch (err: any) {
-    return { found: false, error: err?.message ?? 'network_error' };
+    await logApiExchange({
+      context: 'account/lookup:getAccountInformation',
+      request: meta.request,
+      error: err?.message ?? 'network_error',
+    });
+    return { found: false, error: err?.message ?? 'network_error', meta };
   }
 
+  const responseText = await res.text();
+  const responseBody = safeJsonParse(responseText);
+  meta.response = {
+    status: res.status,
+    headers: headersToObject(res.headers),
+    body: responseBody,
+  };
+
+  await logApiExchange({
+    context: 'account/lookup:getAccountInformation',
+    request: meta.request,
+    response: {
+      status: res.status,
+      headers: meta.response.headers,
+      body: responseBody,
+    },
+  });
+
   if (res.status === 404) {
-    return { found: false, error: 'not_found' };
+    return { found: false, error: 'not_found', meta };
   }
 
   if (!res.ok) {
-    return { found: false, error: `upstream_error_${res.status}` };
+    return { found: false, error: `upstream_error_${res.status}`, meta };
   }
 
-  let body: { success: boolean; account?: AccountInfo };
-  try {
-    body = await res.json();
-  } catch {
-    return { found: false, error: 'invalid_response' };
+  const body = responseBody as { success?: boolean; account?: AccountInfo } | null;
+  if (!body || !body.success || !body.account) {
+    return { found: false, error: 'not_found', meta };
   }
 
-  if (!body.success || !body.account) {
-    return { found: false, error: 'not_found' };
-  }
-
-  return { found: true, account: body.account };
+  return { found: true, account: body.account, meta };
 }
+

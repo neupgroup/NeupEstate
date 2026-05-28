@@ -69,8 +69,10 @@ export default async function ProblemsPage({
                                       <summary className="cursor-pointer text-xs font-medium hover:text-foreground">
                                           View API Call Details
                                       </summary>
-                                      <div className="mt-1 p-2 bg-background/50 rounded-md text-xs font-mono">
-                                          {Object.entries(problem.details).map(([key, value]) => (
+                                  <div className="mt-1 p-2 bg-background/50 rounded-md text-xs font-mono">
+                                          {Object.entries(problem.details)
+                                            .filter(([key]) => key !== 'accountId' && key !== 'lookupError')
+                                            .map(([key, value]) => (
                                               <div key={key} className="mb-2 last:mb-0">
                                                   <p className="font-semibold capitalize">{key.replace(/([A-Z])/g, ' $1')}:</p>
                                                   <pre className="p-2 bg-black/10 dark:bg-white/10 rounded-md whitespace-pre-wrap break-all">

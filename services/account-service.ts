@@ -164,7 +164,19 @@ export async function refreshAccountDisplayInfo(
 ): Promise<{ displayName: string | null; displayImage: string | null } | null> {
   try {
     const info = await getAccountInformation({ accountId: id });
-    if (!info.found) return null;
+    if (!info.found) {
+      await logProblem(
+        new Error(`NeupID lookup failed while refreshing account: ${info.error}`),
+        `refreshAccountDisplayInfo (ID: ${id})`,
+        {
+          accountId: id,
+          lookupError: info.error,
+          request: info.meta.request,
+          response: info.meta.response ?? null,
+        },
+      );
+      return null;
+    }
 
     const displayName  = info.account.displayName  || null;
     const displayImage = info.account.displayImage || null;

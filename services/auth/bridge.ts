@@ -31,6 +31,15 @@ function getAppId(): string {
   return process.env.NEUP_APP_ID ?? '';
 }
 
+function safeParseJson(text: string): unknown {
+  if (!text) return null;
+  try {
+    return JSON.parse(text);
+  } catch {
+    return text;
+  }
+}
+
 /**
  * Build the callback URL for the handshake redirect.
  */
@@ -83,20 +92,39 @@ export function buildAccessUrl(): string {
  * This is useful for getting full user profile from the bridge API.
  */
 export async function fetchWhoami(token: string) {
-  const response = await fetch(buildWhoamiUrl(), {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include',
+  const url = buildWhoamiUrl();
+  const headers = {
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json',
+  };
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      method: 'GET',
+      headers,
+      credentials: 'include',
+    });
+  } catch (error: any) {
+    await logApiExchange({
+      context: 'auth/bridge:fetchWhoami',
+      request: { method: 'GET', url, headers },
+      error: error?.message ?? 'network_error',
+    });
+    return { success: false, status: 0 };
+  }
+
+  const responseText = await response.text();
+  await logApiExchange({
+    context: 'auth/bridge:fetchWhoami',
+    request: { method: 'GET', url, headers },
+    response: { status: response.status, body: responseText },
   });
 
   if (!response.ok) {
     return { success: false, status: response.status };
   }
 
-  const data = await response.json();
+  const data = safeParseJson(responseText);
   return { success: true, data };
 }
 
@@ -104,19 +132,39 @@ export async function fetchWhoami(token: string) {
  * Fetch the current user's access context (roles, permissions, teams, etc).
  */
 export async function fetchAccessInfo(token: string) {
-  const response = await fetch(buildAccessUrl(), {
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include',
+  const url = buildAccessUrl();
+  const headers = {
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json',
+  };
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      method: 'GET',
+      headers,
+      credentials: 'include',
+    });
+  } catch (error: any) {
+    await logApiExchange({
+      context: 'auth/bridge:fetchAccessInfo',
+      request: { method: 'GET', url, headers },
+      error: error?.message ?? 'network_error',
+    });
+    return { success: false, status: 0 };
+  }
+
+  const responseText = await response.text();
+  await logApiExchange({
+    context: 'auth/bridge:fetchAccessInfo',
+    request: { method: 'GET', url, headers },
+    response: { status: response.status, body: responseText },
   });
 
   if (!response.ok) {
     return { success: false, status: response.status };
   }
 
-  const data = await response.json();
+  const data = safeParseJson(responseText);
   return { success: true, data };
 }
+import { logApiExchange } from '@/services/api-log-service';
