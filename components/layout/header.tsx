@@ -69,7 +69,7 @@ const manageNav: ManageNavItem[] = [
 
   { type: "heading", label: "Management" },
   { type: "link",    href: "/manage/agents",            label: "Agents",            icon: Users },
-  { type: "link",    href: "/manage/users",             label: "Users",             icon: UserCog },
+  { type: "link",    href: "/manage/accounts",          label: "Users",             icon: UserCog },
   { type: "link",    href: "/manage/settings",          label: "Settings",          icon: Settings },
   { type: "link",    href: "/manage/support",           label: "Support",           icon: LifeBuoy },
 ];

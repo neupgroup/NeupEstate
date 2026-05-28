@@ -41,7 +41,7 @@ export default function SettingsPage() {
           Manage user roles and access levels.
         </p>
         <div className="border rounded-lg overflow-hidden">
-          <ClientLink href="/manage/users" className="block px-4 py-3 hover:bg-muted/50 transition-colors font-medium">
+          <ClientLink href="/manage/accounts" className="block px-4 py-3 hover:bg-muted/50 transition-colors font-medium">
               Users & Permissions
           </ClientLink>
         </div>

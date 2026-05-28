@@ -1,3 +1,6 @@
+import { logApiExchange } from '@/services/api-log-service';
+import { logProblem } from '@/services/problem-service';
+
 type ApplicationUser = {
   accountId: string;
   neupId: string | null;
@@ -81,51 +84,75 @@ export async function fetchApplicationUsers(input?: {
   const appSecret = getAppSecret();
 
   if (!appId || !appSecret) {
+    const error = 'Missing NEUP_APP_ID / NEUP_APP_SECRET environment variables';
+    await logProblem(
+      new Error(error),
+      'neupid/application-users:fetchApplicationUsers',
+      {
+        request: null,
+        response: null,
+      },
+    );
     return {
       success: false,
       users: [],
       status: 500,
-      error: 'Missing NEUP_APP_ID / NEUP_APP_SECRET environment variables',
+      error,
     };
   }
 
   const base = process.env.NEUP_AUTH_URL ?? 'https://neupgroup.com/account';
   const offset = Math.max(0, input?.offset ?? 0);
   const limit = Math.max(1, Math.min(500, input?.limit ?? 100));
-  const url = new URL('/bridge/api.v1/application/users', base);
+  const normalizedBase = base.endsWith('/') ? base : `${base}/`;
+  const url = new URL('bridge/api.v1/application/users', normalizedBase);
   url.searchParams.set('offset', String(offset));
   url.searchParams.set('limit', String(limit));
 
-  let response: Response;
+  const requestHeaders = { 'Content-Type': 'application/json' };
   const requestBody = {
     'app-id': appId,
     app_secret: appSecret,
   };
+
+  let response: Response;
   try {
     response = await fetch(url.toString(), {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: requestHeaders,
       body: JSON.stringify(requestBody),
       cache: 'no-store',
     });
   } catch (error: any) {
+    const message = error?.message ?? 'Network error while fetching Neup application users';
     await logApiExchange({
       context: 'neupid/application-users:fetchApplicationUsers',
       request: {
         method: 'POST',
         url: url.toString(),
-        headers: { 'Content-Type': 'application/json' },
+        headers: requestHeaders,
         body: requestBody,
       },
-      error: error?.message ?? 'network_error',
+      error: message,
     });
+    await logProblem(
+      new Error(message),
+      'neupid/application-users:fetchApplicationUsers',
+      {
+        request: {
+          method: 'POST',
+          url: url.toString(),
+          headers: requestHeaders,
+          body: requestBody,
+        },
+        response: null,
+      },
+    );
     return {
       success: false,
       users: [],
       status: 502,
-      error: error?.message ?? 'Network error while fetching Neup application users',
+      error: message,
     };
   }
 
@@ -138,18 +165,20 @@ export async function fetchApplicationUsers(input?: {
     // Keep body null, status will capture failure state below.
   }
 
+  const responsePayload = {
+    status: response.status,
+    body: responseText || body,
+  };
+
   await logApiExchange({
     context: 'neupid/application-users:fetchApplicationUsers',
     request: {
       method: 'POST',
       url: url.toString(),
-      headers: { 'Content-Type': 'application/json' },
+      headers: requestHeaders,
       body: requestBody,
     },
-    response: {
-      status: response.status,
-      body: responseText || body,
-    },
+    response: responsePayload,
   });
 
   if (!response.ok) {
@@ -157,11 +186,27 @@ export async function fetchApplicationUsers(input?: {
       body && typeof body === 'object' && typeof (body as Record<string, unknown>).message === 'string'
         ? ((body as Record<string, unknown>).message as string)
         : null;
+    const message = upstreamMessage ?? `Neup users API failed with status ${response.status}`;
+
+    await logProblem(
+      new Error(message),
+      'neupid/application-users:fetchApplicationUsers',
+      {
+        request: {
+          method: 'POST',
+          url: url.toString(),
+          headers: requestHeaders,
+          body: requestBody,
+        },
+        response: responsePayload,
+      },
+    );
+
     return {
       success: false,
       users: [],
       status: response.status,
-      error: upstreamMessage ?? `Neup users API failed with status ${response.status}`,
+      error: message,
     };
   }
 
@@ -178,4 +223,3 @@ export async function fetchApplicationUsers(input?: {
 }
 
 export type { ApplicationUser, FetchApplicationUsersResult };
-import { logApiExchange } from '@/services/api-log-service';

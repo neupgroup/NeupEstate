@@ -5,7 +5,7 @@ import {
     Home, Users, Settings, Upload, FilePlus2, Building, Wand2, Sparkles, ShieldAlert, UserCog,
     LayoutDashboard, LineChart, Package, MessageSquareHeart, FileQuestion, Landmark, CalendarCheck, FileText,
     Banknote, Quote, HelpCircle, Contact, FileSearch,
-    BookOpen, Lightbulb, UserCheck, Eye, Bell, LifeBuoy, Bookmark, Star, Flame, BarChart2, ScanSearch, UsersRound
+    BookOpen, Lightbulb, UserCheck, Eye, Bell, LifeBuoy, Bookmark, Star, Flame, BarChart2, UsersRound
 } from 'lucide-react';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -138,13 +138,9 @@ export default async function ManageLayout({
                     <UsersRound className="mr-2 h-4 w-4" />
                     Team
                 </ClientLink>
-                <ClientLink href="/manage/users" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
+                <ClientLink href="/manage/accounts" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
                     <UserCog className="mr-2 h-4 w-4" />
                     Users
-                </ClientLink>
-                <ClientLink href="/manage/accounts" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
-                    <ScanSearch className="mr-2 h-4 w-4" />
-                    Account Lookup
                 </ClientLink>
                 <ClientLink href="/manage/settings" className={cn(buttonVariants({ variant: 'ghost' }), 'w-full justify-start')}>
                     <Settings className="mr-2 h-4 w-4" />

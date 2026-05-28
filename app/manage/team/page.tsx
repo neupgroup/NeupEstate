@@ -230,7 +230,7 @@ export default async function ManageTeamPage() {
                         <div className="min-w-0">
                           <div className="flex items-center gap-2">
                             <ClientLink
-                              href={`/manage/accounts?accountId=${account.id}`}
+                              href={`/manage/accounts/${account.id}`}
                               className="truncate hover:underline"
                             >
                               {displayName}
