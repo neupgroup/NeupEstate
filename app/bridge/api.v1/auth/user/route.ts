@@ -34,6 +34,7 @@ export async function GET(request: NextRequest) {
   let displayName: string | null = null;
   let displayImage: string | null = null;
   let accountType: string | null = null;
+  let neupidFromDb: string | null = null;
   let verified = guest !== 1;
 
   try {
@@ -70,7 +71,7 @@ export async function GET(request: NextRequest) {
     displayImage = accountRow?.displayImage ?? null;
     accountType = accountRow?.accountType ?? null;
     verified = accountRow?.registered ?? verified;
-    const neupidFromDb = accountRow?.neupId ?? null;
+    neupidFromDb = accountRow?.neupId ?? null;
   } catch {
     // Keep auth response usable even if profile lookup fails.
   }
