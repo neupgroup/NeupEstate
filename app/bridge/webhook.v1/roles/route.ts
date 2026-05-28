@@ -1,5 +1,6 @@
 import { createDecipheriv, createHash, createHmac, timingSafeEqual } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { logProblem } from "@/services/problem-service";
 
@@ -14,27 +15,25 @@ type EncryptedEnvelope = {
   data?: string;
 };
 
-type AccountUpdatePayload = {
+type RoleEventType = "role.created" | "role.updated" | "role.removed";
+type RoleAction = "created_role" | "updated_role" | "removed_role";
+
+type RolePayload = {
   eventId: string;
-  eventType: "account.updated";
-  sourceAppId: "neup.account";
-  occurredAt: string;
+  eventType: RoleEventType;
+  sourceAppId?: string;
+  occurredAt?: string;
   appId: string;
-  connectionId?: string;
-  changedFields?: string[];
-  account?: {
-    neupId?: string;
-    displayName?: string;
-    displayImage?: string;
-    gender?: string;
-    dateOfBirth?: string;
-    role?: string;
-    isMinor?: boolean;
-    accountType?: string;
+  roleId?: string;
+  role?: {
+    id?: string;
+    name?: string;
+    description?: string | null;
+    scope?: string | null;
+    permissions?: unknown;
+    appId?: string;
   };
 };
-
-type AccountUpdateAction = "updated_name" | "updated_role" | "deleted_account";
 
 function fail(error: string, reason?: string, status = 400) {
   return NextResponse.json(
@@ -84,7 +83,7 @@ function decryptEnvelope(ivB64: string, tagB64: string, dataB64: string, appSecr
 
 function isValidEnvelope(body: EncryptedEnvelope): body is Required<EncryptedEnvelope> {
   return (
-    body.eventType === "account.updated" &&
+    typeof body.eventType === "string" &&
     body.encrypted === true &&
     typeof body.iv === "string" &&
     typeof body.tag === "string" &&
@@ -92,92 +91,75 @@ function isValidEnvelope(body: EncryptedEnvelope): body is Required<EncryptedEnv
   );
 }
 
-function isValidPayload(input: unknown): input is AccountUpdatePayload {
-  const payload = input as AccountUpdatePayload;
+function isRoleEventType(eventType: unknown): eventType is RoleEventType {
+  return eventType === "role.created" || eventType === "role.updated" || eventType === "role.removed";
+}
+
+function isValidRolePayload(input: unknown): input is RolePayload {
+  const payload = input as RolePayload;
   return (
     !!payload &&
-    payload.eventType === "account.updated" &&
-    payload.sourceAppId === "neup.account" &&
     typeof payload.eventId === "string" &&
-    typeof payload.occurredAt === "string" &&
+    isRoleEventType(payload.eventType) &&
     typeof payload.appId === "string"
   );
 }
 
-function deriveActions(payload: AccountUpdatePayload): AccountUpdateAction[] {
-  const actions = new Set<AccountUpdateAction>();
-  const changedFields = new Set((payload.changedFields ?? []).map((field) => field.toLowerCase().trim()));
-
-  const hasChangedField = (names: string[]) => names.some((name) => changedFields.has(name.toLowerCase()));
-
-  if (
-    hasChangedField(["displayname", "account.displayname", "name"]) ||
-    typeof payload.account?.displayName === "string"
-  ) {
-    actions.add("updated_name");
-  }
-
-  if (
-    hasChangedField(["role", "account.role", "roleid"]) ||
-    typeof payload.account?.role === "string"
-  ) {
-    actions.add("updated_role");
-  }
-
-  if (
-    hasChangedField(["deleted", "isdeleted", "account.deleted", "account.isdeleted"]) ||
-    payload.account?.accountType?.toLowerCase() === "deleted"
-  ) {
-    actions.add("deleted_account");
-  }
-
-  return Array.from(actions);
+function getRoleId(payload: RolePayload): string | undefined {
+  const candidate = payload.role?.id ?? payload.roleId;
+  if (typeof candidate !== "string") return undefined;
+  const trimmed = candidate.trim();
+  return trimmed.length > 0 ? trimmed : undefined;
 }
 
-async function persistAccountUpdate(payload: AccountUpdatePayload) {
-  const account = payload.account ?? {};
-  const neupId = account.neupId?.trim() || undefined;
-  const connectionId = payload.connectionId?.trim() || undefined;
+function toAction(eventType: RoleEventType): RoleAction {
+  if (eventType === "role.created") return "created_role";
+  if (eventType === "role.updated") return "updated_role";
+  return "removed_role";
+}
 
-  const updateData = {
-    ...(neupId ? { neupId } : {}),
-    ...(typeof account.displayName === "string" ? { displayName: account.displayName } : {}),
-    ...(typeof account.displayImage === "string" ? { displayImage: account.displayImage } : {}),
-    ...(typeof account.accountType === "string" ? { accountType: account.accountType } : {}),
-    ...(connectionId ? { connectionId } : {}),
-    ...(typeof account.role === "string" ? { roleId: account.role } : {}),
-    accessedOn: new Date(),
-  };
+function normalizeJsonValue(value: unknown): Prisma.InputJsonValue | Prisma.NullableJsonNullValueInput | undefined {
+  if (value === undefined) return undefined;
+  if (value === null) return Prisma.JsonNull;
+  return value as Prisma.InputJsonValue;
+}
 
-  if (neupId) {
-    await prisma.account.upsert({
-      where: { neupId },
-      update: updateData,
-      create: {
-        id: crypto.randomUUID(),
-        neupId,
-        accountType: account.accountType || "individual",
-        displayName: account.displayName ?? null,
-        displayImage: account.displayImage ?? null,
-        connectionId: connectionId ?? null,
-        roleId: account.role ?? null,
-        createdOn: new Date(),
-        accessedOn: new Date(),
-      },
+async function persistRoleEvent(payload: RolePayload) {
+  const roleId = getRoleId(payload);
+  if (!roleId) throw new Error("Missing role id.");
+
+  if (payload.eventType === "role.removed") {
+    await prisma.authzRole.deleteMany({
+      where: { id: roleId },
     });
     return;
   }
 
-  if (connectionId) {
-    const result = await prisma.account.updateMany({
-      where: { connectionId },
-      data: updateData,
-    });
+  const role = payload.role ?? {};
+  const appId = (role.appId ?? payload.appId)?.trim();
+  if (!appId) throw new Error("Missing appId.");
 
-    if (result.count > 0) return;
-  }
+  const name =
+    typeof role.name === "string" && role.name.trim().length > 0
+      ? role.name.trim()
+      : roleId;
 
-  throw new Error("No matching account target to persist update.");
+  const updateData = {
+    name,
+    appId,
+    description: typeof role.description === "string" ? role.description : null,
+    scope: typeof role.scope === "string" ? role.scope : null,
+    permissions: normalizeJsonValue(role.permissions),
+  };
+
+  await prisma.authzRole.upsert({
+    where: { id: roleId },
+    update: updateData,
+    create: {
+      id: roleId,
+      ...updateData,
+    },
+  });
 }
 
 export async function POST(req: NextRequest) {
@@ -213,32 +195,34 @@ export async function POST(req: NextRequest) {
   try {
     decryptedText = decryptEnvelope(body.iv, body.tag, body.data, appSecret);
   } catch (error) {
-    await logProblem(error, "bridge/webhook.v1/account/updates decrypt");
+    await logProblem(error, "bridge/webhook.v1/roles decrypt");
     return fail("decrypt_failed");
   }
 
-  let payload: unknown;
+  let parsed: unknown;
   try {
-    payload = JSON.parse(decryptedText);
+    parsed = JSON.parse(decryptedText);
   } catch {
     return fail("decrypt_failed", "Decrypted payload is not valid JSON.");
   }
 
-  if (!isValidPayload(payload)) {
+  const payloads = Array.isArray(parsed) ? parsed : [parsed];
+  if (!payloads.length || !payloads.every(isValidRolePayload)) {
     return fail("invalid_payload", "Decrypted payload shape is invalid.");
   }
 
+  const actions: RoleAction[] = [];
   try {
-    await persistAccountUpdate(payload);
+    for (const payload of payloads) {
+      await persistRoleEvent(payload);
+      actions.push(toAction(payload.eventType));
+    }
   } catch (error) {
-    await logProblem(error, "bridge/webhook.v1/account/updates persist");
+    await logProblem(error, "bridge/webhook.v1/roles persist");
     return fail("record_failed");
   }
 
-  return NextResponse.json({
-    success: true,
-    action: deriveActions(payload),
-  });
+  return NextResponse.json({ success: true, actions });
 }
 
 export async function GET() {
