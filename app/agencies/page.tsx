@@ -4,11 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { SafeImage } from "@/components/safe-image";
 import { Building, AlertCircle, Globe, Mail, Phone, User, MapPin, Milestone } from "lucide-react";
-import { requirePagePermission } from "@/logica/auth/page-guard";
-import { PERMISSIONS } from "@/logica/auth/permissions";
 
 export default async function AgenciesPage() {
-  await requirePagePermission(PERMISSIONS.public.beAgent);
   const agencies = await getAgencies({ limit: 100 });
 
   return (

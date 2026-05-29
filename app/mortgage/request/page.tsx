@@ -2,13 +2,10 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Banknote } from 'lucide-react';
 import { MortgageRequestForm } from '@/components/mortgage-request-form';
-import { requirePagePermission } from '@/logica/auth/page-guard';
-import { PERMISSIONS } from '@/logica/auth/permissions';
 import { GuestSigninBanner } from '@/components/layout/guest-signin-banner';
 import { getAuthenticatedMeData } from '@/services/auth/me';
 
 export default async function RequestMortgagePage() {
-    await requirePagePermission(PERMISSIONS.public.mortgageRequest);
     const me = await getAuthenticatedMeData();
     const showGuestBanner = me?.guest === true;
 
