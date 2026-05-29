@@ -20,7 +20,7 @@
 
 import { headers } from 'next/headers';
 import { prisma } from '@/lib/prisma';
-import { getAccountInformation } from '@/services/account/lookup';
+import { getSignedAccountInformation } from '@/services/account/lookup';
 import { logProblem } from '@/services/problem-service';
 
 /**
@@ -62,7 +62,7 @@ export async function createAccount(): Promise<void> {
       // If some display fields are missing, attempt to fetch them below
       if (!existing.displayName || !existing.displayImage || !existing.neupId) {
         try {
-          const info = await getAccountInformation({ accountId: aid });
+          const info = await getSignedAccountInformation();
           if (info.found) {
             if (!existing.displayName && info.account.displayName) updateData.displayName = info.account.displayName;
             if (!existing.displayImage && info.account.displayImage) updateData.displayImage = info.account.displayImage;
@@ -87,11 +87,10 @@ export async function createAccount(): Promise<void> {
     let accountType = 'individual';
 
     try {
-      const info = await getAccountInformation({ accountId: aid });
+      const info = await getSignedAccountInformation();
       if (info.found) {
         displayName  = info.account.displayName  || null;
         displayImage = info.account.displayImage || null;
-        accountType  = info.account.accountType  || 'individual';
         // include neupId when creating
         neupIdFromLookup = info.account.neupId || null;
       }

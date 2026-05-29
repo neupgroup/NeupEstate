@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma";
-import { fetchWhoami } from "@/services/auth/bridge";
 import { verifyAuthJWT } from "@/services/auth/jwt";
-import { getAccountInformation } from "@/services/account/lookup";
+import { getSignedAccountInformation } from "@/services/account/lookup";
 
 type AccountInfoSuccess = {
   success: true;
@@ -20,82 +19,32 @@ export type CreateAccountInAppResult =
   | { success: true; accountId: string }
   | { success: false; reason: string };
 
-type WhoamiLike = {
-  displayName?: string | null;
-  displayImage?: string | null;
-  neupId?: string | null;
-  nid?: string | null;
-  profile?: {
-    displayName?: string | null;
-    displayImage?: string | null; 
-    neupId?: string | null;
-    neupid?: string | null;
-  } | null;
-};
-
 type AccountProfile = {
   displayName: string | null;
   displayImage: string | null;
   neupId: string | null;
 };
 
-// Normalizes profile fields from the Neup whoami response.
-function extractProfile(data: unknown): {
-  displayName: string | null;
-  displayImage: string | null;
-  neupId: string | null;
-} {
-  const value = (data ?? {}) as WhoamiLike;
-
-  const displayName =
-    value.profile?.displayName ??
-    value.displayName ??
-    null;
-
-  const displayImage =
-    value.profile?.displayImage ??
-    value.displayImage ??
-    null;
-
-  const neupId =
-    value.profile?.neupId ??
-    value.profile?.neupid ??
-    value.neupId ??
-    value.nid ??
-    null;
-
-  return { displayName, displayImage, neupId };
-}
-
-// Resolves profile from whoami and falls back to public account lookup by accountId.
-async function resolveProfile(token: string, aid: string, nid?: string): Promise<AccountProfile> {
+async function resolveProfile(nid?: string): Promise<AccountProfile> {
   const base: AccountProfile = {
     displayName: null,
     displayImage: null,
     neupId: nid ?? null,
   };
 
-  const whoami = await fetchWhoami(token);
-  if (whoami.success) {
-    const profile = extractProfile(whoami.data);
-    if (profile.displayName || profile.displayImage || profile.neupId) {
-      return profile;
-    }
-  }
-
-  const lookup = await getAccountInformation({ accountId: aid });
-  if (lookup.found) {
+  const signed = await getSignedAccountInformation();
+  if (signed.found) {
     return {
-      displayName: lookup.account.displayName ?? null,
-      displayImage: lookup.account.displayImage ?? null,
-      neupId: lookup.account.neupId ?? (nid ?? null),
+      displayName: signed.account.displayName ?? null,
+      displayImage: signed.account.displayImage ?? null,
+      neupId: signed.account.neupId ?? (nid ?? null),
     };
   }
 
   return base;
 }
 
-// Resolves account profile data by cookie: DB first, then Neup whoami + DB upsert.
+// Resolves account profile data by cookie: DB first, then sign&get bridge data.
 export async function getAccountInfo(authAccountCookie: string): Promise<GetAccountInfoResult> {
   if (!authAccountCookie?.trim()) {
     return { success: false, reason: "cookieNotFound" };
@@ -126,7 +75,7 @@ export async function getAccountInfo(authAccountCookie: string): Promise<GetAcco
     };
   }
 
-  const profile = await resolveProfile(authAccountCookie.trim(), aid, nid);
+  const profile = await resolveProfile(nid);
 
   await prisma.account.upsert({
     where: { id: aid },
@@ -170,7 +119,7 @@ export async function createAccountInApp(
   }
 
   const { aid, guest, nid } = verification.payload;
-  const profile = await resolveProfile(token, aid, nid);
+  const profile = await resolveProfile(nid);
 
   await prisma.account.upsert({
     where: { id: aid },

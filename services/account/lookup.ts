@@ -1,4 +1,5 @@
 import { headers } from 'next/headers';
+import { getAuthCookieServer } from '@/services/auth/cookie';
 import { logApiExchange } from '@/services/api-log-service';
 
 // ---------------------------------------------------------------------------
@@ -31,6 +32,35 @@ export type AccountLookupResult =
   | { found: true; account: AccountInfo; meta: AccountLookupMeta }
   | { found: false; error: string; meta: AccountLookupMeta };
 
+export type SignedAccountInfo = {
+  accountId: string;
+  connectionId: string | null;
+  displayName: string | null;
+  displayImage: string | null;
+  neupId: string | null;
+  role: string | null;
+  token: string | null;
+  isMinor: boolean | null;
+};
+
+export type SignedAccountLookupMeta = {
+  request: {
+    method: 'POST';
+    url: string;
+    headers: Record<string, string>;
+    body: Record<string, string>;
+  };
+  response?: {
+    status: number;
+    headers: Record<string, string>;
+    body: unknown;
+  };
+};
+
+export type SignedAccountLookupResult =
+  | { found: true; account: SignedAccountInfo; meta: SignedAccountLookupMeta }
+  | { found: false; error: string; meta: SignedAccountLookupMeta };
+
 export type AccountLookupInput =
   | { accountId: string; neupId?: never }
   | { neupId: string; accountId?: never };
@@ -40,6 +70,7 @@ export type AccountLookupInput =
 // ---------------------------------------------------------------------------
 
 const LOOKUP_BASE = 'https://neupgroup.com/account/bridge/api.v1/accounts/lookup';
+const SIGN_AND_GET_BASE = 'https://neupgroup.com/account/bridge/api.v1/connection/sign&get';
 
 function getAppId(): string {
   return process.env.NEUP_APP_ID ?? '';
@@ -64,6 +95,16 @@ function safeJsonParse(value: string): unknown {
   } catch {
     return value;
   }
+}
+
+function getRoleName(role: unknown): string | null {
+  if (!role) return null;
+  if (typeof role === 'string') return role;
+  if (typeof role === 'object' && role !== null && 'name' in role) {
+    const roleName = (role as { name?: unknown }).name;
+    return typeof roleName === 'string' ? roleName : null;
+  }
+  return null;
 }
 
 // ---------------------------------------------------------------------------
@@ -106,12 +147,22 @@ export async function getAccountInformation(
     Cookie: inboundCookie,
   };
 
+  const loggedHeaders: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...(inboundOrigin ? { Origin: inboundOrigin } : {}),
+  };
+
+  const loggedBody = {
+    ...requestBody,
+    appSecret: '***REDACTED***',
+  };
+
   const meta: AccountLookupMeta = {
     request: {
       method: 'POST',
       url,
-      headers: requestHeaders,
-      body: requestBody,
+      headers: loggedHeaders,
+      body: loggedBody,
     },
   };
 
@@ -192,4 +243,137 @@ export async function getAccountInformation(
   }
 
   return { found: false, error: 'not_found', meta };
+}
+
+export async function getSignedAccountInformation(): Promise<SignedAccountLookupResult> {
+  const url = SIGN_AND_GET_BASE;
+  const appId = getAppId();
+  const appSecret = getAppSecret();
+  const authAccountCookie = await getAuthCookieServer();
+
+  if (!appId || !appSecret) {
+    return {
+      found: false,
+      error: 'missing_app_credentials',
+      meta: {
+        request: {
+          method: 'POST',
+          url,
+          headers: { 'Content-Type': 'application/json' },
+          body: {},
+        },
+      },
+    };
+  }
+
+  if (!authAccountCookie) {
+    return {
+      found: false,
+      error: 'missing_auth_cookie',
+      meta: {
+        request: {
+          method: 'POST',
+          url,
+          headers: { 'Content-Type': 'application/json' },
+          body: { appId, appSecret: '***REDACTED***' },
+        },
+      },
+    };
+  }
+
+  const requestBody = { appId, appSecret };
+  const requestHeaders: Record<string, string> = {
+    'Content-Type': 'application/json',
+    Cookie: `auth_account=${encodeURIComponent(authAccountCookie)}`,
+  };
+  const meta: SignedAccountLookupMeta = {
+    request: {
+      method: 'POST',
+      url,
+      headers: { 'Content-Type': 'application/json' },
+      body: { appId, appSecret: '***REDACTED***' },
+    },
+  };
+
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      method: 'POST',
+      headers: requestHeaders,
+      body: JSON.stringify(requestBody),
+      cache: 'no-store',
+    });
+  } catch (err: any) {
+    await logApiExchange({
+      context: 'account/lookup:getSignedAccountInformation',
+      request: meta.request,
+      error: err?.message ?? 'network_error',
+    });
+    return { found: false, error: err?.message ?? 'network_error', meta };
+  }
+
+  const responseText = await res.text();
+  const responseBody = safeJsonParse(responseText);
+  meta.response = {
+    status: res.status,
+    headers: headersToObject(res.headers),
+    body: responseBody,
+  };
+
+  await logApiExchange({
+    context: 'account/lookup:getSignedAccountInformation',
+    request: meta.request,
+    response: {
+      status: res.status,
+      headers: meta.response.headers,
+      body: responseBody,
+    },
+  });
+
+  if (!res.ok) {
+    return { found: false, error: `upstream_error_${res.status}`, meta };
+  }
+
+  const body = responseBody as {
+    success?: boolean;
+    token?: string | null;
+    role?: unknown;
+    account?: {
+      id?: string;
+      connectionId?: string;
+      isMinor?: boolean;
+      neupid?: string;
+      neupId?: string;
+    } | null;
+    profile?: {
+      displayName?: string | null;
+      displayImage?: string | null;
+      neupid?: string | null;
+      neupId?: string | null;
+    } | null;
+  } | null;
+
+  if (!body || body.success === false) {
+    return { found: false, error: 'not_found', meta };
+  }
+
+  const accountId = body.account?.id ?? body.profile?.neupid ?? body.profile?.neupId ?? null;
+  if (!accountId) {
+    return { found: false, error: 'not_found', meta };
+  }
+
+  return {
+    found: true,
+    account: {
+      accountId,
+      connectionId: body.account?.connectionId ?? null,
+      displayName: body.profile?.displayName ?? null,
+      displayImage: body.profile?.displayImage ?? null,
+      neupId: body.account?.neupid ?? body.account?.neupId ?? body.profile?.neupid ?? body.profile?.neupId ?? null,
+      role: getRoleName(body.role),
+      token: body.token ?? null,
+      isMinor: typeof body.account?.isMinor === 'boolean' ? body.account.isMinor : null,
+    },
+    meta,
+  };
 }

@@ -4,7 +4,7 @@
 
 import { prisma } from '@/lib/prisma';
 import { logProblem } from './problem-service';
-import { getAccountInformation } from '@/services/account/lookup';
+import { getAccountInformation, getSignedAccountInformation } from '@/services/account/lookup';
 import type { Account } from '@/types';
 
 /**
@@ -40,7 +40,7 @@ export async function resolveAccount(
     let displayImage: string | undefined;
 
     try {
-      const info = await getAccountInformation({ accountId: aid });
+      const info = await getSignedAccountInformation();
       if (info.found) {
         displayName  = info.account.displayName  || undefined;
         displayImage = info.account.displayImage || undefined;

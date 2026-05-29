@@ -14,8 +14,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getAuthenticatedAccount, buildHandshakeGrantUrl, fetchWhoami, fetchAccessInfo } from '@/services/auth';
-import { getAuthCookieServer } from '@/services/auth/cookie';
+import { getAuthenticatedAccount, buildHandshakeGrantUrl } from '@/services/auth';
+import { getSignedAccountInformation } from '@/services/account/lookup';
 import { prisma } from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
@@ -74,24 +74,22 @@ export async function GET(request: NextRequest) {
     // Keep auth response usable even if profile lookup fails.
   }
 
-  // Try to fetch extended user information from bridge
-  const token = await getAuthCookieServer();
-  
-  let bridgeProfile = null;
-  let access = null;
+  const signed = await getSignedAccountInformation();
+  const bridgeProfile = signed.found
+    ? {
+        accountId: signed.account.accountId,
+        connectionId: signed.account.connectionId,
+        role: signed.account.role,
+        token: signed.account.token,
+        isMinor: signed.account.isMinor,
+      }
+    : null;
+  const access = signed.found ? { role: signed.account.role } : null;
 
-  if (token) {
-    // Attempt to fetch whoami data (user profile)
-    const whoamiResult = await fetchWhoami(token);
-    if (whoamiResult.success) {
-      bridgeProfile = whoamiResult.data;
-    }
-
-    // Attempt to fetch access info (roles/permissions/teams)
-    const accessResult = await fetchAccessInfo(token);
-    if (accessResult.success) {
-      access = accessResult.data;
-    }
+  if (signed.found) {
+    displayName = displayName ?? signed.account.displayName;
+    displayImage = displayImage ?? signed.account.displayImage;
+    neupidFromDb = neupidFromDb ?? signed.account.neupId;
   }
 
   return NextResponse.json({
@@ -109,7 +107,7 @@ export async function GET(request: NextRequest) {
       profile: {
         displayName,
         displayImage,
-        neupid: neupidFromDb ?? nid ?? null,
+        neupid: neupidFromDb ?? signed.account.neupId ?? nid ?? null,
       },
       bridgeProfile,
       access,
