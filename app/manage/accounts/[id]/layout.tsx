@@ -7,8 +7,6 @@ import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/services/auth/account';
 import { logProblem } from '@/services/problem-service';
 import { ClientLink } from '@/components/client-link';
-import { AccountRefreshButton } from '@/components/manage/account-refresh-button';
-import { DeleteAccountButton } from '@/components/manage/delete-account-button';
 import { Badge } from '@/components/ui/badge';
 import { ChevronLeft, User, ShieldAlert, CalendarDays, Clock, BadgeCheck } from 'lucide-react';
 
@@ -106,12 +104,7 @@ export default async function ManageAccountLayout({
                 </span>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2 pt-1">
-                <AccountRefreshButton accountId={account.id} currentDisplayName={account.display_name} />
-                {!isRegistered && (
-                  <DeleteAccountButton accountId={account.id} displayName={account.display_name} />
-                )}
-              </div>
+
             </div>
           </div>
 

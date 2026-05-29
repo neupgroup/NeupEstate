@@ -1,7 +1,7 @@
 import { getAccounts } from "@/services/account-service";
 import { fetchApplicationUsers } from "@/services/neupid/application-users";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle, User } from "lucide-react";
+import { AlertCircle, User, ChevronRight } from "lucide-react";
 import { ClientLink } from "@/components/client-link";
 import { RelativeTime } from "@/components/manage/relative-time";
 import { Badge } from "@/components/ui/badge";
@@ -60,10 +60,10 @@ export default async function ManageAccountsPage() {
                 <ClientLink
                   key={id}
                   href={`/manage/accounts/${id}`}
-                  className="block p-4 hover:bg-muted/70 transition-colors"
+                  className="flex gap-4 p-4 hover:bg-muted/70 transition-colors items-center justify-between"
                 >
-                  <div className="flex items-center gap-2 min-w-0">
-                    <div className="h-12 w-12 shrink-0 overflow-hidden rounded-2xl border bg-muted flex items-center justify-center">
+                  <div className="flex gap-4 items-center min-w-0 flex-1">
+                    <div className="h-12 w-12 shrink-0 overflow-hidden rounded-xl border bg-muted flex items-center justify-center">
                       {local?.display_image ?? remote?.displayImage ? (
                         <img
                           src={local?.display_image ?? remote?.displayImage}
@@ -71,23 +71,30 @@ export default async function ManageAccountsPage() {
                           className="h-full w-full object-cover"
                         />
                       ) : (
-                        <User className="h-5 w-5 text-muted-foreground" />
+                        <span className="text-muted-foreground font-medium text-lg">?</span>
                       )}
                     </div>
-                    <p className="font-medium truncate min-w-0">{name}</p>
-                    {!isSynced && (
-                      <span className="flex-shrink-0 w-3 h-3 rounded-full bg-red-500" />
-                    )}
+                    
+                    <div className="flex-1 min-w-0 flex flex-col justify-center">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <p className="font-medium truncate min-w-0 text-base">{name}</p>
+                        {!isSynced && (
+                          <span className="flex-shrink-0 w-2 h-2 rounded-full bg-red-500" />
+                        )}
+                      </div>
+                      
+                      <div className="flex items-center mt-1 text-sm text-muted-foreground">
+                        <span className="capitalize">{acctType}</span>
+                        <span className="mx-2 text-foreground/50">•</span>
+                        {local?.accessed_on ? (
+                          <RelativeTime timestamp={local.accessed_on} />
+                        ) : (
+                          <span>Never active</span>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  <div className="mt-1 text-sm text-muted-foreground">
-                    <span className="capitalize">{acctType}</span>
-                    <span className="mx-2">•</span>
-                    {local?.accessed_on ? (
-                      <RelativeTime timestamp={local.accessed_on} />
-                    ) : (
-                      <span className="text-muted-foreground">-</span>
-                    )}
-                  </div>
+                  <ChevronRight className="h-5 w-5 shrink-0 text-muted-foreground/50" />
                 </ClientLink>
               );
             })}

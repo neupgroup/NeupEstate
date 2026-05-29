@@ -5,12 +5,15 @@ import { getSavedProperties, getPaginatedProperties } from '@/services/property-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AdminPropertyRow } from '@/components/manage/property-row';
 import { Activity, Bookmark, Home, Target } from 'lucide-react';
+import { AccountRefreshButton } from '@/components/manage/account-refresh-button';
+import { DeleteAccountButton } from '@/components/manage/delete-account-button';
+import { fetchApplicationUsers } from "@/services/neupid/application-users";
 
 export default async function ManageAccountPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: accountId } = await params;
   const account = await getAccountById(accountId);
 
-  const [requirements, savedProperties, ownedProperties, recentActivity] = await Promise.all([
+  const [requirements, savedProperties, ownedProperties, recentActivity, remoteUsersResult] = await Promise.all([
     getRequirementByUserId(accountId),
     account?.registered ? getSavedProperties(accountId) : Promise.resolve([]),
     getPaginatedProperties({ ownerAccountId: accountId, includeInactive: true, limit: 50 }),
@@ -19,7 +22,10 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
       orderBy: { activityOn: 'desc' },
       take: 20,
     }),
+    fetchApplicationUsers({ offset: 0, limit: 200 }),
   ]);
+
+  const isSynced = remoteUsersResult.success && remoteUsersResult.users.some(u => u.accountId === accountId);
 
   return (
     <div className="space-y-8">
@@ -182,6 +188,13 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
             )}
           </CardContent>
         </Card>
+      </section>
+
+      <section className="pt-8 flex flex-wrap items-center gap-3">
+        <AccountRefreshButton accountId={accountId} currentDisplayName={account?.display_name} />
+        {!isSynced && (
+          <DeleteAccountButton accountId={accountId} displayName={account?.display_name} />
+        )}
       </section>
     </div>
   );
