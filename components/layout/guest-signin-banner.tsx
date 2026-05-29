@@ -32,15 +32,14 @@ export function GuestSigninBanner({ variant }: GuestSigninBannerProps) {
   return (
     <section
       className={cn(
-        isHero
-          ? "container mx-auto px-4 sm:px-6 lg:px-8 py-6"
-          : "border-b border-amber-200/70 bg-amber-50/80"
+        "container mx-auto px-4 sm:px-6 lg:px-8",
+        isHero ? "py-6" : "py-4"
       )}
     >
       <div
         className={cn(
           "flex items-center justify-between gap-4 rounded-2xl border border-amber-200 bg-gradient-to-r from-amber-50 via-orange-50 to-background px-4 py-4 shadow-sm",
-          !isHero && "container mx-auto rounded-none border-0 bg-transparent px-0 py-4 shadow-none"
+          !isHero && "py-6"
         )}
       >
         <div className="flex items-start gap-3 min-w-0">
