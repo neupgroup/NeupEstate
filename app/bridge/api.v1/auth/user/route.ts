@@ -75,20 +75,23 @@ export async function GET(request: NextRequest) {
   }
 
   const signed = await getSignedAccountInformation();
-  const bridgeProfile = signed.found
+  const signedAccount = signed.found ? signed.account : null;
+
+  const bridgeProfile = signedAccount
     ? {
-        accountId: signed.account.accountId,
-        connectionId: signed.account.connectionId,
-        role: signed.account.role,
-        token: signed.account.token,
-        isMinor: signed.account.isMinor,
+        accountId: signedAccount.accountId,
+        connectionId: signedAccount.connectionId,
+        role: signedAccount.role,
+        token: signedAccount.token,
+        isMinor: signedAccount.isMinor,
       }
     : null;
-  const access = signed.found ? { role: signed.account.role } : null;
 
-  if (signed.found) {
-    displayName = displayName ?? signed.account.displayName;
-    neupidFromDb = neupidFromDb ?? signed.account.neupId;
+  const access = signedAccount ? { role: signedAccount.role } : null;
+
+  if (signedAccount) {
+    displayName = displayName ?? signedAccount.displayName;
+    neupidFromDb = neupidFromDb ?? signedAccount.neupId;
   }
 
   return NextResponse.json({
@@ -106,7 +109,7 @@ export async function GET(request: NextRequest) {
       profile: {
         displayName,
         displayImage,
-        neupid: neupidFromDb ?? signed.account.neupId ?? nid ?? null,
+        neupid: neupidFromDb ?? signedAccount?.neupId ?? nid ?? null,
       },
       bridgeProfile,
       access,
