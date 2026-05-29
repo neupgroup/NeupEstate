@@ -126,23 +126,11 @@ const NEUPID_BASE = 'https://neupgroup.com/account';
 // Redirect helpers
 // ---------------------------------------------------------------------------
 
-function redirectToHandshake(request: NextRequest, pathname: string): NextResponse {
-  const appId = process.env.NEUP_APP_ID ?? '';
-  const dest = new URL(`${NEUPID_BASE}/bridge/handshake.v1/auth/grant`);
+function redirectToNeupStart(request: NextRequest, pathname: string): NextResponse {
+  const dest = new URL(`${NEUPID_BASE}/account/auth/start`);
   const redirectTarget = buildPublicAppUrl(request, `${pathname}${request.nextUrl.search}`);
-
-  if (!appId) {
-    dest.pathname = '/account/auth/start';
-    if (pathname && pathname !== '/') {
-      dest.searchParams.set('redirectsTo', redirectTarget);
-    }
-    return NextResponse.redirect(dest);
-  }
-
-  dest.searchParams.set('app', appId);
-  dest.searchParams.set('authenticatesTo', buildPublicAppUrl(request, '/bridge/api.v1/auth/callback'));
-  if (pathname && pathname !== '/') {
-    dest.searchParams.set('redirectsTo', redirectTarget);
+  if (redirectTarget) {
+    dest.searchParams.set('authenticatesTo', redirectTarget);
   }
   return NextResponse.redirect(dest);
 }
@@ -202,7 +190,7 @@ export default async function proxy(request: NextRequest) {
   //    Must have: valid JWT, aid, nid, no guest flag
   if (pathname.startsWith('/manage')) {
     if (!payload || !payload.aid || !payload.nid || payload.guest === 1) {
-      return redirectToHandshake(request, pathname);
+      return redirectToNeupStart(request, pathname);
     }
     return pass();
   }
