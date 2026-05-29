@@ -9,12 +9,6 @@ import { Menu, X, User, BadgeCheck } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNeupUser, getInitials } from "@/lib/neup-user-context";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import {
   Home, Users, Settings, UserCog,
   LayoutDashboard, LineChart, Package, MessageSquareHeart, FileQuestion, Landmark, CalendarCheck,
   Banknote, HelpCircle, Contact, FileSearch,
@@ -84,8 +78,13 @@ export default function Header() {
   const effectiveUser = user;
 
   const isManage = pathname.startsWith("/manage");
-  const displayName = effectiveUser?.displayName?.trim() ? effectiveUser.displayName : "Guest User";
-  const handleText = effectiveUser?.neupId?.trim() ? `@${effectiveUser.neupId}` : "Sign In Now";
+  const isGuestUser = effectiveUser?.accountType === "guest";
+  const displayName = effectiveUser?.displayName?.trim() ?? "";
+  const handleText = isGuestUser
+    ? "@guest"
+    : effectiveUser?.neupId?.trim()
+      ? `@${effectiveUser.neupId}`
+      : "";
 
   // Close on route change
   useEffect(() => { setMenuOpen(false); }, [pathname]);
@@ -153,9 +152,9 @@ export default function Header() {
     <Avatar className="h-8 w-8">
       {effectiveUser ? (
         <>
-          <AvatarImage src={effectiveUser?.displayImage || undefined} alt={effectiveUser?.displayName} />
+          <AvatarImage src={effectiveUser?.displayImage || undefined} alt={displayName || "Profile"} />
           <AvatarFallback className="text-xs font-semibold">
-            {getInitials(effectiveUser?.displayName ?? "")}
+            {getInitials(displayName || (isGuestUser ? "Guest" : "User"))}
           </AvatarFallback>
         </>
       ) : (
@@ -205,36 +204,20 @@ export default function Header() {
           <div className="flex flex-1 items-center justify-end space-x-1.5">
             {/* Inline name/cta — desktop */}
             {effectiveUser && (
-              <div className="flex flex-col items-end mr-1">
-                <Link href="/profile" className="text-sm font-semibold truncate">
-                  {displayName}
-                </Link>
-                <span className="text-xs text-muted-foreground">{handleText}</span>
-              </div>
+              <Link href="/profile" className="flex items-center gap-2 rounded-md px-1 py-1 hover:bg-secondary/60 transition-colors">
+                <div className="flex flex-col items-end min-w-0 mr-1">
+                  <span className="text-sm font-semibold truncate">{displayName}</span>
+                  <span className="text-xs text-muted-foreground">{handleText}</span>
+                </div>
+                <UserAvatar />
+              </Link>
             )}
 
-            {/* Avatar + tooltip — desktop */}
-            <TooltipProvider delayDuration={200}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link href="/profile" className="block">
-                    <UserAvatar />
-                  </Link>
-                </TooltipTrigger>
-                {effectiveUser && (
-                  <TooltipContent side="bottom" align="end" className="p-3 max-w-[220px]">
-                    <div className="flex flex-col gap-0.5">
-                      <div className="flex items-center gap-1.5">
-                        <span className="font-semibold text-sm truncate">{displayName}</span>
-                        {effectiveUser.verified && <BadgeCheck className="h-3.5 w-3.5 text-primary shrink-0" />}
-                      </div>
-                      <span className="text-xs text-muted-foreground">{handleText}</span>
-                      <span className="text-xs text-muted-foreground capitalize">{effectiveUser.accountType}</span>
-                    </div>
-                  </TooltipContent>
-                )}
-              </Tooltip>
-            </TooltipProvider>
+            {!effectiveUser && (
+              <Link href="/profile" className="block">
+                <UserAvatar />
+              </Link>
+            )}
 
             {/* Burger — mobile only */}
             <Button

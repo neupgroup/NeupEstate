@@ -46,6 +46,7 @@ export default async function RootLayout({
   await createAccount();
 
   const me = await getAuthenticatedMeData();
+  const isGuestUser = me?.accountType === 'guest';
   const canShowManagePanel = me
     ? (await Promise.all(
         Object.values(PERMISSIONS.manage).map((permission) => hasPermission(permission))
@@ -71,7 +72,13 @@ export default async function RootLayout({
         )}
       >
         <ActivityTracker />
-        <Providers initialUser={initialUser} showManagePanelLink={canShowManagePanel}>{children}</Providers>
+        <Providers
+          initialUser={initialUser}
+          showManagePanelLink={canShowManagePanel}
+          showGuestBanner={isGuestUser}
+        >
+          {children}
+        </Providers>
         <Toaster />
       </body>
     </html>

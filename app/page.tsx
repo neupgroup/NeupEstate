@@ -10,6 +10,8 @@ import { PostPropertyCTA } from "@/components/home/post-property-cta";
 import { FeaturedAgencies } from "@/components/home/featured-agencies";
 import { CuratedForYouSection } from "@/components/home/curated-for-you";
 import { StartWithNeupEstate } from "@/components/home/start-with-neupestate";
+import { GuestSigninBanner } from "@/components/layout/guest-signin-banner";
+import { getAuthenticatedMeData } from "@/services/auth/me";
 
 const SectionSkeleton = () => (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -28,10 +30,14 @@ const SectionSkeleton = () => (
     </div>
 );
 
-export default function Home() {
+export default async function Home() {
+  const me = await getAuthenticatedMeData();
+  const showGuestBanner = me?.accountType === 'guest';
+
   return (
     <main className="flex-1">
       <SearchSection />
+      {showGuestBanner && <GuestSigninBanner variant="hero" />}
       
       <Suspense fallback={<SectionSkeleton />}>
         <PopularCategories />
