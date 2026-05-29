@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { Section } from "@/components/home/_components/section";
 import { UserCheck, Building2 } from "lucide-react";
 
-export function StartWithNeupEstate() {
+export function StartWithNeupEstate({ showCards = true }: { showCards?: boolean }) {
     return (
         <Section className="bg-primary/5 border-t border-border">
             <div className="text-center mb-10">
@@ -14,7 +14,8 @@ export function StartWithNeupEstate() {
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            {showCards && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl">
                 {/* Become an Agent */}
                 <div className="flex flex-col items-start gap-4 rounded-xl border border-border bg-background p-6 shadow-sm">
                     <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
@@ -52,7 +53,8 @@ export function StartWithNeupEstate() {
                         Create Profile
                     </ClientLink>
                 </div>
-            </div>
+                </div>
+            )}
         </Section>
     );
 }

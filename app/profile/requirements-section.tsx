@@ -13,7 +13,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ClientLink } from '@/components/client-link';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { StartWithNeupEstate } from '@/components/home/start-with-neupestate';
 
 function ViewRequirements({ requirements, isLoading }: { requirements: Requirement[], isLoading: boolean }) {
   if (isLoading) {
@@ -141,7 +140,7 @@ export function RequirementsSection({ accountId }: RequirementsSectionProps) {
 
       <RecommendedForYouSection requirements={requirements} />
 
-      <StartWithNeupEstate />
+      {/* StartWithNeupEstate removed from profile view per design */}
     </main>
   );
 }
