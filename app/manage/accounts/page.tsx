@@ -1,13 +1,5 @@
 import { getAccounts } from "@/services/account-service";
 import { fetchApplicationUsers } from "@/services/neupid/application-users";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { ClientLink } from "@/components/client-link";
@@ -59,76 +51,36 @@ export default async function ManageAccountsPage() {
       )}
       <div>
         {mergedRows.length > 0 ? (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Account ID</TableHead>
-                <TableHead>Sync Status</TableHead>
-                <TableHead>Source</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Last Accessed</TableHead>
-                <TableHead>Created</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {mergedRows.map(({ id, local, remote, status }) => (
-                <TableRow key={id}>
-                  <TableCell className="font-mono text-xs">
-                    {local ? (
-                      <ClientLink href={`/manage/accounts/${id}`} className="hover:underline">
-                        {id}
-                      </ClientLink>
-                    ) : (
-                      id
+          <div className="divide-y divide-border border rounded-lg">
+            {mergedRows.map(({ id, local, remote, status }) => {
+              const name = local?.display_name ?? remote?.displayName ?? 'Unnamed Account';
+              const acctType = local?.account_type ?? remote?.accountType ?? 'unknown';
+              const isSynced = status === 'synced';
+              return (
+                <ClientLink
+                  key={id}
+                  href={`/manage/accounts/${id}`}
+                  className="block p-4 hover:bg-muted/70 transition-colors"
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <p className="font-medium truncate min-w-0">{name}</p>
+                    {!isSynced && (
+                      <span className="flex-shrink-0 w-3 h-3 rounded-full bg-red-500" />
                     )}
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        status === "synced"
-                          ? "default"
-                          : status === "local_only"
-                            ? "secondary"
-                            : "outline"
-                      }
-                    >
-                      {status === "synced"
-                        ? "Synced"
-                        : status === "local_only"
-                          ? "Local only"
-                          : "Remote only"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    {local && remote
-                      ? "Local + Remote"
-                      : local
-                        ? "Local"
-                        : "Remote"}
-                  </TableCell>
-                  <TableCell>
-                    <span className="capitalize">
-                      {local?.account_type ?? remote?.accountType ?? "unknown"}
-                    </span>
-                  </TableCell>
-                  <TableCell>
+                  </div>
+                  <div className="mt-1 text-sm text-muted-foreground">
+                    <span className="capitalize">{acctType}</span>
+                    <span className="mx-2">•</span>
                     {local?.accessed_on ? (
                       <RelativeTime timestamp={local.accessed_on} />
                     ) : (
                       <span className="text-muted-foreground">-</span>
                     )}
-                  </TableCell>
-                  <TableCell>
-                    {local?.created_on ? (
-                      <RelativeTime timestamp={local.created_on} />
-                    ) : (
-                      <span className="text-muted-foreground">-</span>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                  </div>
+                </ClientLink>
+              );
+            })}
+          </div>
         ) : (
           <Alert>
             <AlertCircle className="h-4 w-4" />
