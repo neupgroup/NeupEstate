@@ -1,7 +1,7 @@
 import { getAccounts } from "@/services/account-service";
 import { fetchApplicationUsers } from "@/services/neupid/application-users";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, User } from "lucide-react";
 import { ClientLink } from "@/components/client-link";
 import { RelativeTime } from "@/components/manage/relative-time";
 import { Badge } from "@/components/ui/badge";
@@ -63,6 +63,17 @@ export default async function ManageAccountsPage() {
                   className="block p-4 hover:bg-muted/70 transition-colors"
                 >
                   <div className="flex items-center gap-2 min-w-0">
+                    <div className="h-12 w-12 shrink-0 overflow-hidden rounded-2xl border bg-muted flex items-center justify-center">
+                      {local?.display_image ?? remote?.displayImage ? (
+                        <img
+                          src={local?.display_image ?? remote?.displayImage}
+                          alt={name}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <User className="h-5 w-5 text-muted-foreground" />
+                      )}
+                    </div>
                     <p className="font-medium truncate min-w-0">{name}</p>
                     {!isSynced && (
                       <span className="flex-shrink-0 w-3 h-3 rounded-full bg-red-500" />
