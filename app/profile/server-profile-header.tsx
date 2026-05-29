@@ -6,11 +6,10 @@ export async function ServerProfileHeader() {
 
   return (
     <ProfileHeader
-      displayName={me?.displayName ?? 'User'}
+      displayName={me?.displayName ?? 'Guest Account'}
       displayImage={me?.displayImage ?? null}
       neupId={me?.neupId ?? null}
       verified={me?.registered ?? false}
-      accountType={me?.accountType ?? null}
     />
   );
 }

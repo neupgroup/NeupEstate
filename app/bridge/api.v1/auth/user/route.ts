@@ -88,7 +88,6 @@ export async function GET(request: NextRequest) {
 
   if (signed.found) {
     displayName = displayName ?? signed.account.displayName;
-    displayImage = displayImage ?? signed.account.displayImage;
     neupidFromDb = neupidFromDb ?? signed.account.neupId;
   }
 

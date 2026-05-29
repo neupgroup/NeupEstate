@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { Menu, X, User, BadgeCheck } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNeupUser, getInitials } from "@/lib/neup-user-context";
+import { getAccountDisplayName, getAccountHandle } from "@/lib/account-display";
 import {
   Home, Users, Settings, UserCog,
   LayoutDashboard, LineChart, Package, MessageSquareHeart, FileQuestion, Landmark, CalendarCheck,
@@ -79,12 +80,8 @@ export default function Header() {
 
   const isManage = pathname.startsWith("/manage");
   const isGuestUser = effectiveUser?.accountType === "guest";
-  const displayName = effectiveUser?.displayName?.trim() ?? "";
-  const handleText = isGuestUser
-    ? "@guest"
-    : effectiveUser?.neupId?.trim()
-      ? `@${effectiveUser.neupId}`
-      : "";
+  const displayName = getAccountDisplayName(effectiveUser?.displayName);
+  const handleText = getAccountHandle(effectiveUser?.neupId);
 
   // Close on route change
   useEffect(() => { setMenuOpen(false); }, [pathname]);
@@ -154,7 +151,7 @@ export default function Header() {
         <>
           <AvatarImage src={effectiveUser?.displayImage || undefined} alt={displayName || "Profile"} />
           <AvatarFallback className="text-xs font-semibold">
-            {getInitials(displayName || (isGuestUser ? "Guest" : "User"))}
+            {getInitials(displayName)}
           </AvatarFallback>
         </>
       ) : (

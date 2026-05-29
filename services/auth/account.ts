@@ -23,6 +23,7 @@ import { redirect } from 'next/navigation';
 import { getAuthCookieClient, getAuthCookieServer } from './cookie';
 import { verifyAuthJWT, decodeAuthJWT, type AuthAccountPayload } from './jwt';
 import { buildHandshakeGrantUrl } from './bridge';
+import { buildPublicAppUrl } from './public-url';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -49,13 +50,14 @@ export type AccountInfo = {
 
 const DEFAULT_REDIRECT_PATH = '/';
 
-async function getRedirectPath(request?: { url?: string; nextUrl?: { href?: string } }): Promise<string> {
+async function getRedirectPath(request?: { url?: string; nextUrl?: { href?: string }; headers?: { get(name: string): string | null } }): Promise<string> {
   if (request?.nextUrl?.href) {
-    return request.nextUrl.href;
+    return buildPublicAppUrl(request, request.nextUrl.href.replace(/^https?:\/\/[^/]+/, ''));
   }
 
   if (request?.url) {
-    return request.url;
+    const url = new URL(request.url);
+    return buildPublicAppUrl(request, `${url.pathname}${url.search}`);
   }
 
   try {
@@ -63,15 +65,13 @@ async function getRedirectPath(request?: { url?: string; nextUrl?: { href?: stri
     const headerStore = await headers();
     const pathname = headerStore.get('x-next-pathname') ?? '';
     if (pathname) {
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://neupgroup.com/estate';
-      return new URL(pathname, baseUrl).toString();
+      return buildPublicAppUrl({ headers: headerStore }, pathname);
     }
   } catch {
     // ignore header lookup failures and fall back to a safe default
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://neupgroup.com/estate';
-  return new URL(DEFAULT_REDIRECT_PATH, baseUrl).toString();
+  return buildPublicAppUrl(undefined, DEFAULT_REDIRECT_PATH);
 }
 
 // ─── Server-side (verified) ──────────────────────────────────────────────────

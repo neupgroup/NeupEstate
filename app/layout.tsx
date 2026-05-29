@@ -55,8 +55,8 @@ export default async function RootLayout({
   const initialUser = me
     ? {
         accountId: me.accountId,
-        neupId: me.neupId ?? undefined,
-        displayName: me.displayName ?? undefined,
+        neupId: me.neupId ?? (isGuestUser ? 'guest' : undefined),
+        displayName: me.displayName ?? (isGuestUser ? 'Guest Account' : undefined),
         displayImage: me.displayImage ?? undefined,
         accountType: me.accountType,
         verified: me.registered,

@@ -12,20 +12,10 @@ const NEUPID_BASE = 'https://neupgroup.com/account';
 type RequestLike = {
   url?: string;
   nextUrl?: { href?: string; origin?: string };
+  headers?: { get(name: string): string | null };
 };
 
-function getAppOrigin(request?: RequestLike): string {
-  if (request?.nextUrl?.origin) {
-    return request.nextUrl.origin;
-  }
-
-  if (request?.url) {
-    return new URL(request.url).origin;
-  }
-
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://neupgroup.com/estate';
-  return new URL(baseUrl).origin;
-}
+import { buildPublicAppUrl } from '@/services/auth/public-url';
 
 function getAppId(): string {
   return process.env.NEUP_APP_ID ?? '';
@@ -44,7 +34,7 @@ function safeParseJson(text: string): unknown {
  * Build the callback URL for the handshake redirect.
  */
 export function buildAuthCallbackUrl(request?: RequestLike): string {
-  return new URL('/api/auth/callback', getAppOrigin(request)).toString();
+  return buildPublicAppUrl(request, '/bridge/api.v1/auth/callback');
 }
 
 /**

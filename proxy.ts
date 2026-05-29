@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { buildPublicAppUrl } from '@/services/auth/public-url';
 
 /**
  * proxy.ts — Next.js Edge Middleware
@@ -119,33 +120,29 @@ async function verifyJwt(token: string): Promise<JwtPayload | null> {
 // URL constants
 // ---------------------------------------------------------------------------
 
-const BASE_PATH = '/estate';
 const NEUPID_BASE = 'https://neupgroup.com/account';
 
 // ---------------------------------------------------------------------------
 // Redirect helpers
 // ---------------------------------------------------------------------------
 
-function buildCallbackUrl(request: NextRequest): string {
-  return new URL('/api/auth/callback', request.url).toString();
-}
-
 function redirectToHandshake(request: NextRequest, pathname: string): NextResponse {
   const appId = process.env.NEUP_APP_ID ?? '';
   const dest = new URL(`${NEUPID_BASE}/bridge/handshake.v1/auth/grant`);
+  const redirectTarget = buildPublicAppUrl(request, `${pathname}${request.nextUrl.search}`);
 
   if (!appId) {
     dest.pathname = '/account/auth/start';
     if (pathname && pathname !== '/') {
-      dest.searchParams.set('redirectsTo', BASE_PATH + pathname + request.nextUrl.search);
+      dest.searchParams.set('redirectsTo', redirectTarget);
     }
     return NextResponse.redirect(dest);
   }
 
   dest.searchParams.set('app', appId);
-  dest.searchParams.set('authenticatesTo', buildCallbackUrl(request));
+  dest.searchParams.set('authenticatesTo', buildPublicAppUrl(request, '/bridge/api.v1/auth/callback'));
   if (pathname && pathname !== '/') {
-    dest.searchParams.set('redirectsTo', new URL(BASE_PATH + pathname + request.nextUrl.search, request.url).toString());
+    dest.searchParams.set('redirectsTo', redirectTarget);
   }
   return NextResponse.redirect(dest);
 }
@@ -182,7 +179,7 @@ export default async function proxy(request: NextRequest) {
   const isSecure = proto === 'https' || request.nextUrl.protocol === 'https:';
   if (!isSecure) {
     const dest = new URL('https://neupgroup.com/account/auth/unsecure');
-    dest.searchParams.set('redirectsTo', BASE_PATH + pathname + request.nextUrl.search);
+    dest.searchParams.set('redirectsTo', buildPublicAppUrl(request, `${pathname}${request.nextUrl.search}`));
     return NextResponse.redirect(dest);
   }
 

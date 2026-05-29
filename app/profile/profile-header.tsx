@@ -1,12 +1,12 @@
 import { Button } from '@/components/ui/button';
-import { MapPin, Camera, BadgeCheck } from 'lucide-react';
+import { Camera, BadgeCheck } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { getAccountDisplayName, getAccountHandle } from '@/lib/account-display';
 type ProfileHeaderProps = {
   displayName: string;
   displayImage: string | null;
   neupId: string | null;
   verified: boolean;
-  accountType: string | null;
 };
 
 function getInitials(name: string): string {
@@ -23,10 +23,9 @@ export function ProfileHeader({
   displayImage,
   neupId,
   verified,
-  accountType,
 }: ProfileHeaderProps) {
-  const resolvedName = displayName?.trim() ? displayName : 'Guest User';
-  const handleLine = neupId?.trim() ? `@${neupId}` : 'Sign In Now';
+  const resolvedName = getAccountDisplayName(displayName);
+  const handleLine = getAccountHandle(neupId);
 
   return (
     <div className="w-full bg-background pt-8">
@@ -48,19 +47,15 @@ export function ProfileHeader({
               </Avatar>
             </div>
             <div className="pb-2">
-              <p className="text-xs font-mono text-white/70">{handleLine}</p>
-              <h1 className="text-2xl md:text-3xl font-bold font-headline text-white shadow-sm flex items-center gap-2">
+              <h1 className="text-3xl md:text-4xl font-bold font-headline text-white shadow-sm flex items-center gap-2 leading-tight">
                 {resolvedName}
                 {verified && (
                   <BadgeCheck className="h-6 w-6 text-primary" />
                 )}
               </h1>
-              {accountType && (
-                <p className="text-gray-200 text-sm flex items-center gap-1 capitalize">
-                  <MapPin className="h-4 w-4" />
-                  {accountType} account
-                </p>
-              )}
+              <p className="mt-1 text-xs md:text-sm font-mono text-white/75">
+                {handleLine}
+              </p>
             </div>
           </div>
           <Button size="sm" variant="secondary" className="absolute top-4 right-4 z-20" disabled>
