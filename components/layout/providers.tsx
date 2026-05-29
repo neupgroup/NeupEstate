@@ -10,9 +10,11 @@ import { NeupUserProvider, type NeupUser } from '@/lib/neup-user-context';
 export function Providers({
     children,
     initialUser,
+    showManagePanelLink,
 }: {
     children: ReactNode;
     initialUser?: NeupUser | null;
+    showManagePanelLink?: boolean;
 }) {
     const pathname = usePathname();
 
@@ -22,7 +24,7 @@ export function Providers({
         <NeupUserProvider initialUser={initialUser ?? null}>
             <Header />
             {children}
-            {!isAdminPage && <Footer />}
+            {!isAdminPage && <Footer showManagePanelLink={showManagePanelLink ?? false} />}
         </NeupUserProvider>
     );
 }

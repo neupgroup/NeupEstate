@@ -1,8 +1,11 @@
 
-import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+"use client";
+
+import { Facebook, Twitter, Instagram } from 'lucide-react';
 import { ClientLink } from '@/components/client-link';
 
-const Footer = () => {
+const Footer = ({ showManagePanelLink }: { showManagePanelLink: boolean }) => {
+
   return (
     <footer className="bg-secondary/70 text-secondary-foreground mt-auto">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -26,7 +29,7 @@ const Footer = () => {
               <li><ClientLink href="/collections" className="text-muted-foreground hover:text-primary transition-colors">For You</ClientLink></li>
               <li><ClientLink href="/agencies" className="text-muted-foreground hover:text-primary transition-colors">Agencies</ClientLink></li>
               <li><ClientLink href="/faq" className="text-muted-foreground hover:text-primary transition-colors">FAQs</ClientLink></li>
-              <li><ClientLink href="/manage" className="text-muted-foreground hover:text-primary transition-colors">Manage Panel</ClientLink></li>
+              {showManagePanelLink && <li><ClientLink href="/manage" className="text-muted-foreground hover:text-primary transition-colors">Manage Panel</ClientLink></li>}
             </ul>
           </div>
           
@@ -45,9 +48,9 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold mb-4">Follow Us</h4>
             <div className="flex space-x-4">
-              <a href="https://facebook.com/neupestate" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors"><Facebook className="h-5 w-5" /></a>
-              <a href="https://twitter.com/neupestate" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors"><Twitter className="h-5 w-5" /></a>
-              <a href="https://instagram.com/neupestate" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors"><Instagram className="h-5 w-5" /></a>
+              <a href="https://facebook.com/neupestate" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook" className="text-muted-foreground hover:text-primary transition-colors"><Facebook className="h-5 w-5" /></a>
+              <a href="https://twitter.com/neupestate" target="_blank" rel="noopener noreferrer" aria-label="Twitter" title="Twitter" className="text-muted-foreground hover:text-primary transition-colors"><Twitter className="h-5 w-5" /></a>
+              <a href="https://instagram.com/neupestate" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram" className="text-muted-foreground hover:text-primary transition-colors"><Instagram className="h-5 w-5" /></a>
             </div>
           </div>
         </div>

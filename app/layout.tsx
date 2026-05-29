@@ -10,6 +10,8 @@ import { ActivityTracker } from '@/components/activity-tracker';
 import { createAccount } from '@/services/account/create-account';
 import { createAccountInApp } from '@/logica/auth/account';
 import { getAuthenticatedMeData } from '@/services/auth/me';
+import { hasPermission } from '@/logica/auth/authorization';
+import { PERMISSIONS } from '@/logica/auth/permissions';
 
 const raleway = Raleway({
   subsets: ['latin'],
@@ -44,6 +46,11 @@ export default async function RootLayout({
   await createAccount();
 
   const me = await getAuthenticatedMeData();
+  const canShowManagePanel = me
+    ? (await Promise.all(
+        Object.values(PERMISSIONS.manage).map((permission) => hasPermission(permission))
+      )).some(Boolean)
+    : false;
   const initialUser = me
     ? {
         accountId: me.accountId,
@@ -64,7 +71,7 @@ export default async function RootLayout({
         )}
       >
         <ActivityTracker />
-        <Providers initialUser={initialUser}>{children}</Providers>
+        <Providers initialUser={initialUser} showManagePanelLink={canShowManagePanel}>{children}</Providers>
         <Toaster />
       </body>
     </html>
