@@ -37,6 +37,7 @@ import { createContactSubmission as createContactSubmissionService } from '@/ser
 import { createModel as createModelService, updateModel as updateModelService, deleteModel as deleteModelService, setDefaultModel as setDefaultModelService } from '@/services/model-service';
 import { createRequirement as createRequirementService, updateRequirement as updateRequirementService } from '@/services/requirements-service';
 import { resolveAccount, updateUser } from '@/services/account-service';
+import { deleteAccountAndData } from '@/services/account-service';
 import { getIdentity } from '@/services/neupid/get-identity';
 import { requirePermission } from '@/logica/auth/authorization';
 import { PERMISSIONS } from '@/logica/auth/permissions';
@@ -972,6 +973,19 @@ export async function deleteConversationAction(conversationId: string) {
         await logProblem(e, `deleteConversationAction (ID: ${conversationId})`);
         return { success: false, error: "Failed to delete conversation." };
     }
+}
+
+export async function deleteAccountAction(accountId: string) {
+  try {
+    await deleteAccountAndData(accountId);
+    try {
+      revalidatePath('/manage/accounts');
+    } catch (_) {}
+    return { success: true };
+  } catch (e: any) {
+    await logProblem(e, `deleteAccountAction (ID: ${accountId})`);
+    return { success: false, error: 'Failed to delete account.' };
+  }
 }
 
 export async function setAiInterventionAction(conversationId: string, active: boolean) {

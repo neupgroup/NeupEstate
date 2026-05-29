@@ -190,3 +190,31 @@ export async function refreshAccountDisplayInfo(
     return null;
   }
 }
+
+/**
+ * Delete an account and all locally-stored data associated with it.
+ * Best-effort: removes entries from common tables that reference the account id,
+ * then deletes the account row.
+ */
+export async function deleteAccountAndData(id: string): Promise<void> {
+  try {
+    await prisma.$transaction([
+      prisma.authzAccountAccessGrant.deleteMany({ where: { OR: [{ ownerAccountId: id }, { targetAccountId: id }] } }),
+      prisma.authzAssetsAccessGrant.deleteMany({ where: { accountId: id } }),
+      prisma.agencyMap.deleteMany({ where: { OR: [{ accountId: id }, { agencyAccountId: id }] } }),
+      prisma.conversation.deleteMany({ where: { accountId: id } }),
+      prisma.requirement.deleteMany({ where: { userId: id } }),
+      prisma.savedProperty.deleteMany({ where: { accountId: id } }),
+      prisma.propertyView.deleteMany({ where: { accountId: id } }),
+      prisma.reactedProperty.deleteMany({ where: { trackedId: id } }),
+      prisma.userPreference.deleteMany({ where: { accountId: id } }),
+      prisma.activity.deleteMany({ where: { trackerId: id } }),
+      prisma.clientLink.deleteMany({ where: { trackerId: id } }),
+      prisma.propertyOwner.deleteMany({ where: { userId: id } }),
+      prisma.account.delete({ where: { id } }),
+    ]);
+  } catch (e) {
+    await logProblem(e, `deleteAccountAndData (ID: ${id})`);
+    throw new Error('Failed to delete account and related data.');
+  }
+}

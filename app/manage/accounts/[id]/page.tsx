@@ -7,6 +7,7 @@ import { requireAuth } from '@/services/auth/account';
 import { logProblem } from '@/services/problem-service';
 import { ClientLink } from '@/components/client-link';
 import { AccountRefreshButton } from '@/components/manage/account-refresh-button';
+import { DeleteAccountButton } from '@/components/manage/delete-account-button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -96,11 +97,14 @@ export default async function ManageAccountDetailPage({
 
           <p className="font-mono text-xs text-muted-foreground break-all">{account.id}</p>
 
-          <div className="pt-1">
+          <div className="pt-1 flex items-center gap-2">
             <AccountRefreshButton
               accountId={account.id}
               currentDisplayName={account.display_name}
             />
+            {!isRegistered && (
+              <DeleteAccountButton accountId={account.id} displayName={account.display_name} />
+            )}
           </div>
         </div>
       </div>
