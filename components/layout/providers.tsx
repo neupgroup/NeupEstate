@@ -23,11 +23,12 @@ export function Providers({
 
     const isAdminPage = pathname.startsWith('/manage');
     const isHomePage = pathname === '/';
+    const isCustomBannerPage = pathname === '/profile' || pathname === '/agents' || pathname.startsWith('/mortgage');
 
     return (
         <NeupUserProvider initialUser={initialUser ?? null}>
             <Header />
-            {showGuestBanner && !isAdminPage && !isHomePage && <GuestSigninBanner variant="inline" />}
+            {showGuestBanner && !isAdminPage && !isHomePage && !isCustomBannerPage && <GuestSigninBanner variant="inline" />}
             {children}
             {!isAdminPage && <Footer showManagePanelLink={showManagePanelLink ?? false} />}
         </NeupUserProvider>

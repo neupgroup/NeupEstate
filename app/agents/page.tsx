@@ -6,12 +6,17 @@ import { SafeImage } from "@/components/safe-image";
 import { User, MapPin, AlertCircle, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ClientLink } from "@/components/client-link";
+import { GuestSigninBanner } from "@/components/layout/guest-signin-banner";
+import { getAuthenticatedMeData } from "@/services/auth/me";
 
 export default async function AgentsPage() {
   const agents = await getAgents({ limit: 100 });
+  const me = await getAuthenticatedMeData();
+  const showGuestBanner = me?.guest === true;
 
   return (
     <main className="flex-1">
+      {showGuestBanner && <GuestSigninBanner variant="inline" />}
       <div className="bg-secondary">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <h1 className="text-4xl font-headline font-bold flex items-center gap-3">
