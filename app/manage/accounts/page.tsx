@@ -66,7 +66,7 @@ export default async function ManageAccountsPage() {
                     <div className="h-12 w-12 shrink-0 overflow-hidden rounded-xl border bg-muted flex items-center justify-center">
                       {local?.display_image ?? remote?.displayImage ? (
                         <img
-                          src={local?.display_image ?? remote?.displayImage}
+                          src={(local?.display_image ?? remote?.displayImage) || undefined}
                           alt={name}
                           className="h-full w-full object-cover"
                         />
