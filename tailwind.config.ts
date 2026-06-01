@@ -20,8 +20,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['var(--font-raleway)', 'sans-serif'],
-        headline: ['var(--font-raleway)', 'sans-serif'],
+        sans: ['var(--font-outfit)', 'sans-serif'],
+        body: ['var(--font-outfit)', 'sans-serif'],
+        headline: ['var(--font-outfit)', 'sans-serif'],
         code: ['monospace'],
       },
       colors: {

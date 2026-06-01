@@ -1,6 +1,6 @@
 
 import type { Metadata } from 'next';
-import { Raleway } from 'next/font/google';
+import { Outfit } from 'next/font/google';
 import { cookies } from 'next/headers';
 import './globals.css';
 import { cn } from '@/lib/utils';
@@ -13,10 +13,10 @@ import { getAuthenticatedMeData } from '@/services/auth/me';
 import { hasPermission } from '@/logica/auth/authorization';
 import { PERMISSIONS } from '@/logica/auth/permissions';
 
-const raleway = Raleway({
+const outfit = Outfit({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700', '800'],
-  variable: '--font-raleway',
+  variable: '--font-outfit',
 });
 
 export const dynamic = 'force-dynamic';
@@ -67,8 +67,8 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          'min-h-screen bg-background font-body antialiased flex flex-col',
-          raleway.variable
+          'min-h-screen bg-background font-sans antialiased flex flex-col',
+          outfit.variable
         )}
       >
         <ActivityTracker />
