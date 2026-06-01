@@ -25,6 +25,67 @@ type PropertyFormStep = {
     render: () => React.ReactElement | null;
 };
 
+const FIELD_LABELS: Record<string, string> = {
+    purpose: "Property purpose",
+    purposes: "Property purpose",
+    category: "Property type",
+    categories: "Property type",
+    type: "Property nature",
+    types: "Property nature",
+    area: "Area",
+    areaUnit: "Area unit",
+    "landDetails.area": "Land area",
+    "landDetails.areaUnit": "Land area unit",
+    "landDetails.facing": "Land facing",
+    "pricing.currency": "Currency",
+    "pricing.basis": "Price basis",
+    "pricing.listed": "Listing price",
+    "pricing.basisPrices": "Listing price",
+    "pricing.basisNegotiablePrices": "Negotiable price",
+    "pricing.basisFrequencies": "Rental period",
+    "pricing.basisUnits": "Pricing unit",
+    structuredLocation: "Location details",
+    owners: "Owner information",
+    images: "Property photos",
+    title: "Title",
+    description: "Description",
+};
+
+function labelForPath(path: string): string {
+    if (FIELD_LABELS[path]) return FIELD_LABELS[path];
+
+    const recordPath = path.split(".").slice(0, -1).join(".");
+    if (FIELD_LABELS[recordPath]) return FIELD_LABELS[recordPath];
+
+    const normalized = path
+        .replace(/\.\d+(?=\.|$)/g, "")
+        .replace(/\.[^.]+$/g, (part) => (/^[a-z0-9-]+$/i.test(part.slice(1)) ? "" : part));
+
+    if (FIELD_LABELS[normalized]) return FIELD_LABELS[normalized];
+
+    const last = path.split(".").filter(Boolean).pop() || "Field";
+    return last
+        .replace(/([A-Z])/g, " $1")
+        .replace(/[-_]/g, " ")
+        .replace(/\b\w/g, (char) => char.toUpperCase())
+        .trim();
+}
+
+function formatFieldError(path: string, message: string): string {
+    const label = labelForPath(path);
+    const lowerMessage = message.toLowerCase();
+
+    if (lowerMessage === "required" || lowerMessage.includes("required")) {
+        return `❌ ${label} is required.`;
+    }
+
+    if (lowerMessage.includes("expected number") || lowerMessage.includes("received nan")) {
+        return `❌ ${label} must be a valid number.`;
+    }
+
+    return `❌ ${label}: ${message}`;
+}
+
 interface ProgressivePropertySectionsProps {
     form: UseFormReturn<CreatePropertyFormValues>;
     users: User[];
@@ -46,8 +107,15 @@ export function ProgressivePropertySections({
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const [unlockedUpTo, setUnlockedUpTo] = useState<number>(0);
     const [nextError, setNextError] = useState<string | null>(null);
+    const [errorStepIndex, setErrorStepIndex] = useState<number | null>(null);
     const categories = (form.watch("categories" as any) as unknown as string[]) || [];
     const category = categories[0] as string | undefined;
+
+    useEffect(() => {
+        if (errorStepIndex === null) return;
+        const timeout = window.setTimeout(() => setErrorStepIndex(null), 5000);
+        return () => window.clearTimeout(timeout);
+    }, [errorStepIndex]);
 
     const steps = useMemo<PropertyFormStep[]>(() => [
         {
@@ -129,7 +197,7 @@ export function ProgressivePropertySections({
         function extractMessages(obj: any, path: string) {
             if (!obj || typeof obj !== "object") return;
             if (typeof obj.message === "string" && obj.message) {
-                messages.push(obj.message);
+                messages.push(formatFieldError(path, obj.message));
                 return;
             }
             for (const key of Object.keys(obj)) {
@@ -138,13 +206,21 @@ export function ProgressivePropertySections({
         }
 
         for (const field of fields) {
-            const parts = field.split(".");
-            let node: any = errors;
-            for (const part of parts) {
-                node = node?.[part];
-                if (!node) break;
+            const candidateFields = field === "category"
+                ? ["category", "categories"]
+                : field === "type"
+                    ? ["type", "types"]
+                    : [field];
+
+            for (const candidateField of candidateFields) {
+                const parts = candidateField.split(".");
+                let node: any = errors;
+                for (const part of parts) {
+                    node = node?.[part];
+                    if (!node) break;
+                }
+                if (node) extractMessages(node, candidateField);
             }
-            if (node) extractMessages(node, field);
         }
 
         return [...new Set(messages)];
@@ -155,7 +231,8 @@ export function ProgressivePropertySections({
             const isValid = await form.trigger(steps[activeIndex].fields as any, { shouldFocus: true });
             if (!isValid) {
                 const msgs = collectStepErrors(steps[activeIndex].fields as string[]);
-                setNextError(msgs.length > 0 ? msgs.join(" ") : "Please fix the errors above before continuing.");
+                setNextError(msgs.length > 0 ? msgs.join("\n") : "❌ Please fix the errors above before continuing.");
+                setErrorStepIndex(activeIndex);
                 return;
             }
             // Agency rule check — only for fields belonging to this step
@@ -170,12 +247,14 @@ export function ProgressivePropertySections({
                 const agencyErrors = evaluateAgencyCustomization(stepRule, form.getValues() as any);
                 const agencyMsgs = Object.values(agencyErrors);
                 if (agencyMsgs.length > 0) {
-                    setNextError(agencyMsgs.join(' '));
+                    setNextError(agencyMsgs.map((msg) => `❌ ${msg}`).join("\n"));
+                    setErrorStepIndex(activeIndex);
                     return;
                 }
             }
         }
         setNextError(null);
+        setErrorStepIndex(null);
         setActiveIndex(i);
         setUnlockedUpTo((prev) => Math.max(prev, i));
     }
@@ -184,7 +263,8 @@ export function ProgressivePropertySections({
         const isValid = await form.trigger(steps[activeIndex].fields as any, { shouldFocus: true });
         if (!isValid) {
             const msgs = collectStepErrors(steps[activeIndex].fields as string[]);
-            setNextError(msgs.length > 0 ? msgs.join(" ") : "Please fix the errors above before continuing.");
+            setNextError(msgs.length > 0 ? msgs.join("\n") : "❌ Please fix the errors above before continuing.");
+            setErrorStepIndex(activeIndex);
             return;
         }
         // Agency rule check — only for fields belonging to this step
@@ -199,11 +279,13 @@ export function ProgressivePropertySections({
             const agencyErrors = evaluateAgencyCustomization(stepRule, form.getValues() as any);
             const agencyMsgs = Object.values(agencyErrors);
             if (agencyMsgs.length > 0) {
-                setNextError(agencyMsgs.join(' '));
+                setNextError(agencyMsgs.map((msg) => `❌ ${msg}`).join("\n"));
+                setErrorStepIndex(activeIndex);
                 return;
             }
         }
         setNextError(null);
+        setErrorStepIndex(null);
         const next = Math.min(activeIndex + 1, steps.length - 1);
         setActiveIndex(next);
         setUnlockedUpTo((prev) => Math.max(prev, next));
@@ -211,6 +293,7 @@ export function ProgressivePropertySections({
 
     function handlePrev() {
         setNextError(null);
+        setErrorStepIndex(null);
         setActiveIndex((i) => Math.max(i - 1, 0));
     }
 
@@ -227,9 +310,13 @@ export function ProgressivePropertySections({
                         title={step.title}
                         description={step.description}
                         isActive={isActive}
+                        hasError={errorStepIndex === i}
                         onOpen={() => goTo(i)}
                     >
                         {step.render()}
+                        {nextError && errorStepIndex === i && (
+                            <p className="mt-4 whitespace-pre-line text-sm text-destructive">{nextError}</p>
+                        )}
                         <div className="flex flex-col gap-2 mt-4 mb-6">
                             <div className="flex items-center gap-2">
                                 {activeIndex > 0 && (
@@ -251,9 +338,6 @@ export function ProgressivePropertySections({
                                     </Button>
                                 )}
                             </div>
-                            {nextError && (
-                                <p className="text-sm text-destructive">{nextError}</p>
-                            )}
                         </div>
                     </Section>
                 );
@@ -267,11 +351,12 @@ interface SectionProps {
     title: string;
     description: string;
     isActive: boolean;
+    hasError: boolean;
     onOpen: () => void;
     children: React.ReactNode;
 }
 
-function Section({ index, title, description, isActive, onOpen, children }: SectionProps) {
+function Section({ index, title, description, isActive, hasError, onOpen, children }: SectionProps) {
     const bodyRef = useRef<HTMLDivElement>(null);
     const [height, setHeight] = useState<number>(0);
     const [settled, setSettled] = useState(false);
@@ -306,14 +391,16 @@ function Section({ index, title, description, isActive, onOpen, children }: Sect
                 <div className="flex items-baseline gap-3">
                     <span className={cn(
                         "text-lg font-semibold transition-colors leading-tight shrink-0",
-                        isActive ? "text-primary" : "text-muted-foreground"
+                        isActive ? "text-primary" : "text-muted-foreground",
+                        hasError && "animate-pulse text-destructive [animation-duration:1s]"
                     )}>
                         {String(index + 1).padStart(2, "0")}
                     </span>
                     <div>
                         <h2 className={cn(
                             "text-lg font-semibold transition-colors leading-tight",
-                            isActive ? "text-primary" : "text-foreground group-hover:text-primary"
+                            isActive ? "text-primary" : "text-foreground group-hover:text-primary",
+                            hasError && "animate-pulse text-destructive [animation-duration:1s]"
                         )}>
                             {title}
                         </h2>

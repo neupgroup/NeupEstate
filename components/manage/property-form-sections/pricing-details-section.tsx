@@ -97,6 +97,8 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
     const purposes = watch("purposes") || [];
     const selectedBasis = watch("pricing.basis");
     const basisNegotiable = watch("pricing.basisNegotiable" as any) as Record<string, boolean> | undefined;
+    const basisPrices = watch("pricing.basisPrices" as any) as Record<string, number | undefined> | undefined;
+    const basisNegotiablePrices = watch("pricing.basisNegotiablePrices" as any) as Record<string, number | undefined> | undefined;
 
     const basisOptions = useMemo(
         () => getBasisOptions(categories, purposes as string[]),
@@ -139,6 +141,16 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
     function removeBasis(option: BasisOption) {
         if (!option.value) return;
         setActiveBasisValues((current) => current.filter((value) => value !== option.value));
+    }
+
+    function negotiablePriceError(option: BasisOption): string | null {
+        if (!option.value) return null;
+        const listingPrice = Number(basisPrices?.[option.value] ?? 0);
+        const negotiablePrice = Number(basisNegotiablePrices?.[option.value] ?? 0);
+        if (listingPrice > 0 && negotiablePrice > listingPrice) {
+            return "Negotiable amount can't be more than listing amount.";
+        }
+        return null;
     }
 
     return (
@@ -286,10 +298,10 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
                                                         placeholder="e.g., 150000"
                                                         value={field.value?.toString() || ""}
                                                         onChange={(value) => {
-                                                            const numericValue = Number(value || 0);
+                                                            const numericValue = value ? Number(value) : undefined;
                                                             field.onChange(numericValue);
                                                             if (index === 0) {
-                                                                setValue("pricing.listed", numericValue, { shouldDirty: true, shouldValidate: true });
+                                                                setValue("pricing.listed", numericValue ?? 0, { shouldDirty: true, shouldValidate: true });
                                                                 setValue("pricing.basis", option.value, { shouldDirty: true, shouldValidate: true });
                                                             }
                                                         }}
@@ -311,9 +323,22 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
                                                         <PriceInput
                                                             placeholder="e.g., 145000"
                                                             value={field.value?.toString() || ""}
-                                                            onChange={(value) => field.onChange(Number(value || 0))}
+                                                            onChange={(value) => {
+                                                                const numericValue = value ? Number(value) : undefined;
+                                                                field.onChange(numericValue);
+                                                                if (!numericValue && option.value) {
+                                                                    setValue(`pricing.basisNegotiable.${option.value}` as any, false, { shouldDirty: true, shouldValidate: true });
+                                                                    return;
+                                                                }
+                                                                if (option.value && numericValue === basisPrices?.[option.value]) {
+                                                                    setValue(`pricing.basisNegotiable.${option.value}` as any, false, { shouldDirty: true, shouldValidate: true });
+                                                                }
+                                                            }}
                                                         />
                                                     </FormControl>
+                                                    {negotiablePriceError(option) && (
+                                                        <p className="text-xs text-destructive">{negotiablePriceError(option)}</p>
+                                                    )}
                                                     <FormMessage />
                                                 </FormItem>
                                             )}
@@ -331,7 +356,8 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
                                                             onCheckedChange={(checked) => {
                                                                 field.onChange(checked);
                                                                 if (checked && option.value) {
-                                                                    setValue(`pricing.basisNegotiablePrices.${option.value}` as any, undefined, { shouldDirty: true });
+                                                                    const listingPrice = basisPrices?.[option.value];
+                                                                    setValue(`pricing.basisNegotiablePrices.${option.value}` as any, listingPrice, { shouldDirty: true });
                                                                 }
                                                             }}
                                                         />

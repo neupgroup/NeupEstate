@@ -201,8 +201,8 @@ export const PricingSchema = z.object({
     basisPrices: z.record(emptyPriceMapValueToUndefinedNumber).optional(),
     basisNegotiable: z.record(z.boolean()).optional(),
     basisNegotiablePrices: z.record(emptyPriceMapValueToUndefinedNumber).optional(),
-    basisFrequencies: z.record(z.string()).optional(),
-    basisUnits: z.record(z.string()).optional(),
+    basisFrequencies: z.record(z.string().optional()).optional(),
+    basisUnits: z.record(z.string().optional()).optional(),
     options: z.string().optional(), // Comma-separated string from form
 });
 export type Pricing = z.infer<typeof PricingSchema>;
