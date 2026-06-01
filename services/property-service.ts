@@ -14,6 +14,25 @@ export interface SavedPropertyEntry {
   savedAt: string;
 }
 
+export type BridgePropertyField = keyof Property;
+
+export interface BridgePropertyQuery {
+  agencyId?: string;
+  agentId?: string;
+  fields?: string[];
+  limit?: number;
+  offset?: number;
+  includeInactive?: boolean;
+}
+
+export interface BridgePropertyResult {
+  properties: Partial<Property>[];
+  totalCount: number;
+  limit: number;
+  offset: number;
+  fields: BridgePropertyField[];
+}
+
 const PROPERTY_INCLUDE = {
   media:           { where: { isDeleted: false }, orderBy: { sortOrder: 'asc' as const } },
   houseDetail:     true,
@@ -24,6 +43,95 @@ const PROPERTY_INCLUDE = {
   owners:          true,
   documents:       true,
 } as const;
+
+const BRIDGE_PROPERTY_FIELDS = [
+  'id',
+  'title',
+  'description',
+  'price',
+  'location',
+  'bedrooms',
+  'bathrooms',
+  'area',
+  'areaUnit',
+  'facing',
+  'buildStart',
+  'buildCompleted',
+  'purpose',
+  'purposes',
+  'category',
+  'type',
+  'images',
+  'amenities',
+  'agency',
+  'listingAgent',
+  'isOwnerListing',
+  'isFeatured',
+  'isApproved',
+  'status',
+  'sourceUrl',
+  'createdAt',
+  'updatedAt',
+  'floors',
+  'onFloor',
+  'roadAccess',
+  'latitude',
+  'longitude',
+  'kitchens',
+  'diningRooms',
+  'livingRooms',
+  'carParkingSpots',
+  'bikeParkingSpots',
+  'slug',
+  'landDetails',
+  'plots',
+  'apartmentDetails',
+  'apartmentUnits',
+  'structuredLocation',
+  'pricing',
+  'roadAccessDetails',
+  'distancing',
+  'earnings',
+  'owner',
+  'owners',
+  'documents',
+] as const satisfies readonly BridgePropertyField[];
+
+const DEFAULT_BRIDGE_PROPERTY_FIELDS = [
+  'id',
+  'slug',
+  'title',
+  'price',
+  'location',
+  'purpose',
+  'category',
+  'type',
+  'images',
+  'agency',
+  'listingAgent',
+  'status',
+  'createdAt',
+  'updatedAt',
+] as const satisfies readonly BridgePropertyField[];
+
+function resolveBridgePropertyFields(fields?: string[]): BridgePropertyField[] {
+  if (!fields?.length) return [...DEFAULT_BRIDGE_PROPERTY_FIELDS];
+
+  const allowed = new Set<BridgePropertyField>(BRIDGE_PROPERTY_FIELDS);
+  const requested = fields
+    .map((field) => field.trim())
+    .filter(Boolean)
+    .filter((field): field is BridgePropertyField => allowed.has(field as BridgePropertyField));
+
+  return requested.length ? Array.from(new Set(requested)) : [...DEFAULT_BRIDGE_PROPERTY_FIELDS];
+}
+
+function pickPropertyFields(property: Property, fields: BridgePropertyField[]): Partial<Property> {
+  return fields.reduce<Partial<Property>>((picked, field) => {
+    if (field in property) picked[field] = property[field] as never;
+    return picked;
+  }, {});
+}
 
 function parseGeoLocation(geo: string | null): { latitude?: number; longitude?: number } {
   if (!geo) return {};
@@ -254,6 +362,45 @@ export async function getPropertiesByAgent(agentId: string, opts: { includeInact
     const records = await prisma.property.findMany({ where, orderBy: { updatedAt: 'desc' }, include: PROPERTY_INCLUDE });
     return records.map(mapRecord);
   } catch (e) { await logProblem(e, `getPropertiesByAgent ${agentId}`); return []; }
+}
+
+export async function getBridgePropertiesByAccount(opts: BridgePropertyQuery): Promise<BridgePropertyResult> {
+  try {
+    const limit = Math.min(Math.max(1, opts.limit ?? 20), 100);
+    const offset = Math.max(0, opts.offset ?? 0);
+    const fields = resolveBridgePropertyFields(opts.fields);
+    const where: any = {};
+
+    if (opts.agencyId) where.agency = opts.agencyId;
+    if (opts.agentId) where.agent = opts.agentId;
+    if (!opts.includeInactive) where.status = PropertyStatus.ACTIVE;
+
+    const [totalCount, records] = await Promise.all([
+      prisma.property.count({ where }),
+      prisma.property.findMany({
+        where,
+        orderBy: { updatedAt: 'desc' },
+        take: limit,
+        skip: offset,
+        include: PROPERTY_INCLUDE,
+      }),
+    ]);
+
+    const properties = records
+      .map(mapRecord)
+      .map((property) => pickPropertyFields(property, fields));
+
+    return { properties, totalCount, limit, offset, fields };
+  } catch (e) {
+    await logProblem(e, `getBridgePropertiesByAccount ${opts.agencyId || opts.agentId || 'unknown'}`);
+    return {
+      properties: [],
+      totalCount: 0,
+      limit: Math.min(Math.max(1, opts.limit ?? 20), 100),
+      offset: Math.max(0, opts.offset ?? 0),
+      fields: resolveBridgePropertyFields(opts.fields),
+    };
+  }
 }
 
 // ─── Write ───────────────────────────────────────────────────────────────────
