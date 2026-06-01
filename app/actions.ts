@@ -377,7 +377,9 @@ export async function createPropertyAction(
       return { success: false, error: "Please select at least one purpose.", propertyId: null };
     }
 
-    if (!validatedData.pricing?.listed) {
+    const priceDisplayMode = validatedData.pricing?.priceDisplayMode ?? 'show-price';
+
+    if (priceDisplayMode === 'show-price' && !validatedData.pricing?.listed) {
       return { success: false, error: "Listed price is required.", propertyId: null };
     }
 
@@ -388,7 +390,10 @@ export async function createPropertyAction(
       purpose: orderedPurposes[0],
       purposes: orderedPurposes,
       location: locationString,
-      price: validatedData.pricing.listed,
+      price: validatedData.pricing?.listed ?? 0,
+      details: {
+        priceDisplayMode,
+      },
       area: areaValueToSqft(validatedData.area),
       amenities: validatedData.amenities?.split(',').map(a => a.trim()).filter(Boolean) || [],
       images: validatedData.images?.filter(img => img.trim() !== '') || [],
@@ -434,7 +439,9 @@ export async function updatePropertyAction(
       return { success: false, error: "Please select at least one purpose." };
     }
 
-    if (!validatedData.pricing?.listed) {
+    const priceDisplayMode = validatedData.pricing?.priceDisplayMode ?? 'show-price';
+
+    if (priceDisplayMode === 'show-price' && !validatedData.pricing?.listed) {
         return { success: false, error: "Listed price is required." };
     }
     
@@ -445,7 +452,10 @@ export async function updatePropertyAction(
       purpose: orderedPurposes[0],
       purposes: orderedPurposes,
       location: locationString,
-      price: validatedData.pricing.listed,
+      price: validatedData.pricing?.listed ?? 0,
+      details: {
+        priceDisplayMode,
+      },
       area: areaValueToSqft(validatedData.area),
       amenities: validatedData.amenities?.split(',').map(a => a.trim()).filter(Boolean) || [],
       images: validatedData.images?.filter(img => img.trim() !== '') || [],

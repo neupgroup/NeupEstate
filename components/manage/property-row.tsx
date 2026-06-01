@@ -7,6 +7,7 @@ import {
     Building2, LandPlot, Store, Layers,
 } from "lucide-react";
 import { ClientLink } from '@/components/client-link';
+import { getHiddenPriceLabel } from '@/lib/property-price-display';
 import { cn } from '@/lib/utils';
 
 // ─── Status badge ─────────────────────────────────────────────────────────────
@@ -77,7 +78,7 @@ export function AdminPropertyRow({ property }: { property: Property }) {
                     {[
                         property.location,
                         property.category,
-                        formatPrice(property.price, property.purpose),
+                        getHiddenPriceLabel(property) || formatPrice(property.price, property.purpose),
                     ].filter(Boolean).join(' · ')}
                 </p>
             </div>

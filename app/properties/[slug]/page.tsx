@@ -19,6 +19,7 @@ import { areaValueToSqft } from '@/types';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { requirePagePermission } from '@/logica/auth/page-guard';
 import { PERMISSIONS } from '@/logica/auth/permissions';
+import { getHiddenPriceLabel } from '@/lib/property-price-display';
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -235,6 +236,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
   };
 
   const schemaJson = generateSchema(property);
+  const hiddenPriceLabel = getHiddenPriceLabel(property);
 
   return (
     <>
@@ -299,9 +301,9 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
             
             {property.pricing && (
               <DetailCard title="Pricing Details" icon={<Tag className="h-5 w-5"/>}>
-                  <DetailItem label="Listed Price" value={formatPrice(property.pricing.listed, property.pricing.currency)} />
-                  <DetailItem label="Minimum Price" value={property.pricing.minimum ? formatPrice(property.pricing.minimum, property.pricing.currency) : 'N/A'} />
-                  <DetailItem label="Maximum Price" value={property.pricing.maximum ? formatPrice(property.pricing.maximum, property.pricing.currency) : 'N/A'} />
+                  <DetailItem label="Listed Price" value={hiddenPriceLabel || formatPrice(property.pricing.listed, property.pricing.currency)} />
+                  <DetailItem label="Minimum Price" value={hiddenPriceLabel || (property.pricing.minimum ? formatPrice(property.pricing.minimum, property.pricing.currency) : 'N/A')} />
+                  <DetailItem label="Maximum Price" value={hiddenPriceLabel || (property.pricing.maximum ? formatPrice(property.pricing.maximum, property.pricing.currency) : 'N/A')} />
                   <DetailItem label="Negotiable" value={property.pricing.negotiable ? 'Yes' : 'No'} />
                   <DetailItem label="Basis" value={property.pricing.basis} />
                   <DetailItem label="Options" value={property.pricing.options?.join(', ')} />
@@ -468,9 +470,9 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <p className="text-3xl font-bold text-primary">
-                      {formatPrice(property.price)}
+                      {hiddenPriceLabel || formatPrice(property.price)}
                   </p>
-                  {property.purpose === 'Rent' && <span className="text-sm font-normal text-muted-foreground">/month</span>}
+                  {!hiddenPriceLabel && property.purpose === 'Rent' && <span className="text-sm font-normal text-muted-foreground">/month</span>}
                 </div>
                 <Badge variant={property.purpose === 'Sale' ? 'default' : 'secondary'}>For {property.purpose}</Badge>
               </div>

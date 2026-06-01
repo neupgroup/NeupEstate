@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, BedDouble, Bath, SquareGanttChart, Loader2, Star } from "lucide-react";
 import { useState, useTransition, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { getHiddenPriceLabel } from "@/lib/property-price-display";
 import { SafeImage } from "./safe-image";
 import { toggleSavePropertyAction } from "@/app/actions";
 import { useToast } from "@/hooks/use-toast";
@@ -95,6 +96,7 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
       maximumFractionDigits: 0,
     }).format(price);
   };
+  const hiddenPriceLabel = getHiddenPriceLabel(property);
   
   return (
     <Card className="flex flex-col overflow-hidden rounded-lg card-hover-effect h-full">
@@ -159,8 +161,8 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
       <CardFooter className="p-4 bg-gray-50 flex-col items-start">
         <div className="w-full flex justify-between items-center mb-4">
           <p className="text-2xl font-bold text-primary">
-            {formatPrice(property.price)}
-            {property.purpose === 'Rent' && <span className="text-sm font-normal text-muted-foreground">/month</span>}
+            {hiddenPriceLabel || formatPrice(property.price)}
+            {!hiddenPriceLabel && property.purpose === 'Rent' && <span className="text-sm font-normal text-muted-foreground">/month</span>}
           </p>
         </div>
         <div className="w-full flex justify-between text-sm text-muted-foreground border-t pt-4">

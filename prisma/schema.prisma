@@ -92,6 +92,7 @@ model Property {
   structuredLocation String
   agency             String?
   agent              String?
+  details            Json?
   pricing            Json?
   roadAccessDetails  Json?
   distancing         Json?

@@ -193,6 +193,7 @@ export type StructuredLocation = z.infer<typeof StructuredLocationSchema>;
 
 export const PricingSchema = z.object({
     currency: CurrencySchema.default('USD'),
+    priceDisplayMode: z.enum(['show-price', 'price-on-call', 'offer-yours-first']).default('show-price'),
     maximum: emptyStringToUndefinedNumber,
     minimum: emptyStringToUndefinedNumber,
     listed: z.coerce.number({invalid_type_error: "Listed price must be a number"}).min(0),
@@ -326,6 +327,7 @@ export interface Property {
     apartmentDetails?: ApartmentDetails;
     apartmentUnits?: ApartmentUnit[];
     structuredLocation?: StructuredLocation;
+    details?: Record<string, any>;
     pricing?: Pricing & { options?: string[] }; // DB stores array
     roadAccessDetails?: RoadAccessDetails;
     distancing?: Distancing;
@@ -413,6 +415,7 @@ export type CreatePropertyInput =
     apartmentDetails?: ApartmentDetails;
     apartmentUnits?: ApartmentUnit[];
     pricing?: Omit<Pricing, 'options'> & { options?: string[] };
+    details?: Record<string, any>;
     owners?: Owner[];
 };
 export type UpdatePropertyInput = CreatePropertyInput;

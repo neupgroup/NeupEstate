@@ -27,6 +27,11 @@ const HOUSE_CATEGORIES = new Set(["House", "Bungalow", "Villa", "Multiplex"]);
 const APARTMENT_CATEGORIES = new Set(["Apartment", "Penthouse", "Flat"]);
 const RENTAL_FREQUENCIES = ["Monthly", "Quarterly", "Half-yearly", "Yearly"] as const;
 const LAND_UNITS = ["Aana", "Ropani", "Paisa", "Daam", "Bigha", "Kattha", "Dhur", "Sqft", "Sqm"] as const;
+const PRICE_DISPLAY_OPTIONS = [
+    { value: "show-price", label: "Show price", description: "Display entered prices publicly." },
+    { value: "price-on-call", label: "Price on call", description: "Hide prices and ask buyers to call." },
+    { value: "offer-yours-first", label: "Offer yours first", description: "Hide prices and ask buyers to make an offer." },
+] as const;
 
 function getBasisOptionsForPair(category?: string, purpose?: string): BasisOption[] {
     const isSale = purpose === "Sale";
@@ -96,6 +101,7 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
     const categories = (watch("categories" as any) as unknown as string[]) || [];
     const purposes = watch("purposes") || [];
     const selectedBasis = watch("pricing.basis");
+    const priceDisplayMode = watch("pricing.priceDisplayMode") || "show-price";
     const basisNegotiable = watch("pricing.basisNegotiable" as any) as Record<string, boolean> | undefined;
     const basisPrices = watch("pricing.basisPrices" as any) as Record<string, number | undefined> | undefined;
     const basisNegotiablePrices = watch("pricing.basisNegotiablePrices" as any) as Record<string, number | undefined> | undefined;
@@ -173,6 +179,50 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
                                 ))}
                             </SelectContent>
                         </Select>
+                        <FormMessage />
+                    </FormItem>
+                )}
+            />
+
+            <FormField
+                control={control}
+                name="pricing.priceDisplayMode"
+                render={({ field }) => (
+                    <FormItem>
+                        <FormLabel className="text-base font-semibold">Public Price Display</FormLabel>
+                        <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                            {PRICE_DISPLAY_OPTIONS.map((option) => {
+                                const isSelected = field.value === option.value || (!field.value && option.value === "show-price");
+                                return (
+                                    <button
+                                        key={option.value}
+                                        type="button"
+                                        onClick={() => field.onChange(option.value)}
+                                        aria-pressed={isSelected}
+                                        className={cn(
+                                            "flex min-h-20 items-start gap-3 rounded-lg border-2 bg-background p-4 text-left transition-all",
+                                            isSelected ? "border-primary bg-primary/10 text-primary" : "border-border hover:border-muted-foreground",
+                                        )}
+                                    >
+                                        <span className={cn(
+                                            "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2",
+                                            isSelected ? "border-primary bg-primary text-primary-foreground" : "border-muted-foreground",
+                                        )}>
+                                            {isSelected ? <Check className="h-3 w-3" /> : null}
+                                        </span>
+                                        <span className="space-y-1">
+                                            <span className="block text-sm font-semibold">{option.label}</span>
+                                            <span className="block text-xs text-muted-foreground">{option.description}</span>
+                                        </span>
+                                    </button>
+                                );
+                            })}
+                        </div>
+                        {priceDisplayMode !== "show-price" && (
+                            <p className="text-xs text-muted-foreground">
+                                Public pages will show "{PRICE_DISPLAY_OPTIONS.find((option) => option.value === priceDisplayMode)?.label}" instead of any entered price.
+                            </p>
+                        )}
                         <FormMessage />
                     </FormItem>
                 )}
