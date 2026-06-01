@@ -174,6 +174,26 @@ const emptyPriceMapValueToUndefinedNumber = z.preprocess(
     (val) => (val === "" || (typeof val === "number" && Number.isNaN(val)) ? undefined : val),
     z.coerce.number().min(0).optional()
 );
+const optionalPriceMapSchema = z.preprocess((val) => {
+    if (!val || typeof val !== "object" || Array.isArray(val)) return undefined;
+    const cleaned = Object.fromEntries(
+        Object.entries(val as Record<string, unknown>).filter(([, entry]) =>
+            entry !== undefined &&
+            entry !== "" &&
+            !(typeof entry === "number" && Number.isNaN(entry))
+        )
+    );
+    return Object.keys(cleaned).length > 0 ? cleaned : undefined;
+}, z.record(z.coerce.number().min(0)).optional());
+const optionalStringMapSchema = z.preprocess((val) => {
+    if (!val || typeof val !== "object" || Array.isArray(val)) return undefined;
+    const cleaned = Object.fromEntries(
+        Object.entries(val as Record<string, unknown>).filter(([, entry]) =>
+            entry !== undefined && entry !== ""
+        )
+    );
+    return Object.keys(cleaned).length > 0 ? cleaned : undefined;
+}, z.record(z.string()).optional());
 const emptyStringToUndefinedInt = z.preprocess(
     (val) => (val === "" ? undefined : val),
     z.coerce.number().int().optional()
@@ -196,14 +216,14 @@ export const PricingSchema = z.object({
     priceDisplayMode: z.enum(['show-price', 'price-on-call', 'offer-yours-first']).default('show-price'),
     maximum: emptyStringToUndefinedNumber,
     minimum: emptyStringToUndefinedNumber,
-    listed: z.coerce.number({invalid_type_error: "Listed price must be a number"}).min(0),
+    listed: emptyPriceMapValueToUndefinedNumber,
     negotiable: z.boolean().default(false),
     basis: PricingBasisSchema.optional(),
-    basisPrices: z.record(emptyPriceMapValueToUndefinedNumber).optional(),
+    basisPrices: optionalPriceMapSchema,
     basisNegotiable: z.record(z.boolean()).optional(),
-    basisNegotiablePrices: z.record(emptyPriceMapValueToUndefinedNumber).optional(),
-    basisFrequencies: z.record(z.string().optional()).optional(),
-    basisUnits: z.record(z.string().optional()).optional(),
+    basisNegotiablePrices: optionalPriceMapSchema,
+    basisFrequencies: optionalStringMapSchema,
+    basisUnits: optionalStringMapSchema,
     options: z.string().optional(), // Comma-separated string from form
 });
 export type Pricing = z.infer<typeof PricingSchema>;

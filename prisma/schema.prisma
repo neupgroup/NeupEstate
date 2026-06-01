@@ -297,15 +297,19 @@ model PropertyDocument {
 
 model PropertyChange {
   id         String   @id @default(cuid())
-  propertyId String
+  propertyId String?
   data       Json
+  status     String
+  createdOn  DateTime @default(now())
   modifiedOn DateTime @default(now())
 
-  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  property   Property? @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   @@index([propertyId])
+  @@index([status])
+  @@index([createdOn])
   @@index([modifiedOn])
-  @@map("property_change")
+  @@map("property_changes")
 }
 
 // ============================================================================

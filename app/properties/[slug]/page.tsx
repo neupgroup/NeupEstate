@@ -301,7 +301,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
             
             {property.pricing && (
               <DetailCard title="Pricing Details" icon={<Tag className="h-5 w-5"/>}>
-                  <DetailItem label="Listed Price" value={hiddenPriceLabel || formatPrice(property.pricing.listed, property.pricing.currency)} />
+                  <DetailItem label="Listed Price" value={hiddenPriceLabel || (property.pricing.listed ? formatPrice(property.pricing.listed, property.pricing.currency) : 'N/A')} />
                   <DetailItem label="Minimum Price" value={hiddenPriceLabel || (property.pricing.minimum ? formatPrice(property.pricing.minimum, property.pricing.currency) : 'N/A')} />
                   <DetailItem label="Maximum Price" value={hiddenPriceLabel || (property.pricing.maximum ? formatPrice(property.pricing.maximum, property.pricing.currency) : 'N/A')} />
                   <DetailItem label="Negotiable" value={property.pricing.negotiable ? 'Yes' : 'No'} />

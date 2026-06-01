@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams, useRouter } from 'next/navigation';
 import { useTransition, useState, useEffect } from 'react';
 import { UpdatePropertySchema, type Property, type User, type UpdatePropertyFormValues } from '@/types';
-import { updatePropertyAction, approvePropertyAction, deletePropertyAction, rewritePropertyDetailsAction, getCurrentAccountId } from '@/app/actions';
+import { updatePropertyAction, approvePropertyAction, deletePropertyAction, rewritePropertyDetailsAction, getCurrentAccountId, savePropertyChangeDraftAction } from '@/app/actions';
 import { getPropertyById } from "@/services/property-service";
 import { getUsers } from "@/services/user-service";
 import { useAgencyCustomization } from '@/hooks/use-agency-customization';
@@ -44,12 +44,26 @@ export default function EditPropertyPage() {
     const [isDeleting, startDeleteTransition] = useTransition();
     const [isRewriting, startRewriteTransition] = useTransition();
     const [accountId, setAccountId] = useState<string | null>(null);
+    const [changeId, setChangeId] = useState<string | null>(null);
 
     const { rule: agencyRule } = useAgencyCustomization(accountId, 'property');
 
     const form = useForm<UpdatePropertyFormValues>({
         resolver: zodResolver(UpdatePropertySchema),
     });
+
+    function pickDirtyValues(values: any, dirty: any): Record<string, any> {
+        if (!dirty || typeof dirty !== 'object') return {};
+        return Object.keys(dirty).reduce<Record<string, any>>((picked, key) => {
+            if (dirty[key] === true) {
+                picked[key] = values?.[key];
+                return picked;
+            }
+            const nested = pickDirtyValues(values?.[key], dirty[key]);
+            if (Object.keys(nested).length > 0) picked[key] = nested;
+            return picked;
+        }, {});
+    }
 
     useEffect(() => {
         if (!propertyId) return;
@@ -154,6 +168,26 @@ export default function EditPropertyPage() {
                 });
             }
         });
+    }
+
+    async function handleSectionAdvance(fromIndex: number, toIndex: number) {
+        if (!property || fromIndex !== 0 || toIndex !== 1) return;
+
+        const values = form.getValues();
+        const data = property.isApproved
+            ? pickDirtyValues(values, form.formState.dirtyFields)
+            : values;
+
+        const result = await savePropertyChangeDraftAction({
+            changeId,
+            propertyId: property.id,
+            status: property.isApproved ? 'pending' : 'pending_edits',
+            data,
+        });
+
+        if (result.success && result.changeId) {
+            setChangeId(result.changeId);
+        }
     }
 
     const handleApprove = () => {
@@ -299,6 +333,7 @@ export default function EditPropertyPage() {
                         isSubmitting={isSaving || isRewriting}
                         submitLabel={isSaving ? 'Saving Changes...' : 'Save Changes'}
                         agencyRule={agencyRule}
+                        onSectionAdvance={handleSectionAdvance}
                     />
                 </form>
             </Form>

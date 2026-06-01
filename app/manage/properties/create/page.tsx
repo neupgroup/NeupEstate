@@ -4,10 +4,10 @@
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTransition, useEffect, useState } from 'react';
 import { CreatePropertySchema, type CreatePropertyFormValues, type User } from '@/types';
-import { createPropertyAction, getCurrentAccountId } from '@/app/actions';
+import { createPropertyAction, getCurrentAccountId, getPropertyChangeDraftAction, savePropertyChangeDraftAction } from '@/app/actions';
 
 import { Form } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
@@ -18,10 +18,12 @@ import { ProgressivePropertySections } from '@/components/manage/progressive-pro
 
 export default function CreatePropertyPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const { toast } = useToast();
     const [isPending, startTransition] = useTransition();
     const [users, setUsers] = React.useState<User[]>([]);
     const [accountId, setAccountId] = useState<string | null>(null);
+    const [changeId, setChangeId] = useState<string | null>(searchParams.get('changes'));
 
     useEffect(() => {
         getUsers().then(setUsers);
@@ -74,6 +76,21 @@ export default function CreatePropertyPage() {
         },
     });
 
+    useEffect(() => {
+        const draftId = searchParams.get('changes');
+        if (!draftId) return;
+
+        getPropertyChangeDraftAction(draftId).then((result) => {
+            if (result.success && result.data) {
+                form.reset({
+                    ...form.getValues(),
+                    ...(result.data as Partial<CreatePropertyFormValues>),
+                });
+                setChangeId(draftId);
+            }
+        });
+    }, [searchParams, form]);
+
     async function onSubmit(values: CreatePropertyFormValues) {
         startTransition(async () => {
             const result = await createPropertyAction(values);
@@ -93,6 +110,21 @@ export default function CreatePropertyPage() {
         });
     }
 
+    async function handleSectionAdvance(fromIndex: number, toIndex: number) {
+        if (fromIndex !== 0 || toIndex !== 1) return;
+
+        const result = await savePropertyChangeDraftAction({
+            changeId,
+            status: 'pending_creation',
+            data: form.getValues() as Record<string, any>,
+        });
+
+        if (result.success && result.changeId) {
+            setChangeId(result.changeId);
+            router.replace(`/manage/properties/create?changes=${result.changeId}&status=creation`, { scroll: false });
+        }
+    }
+
     return (
         <div className="max-w-6xl mx-auto">
             <Form {...form}>
@@ -104,6 +136,7 @@ export default function CreatePropertyPage() {
                         isSubmitting={isPending}
                         submitLabel={isPending ? 'Creating...' : 'Create Property'}
                         agencyRule={agencyRule}
+                        onSectionAdvance={handleSectionAdvance}
                     />
                 </form>
             </Form>

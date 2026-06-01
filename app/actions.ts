@@ -41,6 +41,7 @@ import { deleteAccountAndData } from '@/services/account-service';
 import { getIdentity } from '@/services/neupid/get-identity';
 import { requirePermission } from '@/logica/auth/authorization';
 import { PERMISSIONS } from '@/logica/auth/permissions';
+import { prisma } from '@/lib/prisma';
 
 // ---------------------------------------------------------------------------
 // Identity guard
@@ -359,6 +360,111 @@ const formatLocationString = (structuredLocation?: StructuredLocation): string =
   return parts.filter(Boolean).join(', ');
 };
 
+function firstPositivePrice(pricing?: CreatePropertyFormValues['pricing']): number {
+  const direct = Number(pricing?.listed ?? 0);
+  if (direct > 0) return direct;
+
+  const prices = Object.values(pricing?.basisPrices ?? {})
+    .map((value) => Number(value ?? 0))
+    .filter((value) => value > 0);
+
+  return prices[0] ?? 0;
+}
+
+function cleanPricing(pricing?: CreatePropertyFormValues['pricing']) {
+  if (!pricing) return undefined;
+
+  const cleanNumberMap = (map?: Record<string, number | undefined>): Record<string, number> | undefined => {
+    const entries = Object.entries(map ?? {})
+      .map(([key, value]) => [key, Number(value ?? 0)] as const)
+      .filter(([, value]) => value > 0);
+    return entries.length ? Object.fromEntries(entries) : undefined;
+  };
+  const cleanStringMap = (map?: Record<string, string | undefined>): Record<string, string> | undefined => {
+    const entries = Object.entries(map ?? {}).filter((entry): entry is [string, string] => Boolean(entry[1]));
+    return entries.length ? Object.fromEntries(entries) : undefined;
+  };
+
+  const basisPrices = cleanNumberMap(pricing.basisPrices);
+  const basisNegotiablePrices = cleanNumberMap(pricing.basisNegotiablePrices);
+  const activeBasis = new Set([
+    ...Object.keys(basisPrices ?? {}),
+    ...Object.keys(basisNegotiablePrices ?? {}),
+  ]);
+  const basisNegotiable = Object.fromEntries(
+    Object.entries(pricing.basisNegotiable ?? {}).filter(([basis, value]) => value && activeBasis.has(basis)),
+  );
+
+  return {
+    ...pricing,
+    listed: pricing.listed && pricing.listed > 0 ? pricing.listed : undefined,
+    basisPrices,
+    basisNegotiable: Object.keys(basisNegotiable).length ? basisNegotiable : undefined,
+    basisNegotiablePrices,
+    basisFrequencies: cleanStringMap(pricing.basisFrequencies),
+    basisUnits: cleanStringMap(pricing.basisUnits),
+    options: Array.isArray(pricing.options) ? pricing.options : pricing.options?.split(',').map(o => o.trim()).filter(Boolean) as any,
+  };
+}
+
+type PropertyChangeDraftStatus = 'pending_creation' | 'pending_edits' | 'pending';
+
+export async function savePropertyChangeDraftAction(input: {
+  changeId?: string | null;
+  propertyId?: string | null;
+  data: Record<string, any>;
+  status: PropertyChangeDraftStatus;
+}): Promise<{ success: boolean; changeId?: string; error?: string }> {
+  try {
+    await requirePermission(
+      input.propertyId ? PERMISSIONS.manage.propertySelfUpdate : PERMISSIONS.manage.propertySelfCreate,
+    );
+
+    const data = {
+      propertyId: input.propertyId || null,
+      status: input.status,
+      data: input.data,
+      modifiedOn: new Date(),
+    };
+
+    const draft = input.changeId
+      ? await prisma.propertyChange.update({
+          where: { id: input.changeId },
+          data,
+        })
+      : await prisma.propertyChange.create({ data });
+
+    return { success: true, changeId: draft.id };
+  } catch (e: any) {
+    await logProblem(e, 'savePropertyChangeDraftAction');
+    return { success: false, error: e.message || 'Failed to save property draft.' };
+  }
+}
+
+export async function getPropertyChangeDraftAction(changeId: string): Promise<{
+  success: boolean;
+  data?: Record<string, any>;
+  status?: string;
+  propertyId?: string | null;
+  error?: string;
+}> {
+  try {
+    await requirePermission(PERMISSIONS.manage.propertySelfCreate);
+    const draft = await prisma.propertyChange.findUnique({ where: { id: changeId } });
+    if (!draft) return { success: false, error: 'Draft not found.' };
+
+    return {
+      success: true,
+      data: draft.data as Record<string, any>,
+      status: draft.status,
+      propertyId: draft.propertyId,
+    };
+  } catch (e: any) {
+    await logProblem(e, `getPropertyChangeDraftAction ${changeId}`);
+    return { success: false, error: e.message || 'Failed to load property draft.' };
+  }
+}
+
 export async function createPropertyAction(
   data: CreatePropertyFormValues
 ): Promise<{ success: boolean; error?: string | null; propertyId?: string | null }> {
@@ -378,9 +484,11 @@ export async function createPropertyAction(
     }
 
     const priceDisplayMode = validatedData.pricing?.priceDisplayMode ?? 'show-price';
+    const resolvedPrice = firstPositivePrice(validatedData.pricing);
+    const pricing = cleanPricing(validatedData.pricing);
 
-    if (priceDisplayMode === 'show-price' && !validatedData.pricing?.listed) {
-      return { success: false, error: "Listed price is required.", propertyId: null };
+    if (priceDisplayMode !== 'offer-yours-first' && resolvedPrice <= 0) {
+      return { success: false, error: "Add at least one price or choose Offer yours first.", propertyId: null };
     }
 
     const locationString = formatLocationString(validatedData.structuredLocation);
@@ -390,17 +498,14 @@ export async function createPropertyAction(
       purpose: orderedPurposes[0],
       purposes: orderedPurposes,
       location: locationString,
-      price: validatedData.pricing?.listed ?? 0,
+      price: resolvedPrice,
       details: {
         priceDisplayMode,
       },
       area: areaValueToSqft(validatedData.area),
       amenities: validatedData.amenities?.split(',').map(a => a.trim()).filter(Boolean) || [],
       images: validatedData.images?.filter(img => img.trim() !== '') || [],
-      pricing: validatedData.pricing ? {
-        ...validatedData.pricing,
-        options: Array.isArray(validatedData.pricing.options) ? validatedData.pricing.options : validatedData.pricing.options?.split(',').map(o => o.trim()).filter(Boolean) as any,
-      } : undefined,
+      pricing,
       owners: validatedData.owners,
       landDetails: validatedData.landDetails ? {
         ...validatedData.landDetails,
@@ -440,9 +545,11 @@ export async function updatePropertyAction(
     }
 
     const priceDisplayMode = validatedData.pricing?.priceDisplayMode ?? 'show-price';
+    const resolvedPrice = firstPositivePrice(validatedData.pricing);
+    const pricing = cleanPricing(validatedData.pricing);
 
-    if (priceDisplayMode === 'show-price' && !validatedData.pricing?.listed) {
-        return { success: false, error: "Listed price is required." };
+    if (priceDisplayMode !== 'offer-yours-first' && resolvedPrice <= 0) {
+        return { success: false, error: "Add at least one price or choose Offer yours first." };
     }
     
     const locationString = formatLocationString(validatedData.structuredLocation);
@@ -452,17 +559,14 @@ export async function updatePropertyAction(
       purpose: orderedPurposes[0],
       purposes: orderedPurposes,
       location: locationString,
-      price: validatedData.pricing?.listed ?? 0,
+      price: resolvedPrice,
       details: {
         priceDisplayMode,
       },
       area: areaValueToSqft(validatedData.area),
       amenities: validatedData.amenities?.split(',').map(a => a.trim()).filter(Boolean) || [],
       images: validatedData.images?.filter(img => img.trim() !== '') || [],
-      pricing: validatedData.pricing ? {
-        ...validatedData.pricing,
-        options: Array.isArray(validatedData.pricing.options) ? validatedData.pricing.options : validatedData.pricing.options?.split(',').map(o => o.trim()).filter(Boolean) as any,
-      } : undefined,
+      pricing,
       owners: validatedData.owners,
       landDetails: validatedData.landDetails ? {
         ...validatedData.landDetails,

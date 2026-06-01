@@ -94,6 +94,7 @@ interface ProgressivePropertySectionsProps {
     submitLabel: string;
     /** Optional agency customization rule — enforced on top of Zod validation */
     agencyRule?: AgencyCustomizationRule | null;
+    onSectionAdvance?: (fromIndex: number, toIndex: number) => Promise<void> | void;
 }
 
 export function ProgressivePropertySections({
@@ -103,6 +104,7 @@ export function ProgressivePropertySections({
     isSubmitting,
     submitLabel,
     agencyRule,
+    onSectionAdvance,
 }: ProgressivePropertySectionsProps) {
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const [unlockedUpTo, setUnlockedUpTo] = useState<number>(0);
@@ -253,6 +255,9 @@ export function ProgressivePropertySections({
                 }
             }
         }
+        if (activeIndex === 0 && i === 1) {
+            await onSectionAdvance?.(activeIndex, i);
+        }
         setNextError(null);
         setErrorStepIndex(null);
         setActiveIndex(i);
@@ -287,6 +292,9 @@ export function ProgressivePropertySections({
         setNextError(null);
         setErrorStepIndex(null);
         const next = Math.min(activeIndex + 1, steps.length - 1);
+        if (activeIndex === 0 && next === 1) {
+            await onSectionAdvance?.(activeIndex, next);
+        }
         setActiveIndex(next);
         setUnlockedUpTo((prev) => Math.max(prev, next));
     }
