@@ -70,3 +70,36 @@ export function toNepaliWords(value: string | number): string {
 
   return num.toLocaleString();
 }
+
+/**
+ * Converts a number to a romanized Nepali/Indian place-value breakdown.
+ * e.g. 23500000 -> "2 Crore 35 Lakh", 23550000 -> "2 Crore 35 Lakh 50 Hajar"
+ */
+export function toNepaliReadableWords(value: string | number): string {
+  const num = Math.floor(typeof value === 'string' ? parseFloat(value.replace(/,/g, '')) : value);
+  if (!num || isNaN(num) || num <= 0) return '';
+
+  const units = [
+    { value: ARAB, label: 'Arab' },
+    { value: KAROD, label: 'Crore' },
+    { value: LAKH, label: 'Lakh' },
+    { value: HAJAR, label: 'Hajar' },
+  ];
+
+  let remaining = num;
+  const parts: string[] = [];
+
+  for (const unit of units) {
+    const count = Math.floor(remaining / unit.value);
+    if (count > 0) {
+      parts.push(`${count} ${unit.label}`);
+      remaining %= unit.value;
+    }
+  }
+
+  if (remaining > 0 && parts.length < 3) {
+    parts.push(remaining.toLocaleString());
+  }
+
+  return parts.join(' ');
+}

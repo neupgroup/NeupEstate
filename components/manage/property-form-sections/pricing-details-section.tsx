@@ -1,31 +1,365 @@
-
 "use client";
 
-import { Control } from "react-hook-form";
-import { CreatePropertyFormValues, CurrencySchema, PricingBasisSchema } from "@/types";
+import { useEffect, useMemo, useState } from "react";
+import { Control, useFormContext } from "react-hook-form";
+import { Check, X } from "lucide-react";
+import { CreatePropertyFormValues, CurrencySchema } from "@/types";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { PriceInput } from "@/components/ui/price-input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
 
 interface PricingDetailsSectionProps {
     control: Control<CreatePropertyFormValues>;
 }
 
+type BasisOption = {
+    value: NonNullable<CreatePropertyFormValues["pricing"]>["basis"];
+    label: string;
+    description: string;
+    frequency?: boolean;
+    unit?: boolean;
+};
+
+const HOUSE_CATEGORIES = new Set(["House", "Bungalow", "Villa", "Multiplex"]);
+const APARTMENT_CATEGORIES = new Set(["Apartment", "Penthouse", "Flat"]);
+const RENTAL_FREQUENCIES = ["Monthly", "Quarterly", "Half-yearly", "Yearly"] as const;
+const LAND_UNITS = ["Aana", "Ropani", "Paisa", "Daam", "Bigha", "Kattha", "Dhur", "Sqft", "Sqm"] as const;
+
+function getBasisOptionsForPair(category?: string, purpose?: string): BasisOption[] {
+    const isSale = purpose === "Sale";
+    const isRental = purpose === "Rent" || purpose === "Lease";
+    const isHouse = category ? HOUSE_CATEGORIES.has(category) : false;
+    const isApartment = category ? APARTMENT_CATEGORIES.has(category) : false;
+    const isLand = category === "Land";
+
+    if (isHouse && isSale) {
+        return [{ value: "house-sale-flat", label: "House sale price", description: "Flat price" }];
+    }
+
+    if (isHouse && isRental) {
+        return [
+            { value: "house-rent", label: "House rental price", description: "Choose monthly, quarterly, yearly, or another rental period.", frequency: true },
+        ];
+    }
+
+    if (isLand && isSale) {
+        return [
+            { value: "land-sale-unit", label: "Land unit sale price", description: `Choose per aana, ropani, paisa, or another unit.`, unit: true },
+            { value: "land-sale-flat", label: "Land flat sale price", description: "Flat price" },
+        ];
+    }
+
+    if (isLand && isRental) {
+        return [
+            { value: "land-rent-unit", label: "Land unit rental price", description: "Choose rental period and land unit.", frequency: true, unit: true },
+            { value: "land-rent-flat", label: "Land flat rental price", description: "Choose monthly, quarterly, yearly, or another rental period.", frequency: true },
+        ];
+    }
+
+    if (isApartment && isSale) {
+        return [{ value: "apartment-sale-flat", label: "Apartment sale price", description: "Flat price" }];
+    }
+
+    if (isApartment && isRental) {
+        return [
+            { value: "apartment-rent", label: "Apartment rental price", description: "Choose monthly, quarterly, yearly, or another rental period.", frequency: true },
+        ];
+    }
+
+    return [
+        { value: "flat-price", label: "Flat price", description: "Total listed price" },
+        { value: "per-month", label: "Monthly price", description: "Per month price" },
+        { value: "per-annum", label: "Annual price", description: "Per annum price" },
+    ];
+}
+
+function getBasisOptions(categories: string[], purposes: string[]): BasisOption[] {
+    const selectedCategories = categories.length ? categories : [undefined];
+    const selectedPurposes = purposes.length ? purposes : [undefined];
+    const options = selectedCategories.flatMap((category) =>
+        selectedPurposes.flatMap((purpose) => getBasisOptionsForPair(category, purpose)),
+    );
+    const seen = new Set<string>();
+    return options.filter((option) => {
+        if (seen.has(option.value || "")) return false;
+        seen.add(option.value || "");
+        return true;
+    });
+}
+
 export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
+    const { watch, setValue } = useFormContext<CreatePropertyFormValues>();
+    const [activeBasisValues, setActiveBasisValues] = useState<string[]>([]);
+    const categories = (watch("categories" as any) as unknown as string[]) || [];
+    const purposes = watch("purposes") || [];
+    const selectedBasis = watch("pricing.basis");
+    const basisNegotiable = watch("pricing.basisNegotiable" as any) as Record<string, boolean> | undefined;
+
+    const basisOptions = useMemo(
+        () => getBasisOptions(categories, purposes as string[]),
+        [categories.join("|"), (purposes as string[]).join("|")],
+    );
+
+    const activeOptions = activeBasisValues
+        .map((value) => basisOptions.find((option) => option.value === value))
+        .filter(Boolean) as BasisOption[];
+    const inactiveOptions = basisOptions.filter((option) => !activeBasisValues.includes(option.value || ""));
+
+    useEffect(() => {
+        if (!basisOptions.some((option) => option.value === selectedBasis)) {
+            setValue("pricing.basis", basisOptions[0].value, { shouldDirty: true, shouldValidate: true });
+        }
+    }, [basisOptions, selectedBasis, setValue]);
+
+    useEffect(() => {
+        setActiveBasisValues((current) =>
+            current.filter((value) => basisOptions.some((option) => option.value === value)),
+        );
+    }, [basisOptions]);
+
+    function selectBasis(option: BasisOption) {
+        if (!option.value) return;
+        setActiveBasisValues((current) =>
+            current.includes(option.value!) ? current : [...current, option.value!],
+        );
+        if (option.frequency) {
+            setValue(`pricing.basisFrequencies.${option.value}` as any, "Monthly", { shouldDirty: true, shouldValidate: true });
+        }
+        if (option.unit) {
+            setValue(`pricing.basisUnits.${option.value}` as any, "Aana", { shouldDirty: true, shouldValidate: true });
+        }
+        if (!selectedBasis || !basisOptions.some((basisOption) => basisOption.value === selectedBasis)) {
+            setValue("pricing.basis", option.value, { shouldDirty: true, shouldValidate: true });
+        }
+    }
+
+    function removeBasis(option: BasisOption) {
+        if (!option.value) return;
+        setActiveBasisValues((current) => current.filter((value) => value !== option.value));
+    }
+
     return (
         <section className="space-y-6">
-            <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <FormField control={control} name="pricing.listed" render={({ field }) => (<FormItem><FormLabel>Listed Price</FormLabel><FormControl><Input type="number" placeholder="e.g., 150000" {...field} /></FormControl><FormMessage /></FormItem>)} />
-                    <FormField control={control} name="pricing.minimum" render={({ field }) => (<FormItem><FormLabel>Minimum Price (Optional)</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>)} />
-                    <FormField control={control} name="pricing.maximum" render={({ field }) => (<FormItem><FormLabel>Maximum Price (Optional)</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>)} />
-                    <FormField control={control} name="pricing.currency" render={({ field }) => (<FormItem><FormLabel>Currency</FormLabel><Select onValueChange={field.onChange} defaultValue={field.value}><FormControl><SelectTrigger><SelectValue placeholder="Select currency" /></SelectTrigger></FormControl><SelectContent>{CurrencySchema.options.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent></Select><FormMessage /></FormItem>)} />
-                    <FormField control={control} name="pricing.basis" render={({ field }) => (<FormItem><FormLabel>Basis</FormLabel><Select onValueChange={field.onChange} value={field.value}><FormControl><SelectTrigger><SelectValue placeholder="Select basis" /></SelectTrigger></FormControl><SelectContent>{PricingBasisSchema.options.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent></Select><FormMessage /></FormItem>)} />
-                    <FormField control={control} name="pricing.negotiable" render={({ field }) => (<FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm col-span-1 md:col-span-3"><FormLabel>Price is Negotiable</FormLabel><FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl></FormItem>)} />
-                    <FormField control={control} name="pricing.options" render={({ field }) => (<FormItem className="col-span-1 md:col-span-3"><FormLabel>Payment Options (comma-separated)</FormLabel><FormControl><Input placeholder="e.g., cash, loan, mortgage" {...field} /></FormControl><FormMessage /></FormItem>)} />
+            <FormField
+                control={control}
+                name="pricing.currency"
+                render={({ field }) => (
+                    <FormItem>
+                        <FormLabel className="text-base font-semibold">Currency</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                                <SelectTrigger className="max-w-xs">
+                                    <SelectValue placeholder="Select currency" />
+                                </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                                {CurrencySchema.options.map((option) => (
+                                    <SelectItem key={option} value={option}>{option}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                        <FormMessage />
+                    </FormItem>
+                )}
+            />
+
+            <FormField
+                control={control}
+                name="pricing.basis"
+                render={() => (
+                    <FormItem>
+                        <FormLabel className="text-base font-semibold">Price Basis</FormLabel>
+                        {inactiveOptions.length > 0 && (
+                            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                                {inactiveOptions.map((option) => {
+                                    return (
+                                        <button
+                                            key={option.value}
+                                            type="button"
+                                            onClick={() => selectBasis(option)}
+                                            className={cn(
+                                                "flex min-h-20 items-start gap-3 rounded-lg border-2 bg-background p-4 text-left transition-all",
+                                                "border-border hover:border-muted-foreground",
+                                            )}
+                                        >
+                                            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 border-muted-foreground" />
+                                            <span className="space-y-1">
+                                                <span className="block text-sm font-semibold">{option.label}</span>
+                                                <span className="block text-xs text-muted-foreground">{option.description}</span>
+                                            </span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        )}
+                        <FormMessage />
+                    </FormItem>
+                )}
+            />
+
+            {activeOptions.length > 0 && (
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                    {activeOptions.map((option, index) => (
+                        <div key={option.value} className="rounded-2xl border bg-card p-4 shadow-sm">
+                            <div className="mb-4 flex items-start justify-between gap-4">
+                                <div>
+                                    <h3 className="text-base font-bold text-primary">{option.label}</h3>
+                                    <p className="text-xs font-medium text-muted-foreground">{option.description}</p>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={() => removeBasis(option)}
+                                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-destructive/10 text-destructive transition-colors hover:bg-destructive/20"
+                                    aria-label={`Remove ${option.label}`}
+                                >
+                                    <X className="h-4 w-4" />
+                                </button>
+                            </div>
+
+                            <div className="rounded-xl bg-muted p-3">
+                                <div className="grid grid-cols-1 gap-4">
+                                    {(option.frequency || option.unit) && (
+                                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                            {option.frequency && (
+                                                <FormField
+                                                    control={control}
+                                                    name={`pricing.basisFrequencies.${option.value}` as any}
+                                                    render={({ field }) => (
+                                                        <FormItem>
+                                                            <FormLabel>Rental Period</FormLabel>
+                                                            <Select onValueChange={field.onChange} defaultValue={field.value || "Monthly"}>
+                                                                <FormControl>
+                                                                    <SelectTrigger>
+                                                                        <SelectValue placeholder="Select period" />
+                                                                    </SelectTrigger>
+                                                                </FormControl>
+                                                                <SelectContent>
+                                                                    {RENTAL_FREQUENCIES.map((frequency) => (
+                                                                        <SelectItem key={frequency} value={frequency}>{frequency}</SelectItem>
+                                                                    ))}
+                                                                </SelectContent>
+                                                            </Select>
+                                                            <FormMessage />
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                            )}
+
+                                            {option.unit && (
+                                                <FormField
+                                                    control={control}
+                                                    name={`pricing.basisUnits.${option.value}` as any}
+                                                    render={({ field }) => (
+                                                        <FormItem>
+                                                            <FormLabel>Pricing Unit</FormLabel>
+                                                            <Select onValueChange={field.onChange} defaultValue={field.value || "Aana"}>
+                                                                <FormControl>
+                                                                    <SelectTrigger>
+                                                                        <SelectValue placeholder="Select unit" />
+                                                                    </SelectTrigger>
+                                                                </FormControl>
+                                                                <SelectContent>
+                                                                    {LAND_UNITS.map((unit) => (
+                                                                        <SelectItem key={unit} value={unit}>{unit}</SelectItem>
+                                                                    ))}
+                                                                </SelectContent>
+                                                            </Select>
+                                                            <FormMessage />
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                            )}
+                                        </div>
+                                    )}
+
+                                    <FormField
+                                        control={control}
+                                        name={`pricing.basisPrices.${option.value}` as any}
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Listing Price</FormLabel>
+                                                <FormControl>
+                                                    <PriceInput
+                                                        placeholder="e.g., 150000"
+                                                        value={field.value?.toString() || ""}
+                                                        onChange={(value) => {
+                                                            const numericValue = Number(value || 0);
+                                                            field.onChange(numericValue);
+                                                            if (index === 0) {
+                                                                setValue("pricing.listed", numericValue, { shouldDirty: true, shouldValidate: true });
+                                                                setValue("pricing.basis", option.value, { shouldDirty: true, shouldValidate: true });
+                                                            }
+                                                        }}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    {basisNegotiable?.[option.value || ""] ? (
+                                        <FormField
+                                            control={control}
+                                            name={`pricing.basisNegotiablePrices.${option.value}` as any}
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel>Negotiable Price</FormLabel>
+                                                    <FormControl>
+                                                        <PriceInput
+                                                            placeholder="e.g., 145000"
+                                                            value={field.value?.toString() || ""}
+                                                            onChange={(value) => field.onChange(Number(value || 0))}
+                                                        />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                    ) : (
+                                        <FormField
+                                            control={control}
+                                            name={`pricing.basisNegotiable.${option.value}` as any}
+                                            render={({ field }) => (
+                                                <FormItem className="flex flex-row items-center justify-between rounded-lg border bg-background p-3 shadow-sm">
+                                                    <FormLabel>Is Negotiable?</FormLabel>
+                                                    <FormControl>
+                                                        <Switch
+                                                            checked={Boolean(field.value)}
+                                                            onCheckedChange={(checked) => {
+                                                                field.onChange(checked);
+                                                                if (checked && option.value) {
+                                                                    setValue(`pricing.basisNegotiablePrices.${option.value}` as any, undefined, { shouldDirty: true });
+                                                                }
+                                                            }}
+                                                        />
+                                                    </FormControl>
+                                                </FormItem>
+                                            )}
+                                        />
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
-            </div>
+            )}
+
+            <FormField
+                control={control}
+                name="pricing.options"
+                render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Payment Options</FormLabel>
+                        <FormControl>
+                            <Input placeholder="e.g., cash, loan, mortgage" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}
+            />
         </section>
     );
 }

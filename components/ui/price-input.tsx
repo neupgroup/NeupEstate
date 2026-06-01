@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Input } from "@/components/ui/input";
-import { formatNepaliComma, toNepaliWords } from "@/lib/nepali-price";
+import { formatNepaliComma, toNepaliReadableWords } from "@/lib/nepali-price";
 import { cn } from "@/lib/utils";
 
 interface PriceInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "value" | "type"> {
@@ -21,7 +21,7 @@ interface PriceInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElemen
  */
 export function PriceInput({ value, onChange, wrapperClassName, className, ...props }: PriceInputProps) {
   const formatted = formatNepaliComma(value);
-  const words = toNepaliWords(value);
+  const words = toNepaliReadableWords(value);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     // Strip everything except digits

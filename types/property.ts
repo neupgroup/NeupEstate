@@ -125,7 +125,43 @@ export const DistanceUnitSchema = z.enum(['km', 'miles', 'meters', 'feet', 'yard
 export const RoadTypeSchema = z.enum(['Blacktop', 'Gravel', 'Dirt']);
 export const RoadConditionSchema = z.enum(['Good', 'Fair', 'Poor']);
 export const RoadAccessibilitySchema = z.enum(['All-Weather', 'Seasonal', 'Unpaved']);
-export const PricingBasisSchema = z.enum(['per-unit-once(land)', 'per-unit-timely(rental)', 'one-time-total(house/apartment)', 'per-unit-once-range(apartments)']);
+export const PricingBasisSchema = z.enum([
+    'house-rent',
+    'land-sale-unit',
+    'land-rent-unit',
+    'land-rent-flat',
+    'apartment-rent',
+    'house-sale-flat',
+    'house-rent-monthly',
+    'house-rent-annual',
+    'land-sale-per-aana',
+    'land-sale-per-ropani',
+    'land-sale-per-sqft',
+    'land-sale-flat',
+    'land-rent-monthly-per-aana',
+    'land-rent-monthly-per-ropani',
+    'land-rent-monthly-per-sqft',
+    'land-rent-monthly-flat',
+    'land-rent-annual-flat',
+    'apartment-sale-flat',
+    'apartment-rent-monthly',
+    'apartment-rent-annual',
+    'flat-price',
+    'per-month',
+    'per-annum',
+    'per-aana',
+    'per-ropani',
+    'per-sqft',
+    'per-month-flat',
+    'per-annum-flat',
+    'per-month-per-aana',
+    'per-month-per-ropani',
+    'per-month-per-sqft',
+    'one-time-total(house/apartment)',
+    'per-unit-once(land)',
+    'per-unit-timely(rental)',
+    'per-unit-once-range(apartments)',
+]);
 export const PricingOptionsSchema = z.enum(['cash', 'loan', 'mortgage', 'instalment']);
 export const EarningsTypeSchema = z.enum(['rental', 'income']);
 
@@ -133,6 +169,10 @@ export const EarningsTypeSchema = z.enum(['rental', 'income']);
 const emptyStringToUndefinedNumber = z.preprocess(
     (val) => (val === "" ? undefined : val),
     z.coerce.number().optional()
+);
+const emptyPriceMapValueToUndefinedNumber = z.preprocess(
+    (val) => (val === "" || (typeof val === "number" && Number.isNaN(val)) ? undefined : val),
+    z.coerce.number().min(0).optional()
 );
 const emptyStringToUndefinedInt = z.preprocess(
     (val) => (val === "" ? undefined : val),
@@ -158,6 +198,11 @@ export const PricingSchema = z.object({
     listed: z.coerce.number({invalid_type_error: "Listed price must be a number"}).min(0),
     negotiable: z.boolean().default(false),
     basis: PricingBasisSchema.optional(),
+    basisPrices: z.record(emptyPriceMapValueToUndefinedNumber).optional(),
+    basisNegotiable: z.record(z.boolean()).optional(),
+    basisNegotiablePrices: z.record(emptyPriceMapValueToUndefinedNumber).optional(),
+    basisFrequencies: z.record(z.string()).optional(),
+    basisUnits: z.record(z.string()).optional(),
     options: z.string().optional(), // Comma-separated string from form
 });
 export type Pricing = z.infer<typeof PricingSchema>;

@@ -74,14 +74,6 @@ export default function CreatePropertyPage() {
         },
     });
 
-    const primaryPurpose = form.watch('purposes')?.[0];
-
-    useEffect(() => {
-        if (primaryPurpose === 'Sale') {
-            form.setValue('pricing.basis', 'one-time-total(house/apartment)');
-        }
-    }, [primaryPurpose, form]);
-
     async function onSubmit(values: CreatePropertyFormValues) {
         startTransition(async () => {
             const result = await createPropertyAction(values);
