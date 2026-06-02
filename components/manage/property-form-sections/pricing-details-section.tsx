@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Control, useFormContext } from "react-hook-form";
 import { Check, X } from "lucide-react";
 import { CreatePropertyFormValues, CurrencySchema } from "@/types";
@@ -32,6 +32,10 @@ const PRICE_DISPLAY_OPTIONS = [
     { value: "price-on-call", label: "Price on call", description: "Hide prices and ask buyers to call." },
     { value: "offer-yours-first", label: "Offer yours first", description: "Hide prices and ask buyers to make an offer." },
 ] as const;
+
+function hasOwnKey(record: Record<string, unknown> | undefined, key: string): boolean {
+    return Object.prototype.hasOwnProperty.call(record ?? {}, key);
+}
 
 function getBasisOptionsForPair(category?: string, purpose?: string): BasisOption[] {
     const isSale = purpose === "Sale";
@@ -97,6 +101,7 @@ function getBasisOptions(categories: string[], purposes: string[]): BasisOption[
 
 export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
     const { watch, setValue, unregister } = useFormContext<CreatePropertyFormValues>();
+    const [manuallyExpandedBasis, setManuallyExpandedBasis] = useState<string[]>([]);
     const categories = (watch("categories" as any) as unknown as string[]) || [];
     const purposes = watch("purposes") || [];
     const selectedBasis = watch("pricing.basis");
@@ -125,12 +130,22 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
         return false;
     }, [basisOptions, basisNegotiablePrices, basisPrices, listedPrice]);
 
-    const activeOption = useMemo(
-        () => basisOptions.find((option) => option.value === selectedBasis) || null,
-        [basisOptions, selectedBasis],
-    );
-    const activeOptions = activeOption ? [activeOption] : [];
-    const inactiveOptions = basisOptions.filter((option) => option.value !== selectedBasis);
+    const basisFrequencies = watch("pricing.basisFrequencies" as any) as Record<string, string | undefined> | undefined;
+    const basisUnits = watch("pricing.basisUnits" as any) as Record<string, string | undefined> | undefined;
+
+    function hasPersistedBasisData(value: string): boolean {
+        return hasOwnKey(basisPrices as Record<string, unknown> | undefined, value)
+            || hasOwnKey(basisNegotiable as Record<string, unknown> | undefined, value)
+            || hasOwnKey(basisNegotiablePrices as Record<string, unknown> | undefined, value)
+            || hasOwnKey(basisFrequencies as Record<string, unknown> | undefined, value)
+            || hasOwnKey(basisUnits as Record<string, unknown> | undefined, value);
+    }
+
+    const activeOptions = basisOptions.filter((option) => {
+        if (!option.value) return false;
+        return hasPersistedBasisData(option.value) || manuallyExpandedBasis.includes(option.value);
+    });
+    const inactiveOptions = basisOptions.filter((option) => !activeOptions.some((activeOption) => activeOption.value === option.value));
 
     useEffect(() => {
         if (selectedBasis && !basisOptions.some((option) => option.value === selectedBasis)) {
@@ -138,8 +153,15 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
         }
     }, [basisOptions, selectedBasis, setValue]);
 
+    useEffect(() => {
+        setManuallyExpandedBasis((current) =>
+            current.filter((value) => basisOptions.some((option) => option.value === value)),
+        );
+    }, [basisOptions]);
+
     function selectBasis(option: BasisOption) {
         if (!option.value) return;
+        setManuallyExpandedBasis((current) => current.includes(option.value!) ? current : [...current, option.value!]);
         if (option.frequency) {
             setValue(`pricing.basisFrequencies.${option.value}` as any, "Monthly", { shouldDirty: true, shouldValidate: true });
         }
@@ -156,6 +178,7 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
         unregister(`pricing.basisNegotiablePrices.${option.value}` as any);
         unregister(`pricing.basisFrequencies.${option.value}` as any);
         unregister(`pricing.basisUnits.${option.value}` as any);
+        setManuallyExpandedBasis((current) => current.filter((value) => value !== option.value));
 
         if (selectedBasis === option.value) {
             setValue("pricing.basis", undefined as any, { shouldDirty: true, shouldValidate: true });
