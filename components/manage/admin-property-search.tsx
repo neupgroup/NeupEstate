@@ -11,6 +11,7 @@ import { PriceInput } from '@/components/ui/price-input';
 // ─── Quick filter definitions ─────────────────────────────────────────────────
 
 const QUICK_FILTERS: { label: string; params: Record<string, string> }[] = [
+    { label: "Drafts",          params: { status: "drafts" } },
     { label: "Awaiting Review", params: { status: "pending" } },
     { label: "Active",          params: { status: "approved" } },
     { label: "Owner Listings",  params: { owner: "1" } },
@@ -208,6 +209,7 @@ export function AdminPropertySearch() {
                                 className="w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                             >
                                 <option value="">Any</option>
+                                <option value="drafts">Drafts</option>
                                 <option value="approved">Active</option>
                                 <option value="pending">Pending</option>
                             </select>

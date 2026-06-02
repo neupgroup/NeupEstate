@@ -14,6 +14,16 @@ export interface SavedPropertyEntry {
   savedAt: string;
 }
 
+export interface PropertyDraftSummary {
+  id: string;
+  propertyId?: string;
+  title: string;
+  location?: string;
+  category?: string;
+  status: 'pending_creation' | 'pending_edits' | 'pending';
+  modifiedOn: string;
+}
+
 export type BridgePropertyField = keyof Property;
 
 export interface BridgePropertyQuery {
@@ -265,7 +275,7 @@ export async function getProperties(opts: { includeInactive?: boolean } = {}): P
   } catch (e) { await logProblem(e, 'getProperties'); return []; }
 }
 
-export async function getPaginatedProperties(opts: { page?: number; limit?: number; filters?: PropertyFilters; includeInactive?: boolean; ownerAccountId?: string } = {}): Promise<{ properties: Property[]; totalCount: number }> {
+export async function getPaginatedProperties(opts: { page?: number; limit?: number; filters?: PropertyFilters; includeInactive?: boolean; ownerAccountId?: string; excludeArchived?: boolean } = {}): Promise<{ properties: Property[]; totalCount: number }> {
   try {
     const page = Math.max(1, opts.page ?? 1);
     const limit = Math.max(1, opts.limit ?? 20);
@@ -273,6 +283,9 @@ export async function getPaginatedProperties(opts: { page?: number; limit?: numb
     const where: any = {};
 
     if (!opts.includeInactive) where.status = PropertyStatus.ACTIVE;
+    if (opts.excludeArchived && !filters.status) {
+      where.status = { not: PropertyStatus.ARCHIVED };
+    }
     if (filters.id) where.id = filters.id;
     if (filters.status) where.status = mapStatusToEnum(filters.status);
     if (filters.sourceUrl) where.fetchHistory = { some: { sourceUrl: filters.sourceUrl } };
@@ -290,6 +303,60 @@ export async function getPaginatedProperties(opts: { page?: number; limit?: numb
     ]);
     return { properties: records.map(mapRecord), totalCount };
   } catch (e) { await logProblem(e, 'getPaginatedProperties'); return { properties: [], totalCount: 0 }; }
+}
+
+export async function getPropertyDrafts(accountId: string): Promise<PropertyDraftSummary[]> {
+  try {
+    const drafts = await prisma.propertyChange.findMany({
+      where: {
+        accountId,
+        status: {
+          in: ['pending_creation', 'pending_edits', 'pending'],
+        },
+      },
+      orderBy: { modifiedOn: 'desc' },
+      include: {
+        property: {
+          select: {
+            id: true,
+            title: true,
+            locationText: true,
+            type: true,
+          },
+        },
+      },
+    });
+
+    return drafts.map((draft) => {
+      const data = (draft.data && typeof draft.data === 'object' && !Array.isArray(draft.data))
+        ? draft.data as Record<string, any>
+        : {};
+      const purposes = Array.isArray(data.purposes) ? data.purposes.filter(Boolean) : [];
+      const categories = Array.isArray(data.categories) ? data.categories.filter(Boolean) : [];
+      const types = Array.isArray(data.types) ? data.types.filter(Boolean) : [];
+      const locationParts = data.structuredLocation && typeof data.structuredLocation === 'object'
+        ? [
+            data.structuredLocation.street,
+            data.structuredLocation.municipality,
+            data.structuredLocation.district,
+            data.structuredLocation.province,
+          ].filter(Boolean)
+        : [];
+
+      return {
+        id: draft.id,
+        propertyId: draft.propertyId ?? undefined,
+        title: String(data.title || draft.property?.title || 'Unfinished property draft'),
+        location: String(data.location || locationParts.join(', ') || draft.property?.locationText || ''),
+        category: String(categories[0] || types[0] || (draft.property?.type ? mapTypeFromEnum(draft.property.type) : '') || purposes[0] || ''),
+        status: draft.status as PropertyDraftSummary['status'],
+        modifiedOn: draft.modifiedOn.toISOString(),
+      };
+    });
+  } catch (e) {
+    await logProblem(e, `getPropertyDrafts ${accountId}`);
+    return [];
+  }
 }
 
 export async function getPropertyById(id: string, opts: { includeInactive?: boolean } = {}): Promise<Property | null> {
