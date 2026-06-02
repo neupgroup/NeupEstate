@@ -38,11 +38,11 @@ export function ManageSidebar(props: Props) {
 
   return (
     <aside className="hidden md:flex sticky top-16 self-start h-[calc(100vh-4rem)] flex-col border-r border-border bg-background">
-      <nav className="flex min-h-0 flex-1 flex-col space-y-1 overflow-y-auto p-4">
+      <nav className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto py-4">
         {manageNav.map((item, index) => {
           if (item.type === "heading") {
             return (
-              <h3 key={`${item.label}-${index}`} className="pt-4 pb-1 px-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">
+              <h3 key={`${item.label}-${index}`} className="mt-3 px-4 pb-1 text-xs font-semibold uppercase text-muted-foreground tracking-wider first:mt-0">
                 {item.label}
               </h3>
             );
@@ -54,12 +54,12 @@ export function ManageSidebar(props: Props) {
           const isActive = activeHref === item.href;
 
           return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
                 buttonVariants({ variant: "ghost" }),
-                "w-full justify-start transition-[background-color,color] duration-300 ease-in-out hover:bg-primary/5 hover:text-foreground",
+                "w-full justify-start px-4 py-2 transition-[background-color,color] duration-300 ease-in-out hover:bg-primary/7 hover:text-foreground",
                 isActive
                   ? "bg-primary/15 text-primary hover:bg-primary/20 hover:text-primary font-semibold"
                   : "text-foreground/80"
