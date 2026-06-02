@@ -185,6 +185,15 @@ const optionalPriceMapSchema = z.preprocess((val) => {
     );
     return Object.keys(cleaned).length > 0 ? cleaned : undefined;
 }, z.record(z.coerce.number().min(0)).optional());
+const optionalBooleanMapSchema = z.preprocess((val) => {
+    if (!val || typeof val !== "object" || Array.isArray(val)) return undefined;
+    const cleaned = Object.fromEntries(
+        Object.entries(val as Record<string, unknown>).filter(([, entry]) =>
+            entry !== undefined && entry !== ""
+        )
+    );
+    return Object.keys(cleaned).length > 0 ? cleaned : undefined;
+}, z.record(z.boolean()).optional());
 const optionalStringMapSchema = z.preprocess((val) => {
     if (!val || typeof val !== "object" || Array.isArray(val)) return undefined;
     const cleaned = Object.fromEntries(
@@ -220,7 +229,7 @@ export const PricingSchema = z.object({
     negotiable: z.boolean().default(false),
     basis: PricingBasisSchema.optional(),
     basisPrices: optionalPriceMapSchema,
-    basisNegotiable: z.record(z.boolean()).optional(),
+    basisNegotiable: optionalBooleanMapSchema,
     basisNegotiablePrices: optionalPriceMapSchema,
     basisFrequencies: optionalStringMapSchema,
     basisUnits: optionalStringMapSchema,

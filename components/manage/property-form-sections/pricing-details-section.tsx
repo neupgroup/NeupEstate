@@ -101,6 +101,7 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
     const purposes = watch("purposes") || [];
     const selectedBasis = watch("pricing.basis");
     const priceDisplayMode = watch("pricing.priceDisplayMode") || "show-price";
+    const listedPrice = watch("pricing.listed");
     const basisNegotiable = watch("pricing.basisNegotiable" as any) as Record<string, boolean> | undefined;
     const basisPrices = watch("pricing.basisPrices" as any) as Record<string, number | undefined> | undefined;
     const basisNegotiablePrices = watch("pricing.basisNegotiablePrices" as any) as Record<string, number | undefined> | undefined;
@@ -109,6 +110,19 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
         () => getBasisOptions(categories, purposes as string[]),
         [categories.join("|"), (purposes as string[]).join("|")],
     );
+
+    const hasAnyPrice = useMemo(() => {
+        const directPrice = Number(listedPrice ?? 0);
+        if (directPrice > 0) return true;
+
+        for (const option of basisOptions) {
+            const basisPrice = Number(basisPrices?.[option.value] ?? 0);
+            const negotiablePrice = Number(basisNegotiablePrices?.[option.value] ?? 0);
+            if (basisPrice > 0 || negotiablePrice > 0) return true;
+        }
+
+        return false;
+    }, [basisOptions, basisNegotiablePrices, basisPrices, listedPrice]);
 
     const activeOption = useMemo(
         () => basisOptions.find((option) => option.value === selectedBasis) || null,
@@ -217,6 +231,11 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
                         {priceDisplayMode !== "show-price" && (
                             <p className="text-xs text-muted-foreground">
                                 Public pages will show "{PRICE_DISPLAY_OPTIONS.find((option) => option.value === priceDisplayMode)?.label}" instead of any entered price.
+                            </p>
+                        )}
+                        {priceDisplayMode === "show-price" && !hasAnyPrice && (
+                            <p className="text-xs text-destructive">
+                                Show price requires at least one price.
                             </p>
                         )}
                         <FormMessage />

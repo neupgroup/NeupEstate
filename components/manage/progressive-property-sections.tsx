@@ -44,6 +44,7 @@ const FIELD_LABELS: Record<string, string> = {
     "pricing.listed": "Listing price",
     "pricing.basisPrices": "Listing price",
     "pricing.basisNegotiablePrices": "Negotiable price",
+    "pricing.basisNegotiable": "Negotiable option",
     "pricing.basisFrequencies": "Rental period",
     "pricing.basisUnits": "Pricing unit",
     structuredLocation: "Location details",
@@ -83,6 +84,10 @@ function formatFieldError(path: string, message: string): string {
 
     if (lowerMessage.includes("expected number") || lowerMessage.includes("received nan")) {
         return `❌ ${label} must be a valid number.`;
+    }
+
+    if (lowerMessage.includes("expected boolean") || lowerMessage.includes("received null")) {
+        return `❌ ${label} must be set to yes or no.`;
     }
 
     return `❌ ${label}: ${message}`;

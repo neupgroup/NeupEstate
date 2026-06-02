@@ -49,6 +49,73 @@ export default function EditPropertyPage() {
 
     const { rule: agencyRule } = useAgencyCustomization(accountId, 'property');
 
+    function getSectionForErrorPath(path: string): string {
+        if (path.startsWith("pricing.")) return "pricing";
+        if (path.startsWith("structuredLocation")) return "location";
+        if (path.startsWith("owners")) return "owners";
+        if (path.startsWith("images")) return "photos";
+        if (path.startsWith("documents")) return "documents";
+        if (path === "title" || path === "description") return "copy";
+        if (path.startsWith("amenities")) return "ammenities";
+        if (path.startsWith("area") || path.startsWith("landDetails") || path.startsWith("plots") || path.startsWith("apartmentUnits")) return "specifics";
+        if (path === "bedrooms" || path === "bathrooms" || path === "kitchens" || path === "diningRooms" || path === "livingRooms" || path === "carParkingSpots" || path === "bikeParkingSpots") return "space";
+        if (path === "purposes" || path === "category" || path === "categories" || path === "type" || path === "types") return "basic";
+        return "basic";
+    }
+
+    function focusFirstErrorSection(errors: Record<string, any>) {
+        const preferredOrder = [
+            "purposes",
+            "category",
+            "categories",
+            "type",
+            "types",
+            "area",
+            "areaUnit",
+            "landDetails",
+            "plots",
+            "apartmentUnits",
+            "bedrooms",
+            "bathrooms",
+            "kitchens",
+            "diningRooms",
+            "livingRooms",
+            "carParkingSpots",
+            "bikeParkingSpots",
+            "amenities",
+            "pricing",
+            "structuredLocation",
+            "owners",
+            "images",
+            "documents",
+            "title",
+            "description",
+        ];
+
+        const flatten = (obj: any, prefix = ""): string[] => {
+            if (!obj || typeof obj !== "object") return [];
+            const paths: string[] = [];
+            for (const key of Object.keys(obj)) {
+                const next = prefix ? `${prefix}.${key}` : key;
+                const value = obj[key];
+                if (value && typeof value === "object" && !("message" in value)) {
+                    paths.push(...flatten(value, next));
+                } else if (value) {
+                    paths.push(next);
+                }
+            }
+            return paths;
+        };
+
+        const errorPaths = flatten(errors);
+        const firstPath = preferredOrder.find((field) => errorPaths.some((path) => path === field || path.startsWith(`${field}.`))) || errorPaths[0];
+        if (!firstPath) return;
+        const section = getSectionForErrorPath(firstPath);
+        const params = new URLSearchParams(window.location.search);
+        params.set("section", section);
+        router.replace(`${window.location.pathname}?${params.toString()}`, { scroll: false });
+    }
+
     const form = useForm<UpdatePropertyFormValues>({
         resolver: zodResolver(UpdatePropertySchema),
     });
@@ -193,6 +260,15 @@ export default function EditPropertyPage() {
         });
     }
 
+    function onSubmitInvalid(errors: Record<string, any>) {
+        focusFirstErrorSection(errors);
+        toast({
+            variant: 'destructive',
+            title: 'Please fix the highlighted errors',
+            description: 'Some required fields still need attention before publishing.',
+        });
+    }
+
     async function handleSectionAdvance(fromIndex: number, toIndex: number) {
         if (!property) return;
 
@@ -298,7 +374,7 @@ export default function EditPropertyPage() {
     return (
         <div className="space-y-6 max-w-6xl mx-auto">
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <form onSubmit={form.handleSubmit(onSubmit, onSubmitInvalid)} className="space-y-6">
                     <Card>
                         <CardHeader>
                             <div className="flex flex-col sm:flex-row justify-between sm:items-start gap-4">

@@ -630,8 +630,8 @@ export async function createPropertyAction(
     const resolvedPrice = firstPositivePrice(validatedData.pricing);
     const pricing = cleanPricing(validatedData.pricing);
 
-    if (priceDisplayMode !== 'offer-yours-first' && resolvedPrice <= 0) {
-      return { success: false, error: "Add at least one price or choose Offer yours first.", propertyId: null };
+    if (priceDisplayMode === 'show-price' && resolvedPrice <= 0) {
+      return { success: false, error: "Show price requires at least one price.", propertyId: null };
     }
 
     const locationString = formatLocationString(validatedData.structuredLocation);
@@ -691,8 +691,8 @@ export async function updatePropertyAction(
     const resolvedPrice = firstPositivePrice(validatedData.pricing);
     const pricing = cleanPricing(validatedData.pricing);
 
-    if (priceDisplayMode !== 'offer-yours-first' && resolvedPrice <= 0) {
-        return { success: false, error: "Add at least one price or choose Offer yours first." };
+    if (priceDisplayMode === 'show-price' && resolvedPrice <= 0) {
+        return { success: false, error: "Show price requires at least one price." };
     }
     
     const locationString = formatLocationString(validatedData.structuredLocation);
