@@ -229,6 +229,7 @@ export function ProgressivePropertySections({
     }
 
     async function goTo(i: number) {
+        if (i === activeIndex) return;
         if (i > activeIndex) {
             const isValid = await form.trigger(steps[activeIndex].fields as any, { shouldFocus: true });
             if (!isValid) {
@@ -255,9 +256,7 @@ export function ProgressivePropertySections({
                 }
             }
         }
-        if (activeIndex === 0 && i === 1) {
-            await onSectionAdvance?.(activeIndex, i);
-        }
+        await onSectionAdvance?.(activeIndex, i);
         setNextError(null);
         setErrorStepIndex(null);
         setActiveIndex(i);
@@ -292,17 +291,18 @@ export function ProgressivePropertySections({
         setNextError(null);
         setErrorStepIndex(null);
         const next = Math.min(activeIndex + 1, steps.length - 1);
-        if (activeIndex === 0 && next === 1) {
-            await onSectionAdvance?.(activeIndex, next);
-        }
+        await onSectionAdvance?.(activeIndex, next);
         setActiveIndex(next);
         setUnlockedUpTo((prev) => Math.max(prev, next));
     }
 
-    function handlePrev() {
+    async function handlePrev() {
         setNextError(null);
         setErrorStepIndex(null);
-        setActiveIndex((i) => Math.max(i - 1, 0));
+        const prev = Math.max(activeIndex - 1, 0);
+        await onSectionAdvance?.(activeIndex, prev);
+        setActiveIndex(prev);
+        setUnlockedUpTo((i) => Math.max(i, prev));
     }
 
     const isLastStep = activeIndex === steps.length - 1;

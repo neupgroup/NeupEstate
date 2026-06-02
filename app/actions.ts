@@ -421,6 +421,27 @@ const EXPIRED_PROPERTY_CHANGE_STATUSES = new Set<PropertyChangeDraftStatus>([
   'expired_discarded',
 ]);
 
+function isPlainObject(value: unknown): value is Record<string, any> {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
+function deepMergeJson<T>(base: T, patch: any): T {
+  if (!isPlainObject(base) || !isPlainObject(patch)) {
+    return (patch === undefined ? base : patch) as T;
+  }
+
+  const merged: Record<string, any> = { ...base };
+  for (const [key, value] of Object.entries(patch)) {
+    if (value === undefined) continue;
+    const current = merged[key];
+    merged[key] = isPlainObject(current) && isPlainObject(value)
+      ? deepMergeJson(current, value)
+      : value;
+  }
+
+  return merged as T;
+}
+
 export async function savePropertyChangeDraftAction(input: {
   changeId?: string | null;
   propertyId?: string | null;
@@ -437,7 +458,12 @@ export async function savePropertyChangeDraftAction(input: {
       propertyId: input.propertyId || null,
       accountId: actorId,
       status: input.status,
-      data: input.data,
+      data: input.changeId
+        ? deepMergeJson(
+            (await prisma.propertyChange.findUnique({ where: { id: input.changeId } }))?.data ?? {},
+            input.data,
+          )
+        : input.data,
       modifiedOn: new Date(),
     };
 
@@ -492,6 +518,89 @@ export async function getPropertyChangeDraftAction(changeId: string): Promise<{
   } catch (e: any) {
     await logProblem(e, `getPropertyChangeDraftAction ${changeId}`);
     return { success: false, error: e.message || 'Failed to load property draft.' };
+  }
+}
+
+function mapPropertyToCreateFormValues(property: Property): Partial<CreatePropertyFormValues> {
+  return {
+    title: property.title,
+    description: property.description,
+    bedrooms: property.bedrooms,
+    bathrooms: property.bathrooms,
+    kitchens: property.kitchens,
+    diningRooms: property.diningRooms,
+    livingRooms: property.livingRooms,
+    carParkingSpots: property.carParkingSpots,
+    bikeParkingSpots: property.bikeParkingSpots,
+    area: property.area ? { sqft: property.area } : undefined,
+    areaUnit: property.areaUnit,
+    facing: property.facing,
+    buildStart: property.buildStart,
+    buildCompleted: property.buildCompleted,
+    purpose: property.purpose,
+    purposes: property.purposes?.length ? property.purposes : [property.purpose],
+    categories: property.category ? [property.category] : [],
+    types: property.type ? [property.type] : [],
+    amenities: Array.isArray(property.amenities) ? property.amenities.join(', ') : '',
+    images: Array.isArray(property.images) ? property.images : [],
+    listingAgent: property.listingAgent || '',
+    isOwnerListing: property.isOwnerListing || false,
+    floors: property.floors ?? undefined,
+    onFloor: property.onFloor ?? undefined,
+    roadAccess: property.roadAccess ?? undefined,
+    landDetails: property.landDetails ? {
+      ...property.landDetails,
+      area: property.landDetails.area != null
+        ? (typeof property.landDetails.area === 'number'
+          ? { sqft: property.landDetails.area }
+          : property.landDetails.area)
+        : undefined,
+    } : {},
+    plots: (property.plots ?? []).map((plot: any) => ({
+      ...plot,
+      area: plot.area != null
+        ? (typeof plot.area === 'number' ? { sqft: plot.area } : plot.area)
+        : undefined,
+    })),
+    apartmentDetails: property.apartmentDetails || {},
+    apartmentUnits: (property.apartmentUnits ?? []).map((unit: any) => ({
+      ...unit,
+      area: unit.area != null
+        ? (typeof unit.area === 'number' ? { sqft: unit.area } : unit.area)
+        : undefined,
+    })),
+    structuredLocation: property.structuredLocation || {},
+    pricing: property.pricing ? {
+      ...property.pricing,
+      options: Array.isArray(property.pricing.options) ? property.pricing.options.join(', ') : '',
+    } : { listed: property.price },
+    details: property.details || {},
+    roadAccessDetails: property.roadAccessDetails || {},
+    distancing: property.distancing || {},
+    earnings: property.earnings || {},
+    owners: property.owners || [],
+    documents: property.documents || [],
+  };
+}
+
+export async function getPropertyCreateDraftAction(propertyId: string): Promise<{
+  success: boolean;
+  data?: Partial<CreatePropertyFormValues>;
+  error?: string;
+}> {
+  try {
+    const property = await getPropertyById(propertyId, { includeInactive: true });
+    if (!property) {
+      return { success: false, error: 'Property not found.' };
+    }
+
+    return {
+      success: true,
+      data: mapPropertyToCreateFormValues(property),
+    };
+  } catch (e: any) {
+    await logProblem(e, `getPropertyCreateDraftAction ${propertyId}`);
+    return { success: false, error: e.message || 'Failed to load property data.' };
   }
 }
 

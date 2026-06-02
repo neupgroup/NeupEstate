@@ -194,7 +194,7 @@ export default function EditPropertyPage() {
     }
 
     async function handleSectionAdvance(fromIndex: number, toIndex: number) {
-        if (!property || fromIndex !== 0 || toIndex !== 1) return;
+        if (!property) return;
 
         const values = form.getValues();
         const data = property.isApproved
