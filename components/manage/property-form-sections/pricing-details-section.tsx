@@ -380,9 +380,6 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
                                                                     setValue(`pricing.basisNegotiable.${option.value}` as any, false, { shouldDirty: true, shouldValidate: true });
                                                                     return;
                                                                 }
-                                                                if (option.value && numericValue === basisPrices?.[option.value]) {
-                                                                    setValue(`pricing.basisNegotiable.${option.value}` as any, false, { shouldDirty: true, shouldValidate: true });
-                                                                }
                                                             }}
                                                         />
                                                     </FormControl>
