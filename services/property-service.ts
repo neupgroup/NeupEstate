@@ -20,7 +20,7 @@ export interface PropertyDraftSummary {
   title: string;
   location?: string;
   category?: string;
-  status: 'pending_creation' | 'pending_edits' | 'pending';
+  status: 'creating' | 'editing' | 'deleting';
   modifiedOn: string;
 }
 
@@ -310,8 +310,9 @@ export async function getPropertyDrafts(accountId: string): Promise<PropertyDraf
     const drafts = await prisma.propertyChange.findMany({
       where: {
         accountId,
+        isApproved: null,
         status: {
-          in: ['pending_creation', 'pending_edits', 'pending'],
+          in: ['creating', 'editing', 'deleting'],
         },
       },
       orderBy: { modifiedOn: 'desc' },

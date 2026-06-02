@@ -297,10 +297,11 @@ model PropertyDocument {
 
 model PropertyChange {
   id         String   @id @default(cuid())
-  propertyId String?
+  propertyId String?  @map("property_id")
   accountId  String?  @map("account_id")
   data       Json
   status     String
+  isApproved Boolean? @map("is_approved")
   createdOn  DateTime @default(now())
   modifiedOn DateTime @default(now())
 

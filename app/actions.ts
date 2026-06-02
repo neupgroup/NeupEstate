@@ -408,18 +408,9 @@ function cleanPricing(pricing?: CreatePropertyFormValues['pricing']) {
 }
 
 type PropertyChangeDraftStatus =
-  | 'pending_creation'
-  | 'pending_edits'
-  | 'pending'
-  | 'expired_approved'
-  | 'expired_rejected'
-  | 'expired_discarded';
-
-const EXPIRED_PROPERTY_CHANGE_STATUSES = new Set<PropertyChangeDraftStatus>([
-  'expired_approved',
-  'expired_rejected',
-  'expired_discarded',
-]);
+  | 'creating'
+  | 'editing'
+  | 'deleting';
 
 function isPlainObject(value: unknown): value is Record<string, any> {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
@@ -451,20 +442,25 @@ export async function savePropertyChangeDraftAction(input: {
   propertyId?: string | null;
   data: Record<string, any>;
   status: PropertyChangeDraftStatus;
+  isApproved?: boolean | null;
 }): Promise<{ success: boolean; changeId?: string; error?: string }> {
   try {
     await requirePermission(
       input.propertyId ? PERMISSIONS.manage.propertySelfUpdate : PERMISSIONS.manage.propertySelfCreate,
     );
     const actorId = await requireIdentity();
+    const existingDraft = input.changeId
+      ? await prisma.propertyChange.findUnique({ where: { id: input.changeId } })
+      : null;
 
     const data = {
       propertyId: input.propertyId || null,
       accountId: actorId,
       status: input.status,
+      isApproved: input.isApproved ?? existingDraft?.isApproved ?? null,
       data: input.changeId
         ? deepMergeJson(
-            (await prisma.propertyChange.findUnique({ where: { id: input.changeId } }))?.data ?? {},
+            existingDraft?.data ?? {},
             input.data,
           )
         : input.data,
@@ -489,6 +485,7 @@ export async function getPropertyChangeDraftAction(changeId: string): Promise<{
   success: boolean;
   data?: Record<string, any>;
   status?: string;
+  isApproved?: boolean | null;
   propertyId?: string | null;
   error?: string;
 }> {
@@ -503,12 +500,12 @@ export async function getPropertyChangeDraftAction(changeId: string): Promise<{
       return { success: false, error: 'You do not have access to this request.' };
     }
 
-    const status = draft.status as PropertyChangeDraftStatus;
-    if (EXPIRED_PROPERTY_CHANGE_STATUSES.has(status)) {
+    if (draft.isApproved !== null) {
       return {
         success: true,
         data: undefined,
         status: draft.status,
+        isApproved: draft.isApproved,
         propertyId: draft.propertyId,
       };
     }
@@ -517,6 +514,7 @@ export async function getPropertyChangeDraftAction(changeId: string): Promise<{
       success: true,
       data: draft.data as Record<string, any>,
       status: draft.status,
+      isApproved: draft.isApproved,
       propertyId: draft.propertyId,
     };
   } catch (e: any) {

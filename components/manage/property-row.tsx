@@ -96,7 +96,7 @@ export function AdminPropertyDraftRow({
         title: string;
         location?: string;
         category?: string;
-        status: 'pending_creation' | 'pending_edits' | 'pending';
+        status: 'creating' | 'editing' | 'deleting';
         modifiedOn: string;
     };
 }) {
@@ -108,7 +108,11 @@ export function AdminPropertyDraftRow({
     const href = draft.propertyId
         ? `/manage/properties/${draft.propertyId}/edit?request=${draft.id}`
         : `/manage/properties/create?request=${draft.id}`;
-    const badgeLabel = draft.status === 'pending_creation' ? 'Incomplete' : 'Unpublished Changes';
+    const badgeLabel = draft.status === 'creating'
+        ? 'Incomplete'
+        : draft.status === 'deleting'
+            ? 'Pending Deletion'
+            : 'Unpublished Changes';
 
     return (
         <ClientLink

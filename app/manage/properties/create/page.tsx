@@ -146,15 +146,16 @@ export default function CreatePropertyPage() {
     useEffect(() => {
         const draftId = searchParams.get('request') || searchParams.get('changes');
         if (!draftId) return;
+        const resolvedDraftId = draftId;
 
         let cancelled = false;
 
         async function loadDraftAndProperty() {
-            const draftResult = await getPropertyChangeDraftAction(draftId);
+            const draftResult = await getPropertyChangeDraftAction(resolvedDraftId);
             if (cancelled) return;
 
             const shouldLoadTable = !draftResult.success || !draftResult.data || Object.keys(draftResult.data).length === 0;
-            const tableResult = shouldLoadTable ? await getPropertyCreateDraftAction(draftId) : null;
+            const tableResult = shouldLoadTable ? await getPropertyCreateDraftAction(resolvedDraftId) : null;
             if (cancelled) return;
 
             const mergedValues = {
@@ -165,13 +166,13 @@ export default function CreatePropertyPage() {
 
             if (draftResult.success && draftResult.data) {
                 form.reset(mergedValues);
-                setChangeId(draftId);
+                setChangeId(resolvedDraftId);
                 return;
             }
 
             if (tableResult?.success && tableResult.data) {
                 form.reset(mergedValues);
-                setChangeId(draftId);
+                setChangeId(resolvedDraftId);
             }
         }
 
@@ -221,7 +222,7 @@ export default function CreatePropertyPage() {
     async function handleSectionAdvance(fromIndex: number, toIndex: number) {
         const result = await savePropertyChangeDraftAction({
             changeId,
-            status: 'pending_creation',
+            status: 'creating',
             data: form.getValues() as Record<string, any>,
         });
 
