@@ -508,10 +508,24 @@ model CrmClient {
 
   links     ClientLink[]
   leads     ClientLead[]
+  contacts  ClientContact[]
   propertyOwners PropertyOwner[]
 
   @@index([lastName])
   @@map("client")
+}
+
+model ClientContact {
+  id       String    @id @default(cuid())
+  clientId String    @map("client_id")
+  type     String
+  value    String
+
+  client   CrmClient @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@index([clientId])
+  @@index([type])
+  @@map("client_contact")
 }
 
 model ClientLink {
