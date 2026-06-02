@@ -9,12 +9,7 @@ import { Menu, X, User, BadgeCheck } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNeupUser, getInitials } from "@/lib/neup-user-context";
 import { getAccountDisplayName, getAccountHandle } from "@/lib/account-display";
-import {
-  Home, Users, Settings, UserCog,
-  LayoutDashboard, LineChart, Package, MessageSquareHeart, FileQuestion, Landmark, CalendarCheck,
-  Banknote, HelpCircle, Contact, FileSearch,
-  Lightbulb, UserCheck, Eye, Bell, LifeBuoy, Bookmark, Star, Flame, BarChart2,
-} from "lucide-react";
+import { manageNav, getLongestMatchingManageNavHref } from "@/lib/manage-nav";
 
 // ─── Public nav links ─────────────────────────────────────────────────────────
 
@@ -23,50 +18,6 @@ const navLinks = [
   { href: "/agencies", label: "Agencies" },
   { href: "/agents", label: "Agents" },
   { href: "/mortgage/request", label: "Mortgage" },
-];
-
-// ─── Manage sidebar nav (mirrors app/manage/layout.tsx) ───────────────────────
-
-type ManageNavItem =
-  | { type: "link"; href: string; label: string; icon: React.ElementType }
-  | { type: "heading"; label: string };
-
-const manageNav: ManageNavItem[] = [
-  { type: "link",    href: "/manage",                   label: "Dashboard",         icon: LayoutDashboard },
-  { type: "link",    href: "/manage/analytics",         label: "Analytics",         icon: LineChart },
-  { type: "link",    href: "/manage/intelligence",      label: "Intelligence",      icon: BarChart2 },
-  { type: "link",    href: "/manage/schedule",          label: "Schedule",          icon: CalendarCheck },
-
-  { type: "heading", label: "Property" },
-  { type: "link",    href: "/manage/properties",        label: "Properties",        icon: Home },
-  { type: "link",    href: "/manage/collection",        label: "Collection",        icon: Package },
-
-  { type: "heading", label: "Clients" },
-  { type: "link",    href: "/manage/leads",             label: "Leads",             icon: Flame },
-  { type: "link",    href: "/manage/clients",           label: "Clients",           icon: UserCheck },
-  { type: "link",    href: "/manage/messages",          label: "Messages",          icon: MessageSquareHeart },
-  { type: "link",    href: "/manage/inquiries",         label: "Inquiries",         icon: FileQuestion },
-  { type: "link",    href: "/manage/saved",             label: "Saved Properties",  icon: Bookmark },
-  { type: "link",    href: "/manage/requests",          label: "Property Requests", icon: FileSearch },
-  { type: "link",    href: "/manage/sales-requests",    label: "Sales Request",     icon: Landmark },
-  { type: "link",    href: "/manage/visit-requests",    label: "Visit Request",     icon: CalendarCheck },
-  { type: "link",    href: "/manage/mortgage-requests", label: "Mortgage Request",  icon: Banknote },
-  { type: "link",    href: "/manage/contact",           label: "Contact",           icon: Contact },
-
-  { type: "heading", label: "About" },
-  { type: "link",    href: "/manage/reviews",           label: "Reviews",           icon: Star },
-  { type: "link",    href: "/manage/faq",               label: "FAQs",              icon: HelpCircle },
-  { type: "link",    href: "/manage/notifications",     label: "Notifications",     icon: Bell },
-
-  { type: "heading", label: "Content" },
-  { type: "link",    href: "/manage/market-insights",   label: "Market Insights",   icon: Lightbulb },
-  { type: "link",    href: "/manage/competition",       label: "Competition",       icon: Eye },
-
-  { type: "heading", label: "Management" },
-  { type: "link",    href: "/manage/agents",            label: "Agents",            icon: Users },
-  { type: "link",    href: "/manage/accounts",          label: "Users",             icon: UserCog },
-  { type: "link",    href: "/manage/settings",          label: "Settings",          icon: Settings },
-  { type: "link",    href: "/manage/support",           label: "Support",           icon: LifeBuoy },
 ];
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -124,19 +75,18 @@ export default function Header() {
         );
       }
       const Icon = item.icon;
-      const isActive =
-        item.href === "/manage"
-          ? pathname === "/manage"
-          : pathname.startsWith(item.href);
+      const isActive = getLongestMatchingManageNavHref(pathname) === item.href;
       return (
         <Link
           key={item.href}
           href={item.href}
           onClick={() => setMenuOpen(false)}
           className={cn(
-            buttonVariants({ variant: isActive ? "secondary" : "ghost", size: "sm" }),
-            "w-full justify-start",
-            isActive && "font-semibold"
+            buttonVariants({ variant: "ghost", size: "sm" }),
+            "w-full justify-start transition-[background-color,color] duration-300 ease-in-out hover:bg-primary/5 hover:text-foreground",
+            isActive
+              ? "bg-primary/15 text-primary hover:bg-primary/20 hover:text-primary font-semibold"
+              : "text-foreground/80"
           )}
         >
           <Icon className="mr-2 h-4 w-4 shrink-0" />
