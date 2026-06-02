@@ -2,7 +2,7 @@ import { getClients } from '@/services/lead-service';
 import { checkAuthenticationForWeb, getAccountIdFromJWT } from '@/services/neupid/check-auth-web';
 import { ClientLink } from '@/components/client-link';
 import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
+import { Plus, UserPlus } from 'lucide-react';
 import { requirePagePermission } from '@/logica/auth/page-guard';
 import { PERMISSIONS } from '@/logica/auth/permissions';
 
@@ -19,13 +19,18 @@ export default async function ClientsPage() {
                     <h2 className="text-2xl font-semibold leading-none tracking-tight">Clients</h2>
                     <p className="text-sm text-muted-foreground mt-1">{clients.length} client{clients.length !== 1 ? 's' : ''}</p>
                 </div>
-                <ClientLink href="/manage/leads/create">
-                    <Button size="sm"><Plus className="h-4 w-4 mr-1" /> New Lead</Button>
-                </ClientLink>
+                <div className="flex items-center gap-2">
+                    <ClientLink href="/manage/clients/create">
+                        <Button size="sm" variant="outline"><UserPlus className="h-4 w-4 mr-1" /> New Client</Button>
+                    </ClientLink>
+                    <ClientLink href="/manage/leads/create">
+                        <Button size="sm"><Plus className="h-4 w-4 mr-1" /> New Lead</Button>
+                    </ClientLink>
+                </div>
             </div>
 
             {clients.length === 0 ? (
-                <p className="text-sm text-muted-foreground py-12 text-center">No clients yet. Create a lead to add one.</p>
+                <p className="text-sm text-muted-foreground py-12 text-center">No clients yet. Create a client contact or add one through a lead.</p>
             ) : (
                 <div className="space-y-3">
                     {clients.map((c) => (
