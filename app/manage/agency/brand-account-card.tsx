@@ -93,7 +93,7 @@ export function BrandAccountCard({
     <div
       className={[
         "flex items-center gap-4 px-4 py-3 bg-background transition-colors hover:bg-muted/40 cursor-pointer",
-        isSelected ? "ring-2 ring-primary/30 bg-primary/5" : "",
+        isSelected ? "border border-primary/40 bg-muted/60 shadow-sm" : "",
         !isLast ? "border-b border-border" : "",
       ]
         .filter(Boolean)

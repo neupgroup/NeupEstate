@@ -7,19 +7,20 @@ import { BrandAccountCard } from "./brand-account-card";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
-function getSelectedAgency(searchParams?: SearchParams) {
-  const value = searchParams?.selectedAgency;
+async function getSelectedAgency(searchParams?: Promise<SearchParams>) {
+  const resolvedSearchParams = (await searchParams) ?? {};
+  const value = resolvedSearchParams.selectedAgency;
   return Array.isArray(value) ? value[0] : value?.trim() || null;
 }
 
 export default async function ManageAgencyPage({
   searchParams,
 }: {
-  searchParams?: SearchParams;
+  searchParams?: Promise<SearchParams>;
 }) {
   // Require authentication — redirects to login if not authenticated
   const authAccount = await requireAuth();
-  const selectedAgency = getSelectedAgency(searchParams);
+  const selectedAgency = await getSelectedAgency(searchParams);
   const brandAccountsResult = await getBrandAccounts();
 
   if (!brandAccountsResult.success) {
