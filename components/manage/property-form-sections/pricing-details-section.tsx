@@ -96,7 +96,7 @@ function getBasisOptions(categories: string[], purposes: string[]): BasisOption[
 }
 
 export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
-    const { watch, setValue } = useFormContext<CreatePropertyFormValues>();
+    const { watch, setValue, unregister } = useFormContext<CreatePropertyFormValues>();
     const categories = (watch("categories" as any) as unknown as string[]) || [];
     const purposes = watch("purposes") || [];
     const selectedBasis = watch("pricing.basis");
@@ -116,6 +116,7 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
         if (directPrice > 0) return true;
 
         for (const option of basisOptions) {
+            if (!option.value) continue;
             const basisPrice = Number(basisPrices?.[option.value] ?? 0);
             const negotiablePrice = Number(basisNegotiablePrices?.[option.value] ?? 0);
             if (basisPrice > 0 || negotiablePrice > 0) return true;
@@ -150,13 +151,16 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
 
     function removeBasis(option: BasisOption) {
         if (!option.value) return;
-        setValue(`pricing.basisPrices.${option.value}` as any, null, { shouldDirty: true, shouldValidate: true });
-        setValue(`pricing.basisNegotiable.${option.value}` as any, null, { shouldDirty: true, shouldValidate: true });
-        setValue(`pricing.basisNegotiablePrices.${option.value}` as any, null, { shouldDirty: true, shouldValidate: true });
+        unregister(`pricing.basisPrices.${option.value}` as any);
+        unregister(`pricing.basisNegotiable.${option.value}` as any);
+        unregister(`pricing.basisNegotiablePrices.${option.value}` as any);
+        unregister(`pricing.basisFrequencies.${option.value}` as any);
+        unregister(`pricing.basisUnits.${option.value}` as any);
 
         if (selectedBasis === option.value) {
             setValue("pricing.basis", undefined as any, { shouldDirty: true, shouldValidate: true });
         }
+        setValue("pricing.listed", 0, { shouldDirty: true, shouldValidate: true });
     }
 
     function negotiablePriceError(option: BasisOption): string | null {
@@ -391,9 +395,8 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
                                                             onChange={(value) => {
                                                                 const numericValue = value ? Number(value) : undefined;
                                                                 field.onChange(numericValue);
-                                                                if (!numericValue && option.value) {
-                                                                    setValue(`pricing.basisNegotiable.${option.value}` as any, false, { shouldDirty: true, shouldValidate: true });
-                                                                    return;
+                                                                if (option.value) {
+                                                                    setValue(`pricing.basisNegotiable.${option.value}` as any, Boolean(numericValue), { shouldDirty: true, shouldValidate: true });
                                                                 }
                                                             }}
                                                         />

@@ -23,18 +23,18 @@ export function CounterCard({
     onRemove,
     className,
 }: CounterCardProps) {
-    const { watch, setValue } = useFormContext();
-    const value = Number(watch(name as any) ?? 1);
+    const { watch, setValue } = useFormContext<Record<string, number | undefined>>();
+    const value = Number(watch(name) ?? 1);
 
     const set = (next: number) =>
-        setValue(name as any, Math.max(0, next), { shouldDirty: true, shouldValidate: true });
+        setValue(name, Math.max(0, next), { shouldDirty: true, shouldValidate: true });
 
     return (
-        <div className={cn("rounded-2xl border bg-card shadow-sm p-4 space-y-3", className)}>
-            <div className="flex items-center justify-between">
-                <span className="flex items-center gap-2 text-base font-bold">
+        <div className={cn("min-w-0 rounded-2xl border bg-card shadow-sm p-4 space-y-3", className)}>
+            <div className="flex min-w-0 items-center justify-between gap-3">
+                <span className="flex min-w-0 items-center gap-2 text-base font-bold">
                     <span>{emoji}</span>
-                    <span className="text-primary">{label}</span>
+                    <span className="min-w-0 break-words text-primary">{label}</span>
                 </span>
                 {onRemove && (
                     <button
@@ -48,9 +48,9 @@ export function CounterCard({
             </div>
             <div className="rounded-xl bg-muted p-3 space-y-2">
                 <p className="text-xs text-muted-foreground font-medium">{sublabel}</p>
-                <div className="flex items-center justify-between">
+                <div className="flex flex-wrap items-center justify-between gap-3">
                     <span className="text-2xl font-bold text-primary">{value}</span>
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
                         {steps.map((delta) => (
                             <button
                                 key={delta}

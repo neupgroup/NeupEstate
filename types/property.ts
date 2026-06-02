@@ -179,6 +179,7 @@ const optionalPriceMapSchema = z.preprocess((val) => {
     const cleaned = Object.fromEntries(
         Object.entries(val as Record<string, unknown>).filter(([, entry]) =>
             entry !== undefined &&
+            entry !== null &&
             entry !== "" &&
             !(typeof entry === "number" && Number.isNaN(entry))
         )
@@ -189,7 +190,7 @@ const optionalBooleanMapSchema = z.preprocess((val) => {
     if (!val || typeof val !== "object" || Array.isArray(val)) return undefined;
     const cleaned = Object.fromEntries(
         Object.entries(val as Record<string, unknown>).filter(([, entry]) =>
-            entry !== undefined && entry !== ""
+            entry !== undefined && entry !== null && entry !== ""
         )
     );
     return Object.keys(cleaned).length > 0 ? cleaned : undefined;
@@ -198,7 +199,7 @@ const optionalStringMapSchema = z.preprocess((val) => {
     if (!val || typeof val !== "object" || Array.isArray(val)) return undefined;
     const cleaned = Object.fromEntries(
         Object.entries(val as Record<string, unknown>).filter(([, entry]) =>
-            entry !== undefined && entry !== ""
+            entry !== undefined && entry !== null && entry !== ""
         )
     );
     return Object.keys(cleaned).length > 0 ? cleaned : undefined;

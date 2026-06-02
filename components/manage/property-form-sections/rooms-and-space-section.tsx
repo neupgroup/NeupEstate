@@ -2,17 +2,26 @@
 "use client";
 
 import { useMemo } from "react";
-import { useFormContext } from "react-hook-form";
+import { Control, useFormContext } from "react-hook-form";
 import { CreatePropertyFormValues } from "@/types";
 import { CounterCard } from "@/components/ui/counter-card";
 
 interface RoomsAndSpaceSectionProps {
-    control: any;
+    control: Control<CreatePropertyFormValues>;
     category: string | undefined;
 }
 
+type RoomKey =
+    | "bedrooms"
+    | "bathrooms"
+    | "kitchens"
+    | "livingRooms"
+    | "diningRooms"
+    | "carParkingSpots"
+    | "bikeParkingSpots";
+
 type RoomConfig = {
-    key: keyof CreatePropertyFormValues;
+    key: RoomKey;
     label: string;
     emoji: string;
 };
@@ -39,29 +48,29 @@ export function RoomsAndSpaceSection({ category }: RoomsAndSpaceSectionProps) {
         "bikeParkingSpots",
     ]) as Array<number | undefined>;
 
-    if (category === 'Land') return null;
-
     const active = useMemo(() => ROOMS.filter((room, index) => {
         const value = values[index];
         return typeof value === "number" ? value > 0 : false;
     }), [values]);
-    const inactive = useMemo(() => ROOMS.filter((room) => {
-        const value = watch(room.key as any);
+    const inactive = useMemo(() => ROOMS.filter((room, index) => {
+        const value = values[index];
         return !(typeof value === "number" && value > 0);
-    }), [watch, active]);
+    }), [values]);
 
     const add = (config: RoomConfig) => {
-        setValue(config.key, 1 as any, { shouldDirty: true, shouldValidate: true });
+        setValue(config.key, 1, { shouldDirty: true, shouldValidate: true });
     };
 
     const remove = (config: RoomConfig) => {
-        setValue(config.key, 0 as any, { shouldDirty: true, shouldValidate: true });
+        setValue(config.key, 0, { shouldDirty: true, shouldValidate: true });
     };
+
+    if (category === 'Land') return null;
 
     return (
         <section className="space-y-6">
             {active.length > 0 && (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {active.map((r) => (
                         <CounterCard
                             key={r.key}

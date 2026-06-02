@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { AgencyCustomizationRule, CreatePropertyFormValues, User } from "@/types";
@@ -232,7 +232,7 @@ export function ProgressivePropertySections({
     useEffect(() => {
         const initialIndex = getIndexFromSection(searchParams.get("section"));
         setActiveIndex(initialIndex);
-        setUnlockedUpTo(initialIndex);
+        setUnlockedUpTo((current) => Math.max(current, initialIndex));
         setNextError(null);
         setErrorStepIndex(null);
         // Keep the URL normalized when the user enters through a step alias.
@@ -418,26 +418,6 @@ interface SectionProps {
 }
 
 function Section({ index, title, description, isActive, hasError, onOpen, children }: SectionProps) {
-    const bodyRef = useRef<HTMLDivElement>(null);
-    const [height, setHeight] = useState<number>(0);
-    const [settled, setSettled] = useState(false);
-
-    useEffect(() => {
-        if (!bodyRef.current) return;
-        if (isActive) {
-            setSettled(false);
-            // Force a reflow so transition fires from 0
-            setHeight(bodyRef.current.scrollHeight);
-        } else {
-            setSettled(false);
-            setHeight(0);
-        }
-    }, [isActive]);
-
-    function onTransitionEnd() {
-        if (isActive) setSettled(true); // release fixed height so content can reflow
-    }
-
     return (
         <div className={cn("border-b border-border/40 last:border-b-0")}>
             {/* Header — always visible, clickable when unlocked */}
@@ -477,24 +457,13 @@ function Section({ index, title, description, isActive, hasError, onOpen, childr
                 {isActive && <hr className="mt-3 border-primary" />}
             </button>
 
-            {/* Body — height animates open/closed */}
-            <div
-                style={settled ? undefined : { height: `${height}px` }}
-                className={cn(
-                    "overflow-hidden",
-                    !settled && "transition-[height] duration-500 ease-in-out"
-                )}
-                onTransitionEnd={onTransitionEnd}
-            >
-                <div ref={bodyRef} className="px-1 pb-6">
-                    <div className={cn(
-                        "transition-opacity duration-300",
-                        isActive ? "opacity-100" : "opacity-0"
-                    )}>
+            {isActive && (
+                <div className="px-1 pb-6">
+                    <div className="animate-in fade-in-0 duration-200">
                         {children}
                     </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 }
