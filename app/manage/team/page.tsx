@@ -66,11 +66,36 @@ function getRoleLabel(role: string) {
   return role.charAt(0).toUpperCase() + role.slice(1);
 }
 
-export default async function ManageTeamPage() {
+type SearchParams = Record<string, string | string[] | undefined>;
+
+function getSelectedAgency(searchParams?: SearchParams) {
+  const value = searchParams?.selectedAgency;
+  return Array.isArray(value) ? value[0] : value?.trim() || null;
+}
+
+export default async function ManageTeamPage({
+  searchParams,
+}: {
+  searchParams?: SearchParams;
+}) {
   const authAccount = await requireAuth();
+  const selectedAgency = getSelectedAgency(searchParams);
 
   const membership = await getAgencyMapByAccount(authAccount.aid);
-  const agencyAccountId = membership?.agencyAccountId ?? authAccount.aid;
+  const selectedAgencyMembers = selectedAgency
+    ? await getAgencyMapsByAgency(selectedAgency)
+    : [];
+
+  const selectedAgencyIsAllowed =
+    selectedAgency === null ||
+    selectedAgency === authAccount.aid ||
+    membership?.agencyAccountId === selectedAgency ||
+    selectedAgencyMembers.some((member) => member.accountId === authAccount.aid);
+
+  const agencyAccountId =
+    selectedAgencyIsAllowed && selectedAgency
+      ? selectedAgency
+      : membership?.agencyAccountId ?? authAccount.aid;
   const isDirectAgencyOwner = !membership;
 
   const agencyMembers = await getAgencyMapsByAgency(agencyAccountId);
@@ -132,6 +157,8 @@ export default async function ManageTeamPage() {
   const adminMembers = agencyMembers.filter((member) => member.role === 'admin').length;
 
   const agencyDisplayName = agencyAccount?.display_name ?? agencyAccountId;
+  const addMemberHref = `/manage/teams/create?selectedAgency=${encodeURIComponent(agencyAccountId)}`;
+  const manageAgencyHref = `/manage/agency?selectedAgency=${encodeURIComponent(agencyAccountId)}`;
 
   return (
     <div className="space-y-8">
@@ -196,11 +223,27 @@ export default async function ManageTeamPage() {
           </div>
 
           <ClientLink
-            href="/manage/agency"
+            href={manageAgencyHref}
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
           >
             <Building2 className="h-4 w-4" />
             View agency settings
+          </ClientLink>
+        </div>
+
+        <div className="flex items-center justify-between rounded-lg border bg-muted/30 px-4 py-3">
+          <div className="text-sm">
+            <p className="font-medium">Selected agency is active</p>
+            <p className="text-muted-foreground">
+              New team members will be created for this agency.
+            </p>
+          </div>
+          <ClientLink
+            href={addMemberHref}
+            className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
+          >
+            <UsersRound className="h-4 w-4" />
+            Add team member
           </ClientLink>
         </div>
 

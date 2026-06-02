@@ -64,3 +64,10 @@ export function getLongestMatchingManageNavHref(pathname: string) {
     .sort((a, b) => b.length - a.length)[0];
 }
 
+export function appendSelectedAgency(href: string, selectedAgency?: string | null) {
+  if (!selectedAgency) return href;
+
+  const url = new URL(href, "http://local");
+  url.searchParams.set("selectedAgency", selectedAgency);
+  return `${url.pathname}${url.search}`;
+}

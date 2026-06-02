@@ -4,9 +4,9 @@ import { SafeImage } from "@/components/safe-image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Building, CheckCircle, RefreshCw } from "lucide-react";
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { createAccountAction, syncAccountAction } from "./actions";
-import { useRouter } from "next/navigation";
 import type { BrandAccount } from "@/services/neupid/get-brand-accounts";
 
 type BrandAccountCardProps = {
@@ -16,17 +16,21 @@ type BrandAccountCardProps = {
     displayName: string | null;
     displayImage: string | null;
   } | null;
+  isSelected: boolean;
   isLast: boolean;
 };
 
 export function BrandAccountCard({
   brandAccount,
   existingAccount,
+  isSelected,
   isLast,
 }: BrandAccountCardProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const isExisting = !!existingAccount;
   const needsSync =
@@ -34,7 +38,14 @@ export function BrandAccountCard({
     (existingAccount.displayName !== brandAccount.displayName ||
       existingAccount.displayImage !== brandAccount.displayImage);
 
-  const handleCreate = async () => {
+  const handleCardClick = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("selectedAgency", brandAccount.id);
+    router.replace(`${pathname}?${params.toString()}`);
+  };
+
+  const handleCreate = async (event?: MouseEvent) => {
+    event?.stopPropagation();
     setIsLoading(true);
     setError(null);
     try {
@@ -56,7 +67,8 @@ export function BrandAccountCard({
     }
   };
 
-  const handleSync = async () => {
+  const handleSync = async (event?: MouseEvent) => {
+    event?.stopPropagation();
     setIsLoading(true);
     setError(null);
     try {
@@ -80,11 +92,21 @@ export function BrandAccountCard({
   return (
     <div
       className={[
-        "flex items-center gap-4 px-4 py-3 bg-background transition-colors hover:bg-muted/40",
+        "flex items-center gap-4 px-4 py-3 bg-background transition-colors hover:bg-muted/40 cursor-pointer",
+        isSelected ? "ring-2 ring-primary/30 bg-primary/5" : "",
         !isLast ? "border-b border-border" : "",
       ]
         .filter(Boolean)
         .join(" ")}
+      onClick={handleCardClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          handleCardClick();
+        }
+      }}
     >
       {/* Left: Logo / Avatar */}
       <div className="flex-shrink-0 w-12 h-12 rounded-md overflow-hidden border border-border bg-muted flex items-center justify-center">
@@ -149,7 +171,8 @@ export function BrandAccountCard({
           <Button
             size="sm"
             variant={needsSync ? "default" : "outline"}
-            onClick={handleSync}
+            onClick={(event) => handleSync(event)}
+            type="button"
             disabled={isLoading || !needsSync}
           >
             <RefreshCw
@@ -158,7 +181,12 @@ export function BrandAccountCard({
             {needsSync ? "Sync" : "Up to date"}
           </Button>
         ) : (
-          <Button size="sm" onClick={handleCreate} disabled={isLoading}>
+          <Button
+            size="sm"
+            onClick={(event) => handleCreate(event)}
+            type="button"
+            disabled={isLoading}
+          >
             <Building className="h-3.5 w-3.5 mr-1.5" />
             {isLoading ? "Creating…" : "Create"}
           </Button>

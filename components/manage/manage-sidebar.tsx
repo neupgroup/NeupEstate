@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { getLongestMatchingManageNavHref, manageNav } from "@/lib/manage-nav";
+import { appendSelectedAgency, getLongestMatchingManageNavHref, manageNav } from "@/lib/manage-nav";
 
 type Props = {
   canDashboard: boolean;
@@ -21,7 +21,9 @@ type Props = {
 
 export function ManageSidebar(props: Props) {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const activeHref = getLongestMatchingManageNavHref(pathname);
+  const selectedAgency = searchParams.get("selectedAgency");
 
   const permissionMap: Record<string, boolean> = {
     "/manage": props.canDashboard,
@@ -54,10 +56,10 @@ export function ManageSidebar(props: Props) {
           const isActive = activeHref === item.href;
 
           return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
+              <Link
+                key={item.href}
+                href={appendSelectedAgency(item.href, selectedAgency)}
+                className={cn(
                 buttonVariants({ variant: "ghost" }),
                 "w-full justify-start px-4 py-2 transition-[background-color,color] duration-300 ease-in-out hover:bg-primary/7 hover:text-foreground",
                 isActive

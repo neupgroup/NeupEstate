@@ -5,9 +5,21 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, Building } from "lucide-react";
 import { BrandAccountCard } from "./brand-account-card";
 
-export default async function ManageAgencyPage() {
+type SearchParams = Record<string, string | string[] | undefined>;
+
+function getSelectedAgency(searchParams?: SearchParams) {
+  const value = searchParams?.selectedAgency;
+  return Array.isArray(value) ? value[0] : value?.trim() || null;
+}
+
+export default async function ManageAgencyPage({
+  searchParams,
+}: {
+  searchParams?: SearchParams;
+}) {
   // Require authentication — redirects to login if not authenticated
   const authAccount = await requireAuth();
+  const selectedAgency = getSelectedAgency(searchParams);
   const brandAccountsResult = await getBrandAccounts();
 
   if (!brandAccountsResult.success) {
@@ -69,6 +81,7 @@ export default async function ManageAgencyPage() {
                 key={brandAccount.id}
                 brandAccount={brandAccount}
                 existingAccount={existingAccount || null}
+                isSelected={selectedAgency === brandAccount.id}
                 isLast={index === brandAccounts.length - 1}
               />
             );

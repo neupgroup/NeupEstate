@@ -1,9 +1,21 @@
 import { requireAuth } from '@/services/auth';
 import { TeamMemberForm } from '../team-member-form';
 
-export default async function CreateTeamMemberPage() {
+type SearchParams = Record<string, string | string[] | undefined>;
+
+function getSelectedAgency(searchParams?: SearchParams) {
+  const value = searchParams?.selectedAgency;
+  return Array.isArray(value) ? value[0] : value?.trim() || null;
+}
+
+export default async function CreateTeamMemberPage({
+  searchParams,
+}: {
+  searchParams?: SearchParams;
+}) {
   // Require authentication
   await requireAuth();
+  const selectedAgency = getSelectedAgency(searchParams);
 
   return (
     <div className="space-y-6">
@@ -16,7 +28,7 @@ export default async function CreateTeamMemberPage() {
         </p>
       </div>
 
-      <TeamMemberForm />
+      <TeamMemberForm defaultOrgId={selectedAgency ?? undefined} />
     </div>
   );
 }

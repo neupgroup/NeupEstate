@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -9,7 +9,7 @@ import { Menu, X, User, BadgeCheck } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useNeupUser, getInitials } from "@/lib/neup-user-context";
 import { getAccountDisplayName, getAccountHandle } from "@/lib/account-display";
-import { manageNav, getLongestMatchingManageNavHref } from "@/lib/manage-nav";
+import { appendSelectedAgency, manageNav, getLongestMatchingManageNavHref } from "@/lib/manage-nav";
 
 // ─── Public nav links ─────────────────────────────────────────────────────────
 
@@ -24,12 +24,14 @@ const navLinks = [
 
 export default function Header() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const user = useNeupUser();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const effectiveUser = user;
 
   const isManage = pathname.startsWith("/manage");
+  const selectedAgency = searchParams.get("selectedAgency");
   const isGuestUser = effectiveUser?.accountType === "guest";
   const displayName = getAccountDisplayName(effectiveUser?.displayName);
   const handleText = getAccountHandle(effectiveUser?.neupId);
@@ -79,7 +81,7 @@ export default function Header() {
       return (
         <Link
           key={item.href}
-          href={item.href}
+          href={appendSelectedAgency(item.href, selectedAgency)}
           onClick={() => setMenuOpen(false)}
           className={cn(
             buttonVariants({ variant: "ghost", size: "sm" }),

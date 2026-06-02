@@ -25,9 +25,10 @@ import {
 
 type TeamMemberFormProps = {
   teamMember?: TeamMember;
+  defaultOrgId?: string;
 };
 
-export function TeamMemberForm({ teamMember }: TeamMemberFormProps) {
+export function TeamMemberForm({ teamMember, defaultOrgId }: TeamMemberFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -178,7 +179,7 @@ export function TeamMemberForm({ teamMember }: TeamMemberFormProps) {
             <Input
               id="orgId"
               name="orgId"
-              defaultValue={teamMember?.orgId || ''}
+              defaultValue={teamMember?.orgId || defaultOrgId || ''}
               placeholder="org-123"
             />
           </div>
