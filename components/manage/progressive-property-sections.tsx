@@ -93,6 +93,22 @@ function formatFieldError(path: string, message: string): string {
     return `❌ ${label}: ${message}`;
 }
 
+function getShowPriceBasisError(values: CreatePropertyFormValues): string | null {
+    const pricing = values.pricing;
+    const priceDisplayMode = pricing?.priceDisplayMode || "show-price";
+    if (priceDisplayMode !== "show-price") return null;
+
+    const selectedBasis = pricing?.basis;
+    const selectedBasisPrice = selectedBasis ? Number(pricing?.basisPrices?.[selectedBasis] ?? 0) : 0;
+    const hasAnyFilledBasisPrice = Object.values(pricing?.basisPrices ?? {}).some((value) => Number(value ?? 0) > 0);
+
+    if (!selectedBasis || selectedBasisPrice <= 0 || !hasAnyFilledBasisPrice) {
+        return "❌ Price Basis requires at least one selected basis with a listing price.";
+    }
+
+    return null;
+}
+
 interface ProgressivePropertySectionsProps {
     form: UseFormReturn<CreatePropertyFormValues>;
     users: User[];
@@ -278,6 +294,17 @@ export function ProgressivePropertySections({
         return [...new Set(messages)];
     }
 
+    function collectCustomStepErrors(step: PropertyFormStep): string[] {
+        const messages: string[] = [];
+
+        if (step.id === "pricing") {
+            const pricingError = getShowPriceBasisError(form.getValues());
+            if (pricingError) messages.push(pricingError);
+        }
+
+        return messages;
+    }
+
     async function goTo(i: number) {
         if (i === activeIndex) return;
         if (i > activeIndex) {
@@ -285,6 +312,12 @@ export function ProgressivePropertySections({
             if (!isValid) {
                 const msgs = collectStepErrors(steps[activeIndex].fields as string[]);
                 setNextError(msgs.length > 0 ? msgs.join("\n") : "❌ Please fix the errors above before continuing.");
+                setErrorStepIndex(activeIndex);
+                return;
+            }
+            const customMsgs = collectCustomStepErrors(steps[activeIndex]);
+            if (customMsgs.length > 0) {
+                setNextError(customMsgs.join("\n"));
                 setErrorStepIndex(activeIndex);
                 return;
             }
@@ -319,6 +352,12 @@ export function ProgressivePropertySections({
         if (!isValid) {
             const msgs = collectStepErrors(steps[activeIndex].fields as string[]);
             setNextError(msgs.length > 0 ? msgs.join("\n") : "❌ Please fix the errors above before continuing.");
+            setErrorStepIndex(activeIndex);
+            return;
+        }
+        const customMsgs = collectCustomStepErrors(steps[activeIndex]);
+        if (customMsgs.length > 0) {
+            setNextError(customMsgs.join("\n"));
             setErrorStepIndex(activeIndex);
             return;
         }
