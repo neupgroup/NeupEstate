@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { AgencyCustomizationRule, CreatePropertyFormValues, User } from "@/types";
 import { Button } from "@/components/ui/button";
 import { BasicDetailsSection } from "@/components/manage/property-form-sections/basic-details-section";
@@ -19,6 +20,7 @@ import { evaluateAgencyCustomization } from "@/lib/evaluate-agency-customization
 
 type PropertyFormStep = {
     id: string;
+    section: string;
     title: string;
     description: string;
     fields: Array<keyof CreatePropertyFormValues | string>;
@@ -106,6 +108,9 @@ export function ProgressivePropertySections({
     agencyRule,
     onSectionAdvance,
 }: ProgressivePropertySectionsProps) {
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const [unlockedUpTo, setUnlockedUpTo] = useState<number>(0);
     const [nextError, setNextError] = useState<string | null>(null);
@@ -113,15 +118,10 @@ export function ProgressivePropertySections({
     const categories = (form.watch("categories" as any) as unknown as string[]) || [];
     const category = categories[0] as string | undefined;
 
-    useEffect(() => {
-        if (errorStepIndex === null) return;
-        const timeout = window.setTimeout(() => setErrorStepIndex(null), 5000);
-        return () => window.clearTimeout(timeout);
-    }, [errorStepIndex]);
-
     const steps = useMemo<PropertyFormStep[]>(() => [
         {
             id: "basics",
+            section: "basic",
             title: "Basic Information",
             description: "Set the listing purpose, property type, and nature.",
             fields: ["purposes", "category", "type"],
@@ -129,6 +129,7 @@ export function ProgressivePropertySections({
         },
         {
             id: "specifics",
+            section: "specifics",
             title: "Property Specifics",
             description: "Enter the size, age, floors, and structural details.",
             fields: ["area", "areaUnit", "buildStart", "buildCompleted", "facing", "landDetails.facing", "floors", "onFloor", "landDetails", "plots", "apartmentUnits"],
@@ -136,6 +137,7 @@ export function ProgressivePropertySections({
         },
         ...(categories.includes("Land") ? [] : [{
             id: "rooms",
+            section: "space",
             title: "Rooms & Space",
             description: "Specify the number of rooms, parking, and other spaces.",
             fields: ["bedrooms", "bathrooms", "kitchens", "diningRooms", "livingRooms", "carParkingSpots", "bikeParkingSpots"],
@@ -143,6 +145,7 @@ export function ProgressivePropertySections({
         } satisfies PropertyFormStep]),
         {
             id: "features",
+            section: "ammenities",
             title: "Features & Amenities",
             description: "List the key features and amenities available at the property.",
             fields: ["amenities"],
@@ -150,6 +153,7 @@ export function ProgressivePropertySections({
         },
         {
             id: "pricing",
+            section: "pricing",
             title: "Pricing Details",
             description: "Set the listed price, payment basis, and negotiability.",
             fields: ["pricing"],
@@ -157,6 +161,7 @@ export function ProgressivePropertySections({
         },
         {
             id: "location",
+            section: "location",
             title: "Location Details",
             description: "Provide the address, geo-coordinates, and nearby landmarks.",
             fields: ["structuredLocation"],
@@ -164,6 +169,7 @@ export function ProgressivePropertySections({
         },
         {
             id: "owners",
+            section: "owners",
             title: "Owner Information",
             description: "Add the owner or authorized person's contact details.",
             fields: ["owners"],
@@ -171,6 +177,7 @@ export function ProgressivePropertySections({
         },
         {
             id: "photos",
+            section: "photos",
             title: "Property Photos",
             description: "Upload photos that best represent the property.",
             fields: ["images"],
@@ -178,6 +185,7 @@ export function ProgressivePropertySections({
         },
         {
             id: "documents",
+            section: "documents",
             title: "Property Documents",
             description: "Attach ownership documents, blueprints, or legal papers.",
             fields: ["documents"],
@@ -185,12 +193,49 @@ export function ProgressivePropertySections({
         },
         {
             id: "copy",
+            section: "copy",
             title: "Title & Description",
             description: "Write a compelling title and description for the listing.",
             fields: ["title", "description"],
             render: () => <TitleDescriptionSection control={form.control} />,
         },
     ], [category, form.control, form.formState.errors, isEditForm, users]);
+
+    useEffect(() => {
+        if (errorStepIndex === null) return;
+        const timeout = window.setTimeout(() => setErrorStepIndex(null), 5000);
+        return () => window.clearTimeout(timeout);
+    }, [errorStepIndex]);
+
+    function getSectionFromIndex(index: number): string {
+        return steps[index]?.section || steps[0]?.section || "basic";
+    }
+
+    function getIndexFromSection(section: string | null | undefined): number {
+        const normalized = (section || "").trim().toLowerCase();
+        if (!normalized) return 0;
+        const found = steps.findIndex((step) => step.section === normalized || step.id === normalized);
+        return found >= 0 ? found : 0;
+    }
+
+    function replaceSectionParam(section: string) {
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("section", section);
+        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    }
+
+    useEffect(() => {
+        const initialIndex = getIndexFromSection(searchParams.get("section"));
+        setActiveIndex(initialIndex);
+        setUnlockedUpTo(initialIndex);
+        setNextError(null);
+        setErrorStepIndex(null);
+        // Keep the URL normalized when the user enters through a step alias.
+        if (searchParams.get("section") !== getSectionFromIndex(initialIndex)) {
+            replaceSectionParam(getSectionFromIndex(initialIndex));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchParams]);
 
     function collectStepErrors(fields: string[]): string[] {
         const errors = form.formState.errors as Record<string, any>;
@@ -261,6 +306,7 @@ export function ProgressivePropertySections({
         setErrorStepIndex(null);
         setActiveIndex(i);
         setUnlockedUpTo((prev) => Math.max(prev, i));
+        replaceSectionParam(getSectionFromIndex(i));
     }
 
     async function handleNext() {
@@ -294,6 +340,7 @@ export function ProgressivePropertySections({
         await onSectionAdvance?.(activeIndex, next);
         setActiveIndex(next);
         setUnlockedUpTo((prev) => Math.max(prev, next));
+        replaceSectionParam(getSectionFromIndex(next));
     }
 
     async function handlePrev() {
@@ -303,6 +350,7 @@ export function ProgressivePropertySections({
         await onSectionAdvance?.(activeIndex, prev);
         setActiveIndex(prev);
         setUnlockedUpTo((i) => Math.max(i, prev));
+        replaceSectionParam(getSectionFromIndex(prev));
     }
 
     const isLastStep = activeIndex === steps.length - 1;
