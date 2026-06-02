@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import { CreatePropertyFormValues } from "@/types";
 import { CounterCard } from "@/components/ui/counter-card";
@@ -29,20 +29,32 @@ const ROOMS: RoomConfig[] = [
 
 export function RoomsAndSpaceSection({ category }: RoomsAndSpaceSectionProps) {
     const { watch, setValue } = useFormContext<CreatePropertyFormValues>();
-    const [added, setAdded] = useState<string[]>([]);
+    const values = watch([
+        "bedrooms",
+        "bathrooms",
+        "kitchens",
+        "livingRooms",
+        "diningRooms",
+        "carParkingSpots",
+        "bikeParkingSpots",
+    ]) as Array<number | undefined>;
 
     if (category === 'Land') return null;
 
-    const active = added.map((key) => ROOMS.find((r) => r.key === key)!);
-    const inactive = ROOMS.filter((r) => !added.includes(r.key));
+    const active = useMemo(() => ROOMS.filter((room, index) => {
+        const value = values[index];
+        return typeof value === "number" ? value > 0 : false;
+    }), [values]);
+    const inactive = useMemo(() => ROOMS.filter((room) => {
+        const value = watch(room.key as any);
+        return !(typeof value === "number" && value > 0);
+    }), [watch, active]);
 
     const add = (config: RoomConfig) => {
-        setAdded((prev) => [...prev, config.key]);
         setValue(config.key, 1 as any, { shouldDirty: true, shouldValidate: true });
     };
 
     const remove = (config: RoomConfig) => {
-        setAdded((prev) => prev.filter((k) => k !== config.key));
         setValue(config.key, 0 as any, { shouldDirty: true, shouldValidate: true });
     };
 
