@@ -433,6 +433,10 @@ function deepMergeJson<T>(base: T, patch: any): T {
   const merged: Record<string, any> = { ...base };
   for (const [key, value] of Object.entries(patch)) {
     if (value === undefined) continue;
+    if (value === null) {
+      delete merged[key];
+      continue;
+    }
     const current = merged[key];
     merged[key] = isPlainObject(current) && isPlainObject(value)
       ? deepMergeJson(current, value)

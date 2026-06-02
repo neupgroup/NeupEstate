@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { Control, useFormContext } from "react-hook-form";
 import { Check, X } from "lucide-react";
 import { CreatePropertyFormValues, CurrencySchema } from "@/types";
@@ -97,7 +97,6 @@ function getBasisOptions(categories: string[], purposes: string[]): BasisOption[
 
 export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
     const { watch, setValue } = useFormContext<CreatePropertyFormValues>();
-    const [activeBasisValues, setActiveBasisValues] = useState<string[]>([]);
     const categories = (watch("categories" as any) as unknown as string[]) || [];
     const purposes = watch("purposes") || [];
     const selectedBasis = watch("pricing.basis");
@@ -111,6 +110,30 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
         [categories.join("|"), (purposes as string[]).join("|")],
     );
 
+    function hasValue(value: unknown): boolean {
+        return value !== undefined && value !== null && value !== "";
+    }
+
+    const activeBasisValues = useMemo(() => {
+        const keys = new Set<string>();
+
+        for (const [key, value] of Object.entries(basisPrices || {})) {
+            if (hasValue(value)) keys.add(key);
+        }
+        for (const [key, value] of Object.entries(basisNegotiable || {})) {
+            if (hasValue(value)) keys.add(key);
+        }
+        for (const [key, value] of Object.entries(basisNegotiablePrices || {})) {
+            if (hasValue(value)) keys.add(key);
+        }
+
+        if (selectedBasis && basisOptions.some((option) => option.value === selectedBasis)) {
+            keys.add(selectedBasis);
+        }
+
+        return Array.from(keys).filter((value) => basisOptions.some((option) => option.value === value));
+    }, [basisNegotiable, basisNegotiablePrices, basisOptions, basisPrices, selectedBasis]);
+
     const activeOptions = activeBasisValues
         .map((value) => basisOptions.find((option) => option.value === value))
         .filter(Boolean) as BasisOption[];
@@ -122,17 +145,8 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
         }
     }, [basisOptions, selectedBasis, setValue]);
 
-    useEffect(() => {
-        setActiveBasisValues((current) =>
-            current.filter((value) => basisOptions.some((option) => option.value === value)),
-        );
-    }, [basisOptions]);
-
     function selectBasis(option: BasisOption) {
         if (!option.value) return;
-        setActiveBasisValues((current) =>
-            current.includes(option.value!) ? current : [...current, option.value!],
-        );
         if (option.frequency) {
             setValue(`pricing.basisFrequencies.${option.value}` as any, "Monthly", { shouldDirty: true, shouldValidate: true });
         }
@@ -146,7 +160,9 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
 
     function removeBasis(option: BasisOption) {
         if (!option.value) return;
-        setActiveBasisValues((current) => current.filter((value) => value !== option.value));
+        setValue(`pricing.basisPrices.${option.value}` as any, null, { shouldDirty: true, shouldValidate: true });
+        setValue(`pricing.basisNegotiable.${option.value}` as any, null, { shouldDirty: true, shouldValidate: true });
+        setValue(`pricing.basisNegotiablePrices.${option.value}` as any, null, { shouldDirty: true, shouldValidate: true });
     }
 
     function negotiablePriceError(option: BasisOption): string | null {
