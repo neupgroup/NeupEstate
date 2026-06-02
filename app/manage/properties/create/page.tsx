@@ -23,7 +23,7 @@ export default function CreatePropertyPage() {
     const [isPending, startTransition] = useTransition();
     const [users, setUsers] = React.useState<User[]>([]);
     const [accountId, setAccountId] = useState<string | null>(null);
-    const [changeId, setChangeId] = useState<string | null>(searchParams.get('changes'));
+    const [changeId, setChangeId] = useState<string | null>(searchParams.get('request') || searchParams.get('changes'));
 
     useEffect(() => {
         getUsers().then(setUsers);
@@ -77,7 +77,7 @@ export default function CreatePropertyPage() {
     });
 
     useEffect(() => {
-        const draftId = searchParams.get('changes');
+        const draftId = searchParams.get('request') || searchParams.get('changes');
         if (!draftId) return;
 
         getPropertyChangeDraftAction(draftId).then((result) => {
@@ -90,6 +90,14 @@ export default function CreatePropertyPage() {
             }
         });
     }, [searchParams, form]);
+
+    function replaceRequestParam(requestId: string) {
+        const params = new URLSearchParams(window.location.search);
+        params.set('request', requestId);
+        params.set('status', 'creation');
+        params.delete('changes');
+        window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`);
+    }
 
     async function onSubmit(values: CreatePropertyFormValues) {
         startTransition(async () => {
@@ -121,7 +129,13 @@ export default function CreatePropertyPage() {
 
         if (result.success && result.changeId) {
             setChangeId(result.changeId);
-            router.replace(`/manage/properties/create?changes=${result.changeId}&status=creation`, { scroll: false });
+            replaceRequestParam(result.changeId);
+        } else {
+            toast({
+                variant: 'destructive',
+                title: 'Could not save request',
+                description: result.error || 'Please try again before continuing.',
+            });
         }
     }
 

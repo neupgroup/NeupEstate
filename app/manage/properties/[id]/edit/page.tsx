@@ -3,10 +3,10 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useTransition, useState, useEffect } from 'react';
 import { UpdatePropertySchema, type Property, type User, type UpdatePropertyFormValues } from '@/types';
-import { updatePropertyAction, approvePropertyAction, deletePropertyAction, rewritePropertyDetailsAction, getCurrentAccountId, savePropertyChangeDraftAction } from '@/app/actions';
+import { updatePropertyAction, approvePropertyAction, deletePropertyAction, rewritePropertyDetailsAction, getCurrentAccountId, savePropertyChangeDraftAction, getPropertyChangeDraftAction } from '@/app/actions';
 import { getPropertyById } from "@/services/property-service";
 import { getUsers } from "@/services/user-service";
 import { useAgencyCustomization } from '@/hooks/use-agency-customization';
@@ -38,13 +38,14 @@ export default function EditPropertyPage() {
     const params = useParams<{ id: string }>();
     const propertyId = Array.isArray(params?.id) ? params.id[0] : params?.id;
     const router = useRouter();
+    const searchParams = useSearchParams();
     const { toast } = useToast();
     const [isSaving, startSaveTransition] = useTransition();
     const [isApproving, startApproveTransition] = useTransition();
     const [isDeleting, startDeleteTransition] = useTransition();
     const [isRewriting, startRewriteTransition] = useTransition();
     const [accountId, setAccountId] = useState<string | null>(null);
-    const [changeId, setChangeId] = useState<string | null>(null);
+    const [changeId, setChangeId] = useState<string | null>(searchParams.get('request') || searchParams.get('changes'));
 
     const { rule: agencyRule } = useAgencyCustomization(accountId, 'property');
 
@@ -63,6 +64,13 @@ export default function EditPropertyPage() {
             if (Object.keys(nested).length > 0) picked[key] = nested;
             return picked;
         }, {});
+    }
+
+    function replaceRequestParam(requestId: string) {
+        const params = new URLSearchParams(window.location.search);
+        params.set('request', requestId);
+        params.delete('changes');
+        window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`);
     }
 
     useEffect(() => {
@@ -86,7 +94,7 @@ export default function EditPropertyPage() {
             setProperty(propData);
             setUsers(userData);
 
-            form.reset({
+            const baseValues = {
                 title: propData.title,
                 description: propData.description,
                 bedrooms: propData.bedrooms,
@@ -145,10 +153,25 @@ export default function EditPropertyPage() {
                 facing: propData.facing,
                 buildStart: propData.buildStart,
                 buildCompleted: propData.buildCompleted,
-            });
+            };
+
+            const draftId = searchParams.get('request') || searchParams.get('changes');
+            if (draftId) {
+                const draft = await getPropertyChangeDraftAction(draftId);
+                if (draft.success && draft.data && (!draft.propertyId || draft.propertyId === propData.id)) {
+                    form.reset({
+                        ...baseValues,
+                        ...(draft.data as Partial<UpdatePropertyFormValues>),
+                    });
+                    setChangeId(draftId);
+                    return;
+                }
+            }
+
+            form.reset(baseValues);
         }
         loadData();
-    }, [propertyId, router, toast, form]);
+    }, [propertyId, router, toast, form, searchParams]);
 
     async function onSubmit(values: UpdatePropertyFormValues) {
         if (!property) return;
@@ -187,6 +210,13 @@ export default function EditPropertyPage() {
 
         if (result.success && result.changeId) {
             setChangeId(result.changeId);
+            replaceRequestParam(result.changeId);
+        } else {
+            toast({
+                variant: 'destructive',
+                title: 'Could not save request',
+                description: result.error || 'Please try again before continuing.',
+            });
         }
     }
 

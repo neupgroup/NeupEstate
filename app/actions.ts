@@ -407,7 +407,19 @@ function cleanPricing(pricing?: CreatePropertyFormValues['pricing']) {
   };
 }
 
-type PropertyChangeDraftStatus = 'pending_creation' | 'pending_edits' | 'pending';
+type PropertyChangeDraftStatus =
+  | 'pending_creation'
+  | 'pending_edits'
+  | 'pending'
+  | 'expired_approved'
+  | 'expired_rejected'
+  | 'expired_discarded';
+
+const EXPIRED_PROPERTY_CHANGE_STATUSES = new Set<PropertyChangeDraftStatus>([
+  'expired_approved',
+  'expired_rejected',
+  'expired_discarded',
+]);
 
 export async function savePropertyChangeDraftAction(input: {
   changeId?: string | null;
@@ -419,9 +431,11 @@ export async function savePropertyChangeDraftAction(input: {
     await requirePermission(
       input.propertyId ? PERMISSIONS.manage.propertySelfUpdate : PERMISSIONS.manage.propertySelfCreate,
     );
+    const actorId = await requireIdentity();
 
     const data = {
       propertyId: input.propertyId || null,
+      accountId: actorId,
       status: input.status,
       data: input.data,
       modifiedOn: new Date(),
@@ -449,9 +463,25 @@ export async function getPropertyChangeDraftAction(changeId: string): Promise<{
   error?: string;
 }> {
   try {
-    await requirePermission(PERMISSIONS.manage.propertySelfCreate);
+    const actorId = await requireIdentity();
     const draft = await prisma.propertyChange.findUnique({ where: { id: changeId } });
     if (!draft) return { success: false, error: 'Draft not found.' };
+    await requirePermission(
+      draft.propertyId ? PERMISSIONS.manage.propertySelfUpdate : PERMISSIONS.manage.propertySelfCreate,
+    );
+    if (draft.accountId && draft.accountId !== actorId) {
+      return { success: false, error: 'You do not have access to this request.' };
+    }
+
+    const status = draft.status as PropertyChangeDraftStatus;
+    if (EXPIRED_PROPERTY_CHANGE_STATUSES.has(status)) {
+      return {
+        success: true,
+        data: undefined,
+        status: draft.status,
+        propertyId: draft.propertyId,
+      };
+    }
 
     return {
       success: true,
