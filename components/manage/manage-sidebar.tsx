@@ -40,7 +40,7 @@ export function ManageSidebar(props: Props) {
 
   return (
     <aside className="hidden md:flex sticky top-16 self-start h-[calc(100vh-4rem)] flex-col border-r border-border bg-background">
-      <nav className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto py-4">
+      <nav className="-mr-3 flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto py-4 pr-3">
         {manageNav.map((item, index) => {
           if (item.type === "heading") {
             return (
