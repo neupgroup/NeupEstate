@@ -305,7 +305,7 @@ model PropertyChange {
   createdOn  DateTime @default(now())
   modifiedOn DateTime @default(now())
 
-  property   Property? @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  property   Property? @relation(fields: [propertyId], references: [id], onDelete: SetNull)
 
   @@index([propertyId])
   @@index([accountId])

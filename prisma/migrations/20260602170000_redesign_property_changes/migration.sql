@@ -45,7 +45,7 @@ ALTER TABLE "property_changes"
 
 ALTER TABLE "property_changes"
   ADD CONSTRAINT "property_changes_property_id_fkey"
-  FOREIGN KEY ("property_id") REFERENCES "property"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+  FOREIGN KEY ("property_id") REFERENCES "property"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 ALTER TABLE "property_changes"
   DROP COLUMN IF EXISTS "propertyId";
