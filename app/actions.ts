@@ -575,11 +575,10 @@ function mapPropertyToCreateFormValues(property: Property): Partial<CreateProper
     pricing: property.pricing ? {
       ...property.pricing,
       options: Array.isArray(property.pricing.options) ? property.pricing.options.join(', ') : '',
-    } : { listed: property.price },
-    details: property.details || {},
-    roadAccessDetails: property.roadAccessDetails || {},
-    distancing: property.distancing || {},
-    earnings: property.earnings || {},
+    } : { listed: property.price, currency: 'USD', priceDisplayMode: 'show-price', negotiable: false },
+    roadAccessDetails: property.roadAccessDetails || undefined,
+    distancing: property.distancing || undefined,
+    earnings: property.earnings || undefined,
     owners: property.owners || [],
     documents: property.documents || [],
   };

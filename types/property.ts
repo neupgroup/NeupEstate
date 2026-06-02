@@ -277,36 +277,13 @@ export const PropertyDocumentSchema = z.object({
 });
 export type PropertyDocument = z.infer<typeof PropertyDocumentSchema>;
 
-const PhoneSchema = z.object({
-    value: z.string().optional()
-        .refine(phone => phone === undefined || phone === '' || !/[a-zA-Z]/.test(phone), {
-            message: "Phone number cannot contain letters.",
-        })
-        .transform(phone => phone ? phone.replace(/[\s.+-]/g, '') : phone),
+export const OwnerSchema = z.object({
+    ownerClientId: z.string({ required_error: "Please select a client owner." }).min(1, "Please select a client owner."),
+    isPrimaryOwner: z.boolean().optional().default(false),
+    clientName: z.string().optional(),
+    clientEmail: z.string().optional(),
+    clientPhone: z.string().optional(),
 });
-
-const RegisteredOwnerSchema = z.object({
-    ownerType: z.literal('registered'),
-    userId: z.string({required_error: "Please select a registered user."}).min(1, "Please select a user."),
-    unregisteredOwnerName: z.string().optional(),
-    unregisteredOwnerEmail: z.string().optional(),
-    unregisteredOwnerPhones: z.array(PhoneSchema).optional(),
-    unregisteredOwnerNotes: z.string().optional(),
-});
-
-const UnregisteredOwnerSchema = z.object({
-    ownerType: z.literal('unregistered'),
-    userId: z.string().optional(),
-    unregisteredOwnerName: z.string().min(2, "Owner name is required for unregistered owners."),
-    unregisteredOwnerEmail: z.string().email({message: "Please enter a valid email."}).optional().or(z.literal('')),
-    unregisteredOwnerPhones: z.array(PhoneSchema).optional(),
-    unregisteredOwnerNotes: z.string().optional(),
-});
-
-export const OwnerSchema = z.discriminatedUnion("ownerType", [
-    RegisteredOwnerSchema,
-    UnregisteredOwnerSchema,
-]);
 export type Owner = z.infer<typeof OwnerSchema>;
 
 // Main Property Interface and Schemas
@@ -416,7 +393,13 @@ export const CreatePropertySchema = z.object({
     roadAccessDetails: RoadAccessDetailsSchema.optional(),
     distancing: DistancingSchema.optional(),
     earnings: EarningsSchema.optional(),
-    owners: z.array(OwnerSchema).min(1, 'At least one owner is required.').max(4, 'You can add up to 4 owners.').optional(),
+    owners: z.array(OwnerSchema)
+        .min(1, 'At least one owner is required.')
+        .max(4, 'You can add up to 4 owners.')
+        .refine((owners) => new Set(owners.map((owner) => owner.ownerClientId)).size === owners.length, {
+            message: 'The same client cannot be selected more than once.',
+        })
+        .optional(),
     documents: z.array(PropertyDocumentSchema).optional(),
     images: z.array(z.string().url({message: "Please enter a valid URL."}).or(z.literal(''))).optional()
         .refine(

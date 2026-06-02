@@ -1,170 +1,266 @@
-
 "use client";
 
-import { Control, useFieldArray, useWatch } from "react-hook-form";
+import { useEffect, useState, useTransition } from "react";
+import { Control, UseFormSetValue, useFieldArray, useWatch } from "react-hook-form";
 import { CreatePropertyFormValues, User } from "@/types";
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { searchClients } from "@/services/lead-service";
+import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, Trash2 } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { PlusCircle, Search, Star, Trash2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-// Sub-component for phone numbers array
-function PhoneInputArray({ control, ownerIndex }: { control: Control<CreatePropertyFormValues>, ownerIndex: number }) {
-    const { fields, append, remove } = useFieldArray({
+type ClientSearchResult = {
+    id: string;
+    firstName: string;
+    lastName: string;
+    contact: {
+        email?: string | null;
+        phone?: string | null;
+    };
+    source?: string | null;
+};
+
+function OwnerClientPicker({
+    control,
+    setValue,
+    index,
+    remove,
+    isPrimary,
+    hasPrimaryOwner,
+    makePrimary,
+}: {
+    control: Control<CreatePropertyFormValues>;
+    setValue: UseFormSetValue<CreatePropertyFormValues>;
+    index: number;
+    remove: (index: number) => void;
+    isPrimary: boolean;
+    hasPrimaryOwner: boolean;
+    makePrimary: (index: number) => void;
+}) {
+    const owner = useWatch({
         control,
-        name: `owners.${ownerIndex}.unregisteredOwnerPhones`
+        name: `owners.${index}`,
     });
+    const [query, setQuery] = useState("");
+    const [results, setResults] = useState<ClientSearchResult[]>([]);
+    const [searched, setSearched] = useState(false);
+    const [isPending, startTransition] = useTransition();
+
+    useEffect(() => {
+        if (owner?.clientName && !query) {
+            setQuery(owner.clientName);
+        }
+    }, [owner?.clientName, query]);
+
+    useEffect(() => {
+        const trimmed = query.trim();
+        if (trimmed.length < 2) {
+            setResults([]);
+            setSearched(false);
+            return;
+        }
+
+        const timeout = window.setTimeout(() => {
+            startTransition(async () => {
+                const found = await searchClients(trimmed);
+                setResults(found as ClientSearchResult[]);
+                setSearched(true);
+            });
+        }, 250);
+
+        return () => window.clearTimeout(timeout);
+    }, [query]);
 
     return (
-        <div className="space-y-2">
-            <FormLabel>Phone</FormLabel>
-            {fields.map((field, index) => (
-                <div key={field.id} className="relative">
-                    <FormField
-                        control={control}
-                        name={`owners.${ownerIndex}.unregisteredOwnerPhones.${index}.value`}
-                        render={({ field }) => (
-                            <FormItem className="flex-grow">
-                                <FormControl><Input placeholder="e.g., 98xxxxxxxx" {...field} className="pr-10" /></FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <Button type="button" variant="ghost" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 text-destructive hover:text-destructive" onClick={() => remove(index)}><Trash2 className="h-4 w-4" /></Button>
+        <div className="space-y-4 rounded-lg border p-4">
+            <div className="flex items-center justify-between gap-3">
+                <div>
+                    <h4 className="font-medium">Owner {index + 1}</h4>
+                    <p className="text-sm text-muted-foreground">
+                        Search by client name, phone number, or email and select the owner.
+                    </p>
                 </div>
-            ))}
-            <Button type="button" variant="outline" size="sm" onClick={() => append({ value: '' })}><PlusCircle className="mr-2 h-4 w-4" />Add Phone</Button>
-        </div>
-    );
-}
-
-// Sub-component for a single owner's details
-function OwnerDetails({ control, index, remove, users }: { control: Control<CreatePropertyFormValues>, index: number, remove: (index: number) => void, users: User[] }) {
-    const ownerType = useWatch({
-        control,
-        name: `owners.${index}.ownerType`
-    });
-
-    return (
-        <div className="p-4 border rounded-lg space-y-4">
-            <div className="flex justify-between items-center">
-                <h4 className="font-medium">Owner {index + 1}</h4>
-                <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+                <div className="flex items-center gap-2">
+                    <Button
+                        type="button"
+                        variant={isPrimary ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => makePrimary(index)}
+                    >
+                        <Star className="mr-2 h-4 w-4" />
+                        {isPrimary ? "Primary Owner" : "Make Primary"}
+                    </Button>
+                    <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)}>
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                </div>
             </div>
+
             <FormField
                 control={control}
-                name={`owners.${index}.ownerType`}
+                name={`owners.${index}.ownerClientId`}
                 render={({ field }) => (
-                    <FormItem>
-                        <FormControl>
-                            <RadioGroup
-                                onValueChange={field.onChange}
-                                value={field.value}
-                                className="flex gap-4"
-                            >
-                                <FormItem className="flex items-center space-x-2">
-                                    <FormControl><RadioGroupItem value="unregistered" id={`owner-${index}-unregistered`} /></FormControl>
-                                    <Label htmlFor={`owner-${index}-unregistered`}>Unregistered</Label>
-                                </FormItem>
-                                <FormItem className="flex items-center space-x-2">
-                                    <FormControl><RadioGroupItem value="registered" id={`owner-${index}-registered`} /></FormControl>
-                                    <Label htmlFor={`owner-${index}-registered`}>Registered User</Label>
-                                </FormItem>
-                            </RadioGroup>
-                        </FormControl>
+                    <FormItem className="space-y-3">
+                        <FormLabel>Search Client</FormLabel>
+                        <div className="relative">
+                            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                            <Input
+                                value={query}
+                                onChange={(event) => setQuery(event.target.value)}
+                                placeholder="Search by owner name, phone, or email"
+                                className="pl-9"
+                            />
+                        </div>
+
+                        {owner?.clientName ? (
+                            <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 text-sm">
+                                <p className="font-medium">{owner.clientName}</p>
+                                <p className="text-muted-foreground">
+                                    {[owner.clientPhone, owner.clientEmail].filter(Boolean).join(" · ") || "No contact details"}
+                                </p>
+                            </div>
+                        ) : null}
+
+                        {isPending ? (
+                            <div className="rounded-lg border border-dashed p-3 text-sm text-muted-foreground">
+                                Searching clients...
+                            </div>
+                        ) : null}
+
+                        {!isPending && searched ? (
+                            results.length > 0 ? (
+                                <div className="space-y-2">
+                                    {results.map((client) => {
+                                        const fullName = `${client.firstName} ${client.lastName}`.trim();
+                                        const email = client.contact?.email || "";
+                                        const phone = client.contact?.phone || "";
+                                        const isSelected = field.value === client.id;
+
+                                        return (
+                                            <button
+                                                key={client.id}
+                                                type="button"
+                                                onClick={() => {
+                                                    field.onChange(client.id);
+                                                    if (!hasPrimaryOwner) {
+                                                        setValue(`owners.${index}.isPrimaryOwner`, index === 0, { shouldDirty: true });
+                                                    }
+                                                    setValue(`owners.${index}.clientName`, fullName, { shouldDirty: true });
+                                                    setValue(`owners.${index}.clientEmail`, email, { shouldDirty: true });
+                                                    setValue(`owners.${index}.clientPhone`, phone, { shouldDirty: true });
+                                                    setQuery(fullName);
+                                                }}
+                                                className={cn(
+                                                    "w-full rounded-lg border px-4 py-3 text-left transition-colors",
+                                                    isSelected ? "border-primary bg-primary/5" : "border-border hover:border-primary/40"
+                                                )}
+                                            >
+                                                <p className="font-medium">{fullName}</p>
+                                                <p className="text-sm text-muted-foreground">
+                                                    {[phone, email].filter(Boolean).join(" · ") || "No contact details"}
+                                                </p>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            ) : (
+                                <div className="rounded-lg border border-dashed p-3 text-sm text-muted-foreground">
+                                    No matching clients found.
+                                </div>
+                            )
+                        ) : null}
+
                         <FormMessage />
                     </FormItem>
                 )}
             />
-            <Separator />
-
-            {ownerType === 'registered' ? (
-                <FormField
-                    control={control}
-                    name={`owners.${index}.userId`}
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Select User</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                <FormControl><SelectTrigger><SelectValue placeholder="Select a registered user" /></SelectTrigger></FormControl>
-                                <SelectContent>
-                                    {users.map(user => (
-                                        <SelectItem key={user.id} value={user.id}>{user.name} ({Array.isArray(user.email) ? user.email[0]?.value : user.email})</SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-            ) : (
-                <div className="space-y-4">
-                    <FormField
-                        control={control}
-                        name={`owners.${index}.unregisteredOwnerName`}
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Name</FormLabel>
-                                <FormControl><Input placeholder="Owner's full name" {...field} /></FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={control}
-                        name={`owners.${index}.unregisteredOwnerEmail`}
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Email</FormLabel>
-                                <FormControl><Input type="email" placeholder="Owner's email" {...field} /></FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <PhoneInputArray control={control} ownerIndex={index} />
-                    <FormField
-                        control={control}
-                        name={`owners.${index}.unregisteredOwnerNotes`}
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Notes</FormLabel>
-                                <FormControl><Textarea placeholder="Any notes about the owner..." {...field} /></FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
-            )}
         </div>
     );
 }
 
-// Main component for the section
 interface OwnerInfoSectionProps {
     control: Control<CreatePropertyFormValues>;
+    setValue: UseFormSetValue<CreatePropertyFormValues>;
     users: User[];
     formErrors: any;
 }
 
-export function OwnerInfoSection({ control, users, formErrors }: OwnerInfoSectionProps) {
-    const { fields: ownerFields, append: appendOwner, remove: removeOwner } = useFieldArray({
+export function OwnerInfoSection({ control, setValue, formErrors }: OwnerInfoSectionProps) {
+    const { fields, append, remove, replace } = useFieldArray({
         control,
-        name: "owners"
+        name: "owners",
     });
+    const owners = useWatch({
+        control,
+        name: "owners",
+    }) || [];
+
+    function appendOwner() {
+        append({
+            ownerClientId: "",
+            isPrimaryOwner: owners.length === 0,
+            clientName: "",
+            clientEmail: "",
+            clientPhone: "",
+        });
+    }
+
+    function makePrimary(index: number) {
+        replace(
+            owners.map((owner, ownerIndex) => ({
+                ...owner,
+                isPrimaryOwner: ownerIndex === index,
+            }))
+        );
+    }
+
+    function removeOwner(index: number) {
+        const wasPrimary = Boolean(owners[index]?.isPrimaryOwner);
+        remove(index);
+
+        if (!wasPrimary) return;
+
+        const remaining = owners.filter((_, ownerIndex) => ownerIndex !== index);
+        if (remaining.length === 0) return;
+
+        window.setTimeout(() => {
+            replace(
+                remaining.map((owner, ownerIndex) => ({
+                    ...owner,
+                    isPrimaryOwner: ownerIndex === 0,
+                }))
+            );
+        }, 0);
+    }
 
     return (
         <section className="space-y-6">
-                <FormMessage>{formErrors.owners?.root?.message}</FormMessage>
+            <FormMessage>{formErrors.owners?.root?.message || formErrors.owners?.message}</FormMessage>
             <div className="space-y-4">
-                {ownerFields.map((field, index) => (
-                    <OwnerDetails key={field.id} control={control} index={index} remove={removeOwner} users={users} />
+                {fields.length === 0 ? (
+                    <div className="rounded-lg border border-dashed p-4 text-sm text-muted-foreground">
+                        Add one or more client owners for this property.
+                    </div>
+                ) : null}
+
+                {fields.map((field, index) => (
+                    <OwnerClientPicker
+                        key={field.id}
+                        control={control}
+                        setValue={setValue}
+                        index={index}
+                        remove={removeOwner}
+                        isPrimary={Boolean(owners[index]?.isPrimaryOwner)}
+                        hasPrimaryOwner={owners.some((owner) => owner?.isPrimaryOwner)}
+                        makePrimary={makePrimary}
+                    />
                 ))}
-                <Button type="button" variant="outline" size="sm" onClick={() => appendOwner({ ownerType: 'unregistered', unregisteredOwnerName: '', unregisteredOwnerEmail: '', unregisteredOwnerPhones: [{ value: '' }], unregisteredOwnerNotes: '' })} disabled={ownerFields.length >= 4}><PlusCircle className="mr-2 h-4 w-4" />Add Owner</Button>
+
+                <Button type="button" variant="outline" size="sm" onClick={appendOwner} disabled={fields.length >= 4}>
+                    <PlusCircle className="mr-2 h-4 w-4" />
+                    Add Owner
+                </Button>
             </div>
         </section>
     );

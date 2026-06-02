@@ -266,19 +266,17 @@ model PropertyFetchHistory {
 }
 
 model PropertyOwner {
-  id                      String   @id @default(cuid())
-  propertyId              String
-  ownerType               String   // registered | unregistered
-  userId                  String?
-  unregisteredName        String?
-  unregisteredEmail       String?
-  unregisteredPhones      Json?
-  unregisteredNotes       String?
-  sortOrder               Int      @default(0)
+  id             String    @id @default(cuid())
+  propertyId     String    @map("property_id")
+  ownerClientId  String    @map("owner_client_id")
+  isPrimaryOwner Boolean   @default(false) @map("is_primary_owner")
 
-  property                Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  property       Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  ownerClient    CrmClient @relation(fields: [ownerClientId], references: [id], onDelete: Cascade)
 
   @@index([propertyId])
+  @@index([ownerClientId])
+  @@unique([propertyId, ownerClientId])
   @@map("property_owner")
 }
 
@@ -510,6 +508,7 @@ model CrmClient {
 
   links     ClientLink[]
   leads     ClientLead[]
+  propertyOwners PropertyOwner[]
 
   @@index([lastName])
   @@map("client")

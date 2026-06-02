@@ -210,7 +210,6 @@ export async function deleteAccountAndData(id: string): Promise<void> {
       prisma.userPreference.deleteMany({ where: { accountId: id } }),
       prisma.activity.deleteMany({ where: { trackerId: id } }),
       prisma.clientLink.deleteMany({ where: { trackerId: id } }),
-      prisma.propertyOwner.deleteMany({ where: { userId: id } }),
       prisma.account.delete({ where: { id } }),
     ]);
   } catch (e) {

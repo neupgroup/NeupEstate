@@ -192,9 +192,9 @@ export function ProgressivePropertySections({
             id: "owners",
             section: "owners",
             title: "Owner Information",
-            description: "Add the owner or authorized person's contact details.",
+            description: "Search and select one or more client owners for this property.",
             fields: ["owners"],
-            render: () => <OwnerInfoSection control={form.control} users={users} formErrors={form.formState.errors} />,
+            render: () => <OwnerInfoSection control={form.control} setValue={form.setValue} users={users} formErrors={form.formState.errors} />,
         },
         {
             id: "photos",

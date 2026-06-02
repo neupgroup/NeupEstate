@@ -12,7 +12,6 @@ import { EmiCalculatorChart } from '@/components/emi-calculator-chart';
 import { PropertyMap } from '@/components/property-map';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { getUsers } from '@/services/user-service';
 import { PropertyQA } from '@/components/property-q-a';
 import type { Property } from '@/types';
 import { areaValueToSqft } from '@/types';
@@ -216,16 +215,8 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
     return redirect(`/properties/${property.slug}`);
   }
 
-  let ownerName = 'N/A';
-  if (property.owner) {
-      if (property.owner?.ownerType === 'registered' && property.owner.userId) {
-          const users = await getUsers();
-          const user = users.find(u => u.id === property.owner!.userId);
-          ownerName = user ? user.name : 'Registered User (Not Found)';
-      } else if (property.owner?.ownerType === 'unregistered') {
-          ownerName = property.owner.unregisteredOwnerName || 'Unregistered Owner';
-      }
-  }
+  const ownerNames = property.owners?.map((owner) => owner.clientName).filter(Boolean) || [];
+  const primaryOwnerName = ownerNames[0] || 'N/A';
   
   const formatPrice = (price: number, currency: string = 'USD') => {
     return new Intl.NumberFormat('en-US', {
@@ -324,8 +315,8 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
             )}
             
             <DetailCard title="Owner Information" icon={<UserIcon className="h-5 w-5"/>}>
-              <DetailItem label="Owner Name" value={ownerName} />
-              <DetailItem label="Ownership Type" value={property.owner?.ownerType === 'registered' ? 'Registered User' : 'Manual Entry'} />
+              <DetailItem label="Primary Owner" value={primaryOwnerName} />
+              <DetailItem label="All Owners" value={ownerNames.length ? ownerNames.join(', ') : 'N/A'} />
             </DetailCard>
 
             {property.documents && property.documents.length > 0 && (

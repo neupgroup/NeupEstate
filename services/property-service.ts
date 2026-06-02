@@ -3,7 +3,7 @@
 import { prisma } from '@/lib/prisma';
 import { logProblem } from './problem-service';
 import type { Property, CreatePropertyInput, PropertyFilters, ExtractedPropertyData, UpdatePropertyInput } from '@/types';
-import { PropertyType, PropertyStatus, PropertyPurpose } from '@prisma/client';
+import { Prisma, PropertyType, PropertyStatus, PropertyPurpose } from '@prisma/client';
 import { mapPurposeToEnum, mapPurposeFromEnum, mapTypeToEnum, mapTypeFromEnum, mapStatusToEnum, mapStatusFromEnum } from '@/lib/adapters/enum-mappers';
 
 export interface SavedPropertyEntry {
@@ -43,16 +43,16 @@ export interface BridgePropertyResult {
   fields: BridgePropertyField[];
 }
 
-const PROPERTY_INCLUDE = {
+const PROPERTY_INCLUDE = Prisma.validator<Prisma.PropertyInclude>()({
   media:           { where: { isDeleted: false }, orderBy: { sortOrder: 'asc' as const } },
   houseDetail:     true,
   apartmentDetail: true,
   landDetail:      true,
   commercialDetail: true,
   prices:          true,
-  owners:          true,
+  owners:          { include: { ownerClient: true }, orderBy: [{ isPrimaryOwner: 'desc' }, { id: 'asc' }] },
   documents:       true,
-} as const;
+});
 
 const BRIDGE_PROPERTY_FIELDS = [
   'id',
@@ -208,12 +208,11 @@ function mapRecord(record: any): Property {
 
   const owners = record.owners?.length
     ? record.owners.map((o: any) => ({
-        ownerType: o.ownerType,
-        userId: o.userId || undefined,
-        unregisteredOwnerName: o.unregisteredName || undefined,
-        unregisteredOwnerEmail: o.unregisteredEmail || undefined,
-        unregisteredOwnerPhones: o.unregisteredPhones || undefined,
-        unregisteredOwnerNotes: o.unregisteredNotes || undefined,
+        ownerClientId: o.ownerClientId,
+        isPrimaryOwner: Boolean(o.isPrimaryOwner),
+        clientName: [o.ownerClient?.firstName, o.ownerClient?.lastName].filter(Boolean).join(' ') || undefined,
+        clientEmail: o.ownerClient?.contact?.email || undefined,
+        clientPhone: o.ownerClient?.contact?.phone || undefined,
       }))
     : undefined;
 
@@ -258,6 +257,7 @@ function mapRecord(record: any): Property {
     roadAccessDetails: record.roadAccessDetails || undefined,
     distancing:       record.distancing || undefined,
     earnings:         record.earnings || undefined,
+    owner:            owners?.[0],
     owners,
     documents,
   } as Property;
@@ -295,7 +295,7 @@ export async function getPaginatedProperties(opts: { page?: number; limit?: numb
     ];
     if (Number.isFinite(filters.minPrice)) where.displayPrice = { ...where.displayPrice, gte: filters.minPrice };
     if (Number.isFinite(filters.maxPrice)) where.displayPrice = { ...where.displayPrice, lte: filters.maxPrice };
-    if (opts.ownerAccountId) where.owners = { some: { userId: opts.ownerAccountId } };
+    if (opts.ownerAccountId) where.owners = { some: { ownerClientId: opts.ownerAccountId } };
 
     const [totalCount, records] = await Promise.all([
       prisma.property.count({ where }),
@@ -549,6 +549,19 @@ async function upsertMedia(propertyId: string, images: string[]) {
   }
 }
 
+async function replacePropertyOwners(propertyId: string, owners: CreatePropertyInput['owners'] = []) {
+  await prisma.propertyOwner.deleteMany({ where: { propertyId } });
+  if (!owners.length) return;
+
+  await prisma.propertyOwner.createMany({
+    data: owners.map((owner, index) => ({
+      propertyId,
+      ownerClientId: owner.ownerClientId,
+      isPrimaryOwner: owner.isPrimaryOwner ?? index === 0,
+    })),
+  });
+}
+
 export async function createProperty(d: CreatePropertyInput & { creatorId?: string }): Promise<string> {
   try {
     const coreData = buildCoreData({ ...d, status: 'approved', isApproved: true });
@@ -564,40 +577,7 @@ export async function createProperty(d: CreatePropertyInput & { creatorId?: stri
     await upsertDetailTable(created.id, created.type, d);
     await upsertMedia(created.id, d.images ?? []);
 
-    // Write PropertyOwner rows from the form's owners array
-    const formOwners = d.owners ?? [];
-    if (formOwners.length > 0) {
-      await prisma.propertyOwner.createMany({
-        data: formOwners.map((o: any, i: number) => ({
-          propertyId: created.id,
-          ownerType: o.ownerType,
-          userId: o.ownerType === 'registered' ? (o.userId || null) : null,
-          unregisteredName: o.unregisteredOwnerName || null,
-          unregisteredEmail: o.unregisteredOwnerEmail || null,
-          unregisteredPhones: o.unregisteredOwnerPhones || null,
-          unregisteredNotes: o.unregisteredOwnerNotes || null,
-          sortOrder: i,
-        })),
-      });
-    }
-
-    // Always ensure the creator (logged-in user) is linked as a registered owner
-    // so the property appears in their /manage/properties view
-    if (d.creatorId) {
-      const alreadyLinked = formOwners.some(
-        (o: any) => o.ownerType === 'registered' && o.userId === d.creatorId
-      );
-      if (!alreadyLinked) {
-        await prisma.propertyOwner.create({
-          data: {
-            propertyId: created.id,
-            ownerType: 'registered',
-            userId: d.creatorId,
-            sortOrder: formOwners.length,
-          },
-        });
-      }
-    }
+    await replacePropertyOwners(created.id, d.owners);
 
     return created.id;
   } catch (e) { await logProblem(e, 'createProperty'); throw new Error('Failed to create property.'); }
@@ -624,6 +604,7 @@ export async function updateProperty(id: string, d: UpdatePropertyInput): Promis
     await prisma.property.update({ where: { id }, data: coreData as any });
     await upsertDetailTable(id, mapTypeToEnum((d as any).category ?? d.categories?.[0]), d);
     if (d.images) await upsertMedia(id, d.images);
+    await replacePropertyOwners(id, d.owners);
   } catch (e) { await logProblem(e, `updateProperty ${id}`); throw new Error('Failed to update property.'); }
 }
 
