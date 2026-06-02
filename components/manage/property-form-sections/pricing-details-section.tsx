@@ -110,38 +110,16 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
         [categories.join("|"), (purposes as string[]).join("|")],
     );
 
-    function hasValue(value: unknown): boolean {
-        return value !== undefined && value !== null && value !== "";
-    }
-
-    const activeBasisValues = useMemo(() => {
-        const keys = new Set<string>();
-
-        for (const [key, value] of Object.entries(basisPrices || {})) {
-            if (hasValue(value)) keys.add(key);
-        }
-        for (const [key, value] of Object.entries(basisNegotiable || {})) {
-            if (hasValue(value)) keys.add(key);
-        }
-        for (const [key, value] of Object.entries(basisNegotiablePrices || {})) {
-            if (hasValue(value)) keys.add(key);
-        }
-
-        if (selectedBasis && basisOptions.some((option) => option.value === selectedBasis)) {
-            keys.add(selectedBasis);
-        }
-
-        return Array.from(keys).filter((value) => basisOptions.some((option) => option.value === value));
-    }, [basisNegotiable, basisNegotiablePrices, basisOptions, basisPrices, selectedBasis]);
-
-    const activeOptions = activeBasisValues
-        .map((value) => basisOptions.find((option) => option.value === value))
-        .filter(Boolean) as BasisOption[];
-    const inactiveOptions = basisOptions.filter((option) => !activeBasisValues.includes(option.value || ""));
+    const activeOption = useMemo(
+        () => basisOptions.find((option) => option.value === selectedBasis) || null,
+        [basisOptions, selectedBasis],
+    );
+    const activeOptions = activeOption ? [activeOption] : [];
+    const inactiveOptions = basisOptions.filter((option) => option.value !== selectedBasis);
 
     useEffect(() => {
-        if (!basisOptions.some((option) => option.value === selectedBasis)) {
-            setValue("pricing.basis", basisOptions[0].value, { shouldDirty: true, shouldValidate: true });
+        if (selectedBasis && !basisOptions.some((option) => option.value === selectedBasis)) {
+            setValue("pricing.basis", undefined as any, { shouldDirty: true, shouldValidate: true });
         }
     }, [basisOptions, selectedBasis, setValue]);
 
@@ -153,9 +131,7 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
         if (option.unit) {
             setValue(`pricing.basisUnits.${option.value}` as any, "Aana", { shouldDirty: true, shouldValidate: true });
         }
-        if (!selectedBasis || !basisOptions.some((basisOption) => basisOption.value === selectedBasis)) {
-            setValue("pricing.basis", option.value, { shouldDirty: true, shouldValidate: true });
-        }
+        setValue("pricing.basis", option.value, { shouldDirty: true, shouldValidate: true });
     }
 
     function removeBasis(option: BasisOption) {
@@ -163,6 +139,10 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
         setValue(`pricing.basisPrices.${option.value}` as any, null, { shouldDirty: true, shouldValidate: true });
         setValue(`pricing.basisNegotiable.${option.value}` as any, null, { shouldDirty: true, shouldValidate: true });
         setValue(`pricing.basisNegotiablePrices.${option.value}` as any, null, { shouldDirty: true, shouldValidate: true });
+
+        if (selectedBasis === option.value) {
+            setValue("pricing.basis", undefined as any, { shouldDirty: true, shouldValidate: true });
+        }
     }
 
     function negotiablePriceError(option: BasisOption): string | null {
