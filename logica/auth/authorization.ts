@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { getIdentity } from "@/services/neupid/get-identity";
+import { cache } from "react";
 
 type AccountPermission = string;
 type AccountRole = string | null;
@@ -20,7 +21,7 @@ function normalizePermissions(raw: unknown): AccountPermission[] {
   return [];
 }
 
-async function getCurrentAccountRoleId(): Promise<string | null> {
+const getCurrentAccountRoleId = cache(async (): Promise<string | null> => {
   const identity = await getIdentity();
   if (!identity.authenticated) return null;
 
@@ -30,10 +31,10 @@ async function getCurrentAccountRoleId(): Promise<string | null> {
   });
 
   return account?.roleId ?? null;
-}
+});
 
 // Returns the current account's permissions.
-export async function getAccountsPermission(): Promise<AccountPermission[]> {
+export const getAccountsPermission = cache(async (): Promise<AccountPermission[]> => {
   const roleId = await getCurrentAccountRoleId();
   if (!roleId) return [];
 
@@ -43,7 +44,7 @@ export async function getAccountsPermission(): Promise<AccountPermission[]> {
   });
 
   return normalizePermissions(role?.permissions);
-}
+});
 
 // Returns the current account's role.
 export async function getAccountRole(): Promise<AccountRole> {
