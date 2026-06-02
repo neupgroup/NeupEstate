@@ -50,7 +50,7 @@ const PROPERTY_INCLUDE = Prisma.validator<Prisma.PropertyInclude>()({
   landDetail:      true,
   commercialDetail: true,
   prices:          true,
-  owners:          { include: { ownerClient: true }, orderBy: [{ isPrimaryOwner: 'desc' }, { id: 'asc' }] },
+  owners:          { include: { ownerClient: { include: { contacts: true } } }, orderBy: [{ isPrimaryOwner: 'desc' }, { id: 'asc' }] },
   documents:       true,
 });
 
@@ -211,8 +211,8 @@ function mapRecord(record: any): Property {
         ownerClientId: o.ownerClientId,
         isPrimaryOwner: Boolean(o.isPrimaryOwner),
         clientName: [o.ownerClient?.firstName, o.ownerClient?.lastName].filter(Boolean).join(' ') || undefined,
-        clientEmail: o.ownerClient?.contact?.email || undefined,
-        clientPhone: o.ownerClient?.contact?.phone || undefined,
+        clientEmail: o.ownerClient?.contacts?.find((contact: any) => contact.type?.toLowerCase() === 'email')?.value || o.ownerClient?.contact?.email || undefined,
+        clientPhone: o.ownerClient?.contacts?.find((contact: any) => contact.type?.toLowerCase() === 'phone')?.value || o.ownerClient?.contact?.phone || undefined,
       }))
     : undefined;
 
