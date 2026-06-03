@@ -3,9 +3,12 @@ import { ClientLink } from '@/components/client-link';
 import { ChevronLeft } from 'lucide-react';
 import { requirePagePermission } from '@/logica/auth/page-guard';
 import { PERMISSIONS } from '@/logica/auth/permissions';
+import { checkAuthenticationForWeb, getAccountIdFromJWT } from '@/services/neupid/check-auth-web';
 
 export default async function CreateClientPage() {
     await requirePagePermission(PERMISSIONS.manage.selfClientView);
+    await checkAuthenticationForWeb();
+    const accountId = await getAccountIdFromJWT();
 
     return (
         <div className="max-w-6xl mx-auto space-y-6">
@@ -19,7 +22,7 @@ export default async function CreateClientPage() {
                 <h2 className="text-2xl font-semibold leading-none tracking-tight">New Client</h2>
                 <p className="text-sm text-muted-foreground mt-1">Create a client contact without creating a lead.</p>
             </div>
-            <CreateClientForm />
+            <CreateClientForm accountId={accountId!} />
         </div>
     );
 }

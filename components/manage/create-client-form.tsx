@@ -20,7 +20,11 @@ const createClientSchema = z.object({
 
 type CreateClientValues = z.infer<typeof createClientSchema>;
 
-export function CreateClientForm() {
+interface CreateClientFormProps {
+    accountId: string;
+}
+
+export function CreateClientForm({ accountId }: CreateClientFormProps) {
     const router = useRouter();
     const [error, setError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
@@ -40,7 +44,7 @@ export function CreateClientForm() {
         setError(null);
         startTransition(async () => {
             try {
-                const clientId = await saveClient(values);
+                const clientId = await saveClient({ ...values, accountId });
                 router.push(`/manage/clients/${clientId}`);
             } catch (submitError) {
                 setError(submitError instanceof Error ? submitError.message : 'Failed to create client.');

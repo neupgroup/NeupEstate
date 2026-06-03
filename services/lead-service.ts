@@ -94,6 +94,7 @@ export async function searchClients(query: string) {
 }
 
 export async function saveClient(data: {
+    accountId?: string;
     firstName: string;
     lastName: string;
     email?: string;
@@ -115,6 +116,15 @@ export async function saveClient(data: {
                 { type: 'email', value: data.email },
                 { type: 'phone', value: data.phone },
             ]);
+
+            if (data.accountId) {
+                await tx.clientLink.create({
+                    data: {
+                        trackerId: data.accountId,
+                        clientId: created.id,
+                    },
+                });
+            }
 
             return created;
         });
@@ -200,9 +210,17 @@ export async function getLeadById(id: string) {
 export async function getClients(accountId: string) {
     try {
         const clients = await prisma.crmClient.findMany({
-            where: { leads: { some: { leadOwner: accountId } } },
+            where: {
+                OR: [
+                    { leads: { some: { leadOwner: accountId } } },
+                    { links: { some: { trackerId: accountId } } },
+                ],
+            },
             orderBy: { createdAt: 'desc' },
-            include: { leads: { where: { leadOwner: accountId } }, contacts: true },
+            include: {
+                leads: { where: { leadOwner: accountId } },
+                contacts: true,
+            },
         });
         return clients.map(normalizeClient);
     } catch (e) {
@@ -216,7 +234,10 @@ export async function getClientById(id: string, accountId: string) {
         const client = await prisma.crmClient.findFirst({
             where: {
                 id,
-                leads: { some: { leadOwner: accountId } },
+                OR: [
+                    { leads: { some: { leadOwner: accountId } } },
+                    { links: { some: { trackerId: accountId } } },
+                ],
             },
             include: {
                 contacts: true,
