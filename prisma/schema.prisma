@@ -556,7 +556,7 @@ model ClientLead {
   @@index([clientId])
   @@index([type])
   @@index([priority])
-  @@map("client_lead")
+  @@map("lead")
 }
 
 model LeadActivity {

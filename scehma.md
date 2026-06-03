@@ -277,7 +277,7 @@ PostgreSQL database configured via `DATABASE_URL`.
 - trackerId: String (indexed)
 - clientId: String (references CrmClient.id, indexed)
 
-## client_lead (ClientLead)
+## lead (ClientLead)
 - id: String (cuid, primary key)
 - clientId: String (references CrmClient.id, indexed)
 - type: Enum (BUYER/SELLER/TENANT/LANDLORD, indexed)
