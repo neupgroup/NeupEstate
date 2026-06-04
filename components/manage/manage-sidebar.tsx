@@ -5,7 +5,8 @@ import { useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { appendSelectedAgency, getLongestMatchingManageNavHref, manageNav } from "@/lib/manage-nav";
+import { manageNav } from "@/lib/manage-nav";
+import { appendSelectedAgencyV1, getLongestMatchingManageNavHrefV1 } from "@/components/logic/ManageNavSelection.v1";
 
 type Props = {
   canDashboard: boolean;
@@ -25,7 +26,7 @@ export function ManageSidebar(props: Props) {
   const [isScrollbarVisible, setIsScrollbarVisible] = useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const activeHref = getLongestMatchingManageNavHref(pathname);
+  const activeHref = getLongestMatchingManageNavHrefV1(pathname, manageNav);
   const selectedAgency = searchParams.get("selectedAgency");
 
   const permissionMap: Record<string, boolean> = {
@@ -75,7 +76,7 @@ export function ManageSidebar(props: Props) {
             return (
                 <Link
                   key={item.href}
-                  href={appendSelectedAgency(item.href, selectedAgency)}
+                  href={appendSelectedAgencyV1(item.href, selectedAgency)}
                   className={cn(
                   buttonVariants({ variant: "ghost" }),
                   "w-full justify-start px-4 py-2 transition-[background-color,color] duration-300 ease-in-out hover:bg-primary/7 hover:text-foreground",
