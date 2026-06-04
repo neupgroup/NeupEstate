@@ -14,6 +14,16 @@ function formatValue(value: unknown): string {
   return String(value);
 }
 
+function decodeMaybeEncodedText(value: string): string {
+  if (!value.includes('%') && !value.includes('+')) return value;
+
+  try {
+    return decodeURIComponent(value.replace(/\+/g, ' '));
+  } catch {
+    return value;
+  }
+}
+
 function asNumber(value: unknown): string {
   if (value === null || value === undefined || value === '') return 'Not provided';
   const num = Number(value);
@@ -75,8 +85,12 @@ export default async function IntelligenceListingDetailPage({
   const heroPrice = listing.price
     ? (typeof listing.price === 'object' ? JSON.stringify(listing.price) : String(listing.price))
     : (details?.price !== undefined ? asNumber(details.price) : 'Not provided');
-  const title = listing.title;
-  const description = listing.description || listing.sourceTitle || (typeof details?.reason === 'string' ? details.reason : null);
+  const title = decodeMaybeEncodedText(formatValue(listing.title));
+  const description = listing.description
+    ? decodeMaybeEncodedText(formatValue(listing.description))
+    : listing.sourceTitle
+      ? decodeMaybeEncodedText(formatValue(listing.sourceTitle))
+      : (typeof details?.reason === 'string' ? decodeMaybeEncodedText(details.reason) : null);
 
   const infoRows = [
     { label: 'Purpose', value: listing.purpose || details?.purpose },
@@ -116,15 +130,15 @@ export default async function IntelligenceListingDetailPage({
                 {typeof details?.type === 'string' && <Badge variant="outline">{details.type}</Badge>}
               </div>
               <div className="space-y-1">
-                <CardTitle className="text-3xl tracking-tight">{title}</CardTitle>
-                {description && <CardDescription className="max-w-3xl text-base">{description}</CardDescription>}
+                <CardTitle className="text-3xl tracking-tight break-words">{title}</CardTitle>
+                {description && <CardDescription className="max-w-3xl text-base break-words">{description}</CardDescription>}
               </div>
             </div>
             <div className="rounded-xl border bg-background p-4 shadow-sm min-w-[240px]">
               <div className="text-xs uppercase tracking-wide text-muted-foreground">Price</div>
               <div className="mt-2 text-3xl font-semibold">{heroPrice}</div>
               <div className="mt-3 text-sm text-muted-foreground">
-                {listing.sourceUrl ?? 'Source unavailable'}
+                {listing.sourceUrl ? decodeMaybeEncodedText(listing.sourceUrl) : 'Source unavailable'}
               </div>
             </div>
           </div>
@@ -215,7 +229,7 @@ export default async function IntelligenceListingDetailPage({
                     <div className="text-muted-foreground">Source URL</div>
                     {listing.sourceUrl ? (
                       <a href={listing.sourceUrl} target="_blank" rel="noreferrer" className="break-all text-primary underline">
-                        {listing.sourceUrl}
+                        {decodeMaybeEncodedText(listing.sourceUrl)}
                       </a>
                     ) : (
                       <div>Not available</div>

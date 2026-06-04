@@ -13,6 +13,16 @@ function formatCompactValue(value: unknown): string | null {
   return String(value);
 }
 
+function decodeMaybeEncodedText(value: string): string {
+  if (!value.includes('%') && !value.includes('+')) return value;
+
+  try {
+    return decodeURIComponent(value.replace(/\+/g, ' '));
+  } catch {
+    return value;
+  }
+}
+
 function formatPrice(value: unknown): string | null {
   if (value === null || value === undefined || value === '') return null;
   if (typeof value === 'number' && Number.isFinite(value)) {
@@ -23,37 +33,31 @@ function formatPrice(value: unknown): string | null {
   return String(value);
 }
 
-function formatRelativeTime(value: string | Date | null | undefined): string | null {
-  if (!value) return null;
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return null;
-
-  const diffMs = Date.now() - date.getTime();
-  const diffDays = Math.max(0, Math.floor(diffMs / 86400000));
-  if (diffDays <= 0) return 'today';
-  if (diffDays === 1) return '1 day ago';
-  return `${diffDays} days ago`;
-}
-
 function formatListingTitle(title: unknown): string {
   const value = formatCompactValue(title) ?? 'Untitled';
-  return value.replace(/^property\s*\/\s*/i, '');
+  return decodeMaybeEncodedText(value.replace(/^property\s*\/\s*/i, ''));
 }
 
 function getListingSummary(listing: any) {
   const details = (listing.details as Record<string, unknown> | null) ?? null;
-  const competitorName = formatCompactValue(details?.competitorName ?? details?.competitor ?? details?.sourceName);
-  const agencyName = formatCompactValue(details?.agencyName ?? details?.agency ?? listing.sourceTitle);
+  const competitorName = formatCompactValue(
+    listing.competitorName ??
+      listing.pageCompetitorName ??
+      listing.competitor?.name ??
+      listing.pageCompetitor?.name ??
+      details?.competitorName ??
+      details?.competitor ??
+      details?.sourceName,
+  );
+  const agencyName = formatCompactValue(details?.agencyName ?? details?.agency);
   const price = formatPrice(listing.price ?? details?.price);
   const priceBasis = formatCompactValue(listing.priceBasis ?? details?.priceBasis);
-  const loggedAgo = formatRelativeTime(listing.loggedOn);
 
   return {
     competitorName,
     agencyName,
     price,
     priceBasis,
-    loggedAgo,
   };
 }
 
@@ -66,6 +70,8 @@ export default async function ListingsIntelligencePage({
   const listings = await prisma.$queryRaw<Array<any>>`
     SELECT
       l.*,
+      c.name AS "competitorName",
+      cp.name AS "pageCompetitorName",
       p.id AS "sourcePageId",
       p.title AS "sourceTitle",
       p.source AS "sourceUrl",
@@ -73,7 +79,9 @@ export default async function ListingsIntelligencePage({
       p."lastLoggedOn" AS "sourceLastLoggedOn",
       p."listedOn" AS "sourceListedOn"
     FROM "competitor_listings" l
+    LEFT JOIN "competitors" c ON c.id = l."competitorId"
     LEFT JOIN "competitor_pages" p ON p.id = l."competitorPageId"
+    LEFT JOIN "competitors" cp ON cp.id = p."competitorId"
     ORDER BY l."loggedOn" DESC
   `;
 
@@ -119,16 +127,19 @@ export default async function ListingsIntelligencePage({
               className="rounded-none border-t-0 first:rounded-t-lg first:border-t last:rounded-b-lg hover:border-primary transition-colors"
             >
               <CardHeader className="pb-3">
-                <CardTitle className="flex items-start gap-3 text-base leading-tight">
+                <CardTitle className="flex items-start gap-3 text-base leading-tight min-w-0">
                   <span className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-red-500" />
-                  <ClientLink href={`/manage/intelligence/listings/${listing.id}`} data-listing-id={listing.id} className="hover:underline">
+                  <ClientLink
+                    href={`/manage/intelligence/listings/${listing.id}`}
+                    data-listing-id={listing.id}
+                    className="block min-w-0 flex-1 break-words hover:underline"
+                  >
                     {formatListingTitle(listing.title)}
                   </ClientLink>
                 </CardTitle>
-                <CardDescription className="pl-5 truncate">
+                <CardDescription className="pl-5 min-w-0 break-words">
                   by {summary.competitorName ?? 'Unknown competitor'}
                   {summary.agencyName ? `, ${summary.agencyName}` : ''}
-                  {summary.loggedAgo ? ` • ${summary.loggedAgo}` : ''}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-1.5 pt-0 pl-5">

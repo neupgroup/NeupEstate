@@ -1,11 +1,16 @@
 import { prisma } from '@/logica/core/prisma';
 import { ClientLink } from '@/components/client-link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { ListChecks, Link2 } from 'lucide-react';
+import { ListChecks } from 'lucide-react';
 import { requirePagePermission } from '@/logica/auth/page-guard';
 import { PERMISSIONS } from '@/logica/auth/permissions';
 import { Pagination } from '@/components/manage/pagination';
+
+function getStatusDotColor(listing: { id: string } | null | undefined, lastLoggedStatus: string | null) {
+  if (listing) return 'bg-emerald-500';
+  if (lastLoggedStatus === 'not_to_log') return 'bg-slate-400';
+  return 'bg-red-500';
+}
 
 export default async function ListingsIntelligencePage({
   searchParams,
@@ -13,9 +18,14 @@ export default async function ListingsIntelligencePage({
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
   await requirePagePermission(PERMISSIONS.manage.intelligenceListingsView);
-  const listings = await prisma.competitorPage.findMany({
-    orderBy: { createdAt: 'desc' },
-  });
+  const listings = await prisma.$queryRaw<Array<any>>`
+    SELECT
+      p.*,
+      l.id AS "listingId"
+    FROM "competitor_pages" p
+    LEFT JOIN "competitor_listings" l ON l."competitorPageId" = p.id
+    ORDER BY p."createdAt" DESC
+  `;
   const resolvedSearchParams = await searchParams;
   const pageParam = Array.isArray(resolvedSearchParams?.page)
     ? resolvedSearchParams.page[0]
@@ -52,24 +62,23 @@ export default async function ListingsIntelligencePage({
         {currentListings.map((listing) => (
           <Card
             key={listing.id}
-            className="rounded-none border-t-0 first:rounded-t-lg first:border-t last:rounded-b-lg hover:border-primary transition-colors"
+            className="w-full overflow-hidden rounded-none border-t-0 first:rounded-t-lg first:border-t last:rounded-b-lg hover:border-primary transition-colors"
           >
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-base">
-                <Link2 className="h-4 w-4 text-primary" />
-                <a href={listing.source} target="_blank" rel="noreferrer" className="hover:underline">
+            <CardHeader className="min-w-0 pb-2">
+              <CardTitle className="flex w-full items-start gap-2 text-base min-w-0">
+                <span className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ${getStatusDotColor(listing.listingId ? { id: listing.listingId } : null, listing.lastLoggedStatus)}`} aria-hidden="true" />
+                <a href={listing.source} target="_blank" rel="noreferrer" className="block min-w-0 flex-1 whitespace-normal break-all leading-snug hover:underline">
                   {listing.title}
                 </a>
               </CardTitle>
-              <CardDescription className="truncate">
+              <CardDescription className="min-w-0 whitespace-normal break-all">
                 {listing.source}
               </CardDescription>
             </CardHeader>
-            <CardContent className="flex items-center justify-between gap-4">
+            <CardContent className="flex w-full items-center justify-between gap-4">
               <div className="text-sm text-muted-foreground">
                 {listing.listedOn ? new Date(listing.listedOn).toLocaleDateString() : new Date(listing.createdAt).toLocaleDateString()}
               </div>
-              <Badge variant="secondary">Logged</Badge>
             </CardContent>
           </Card>
         ))}
