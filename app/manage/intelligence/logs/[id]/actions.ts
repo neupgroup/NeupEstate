@@ -73,7 +73,7 @@ export async function crawlCompetitorSourcesAction(competitorId: string) {
       }
     }
 
-    revalidatePath('/manage/intelligence/listings');
+    revalidatePath('/manage/intelligence/logs');
 
     return {
       success: true,

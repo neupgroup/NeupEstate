@@ -233,7 +233,7 @@ export async function saveCrawledCompetitorPageAction(
 
     revalidatePath('/manage/intelligence/competition');
     revalidatePath(`/manage/intelligence/competition/${competitorId}`);
-    revalidatePath('/manage/intelligence/listings');
+    revalidatePath('/manage/intelligence/logs');
 
     return { success: true };
   } catch (error) {
