@@ -25,6 +25,10 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'cdn.neupcdn.com',
+      },
+      {
+        protocol: 'https',
         hostname: '**.**',
       }
     ],
