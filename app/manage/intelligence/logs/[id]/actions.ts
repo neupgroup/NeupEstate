@@ -75,11 +75,12 @@ export async function crawlCompetitorSourcesAction(competitorId: string) {
 
           try {
             if (!shouldIndexCrawledUrl(url, competitor.crawlRules)) {
-              await upsertCompetitorPage({
+            await upsertCompetitorPage({
                 competitorId,
                 title: buildDefaultTitle(url, existingPage?.title),
                 description: existingPage?.description ?? undefined,
                 source: url,
+                visibleHtml,
                 lastLoggedStatus: 'not_to_log',
                 lastLoggedOn: new Date(),
                 details: existingPage?.details ?? undefined,
@@ -113,6 +114,7 @@ export async function crawlCompetitorSourcesAction(competitorId: string) {
               title: aiResult.title?.trim() || buildDefaultTitle(url, existingPage?.title),
               description: aiResult.description?.trim() || existingPage?.description || undefined,
               source: url,
+              visibleHtml,
               lastLoggedStatus: 'logged',
               lastLoggedOn: new Date(),
               details: {
@@ -143,6 +145,7 @@ export async function crawlCompetitorSourcesAction(competitorId: string) {
                 title: buildDefaultTitle(url, existingPage?.title),
                 description: existingPage?.description ?? undefined,
                 source: url,
+                visibleHtml,
                 lastLoggedStatus: status,
                 lastLoggedOn: new Date(),
                 details: existingPage?.details ?? undefined,

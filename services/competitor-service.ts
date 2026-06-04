@@ -146,6 +146,7 @@ export async function upsertCompetitorPage(data: {
   title: string;
   description?: string;
   source: string;
+  visibleHtml?: string | null;
   lastLoggedStatus?: string | null;
   lastLoggedOn?: Date | null;
   details?: Record<string, any>;
@@ -165,7 +166,7 @@ export async function upsertCompetitorPage(data: {
       SET
         "title" = ${data.title},
         "description" = ${data.description},
-        "visibleHtml" = NULL,
+        "visibleHtml" = ${data.visibleHtml ?? null},
         "lastLoggedStatus" = ${data.lastLoggedStatus},
         "lastLoggedOn" = ${data.lastLoggedOn},
         "details" = ${data.details as any},
@@ -183,6 +184,7 @@ export async function upsertCompetitorPage(data: {
       "title",
       "description",
       "source",
+      "visibleHtml",
       "lastLoggedStatus",
       "lastLoggedOn",
       "details",
@@ -196,6 +198,7 @@ export async function upsertCompetitorPage(data: {
       ${data.title},
       ${data.description},
       ${data.source},
+      ${data.visibleHtml ?? null},
       ${data.lastLoggedStatus},
       ${data.lastLoggedOn},
       ${data.details as any},

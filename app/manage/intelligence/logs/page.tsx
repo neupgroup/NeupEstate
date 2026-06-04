@@ -1,6 +1,8 @@
 import { prisma } from '@/logica/core/prisma';
 import { ClientLink } from '@/components/client-link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { ListChecks } from 'lucide-react';
 import { requirePagePermission } from '@/logica/auth/page-guard';
 import { PERMISSIONS } from '@/logica/auth/permissions';
@@ -47,6 +49,25 @@ export default async function ListingsIntelligencePage({
           Directly view logged listing pages from crawled sources.
         </p>
       </div>
+
+      <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-background">
+        <CardHeader className="pb-3">
+          <div className="flex items-start justify-between gap-4">
+            <div className="space-y-2">
+              <Badge variant="secondary" className="w-fit">Pipeline</Badge>
+              <CardTitle className="text-xl">Crawl and fetch properties</CardTitle>
+              <CardDescription className="max-w-3xl break-words">
+                Crawl the site, fetch the rendered HTML, capture the source HTML, collect the images, save the rendered HTML in the database, and then pass the page to AI to create a competitor listing.
+              </CardDescription>
+            </div>
+            <Button asChild className="shrink-0">
+              <ClientLink href="/manage/intelligence/competition">
+                Start crawl
+              </ClientLink>
+            </Button>
+          </div>
+        </CardHeader>
+      </Card>
 
       {listings.length === 0 && (
         <p className="text-sm text-muted-foreground">
