@@ -12,18 +12,17 @@ export async function logActivity(activityData: CreateUserActivityInput): Promis
             return '';
         }
 
-        const activity = await (prisma.activity.create as any)({
+        const activity = await prisma.activity.create({
             data: {
-                account: {
-                    connect: {
-                        id: activityData.userId,
-                    },
+                trackerId: activityData.userId,
+                title: activityData.activity,
+                details: {
+                    page: activityData.page ?? null,
+                    propertyId: activityData.propertyId ?? null,
+                    duration: activityData.duration ?? null,
                 },
-                activity: activityData.activity,
-                page: activityData.page,
-                propertyId: activityData.propertyId,
                 activityOn: new Date(activityData.activityOn),
-                duration: activityData.duration,
+                ipAddress: 'unknown',
             },
         });
         return activity.id;

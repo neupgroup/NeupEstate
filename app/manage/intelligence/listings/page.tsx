@@ -6,7 +6,6 @@ import { ListChecks, Link2 } from 'lucide-react';
 import { requirePagePermission } from '@/logica/auth/page-guard';
 import { PERMISSIONS } from '@/logica/auth/permissions';
 import { Pagination } from '@/components/manage/pagination';
-import { ExtractListingButton } from './extract-button';
 
 export default async function ListingsIntelligencePage({
   searchParams,
@@ -15,15 +14,18 @@ export default async function ListingsIntelligencePage({
 }) {
   await requirePagePermission(PERMISSIONS.manage.intelligenceListingsView);
   const listings = await prisma.$queryRaw<Array<any>>`
-    SELECT *
-    FROM "competitor_pages"
-    ORDER BY "createdAt" DESC
+    SELECT
+      l.*,
+      p.id AS "sourcePageId",
+      p.title AS "sourceTitle",
+      p.source AS "sourceUrl",
+      p."lastLoggedStatus" AS "sourceLastLoggedStatus",
+      p."lastLoggedOn" AS "sourceLastLoggedOn",
+      p."listedOn" AS "sourceListedOn"
+    FROM "competitor_listings" l
+    LEFT JOIN "competitor_pages" p ON p.id = l."competitorPageId"
+    ORDER BY l."loggedOn" DESC
   `;
-  const savedRows = await prisma.$queryRaw<Array<{ competitorPageId: string; loggedOn: Date }>>`
-    SELECT "competitorPageId", "loggedOn"
-    FROM "competitor_listings"
-  `;
-  const savedByPageId = new Map(savedRows.map((row) => [row.competitorPageId, row.loggedOn]));
 
   const resolvedSearchParams = await searchParams;
   const pageParam = Array.isArray(resolvedSearchParams?.page)
@@ -43,56 +45,43 @@ export default async function ListingsIntelligencePage({
           Intelligence Listings
         </h2>
         <p className="text-sm text-muted-foreground mt-1">
-          Convert saved pages into structured property listings with Genkit.
+          Converted property listings extracted from crawled pages.
         </p>
       </div>
 
       {listings.length === 0 && (
         <p className="text-sm text-muted-foreground">
-          No source pages found yet. Add pages in{' '}
-          <ClientLink href="/manage/intelligence/logs" className="text-primary underline">
-            Logs
+          No converted property listings found yet. Convert crawled pages in{' '}
+          <ClientLink href="/manage/intelligence/competition" className="text-primary underline">
+            Competition
           </ClientLink>
           .
         </p>
       )}
 
       <div className="space-y-0">
-        {currentListings.map((page) => (
+        {currentListings.map((listing) => (
           <Card
-            key={page.id}
+            key={listing.id}
             className="rounded-none border-t-0 first:rounded-t-lg first:border-t last:rounded-b-lg hover:border-primary transition-colors"
           >
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2 text-base">
                 <Link2 className="h-4 w-4 text-primary" />
-                <a href={page.source} target="_blank" rel="noreferrer" className="hover:underline">
-                  {page.title}
-                </a>
+                <ClientLink href={listing.id.toString()} data-listing-id={listing.id} className="hover:underline">
+                  {listing.title}
+                </ClientLink>
               </CardTitle>
               <CardDescription className="truncate">
-                {page.source}
+                {listing.sourceUrl ?? 'Unknown source'}
               </CardDescription>
             </CardHeader>
             <CardContent className="flex items-center justify-between gap-4">
               <div className="flex flex-col gap-1 text-sm text-muted-foreground">
-                <span>
-                  {savedByPageId.has(page.id)
-                    ? `Listing saved on ${new Date(savedByPageId.get(page.id) as Date).toLocaleDateString()}`
-                    : page.lastLoggedStatus
-                      ? `HTTP ${page.lastLoggedStatus} logged on ${page.lastLoggedOn ? new Date(page.lastLoggedOn).toLocaleDateString() : 'unknown date'}`
-                      : 'Not extracted yet'}
-                </span>
+                <span>{new Date(listing.loggedOn).toLocaleDateString()}</span>
+                <span>{listing.sourceTitle ?? 'Source title unavailable'}</span>
               </div>
-              <div className="flex items-center gap-2">
-                {savedByPageId.has(page.id) ? (
-                  <Badge variant="secondary">Saved</Badge>
-                ) : page.lastLoggedStatus ? (
-                  <Badge variant="destructive">HTTP {page.lastLoggedStatus}</Badge>
-                ) : (
-                  <ExtractListingButton competitorPageId={page.id} />
-                )}
-              </div>
+              <Badge variant="secondary">Logged</Badge>
             </CardContent>
           </Card>
         ))}

@@ -295,6 +295,8 @@ export async function upsertCompetitorListing(data: {
     isSold: data.isSold ?? false,
     details: data.details,
   };
+  const priceJson = JSON.stringify(payload.price ?? null);
+  const detailsJson = JSON.stringify(payload.details ?? null);
 
   if (existing) {
     await prisma.$executeRaw`
@@ -304,10 +306,10 @@ export async function upsertCompetitorListing(data: {
         "description" = ${payload.description},
         "purpose" = ${payload.purpose},
         "agentName" = ${payload.agentName},
-        "price" = ${payload.price as any},
+        "price" = ${priceJson}::jsonb,
         "priceBasis" = ${payload.priceBasis},
         "isSold" = ${payload.isSold},
-        "details" = ${payload.details as any},
+        "details" = ${detailsJson}::jsonb,
         "updatedAt" = NOW()
       WHERE "id" = ${existing.id}
     `;
@@ -337,10 +339,10 @@ export async function upsertCompetitorListing(data: {
       ${payload.description},
       ${payload.purpose},
       ${payload.agentName},
-      ${payload.price as any},
+      ${priceJson}::jsonb,
       ${payload.priceBasis},
       ${payload.isSold},
-      ${payload.details as any},
+      ${detailsJson}::jsonb,
       NOW(),
       NOW(),
       NOW()
