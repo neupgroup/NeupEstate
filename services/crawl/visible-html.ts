@@ -1,5 +1,3 @@
-'use server';
-
 import * as cheerio from 'cheerio';
 
 export function extractVisibleHtml(rawHtml: string): string {

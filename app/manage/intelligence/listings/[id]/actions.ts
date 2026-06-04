@@ -2,7 +2,7 @@
 
 import { crawlSitemap } from '@/services/crawl/sitemap';
 import { crawlLinks } from '@/services/crawl/links';
-import { getCompetitorById, getCompetitorProperties, upsertCompetitorProperty } from '@/services/competitor-service';
+import { getCompetitorById, getCompetitorPages, upsertCompetitorPage } from '@/services/competitor-service';
 import { fetchPageSourceCode } from '@/services/activities/fetch-page-source2';
 import { extractVisibleHtml } from '@/services/crawl/visible-html';
 import { logProblem } from '@/services/problem-service';
@@ -15,7 +15,7 @@ export async function crawlCompetitorSourcesAction(competitorId: string) {
       return { success: false, error: 'Competitor not found' };
     }
 
-    const existingProperties = await getCompetitorProperties(competitorId);
+    const existingProperties = await getCompetitorPages(competitorId);
     const existingUrls = new Set(existingProperties.map(p => p.source));
 
     let discoveredCount = 0;
@@ -55,7 +55,7 @@ export async function crawlCompetitorSourcesAction(competitorId: string) {
             try {
               const rawHtml = await fetchPageSourceCode(url);
               const visibleHtml = extractVisibleHtml(rawHtml);
-              await upsertCompetitorProperty({
+              await upsertCompetitorPage({
                 competitorId,
                 title: new URL(url).pathname.split('/').filter(Boolean).join(' / ') || 'Listing',
                 source: url,

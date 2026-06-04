@@ -29,10 +29,10 @@ const BASE_PATH = '/estate';
 
 export function CompetitionDetailClient({
   competitor,
-  initialPropertyUrls,
+  initialPageUrls,
 }: {
   competitor: Competitor;
-  initialPropertyUrls: string[];
+  initialPageUrls: string[];
 }) {
   const [currentCompetitor, setCurrentCompetitor] = useState(competitor);
   const [isPending, startTransition] = useTransition();
@@ -87,7 +87,7 @@ export function CompetitionDetailClient({
   }
 
   function handleCrawlSources() {
-    const knownUrls = new Set(initialPropertyUrls);
+    const knownUrls = new Set(initialPageUrls);
 
     setIsCrawling(true);
     setCrawlMessage('Starting crawl...');

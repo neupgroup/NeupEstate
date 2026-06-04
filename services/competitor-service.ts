@@ -90,7 +90,7 @@ export async function deleteCompetitorSource(id: string): Promise<void> {
   await prisma.competitorSource.delete({ where: { id } });
 }
 
-// ── Competitor Properties ────────────────────────────────────────────────────
+// ── Competitor Pages ─────────────────────────────────────────────────────────
 
 export async function getCompetitorPages(competitorId: string): Promise<CompetitorPage[]> {
   try {

@@ -90,8 +90,8 @@ export async function crawlCompetitorSourcesAction(
     const competitor = await getCompetitorById(competitorId);
     if (!competitor) return { success: false, error: 'Competitor not found.' };
 
-    const existingProperties = await getCompetitorPages(competitorId);
-    const existingUrls = new Set(existingProperties.map((property) => property.source));
+    const existingPages = await getCompetitorPages(competitorId);
+    const existingUrls = new Set(existingPages.map((page) => page.source));
 
     let crawledCount = 0;
     let discoveredCount = 0;
@@ -144,7 +144,7 @@ export async function crawlCompetitorSourcesAction(
             savedCount += 1;
             existingUrls.add(url);
           } catch (error) {
-            errors.push(`${url}: ${error instanceof Error ? error.message : 'Failed to save property'}`);
+            errors.push(`${url}: ${error instanceof Error ? error.message : 'Failed to save page'}`);
           }
         }
       } catch (error) {
@@ -221,12 +221,14 @@ export async function saveCrawledCompetitorPageAction(
   description?: string,
 ): Promise<{ success: boolean; error?: string }> {
   try {
+    const rawHtml = await fetchPageSourceCode(url);
+    const visibleHtml = extractVisibleHtml(rawHtml);
     await upsertCompetitorPage({
       competitorId,
       source: url,
       title: title?.trim() || new URL(url).pathname.split('/').filter(Boolean).join(' / ') || 'Listing',
       description: description?.trim() || undefined,
-      visibleHtml: undefined,
+      visibleHtml,
     });
 
     revalidatePath('/manage/intelligence/competition');
@@ -235,6 +237,6 @@ export async function saveCrawledCompetitorPageAction(
 
     return { success: true };
   } catch (error) {
-    return { success: false, error: error instanceof Error ? error.message : 'Failed to save crawled property.' };
+    return { success: false, error: error instanceof Error ? error.message : 'Failed to save crawled page.' };
   }
 }
