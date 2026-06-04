@@ -68,7 +68,7 @@ export async function crawlCompetitorSourcesAction(competitorId: string) {
       }
     }
 
-    revalidatePath(`/manage/intelligence/listings/${competitorId}`);
+    revalidatePath('/manage/intelligence/listings');
 
     return {
       success: true,

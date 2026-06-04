@@ -225,7 +225,7 @@ export async function saveCrawledCompetitorPropertyAction(
 
     revalidatePath('/manage/intelligence/competition');
     revalidatePath(`/manage/intelligence/competition/${competitorId}`);
-    revalidatePath(`/manage/intelligence/listings/${competitorId}`);
+    revalidatePath('/manage/intelligence/listings');
 
     return { success: true };
   } catch (error) {

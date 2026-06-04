@@ -1,30 +1,46 @@
-import { getCompetitors } from '@/services/competitor-service';
+import { prisma } from '@/logica/core/prisma';
 import { ClientLink } from '@/components/client-link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ListChecks, Globe } from 'lucide-react';
+import { ListChecks, Link2 } from 'lucide-react';
 import { requirePagePermission } from '@/logica/auth/page-guard';
 import { PERMISSIONS } from '@/logica/auth/permissions';
+import { Pagination } from '@/components/manage/pagination';
 
-export default async function ListingsIntelligencePage() {
+export default async function ListingsIntelligencePage({
+  searchParams,
+}: {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}) {
   await requirePagePermission(PERMISSIONS.manage.intelligenceListingsView);
-  const competitors = await getCompetitors();
+  const listings = await prisma.competitorProperty.findMany({
+    orderBy: { createdAt: 'desc' },
+  });
+  const resolvedSearchParams = await searchParams;
+  const pageParam = Array.isArray(resolvedSearchParams?.page)
+    ? resolvedSearchParams.page[0]
+    : (resolvedSearchParams?.page as string | undefined);
+  const currentPage = Math.max(1, Number(pageParam ?? '1'));
+  const pageSize = 10;
+  const totalPages = Math.max(1, Math.ceil(listings.length / pageSize));
+  const start = (currentPage - 1) * pageSize;
+  const currentListings = listings.slice(start, start + pageSize);
 
   return (
     <div className="space-y-8">
       <div>
         <h2 className="text-2xl font-semibold tracking-tight flex items-center gap-2">
           <ListChecks className="h-6 w-6" />
-          Listings Intelligence
+          Intelligence Listings
         </h2>
         <p className="text-sm text-muted-foreground mt-1">
-          Select a competitor to analyse their listings via sitemaps and page links.
+          Directly view logged listing pages from crawled sources.
         </p>
       </div>
 
-      {competitors.length === 0 && (
+      {listings.length === 0 && (
         <p className="text-sm text-muted-foreground">
-          No competitors found. Add them in{' '}
+          No listings found yet. Add sources in{' '}
           <ClientLink href="/manage/intelligence/competition" className="text-primary underline">
             Competition
           </ClientLink>
@@ -32,26 +48,36 @@ export default async function ListingsIntelligencePage() {
         </p>
       )}
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {competitors.map((competitor) => (
-          <ClientLink key={competitor.id} href={`/manage/intelligence/listings/${competitor.id}`}>
-            <Card className="hover:border-primary transition-colors cursor-pointer h-full">
-              <CardHeader className="pb-2">
-                <CardTitle className="flex items-center gap-2 text-base">
-                  <Globe className="h-4 w-4 text-primary" />
-                  {competitor.name}
-                </CardTitle>
-                {competitor.description && (
-                  <CardDescription>{competitor.description}</CardDescription>
-                )}
-              </CardHeader>
-              <CardContent>
-                <Badge variant="secondary">{competitor.sources.length} source{competitor.sources.length !== 1 ? 's' : ''}</Badge>
-              </CardContent>
-            </Card>
-          </ClientLink>
+      <div className="space-y-0">
+        {currentListings.map((listing) => (
+          <Card
+            key={listing.id}
+            className="rounded-none border-t-0 first:rounded-t-lg first:border-t last:rounded-b-lg hover:border-primary transition-colors"
+          >
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 text-base">
+                <Link2 className="h-4 w-4 text-primary" />
+                <a href={listing.source} target="_blank" rel="noreferrer" className="hover:underline">
+                  {listing.title}
+                </a>
+              </CardTitle>
+              <CardDescription className="truncate">
+                {listing.source}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex items-center justify-between gap-4">
+              <div className="text-sm text-muted-foreground">
+                {listing.listedOn ? new Date(listing.listedOn).toLocaleDateString() : new Date(listing.createdAt).toLocaleDateString()}
+              </div>
+              <Badge variant="secondary">Logged</Badge>
+            </CardContent>
+          </Card>
         ))}
       </div>
+
+      {totalPages > 1 && (
+        <Pagination totalPages={totalPages} currentPage={currentPage} />
+      )}
     </div>
   );
 }
