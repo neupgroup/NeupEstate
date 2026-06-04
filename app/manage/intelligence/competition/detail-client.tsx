@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ClientLink } from '@/components/client-link';
-import { addCompetitorSourceAction, deleteCompetitorSourceAction, saveCrawledCompetitorPropertyAction } from './actions';
+import { addCompetitorSourceAction, deleteCompetitorSourceAction, saveCrawledCompetitorPageAction } from './actions';
 import type { Competitor } from './types';
 import { useToast } from '@/logica/core/hooks/use-toast';
 
@@ -118,7 +118,7 @@ export function CompetitionDetailClient({
             setCrawlStats({ crawledCount, discoveredCount, savedCount });
             setCrawlMessage(`Crawled ${crawledCount} pages, discovered ${discoveredCount} new pages`);
 
-            const saveResult = await saveCrawledCompetitorPropertyAction(currentCompetitor.id, url);
+            const saveResult = await saveCrawledCompetitorPageAction(currentCompetitor.id, url);
             if (saveResult.success) {
               savedCount += 1;
               knownUrls.add(url);

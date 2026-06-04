@@ -7,12 +7,14 @@ import {
   addCompetitorSource,
   deleteCompetitorSource,
   getCompetitorById,
-  getCompetitorProperties,
-  upsertCompetitorProperty,
+  getCompetitorPages,
+  upsertCompetitorPage,
   type Competitor,
 } from '@/services/competitor-service';
 import { crawlSitemap } from '@/services/crawl/sitemap';
 import { crawlLinks } from '@/services/crawl/links';
+import { fetchPageSourceCode } from '@/services/activities/fetch-page-source2';
+import { extractVisibleHtml } from '@/services/crawl/visible-html';
 import { revalidatePath } from 'next/cache';
 
 export async function getCompetitorsAction(): Promise<Competitor[]> {
@@ -88,7 +90,7 @@ export async function crawlCompetitorSourcesAction(
     const competitor = await getCompetitorById(competitorId);
     if (!competitor) return { success: false, error: 'Competitor not found.' };
 
-    const existingProperties = await getCompetitorProperties(competitorId);
+    const existingProperties = await getCompetitorPages(competitorId);
     const existingUrls = new Set(existingProperties.map((property) => property.source));
 
     let crawledCount = 0;
@@ -131,10 +133,13 @@ export async function crawlCompetitorSourcesAction(
           discoveredCount += 1;
 
           try {
-            await upsertCompetitorProperty({
+            const rawHtml = await fetchPageSourceCode(url);
+            const visibleHtml = extractVisibleHtml(rawHtml);
+            await upsertCompetitorPage({
               competitorId,
               title: new URL(url).pathname.split('/').filter(Boolean).join(' / ') || 'Listing',
               source: url,
+              visibleHtml,
             });
             savedCount += 1;
             existingUrls.add(url);
@@ -209,18 +214,19 @@ export async function crawlAllCompetitorSourcesAction(): Promise<
   }
 }
 
-export async function saveCrawledCompetitorPropertyAction(
+export async function saveCrawledCompetitorPageAction(
   competitorId: string,
   url: string,
   title?: string,
   description?: string,
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    await upsertCompetitorProperty({
+    await upsertCompetitorPage({
       competitorId,
       source: url,
       title: title?.trim() || new URL(url).pathname.split('/').filter(Boolean).join(' / ') || 'Listing',
       description: description?.trim() || undefined,
+      visibleHtml: undefined,
     });
 
     revalidatePath('/manage/intelligence/competition');

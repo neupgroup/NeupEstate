@@ -945,7 +945,7 @@ model Competitor {
   updatedAt   DateTime             @updatedAt
 
   sources     CompetitorSource[]
-  properties  CompetitorProperty[]
+  pages       CompetitorPage[]
 
   @@map("competitors")
 }
@@ -963,12 +963,13 @@ model CompetitorSource {
   @@map("competitor_sources")
 }
 
-model CompetitorProperty {
+model CompetitorPage {
   id           String               @id @default(cuid())
   competitorId String
   title        String
   description  String?
   source       String               // URL the property was found at
+  visibleHtml  String?              @db.Text
   details      Json?
   listedOn     DateTime?
   createdAt    DateTime             @default(now())
@@ -979,18 +980,18 @@ model CompetitorProperty {
 
   @@index([competitorId])
   @@index([source])
-  @@map("competitor_properties")
+  @@map("competitor_pages")
 }
 
 model CompetitorTracking {
   id                   String             @id @default(cuid())
-  competitorPropertyId String
+  competitorPageId     String
   ourPropertyId        String?
   createdAt            DateTime           @default(now())
 
-  competitorProperty   CompetitorProperty @relation(fields: [competitorPropertyId], references: [id], onDelete: Cascade)
+  competitorPage       CompetitorPage     @relation(fields: [competitorPageId], references: [id], onDelete: Cascade)
 
-  @@index([competitorPropertyId])
+  @@index([competitorPageId])
   @@index([ourPropertyId])
   @@map("competitor_tracking")
 }

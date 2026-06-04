@@ -13,7 +13,7 @@ export default async function ListingsIntelligencePage({
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
   await requirePagePermission(PERMISSIONS.manage.intelligenceListingsView);
-  const listings = await prisma.competitorProperty.findMany({
+  const listings = await prisma.competitorPage.findMany({
     orderBy: { createdAt: 'desc' },
   });
   const resolvedSearchParams = await searchParams;

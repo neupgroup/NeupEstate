@@ -3,6 +3,8 @@
 import { crawlSitemap } from '@/services/crawl/sitemap';
 import { crawlLinks } from '@/services/crawl/links';
 import { getCompetitorById, getCompetitorProperties, upsertCompetitorProperty } from '@/services/competitor-service';
+import { fetchPageSourceCode } from '@/services/activities/fetch-page-source2';
+import { extractVisibleHtml } from '@/services/crawl/visible-html';
 import { logProblem } from '@/services/problem-service';
 import { revalidatePath } from 'next/cache';
 
@@ -51,10 +53,13 @@ export async function crawlCompetitorSourcesAction(competitorId: string) {
           discoveredCount++;
           if (!existingUrls.has(url)) {
             try {
+              const rawHtml = await fetchPageSourceCode(url);
+              const visibleHtml = extractVisibleHtml(rawHtml);
               await upsertCompetitorProperty({
                 competitorId,
                 title: new URL(url).pathname.split('/').filter(Boolean).join(' / ') || 'Listing',
                 source: url,
+                visibleHtml,
               });
               savedCount++;
               existingUrls.add(url);

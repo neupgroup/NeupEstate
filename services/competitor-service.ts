@@ -20,12 +20,13 @@ export type CompetitorSource = {
   value: string;
 };
 
-export type CompetitorProperty = {
+export type CompetitorPage = {
   id: string;
   competitorId: string;
   title: string;
   description: string | null;
   source: string;
+  visibleHtml: string | null;
   details: Record<string, any> | null;
   listedOn: string | null;
   createdAt: string;
@@ -33,7 +34,7 @@ export type CompetitorProperty = {
 
 export type CompetitorTracking = {
   id: string;
-  competitorPropertyId: string;
+  competitorPageId: string;
   ourPropertyId: string | null;
 };
 
@@ -91,38 +92,40 @@ export async function deleteCompetitorSource(id: string): Promise<void> {
 
 // ── Competitor Properties ────────────────────────────────────────────────────
 
-export async function getCompetitorProperties(competitorId: string): Promise<CompetitorProperty[]> {
+export async function getCompetitorPages(competitorId: string): Promise<CompetitorPage[]> {
   try {
-    const rows = await prisma.competitorProperty.findMany({
+    const rows = await prisma.competitorPage.findMany({
       where: { competitorId },
       orderBy: { createdAt: 'desc' },
     });
-    return rows.map(mapCompetitorProperty);
+    return rows.map(mapCompetitorPage);
   } catch (e) {
-    await logProblem(e, `getCompetitorProperties (${competitorId})`);
+    await logProblem(e, `getCompetitorPages (${competitorId})`);
     return [];
   }
 }
 
-export async function upsertCompetitorProperty(data: {
+export async function upsertCompetitorPage(data: {
   competitorId: string;
   title: string;
   description?: string;
   source: string;
+  visibleHtml?: string;
   details?: Record<string, any>;
   listedOn?: Date;
 }): Promise<string> {
-  const existing = await prisma.competitorProperty.findFirst({
+  const existing = await prisma.competitorPage.findFirst({
     where: { competitorId: data.competitorId, source: data.source },
     select: { id: true },
   });
 
   if (existing) {
-    await prisma.competitorProperty.update({
+    await prisma.competitorPage.update({
       where: { id: existing.id },
       data: {
         title: data.title,
         description: data.description,
+        visibleHtml: data.visibleHtml,
         details: data.details,
         listedOn: data.listedOn,
       },
@@ -130,29 +133,29 @@ export async function upsertCompetitorProperty(data: {
     return existing.id;
   }
 
-  const row = await prisma.competitorProperty.create({ data });
+  const row = await prisma.competitorPage.create({ data });
   return row.id;
 }
 
 // ── Tracking ─────────────────────────────────────────────────────────────────
 
-export async function getTrackingForCompetitorProperty(
-  competitorPropertyId: string,
+export async function getTrackingForCompetitorPage(
+  competitorPageId: string,
 ): Promise<CompetitorTracking[]> {
-  const rows = await prisma.competitorTracking.findMany({ where: { competitorPropertyId } });
+  const rows = await prisma.competitorTracking.findMany({ where: { competitorPageId } });
   return rows.map((r) => ({
     id: r.id,
-    competitorPropertyId: r.competitorPropertyId,
+    competitorPageId: r.competitorPageId,
     ourPropertyId: r.ourPropertyId ?? null,
   }));
 }
 
 export async function linkToOurProperty(
-  competitorPropertyId: string,
+  competitorPageId: string,
   ourPropertyId: string,
 ): Promise<string> {
   const row = await prisma.competitorTracking.create({
-    data: { competitorPropertyId, ourPropertyId },
+    data: { competitorPageId, ourPropertyId },
   });
   return row.id;
 }
@@ -178,13 +181,14 @@ function mapCompetitor(row: any): Competitor {
   };
 }
 
-function mapCompetitorProperty(row: any): CompetitorProperty {
+function mapCompetitorPage(row: any): CompetitorPage {
   return {
     id: row.id,
     competitorId: row.competitorId,
     title: row.title,
     description: row.description ?? null,
     source: row.source,
+    visibleHtml: row.visibleHtml ?? null,
     details: row.details ?? null,
     listedOn: row.listedOn?.toISOString() ?? null,
     createdAt: row.createdAt.toISOString(),
