@@ -2,11 +2,11 @@ import { prisma } from '@/logica/core/prisma';
 import { ClientLink } from '@/components/client-link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { ListChecks } from 'lucide-react';
 import { requirePagePermission } from '@/logica/auth/page-guard';
 import { PERMISSIONS } from '@/logica/auth/permissions';
 import { Pagination } from '@/components/manage/pagination';
+import { StartCrawlButton } from './start-crawl-button';
 
 function getStatusDotColor(listing: { id: string } | null | undefined, lastLoggedStatus: string | null) {
   if (listing) return 'bg-emerald-500';
@@ -60,11 +60,7 @@ export default async function ListingsIntelligencePage({
                 Crawl the site, fetch the rendered HTML, capture the source HTML, collect the images, save the rendered HTML in the database, and then pass the page to AI to create a competitor listing.
               </CardDescription>
             </div>
-            <Button asChild className="shrink-0">
-              <ClientLink href="/manage/intelligence/competition">
-                Start crawl
-              </ClientLink>
-            </Button>
+            <StartCrawlButton />
           </div>
         </CardHeader>
       </Card>

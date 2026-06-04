@@ -2,7 +2,6 @@
 
 import { ai, resolveGoogleModel } from '@/logica/core/ai/genkit';
 import { z } from 'zod';
-import { getPrompt } from '@/services/prompt-service';
 
 const IntelligencePageInputSchema = z.object({
   url: z.string().url(),
@@ -62,8 +61,16 @@ HTML:
 \`\`\`html
 {{{htmlContent}}}
 \`\`\`
-`,
+  `,
 };
+
+const extractIntelligencePagePrompt = ai.definePrompt({
+  name: PROMPT_ID,
+  input: { schema: IntelligencePageInputSchema },
+  output: { schema: IntelligencePageOutputSchema },
+  prompt: defaultPrompt.promptText,
+  model: resolveGoogleModel(),
+});
 
 const flow = ai.defineFlow(
   {
@@ -72,17 +79,7 @@ const flow = ai.defineFlow(
     outputSchema: IntelligencePageOutputSchema,
   },
   async (input) => {
-    const promptConfig = await getPrompt(PROMPT_ID, defaultPrompt);
-
-    const prompt = ai.definePrompt({
-      name: PROMPT_ID,
-      input: { schema: IntelligencePageInputSchema },
-      output: { schema: IntelligencePageOutputSchema },
-      prompt: promptConfig.promptText,
-      model: resolveGoogleModel(promptConfig.model),
-    });
-
-    const { output } = await prompt(input);
+    const { output } = await extractIntelligencePagePrompt(input);
     if (!output) {
       return { success: false, reason: 'AI did not return a usable JSON response.' };
     }

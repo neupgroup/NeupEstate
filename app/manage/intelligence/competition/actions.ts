@@ -17,8 +17,10 @@ import { fetchPageSourceCode } from '@/services/activities/fetch-page-source2';
 import { extractVisibleHtml } from '@/services/crawl/visible-html';
 import { shouldIndexCrawledUrl } from '@/services/crawl/crawl-rules';
 import { extractIntelligencePage } from '@/services/ai/extract-intelligence-page-flow';
+import { extractCompetitorListing } from '@/services/ai/extract-competitor-listing-flow';
 import { revalidatePath } from 'next/cache';
 import { prisma } from '@/logica/core/prisma';
+import { upsertCompetitorListing } from '@/services/competitor-service';
 
 function getHttpStatusFromError(error: unknown): string | null {
   const message = error instanceof Error ? error.message : String(error);
@@ -165,6 +167,7 @@ export async function crawlCompetitorSourcesAction(
         for (const url of urls) {
           discoveredCount += 1;
           const existingPage = existingPages.find((page) => page.source === url);
+          let pageId = existingPage?.id ?? null;
 
           if (existingPage && isLoggedStatus(existingPage.lastLoggedStatus)) {
             continue;
@@ -172,7 +175,7 @@ export async function crawlCompetitorSourcesAction(
 
           try {
             if (!shouldIndexCrawledUrl(url, competitor.crawlRules)) {
-            await upsertCompetitorPage({
+              pageId = await upsertCompetitorPage({
                 competitorId,
                 title: buildDefaultTitle(url, existingPage?.title),
                 description: existingPage?.description ?? undefined,
@@ -206,7 +209,7 @@ export async function crawlCompetitorSourcesAction(
               continue;
             }
 
-            await upsertCompetitorPage({
+            pageId = await upsertCompetitorPage({
               competitorId,
               title: aiResult.title?.trim() || buildDefaultTitle(url, existingPage?.title),
               description: aiResult.description?.trim() || existingPage?.description || undefined,
@@ -232,12 +235,32 @@ export async function crawlCompetitorSourcesAction(
               },
               listedOn: existingPage?.listedOn ? new Date(existingPage.listedOn) : new Date(),
             });
+
+            const listingResult = await extractCompetitorListing({ url });
+            if (listingResult.isPropertyPage && pageId) {
+              await upsertCompetitorListing({
+                competitorId,
+                competitorPageId: pageId,
+                title: listingResult.title?.trim() || aiResult.title?.trim() || buildDefaultTitle(url, existingPage?.title),
+                description: listingResult.description?.trim() || aiResult.description?.trim() || existingPage?.description || undefined,
+                purpose: listingResult.purpose ?? aiResult.purpose ?? 'sales',
+                agentName: listingResult.agentName ?? aiResult.agentName,
+                price: listingResult.price ?? aiResult.price ?? null,
+                priceBasis: listingResult.priceBasis ?? aiResult.priceBasis,
+                isSold: listingResult.isSold ?? aiResult.isSold ?? false,
+                details: {
+                  ...(aiResult.details ?? {}),
+                  ...(listingResult.details ?? {}),
+                },
+              });
+              revalidatePath('/manage/intelligence/listings');
+            }
             savedCount += 1;
             existingUrls.add(url);
           } catch (error) {
             const status = getHttpStatusFromError(error);
             if (status) {
-              await upsertCompetitorPage({
+              pageId = await upsertCompetitorPage({
                 competitorId,
                 title: buildDefaultTitle(url, existingPage?.title),
                 description: existingPage?.description ?? undefined,
