@@ -68,7 +68,7 @@ export default async function ListingsIntelligencePage({
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2 text-base">
                 <Link2 className="h-4 w-4 text-primary" />
-                <ClientLink href={listing.id.toString()} data-listing-id={listing.id} className="hover:underline">
+                <ClientLink href={`/manage/intelligence/listings/${listing.id}`} data-listing-id={listing.id} className="hover:underline">
                   {listing.title}
                 </ClientLink>
               </CardTitle>
