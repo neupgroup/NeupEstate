@@ -34,7 +34,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/logica/core/hooks/use-toast';
 import { createWhatsAppTemplateAction, deleteWhatsAppTemplateAction, updateWhatsAppConfigAction } from '@/app/actions';
 
 import type { WhatsAppTemplate, CreateWhatsAppTemplateFormValues, WhatsAppConfig } from '@/types';

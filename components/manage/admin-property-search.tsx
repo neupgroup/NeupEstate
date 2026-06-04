@@ -5,7 +5,7 @@ import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search, X, SlidersHorizontal } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/logica/core/utils';
 import { PriceInput } from '@/components/ui/price-input';
 
 // ─── Quick filter definitions ─────────────────────────────────────────────────

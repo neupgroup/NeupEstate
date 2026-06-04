@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Sparkles, ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/logica/core/utils";
 
 type GuestSigninBannerProps = {
   variant: "hero" | "inline";

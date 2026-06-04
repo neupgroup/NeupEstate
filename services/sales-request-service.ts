@@ -1,7 +1,7 @@
 
 'use server';
 
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/logica/core/prisma';
 import type { SalesRequest, CreateSalesRequestFormValues } from '@/types';
 import { logProblem } from './problem-service';
 

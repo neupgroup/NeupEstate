@@ -41,7 +41,7 @@ import { deleteAccountAndData } from '@/services/account-service';
 import { getIdentity } from '@/services/neupid/get-identity';
 import { requirePermission } from '@/logica/auth/authorization';
 import { PERMISSIONS } from '@/logica/auth/permissions';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/logica/core/prisma';
 
 // ---------------------------------------------------------------------------
 // Identity guard

@@ -1,6 +1,6 @@
 'use server';
 
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/logica/core/prisma';
 import { logProblem } from './problem-service';
 import type { Agent, CreateAgentFormValues, UpdateAgentFormValues } from '@/types';
 import slugify from 'slugify';

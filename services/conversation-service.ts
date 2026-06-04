@@ -2,7 +2,7 @@
 
 'use server';
 
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/logica/core/prisma';
 import type { Conversation, Message, CreateConversationInput } from '@/types';
 
 

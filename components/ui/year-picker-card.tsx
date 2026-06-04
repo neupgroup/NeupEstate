@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/logica/core/utils";
 
 interface YearPickerCardProps {
     name: string;

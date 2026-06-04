@@ -44,7 +44,7 @@ The Protocol Buffers definition for the AuthService. Defines the `Verify` RPC an
 - `VerifyResponse`: Contains `valid` (bool), `error` (string), `user` (User)
 - `User`: Contains `accountId`, `neupId`, `displayName`, `displayImage`, `accountType`, `verified`
 
-### 2. `lib/neupid-grpc.ts`
+### 2. `core/neupid-grpc.ts`
 
 Creates and exports a singleton gRPC client for the AuthService. The client is cached globally to avoid creating a new channel on every hot-reload in development.
 
@@ -52,7 +52,7 @@ Creates and exports a singleton gRPC client for the AuthService. The client is c
 - Reads `NEUPID_GRPC_HOST` from environment (defaults to `localhost:50051`)
 - Uses insecure credentials (no TLS) — **keep this on a private network**
 
-### 3. `lib/verify-session.ts`
+### 3. `core/verify-session.ts`
 
 Typed wrapper around the gRPC `Verify` RPC. Accepts a session triplet and returns either:
 - `{ valid: true, user: NeupUser }` on success
@@ -70,7 +70,7 @@ Typed wrapper around the gRPC `Verify` RPC. Accepts a session triplet and return
 }
 ```
 
-### 4. `lib/get-identity.ts`
+### 4. `core/get-identity.ts`
 
 High-level server-side helper that:
 1. Reads the `auth_accounts` cookie (via `next/headers` or manual input)
@@ -100,7 +100,7 @@ Parses the `auth_accounts` cookie JSON and extracts the active account (where `d
 ### In a Server Component
 
 ```ts
-import { getIdentity } from '@/lib/get-identity';
+import { getIdentity } from '@/logica/core/get-identity';
 
 export default async function DashboardPage() {
   const identity = await getIdentity();
@@ -124,7 +124,7 @@ export default async function DashboardPage() {
 ```ts
 'use server';
 
-import { getIdentity } from '@/lib/get-identity';
+import { getIdentity } from '@/logica/core/get-identity';
 
 export async function createPost(formData: FormData) {
   const identity = await getIdentity();
@@ -142,7 +142,7 @@ export async function createPost(formData: FormData) {
 
 ```ts
 import { NextRequest, NextResponse } from 'next/server';
-import { getIdentity } from '@/lib/get-identity';
+import { getIdentity } from '@/logica/core/get-identity';
 
 export async function GET(request: NextRequest) {
   const cookieValue = request.cookies.get('auth_accounts')?.value;
@@ -161,7 +161,7 @@ export async function GET(request: NextRequest) {
 If you need more control, you can call `verifySession` directly:
 
 ```ts
-import { verifySession } from '@/lib/verify-session';
+import { verifySession } from '@/logica/core/verify-session';
 import { getActiveAccount } from '@/services/account/getAccount';
 
 const account = getActiveAccount(cookieValue);

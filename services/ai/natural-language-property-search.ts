@@ -11,7 +11,7 @@
  * - NaturalLanguageSearchOutput - The return type for the naturalLanguagePropertySearch function.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai} from '@/logica/core/ai/genkit';
 import {z} from 'zod';
 import { NaturalLanguageSearchOutputSchema, type NaturalLanguageSearchOutput } from '@/types';
 import { getPrompt } from '@/services/prompt-service';

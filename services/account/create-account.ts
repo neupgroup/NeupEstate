@@ -19,7 +19,7 @@
  */
 
 import { headers } from 'next/headers';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/logica/core/prisma';
 import { getSignedAccountInformation } from '@/services/account/lookup';
 import { logProblem } from '@/services/problem-service';
 

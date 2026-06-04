@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { Menu, X, BadgeCheck } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { getAccountDisplayName, getAccountHandle } from "@/lib/account-display";
+import { cn } from "@/logica/core/utils";
+import { getAccountDisplayName, getAccountHandle } from "@/logica/core/account-display";
 import { isActivePublicHrefV1 } from "@/components/logic/PublicNavSelection.v1";
 import { appendSelectedAgencyV1, getLongestMatchingManageNavHrefV1 } from "@/components/logic/ManageNavSelection.v1";
-import { manageNav } from "@/lib/manage-nav";
+import { manageNav } from "@/logica/core/manage-nav";
 import { ProfileV1 } from "@/components/elements/Profile.v1";
 
 const publicNavLinks = [

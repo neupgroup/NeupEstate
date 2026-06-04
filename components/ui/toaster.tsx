@@ -1,6 +1,6 @@
 "use client"
 
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from "@/logica/core/hooks/use-toast"
 import {
   Toast,
   ToastClose,

@@ -2,7 +2,7 @@
 
 'use server';
 
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/logica/core/prisma';
 import { logProblem } from './problem-service';
 import type { CreatePromptFormValues } from '@/types';
 import { getDefaultModel } from './model-service';

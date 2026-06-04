@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ClientLink } from '@/components/client-link';
 import { addCompetitorSourceAction, deleteCompetitorSourceAction, saveCrawledCompetitorPropertyAction } from './actions';
 import type { Competitor } from './types';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/logica/core/hooks/use-toast';
 
 type SourceType = 'sitemap' | 'link' | 'manual';
 

@@ -16,7 +16,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthenticatedAccount, buildHandshakeGrantUrl } from '@/services/auth';
 import { getSignedAccountInformation } from '@/services/account/lookup';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/logica/core/prisma';
 
 export async function GET(request: NextRequest) {
   // Verify authentication

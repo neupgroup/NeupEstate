@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/logica/core/prisma';
 import { getAccountById } from '@/services/account-service';
 import { getRequirementByUserId } from '@/services/requirements-service';
 import { getSavedProperties, getPaginatedProperties } from '@/services/property-service';

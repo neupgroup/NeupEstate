@@ -8,7 +8,7 @@
  * - ExtractPropertyDetailsOutput - The return type for the flow.
  */
 
-import { ai, resolveGoogleModel } from '@/ai/genkit';
+import { ai, resolveGoogleModel } from '@/logica/core/ai/genkit';
 import { z } from 'zod';
 import { addProperty, updatePropertyWithExtractedData } from '@/services/property-service';
 import { ExtractedPropertySchema } from '@/types';

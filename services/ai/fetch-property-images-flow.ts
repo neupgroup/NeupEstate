@@ -5,7 +5,7 @@
  * @fileOverview An AI flow to intelligently extract property images from a webpage URL.
  */
 
-import { ai } from '@/ai/genkit';
+import { ai } from '@/logica/core/ai/genkit';
 import { z } from 'zod';
 import { fetchPageContent } from '@/services/activities/fetch-page-content';
 import { logProblem } from '@/services/problem-service';

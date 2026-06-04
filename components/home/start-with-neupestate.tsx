@@ -1,6 +1,6 @@
 import { ClientLink } from "@/components/estate";
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/logica/core/utils";
 import { Section } from "@/components/home/_components/section";
 import { UserCheck, Building2 } from "lucide-react";
 

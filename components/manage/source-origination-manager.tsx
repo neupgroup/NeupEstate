@@ -9,7 +9,7 @@ import { SafeImage } from '@/components/safe-image';
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/logica/core/hooks/use-toast';
 import { Loader2, DownloadCloud, AlertCircle, ImageDown } from 'lucide-react';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import {
@@ -23,7 +23,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { cn } from '@/lib/utils';
+import { cn } from '@/logica/core/utils';
 
 
 interface SourceOriginationManagerProps {

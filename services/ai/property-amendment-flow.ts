@@ -9,7 +9,7 @@
  * - PropertyAmendmentResult - The return type for the amendment function.
  */
 
-import { ai, resolveGoogleModel } from '@/ai/genkit';
+import { ai, resolveGoogleModel } from '@/logica/core/ai/genkit';
 import { z } from 'zod';
 import { getPropertyById, updatePropertyWithExtractedData } from '@/services/property-service';
 import { PropertyAmendmentResultSchema, type PropertyAmendmentResult, ExtractedPropertySchema } from '@/types';

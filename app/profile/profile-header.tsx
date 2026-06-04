@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Camera, BadgeCheck } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { getAccountDisplayName, getAccountHandle } from '@/lib/account-display';
+import { getAccountDisplayName, getAccountHandle } from '@/logica/core/account-display';
 type ProfileHeaderProps = {
   displayName: string;
   displayImage: string | null;

@@ -4,7 +4,7 @@
 import { useSearchParams, usePathname } from 'next/navigation';
 import { buttonVariants } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn } from '@/logica/core/utils';
 import { ClientLink } from './client-link';
 
 interface PaginationProps {

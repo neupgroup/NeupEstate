@@ -1,7 +1,7 @@
 
 'use server';
 
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/logica/core/prisma';
 import type { Inquiry, CreateInquiryFormValues, InquiryStatus } from '@/types';
 import { getPropertyById } from './property-service';
 import { logProblem } from './problem-service';

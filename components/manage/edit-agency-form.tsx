@@ -11,7 +11,7 @@ import { updateAgencyAction, deleteAgencyAction } from '@/app/actions';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/logica/core/hooks/use-toast';
 import { Loader2, Trash2, Pencil } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import {

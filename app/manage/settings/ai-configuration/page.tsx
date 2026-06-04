@@ -11,10 +11,10 @@ import { Pencil, Info, Bot, PlusCircle, Trash2, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/logica/core/hooks/use-toast';
 import { deletePromptAction } from '@/app/actions';
 import { ClientLink } from '@/components/client-link';
-import { cn } from '@/lib/utils';
+import { cn } from '@/logica/core/utils';
 
 export default function AiConfigurationPage() {
     const { toast } = useToast();

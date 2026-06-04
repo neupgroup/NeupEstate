@@ -10,7 +10,7 @@
  * to the appropriate provider based on the 'provider' parameter.
  */
 
-import { ai, resolveGoogleModel } from '@/ai/genkit';
+import { ai, resolveGoogleModel } from '@/logica/core/ai/genkit';
 import * as Handlebars from 'handlebars';
 import { logProblem } from '@/services/problem-service';
 import { z } from 'zod';

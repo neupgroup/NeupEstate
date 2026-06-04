@@ -11,7 +11,7 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { SelectionCards } from '@/components/ui/selection-cards';
-import { cn } from '@/lib/utils';
+import { cn } from '@/logica/core/utils';
 import { Search, UserPlus, ChevronRight } from 'lucide-react';
 import { PriceInput } from '@/components/ui/price-input';
 

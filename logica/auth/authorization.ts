@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/logica/core/prisma";
 import { getIdentity } from "@/services/neupid/get-identity";
 import { cache } from "react";
 

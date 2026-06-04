@@ -14,7 +14,7 @@ import { areaValueToSqft } from '@/types';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { requirePagePermission } from '@/logica/auth/page-guard';
 import { PERMISSIONS } from '@/logica/auth/permissions';
-import { getHiddenPriceLabel } from '@/lib/property-price-display';
+import { getHiddenPriceLabel } from '@/logica/core/property-price-display';
 
 type Props = {
   params: Promise<{ slug: string }>

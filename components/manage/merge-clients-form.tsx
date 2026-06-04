@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { mergeClients } from '@/services/lead-service';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { cn } from '@/logica/core/utils';
 import { Check } from 'lucide-react';
 
 type Client = {

@@ -1,4 +1,4 @@
-import type { ManageNavItem } from "@/lib/manage-nav";
+import type { ManageNavItem } from "@/logica/core/manage-nav";
 
 export function normalizePathnameV1(pathname: string) {
   if (pathname.length > 1 && pathname.endsWith("/")) {

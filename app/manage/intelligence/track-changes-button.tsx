@@ -3,7 +3,7 @@
 import { useTransition } from 'react';
 import { Loader2, Radar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/logica/core/hooks/use-toast';
 import { crawlAllCompetitorSourcesAction } from './competition/actions';
 
 export function TrackChangesButton() {

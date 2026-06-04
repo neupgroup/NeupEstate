@@ -4,7 +4,7 @@
  * @fileOverview A shared Genkit tool for fetching HTML content from a URL.
  */
 
-import { ai } from '@/ai/genkit';
+import { ai } from '@/logica/core/ai/genkit';
 import { z } from 'zod';
 import { fetchPageSourceCode } from '@/services/activities/fetch-page-source2';
 

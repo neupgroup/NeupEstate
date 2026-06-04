@@ -1,7 +1,7 @@
 import { createDecipheriv, createHash, createHmac, timingSafeEqual } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/logica/core/prisma";
 import { logProblem } from "@/services/problem-service";
 
 export const dynamic = "force-dynamic";

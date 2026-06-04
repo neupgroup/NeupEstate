@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Pencil, User, Phone } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/logica/core/hooks/use-toast';
 
 const initialSchedule = [
     { id: 'task1', title: 'Meeting', details: 'Discuss property options', time: '12:00 PM', completed: false, clientName: 'John Doe', clientPhone: '(123) 456-7890' },

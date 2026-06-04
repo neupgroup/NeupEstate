@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/logica/core/prisma";
 import { verifyAuthJWT } from "@/services/auth/jwt";
 import { getSignedAccountInformation } from "@/services/account/lookup";
 

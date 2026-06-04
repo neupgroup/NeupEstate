@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useNeupUser } from "@/lib/neup-user-context";
+import { useNeupUser } from "@/logica/core/neup-user-context";
 import { HeaderV1 } from "@/components/elements/Header.v1";
 
 export function HeaderLayoutV1() {

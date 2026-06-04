@@ -10,9 +10,9 @@ import { CreatePropertySchema, type CreatePropertyFormValues, type User } from '
 import { createPropertyAction, getCurrentAccountId, getPropertyChangeDraftAction, getPropertyCreateDraftAction, savePropertyChangeDraftAction } from '@/app/actions';
 
 import { Form } from '@/components/ui/form';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/logica/core/hooks/use-toast';
 import { getUsers } from '@/services/user-service';
-import { useAgencyCustomization } from '@/hooks/use-agency-customization';
+import { useAgencyCustomization } from '@/logica/core/hooks/use-agency-customization';
 
 import { ProgressivePropertySections } from '@/components/manage/progressive-property-sections';
 

@@ -1,7 +1,7 @@
 
 'use server';
 
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/logica/core/prisma';
 import type { MortgageRequest, CreateMortgageRequestFormValues } from '@/types';
 import { logProblem } from './problem-service';
 

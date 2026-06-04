@@ -9,7 +9,7 @@
  * - PropertyApprovalResult - The return type for the approval function.
  */
 
-import { ai, resolveGoogleModel } from '@/ai/genkit';
+import { ai, resolveGoogleModel } from '@/logica/core/ai/genkit';
 import { z } from 'zod';
 import { approveProperty, getPropertyById } from '@/services/property-service';
 import { PropertyApprovalResultSchema, type PropertyApprovalResult } from '@/types';

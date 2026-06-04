@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { getAccountById } from '@/services/account-service';
 import { getRequirementByUserId } from '@/services/requirements-service';
 import { getSavedProperties, getPaginatedProperties } from '@/services/property-service';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/logica/core/prisma';
 import { requireAuth } from '@/services/auth/account';
 import { logProblem } from '@/services/problem-service';
 import { ClientLink } from '@/components/client-link';

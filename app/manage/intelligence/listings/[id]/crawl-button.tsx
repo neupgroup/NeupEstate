@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { RefreshCw, CheckCircle2 } from 'lucide-react';
 import { crawlCompetitorSourcesAction } from './actions';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/logica/core/hooks/use-toast';
 
 interface CrawlButtonProps {
   competitorId: string;

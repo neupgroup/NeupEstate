@@ -8,11 +8,11 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Badge } from "@/components/ui/badge";
 import { Heart, BedDouble, Bath, SquareGanttChart, Loader2, Star } from "lucide-react";
 import { useState, useTransition, useEffect } from "react";
-import { cn } from "@/lib/utils";
-import { getHiddenPriceLabel } from "@/lib/property-price-display";
+import { cn } from "@/logica/core/utils";
+import { getHiddenPriceLabel } from "@/logica/core/property-price-display";
 import { SafeImage } from "./safe-image";
 import { toggleSavePropertyAction } from "@/app/actions";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/logica/core/hooks/use-toast";
 import { isPropertySaved } from "@/services/property-service";
 import { getClientAccountId } from "@/services/account/get-account-id";
 

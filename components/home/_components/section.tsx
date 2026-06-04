@@ -1,5 +1,5 @@
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/logica/core/utils";
 
 export const Section = ({ children, className }: { children: React.ReactNode, className?: string }) => (
   <section className={cn("w-full py-12", className)}>

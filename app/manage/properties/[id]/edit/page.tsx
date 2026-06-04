@@ -9,11 +9,11 @@ import { UpdatePropertySchema, type Property, type User, type UpdatePropertyForm
 import { updatePropertyAction, approvePropertyAction, deletePropertyAction, rewritePropertyDetailsAction, getCurrentAccountId, savePropertyChangeDraftAction, getPropertyChangeDraftAction } from '@/app/actions';
 import { getPropertyById } from "@/services/property-service";
 import { getUsers } from "@/services/user-service";
-import { useAgencyCustomization } from '@/hooks/use-agency-customization';
+import { useAgencyCustomization } from '@/logica/core/hooks/use-agency-customization';
 
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/logica/core/hooks/use-toast';
 import { Loader2, CheckCircle, Trash2, PenSquare, ExternalLink } from 'lucide-react';
 import {
   AlertDialog,

@@ -188,7 +188,7 @@ const account = result.account;
 ```typescript
 // app/dashboard/page.tsx
 import { requireAuth } from '@/services/auth';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/logica/core/prisma';
 
 export default async function DashboardPage() {
   // One line - handles everything

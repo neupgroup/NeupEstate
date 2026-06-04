@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { User, Phone, Star } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils';
+import { cn } from '@/logica/core/utils';
 import { getWhatsAppTemplates } from '@/services/whatsapp-service';
 import { getConversationById, getMessagesByConversationId } from '@/services/conversation-service';
 import { SendMessageForm } from '@/components/manage/send-message-form';

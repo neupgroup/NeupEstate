@@ -1,10 +1,10 @@
 'use server';
 
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/logica/core/prisma';
 import { logProblem } from './problem-service';
 import type { Property, CreatePropertyInput, PropertyFilters, ExtractedPropertyData, UpdatePropertyInput } from '@/types';
 import { Prisma, PropertyType, PropertyStatus, PropertyPurpose } from '@prisma/client';
-import { mapPurposeToEnum, mapPurposeFromEnum, mapTypeToEnum, mapTypeFromEnum, mapStatusToEnum, mapStatusFromEnum } from '@/lib/adapters/enum-mappers';
+import { mapPurposeToEnum, mapPurposeFromEnum, mapTypeToEnum, mapTypeFromEnum, mapStatusToEnum, mapStatusFromEnum } from '@/logica/core/adapters/enum-mappers';
 
 export interface SavedPropertyEntry {
   userId: string;

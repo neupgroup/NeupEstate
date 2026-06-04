@@ -1,5 +1,5 @@
 import { getBrandAccounts } from "@/services/neupid/get-brand-accounts";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/logica/core/prisma";
 import { requireAuth } from "@/services/auth/account";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, Building } from "lucide-react";
