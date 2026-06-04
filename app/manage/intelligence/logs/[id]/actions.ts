@@ -6,6 +6,7 @@ import { getCompetitorById, getCompetitorPages, upsertCompetitorPage } from '@/s
 import { fetchPageSourceCode } from '@/services/activities/fetch-page-source2';
 import { extractVisibleHtml } from '@/services/crawl/visible-html';
 import { shouldIndexCrawledUrl } from '@/services/crawl/crawl-rules';
+import { extractIntelligencePage } from '@/services/ai/extract-intelligence-page-flow';
 import { logProblem } from '@/services/problem-service';
 import { revalidatePath } from 'next/cache';
 
@@ -13,6 +14,14 @@ function getHttpStatusFromError(error: unknown): string | null {
   const message = error instanceof Error ? error.message : String(error);
   const match = message.match(/status:\s*(\d{3})/i);
   return match ? match[1] : null;
+}
+
+function isLoggedStatus(status: string | null | undefined): boolean {
+  return status === 'logged';
+}
+
+function buildDefaultTitle(url: string, title?: string | null): string {
+  return title?.trim() || new URL(url).pathname.split('/').filter(Boolean).join(' / ') || 'Listing';
 }
 
 export async function crawlCompetitorSourcesAction(competitorId: string) {
@@ -58,42 +67,92 @@ export async function crawlCompetitorSourcesAction(competitorId: string) {
         // Save new URLs to database
         for (const url of urls) {
           discoveredCount++;
-          if (!existingUrls.has(url)) {
-            try {
-              if (!shouldIndexCrawledUrl(url, competitor.crawlRules)) {
-                continue;
-              }
+          const existingPage = existingProperties.find((page) => page.source === url);
 
-              const rawHtml = await fetchPageSourceCode(url);
-              const visibleHtml = extractVisibleHtml(rawHtml);
+          if (existingPage && isLoggedStatus(existingPage.lastLoggedStatus)) {
+            continue;
+          }
+
+          try {
+            if (!shouldIndexCrawledUrl(url, competitor.crawlRules)) {
               await upsertCompetitorPage({
                 competitorId,
-                title: new URL(url).pathname.split('/').filter(Boolean).join(' / ') || 'Listing',
+                title: buildDefaultTitle(url, existingPage?.title),
+                description: existingPage?.description ?? undefined,
                 source: url,
-                visibleHtml,
-                lastLoggedStatus: null,
+                lastLoggedStatus: 'not_to_log',
                 lastLoggedOn: new Date(),
+                details: existingPage?.details ?? undefined,
+                listedOn: existingPage?.listedOn ? new Date(existingPage.listedOn) : undefined,
               });
-              savedCount++;
               existingUrls.add(url);
-            } catch (e) {
-              const status = getHttpStatusFromError(e);
-              if (status) {
-                await upsertCompetitorPage({
-                  competitorId,
-                  title: new URL(url).pathname.split('/').filter(Boolean).join(' / ') || 'Listing',
-                  source: url,
-                  visibleHtml: null,
-                  lastLoggedStatus: status,
-                  lastLoggedOn: new Date(),
-                });
-                savedCount++;
-                existingUrls.add(url);
-                continue;
-              }
-
-              errors.push(`Failed to save URL ${url}: ${e instanceof Error ? e.message : 'Unknown error'}`);
+              continue;
             }
+
+            const rawHtml = await fetchPageSourceCode(url);
+            const visibleHtml = extractVisibleHtml(rawHtml);
+            const aiResult = await extractIntelligencePage({ url, htmlContent: visibleHtml });
+
+            if (!aiResult.success) {
+              await upsertCompetitorPage({
+                competitorId,
+                title: buildDefaultTitle(url, existingPage?.title),
+                description: existingPage?.description ?? undefined,
+                source: url,
+                lastLoggedStatus: 'not_logged',
+                lastLoggedOn: new Date(),
+                details: { reason: aiResult.reason ?? 'AI classified this page as not a property page.' },
+                listedOn: existingPage?.listedOn ? new Date(existingPage.listedOn) : undefined,
+              });
+              errors.push(`${url}: ${aiResult.reason ?? 'The page has not been logged.'}`);
+              continue;
+            }
+
+            await upsertCompetitorPage({
+              competitorId,
+              title: aiResult.title?.trim() || buildDefaultTitle(url, existingPage?.title),
+              description: aiResult.description?.trim() || existingPage?.description || undefined,
+              source: url,
+              lastLoggedStatus: 'logged',
+              lastLoggedOn: new Date(),
+              details: {
+                price: aiResult.price,
+                location: aiResult.location,
+                bedrooms: aiResult.bedrooms,
+                bathrooms: aiResult.bathrooms,
+                area: aiResult.area,
+                purpose: aiResult.purpose,
+                category: aiResult.category,
+                type: aiResult.type,
+                amenities: aiResult.amenities,
+                images: aiResult.images,
+                listingAgent: aiResult.listingAgent,
+                isOwnerListing: aiResult.isOwnerListing,
+                floors: aiResult.floors,
+                roadAccess: aiResult.roadAccess,
+              },
+              listedOn: existingPage?.listedOn ? new Date(existingPage.listedOn) : new Date(),
+            });
+            savedCount++;
+            existingUrls.add(url);
+          } catch (e) {
+            const status = getHttpStatusFromError(e);
+            if (status) {
+              await upsertCompetitorPage({
+                competitorId,
+                title: buildDefaultTitle(url, existingPage?.title),
+                description: existingPage?.description ?? undefined,
+                source: url,
+                lastLoggedStatus: status,
+                lastLoggedOn: new Date(),
+                details: existingPage?.details ?? undefined,
+                listedOn: existingPage?.listedOn ? new Date(existingPage.listedOn) : undefined,
+              });
+              existingUrls.add(url);
+              continue;
+            }
+
+            errors.push(`Failed to save URL ${url}: ${e instanceof Error ? e.message : 'Unknown error'}`);
           }
         }
       } catch (e) {

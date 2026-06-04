@@ -18,10 +18,6 @@ export async function extractCompetitorListingAction(competitorPageId: string) {
     return { success: false, error: `This page is marked with HTTP ${page.lastLoggedStatus} and will not be extracted.` };
   }
 
-  if (!page.visibleHtml) {
-    return { success: false, error: 'This page has no rendered HTML to extract.' };
-  }
-
   const result = await extractCompetitorListing({
     url: page.source,
   });

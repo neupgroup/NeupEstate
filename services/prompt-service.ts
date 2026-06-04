@@ -71,7 +71,7 @@ export async function getPrompt(promptId: string, defaultPrompt: Omit<Prompt, 'i
                  modelIdentifier = defaultModel.modelId;
             } else {
                 // Final fallback if no default is set in the DB
-                modelIdentifier = 'gemini-2.5-flash';
+                modelIdentifier = 'gemini-2.5-flash-lite';
             }
         }
         
@@ -85,7 +85,7 @@ export async function getPrompt(promptId: string, defaultPrompt: Omit<Prompt, 'i
         return { 
             id: promptId, 
             ...defaultPrompt,
-            model: defaultModel?.modelId || 'gemini-2.5-flash'
+            model: defaultModel?.modelId || 'gemini-2.5-flash-lite'
         };
     }
 }

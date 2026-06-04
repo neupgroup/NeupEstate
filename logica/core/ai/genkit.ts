@@ -1,7 +1,7 @@
 import { genkit } from 'genkit';
 import { googleAI } from '@genkit-ai/google-genai';
 
-export const DEFAULT_MODEL_NAME = 'gemini-2.5-flash';
+export const DEFAULT_MODEL_NAME = 'gemini-2.5-flash-lite';
 export const DEFAULT_EMBEDDER_NAME = 'gemini-embedding-001';
 
 function stripGoogleModelPrefix(identifier: string): string {

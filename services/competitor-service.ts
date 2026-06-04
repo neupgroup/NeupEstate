@@ -28,7 +28,6 @@ export type CompetitorPage = {
   title: string;
   description: string | null;
   source: string;
-  visibleHtml: string | null;
   lastLoggedStatus: string | null;
   lastLoggedOn: string | null;
   details: Record<string, any> | null;
@@ -146,7 +145,6 @@ export async function upsertCompetitorPage(data: {
   title: string;
   description?: string;
   source: string;
-  visibleHtml?: string;
   lastLoggedStatus?: string | null;
   lastLoggedOn?: Date | null;
   details?: Record<string, any>;
@@ -166,7 +164,7 @@ export async function upsertCompetitorPage(data: {
       SET
         "title" = ${data.title},
         "description" = ${data.description},
-        "visibleHtml" = ${data.visibleHtml},
+        "visibleHtml" = NULL,
         "lastLoggedStatus" = ${data.lastLoggedStatus},
         "lastLoggedOn" = ${data.lastLoggedOn},
         "details" = ${data.details as any},
@@ -184,7 +182,6 @@ export async function upsertCompetitorPage(data: {
       "title",
       "description",
       "source",
-      "visibleHtml",
       "lastLoggedStatus",
       "lastLoggedOn",
       "details",
@@ -198,7 +195,6 @@ export async function upsertCompetitorPage(data: {
       ${data.title},
       ${data.description},
       ${data.source},
-      ${data.visibleHtml},
       ${data.lastLoggedStatus},
       ${data.lastLoggedOn},
       ${data.details as any},
@@ -379,7 +375,6 @@ function mapCompetitorPage(row: any): CompetitorPage {
     title: row.title,
     description: row.description ?? null,
     source: row.source,
-    visibleHtml: row.visibleHtml ?? null,
     lastLoggedStatus: row.lastLoggedStatus ?? null,
     lastLoggedOn: row.lastLoggedOn?.toISOString?.() ?? (row.lastLoggedOn ? new Date(row.lastLoggedOn).toISOString() : null),
     details: row.details ?? null,
