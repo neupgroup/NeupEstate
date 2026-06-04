@@ -95,7 +95,7 @@ export function HeaderV1({
         <div className="container flex h-16 items-center px-4 sm:px-6 lg:px-8">
           <div className="flex-1 justify-start flex">
             <Link href="/" className="flex items-center gap-2">
-              <img src="/estate/logo.png" alt="Neup.Estate Logo" className="h-9 w-9 object-contain" />
+              <img src="https://cdn.neupgroup.com/neupestate/logo.png" alt="Neup.Estate Logo" className="h-9 w-9 object-contain" />
               <span className="font-headline text-lg font-bold">Neup.Estate</span>
             </Link>
           </div>

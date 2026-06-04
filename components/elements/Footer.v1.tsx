@@ -10,7 +10,7 @@ export function FooterV1({ showManagePanelLink }: { showManagePanelLink: boolean
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="md:col-span-1">
             <div className="mb-4 flex items-center gap-2">
-              <img src="/estate/logo.png" alt="Neup.Estate Logo" className="h-7 w-7 object-contain" />
+              <img src="https://cdn.neupgroup.com/neupestate/logo.png" alt="Neup.Estate Logo" className="h-7 w-7 object-contain" />
               <h3 className="font-headline text-lg font-bold">Neup.Estate</h3>
             </div>
             <p className="text-sm text-muted-foreground">
@@ -56,4 +56,3 @@ export function FooterV1({ showManagePanelLink }: { showManagePanelLink: boolean
     </footer>
   );
 }
-
