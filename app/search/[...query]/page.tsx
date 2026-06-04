@@ -1,6 +1,6 @@
 
 import { Suspense } from "react";
-import { SearchPageContent } from "@/components/search-page-content";
+import { SearchPageContent } from "@/components/estate";
 
 export default async function SearchPage({ params }: { params: Promise<{ query?: string[] }> }) {
     const resolvedParams = await params;

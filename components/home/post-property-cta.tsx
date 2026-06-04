@@ -1,5 +1,5 @@
 
-import { ClientLink } from "@/components/client-link";
+import { ClientLink } from "@/components/estate";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Section } from "@/components/home/_components/section";

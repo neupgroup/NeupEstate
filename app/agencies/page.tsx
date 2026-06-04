@@ -2,7 +2,7 @@
 import { getAgencies } from "@/services/agency-service";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { SafeImage } from "@/components/safe-image";
+import { SafeImage } from "@/components/estate";
 import { Building, AlertCircle, Globe, Mail, Phone, User, MapPin, Milestone } from "lucide-react";
 
 export default async function AgenciesPage() {

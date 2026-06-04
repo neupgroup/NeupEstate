@@ -1,6 +1,6 @@
 
 import { Suspense } from "react";
-import { SearchSection } from "@/components/search-section";
+import { SearchSection } from "@/components/estate";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PopularCategories } from "@/components/home/popular-categories";
 import { FeaturedProperties } from "@/components/home/featured-properties";

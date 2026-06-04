@@ -1,6 +1,6 @@
 
 
-import { PropertyRequestForm } from '@/components/property-request-form';
+import { PropertyRequestForm } from '@/components/estate';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileSearch } from 'lucide-react';
 import { requirePagePermission } from '@/logica/auth/page-guard';

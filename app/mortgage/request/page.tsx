@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Banknote } from 'lucide-react';
-import { MortgageRequestForm } from '@/components/mortgage-request-form';
+import { MortgageRequestForm } from '@/components/estate';
 import { GuestSigninBanner } from '@/components/layout/guest-signin-banner';
 import { getAuthenticatedMeData } from '@/services/auth/me';
 

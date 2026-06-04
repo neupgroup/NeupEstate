@@ -3,12 +3,10 @@ import { notFound } from 'next/navigation';
 import { getAgentBySlug } from '@/services/agent-service';
 import { getPropertiesByAgent } from '@/services/property-service';
 import { getReviewsByAgent } from '@/services/review-service';
-import { SafeImage } from '@/components/safe-image';
+import { SafeImage, PropertyCard, ClientLink } from '@/components/estate';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PropertyCard } from '@/components/property-card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Mail, Home, Star, MessageSquare, Phone } from 'lucide-react';
-import { ClientLink } from '@/components/client-link';
 import { Button } from '@/components/ui/button';
 
 function StarRating({ rating }: { rating: number }) {

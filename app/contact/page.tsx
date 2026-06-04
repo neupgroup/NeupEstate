@@ -1,5 +1,5 @@
 
-import { ContactForm } from '@/components/contact-form';
+import { ContactForm } from '@/components/estate';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Mail } from 'lucide-react';
 

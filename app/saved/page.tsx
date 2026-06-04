@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { searchProperties } from "@/app/actions";
-import { PropertyCard } from "@/components/property-card";
+import { PropertyCard } from "@/components/estate";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Property, PropertyFilters } from "@/types";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";

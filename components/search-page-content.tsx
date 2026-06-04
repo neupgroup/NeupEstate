@@ -4,16 +4,16 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { searchProperties, searchAgentsByLocationAction } from "@/app/actions";
-import { PropertyCard } from "@/components/property-card";
+import { PropertyCard } from "@/components/estate";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Property, PropertyFilters, Agent } from "@/types";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, Search } from "lucide-react";
-import { SearchSidebar } from "@/components/search-sidebar";
+import { SearchSidebar } from "@/components/estate";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Pagination } from "@/components/pagination";
-import { AgentResults } from "@/components/agent-results";
+import { Pagination } from "@/components/estate";
+import { AgentResults } from "@/components/estate";
 
 const PROPERTIES_PER_PAGE = 18;
 

@@ -12,8 +12,6 @@
 
 ## Next
 
-- Split link-selection logic into more focused `components/logic` files as needed.
 - Add `v2` implementations when there is a concrete alternate layout or interaction pattern.
-- Reclassify existing `components/*` files into the new folder structure.
 - Decide which app-specific components should be relocated into `components/estate`.
 

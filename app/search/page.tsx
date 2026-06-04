@@ -1,12 +1,10 @@
 
 import { Suspense } from "react";
-import { SearchSection } from "@/components/search-section";
+import { SearchSection, ClientLink, SafeImage } from "@/components/estate";
 import { PopularCategories } from "@/components/home/popular-categories";
 import { Section } from "@/components/home/_components/section";
 import { SectionTitle } from "@/components/home/_components/section-title";
-import { ClientLink } from "@/components/client-link";
 import { Card, CardContent } from "@/components/ui/card";
-import { SafeImage } from "@/components/safe-image";
 
 // Mock data for featured collections
 const mockFeaturedCollections = [

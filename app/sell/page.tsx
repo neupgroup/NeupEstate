@@ -1,5 +1,5 @@
 
-import { SalesRequestForm } from '@/components/sales-request-form';
+import { SalesRequestForm } from '@/components/estate';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Landmark } from 'lucide-react';
 

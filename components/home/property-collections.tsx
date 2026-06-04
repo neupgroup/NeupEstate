@@ -1,4 +1,4 @@
-import { RecommendedProperties } from "@/components/recommended-properties";
+import { RecommendedProperties } from "@/components/estate";
 import { Wand2 } from "lucide-react";
 import { Section } from "@/components/home/_components/section";
 import { SectionTitle } from "@/components/home/_components/section-title";

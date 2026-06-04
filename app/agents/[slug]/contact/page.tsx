@@ -1,12 +1,11 @@
 
 import { notFound } from 'next/navigation';
 import { getAgentBySlug } from '@/services/agent-service';
-import { SafeImage } from '@/components/safe-image';
+import { SafeImage, ClientLink } from '@/components/estate';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Mail, Phone, MessageSquare } from 'lucide-react';
 import { WhatsAppIcon } from '@/components/icons';
-import { ClientLink } from '@/components/client-link';
 
 export default async function AgentContactPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;

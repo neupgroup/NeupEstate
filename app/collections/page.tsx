@@ -1,5 +1,5 @@
 
-import { RecommendedProperties } from "@/components/recommended-properties";
+import { RecommendedProperties } from "@/components/estate";
 import { Wand2 } from "lucide-react";
 
 export default function CollectionsPage() {

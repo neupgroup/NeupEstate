@@ -1,6 +1,6 @@
 
 import { getRequirementByUserId } from "@/services/requirements-service";
-import { RecommendedProperties } from "@/components/recommended-properties";
+import { RecommendedProperties } from "@/components/estate";
 import { Section } from "@/components/home/_components/section";
 import { SectionTitle } from "@/components/home/_components/section-title";
 import type { RequirementsFormValues } from "@/components/profile/user-requirements-form";

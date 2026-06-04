@@ -1,4 +1,4 @@
-import { ClientLink } from "@/components/client-link";
+import { ClientLink } from "@/components/estate";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ArrowRight, ChevronRight } from "lucide-react";
