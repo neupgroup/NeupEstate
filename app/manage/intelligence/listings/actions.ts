@@ -27,6 +27,7 @@ export async function extractCompetitorListingAction(competitorPageId: string) {
   }
 
   const listingId = await upsertCompetitorListing({
+    competitorId: page.competitorId,
     competitorPageId: page.id,
     title: result.title ?? page.title,
     description: result.description,

@@ -988,22 +988,25 @@ model CompetitorPage {
 }
 
 model CompetitorListing {
-  id              String          @id @default(cuid())
+  id               String         @id @default(cuid())
+  competitorId     String
   competitorPageId String         @unique
-  title           String
-  description     String?
-  purpose         String
-  agentName       String?
-  price           Json?
-  priceBasis      String?
-  isSold          Boolean         @default(false)
-  details         Json?
-  loggedOn        DateTime        @default(now())
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
+  title            String
+  description      String?
+  purpose          String
+  agentName        String?
+  price            Json?
+  priceBasis       String?
+  isSold           Boolean        @default(false)
+  details          Json?
+  loggedOn         DateTime       @default(now())
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
 
+  competitor      Competitor     @relation(fields: [competitorId], references: [id], onDelete: Cascade)
   competitorPage  CompetitorPage  @relation(fields: [competitorPageId], references: [id], onDelete: Cascade)
 
+  @@index([competitorId])
   @@index([loggedOn])
   @@map("competitor_listings")
 }

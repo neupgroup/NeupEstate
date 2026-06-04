@@ -1,11 +1,61 @@
 import { prisma } from '@/logica/core/prisma';
 import { ClientLink } from '@/components/client-link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { ListChecks, Link2 } from 'lucide-react';
+import { ListChecks } from 'lucide-react';
 import { requirePagePermission } from '@/logica/auth/page-guard';
 import { PERMISSIONS } from '@/logica/auth/permissions';
 import { Pagination } from '@/components/manage/pagination';
+
+function formatCompactValue(value: unknown): string | null {
+  if (value === null || value === undefined || value === '') return null;
+  if (Array.isArray(value)) return value.length > 0 ? value.join(', ') : null;
+  if (typeof value === 'object') return JSON.stringify(value);
+  return String(value);
+}
+
+function formatPrice(value: unknown): string | null {
+  if (value === null || value === undefined || value === '') return null;
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return value.toLocaleString();
+  }
+  const numeric = Number(value);
+  if (Number.isFinite(numeric)) return numeric.toLocaleString();
+  return String(value);
+}
+
+function formatRelativeTime(value: string | Date | null | undefined): string | null {
+  if (!value) return null;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return null;
+
+  const diffMs = Date.now() - date.getTime();
+  const diffDays = Math.max(0, Math.floor(diffMs / 86400000));
+  if (diffDays <= 0) return 'today';
+  if (diffDays === 1) return '1 day ago';
+  return `${diffDays} days ago`;
+}
+
+function formatListingTitle(title: unknown): string {
+  const value = formatCompactValue(title) ?? 'Untitled';
+  return value.replace(/^property\s*\/\s*/i, '');
+}
+
+function getListingSummary(listing: any) {
+  const details = (listing.details as Record<string, unknown> | null) ?? null;
+  const competitorName = formatCompactValue(details?.competitorName ?? details?.competitor ?? details?.sourceName);
+  const agencyName = formatCompactValue(details?.agencyName ?? details?.agency ?? listing.sourceTitle);
+  const price = formatPrice(listing.price ?? details?.price);
+  const priceBasis = formatCompactValue(listing.priceBasis ?? details?.priceBasis);
+  const loggedAgo = formatRelativeTime(listing.loggedOn);
+
+  return {
+    competitorName,
+    agencyName,
+    price,
+    priceBasis,
+    loggedAgo,
+  };
+}
 
 export default async function ListingsIntelligencePage({
   searchParams,
@@ -60,31 +110,36 @@ export default async function ListingsIntelligencePage({
       )}
 
       <div className="space-y-0">
-        {currentListings.map((listing) => (
-          <Card
-            key={listing.id}
-            className="rounded-none border-t-0 first:rounded-t-lg first:border-t last:rounded-b-lg hover:border-primary transition-colors"
-          >
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-base">
-                <Link2 className="h-4 w-4 text-primary" />
-                <ClientLink href={`/manage/intelligence/listings/${listing.id}`} data-listing-id={listing.id} className="hover:underline">
-                  {listing.title}
-                </ClientLink>
-              </CardTitle>
-              <CardDescription className="truncate">
-                {listing.sourceUrl ?? 'Unknown source'}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex items-center justify-between gap-4">
-              <div className="flex flex-col gap-1 text-sm text-muted-foreground">
-                <span>{new Date(listing.loggedOn).toLocaleDateString()}</span>
-                <span>{listing.sourceTitle ?? 'Source title unavailable'}</span>
-              </div>
-              <Badge variant="secondary">Logged</Badge>
-            </CardContent>
-          </Card>
-        ))}
+        {currentListings.map((listing) => {
+          const summary = getListingSummary(listing);
+
+          return (
+            <Card
+              key={listing.id}
+              className="rounded-none border-t-0 first:rounded-t-lg first:border-t last:rounded-b-lg hover:border-primary transition-colors"
+            >
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-start gap-3 text-base leading-tight">
+                  <span className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-red-500" />
+                  <ClientLink href={`/manage/intelligence/listings/${listing.id}`} data-listing-id={listing.id} className="hover:underline">
+                    {formatListingTitle(listing.title)}
+                  </ClientLink>
+                </CardTitle>
+                <CardDescription className="pl-5 truncate">
+                  by {summary.competitorName ?? 'Unknown competitor'}
+                  {summary.agencyName ? `, ${summary.agencyName}` : ''}
+                  {summary.loggedAgo ? ` • ${summary.loggedAgo}` : ''}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-1.5 pt-0 pl-5">
+                <div className="text-sm font-medium">
+                  {summary.price ? `NPR ${summary.price}` : 'Price not provided'}
+                  {summary.priceBasis ? ` ${summary.priceBasis}` : ''}
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
 
       {totalPages > 1 && (

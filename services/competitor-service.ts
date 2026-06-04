@@ -37,6 +37,7 @@ export type CompetitorPage = {
 
 export type CompetitorListing = {
   id: string;
+  competitorId: string;
   competitorPageId: string;
   title: string;
   description: string | null;
@@ -267,6 +268,7 @@ export async function getCompetitorListingByPageId(competitorPageId: string): Pr
 }
 
 export async function upsertCompetitorListing(data: {
+  competitorId: string;
   competitorPageId: string;
   title: string;
   description?: string;
@@ -286,6 +288,7 @@ export async function upsertCompetitorListing(data: {
   const existing = existingRows[0];
 
   const payload = {
+    competitorId: data.competitorId,
     title: data.title,
     description: data.description,
     purpose: data.purpose,
@@ -302,6 +305,7 @@ export async function upsertCompetitorListing(data: {
     await prisma.$executeRaw`
       UPDATE "competitor_listings"
       SET
+        "competitorId" = ${payload.competitorId},
         "title" = ${payload.title},
         "description" = ${payload.description},
         "purpose" = ${payload.purpose},
@@ -319,6 +323,7 @@ export async function upsertCompetitorListing(data: {
   const insertedRows = await prisma.$queryRaw<Array<{ id: string }>>`
     INSERT INTO "competitor_listings" (
       "id",
+      "competitorId",
       "competitorPageId",
       "title",
       "description",
@@ -334,6 +339,7 @@ export async function upsertCompetitorListing(data: {
     )
     VALUES (
       ${randomUUID()},
+      ${data.competitorId},
       ${data.competitorPageId},
       ${payload.title},
       ${payload.description},
@@ -388,6 +394,7 @@ function mapCompetitorPage(row: any): CompetitorPage {
 function mapCompetitorListing(row: any): CompetitorListing {
   return {
     id: row.id,
+    competitorId: row.competitorId,
     competitorPageId: row.competitorPageId,
     title: row.title,
     description: row.description ?? null,
