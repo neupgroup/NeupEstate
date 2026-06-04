@@ -1,0 +1,3 @@
+ALTER TABLE "competitor_pages"
+ADD COLUMN IF NOT EXISTS "lastLoggedStatus" TEXT,
+ADD COLUMN IF NOT EXISTS "lastLoggedOn" TIMESTAMP(3);

@@ -7,7 +7,7 @@ import { PERMISSIONS } from '@/logica/auth/permissions';
 
 const sections = [
   {
-    href: '/manage/intelligence/logs',
+    href: '/manage/intelligence/listings',
     icon: <ListChecks className="h-6 w-6 text-primary" />,
     title: 'Listings Intelligence',
     description: 'Analyse listing performance, trends, and market positioning across your property portfolio.',

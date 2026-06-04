@@ -2,6 +2,7 @@
 
 import { prisma } from '@/logica/core/prisma';
 import { logProblem } from '@/services/problem-service';
+import { randomUUID } from 'crypto';
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -9,6 +10,7 @@ export type Competitor = {
   id: string;
   name: string;
   description: string | null;
+  crawlRules: string[] | null;
   createdAt: string;
   sources: CompetitorSource[];
 };
@@ -27,9 +29,27 @@ export type CompetitorPage = {
   description: string | null;
   source: string;
   visibleHtml: string | null;
+  lastLoggedStatus: string | null;
+  lastLoggedOn: string | null;
   details: Record<string, any> | null;
   listedOn: string | null;
   createdAt: string;
+};
+
+export type CompetitorListing = {
+  id: string;
+  competitorPageId: string;
+  title: string;
+  description: string | null;
+  purpose: string;
+  agentName: string | null;
+  price: any | null;
+  priceBasis: string | null;
+  isSold: boolean;
+  details: Record<string, any> | null;
+  loggedOn: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type CompetitorTracking = {
@@ -42,10 +62,16 @@ export type CompetitorTracking = {
 
 export async function getCompetitors(): Promise<Competitor[]> {
   try {
-    const rows = await prisma.competitor.findMany({
-      include: { sources: true },
-      orderBy: { createdAt: 'desc' },
-    });
+    const rows = await prisma.$queryRaw<Array<any>>`
+      SELECT c.*, COALESCE(
+        json_agg(cs ORDER BY cs."createdAt") FILTER (WHERE cs.id IS NOT NULL),
+        '[]'::json
+      ) AS sources
+      FROM "competitors" c
+      LEFT JOIN "competitor_sources" cs ON cs."competitorId" = c.id
+      GROUP BY c.id
+      ORDER BY c."createdAt" DESC
+    `;
     return rows.map(mapCompetitor);
   } catch (e) {
     await logProblem(e, 'getCompetitors');
@@ -55,10 +81,18 @@ export async function getCompetitors(): Promise<Competitor[]> {
 
 export async function getCompetitorById(id: string): Promise<Competitor | null> {
   try {
-    const row = await prisma.competitor.findUnique({
-      where: { id },
-      include: { sources: true },
-    });
+    const rows = await prisma.$queryRaw<Array<any>>`
+      SELECT c.*, COALESCE(
+        json_agg(cs ORDER BY cs."createdAt") FILTER (WHERE cs.id IS NOT NULL),
+        '[]'::json
+      ) AS sources
+      FROM "competitors" c
+      LEFT JOIN "competitor_sources" cs ON cs."competitorId" = c.id
+      WHERE c.id = ${id}
+      GROUP BY c.id
+      LIMIT 1
+    `;
+    const row = rows[0];
     return row ? mapCompetitor(row) : null;
   } catch (e) {
     await logProblem(e, `getCompetitorById (${id})`);
@@ -94,10 +128,12 @@ export async function deleteCompetitorSource(id: string): Promise<void> {
 
 export async function getCompetitorPages(competitorId: string): Promise<CompetitorPage[]> {
   try {
-    const rows = await prisma.competitorPage.findMany({
-      where: { competitorId },
-      orderBy: { createdAt: 'desc' },
-    });
+    const rows = await prisma.$queryRaw<Array<any>>`
+      SELECT *
+      FROM "competitor_pages"
+      WHERE "competitorId" = ${competitorId}
+      ORDER BY "createdAt" DESC
+    `;
     return rows.map(mapCompetitorPage);
   } catch (e) {
     await logProblem(e, `getCompetitorPages (${competitorId})`);
@@ -111,30 +147,68 @@ export async function upsertCompetitorPage(data: {
   description?: string;
   source: string;
   visibleHtml?: string;
+  lastLoggedStatus?: string | null;
+  lastLoggedOn?: Date | null;
   details?: Record<string, any>;
   listedOn?: Date;
 }): Promise<string> {
-  const existing = await prisma.competitorPage.findFirst({
-    where: { competitorId: data.competitorId, source: data.source },
-    select: { id: true },
-  });
+  const existingRows = await prisma.$queryRaw<Array<{ id: string }>>`
+    SELECT "id"
+    FROM "competitor_pages"
+    WHERE "competitorId" = ${data.competitorId} AND "source" = ${data.source}
+    LIMIT 1
+  `;
+  const existing = existingRows[0];
 
   if (existing) {
-    await prisma.competitorPage.update({
-      where: { id: existing.id },
-      data: {
-        title: data.title,
-        description: data.description,
-        visibleHtml: data.visibleHtml,
-        details: data.details,
-        listedOn: data.listedOn,
-      },
-    });
+    await prisma.$executeRaw`
+      UPDATE "competitor_pages"
+      SET
+        "title" = ${data.title},
+        "description" = ${data.description},
+        "visibleHtml" = ${data.visibleHtml},
+        "lastLoggedStatus" = ${data.lastLoggedStatus},
+        "lastLoggedOn" = ${data.lastLoggedOn},
+        "details" = ${data.details as any},
+        "listedOn" = ${data.listedOn},
+        "updatedAt" = NOW()
+      WHERE "id" = ${existing.id}
+    `;
     return existing.id;
   }
 
-  const row = await prisma.competitorPage.create({ data });
-  return row.id;
+  const rows = await prisma.$queryRaw<Array<{ id: string }>>`
+    INSERT INTO "competitor_pages" (
+      "id",
+      "competitorId",
+      "title",
+      "description",
+      "source",
+      "visibleHtml",
+      "lastLoggedStatus",
+      "lastLoggedOn",
+      "details",
+      "listedOn",
+      "createdAt",
+      "updatedAt"
+    )
+    VALUES (
+      ${randomUUID()},
+      ${data.competitorId},
+      ${data.title},
+      ${data.description},
+      ${data.source},
+      ${data.visibleHtml},
+      ${data.lastLoggedStatus},
+      ${data.lastLoggedOn},
+      ${data.details as any},
+      ${data.listedOn},
+      NOW(),
+      NOW()
+    )
+    RETURNING "id"
+  `;
+  return rows[0].id;
 }
 
 // ── Tracking ─────────────────────────────────────────────────────────────────
@@ -164,6 +238,122 @@ export async function unlinkTracking(id: string): Promise<void> {
   await prisma.competitorTracking.delete({ where: { id } });
 }
 
+export async function getCompetitorPageById(id: string): Promise<CompetitorPage | null> {
+  try {
+    const rows = await prisma.$queryRaw<Array<any>>`
+      SELECT *
+      FROM "competitor_pages"
+      WHERE "id" = ${id}
+      LIMIT 1
+    `;
+    const row = rows[0];
+    return row ? mapCompetitorPage(row) : null;
+  } catch (e) {
+    await logProblem(e, `getCompetitorPageById (${id})`);
+    return null;
+  }
+}
+
+export async function getCompetitorListingByPageId(competitorPageId: string): Promise<CompetitorListing | null> {
+  try {
+    const rows = await prisma.$queryRaw<Array<any>>`
+      SELECT *
+      FROM "competitor_listings"
+      WHERE "competitorPageId" = ${competitorPageId}
+      LIMIT 1
+    `;
+    const row = rows[0];
+    return row ? mapCompetitorListing(row) : null;
+  } catch (e) {
+    await logProblem(e, `getCompetitorListingByPageId (${competitorPageId})`);
+    return null;
+  }
+}
+
+export async function upsertCompetitorListing(data: {
+  competitorPageId: string;
+  title: string;
+  description?: string;
+  purpose: string;
+  agentName?: string;
+  price?: any;
+  priceBasis?: string;
+  isSold?: boolean;
+  details?: Record<string, any>;
+}): Promise<string> {
+  const existingRows = await prisma.$queryRaw<Array<{ id: string }>>`
+    SELECT "id"
+    FROM "competitor_listings"
+    WHERE "competitorPageId" = ${data.competitorPageId}
+    LIMIT 1
+  `;
+  const existing = existingRows[0];
+
+  const payload = {
+    title: data.title,
+    description: data.description,
+    purpose: data.purpose,
+    agentName: data.agentName,
+    price: data.price,
+    priceBasis: data.priceBasis,
+    isSold: data.isSold ?? false,
+    details: data.details,
+  };
+
+  if (existing) {
+    await prisma.$executeRaw`
+      UPDATE "competitor_listings"
+      SET
+        "title" = ${payload.title},
+        "description" = ${payload.description},
+        "purpose" = ${payload.purpose},
+        "agentName" = ${payload.agentName},
+        "price" = ${payload.price as any},
+        "priceBasis" = ${payload.priceBasis},
+        "isSold" = ${payload.isSold},
+        "details" = ${payload.details as any},
+        "updatedAt" = NOW()
+      WHERE "id" = ${existing.id}
+    `;
+    return existing.id;
+  }
+
+  const insertedRows = await prisma.$queryRaw<Array<{ id: string }>>`
+    INSERT INTO "competitor_listings" (
+      "id",
+      "competitorPageId",
+      "title",
+      "description",
+      "purpose",
+      "agentName",
+      "price",
+      "priceBasis",
+      "isSold",
+      "details",
+      "loggedOn",
+      "createdAt",
+      "updatedAt"
+    )
+    VALUES (
+      ${randomUUID()},
+      ${data.competitorPageId},
+      ${payload.title},
+      ${payload.description},
+      ${payload.purpose},
+      ${payload.agentName},
+      ${payload.price as any},
+      ${payload.priceBasis},
+      ${payload.isSold},
+      ${payload.details as any},
+      NOW(),
+      NOW(),
+      NOW()
+    )
+    RETURNING "id"
+  `;
+  return insertedRows[0].id;
+}
+
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 function mapCompetitor(row: any): Competitor {
@@ -171,6 +361,7 @@ function mapCompetitor(row: any): Competitor {
     id: row.id,
     name: row.name,
     description: row.description ?? null,
+    crawlRules: Array.isArray(row.crawlRules) ? row.crawlRules : (typeof row.crawlRules === 'string' ? JSON.parse(row.crawlRules) : null),
     createdAt: row.createdAt.toISOString(),
     sources: (row.sources ?? []).map((s: any): CompetitorSource => ({
       id: s.id,
@@ -189,8 +380,28 @@ function mapCompetitorPage(row: any): CompetitorPage {
     description: row.description ?? null,
     source: row.source,
     visibleHtml: row.visibleHtml ?? null,
+    lastLoggedStatus: row.lastLoggedStatus ?? null,
+    lastLoggedOn: row.lastLoggedOn?.toISOString?.() ?? (row.lastLoggedOn ? new Date(row.lastLoggedOn).toISOString() : null),
     details: row.details ?? null,
     listedOn: row.listedOn?.toISOString() ?? null,
     createdAt: row.createdAt.toISOString(),
+  };
+}
+
+function mapCompetitorListing(row: any): CompetitorListing {
+  return {
+    id: row.id,
+    competitorPageId: row.competitorPageId,
+    title: row.title,
+    description: row.description ?? null,
+    purpose: row.purpose,
+    agentName: row.agentName ?? null,
+    price: row.price ?? null,
+    priceBasis: row.priceBasis ?? null,
+    isSold: row.isSold,
+    details: row.details ?? null,
+    loggedOn: row.loggedOn.toISOString(),
+    createdAt: row.createdAt.toISOString(),
+    updatedAt: row.updatedAt.toISOString(),
   };
 }

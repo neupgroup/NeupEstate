@@ -941,6 +941,7 @@ model Competitor {
   id          String               @id @default(cuid())
   name        String
   description String?
+  crawlRules  Json?
   createdAt   DateTime             @default(now())
   updatedAt   DateTime             @updatedAt
 
@@ -970,6 +971,8 @@ model CompetitorPage {
   description  String?
   source       String               // URL the property was found at
   visibleHtml  String?              @db.Text
+  lastLoggedStatus String?
+  lastLoggedOn DateTime?
   details      Json?
   listedOn     DateTime?
   createdAt    DateTime             @default(now())
@@ -977,10 +980,32 @@ model CompetitorPage {
 
   competitor   Competitor           @relation(fields: [competitorId], references: [id], onDelete: Cascade)
   tracking     CompetitorTracking[]
+  listing      CompetitorListing?
 
   @@index([competitorId])
   @@index([source])
   @@map("competitor_pages")
+}
+
+model CompetitorListing {
+  id              String          @id @default(cuid())
+  competitorPageId String         @unique
+  title           String
+  description     String?
+  purpose         String
+  agentName       String?
+  price           Json?
+  priceBasis      String?
+  isSold          Boolean         @default(false)
+  details         Json?
+  loggedOn        DateTime        @default(now())
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  competitorPage  CompetitorPage  @relation(fields: [competitorPageId], references: [id], onDelete: Cascade)
+
+  @@index([loggedOn])
+  @@map("competitor_listings")
 }
 
 model CompetitorTracking {

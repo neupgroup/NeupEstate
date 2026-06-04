@@ -1,0 +1,2 @@
+ALTER TABLE "competitors"
+ADD COLUMN IF NOT EXISTS "crawlRules" JSONB;

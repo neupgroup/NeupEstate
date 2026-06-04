@@ -15,7 +15,15 @@ import { crawlSitemap } from '@/services/crawl/sitemap';
 import { crawlLinks } from '@/services/crawl/links';
 import { fetchPageSourceCode } from '@/services/activities/fetch-page-source2';
 import { extractVisibleHtml } from '@/services/crawl/visible-html';
+import { shouldIndexCrawledUrl } from '@/services/crawl/crawl-rules';
 import { revalidatePath } from 'next/cache';
+import { prisma } from '@/logica/core/prisma';
+
+function getHttpStatusFromError(error: unknown): string | null {
+  const message = error instanceof Error ? error.message : String(error);
+  const match = message.match(/status:\s*(\d{3})/i);
+  return match ? match[1] : null;
+}
 
 export async function getCompetitorsAction(): Promise<Competitor[]> {
   return getCompetitors();
@@ -29,6 +37,24 @@ export async function createCompetitorAction(
   try {
     await createCompetitor(name.trim(), description?.trim() || undefined);
     revalidatePath('/manage/intelligence/competition');
+    return { success: true };
+  } catch (e: any) {
+    return { success: false, error: e.message };
+  }
+}
+
+export async function updateCompetitorCrawlRulesAction(
+  competitorId: string,
+  rules: string[],
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    await prisma.$executeRaw`
+      UPDATE "competitors"
+      SET "crawlRules" = ${rules as any}, "updatedAt" = NOW()
+      WHERE "id" = ${competitorId}
+    `;
+    revalidatePath('/manage/intelligence/competition');
+    revalidatePath(`/manage/intelligence/competition/${competitorId}`);
     return { success: true };
   } catch (e: any) {
     return { success: false, error: e.message };
@@ -108,7 +134,7 @@ export async function crawlCompetitorSourcesAction(
             errors.push(`${source.value}: ${result.error}`);
             continue;
           }
-          urls = result.urls;
+          urls = result.urls.filter((url) => shouldIndexCrawledUrl(url, competitor.crawlRules));
         } else {
           const urlCandidate = source.value.trim();
           try {
@@ -122,7 +148,7 @@ export async function crawlCompetitorSourcesAction(
             errors.push(`${source.value}: ${result.error}`);
             continue;
           }
-          urls = result.links;
+          urls = result.links.filter((url) => shouldIndexCrawledUrl(url, competitor.crawlRules));
         }
 
         crawledCount += urls.length;
@@ -133,6 +159,10 @@ export async function crawlCompetitorSourcesAction(
           discoveredCount += 1;
 
           try {
+            if (!shouldIndexCrawledUrl(url, competitor.crawlRules)) {
+              continue;
+            }
+
             const rawHtml = await fetchPageSourceCode(url);
             const visibleHtml = extractVisibleHtml(rawHtml);
             await upsertCompetitorPage({
@@ -140,10 +170,27 @@ export async function crawlCompetitorSourcesAction(
               title: new URL(url).pathname.split('/').filter(Boolean).join(' / ') || 'Listing',
               source: url,
               visibleHtml,
+              lastLoggedStatus: null,
+              lastLoggedOn: new Date(),
             });
             savedCount += 1;
             existingUrls.add(url);
           } catch (error) {
+            const status = getHttpStatusFromError(error);
+            if (status) {
+              await upsertCompetitorPage({
+                competitorId,
+                title: new URL(url).pathname.split('/').filter(Boolean).join(' / ') || 'Listing',
+                source: url,
+                visibleHtml: null,
+                lastLoggedStatus: status,
+                lastLoggedOn: new Date(),
+              });
+              savedCount += 1;
+              existingUrls.add(url);
+              continue;
+            }
+
             errors.push(`${url}: ${error instanceof Error ? error.message : 'Failed to save page'}`);
           }
         }
@@ -223,12 +270,21 @@ export async function saveCrawledCompetitorPageAction(
   try {
     const rawHtml = await fetchPageSourceCode(url);
     const visibleHtml = extractVisibleHtml(rawHtml);
+    const competitor = await getCompetitorById(competitorId);
+    if (!competitor) {
+      return { success: false, error: 'Competitor not found.' };
+    }
+    if (!shouldIndexCrawledUrl(url, competitor.crawlRules)) {
+      return { success: false, error: 'This page does not match the competitor crawl rules.' };
+    }
     await upsertCompetitorPage({
       competitorId,
       source: url,
       title: title?.trim() || new URL(url).pathname.split('/').filter(Boolean).join(' / ') || 'Listing',
       description: description?.trim() || undefined,
       visibleHtml,
+      lastLoggedStatus: null,
+      lastLoggedOn: new Date(),
     });
 
     revalidatePath('/manage/intelligence/competition');
@@ -237,6 +293,20 @@ export async function saveCrawledCompetitorPageAction(
 
     return { success: true };
   } catch (error) {
+    const status = getHttpStatusFromError(error);
+    if (status) {
+      await upsertCompetitorPage({
+        competitorId,
+        source: url,
+        title: title?.trim() || new URL(url).pathname.split('/').filter(Boolean).join(' / ') || 'Listing',
+        description: description?.trim() || undefined,
+        visibleHtml: null,
+        lastLoggedStatus: status,
+        lastLoggedOn: new Date(),
+      });
+      revalidatePath('/manage/intelligence/logs');
+      return { success: true };
+    }
     return { success: false, error: error instanceof Error ? error.message : 'Failed to save crawled page.' };
   }
 }

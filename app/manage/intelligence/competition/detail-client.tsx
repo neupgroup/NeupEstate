@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { Plus, Trash2, Map, Link2, FileText, Globe, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ClientLink } from '@/components/client-link';
-import { addCompetitorSourceAction, deleteCompetitorSourceAction, saveCrawledCompetitorPageAction } from './actions';
+import { addCompetitorSourceAction, deleteCompetitorSourceAction, saveCrawledCompetitorPageAction, updateCompetitorCrawlRulesAction } from './actions';
 import type { Competitor } from './types';
 import { useToast } from '@/logica/core/hooks/use-toast';
 
@@ -41,7 +41,12 @@ export function CompetitionDetailClient({
   const [isCrawling, setIsCrawling] = useState(false);
   const [crawlStats, setCrawlStats] = useState<{ crawledCount: number; discoveredCount: number; savedCount: number } | null>(null);
   const [crawlMessage, setCrawlMessage] = useState('');
+  const [crawlRules, setCrawlRules] = useState((competitor.crawlRules ?? []).join('\n'));
   const { toast } = useToast();
+
+  useEffect(() => {
+    setCrawlRules((competitor.crawlRules ?? []).join('\n'));
+  }, [competitor.crawlRules]);
 
   function handleAddSource() {
     const value = sourceValue.trim();
@@ -64,6 +69,29 @@ export function CompetitionDetailClient({
           ...prev,
           sources: prev.sources.filter((source) => source.id !== sourceId),
         }));
+      }
+    });
+  }
+
+  function handleSaveRules() {
+    const rules = crawlRules
+      .split('\n')
+      .map((rule) => rule.trim())
+      .filter(Boolean);
+
+    startTransition(async () => {
+      const res = await updateCompetitorCrawlRulesAction(currentCompetitor.id, rules);
+      if (res.success) {
+        toast({
+          title: 'Rules saved',
+          description: 'Crawl rules updated successfully.',
+        });
+      } else {
+        toast({
+          variant: 'destructive',
+          title: 'Save failed',
+          description: res.error || 'Could not save crawl rules.',
+        });
       }
     });
   }
@@ -167,6 +195,24 @@ export function CompetitionDetailClient({
         </div>
         <Badge variant="secondary">{currentCompetitor.sources.length} sources</Badge>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Crawl Rules</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <textarea
+            className="min-h-36 w-full rounded-md border border-input bg-background px-3 py-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            value={crawlRules}
+            onChange={(e) => setCrawlRules(e.target.value)}
+            placeholder={`/about/*\n!/manage/*\n/property/*`}
+          />
+          <p className="text-xs text-muted-foreground">
+            One rule per line. Use plain patterns to allow pages, or prefix with <code>!</code> to deny them. If you add any allow rules, only matching pages are indexed.
+          </p>
+          <Button onClick={handleSaveRules} disabled={isPending}>Save Rules</Button>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>

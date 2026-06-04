@@ -5,8 +5,15 @@ import { crawlLinks } from '@/services/crawl/links';
 import { getCompetitorById, getCompetitorPages, upsertCompetitorPage } from '@/services/competitor-service';
 import { fetchPageSourceCode } from '@/services/activities/fetch-page-source2';
 import { extractVisibleHtml } from '@/services/crawl/visible-html';
+import { shouldIndexCrawledUrl } from '@/services/crawl/crawl-rules';
 import { logProblem } from '@/services/problem-service';
 import { revalidatePath } from 'next/cache';
+
+function getHttpStatusFromError(error: unknown): string | null {
+  const message = error instanceof Error ? error.message : String(error);
+  const match = message.match(/status:\s*(\d{3})/i);
+  return match ? match[1] : null;
+}
 
 export async function crawlCompetitorSourcesAction(competitorId: string) {
   try {
@@ -53,6 +60,10 @@ export async function crawlCompetitorSourcesAction(competitorId: string) {
           discoveredCount++;
           if (!existingUrls.has(url)) {
             try {
+              if (!shouldIndexCrawledUrl(url, competitor.crawlRules)) {
+                continue;
+              }
+
               const rawHtml = await fetchPageSourceCode(url);
               const visibleHtml = extractVisibleHtml(rawHtml);
               await upsertCompetitorPage({
@@ -60,10 +71,27 @@ export async function crawlCompetitorSourcesAction(competitorId: string) {
                 title: new URL(url).pathname.split('/').filter(Boolean).join(' / ') || 'Listing',
                 source: url,
                 visibleHtml,
+                lastLoggedStatus: null,
+                lastLoggedOn: new Date(),
               });
               savedCount++;
               existingUrls.add(url);
             } catch (e) {
+              const status = getHttpStatusFromError(e);
+              if (status) {
+                await upsertCompetitorPage({
+                  competitorId,
+                  title: new URL(url).pathname.split('/').filter(Boolean).join(' / ') || 'Listing',
+                  source: url,
+                  visibleHtml: null,
+                  lastLoggedStatus: status,
+                  lastLoggedOn: new Date(),
+                });
+                savedCount++;
+                existingUrls.add(url);
+                continue;
+              }
+
               errors.push(`Failed to save URL ${url}: ${e instanceof Error ? e.message : 'Unknown error'}`);
             }
           }
