@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Camera, BadgeCheck } from 'lucide-react';
+import { Camera } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getAccountDisplayName, getAccountHandle } from '@/logica/core/account-display';
 type ProfileHeaderProps = {
@@ -50,7 +50,23 @@ export function ProfileHeader({
               <h1 className="text-3xl md:text-4xl font-bold font-headline text-white shadow-sm flex items-center gap-2 leading-tight">
                 {resolvedName}
                 {verified && (
-                  <BadgeCheck className="h-6 w-6 text-primary" />
+                  <svg
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                    className="h-6 w-6 shrink-0"
+                  >
+                    <path
+                      d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"
+                      className="fill-primary"
+                    />
+                    <path
+                      d="m9 12 2 2 4-4"
+                      className="fill-none stroke-white"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
                 )}
               </h1>
               <p className="mt-1 text-xs md:text-sm font-mono text-white/75">
