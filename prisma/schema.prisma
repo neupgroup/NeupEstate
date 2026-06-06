@@ -54,6 +54,8 @@ model Account {
   connectionId String?
   roleId       String?   @map("role_id")
   role         AuthzRole? @relation(fields: [roleId], references: [id], onDelete: SetNull)
+  intelligenceMappings IntelligenceMapping[]
+  intelligenceAlerts    IntelligenceAlert[]
 
   @@map("account")
 }
@@ -948,6 +950,8 @@ model Competitor {
   sources     CompetitorSource[]
   pages       CompetitorPage[]
   listings    CompetitorListing[]
+  intelligenceMappings IntelligenceMapping[]
+  intelligenceAlerts    IntelligenceAlert[]
 
   @@map("competitors")
 }
@@ -1023,4 +1027,44 @@ model CompetitorTracking {
   @@index([competitorPageId])
   @@index([ourPropertyId])
   @@map("competitor_tracking")
+}
+
+model IntelligenceMapping {
+  id           String   @id @default(cuid())
+  accountId    String   @map("account_id")
+  cLocation    String?  @map("c_location")
+  cMinBudget   Int?     @map("c_min_budget")
+  cMaxBudget   Int?     @map("c_max_budget")
+  cCompetitorId String? @map("c_competitor")
+  cType        String?  @map("c_type")
+  cPurpose     String   @map("c_purpose")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  account      Account      @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  competitor   Competitor?  @relation(fields: [cCompetitorId], references: [id], onDelete: SetNull)
+  alerts       IntelligenceAlert[]
+
+  @@index([accountId], map: "intelligence_mapping_account_id_idx")
+  @@index([cCompetitorId], map: "intelligence_mapping_competitor_id_idx")
+  @@map("intelligence_mapping")
+}
+
+model IntelligenceAlert {
+  id          String   @id @default(cuid())
+  mapId       String   @map("map_id")
+  accountId   String   @map("account_id")
+  listingId   String   @map("listing_id")
+  status      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  mapping     IntelligenceMapping @relation(fields: [mapId], references: [id], onDelete: Cascade)
+  account     Account             @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  competitor  Competitor          @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@index([mapId], map: "intelligence_alerts_map_id_idx")
+  @@index([accountId], map: "intelligence_alerts_account_id_idx")
+  @@index([listingId], map: "intelligence_alerts_listing_id_idx")
+  @@map("intelligence_alerts")
 }
