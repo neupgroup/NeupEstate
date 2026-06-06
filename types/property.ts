@@ -119,6 +119,10 @@ export const ApartmentUnitSchema = z.object({
 });
 export type ApartmentUnit = z.infer<typeof ApartmentUnitSchema>;
 
+function stripHtmlTags(value: string) {
+    return value.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+}
+
 // Detailed Schemas (Location, Pricing, etc.)
 export const CurrencySchema = z.enum(['NPR', 'USD', 'INR']);
 export const DistanceUnitSchema = z.enum(['km', 'miles', 'meters', 'feet', 'yards']);
@@ -346,7 +350,10 @@ export interface Property {
 
 export const CreatePropertySchema = z.object({
     title: z.string().min(3, {message: "Title must be at least 3 characters long."}),
-    description: z.string().min(10, {message: "Description must be at least 10 characters long."}),
+    description: z.preprocess(
+        (val) => typeof val === "string" ? stripHtmlTags(val) : val,
+        z.string().min(10, {message: "Description must be at least 10 characters long."})
+    ),
     purpose: PropertyPurposeSchema.optional(),
     purposes: PropertyPurposesSchema,
     categories: z.array(PropertyCategorySchema).min(1, "Please select at least one property type."),

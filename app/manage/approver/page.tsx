@@ -21,6 +21,8 @@ import { ClientLink } from '@/components/client-link';
 type AgentResult = {
   propertyId: string;
   title: string;
+  kind?: 'property' | 'draft';
+  requestId?: string;
   status: 'queued' | 'processing' | 'approved' | 'amended' | 'skipped' | 'failed' | 'assured';
   reason?: string;
   steps?: string[];
@@ -92,7 +94,7 @@ export default function IntelligencePage() {
                     return;
                 }
 
-                setApprovalResults(propertiesToProcess.map(p => ({ propertyId: p.id, title: p.title, status: 'queued' })));
+                setApprovalResults(propertiesToProcess.map(p => ({ propertyId: p.id, title: p.title, kind: p.kind, requestId: p.requestId, status: 'queued' })));
 
                 let processedCount = 0;
                 for (const prop of propertiesToProcess) {
@@ -198,13 +200,21 @@ export default function IntelligencePage() {
                                 </div>
                                 <div className="flex-grow min-w-0">
                                     <p className="text-xs text-muted-foreground">ID: {result.propertyId}</p>
-                                    <ClientLink href={`/manage/properties/${result.propertyId}/edit`} className="text-lg font-semibold truncate hover:underline block">
+                                    <ClientLink
+                                        href={result.kind === 'draft'
+                                          ? `/manage/properties/create?request=${result.requestId || result.propertyId}`
+                                          : `/manage/properties/${result.propertyId}/edit`}
+                                        className="text-lg font-semibold truncate hover:underline block"
+                                    >
                                         {result.title}
                                     </ClientLink>
                                     <p className="text-sm text-muted-foreground break-words">
                                         <span className="font-medium capitalize">{result.status.replace('_', ' ')}</span>
                                         {result.reason && `: ${result.reason}`}
                                     </p>
+                                    {result.kind === 'draft' && (
+                                      <p className="text-xs text-muted-foreground">Draft awaiting review</p>
+                                    )}
                                      {result.steps && (
                                         <details className="mt-2 text-left">
                                             <summary className="cursor-pointer text-xs font-medium text-muted-foreground hover:text-foreground">View Agent Log</summary>

@@ -16,6 +16,14 @@ import { requirePagePermission } from '@/logica/auth/page-guard';
 import { PERMISSIONS } from '@/logica/auth/permissions';
 import { getHiddenPriceLabel } from '@/logica/core/property-price-display';
 
+function stripHtml(html: string) {
+  return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function RichTextHtml({ html }: { html: string }) {
+  return <div className="prose max-w-none text-gray-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: html }} />;
+}
+
 type Props = {
   params: Promise<{ slug: string }>
 }
@@ -42,7 +50,7 @@ export async function generateMetadata(
 
   const siteName = 'Neup.Estate';
   const title = `${property.title} | ${siteName}`;
-  const description = property.description.substring(0, 160);
+  const description = stripHtml(property.description).substring(0, 160);
   const imageUrl = property.images && property.images.length > 0 ? property.images[0] : 'https://placehold.co/1200x630.png';
   const propertyUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://neupgroup.com/estate'}/properties/${property.slug || property.id}`;
 
@@ -246,7 +254,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
 
             <div className="border-t pt-6">
               <h2 className="text-2xl font-headline font-semibold mb-4">About this property</h2>
-              <p className="text-gray-700 leading-relaxed">{property.description}</p>
+              <RichTextHtml html={property.description} />
             </div>
 
             <div className="border-t pt-6">

@@ -26,6 +26,7 @@ enum PropertyPurpose {
 }
 
 enum PropertyStatus {
+  AWAITING_CREATION
   PENDING
   ACTIVE
   SOLD

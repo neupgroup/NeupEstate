@@ -24,6 +24,17 @@ export interface PropertyDraftSummary {
   modifiedOn: string;
 }
 
+export interface AwaitingReviewItem {
+  id: string;
+  title: string;
+  location?: string;
+  category?: string;
+  kind: 'property' | 'draft';
+  propertyId?: string;
+  status?: string;
+  modifiedOn?: string;
+}
+
 export type BridgePropertyField = keyof Property;
 
 export interface BridgePropertyQuery {
@@ -420,9 +431,86 @@ export async function getLuxuriousProperties(limit = 4): Promise<Property[]> {
 
 export async function getPendingProperties(limit = 50): Promise<Property[]> {
   try {
-    const records = await prisma.property.findMany({ where: { status: PropertyStatus.PENDING }, orderBy: { updatedAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
+    const records = await prisma.property.findMany({
+      where: { status: { in: [PropertyStatus.AWAITING_CREATION, PropertyStatus.PENDING] } },
+      orderBy: { updatedAt: 'desc' },
+      take: limit,
+      include: PROPERTY_INCLUDE,
+    });
     return records.map(mapRecord);
   } catch (e) { await logProblem(e, 'getPendingProperties'); return []; }
+}
+
+export async function getAwaitingReviewItems(limit = 50): Promise<AwaitingReviewItem[]> {
+  try {
+    const [pendingProperties, drafts] = await Promise.all([
+      getPendingProperties(limit),
+      prisma.propertyChange.findMany({
+        where: {
+          isApproved: null,
+          status: { in: ['creating', 'editing', 'deleting'] },
+        },
+        orderBy: { modifiedOn: 'desc' },
+        take: limit,
+        include: {
+          property: {
+            select: {
+              id: true,
+              title: true,
+              locationText: true,
+              type: true,
+            },
+          },
+        },
+      }),
+    ]);
+
+    const draftItems = drafts.map((draft) => {
+      const data = (draft.data && typeof draft.data === 'object' && !Array.isArray(draft.data))
+        ? draft.data as Record<string, any>
+        : {};
+      const categories = Array.isArray(data.categories) ? data.categories.filter(Boolean) : [];
+      const types = Array.isArray(data.types) ? data.types.filter(Boolean) : [];
+      const purposes = Array.isArray(data.purposes) ? data.purposes.filter(Boolean) : [];
+      const locationParts = data.structuredLocation && typeof data.structuredLocation === 'object'
+        ? [
+            data.structuredLocation.street,
+            data.structuredLocation.municipality,
+            data.structuredLocation.district,
+            data.structuredLocation.province,
+          ].filter(Boolean)
+        : [];
+
+      return {
+        id: draft.id,
+        propertyId: draft.propertyId ?? undefined,
+        title: String(data.title || draft.property?.title || 'Unfinished property draft'),
+        location: String(data.location || locationParts.join(', ') || draft.property?.locationText || ''),
+        category: String(categories[0] || types[0] || purposes[0] || ''),
+        kind: 'draft' as const,
+        status: draft.status,
+        modifiedOn: draft.modifiedOn.toISOString(),
+      };
+    });
+
+    const propertyItems: AwaitingReviewItem[] = pendingProperties.map((property) => ({
+      id: property.id,
+      title: property.title,
+      location: property.location,
+      category: property.category,
+      kind: 'property' as const,
+      propertyId: property.id,
+      status: property.status,
+      modifiedOn: property.updatedAt || '',
+    }));
+
+    return [...draftItems, ...propertyItems]
+      .sort((a, b) => String(b.modifiedOn || '').localeCompare(String(a.modifiedOn || '')))
+      .slice(0, limit);
+  } catch (e) {
+    await logProblem(e, 'getAwaitingReviewItems');
+    return [];
+  }
 }
 
 export async function getPropertiesByAgent(agentId: string, opts: { includeInactive?: boolean } = {}): Promise<Property[]> {

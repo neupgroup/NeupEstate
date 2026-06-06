@@ -23,6 +23,10 @@ interface PropertyCardProps {
   rating?: number;
 }
 
+function stripHtml(html: string) {
+  return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+}
+
 const FALLBACK_IMAGES = [
     'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
     'https://media.istockphoto.com/id/1026205392/photo/beautiful-luxury-home-exterior-at-twilight.jpg?s=612x612&w=0&k=20&c=HOCqYY0noIVxnp5uQf1MJJEVpsH_d4WtVQ6-OwVoeDo=',
@@ -155,7 +159,8 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
             )}
         </div>
         <p className="text-sm text-gray-700 h-10 overflow-hidden text-ellipsis">
-          {property.description.substring(0, 80)}{property.description.length > 80 && "..."}
+          {stripHtml(property.description).substring(0, 80)}
+          {stripHtml(property.description).length > 80 && "..."}
         </p>
       </CardContent>
       <CardFooter className="p-4 bg-gray-50 flex-col items-start">

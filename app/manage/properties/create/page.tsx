@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTransition, useEffect, useState } from 'react';
 import { CreatePropertySchema, type CreatePropertyFormValues, type User } from '@/types';
-import { createPropertyAction, getCurrentAccountId, getPropertyChangeDraftAction, getPropertyCreateDraftAction, savePropertyChangeDraftAction } from '@/app/actions';
+import { createPropertyAction, getCurrentAccountId } from '@/app/actions';
 
 import { Form } from '@/components/ui/form';
 import { useToast } from '@/logica/core/hooks/use-toast';
@@ -23,7 +23,6 @@ export default function CreatePropertyPage() {
     const [isPending, startTransition] = useTransition();
     const [users, setUsers] = React.useState<User[]>([]);
     const [accountId, setAccountId] = useState<string | null>(null);
-    const [changeId, setChangeId] = useState<string | null>(searchParams.get('request') || searchParams.get('changes'));
 
     useEffect(() => {
         getUsers().then(setUsers);
@@ -143,54 +142,6 @@ export default function CreatePropertyPage() {
         },
     });
 
-    useEffect(() => {
-        const draftId = searchParams.get('request') || searchParams.get('changes');
-        if (!draftId) return;
-        const resolvedDraftId = draftId;
-
-        let cancelled = false;
-
-        async function loadDraftAndProperty() {
-            const draftResult = await getPropertyChangeDraftAction(resolvedDraftId);
-            if (cancelled) return;
-
-            const shouldLoadTable = !draftResult.success || !draftResult.data || Object.keys(draftResult.data).length === 0;
-            const tableResult = shouldLoadTable ? await getPropertyCreateDraftAction(resolvedDraftId) : null;
-            if (cancelled) return;
-
-            const mergedValues = {
-                ...form.getValues(),
-                ...(tableResult?.success && tableResult.data ? tableResult.data : {}),
-                ...(draftResult.success && draftResult.data ? (draftResult.data as Partial<CreatePropertyFormValues>) : {}),
-            };
-
-            if (draftResult.success && draftResult.data) {
-                form.reset(mergedValues);
-                setChangeId(resolvedDraftId);
-                return;
-            }
-
-            if (tableResult?.success && tableResult.data) {
-                form.reset(mergedValues);
-                setChangeId(resolvedDraftId);
-            }
-        }
-
-        loadDraftAndProperty();
-
-        return () => {
-            cancelled = true;
-        };
-    }, [searchParams, form]);
-
-    function replaceRequestParam(requestId: string) {
-        const params = new URLSearchParams(window.location.search);
-        params.set('request', requestId);
-        params.set('status', 'creation');
-        params.delete('changes');
-        window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`);
-    }
-
     async function onSubmit(values: CreatePropertyFormValues) {
         startTransition(async () => {
             const result = await createPropertyAction(values);
@@ -220,22 +171,8 @@ export default function CreatePropertyPage() {
     }
 
     async function handleSectionAdvance(fromIndex: number, toIndex: number) {
-        const result = await savePropertyChangeDraftAction({
-            changeId,
-            status: 'creating',
-            data: form.getValues() as Record<string, any>,
-        });
-
-        if (result.success && result.changeId) {
-            setChangeId(result.changeId);
-            replaceRequestParam(result.changeId);
-        } else {
-            toast({
-                variant: 'destructive',
-                title: 'Could not save request',
-                description: result.error || 'Please try again before continuing.',
-            });
-        }
+        void fromIndex;
+        void toIndex;
     }
 
     return (

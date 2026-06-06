@@ -5,7 +5,7 @@
 import { naturalLanguagePropertySearch as naturalLanguagePropertySearchFlow } from "@/services/ai/natural-language-property-search";
 import { recommendProperties as recommendPropertiesFlow } from "@/services/ai/ai-powered-recommendations";
 import { extractAndSaveProperty as extractAndSavePropertyFlow, type ExtractPropertyDetailsOutput } from "@/services/ai/extract-property-details-flow";
-import { createProperty as createPropertyService, updateProperty as updatePropertyService, approveProperty, getProperties, deleteProperty as deletePropertyService, getPendingProperties, getPaginatedProperties, getPropertyById, updatePropertyWithExtractedData, addFetchToHistory, deleteFetchHistoryItem as deleteFetchHistoryItemService, updatePropertyImages, addImagesToFetchHistory, deleteImageFetchHistoryItem as deleteImageFetchHistoryItemService, toggleSavedProperty as toggleSavedPropertyService, getUsersBySavedProperty as getUsersBySavedPropertyService, getSavedPropertiesForUser as getSavedPropertiesForUserService } from '@/services/property-service';
+import { createProperty as createPropertyService, updateProperty as updatePropertyService, approveProperty, getProperties, deleteProperty as deletePropertyService, getPendingProperties, getAwaitingReviewItems, getPaginatedProperties, getPropertyById, updatePropertyWithExtractedData, addFetchToHistory, deleteFetchHistoryItem as deleteFetchHistoryItemService, updatePropertyImages, addImagesToFetchHistory, deleteImageFetchHistoryItem as deleteImageFetchHistoryItemService, toggleSavedProperty as toggleSavedPropertyService, getUsersBySavedProperty as getUsersBySavedPropertyService, getSavedPropertiesForUser as getSavedPropertiesForUserService } from '@/services/property-service';
 import { createAgency as createAgencyService, updateAgency as updateAgencyService, deleteAgency as deleteAgencyService } from '@/services/agency-service';
 import { getAgentsByLocation as getAgentsByLocationService, createAgent as createAgentService, updateAgent as updateAgentService, deleteAgent as deleteAgentService } from '@/services/agent-service';
 import { addSitemap, getNewUrlsFromSitemap, processSitemapUrl, updateSitemapCheckedTime } from "@/services/sitemap-service";
@@ -58,6 +58,15 @@ async function requireIdentity(): Promise<string> {
     });
   }
   return identity.account.accountId;
+}
+
+async function isAgencyAffiliatedAccount(accountId: string): Promise<boolean> {
+  const [agencyMap, agencyRecord] = await Promise.all([
+    prisma.agencyMap.findFirst({ where: { accountId } }),
+    prisma.agency.findUnique({ where: { id: accountId } }),
+  ]);
+
+  return Boolean(agencyMap || agencyRecord);
 }
 
 /**
@@ -654,7 +663,12 @@ export async function createPropertyAction(
       plots: validatedData.plots?.map(p => ({ ...p, area: areaValueToSqft(p.area) })) as unknown as PlotDetails[],
       apartmentUnits: validatedData.apartmentUnits?.map(u => ({ ...u, area: areaValueToSqft(u.area) })) as unknown as ApartmentUnit[],
     };
-    const propertyId = await createPropertyService({ ...serviceInput, creatorId: actorId });
+    const propertyId = await createPropertyService({
+      ...(serviceInput as any),
+      status: 'awaitingCreation',
+      isApproved: false,
+      creatorId: actorId,
+    });
     revalidatePath('/manage/properties');
     return { success: true, propertyId, error: null };
   } catch (e: any) {
@@ -910,9 +924,15 @@ export async function runPropertyAssurance(propertyId: string): Promise<Property
     return runPropertyAssuranceFlow(propertyId);
 }
 
-export async function getPendingPropertiesForAgent(limit: number): Promise<{ id: string; title: string }[]> {
-    const pendingProperties = await getPendingProperties(limit);
-    return pendingProperties.map(p => ({ id: p.id, title: p.title }));
+export async function getPendingPropertiesForAgent(limit: number): Promise<{ id: string; title: string; kind: 'property' | 'draft'; propertyId?: string; requestId?: string }[]> {
+    const awaitingReviewItems = await getAwaitingReviewItems(limit);
+    return awaitingReviewItems.map((item) => ({
+      id: item.id,
+      title: item.title,
+      kind: item.kind,
+      propertyId: item.propertyId,
+      requestId: item.kind === 'draft' ? item.id : undefined,
+    }));
 }
 
 export async function getApprovedPropertiesForAgent(limit: number): Promise<{ id:string; title: string }[]> {

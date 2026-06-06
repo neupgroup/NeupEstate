@@ -37,6 +37,8 @@ export function mapTypeFromEnum(type: PropertyType): string {
 
 export function mapStatusToEnum(status: string | undefined | null): PropertyStatus {
   switch (status?.toLowerCase()) {
+    case "awaitingcreation":
+    case "awaiting_creation": return PropertyStatus.AWAITING_CREATION;
     case "active":
     case "approved": return PropertyStatus.ACTIVE;
     case "sold":     return PropertyStatus.SOLD;
@@ -48,6 +50,7 @@ export function mapStatusToEnum(status: string | undefined | null): PropertyStat
 
 export function mapStatusFromEnum(status: PropertyStatus): string {
   switch (status) {
+    case PropertyStatus.AWAITING_CREATION: return "awaitingCreation";
     case PropertyStatus.ACTIVE:    return "approved";
     case PropertyStatus.SOLD:      return "sold";
     case PropertyStatus.RENTED:    return "rented";

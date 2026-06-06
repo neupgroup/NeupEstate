@@ -1,13 +1,87 @@
 "use client";
 
+import * as React from "react";
 import { Control } from "react-hook-form";
+import { Bold, Italic, Underline, List, ListOrdered, Pilcrow } from "lucide-react";
 import { CreatePropertyFormValues } from "@/types";
+import { Button } from "@/components/ui/button";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/logica/core/utils";
 
 interface TitleDescriptionSectionProps {
     control: Control<CreatePropertyFormValues>;
+}
+
+function RichTextEditor({
+    value,
+    onChange,
+    placeholder,
+}: {
+    value: string;
+    onChange: (value: string) => void;
+    placeholder?: string;
+}) {
+    const editorRef = React.useRef<HTMLDivElement | null>(null);
+
+    React.useEffect(() => {
+        const editor = editorRef.current;
+        if (!editor) return;
+        if (editor.innerHTML !== value) {
+            editor.innerHTML = value || "";
+        }
+    }, [value]);
+
+    function exec(format: string, option?: string) {
+        const editor = editorRef.current;
+        if (!editor) return;
+        editor.focus();
+        document.execCommand(format, false, option);
+        onChange(editor.innerHTML);
+    }
+
+    return (
+        <div className="space-y-2">
+            <div className="flex flex-wrap gap-1 rounded-md border bg-muted/30 p-1">
+                <Button type="button" variant="ghost" size="sm" onClick={() => exec("bold")}>
+                    <Bold className="h-4 w-4" />
+                </Button>
+                <Button type="button" variant="ghost" size="sm" onClick={() => exec("italic")}>
+                    <Italic className="h-4 w-4" />
+                </Button>
+                <Button type="button" variant="ghost" size="sm" onClick={() => exec("underline")}>
+                    <Underline className="h-4 w-4" />
+                </Button>
+                <Button type="button" variant="ghost" size="sm" onClick={() => exec("insertUnorderedList")}>
+                    <List className="h-4 w-4" />
+                </Button>
+                <Button type="button" variant="ghost" size="sm" onClick={() => exec("insertOrderedList")}>
+                    <ListOrdered className="h-4 w-4" />
+                </Button>
+                <Button type="button" variant="ghost" size="sm" onClick={() => exec("formatBlock", "p")}>
+                    <Pilcrow className="h-4 w-4" />
+                </Button>
+            </div>
+            <div
+                ref={editorRef}
+                contentEditable
+                suppressContentEditableWarning
+                role="textbox"
+                aria-multiline="true"
+                data-placeholder={placeholder}
+                className={cn(
+                    "min-h-40 rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm outline-none transition-colors",
+                    "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                    "empty:before:text-muted-foreground",
+                )}
+                onInput={(event) => onChange((event.currentTarget as HTMLDivElement).innerHTML)}
+                onBlur={(event) => onChange((event.currentTarget as HTMLDivElement).innerHTML)}
+            />
+            <p className="text-xs text-muted-foreground">
+                Use basic formatting for emphasis, bullet lists, and structure. The description is stored as HTML.
+            </p>
+        </div>
+    );
 }
 
 export function TitleDescriptionSection({ control }: TitleDescriptionSectionProps) {
@@ -35,7 +109,11 @@ export function TitleDescriptionSection({ control }: TitleDescriptionSectionProp
                         <FormItem>
                             <FormLabel>Description</FormLabel>
                             <FormControl>
-                                <Textarea placeholder="Describe the property..." {...field} />
+                                <RichTextEditor
+                                    value={field.value ?? ""}
+                                    onChange={field.onChange}
+                                    placeholder="Describe the property..."
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
