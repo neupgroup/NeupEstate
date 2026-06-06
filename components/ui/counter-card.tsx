@@ -63,12 +63,14 @@ export function CounterCard({
         select(Number(value ?? 0) + delta);
     }
 
+    const visibleSteps = steps.filter((step) => step <= Number(value ?? 0));
+
     return (
         <div className={cn("space-y-2 w-full max-w-2xl", className)}>
             <div className="space-y-1">
                 <div className="flex items-center gap-2 text-base font-bold">
                     <span>{emoji}</span>
-                    <span className="text-primary">{label}</span>
+                    <span className="text-foreground">{label}</span>
                     {onRemove && (
                         <button
                             type="button"
@@ -97,19 +99,19 @@ export function CounterCard({
                     }}
                     onBlur={onBlur}
                     className={cn(
-                        "w-full rounded-xl border bg-background px-3 py-2 text-sm outline-none",
-                        "focus:ring-2 focus:ring-ring focus:border-primary"
+                        "w-full rounded-xl border bg-background px-3 py-2 text-sm outline-none text-foreground",
+                        "focus:ring-2 focus:ring-ring focus:border-foreground"
                     )}
                 />
             </div>
 
             <div className="flex flex-wrap gap-2">
-                {steps.map((delta) => (
+                {visibleSteps.map((delta) => (
                     <button
                         key={delta}
                         type="button"
                         onClick={() => nudge(delta)}
-                        className="rounded-full border px-3 py-1.5 text-xs font-medium transition-colors border-border bg-background hover:border-primary hover:text-primary"
+                        className="rounded-full border px-3 py-1.5 text-xs font-medium transition-colors border-border bg-background text-foreground hover:border-foreground hover:text-foreground"
                     >
                         {delta > 0 ? `+${delta}` : delta}
                     </button>

@@ -147,7 +147,7 @@ export function FacingInput({ name, label, variant = "house", className, note }:
             <div className="space-y-1">
                 <div className="flex items-center gap-2 text-base font-bold">
                     <span>{variantIcon}</span>
-                    <span className="text-primary">{label}</span>
+                    <span className="text-foreground">{label}</span>
                     <button
                         type="button"
                         className="text-xs text-muted-foreground hover:text-foreground"
@@ -168,10 +168,7 @@ export function FacingInput({ name, label, variant = "house", className, note }:
                     }}
                     onBlur={onBlur}
                     placeholder="e.g. Purba / North East"
-                    className={cn(
-                        "w-full rounded-xl border bg-background px-3 py-2 text-sm outline-none",
-                        error && "border-destructive"
-                    )}
+                    className={cn("w-full rounded-xl border bg-background px-3 py-2 text-sm outline-none text-foreground", error && "border-destructive")}
                 />
                 {error && <p className="text-xs font-medium text-destructive">{error}</p>}
             </div>
@@ -182,14 +179,14 @@ export function FacingInput({ name, label, variant = "house", className, note }:
                     return (
                         <button
                             key={direction}
-                            type="button"
-                            onClick={() => select(isSelected ? undefined : direction)}
-                            className={cn(
-                                "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
-                                "border-border bg-background hover:border-primary hover:text-primary",
-                                isSelected && "border-primary bg-primary/10 text-primary",
-                            )}
-                        >
+                        type="button"
+                        onClick={() => select(isSelected ? undefined : direction)}
+                        className={cn(
+                            "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+                            "border-border bg-background text-foreground hover:border-foreground hover:text-foreground",
+                            isSelected && "border-foreground bg-black/5 text-foreground",
+                        )}
+                    >
                             {direction}
                         </button>
                     );

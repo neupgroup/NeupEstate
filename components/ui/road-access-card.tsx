@@ -47,12 +47,23 @@ export function RoadAccessCard({ name, note }: RoadAccessCardProps) {
         select(Number(value ?? 0) + delta);
     }
 
+    const visibleActions = [
+        { label: "+1 feet", delta: 1 },
+        { label: "-1 feet", delta: -1 },
+        { label: "+2 feet", delta: 2 },
+        { label: "-2 feet", delta: -2 },
+        { label: "+5 feet", delta: 5 },
+        { label: "-5 feet", delta: -5 },
+        { label: "+10 feet", delta: 10 },
+        { label: "-10 feet", delta: -10 },
+    ].filter((action) => action.delta > 0 || Math.abs(action.delta) <= Number(value ?? 0));
+
     return (
         <div className={cn("space-y-2 w-full max-w-2xl")}>
             <div className="space-y-1">
                 <div className="flex items-center gap-2 text-base font-bold">
                     <span>🛣️</span>
-                    <span className="text-primary">Road Access</span>
+                    <span className="text-foreground">Road Access</span>
                     <span className="text-xs text-muted-foreground font-medium">(Feet System)</span>
                 </div>
 
@@ -73,28 +84,19 @@ export function RoadAccessCard({ name, note }: RoadAccessCardProps) {
                     }}
                     onBlur={onBlur}
                     className={cn(
-                        "w-full rounded-xl border bg-background px-3 py-2 text-sm outline-none",
-                        "focus:ring-2 focus:ring-ring focus:border-primary"
+                        "w-full rounded-xl border bg-background px-3 py-2 text-sm outline-none text-foreground",
+                        "focus:ring-2 focus:ring-ring focus:border-foreground"
                     )}
                 />
             </div>
 
             <div className="flex flex-wrap gap-2">
-                {[
-                    { label: "+1 feet", delta: 1 },
-                    { label: "-1 feet", delta: -1 },
-                    { label: "+2 feet", delta: 2 },
-                    { label: "-2 feet", delta: -2 },
-                    { label: "+5 feet", delta: 5 },
-                    { label: "-5 feet", delta: -5 },
-                    { label: "+10 feet", delta: 10 },
-                    { label: "-10 feet", delta: -10 },
-                ].map((action) => (
+                {visibleActions.map((action) => (
                     <button
                         key={action.label}
                         type="button"
                         onClick={() => nudge(action.delta)}
-                        className="rounded-full border px-3 py-1.5 text-xs font-medium transition-colors border-border bg-background hover:border-primary hover:text-primary"
+                        className="rounded-full border px-3 py-1.5 text-xs font-medium transition-colors border-border bg-background text-foreground hover:border-foreground hover:text-foreground"
                     >
                         {action.label}
                     </button>

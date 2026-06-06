@@ -198,6 +198,12 @@ export function AreaInput({ label = "Total Area", name = "area", className, note
   });
 
   const system = useMemo(() => SYSTEMS.find((s) => s.key === activeSystem) ?? SYSTEMS[0], [activeSystem]);
+  const visibleUnits = useMemo(() => {
+    return system.units.map((unit) => ({
+      ...unit,
+      visibleSteps: unit.steps.filter((step) => (currentVals[unit.key] ?? 0) >= step),
+    }));
+  }, [system.key, currentVals]);
   const hint = useMemo(() => {
     switch (system.key) {
       case "aana":
@@ -263,7 +269,7 @@ export function AreaInput({ label = "Total Area", name = "area", className, note
       <div className="space-y-1">
         <div className="flex items-center gap-2 text-base font-bold">
           <Triangle className="h-4 w-4 rotate-90 text-muted-foreground" />
-          <span className="text-primary">{label}</span>
+          <span className="text-foreground">{label}</span>
           <button
             type="button"
             onClick={() => {
@@ -289,20 +295,20 @@ export function AreaInput({ label = "Total Area", name = "area", className, note
           }}
           onBlur={onBlur}
           placeholder={hint}
-          className={cn("w-full rounded-xl border bg-background px-3 py-2 text-sm outline-none", errorMessage && "border-destructive")}
+          className={cn("w-full rounded-xl border bg-background px-3 py-2 text-sm outline-none text-foreground", errorMessage && "border-destructive")}
         />
       </div>
 
       <div className="flex flex-wrap gap-2">
-        {system.units.map((unit) => (
+        {visibleUnits.map((unit) => (
           <div key={unit.key} className="flex flex-wrap items-center gap-2">
-            {unit.steps.map((step) => (
-              <button key={`-${unit.key}-${step}`} type="button" onClick={() => nudge(unit.key, -step)} className="rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium hover:border-primary hover:text-primary">
+            {unit.visibleSteps.map((step) => (
+              <button key={`-${unit.key}-${step}`} type="button" onClick={() => nudge(unit.key, -step)} className="rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium text-foreground hover:border-foreground hover:text-foreground">
                 - {step} {unit.label}
               </button>
             ))}
             {unit.steps.map((step) => (
-              <button key={`+${unit.key}-${step}`} type="button" onClick={() => nudge(unit.key, step)} className="rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium hover:border-primary hover:text-primary">
+              <button key={`+${unit.key}-${step}`} type="button" onClick={() => nudge(unit.key, step)} className="rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium text-foreground hover:border-foreground hover:text-foreground">
                 + {step} {unit.label}
               </button>
             ))}

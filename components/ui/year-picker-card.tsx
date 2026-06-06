@@ -68,7 +68,7 @@ export function YearPickerCard({ name, label, emoji, className, note }: YearPick
             <div className="space-y-1">
                 <div className="flex items-center gap-2 text-base font-bold">
                     <span>{emoji}</span>
-                    <span className="text-primary">{label}</span>
+                    <span className="text-foreground">{label}</span>
                     <button
                         type="button"
                         onClick={() => setSystem((current) => (current === "ad" ? "bs" : "ad"))}
@@ -90,9 +90,7 @@ export function YearPickerCard({ name, label, emoji, className, note }: YearPick
                     }}
                     onBlur={onBlur}
                     placeholder="e.g. 2025"
-                    className={cn(
-                        "w-full rounded-xl border bg-background px-3 py-2 text-sm outline-none",
-                    )}
+                    className={cn("w-full rounded-xl border bg-background px-3 py-2 text-sm outline-none text-foreground")}
                 />
             </div>
 
@@ -109,7 +107,7 @@ export function YearPickerCard({ name, label, emoji, className, note }: YearPick
                         onClick={() => adjust(action.delta)}
                         className={cn(
                             "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
-                            "border-border bg-background hover:border-primary hover:text-primary",
+                            "border-border bg-background text-foreground hover:border-foreground hover:text-foreground",
                         )}
                     >
                         {action.label}
