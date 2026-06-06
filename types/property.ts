@@ -387,6 +387,9 @@ export const CreatePropertySchema = z.object({
     // Listing/Agent Details
     listingAgent: z.string().optional(),
     isOwnerListing: z.boolean().optional().default(false),
+    isPrivate: z.boolean().optional().default(false),
+    showMap: z.boolean().optional().default(true),
+    showOwnerInformation: z.boolean().optional().default(true),
 
     // Land Details
     landDetails: LandDetailsSchema.optional(),

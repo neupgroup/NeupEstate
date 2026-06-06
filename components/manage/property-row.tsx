@@ -65,7 +65,7 @@ function formatPrice(price: number, purpose: string) {
 export function AdminPropertyRow({ property, draftKind }: { property: Property; draftKind?: 'creating' | 'changing' | 'deleting' }) {
     return (
         <ClientLink
-            href={`/manage/properties/${property.id}/edit`}
+            href={`/manage/properties/${property.id}`}
             className="flex items-center gap-4 px-5 py-4 hover:bg-muted/40 transition-colors group"
         >
             <Thumbnail property={property} />

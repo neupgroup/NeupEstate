@@ -745,6 +745,9 @@ export async function createPropertyAction(
       price: resolvedPrice,
       details: {
         priceDisplayMode,
+        showMap: validatedData.showMap ?? true,
+        showOwnerInformation: validatedData.showOwnerInformation ?? true,
+        isPrivate: validatedData.isPrivate ?? false,
       },
       area: areaValueToSqft(validatedData.area),
       amenities: validatedData.amenities?.split(',').map(a => a.trim()).filter(Boolean) || [],
@@ -811,6 +814,9 @@ export async function updatePropertyAction(
       price: resolvedPrice,
       details: {
         priceDisplayMode,
+        showMap: validatedData.showMap ?? true,
+        showOwnerInformation: validatedData.showOwnerInformation ?? true,
+        isPrivate: validatedData.isPrivate ?? false,
       },
       area: areaValueToSqft(validatedData.area),
       amenities: validatedData.amenities?.split(',').map(a => a.trim()).filter(Boolean) || [],

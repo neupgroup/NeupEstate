@@ -7,6 +7,7 @@ import { CreatePropertyFormValues } from "@/types";
 import { Button } from "@/components/ui/button";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { cn } from "@/logica/core/utils";
 
 interface TitleDescriptionSectionProps {
@@ -117,11 +118,71 @@ export function TitleDescriptionSection({ control, fieldChangeNotes }: TitleDesc
                                     placeholder="Describe the property..."
                                 />
                             </FormControl>
-                            {fieldChangeNotes?.description && <p className="text-xs text-muted-foreground">{fieldChangeNotes.description}</p>}
                             <FormMessage />
                         </FormItem>
                     )}
                 />
+
+                <div className="space-y-4 rounded-lg border bg-muted/20 p-4">
+                    <div className="space-y-1">
+                        <h3 className="text-base font-semibold">Publishing</h3>
+                        <p className="text-sm text-muted-foreground">
+                            Control how this property appears on the website.
+                        </p>
+                    </div>
+
+                    <FormField
+                        control={control}
+                        name="isPrivate"
+                        render={({ field }) => (
+                            <FormItem className="flex items-center justify-between rounded-lg border bg-background px-4 py-3">
+                                <div className="space-y-0.5">
+                                    <FormLabel className="text-sm font-medium">Make private</FormLabel>
+                                    <p className="text-xs text-muted-foreground">
+                                        The description will not show on the public website.
+                                    </p>
+                                </div>
+                                <FormControl>
+                                    <Switch checked={Boolean(field.value)} onCheckedChange={(checked) => field.onChange(checked)} />
+                                </FormControl>
+                            </FormItem>
+                        )}
+                    />
+
+                    <div className="grid gap-3 sm:grid-cols-2">
+                        <FormField
+                            control={control}
+                            name="showMap"
+                            render={({ field }) => (
+                                <FormItem className="flex items-center justify-between rounded-lg border bg-background px-4 py-3">
+                                    <div className="space-y-0.5">
+                                        <FormLabel className="text-sm font-medium">Show map</FormLabel>
+                                        <p className="text-xs text-muted-foreground">Display the map on the public listing.</p>
+                                    </div>
+                                    <FormControl>
+                                        <Switch checked={Boolean(field.value)} onCheckedChange={(checked) => field.onChange(checked)} />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={control}
+                            name="showOwnerInformation"
+                            render={({ field }) => (
+                                <FormItem className="flex items-center justify-between rounded-lg border bg-background px-4 py-3">
+                                    <div className="space-y-0.5">
+                                        <FormLabel className="text-sm font-medium">Show owner info</FormLabel>
+                                        <p className="text-xs text-muted-foreground">Display owner details on the public listing.</p>
+                                    </div>
+                                    <FormControl>
+                                        <Switch checked={Boolean(field.value)} onCheckedChange={(checked) => field.onChange(checked)} />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+                </div>
             </div>
         </section>
     );

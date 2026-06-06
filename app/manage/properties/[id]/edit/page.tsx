@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams, useRouter } from 'next/navigation';
 import { useTransition, useState, useEffect, useMemo } from 'react';
 import { UpdatePropertySchema, type Property, type User, type UpdatePropertyFormValues } from '@/types';
-import { updatePropertyAction, approvePropertyAction, deletePropertyAction, rewritePropertyDetailsAction, getCurrentAccountId, savePropertyChangeDraftAction, getPropertyChangeContextAction } from '@/app/actions';
+import { approvePropertyAction, deletePropertyAction, rewritePropertyDetailsAction, getCurrentAccountId, savePropertyChangeDraftAction, getPropertyChangeContextAction } from '@/app/actions';
 import { getPropertyById } from "@/services/property-service";
 import { getUsers } from "@/services/user-service";
 import { useAgencyCustomization } from '@/logica/core/hooks/use-agency-customization';
@@ -325,6 +325,9 @@ export default function EditPropertyPage() {
                 images: Array.isArray(propData.images) ? propData.images : [],
                 listingAgent: propData.listingAgent || '',
                 isOwnerListing: propData.isOwnerListing || false,
+                isPrivate: Boolean((propData.details as any)?.isPrivate),
+                showMap: propData.details?.showMap ?? true,
+                showOwnerInformation: propData.details?.showOwnerInformation ?? true,
                 floors: propData.floors ?? undefined,
                 onFloor: propData.onFloor ?? undefined,
                 roadAccess: propData.roadAccess ?? undefined,
@@ -377,17 +380,26 @@ export default function EditPropertyPage() {
     async function onSubmit(values: UpdatePropertyFormValues) {
         if (!property) return;
         startSaveTransition(async () => {
-            const result = await updatePropertyAction(property.id, values);
+            const data = property.isApproved
+                ? pickDirtyValues(values, form.formState.dirtyFields)
+                : values;
+
+            const result = await savePropertyChangeDraftAction({
+                propertyId: property.id,
+                status: 'changing',
+                data,
+            });
+
             if (result.success) {
                 toast({
-                    title: 'Property Updated',
-                    description: `The property "${values.title}" has been successfully updated.`,
+                    title: 'Review Requested',
+                    description: `Your changes for "${values.title}" have been sent for review.`,
                 });
-                router.refresh();
+                router.push(`/manage/properties/${property.id}`);
             } else {
                 toast({
                     variant: 'destructive',
-                    title: 'Error updating property',
+                    title: 'Could not request review',
                     description: result.error,
                 });
             }
@@ -623,7 +635,7 @@ export default function EditPropertyPage() {
                         users={users}
                         isEditForm={true}
                         isSubmitting={isSaving || isRewriting}
-                        submitLabel={isSaving ? 'Saving Changes...' : 'Save Changes'}
+                        submitLabel={isSaving ? 'Requesting Review...' : 'Request Review'}
                         agencyRule={agencyRule}
                         onSectionAdvance={handleSectionAdvance}
                         fieldChangeNotes={fieldChangeNotes}

@@ -219,9 +219,9 @@ export function ProgressivePropertySections({
         {
             id: "copy",
             section: "copy",
-            title: "Title & Description",
-            description: "Write a compelling title and description for the listing.",
-            fields: ["title", "description"],
+            title: "Publishing and Copy",
+            description: "Write the listing copy and control how it appears publicly.",
+            fields: ["title", "description", "isPrivate", "showMap", "showOwnerInformation"],
             render: () => <TitleDescriptionSection control={form.control} fieldChangeNotes={fieldChangeNotes} />,
         },
     ], [category, form.control, form.formState.errors, isEditForm, users]);
