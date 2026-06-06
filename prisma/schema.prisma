@@ -39,6 +39,12 @@ enum Reaction {
   Reported
 }
 
+enum PropertyCompetitionStatus {
+  VERIFIED
+  UNVERIFIED
+  DECLINED
+}
+
 // ============================================================================
 // Account & Activity
 // ============================================================================
@@ -126,6 +132,7 @@ model Property {
   savedBy            SavedProperty[]
   reactions          ReactedProperty[]
   views              PropertyView[]
+  competitionMaps    PropertyCompetitionMap[]
 
   @@index([type])
   @@index([purpose])
@@ -1010,10 +1017,27 @@ model CompetitorListing {
 
   competitor      Competitor     @relation(fields: [competitorId], references: [id], onDelete: Cascade)
   competitorPage  CompetitorPage  @relation(fields: [competitorPageId], references: [id], onDelete: Cascade)
+  propertyMaps    PropertyCompetitionMap[]
 
   @@index([competitorId])
   @@index([loggedOn])
   @@map("competitor_listings")
+}
+
+model PropertyCompetitionMap {
+  id                String   @id @default(cuid())
+  propertyId        String   @map("property_id")
+  competitorPropertyId String @map("competitor_property_id")
+  status            PropertyCompetitionStatus @default(UNVERIFIED)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  property         Property          @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  competitorListing CompetitorListing @relation(fields: [competitorPropertyId], references: [id], onDelete: Cascade)
+
+  @@index([propertyId], map: "property_competition_map_property_id_idx")
+  @@index([competitorPropertyId], map: "property_competition_map_competitor_property_id_idx")
+  @@map("property_competition_map")
 }
 
 model CompetitorTracking {
