@@ -2,7 +2,7 @@
 import { getAwaitingReviewItems, getPaginatedProperties } from "@/services/property-service";
 import { checkAuthenticationForWeb } from "@/services/neupid/check-auth-web";
 import { FilePlus2 } from "lucide-react";
-import { AdminPropertyDraftRow, AdminPropertyRow } from "@/components/manage/property-row";
+import { AdminPropertyRow } from "@/components/manage/property-row";
 import { Pagination } from "@/components/manage/pagination";
 import { AdminPropertySearch } from "@/components/manage/admin-property-search";
 import { parseAdminFilter } from "@/services/ai/parse-admin-filter-flow";
@@ -25,6 +25,7 @@ export default async function ManagePropertiesPage({
   const currentPage   = Number(sp.page) || 1;
   const query         = sp.q        || '';
   const statusParam   = sp.status   || '';
+  const ownerParam    = sp.owner    || '';
   const purposeParam  = sp.purpose  || '';
   const categoryParam = sp.category || '';
   const locationParam = sp.location || '';
@@ -36,6 +37,7 @@ export default async function ManagePropertiesPage({
 
   let filters: PropertyFilters = {};
   if (statusParam && statusParam !== 'drafts') filters.status = statusParam as 'approved' | 'pending';
+  if (ownerParam === '1') filters.isOwnerListing = true;
   if (purposeParam)  filters.purpose      = [purposeParam as any];
   if (categoryParam) filters.category     = [categoryParam as any];
   if (locationParam) filters.location     = locationParam;
@@ -61,7 +63,7 @@ export default async function ManagePropertiesPage({
   const hasFilters = Object.keys(filters).length > 0;
   const isDefaultFeed = !hasFilters && !query && !isDraftsView;
 
-  const combinedItems = (isDefaultFeed || isDraftsView)
+  const awaitingItems = (isDefaultFeed || isDraftsView)
     ? await getAwaitingReviewItems(500)
     : [];
 
@@ -73,38 +75,18 @@ export default async function ManagePropertiesPage({
         excludeArchived: true,
       });
   const properties = paginatedProperties.properties;
-  const totalCount = (isDefaultFeed || isDraftsView)
-    ? combinedItems.length + (isDraftsView ? 0 : paginatedProperties.totalCount)
-    : paginatedProperties.totalCount;
+  const draftKindsByPropertyId = new Map<string, 'creating' | 'changing' | 'deleting'>();
+  for (const item of awaitingItems) {
+    if (item.propertyId) draftKindsByPropertyId.set(item.propertyId, item.status as 'creating' | 'changing' | 'deleting');
+  }
+
+  const filteredProperties = isDraftsView
+    ? properties.filter((property) => draftKindsByPropertyId.has(property.id))
+    : properties;
+  const totalCount = isDraftsView ? filteredProperties.length : paginatedProperties.totalCount;
   const totalPages = Math.ceil(totalCount / PROPERTIES_PER_PAGE);
-  const defaultPageItems = (isDefaultFeed || isDraftsView)
-    ? [
-        ...combinedItems.map((item) => ({
-          id: `${item.kind}:${item.id}`,
-          kind: item.kind,
-          title: item.title,
-          location: item.location,
-          category: item.category,
-          status: item.status,
-          propertyId: item.propertyId,
-          requestId: item.kind === 'draft' ? item.id : undefined,
-          modifiedOn: item.modifiedOn || '',
-        })),
-        ...(isDraftsView ? [] : properties.map((property) => ({
-          id: property.id,
-          kind: 'property' as const,
-          title: property.title,
-          location: property.location,
-          category: property.category,
-          status: property.status,
-          propertyId: property.id,
-          modifiedOn: property.updatedAt || '',
-        }))),
-      ]
-      .sort((a, b) => String(b.modifiedOn || '').localeCompare(String(a.modifiedOn || '')))
-      .slice((currentPage - 1) * PROPERTIES_PER_PAGE, currentPage * PROPERTIES_PER_PAGE)
-    : [];
-  const hasAnyRows = (isDefaultFeed || isDraftsView) ? defaultPageItems.length > 0 : properties.length > 0;
+  const defaultPageItems = filteredProperties.slice((currentPage - 1) * PROPERTIES_PER_PAGE, currentPage * PROPERTIES_PER_PAGE);
+  const hasAnyRows = defaultPageItems.length > 0;
 
   return (
     <div className="space-y-6">
@@ -114,7 +96,7 @@ export default async function ManagePropertiesPage({
           Properties
         </h2>
         <p className="text-sm text-muted-foreground mt-1">
-          {hasFilters || query
+          {hasFilters || query || isDraftsView
             ? `Found ${totalCount} ${totalCount === 1 ? 'property' : 'properties'}`
             : `${totalCount} ${totalCount === 1 ? 'property' : 'properties'} total`}
         </p>
@@ -145,30 +127,14 @@ export default async function ManagePropertiesPage({
         </ClientLink>
 
         {/* Property rows */}
-        {isDefaultFeed && defaultPageItems.length > 0 ? (
-          defaultPageItems.map((item) => (
-            <div key={item.id}>
-              <div className="border-t border-border" />
-              {item.kind === 'draft' ? (
-                <AdminPropertyDraftRow draft={{
-                  id: item.id,
-                  propertyId: item.propertyId,
-                  title: item.title,
-                  location: item.location,
-                  category: item.category,
-                  status: 'creating',
-                  modifiedOn: item.modifiedOn,
-                }} />
-              ) : (
-                <AdminPropertyRow property={item as any} />
-              )}
-            </div>
-          ))
-        ) : !isDefaultFeed && properties.length > 0 ? (
-          properties.map((property) => (
+        {defaultPageItems.length > 0 ? (
+          defaultPageItems.map((property) => (
             <div key={property.id}>
               <div className="border-t border-border" />
-              <AdminPropertyRow property={property} />
+              <AdminPropertyRow
+                property={property}
+                draftKind={draftKindsByPropertyId.get(property.id)}
+              />
             </div>
           ))
         ) : !hasAnyRows ? (

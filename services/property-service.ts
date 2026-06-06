@@ -249,8 +249,9 @@ function mapRecord(record: any): Property {
     type:             record.type === PropertyType.COMMERCIAL ? 'Commercial' : 'Residential',
     images,
     amenities:        normalizeStringArray(record.amenities),
-    agency:           { id: record.agency || 'unknown', name: 'Agency', logoUrl: 'https://placehold.co/200x80.png' },
+    agency:           { id: record.agency || 'unknown', name: record.agency ? 'Agency' : 'Owner', logoUrl: 'https://placehold.co/200x80.png' },
     listingAgent:     record.agent || undefined,
+    isOwnerListing:   !record.agency,
     isFeatured:       Boolean(record.isFeatured),
     isApproved:       Boolean(record.isApproved),
     status:           record.status as Property['status'],
@@ -300,6 +301,18 @@ export async function getPaginatedProperties(opts: { page?: number; limit?: numb
     if (filters.id) where.id = filters.id;
     if (filters.status) where.status = mapStatusToEnum(filters.status);
     if (filters.sourceUrl) where.fetchHistory = { some: { sourceUrl: filters.sourceUrl } };
+    if (filters.isOwnerListing === true) where.agency = null;
+    if (filters.isOwnerListing === false) where.agency = { not: null };
+    if (filters.purpose?.length) where.purpose = { in: filters.purpose.map(mapPurposeToEnum) };
+    if (filters.category?.length) where.type = { in: filters.category.map(mapTypeToEnum) };
+    if (filters.agencyName) where.agency = { contains: filters.agencyName, mode: 'insensitive' };
+    if (filters.listingAgent) where.agent = { contains: filters.listingAgent, mode: 'insensitive' };
+    if (filters.minBedrooms != null || filters.maxBedrooms != null) {
+      where.bedrooms = {
+        ...(Number.isFinite(filters.minBedrooms) ? { gte: filters.minBedrooms } : {}),
+        ...(Number.isFinite(filters.maxBedrooms) ? { lte: filters.maxBedrooms } : {}),
+      };
+    }
     if (filters.searchTerm) where.OR = [
       { title: { contains: filters.searchTerm, mode: 'insensitive' } },
       { description: { contains: filters.searchTerm, mode: 'insensitive' } },

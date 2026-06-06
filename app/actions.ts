@@ -455,12 +455,14 @@ export async function savePropertyChangeDraftAction(input: {
 }): Promise<{ success: boolean; changeId?: string; error?: string }> {
   try {
     await requirePermission(PERMISSIONS.manage.propertySelfUpdate);
+    const actorId = await requireIdentity();
     const existingDraft = input.changeId
       ? await prisma.propertyChange.findUnique({ where: { id: input.changeId } })
       : null;
 
     const data = {
       propertyId: input.propertyId,
+      accountId: actorId,
       status: input.status,
       isApproved: input.isApproved ?? existingDraft?.isApproved ?? null,
       data: input.changeId

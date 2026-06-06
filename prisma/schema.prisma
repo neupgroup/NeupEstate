@@ -63,6 +63,7 @@ model Account {
   role         AuthzRole? @relation(fields: [roleId], references: [id], onDelete: SetNull)
   intelligenceMappings IntelligenceMapping[]
   intelligenceAlerts    IntelligenceAlert[]
+  propertyChanges       PropertyChange[]
 
   @@map("account")
 }
@@ -306,6 +307,7 @@ model PropertyDocument {
 model PropertyChange {
   id         String   @id @default(cuid())
   propertyId String   @map("property_id")
+  accountId  String   @map("account_id")
   data       Json
   status     String
   isApproved Boolean? @map("is_approved")
@@ -313,8 +315,10 @@ model PropertyChange {
   modifiedOn DateTime @default(now())
 
   property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  account    Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
 
   @@index([propertyId])
+  @@index([accountId])
   @@index([status])
   @@index([createdOn])
   @@index([modifiedOn])

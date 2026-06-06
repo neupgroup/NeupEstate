@@ -12,6 +12,7 @@ import { getHiddenPriceLabel } from '@/logica/core/property-price-display';
 // ─── Status badge ─────────────────────────────────────────────────────────────
 
 function StatusBadge({ property }: { property: Property }) {
+    if (property.isOwnerListing) return <Badge variant="secondary" className="shrink-0 text-[11px]"><Home className="mr-1 h-3 w-3" />Owner Listing</Badge>;
     const s = property.status;
     if (s === 'ACTIVE')   return <Badge variant="default"   className="shrink-0 text-[11px]"><CheckCircle className="mr-1 h-3 w-3" />Active</Badge>;
     if (s === 'PENDING')  return <Badge variant="secondary" className="shrink-0 text-[11px]"><Clock       className="mr-1 h-3 w-3" />Pending</Badge>;
@@ -61,7 +62,7 @@ function formatPrice(price: number, purpose: string) {
 
 // ─── Row ──────────────────────────────────────────────────────────────────────
 
-export function AdminPropertyRow({ property }: { property: Property }) {
+export function AdminPropertyRow({ property, draftKind }: { property: Property; draftKind?: 'creating' | 'changing' | 'deleting' }) {
     return (
         <ClientLink
             href={`/manage/properties/${property.id}/edit`}
@@ -77,12 +78,16 @@ export function AdminPropertyRow({ property }: { property: Property }) {
                     {[
                         property.location,
                         property.category,
+                        property.isOwnerListing ? 'Owner listing' : null,
                         getHiddenPriceLabel(property) || formatPrice(property.price, property.purpose),
                     ].filter(Boolean).join(' · ')}
                 </p>
             </div>
 
-            <StatusBadge property={property} />
+            <div className="flex items-center gap-2">
+                <StatusBadge property={property} />
+                {draftKind && <DraftIndicator kind={draftKind} isActive={property.isApproved} />}
+            </div>
         </ClientLink>
     );
 }
@@ -137,5 +142,20 @@ export function AdminPropertyDraftRow({
                 {badgeLabel}
             </Badge>
         </ClientLink>
+    );
+}
+
+export function DraftIndicator({ kind, isActive }: { kind: 'creating' | 'changing' | 'deleting'; isActive?: boolean }) {
+    const label = kind === 'creating'
+        ? 'Drafts'
+        : isActive
+            ? 'Also in Drafts'
+            : 'Drafts';
+
+    return (
+        <Badge variant="secondary" className="shrink-0 text-[11px]">
+            <Clock className="mr-1 h-3 w-3" />
+            {label}
+        </Badge>
     );
 }
