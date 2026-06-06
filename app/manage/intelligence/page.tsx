@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ClientLink } from '@/components/client-link';
-import { BarChart2, TrendingUp, ListChecks, Swords } from 'lucide-react';
+import { BarChart2, TrendingUp, ListChecks, Swords, FileText } from 'lucide-react';
 import { TrackChangesButton } from './track-changes-button';
 import { requirePagePermission } from '@/logica/auth/page-guard';
 import { PERMISSIONS } from '@/logica/auth/permissions';
@@ -24,6 +24,12 @@ const sections = [
     title: 'Competition',
     description: 'Manage competitors, track their listings and sources, and benchmark against your portfolio.',
   },
+  {
+    href: '/manage/intelligence/logs',
+    icon: <FileText className="h-6 w-6 text-primary" />,
+    title: 'Logs',
+    description: 'Review extraction logs, crawl activity, and error history for the intelligence pipeline.',
+  },
 ];
 
 export default async function IntelligencePage() {
@@ -43,7 +49,7 @@ export default async function IntelligencePage() {
         <TrackChangesButton />
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-2">
         {sections.map((s) => (
           <ClientLink key={s.href} href={s.href}>
             <Card className="hover:border-primary transition-colors cursor-pointer h-full">
