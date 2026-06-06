@@ -450,12 +450,23 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
             )}
 
 
-            {property.latitude && property.longitude && (
+            {(property.latitude && property.longitude) || property.location || property.structuredLocation ? (
               <div className="mt-6 border-t pt-6">
                 <h2 className="text-2xl font-headline font-semibold mb-4">Location on Map</h2>
-                <PropertyMap center={{ lat: property.latitude, lng: property.longitude }} />
+                <PropertyMap
+                  center={property.latitude && property.longitude ? { lat: property.latitude, lng: property.longitude } : null}
+                  query={[
+                    property.structuredLocation?.street,
+                    property.structuredLocation?.landmark,
+                    property.structuredLocation?.municipality,
+                    property.structuredLocation?.district,
+                    property.structuredLocation?.province,
+                    property.structuredLocation?.country,
+                    property.location,
+                  ].filter(Boolean).join(", ")}
+                />
               </div>
-            )}
+            ) : null}
 
             {property.purpose === 'Sale' && <EmiCalculatorChart price={property.price} />}
           </div>

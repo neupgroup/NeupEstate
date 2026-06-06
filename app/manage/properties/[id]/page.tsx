@@ -1,12 +1,15 @@
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { getPropertyById } from "@/services/property-service";
+import { hasPermission } from "@/logica/auth/authorization";
+import { PERMISSIONS } from "@/logica/auth/permissions";
+import { cancelPropertyChangeDraftAction, getCurrentAccountId, getPropertyChangeContextAction } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import { ClientLink } from "@/components/client-link";
 import { AreaDisplayToggle } from "@/components/manage/area-display-toggle";
 import { FacingDisplayToggle } from "@/components/manage/facing-display-toggle";
 import { RoadAccessDisplayToggle } from "@/components/manage/road-access-display-toggle";
-import { Bath, BedDouble, Bike, CalendarDays, CarFront, ChefHat, ChevronLeft, ExternalLink, Layers3, PenSquare, Sofa, SquareUserRound, UtensilsCrossed } from "lucide-react";
+import { Bath, BedDouble, Bike, Building2, CalendarDays, CarFront, ChefHat, ChevronLeft, Clock3, ExternalLink, FileText, Hash, Images, Layers3, Link2, PenSquare, Sofa, SquareUserRound, Tag, UserRound, UtensilsCrossed } from "lucide-react";
 
 type PageProps = {
     params: Promise<{ id: string }>;
@@ -32,6 +35,41 @@ function formatHtmlDescription(value: string | undefined) {
 
 function formatAmenityIconName(amenity: string) {
     return amenity.toLowerCase().trim().replace(/\s+/g, "-");
+}
+
+function hasLocationValue(value: unknown): boolean {
+    if (value == null) return false;
+    if (typeof value === "string") return value.trim().length > 0;
+    if (typeof value === "number") return true;
+    if (Array.isArray(value)) return value.some(hasLocationValue);
+    if (typeof value === "object") return Object.values(value as Record<string, unknown>).some(hasLocationValue);
+    return false;
+}
+
+function formatLocationSummary(property: {
+    structuredLocation?: {
+        country?: string | null;
+        province?: string | null;
+        district?: string | null;
+        municipality?: string | null;
+        ward?: number | null;
+        street?: string | null;
+        landmark?: string | null;
+    } | null;
+    location?: string | null;
+}) {
+    const parts = [
+        property.structuredLocation?.country?.trim(),
+        property.structuredLocation?.province?.trim(),
+        property.structuredLocation?.district?.trim(),
+        property.structuredLocation?.municipality?.trim(),
+        property.structuredLocation?.ward != null ? `Ward ${property.structuredLocation.ward}` : null,
+        property.structuredLocation?.street?.trim(),
+        property.structuredLocation?.landmark?.trim(),
+        property.location?.trim(),
+    ].filter((part): part is string => Boolean(part));
+
+    return parts.join(" > ");
 }
 
 function formatPurposeSummary(purposes: string[] | null | undefined) {
@@ -116,6 +154,21 @@ function getPropertyNotice(property: {
     }
 
     return null;
+}
+
+function isPendingReview(property: {
+    isApproved?: boolean | null;
+    status?: string | null;
+}) {
+    const normalizedStatus = property.status?.toLowerCase?.();
+    return property.isApproved === false || normalizedStatus === "pending" || normalizedStatus === "awaitingreview" || normalizedStatus === "awaiting review";
+}
+
+function pendingReviewTone(status?: string | null) {
+    const normalized = status?.toLowerCase?.();
+    if (normalized === "deleting") return "destructive";
+    if (normalized === "changing") return "muted";
+    return "info";
 }
 
 function Section({
@@ -211,6 +264,20 @@ export default async function ViewPropertyPage({ params }: PageProps) {
 
     const editUrl = `/manage/properties/${property.id}/edit`;
     const siteUrl = property.slug ? `/properties/${property.slug}` : null;
+    const hasLocation = hasLocationValue(property.structuredLocation) || hasLocationValue(property.location) || hasLocationValue(property.latitude) || hasLocationValue(property.longitude);
+    const locationSummary = formatLocationSummary({
+        structuredLocation: property.structuredLocation,
+        location: property.location,
+    });
+    const canReviewProperty = await hasPermission(PERMISSIONS.manage.selfReviewsView);
+    const currentAccountId = await getCurrentAccountId();
+    const changeContext = await getPropertyChangeContextAction(property.id);
+    const currentChange = changeContext.success ? changeContext.currentUserChange : null;
+    const isMyChange = Boolean(currentAccountId && currentChange?.accountId === currentAccountId);
+    const awaitingReview = isPendingReview({
+        isApproved: property.isApproved,
+        status: property.status,
+    });
     const headerSubtitle = formatHeaderSubtitle({
         type: property.type,
         category: property.category,
@@ -224,6 +291,17 @@ export default async function ViewPropertyPage({ params }: PageProps) {
         isOwnerListing: property.isOwnerListing,
         details: property.details,
     });
+    const reviewTone = pendingReviewTone(currentChange?.status ?? property.status);
+    const reviewMessage = currentChange?.status === "deleting"
+        ? `The deletion request on ${canReviewProperty ? "this" : isMyChange ? "your" : "this"} property has not been approved. It will be deleted after review.`
+        : currentChange?.status === "changing"
+            ? `The change on ${canReviewProperty ? "this" : isMyChange ? "your" : "this"} property has not been published. It will be visible after review.`
+            : `The ${canReviewProperty ? "this" : isMyChange ? "your" : "this"} property has not been published. It will be visible after review.`;
+    const reviewLinkText = canReviewProperty
+        ? "Review it"
+        : currentChange?.status === "deleting"
+            ? "Cancel it"
+            : null;
 
     return (
         <div className="space-y-10 max-w-6xl mx-auto">
@@ -251,9 +329,42 @@ export default async function ViewPropertyPage({ params }: PageProps) {
                     )}
                 </div>
                 <p className="text-sm text-muted-foreground">{headerSubtitle}</p>
-                {propertyNotice && (
+                {propertyNotice && !awaitingReview && (
                     <div className="rounded-lg border bg-muted/20 px-4 py-3 text-sm font-medium text-muted-foreground">
                         {propertyNotice}
+                    </div>
+                )}
+                {awaitingReview && (
+                    <div
+                        className={[
+                            "rounded-lg border px-4 py-3 text-sm",
+                            reviewTone === "destructive"
+                                ? "border-red-200 bg-red-50 text-red-950"
+                                : reviewTone === "muted"
+                                    ? "border-slate-200 bg-slate-50 text-slate-950"
+                                    : "border-blue-200 bg-blue-50 text-blue-950",
+                        ].join(" ")}
+                    >
+                        <div className="flex flex-wrap items-center gap-1">
+                            <span>{reviewMessage}</span>
+                            {reviewLinkText && (
+                                reviewLinkText === "Cancel it" ? (
+                                    <form action={cancelPropertyChangeDraftAction.bind(null, currentChange?.id ?? "")}>
+                                        <Button
+                                            type="submit"
+                                            variant="link"
+                                            className="h-auto p-0 align-baseline underline font-medium text-inherit"
+                                        >
+                                            Don&apos;t want to delete, cancel it!
+                                        </Button>
+                                    </form>
+                                ) : (
+                                    <ClientLink href={`/manage/properties/${property.id}?mode=review`} className="underline font-medium">
+                                        Review it
+                                    </ClientLink>
+                                )
+                            )}
+                        </div>
                     </div>
                 )}
             </div>
@@ -310,41 +421,56 @@ export default async function ViewPropertyPage({ params }: PageProps) {
 
             <Section title="Pricing Details" description="Price and pricing metadata.">
                 <ReadonlyGrid>
-                    <Field label="Price" value={property.price} />
-                    <Field label="Pricing" value={property.pricing} />
+                    <Field label="Price" value={property.price} icon={<Tag className="h-5 w-5" />} />
+                    <Field label="Pricing" value={property.pricing} icon={<Hash className="h-5 w-5" />} />
                 </ReadonlyGrid>
             </Section>
 
-            <Section title="Location Details" description="Structured location and coordinates.">
-                <ReadonlyGrid>
-                    <Field label="Structured Location" value={property.structuredLocation} />
-                    <Field label="Latitude" value={property.latitude} />
-                    <Field label="Longitude" value={property.longitude} />
-                </ReadonlyGrid>
-            </Section>
+            {hasLocation && (
+                <Section title="Location Details" description="Structured location and coordinates.">
+                    <div className="space-y-2 text-sm text-muted-foreground">
+                        {locationSummary ? <p className="font-medium text-foreground">{locationSummary}</p> : null}
+                        <p>
+                            {[
+                                property.structuredLocation?.country,
+                                property.structuredLocation?.province,
+                                property.structuredLocation?.district,
+                                property.structuredLocation?.municipality,
+                                property.structuredLocation?.ward != null ? `Ward ${property.structuredLocation.ward}` : null,
+                                property.structuredLocation?.street,
+                                property.structuredLocation?.landmark,
+                                property.location,
+                            ].filter((part): part is string => Boolean(part)).join(" > ")}
+                        </p>
+                        {(property.latitude != null && property.longitude != null) && (
+                            <p>Geo: {property.latitude}, {property.longitude}</p>
+                        )}
+                    </div>
+                </Section>
+            )}
 
             <Section title="Owner Information" description="Ownership and agent context.">
                 <ReadonlyGrid>
-                    <Field label="Owners" value={property.owners} />
-                    <Field label="Agency" value={property.agency?.name} />
-                    <Field label="Listing Agent" value={property.listingAgent} />
-                    <Field label="Owner Listing" value={property.isOwnerListing} />
+                    <Field label="Owners" value={property.owners} icon={<UserRound className="h-5 w-5" />} />
+                    <Field label="Agency" value={property.agency?.name} icon={<Building2 className="h-5 w-5" />} />
+                    <Field label="Listing Agent" value={property.listingAgent} icon={<UserRound className="h-5 w-5" />} />
+                    <Field label="Owner Listing" value={property.isOwnerListing} icon={<UserRound className="h-5 w-5" />} />
                 </ReadonlyGrid>
             </Section>
 
             <Section title="Photos" description="Photos and attached files.">
                 <ReadonlyGrid>
-                    <Field label="Images" value={property.images} />
-                    <Field label="Documents" value={property.documents} />
+                    <Field label="Images" value={property.images} icon={<Images className="h-5 w-5" />} />
+                    <Field label="Documents" value={property.documents} icon={<FileText className="h-5 w-5" />} />
                 </ReadonlyGrid>
             </Section>
 
             <Section title="Source & Metadata" description="External source and record timestamps.">
                 <ReadonlyGrid>
-                    <Field label="Source URL" value={property.sourceUrl} />
-                    <Field label="Created At" value={property.createdAt} />
-                    <Field label="Updated At" value={property.updatedAt} />
-                    <Field label="Slug" value={property.slug} />
+                    <Field label="Source URL" value={property.sourceUrl} icon={<Link2 className="h-5 w-5" />} />
+                    <Field label="Created At" value={property.createdAt} icon={<Clock3 className="h-5 w-5" />} />
+                    <Field label="Updated At" value={property.updatedAt} icon={<Clock3 className="h-5 w-5" />} />
+                    <Field label="Slug" value={property.slug} icon={<Hash className="h-5 w-5" />} />
                 </ReadonlyGrid>
             </Section>
 

@@ -627,6 +627,29 @@ export async function getPropertyChangeContextAction(propertyId: string): Promis
   }
 }
 
+export async function cancelPropertyChangeDraftAction(changeId: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    await requirePermission(PERMISSIONS.manage.propertySelfUpdate);
+    const accountId = await requireIdentity();
+    const deleted = await prisma.propertyChange.deleteMany({
+      where: {
+        id: changeId,
+        accountId,
+        isApproved: null,
+      },
+    });
+
+    if (!deleted.count) {
+      return { success: false, error: 'Pending request not found.' };
+    }
+
+    return { success: true };
+  } catch (e: any) {
+    await logProblem(e, `cancelPropertyChangeDraftAction ${changeId}`);
+    return { success: false, error: e.message || 'Failed to cancel property change draft.' };
+  }
+}
+
 function mapPropertyToCreateFormValues(property: Property): Partial<CreatePropertyFormValues> {
   return {
     title: property.title,
