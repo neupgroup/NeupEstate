@@ -144,6 +144,21 @@ model Property {
   @@map("property")
 }
 
+model PropertyLog {
+  id           String   @id @default(cuid())
+  propertyId   String   @map("property_id")
+  requestedBy  String   @map("requested_by")
+  approvedBy   String?  @map("approved_by")
+  data         Json[]   @default([])
+  requestedOn  DateTime @default(now()) @map("requested_on")
+  approvedOn   DateTime? @map("approved_on")
+
+  @@index([propertyId])
+  @@index([requestedBy])
+  @@index([approvedBy])
+  @@map("property_log")
+}
+
 model PropertyLink {
   id          String   @id @default(cuid())
   primaryId   String

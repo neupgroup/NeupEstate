@@ -5,7 +5,7 @@
 import { naturalLanguagePropertySearch as naturalLanguagePropertySearchFlow } from "@/services/ai/natural-language-property-search";
 import { recommendProperties as recommendPropertiesFlow } from "@/services/ai/ai-powered-recommendations";
 import { extractAndSaveProperty as extractAndSavePropertyFlow, type ExtractPropertyDetailsOutput } from "@/services/ai/extract-property-details-flow";
-import { createProperty as createPropertyService, updateProperty as updatePropertyService, approveProperty, getProperties, deleteProperty as deletePropertyService, getPendingProperties, getAwaitingReviewItems, getPaginatedProperties, getPropertyById, updatePropertyWithExtractedData, addFetchToHistory, deleteFetchHistoryItem as deleteFetchHistoryItemService, updatePropertyImages, addImagesToFetchHistory, deleteImageFetchHistoryItem as deleteImageFetchHistoryItemService, toggleSavedProperty as toggleSavedPropertyService, getUsersBySavedProperty as getUsersBySavedPropertyService, getSavedPropertiesForUser as getSavedPropertiesForUserService } from '@/services/property-service';
+import { createProperty as createPropertyService, updateProperty as updatePropertyService, approveProperty, getProperties, deleteProperty as deletePropertyService, getPendingProperties, getAwaitingReviewItems, getPaginatedProperties, getPropertyById, getPropertyReviewRequests, updatePropertyWithExtractedData, addFetchToHistory, deleteFetchHistoryItem as deleteFetchHistoryItemService, updatePropertyImages, addImagesToFetchHistory, deleteImageFetchHistoryItem as deleteImageFetchHistoryItemService, toggleSavedProperty as toggleSavedPropertyService, getUsersBySavedProperty as getUsersBySavedPropertyService, getSavedPropertiesForUser as getSavedPropertiesForUserService, createPropertyLog } from '@/services/property-service';
 import { createAgency as createAgencyService, updateAgency as updateAgencyService, deleteAgency as deleteAgencyService } from '@/services/agency-service';
 import { getAgentsByLocation as getAgentsByLocationService, createAgent as createAgentService, updateAgent as updateAgentService, deleteAgent as deleteAgentService } from '@/services/agent-service';
 import { addSitemap, getNewUrlsFromSitemap, processSitemapUrl, updateSitemapCheckedTime } from "@/services/sitemap-service";
@@ -650,6 +650,94 @@ export async function cancelPropertyChangeDraftAction(changeId: string): Promise
   }
 }
 
+export async function reviewPropertyChangeAction(input: {
+  changeId: string;
+  propertyId: string;
+  approve: boolean;
+  acceptedFields?: string[];
+}): Promise<{ success: boolean; error?: string }> {
+  try {
+    await requirePermission(PERMISSIONS.manage.selfReviewsReply);
+    const accountId = await requireIdentity();
+    const request = await prisma.propertyChange.findFirst({
+      where: {
+        id: input.changeId,
+        propertyId: input.propertyId,
+        isApproved: null,
+      },
+    });
+
+    if (!request) {
+      return { success: false, error: 'Pending request not found.' };
+    }
+
+    if (input.approve) {
+      const acceptedFields = input.acceptedFields?.length ? input.acceptedFields : Object.keys(request.data as Record<string, any>);
+      const acceptedData = acceptedFields
+        .map((field) => ({ field, value: (request.data as Record<string, any>)[field] }))
+        .filter((entry) => entry.value !== undefined);
+
+      if (request.status === 'deleting') {
+        await deletePropertyService(input.propertyId);
+        await createPropertyLog({
+          propertyId: input.propertyId,
+          requestedBy: request.accountId,
+          approvedBy: accountId,
+          approvedOn: new Date(),
+          data: acceptedData.length ? acceptedData : [{ field: 'status', value: 'deleting' }],
+        });
+      } else {
+        const data = acceptedFields.reduce<Record<string, any>>((picked, field) => {
+          const value = (request.data as Record<string, any>)[field];
+          if (value !== undefined) picked[field] = value;
+          return picked;
+        }, {});
+        await updatePropertyWithExtractedData(input.propertyId, data as any);
+        await approveProperty(input.propertyId);
+        await createPropertyLog({
+          propertyId: input.propertyId,
+          requestedBy: request.accountId,
+          approvedBy: accountId,
+          approvedOn: new Date(),
+          data: acceptedData,
+        });
+      }
+      await prisma.propertyChange.update({
+        where: { id: request.id },
+        data: {
+          isApproved: true,
+          modifiedOn: new Date(),
+        },
+      });
+      return { success: true };
+    }
+
+    await prisma.propertyChange.update({
+      where: { id: request.id },
+      data: {
+        isApproved: false,
+        modifiedOn: new Date(),
+      },
+    });
+
+    if (input.acceptedFields?.length) {
+      await createPropertyLog({
+        propertyId: input.propertyId,
+        requestedBy: request.accountId,
+        approvedBy: accountId,
+        approvedOn: new Date(),
+        data: input.acceptedFields
+          .map((field) => ({ field, value: (request.data as Record<string, any>)[field] }))
+          .filter((entry) => entry.value !== undefined),
+      });
+    }
+    return { success: true };
+  } catch (e: any) {
+    await logProblem(e, `reviewPropertyChangeAction ${input.propertyId}/${input.changeId}`);
+    return { success: false, error: e.message || 'Failed to review property change.' };
+  }
+}
+
 function mapPropertyToCreateFormValues(property: Property): Partial<CreatePropertyFormValues> {
   return {
     title: property.title,
@@ -789,6 +877,13 @@ export async function createPropertyAction(
       status: 'awaitingCreation',
       isApproved: false,
       creatorId: actorId,
+    });
+    await createPropertyLog({
+      propertyId,
+      requestedBy: actorId,
+      approvedBy: actorId,
+      approvedOn: new Date(),
+      data: Object.entries(serviceInput).map(([field, value]) => ({ field, value })),
     });
     revalidatePath('/manage/properties');
     return { success: true, propertyId, error: null };
@@ -972,7 +1067,18 @@ export async function deleteAgencyAction(agencyId: string) {
 
 export async function approvePropertyAction(propertyId: string) {
     try {
+        const actorId = await requireIdentity();
         await approveProperty(propertyId);
+        const property = await getPropertyById(propertyId, { includeInactive: true });
+        if (property) {
+          await createPropertyLog({
+            propertyId,
+            requestedBy: actorId,
+            approvedBy: actorId,
+            approvedOn: new Date(),
+            data: Object.entries(property as Record<string, any>).map(([field, value]) => ({ field, value })),
+          });
+        }
         revalidatePath('/manage/properties');
         revalidatePath(`/manage/properties/${propertyId}/edit`);
         return { success: true };

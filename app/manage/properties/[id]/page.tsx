@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
-import { getPropertyById } from "@/services/property-service";
+import { getPropertyById, getPropertyReviewRequests } from "@/services/property-service";
 import { hasPermission } from "@/logica/auth/authorization";
 import { PERMISSIONS } from "@/logica/auth/permissions";
 import { cancelPropertyChangeDraftAction, getCurrentAccountId, getPropertyChangeContextAction } from "@/app/actions";
 import { Button } from "@/components/ui/button";
+import { PropertyReviewRequests } from "@/components/manage/property-review-requests";
 import { ClientLink } from "@/components/client-link";
 import { AreaDisplayToggle } from "@/components/manage/area-display-toggle";
 import { FacingDisplayToggle } from "@/components/manage/facing-display-toggle";
@@ -13,6 +14,7 @@ import { Bath, BedDouble, Bike, Building2, CalendarDays, CarFront, ChefHat, Chev
 
 type PageProps = {
     params: Promise<{ id: string }>;
+    searchParams?: Promise<Record<string, string | undefined>>;
 };
 
 function formatValue(value: unknown): string {
@@ -257,8 +259,14 @@ function AmenityTile({ amenity }: { amenity: string }) {
     );
 }
 
-export default async function ViewPropertyPage({ params }: PageProps) {
+function normalizeMode(mode?: string) {
+    return mode?.toLowerCase?.() ?? "";
+}
+
+export default async function ViewPropertyPage({ params, searchParams }: PageProps) {
     const { id } = await params;
+    const sp = await searchParams ?? {};
+    const mode = normalizeMode(sp.mode);
     const property = await getPropertyById(id, { includeInactive: true });
     if (!property) notFound();
 
@@ -302,6 +310,9 @@ export default async function ViewPropertyPage({ params }: PageProps) {
         : currentChange?.status === "deleting"
             ? "Cancel it"
             : null;
+    const reviewRequests = mode === "review" && canReviewProperty
+        ? await getPropertyReviewRequests(property.id)
+        : [];
 
     return (
         <div className="space-y-10 max-w-6xl mx-auto">
@@ -368,6 +379,24 @@ export default async function ViewPropertyPage({ params }: PageProps) {
                     </div>
                 )}
             </div>
+
+            {mode === "review" && canReviewProperty && (
+                <section className="space-y-3">
+                    <div className="space-y-0.5">
+                        <h2 className="text-lg font-semibold tracking-tight">Review Requests</h2>
+                        <p className="text-sm text-muted-foreground">Approve or reject pending changes for this property.</p>
+                    </div>
+                    {reviewRequests.length ? (
+                        <div className="space-y-4">
+                            <PropertyReviewRequests propertyId={property.id} requests={reviewRequests} />
+                        </div>
+                    ) : (
+                        <div className="rounded-lg border bg-muted/20 px-4 py-3 text-sm text-muted-foreground">
+                            No pending requests for this property.
+                        </div>
+                    )}
+                </section>
+            )}
 
             <Section title="Property Specifics" description="Core measurements and structural details.">
                 <ReadonlyGrid>

@@ -525,6 +525,79 @@ export async function getAwaitingReviewItems(limit = 50): Promise<AwaitingReview
   }
 }
 
+export async function getPropertyReviewRequests(propertyId: string): Promise<Array<{
+  id: string;
+  propertyId: string;
+  accountId: string;
+  status: string;
+  isApproved: boolean | null;
+  data: Record<string, any>;
+  createdOn: string;
+  modifiedOn: string;
+  account?: {
+    displayName?: string | null;
+    neupId?: string | null;
+  } | null;
+}>> {
+  try {
+    const rows = await prisma.propertyChange.findMany({
+      where: {
+        propertyId,
+        isApproved: null,
+      },
+      orderBy: { modifiedOn: 'desc' },
+      include: {
+        account: {
+          select: {
+            displayName: true,
+            neupId: true,
+          },
+        },
+      },
+    });
+
+    return rows.map((row) => ({
+      id: row.id,
+      propertyId: row.propertyId,
+      accountId: row.accountId,
+      status: row.status,
+      isApproved: row.isApproved,
+      data: row.data as Record<string, any>,
+      createdOn: row.createdOn.toISOString(),
+      modifiedOn: row.modifiedOn.toISOString(),
+      account: row.account ? {
+        displayName: row.account.displayName,
+        neupId: row.account.neupId,
+      } : null,
+    }));
+  } catch (e) {
+    await logProblem(e, `getPropertyReviewRequests ${propertyId}`);
+    return [];
+  }
+}
+
+export async function createPropertyLog(input: {
+  propertyId: string;
+  requestedBy: string;
+  approvedBy?: string | null;
+  data: Record<string, any>[];
+  approvedOn?: Date | null;
+}): Promise<void> {
+  try {
+    await prisma.propertyLog.create({
+      data: {
+        propertyId: input.propertyId,
+        requestedBy: input.requestedBy,
+        approvedBy: input.approvedBy ?? null,
+        data: input.data as any,
+        approvedOn: input.approvedOn ?? null,
+      },
+    });
+  } catch (e) {
+    await logProblem(e, `createPropertyLog ${input.propertyId}`);
+  }
+}
+
 export async function getPropertiesByAgent(agentId: string, opts: { includeInactive?: boolean } = {}): Promise<Property[]> {
   try {
     const where: any = { agent: agentId };
