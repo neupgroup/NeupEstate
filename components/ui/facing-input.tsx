@@ -70,6 +70,28 @@ const NEPALI_ALIASES: Record<string, FacingDirection> = {
     "dakshin-paschim": "South-West",
 };
 
+const ENGLISH_LABELS: Record<FacingDirection, string> = {
+    North: "North",
+    South: "South",
+    East: "East",
+    West: "West",
+    "North-East": "North-East",
+    "North-West": "North-West",
+    "South-East": "South-East",
+    "South-West": "South-West",
+};
+
+const NEPALI_LABELS: Record<FacingDirection, string> = {
+    North: "Uttar",
+    South: "Dakshin",
+    East: "Purba",
+    West: "Paschim",
+    "North-East": "Uttar-purba",
+    "North-West": "Uttar-paschim",
+    "South-East": "Dakshin-purba",
+    "South-West": "Dakshin-paschim",
+};
+
 function normalizeFacing(value: string): string {
     return value.toLowerCase().replace(/[^a-z-]/g, "");
 }
@@ -103,18 +125,25 @@ function formatFacing(direction?: FacingDirection): string {
     return direction ? direction : "";
 }
 
+export function formatFacingDirection(direction?: string | null, mode: "english" | "nepali" = "english"): string {
+    if (!direction) return "Not set";
+    const parsed = parseFacing(direction) ?? (direction as FacingDirection);
+    return mode === "nepali" ? NEPALI_LABELS[parsed] : ENGLISH_LABELS[parsed];
+}
+
 export function FacingInput({ name, label, variant = "house", className, note }: FacingInputProps) {
     const { watch, setValue } = useFormContext();
     const value = watch(name as any) as string | undefined;
     const [text, setText] = useState("");
     const [touched, setTouched] = useState(false);
     const [error, setError] = useState("");
+    const [mode, setMode] = useState<"english" | "nepali">("english");
 
     useEffect(() => {
         if (!touched) {
-            setText(formatFacing(value as FacingDirection | undefined));
+            setText(formatFacingDirection(value, mode));
         }
-    }, [value, touched]);
+    }, [value, touched, mode]);
 
     const variantIcon = useMemo(() => (variant === "land" ? "🟩" : "🏠"), [variant]);
 
@@ -123,9 +152,14 @@ export function FacingInput({ name, label, variant = "house", className, note }:
             shouldDirty: true,
             shouldValidate: true,
         });
-        setText(formatFacing(direction));
+        setText(formatFacingDirection(direction, mode));
         setError("");
         setTouched(true);
+    }
+
+    function toggleMode() {
+        setMode((current) => (current === "english" ? "nepali" : "english"));
+        setText(formatFacingDirection(value, mode === "english" ? "nepali" : "english"));
     }
 
     function onBlur() {
@@ -151,8 +185,9 @@ export function FacingInput({ name, label, variant = "house", className, note }:
                     <button
                         type="button"
                         className="text-xs text-muted-foreground hover:text-foreground"
+                        onClick={toggleMode}
                     >
-                        (Nepali/English) <ChevronRight className="inline h-3 w-3" />
+                        {mode === "english" ? "English" : "Nepali"} <ChevronRight className="inline h-3 w-3" />
                     </button>
                 </div>
 
@@ -180,14 +215,14 @@ export function FacingInput({ name, label, variant = "house", className, note }:
                         <button
                             key={direction}
                         type="button"
-                        onClick={() => select(isSelected ? undefined : direction)}
+                            onClick={() => select(isSelected ? undefined : direction)}
                         className={cn(
                             "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
                             "border-border bg-background text-foreground hover:border-foreground hover:text-foreground",
                             isSelected && "border-foreground bg-black/5 text-foreground",
                         )}
                     >
-                            {direction}
+                            {formatFacingDirection(direction, mode)}
                         </button>
                     );
                 })}

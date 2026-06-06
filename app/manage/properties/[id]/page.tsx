@@ -4,6 +4,8 @@ import { getPropertyById } from "@/services/property-service";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ClientLink } from "@/components/client-link";
+import { AreaDisplayToggle } from "@/components/manage/area-display-toggle";
+import { FacingDisplayToggle } from "@/components/manage/facing-display-toggle";
 import { ChevronLeft, ExternalLink, PenSquare } from "lucide-react";
 
 type PageProps = {
@@ -207,9 +209,8 @@ export default async function ViewPropertyPage({ params }: PageProps) {
 
             <Section title="Property Specifics" description="Core measurements and structural details.">
                 <ReadonlyGrid>
-                    <Field label="Area" value={property.area} />
-                    <Field label="Area Unit" value={property.areaUnit} />
-                    <Field label="Facing" value={property.facing} />
+                    <AreaDisplayToggle value={property.area} />
+                    <FacingDisplayToggle value={property.facing} />
                     <Field label="Build Start Year" value={property.buildStart} />
                     <Field label="Build End Year" value={property.buildCompleted} />
                     <Field label="Floors" value={property.floors} />

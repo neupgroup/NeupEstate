@@ -108,6 +108,7 @@ export default function CreatePropertyPage() {
             area: undefined,
             bedrooms: 1,
             bathrooms: 1,
+            areaUnit: 'sqft',
             kitchens: 1,
             diningRooms: 0,
             livingRooms: 1,
