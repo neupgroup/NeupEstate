@@ -16,11 +16,11 @@ export interface SavedPropertyEntry {
 
 export interface PropertyDraftSummary {
   id: string;
-  propertyId?: string;
+  propertyId: string;
   title: string;
   location?: string;
   category?: string;
-  status: 'creating' | 'editing' | 'deleting';
+  status: 'creating' | 'changing' | 'deleting';
   modifiedOn: string;
 }
 
@@ -320,10 +320,9 @@ export async function getPropertyDrafts(accountId: string): Promise<PropertyDraf
   try {
     const drafts = await prisma.propertyChange.findMany({
       where: {
-        accountId,
         isApproved: null,
         status: {
-          in: ['creating', 'editing', 'deleting'],
+          in: ['creating', 'changing', 'deleting'],
         },
       },
       orderBy: { modifiedOn: 'desc' },
@@ -357,7 +356,7 @@ export async function getPropertyDrafts(accountId: string): Promise<PropertyDraf
 
       return {
         id: draft.id,
-        propertyId: draft.propertyId ?? undefined,
+        propertyId: draft.propertyId,
         title: String(data.title || draft.property?.title || 'Unfinished property draft'),
         location: String(data.location || locationParts.join(', ') || draft.property?.locationText || ''),
         category: String(categories[0] || types[0] || (draft.property?.type ? mapTypeFromEnum(draft.property.type) : '') || purposes[0] || ''),
@@ -448,7 +447,7 @@ export async function getAwaitingReviewItems(limit = 50): Promise<AwaitingReview
       prisma.propertyChange.findMany({
         where: {
           isApproved: null,
-          status: { in: ['creating', 'editing', 'deleting'] },
+          status: { in: ['creating', 'changing', 'deleting'] },
         },
         orderBy: { modifiedOn: 'desc' },
         take: limit,

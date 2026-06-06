@@ -1,6 +1,6 @@
 
 import { getAwaitingReviewItems, getPaginatedProperties } from "@/services/property-service";
-import { checkAuthenticationForWeb, getAccountIdFromJWT } from "@/services/neupid/check-auth-web";
+import { checkAuthenticationForWeb } from "@/services/neupid/check-auth-web";
 import { FilePlus2 } from "lucide-react";
 import { AdminPropertyDraftRow, AdminPropertyRow } from "@/components/manage/property-row";
 import { Pagination } from "@/components/manage/pagination";
@@ -20,11 +20,11 @@ export default async function ManagePropertiesPage({
 }) {
   await requirePagePermission(PERMISSIONS.manage.propertySelfView);
   await checkAuthenticationForWeb();
-  const accountId = await getAccountIdFromJWT();
   const sp = await searchParams ?? {};
 
   const currentPage   = Number(sp.page) || 1;
   const query         = sp.q        || '';
+  const statusParam   = sp.status   || '';
   const purposeParam  = sp.purpose  || '';
   const categoryParam = sp.category || '';
   const locationParam = sp.location || '';
@@ -32,8 +32,10 @@ export default async function ManagePropertiesPage({
   const maxPrice      = sp.maxPrice    ? Number(sp.maxPrice)    : undefined;
   const minBedrooms   = sp.minBedrooms ? Number(sp.minBedrooms) : undefined;
   const minBathrooms  = sp.minBathrooms? Number(sp.minBathrooms): undefined;
+  const isDraftsView  = statusParam === 'drafts';
 
   let filters: PropertyFilters = {};
+  if (statusParam && statusParam !== 'drafts') filters.status = statusParam as 'approved' | 'pending';
   if (purposeParam)  filters.purpose      = [purposeParam as any];
   if (categoryParam) filters.category     = [categoryParam as any];
   if (locationParam) filters.location     = locationParam;
@@ -57,9 +59,9 @@ export default async function ManagePropertiesPage({
   }
 
   const hasFilters = Object.keys(filters).length > 0;
-  const isDefaultFeed = !hasFilters && !query;
+  const isDefaultFeed = !hasFilters && !query && !isDraftsView;
 
-  const combinedItems = isDefaultFeed
+  const combinedItems = (isDefaultFeed || isDraftsView)
     ? await getAwaitingReviewItems(500)
     : [];
 
@@ -68,13 +70,14 @@ export default async function ManagePropertiesPage({
         limit: PROPERTIES_PER_PAGE,
         filters: hasFilters ? filters : undefined,
         includeInactive: true,
-        ownerAccountId: accountId ?? undefined,
         excludeArchived: true,
       });
   const properties = paginatedProperties.properties;
-  const totalCount = isDefaultFeed ? combinedItems.length + paginatedProperties.totalCount : paginatedProperties.totalCount;
+  const totalCount = (isDefaultFeed || isDraftsView)
+    ? combinedItems.length + (isDraftsView ? 0 : paginatedProperties.totalCount)
+    : paginatedProperties.totalCount;
   const totalPages = Math.ceil(totalCount / PROPERTIES_PER_PAGE);
-  const defaultPageItems = isDefaultFeed
+  const defaultPageItems = (isDefaultFeed || isDraftsView)
     ? [
         ...combinedItems.map((item) => ({
           id: `${item.kind}:${item.id}`,
@@ -87,7 +90,7 @@ export default async function ManagePropertiesPage({
           requestId: item.kind === 'draft' ? item.id : undefined,
           modifiedOn: item.modifiedOn || '',
         })),
-        ...properties.map((property) => ({
+        ...(isDraftsView ? [] : properties.map((property) => ({
           id: property.id,
           kind: 'property' as const,
           title: property.title,
@@ -96,12 +99,12 @@ export default async function ManagePropertiesPage({
           status: property.status,
           propertyId: property.id,
           modifiedOn: property.updatedAt || '',
-        })),
+        }))),
       ]
       .sort((a, b) => String(b.modifiedOn || '').localeCompare(String(a.modifiedOn || '')))
       .slice((currentPage - 1) * PROPERTIES_PER_PAGE, currentPage * PROPERTIES_PER_PAGE)
     : [];
-  const hasAnyRows = isDefaultFeed ? defaultPageItems.length > 0 : properties.length > 0;
+  const hasAnyRows = (isDefaultFeed || isDraftsView) ? defaultPageItems.length > 0 : properties.length > 0;
 
   return (
     <div className="space-y-6">

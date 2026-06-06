@@ -418,7 +418,7 @@ function cleanPricing(pricing?: CreatePropertyFormValues['pricing']) {
 
 type PropertyChangeDraftStatus =
   | 'creating'
-  | 'editing'
+  | 'changing'
   | 'deleting';
 
 function isPlainObject(value: unknown): value is Record<string, any> {
@@ -448,23 +448,19 @@ function deepMergeJson<T>(base: T, patch: any): T {
 
 export async function savePropertyChangeDraftAction(input: {
   changeId?: string | null;
-  propertyId?: string | null;
+  propertyId: string;
   data: Record<string, any>;
   status: PropertyChangeDraftStatus;
   isApproved?: boolean | null;
 }): Promise<{ success: boolean; changeId?: string; error?: string }> {
   try {
-    await requirePermission(
-      input.propertyId ? PERMISSIONS.manage.propertySelfUpdate : PERMISSIONS.manage.propertySelfCreate,
-    );
-    const actorId = await requireIdentity();
+    await requirePermission(PERMISSIONS.manage.propertySelfUpdate);
     const existingDraft = input.changeId
       ? await prisma.propertyChange.findUnique({ where: { id: input.changeId } })
       : null;
 
     const data = {
-      propertyId: input.propertyId || null,
-      accountId: actorId,
+      propertyId: input.propertyId,
       status: input.status,
       isApproved: input.isApproved ?? existingDraft?.isApproved ?? null,
       data: input.changeId
@@ -499,15 +495,11 @@ export async function getPropertyChangeDraftAction(changeId: string): Promise<{
   error?: string;
 }> {
   try {
-    const actorId = await requireIdentity();
     const draft = await prisma.propertyChange.findUnique({ where: { id: changeId } });
     if (!draft) return { success: false, error: 'Draft not found.' };
     await requirePermission(
-      draft.propertyId ? PERMISSIONS.manage.propertySelfUpdate : PERMISSIONS.manage.propertySelfCreate,
+      PERMISSIONS.manage.propertySelfUpdate,
     );
-    if (draft.accountId && draft.accountId !== actorId) {
-      return { success: false, error: 'You do not have access to this request.' };
-    }
 
     if (draft.isApproved !== null) {
       return {

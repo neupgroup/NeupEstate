@@ -280,7 +280,7 @@ export default function EditPropertyPage() {
         const result = await savePropertyChangeDraftAction({
             changeId,
             propertyId: property.id,
-            status: 'editing',
+            status: 'changing',
             data,
         });
 

@@ -92,11 +92,11 @@ export function AdminPropertyDraftRow({
 }: {
     draft: {
         id: string;
-        propertyId?: string;
+        propertyId: string;
         title: string;
         location?: string;
         category?: string;
-        status: 'creating' | 'editing' | 'deleting';
+        status: 'creating' | 'changing' | 'deleting';
         modifiedOn: string;
     };
 }) {
@@ -112,7 +112,7 @@ export function AdminPropertyDraftRow({
         ? 'Incomplete'
         : draft.status === 'deleting'
             ? 'Pending Deletion'
-            : 'Unpublished Changes';
+            : 'Pending Changes';
 
     return (
         <ClientLink
