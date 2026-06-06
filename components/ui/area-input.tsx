@@ -12,8 +12,8 @@ type System = { key: SystemKey; label: string; units: SubUnit[] };
 const SYSTEMS: System[] = [
   { key: "aana", label: "Aana System", units: [{ key: "ropani", label: "Ropani", steps: [1] }, { key: "aana", label: "Aana", steps: [1] }, { key: "paisa", label: "Paisa", steps: [1] }, { key: "daam", label: "Daam", steps: [1] }] },
   { key: "kattha", label: "Kattha System", units: [{ key: "bigha", label: "Bigha", steps: [1] }, { key: "kattha", label: "Kattha", steps: [1] }, { key: "dhur", label: "Dhur", steps: [1] }] },
-  { key: "feet", label: "Feet System", units: [{ key: "sqft", label: "Sqft", steps: [1, 10, 100] }] },
-  { key: "meter", label: "Meter System", units: [{ key: "sqm", label: "Sqm", steps: [1, 10, 100] }] },
+  { key: "feet", label: "Feet System", units: [{ key: "sqft", label: "Sq Ft", steps: [1, 10, 100] }] },
+  { key: "meter", label: "Meter System", units: [{ key: "sqm", label: "Sq Meter", steps: [1, 10, 100] }] },
 ];
 
 const SYSTEM_KEYS: Record<SystemKey, string[]> = {
@@ -143,12 +143,17 @@ function parseLooseText(text: string): Record<string, number> {
   return out;
 }
 
+function hasExplicitSystemHint(text: string): boolean {
+  const lower = text.toLowerCase();
+  return /(ropani|aana|ana|anna|annaa|aannaa|paisa|daam|bigha|kattha|dhur|sqft|sq\s*ft|sqm|sq\s*m)/i.test(lower);
+}
+
 function formatText(vals: Record<string, number>, system: SystemKey): string {
   const order = SYSTEM_KEYS[system];
   return order
     .map((key) => ({ key, value: vals[key] }))
     .filter(({ value }) => Number(value) > 0)
-    .map(({ key, value }) => `${String(value).replace(/\.0+$/, "")} ${key.charAt(0).toUpperCase()}${key.slice(1)}`)
+    .map(({ key, value }) => `${String(Number(value) || 0).replace(/\.0+$/, "")} ${key === "sqft" ? "Sq Ft" : key === "sqm" ? "Sq Meter" : key.charAt(0).toUpperCase() + key.slice(1)}`)
     .join(" ");
 }
 
@@ -156,9 +161,30 @@ function formatCompactText(vals: Record<string, number>, system: SystemKey): str
   const order = SYSTEM_KEYS[system];
   return order
     .map((key) => ({ key, value: vals[key] }))
-    .filter(({ value }) => Number(value) > 0)
-    .map(({ key, value }) => `${String(value).replace(/\.0+$/, "")}${key}`)
-    .join(" ");
+    .map(({ value }) => String(Number(value) || 0).replace(/\.0+$/, ""))
+    .join("-");
+}
+
+function formatEmptyValue(system: SystemKey): string {
+  switch (system) {
+    case "kattha":
+      return "0 Kattha";
+    case "feet":
+      return "0 Sq Ft";
+    case "meter":
+      return "0 Sq Meter";
+    case "aana":
+    default:
+      return "0 Daam";
+  }
+}
+
+function getDisplayText(vals: Record<string, number>, system: SystemKey, focused: boolean) {
+  const sqm = toSqm(vals);
+  if (focused) {
+    return sqm > 0 ? formatCompactText(fromSqm(sqm, system), system) : formatCompactText(fromSqm(0, system), system);
+  }
+  return sqm > 0 ? formatText(fromSqm(sqm, system), system) : formatEmptyValue(system);
 }
 
 interface AreaInputProps {
@@ -174,6 +200,7 @@ export function AreaInput({ label = "Total Area", name = "area", className, note
   const [activeSystem, setActiveSystem] = useState<SystemKey>("aana");
   const [systemTouched, setSystemTouched] = useState(false);
   const [text, setText] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
   const canonicalSqm = useRef(0);
   const initialised = useRef(false);
 
@@ -193,9 +220,9 @@ export function AreaInput({ label = "Total Area", name = "area", className, note
       const detected = detectSystem(currentVals);
       if (!systemTouched) setActiveSystem(detected);
       const sys = SYSTEMS.find((s) => s.key === (activeSystem ?? detected)) ?? SYSTEMS[0];
-      setText(formatText(currentVals, sys.key));
+      setText(getDisplayText(currentVals, sys.key, isFocused));
     }
-  });
+  }, [activeSystem, currentVals, isFocused, systemTouched]);
 
   const system = useMemo(() => SYSTEMS.find((s) => s.key === activeSystem) ?? SYSTEMS[0], [activeSystem]);
   const visibleUnits = useMemo(() => {
@@ -230,7 +257,7 @@ export function AreaInput({ label = "Total Area", name = "area", className, note
 
   function applyParsed(nextText: string, opts?: { keepText?: boolean; forceSystem?: SystemKey }) {
     const parsed = parseLooseText(nextText);
-    const nextSystem = opts?.forceSystem ?? detectSystem(parsed);
+    const nextSystem = opts?.forceSystem ?? (hasExplicitSystemHint(nextText) ? detectSystem(parsed) : activeSystem);
     const converted = fromSqm(toSqm(parsed), nextSystem);
     setActiveSystem(nextSystem);
     setSystemTouched(true);
@@ -239,16 +266,41 @@ export function AreaInput({ label = "Total Area", name = "area", className, note
     for (const u of ALL_UNITS) setValue(`${name}.${u}` as any, undefined, { shouldDirty: true, shouldValidate: true });
     for (const [u, v] of Object.entries(converted)) setValue(`${name}.${u}` as any, v > 0 ? v : undefined, { shouldDirty: true, shouldValidate: true });
 
-    setText(opts?.keepText ? nextText : formatText(converted, nextSystem));
+    setText(
+      opts?.keepText
+        ? nextText
+        : toSqm(converted) > 0
+          ? formatText(converted, nextSystem)
+          : formatEmptyValue(nextSystem),
+    );
   }
 
   function onBlur() {
     if (!text.trim()) {
       for (const u of ALL_UNITS) setValue(`${name}.${u}` as any, undefined, { shouldDirty: true, shouldValidate: true });
-      setText("");
+      setText(formatEmptyValue(activeSystem));
+      setIsFocused(false);
       return;
     }
-    applyParsed(text, { keepText: false });
+    applyParsed(text, { keepText: false, forceSystem: hasExplicitSystemHint(text) ? undefined : activeSystem });
+    setIsFocused(false);
+  }
+
+  function onFocus() {
+    setIsFocused(true);
+    setText(getDisplayText(currentVals, activeSystem, true));
+  }
+
+  function switchSystem(next: SystemKey) {
+    const sqm = toSqm(currentVals);
+    setActiveSystem(next);
+    setSystemTouched(true);
+    canonicalSqm.current = sqm;
+
+    for (const u of ALL_UNITS) setValue(`${name}.${u}` as any, undefined, { shouldDirty: true, shouldValidate: true });
+    const converted = fromSqm(sqm, next);
+    for (const [u, v] of Object.entries(converted)) setValue(`${name}.${u}` as any, v > 0 ? v : undefined, { shouldDirty: true, shouldValidate: true });
+    setText(getDisplayText(converted, next, isFocused));
   }
 
   function nudge(unit: string, delta: number) {
@@ -276,7 +328,7 @@ export function AreaInput({ label = "Total Area", name = "area", className, note
               const systems = SYSTEMS.map((s) => s.key);
               const currentIndex = systems.indexOf(system.key);
               const next = systems[(currentIndex + 1) % systems.length];
-              applyParsed(text || formatCompactText(currentVals, system.key), { keepText: false, forceSystem: next });
+              switchSystem(next);
             }}
             className="text-xs text-muted-foreground hover:text-foreground"
           >
@@ -293,8 +345,9 @@ export function AreaInput({ label = "Total Area", name = "area", className, note
             setText(e.target.value.toLowerCase());
             setSystemTouched(true);
           }}
+          onFocus={onFocus}
           onBlur={onBlur}
-          placeholder={hint}
+          placeholder={isFocused ? hint : ""}
           className={cn("w-full rounded-xl border bg-background px-3 py-2 text-sm outline-none text-foreground", errorMessage && "border-destructive")}
         />
       </div>
