@@ -36,6 +36,22 @@ function buildDefaultTitle(url: string, title?: string | null): string {
   return title?.trim() || new URL(url).pathname.split('/').filter(Boolean).join(' / ') || 'Listing';
 }
 
+function getFriendlyAiError(error: unknown): string {
+  const message = error instanceof Error ? error.message : String(error);
+
+  if (
+    message.includes('RESOURCE_EXHAUSTED') ||
+    message.includes('Too Many Requests') ||
+    message.includes('quota') ||
+    message.includes('rate limit') ||
+    message.includes('429')
+  ) {
+    return 'AI quota exceeded. Please try again later.';
+  }
+
+  return message || 'Failed to extract listing.';
+}
+
 export async function getCompetitorsAction(): Promise<Competitor[]> {
   return getCompetitors();
 }
@@ -61,7 +77,7 @@ export async function updateCompetitorCrawlRulesAction(
   try {
     await prisma.$executeRaw`
       UPDATE "competitors"
-      SET "crawlRules" = ${rules as any}, "updatedAt" = NOW()
+      SET "crawlRules" = ${JSON.stringify(rules)}::jsonb, "updatedAt" = NOW()
       WHERE "id" = ${competitorId}
     `;
     revalidatePath('/manage/intelligence/competition');
@@ -236,24 +252,28 @@ export async function crawlCompetitorSourcesAction(
               listedOn: existingPage?.listedOn ? new Date(existingPage.listedOn) : new Date(),
             });
 
-            const listingResult = await extractCompetitorListing({ url });
-            if (listingResult.isPropertyPage && pageId) {
-              await upsertCompetitorListing({
-                competitorId,
-                competitorPageId: pageId,
-                title: listingResult.title?.trim() || aiResult.title?.trim() || buildDefaultTitle(url, existingPage?.title),
-                description: listingResult.description?.trim() || aiResult.description?.trim() || existingPage?.description || undefined,
-                purpose: listingResult.purpose ?? aiResult.purpose ?? 'sales',
-                agentName: listingResult.agentName ?? aiResult.agentName,
-                price: listingResult.price ?? aiResult.price ?? null,
-                priceBasis: listingResult.priceBasis ?? aiResult.priceBasis,
-                isSold: listingResult.isSold ?? aiResult.isSold ?? false,
-                details: {
-                  ...(aiResult.details ?? {}),
-                  ...(listingResult.details ?? {}),
-                },
-              });
-              revalidatePath('/manage/intelligence/listings');
+            try {
+              const listingResult = await extractCompetitorListing({ url });
+              if (listingResult.isPropertyPage && pageId) {
+                await upsertCompetitorListing({
+                  competitorId,
+                  competitorPageId: pageId,
+                  title: listingResult.title?.trim() || aiResult.title?.trim() || buildDefaultTitle(url, existingPage?.title),
+                  description: listingResult.description?.trim() || aiResult.description?.trim() || existingPage?.description || undefined,
+                  purpose: listingResult.purpose ?? aiResult.purpose ?? 'sales',
+                  agentName: listingResult.agentName ?? aiResult.agentName,
+                  price: listingResult.price ?? aiResult.price ?? null,
+                  priceBasis: listingResult.priceBasis ?? aiResult.priceBasis,
+                  isSold: listingResult.isSold ?? aiResult.isSold ?? false,
+                  details: {
+                    ...(aiResult.details ?? {}),
+                    ...(listingResult.details ?? {}),
+                  },
+                });
+                revalidatePath('/manage/intelligence/listings');
+              }
+            } catch (error) {
+              errors.push(`${url}: ${getFriendlyAiError(error)}`);
             }
             savedCount += 1;
             existingUrls.add(url);

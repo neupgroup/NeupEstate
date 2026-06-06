@@ -16,6 +16,14 @@ export function FooterV1({ showManagePanelLink }: { showManagePanelLink: boolean
             <p className="text-sm text-muted-foreground">
               Your modern solution to finding the perfect property. We simplify the search, so you can find home faster.
             </p>
+            {showManagePanelLink && (
+              <ClientLink
+                href="/manage"
+                className="mt-4 inline-flex text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+              >
+                Manage Panel
+              </ClientLink>
+            )}
           </div>
 
           <div>
@@ -25,7 +33,6 @@ export function FooterV1({ showManagePanelLink }: { showManagePanelLink: boolean
               <li><ClientLink href="/collections" className="text-muted-foreground transition-colors hover:text-primary">For You</ClientLink></li>
               <li><ClientLink href="/agencies" className="text-muted-foreground transition-colors hover:text-primary">Agencies</ClientLink></li>
               <li><ClientLink href="/faq" className="text-muted-foreground transition-colors hover:text-primary">FAQs</ClientLink></li>
-              {showManagePanelLink && <li><ClientLink href="/manage" className="text-muted-foreground transition-colors hover:text-primary">Manage Panel</ClientLink></li>}
             </ul>
           </div>
 

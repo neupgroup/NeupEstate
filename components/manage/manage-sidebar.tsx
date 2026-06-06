@@ -78,13 +78,13 @@ export function ManageSidebar(props: Props) {
                   key={item.href}
                   href={appendSelectedAgencyV1(item.href, selectedAgency)}
                   className={cn(
-                  buttonVariants({ variant: "ghost" }),
-                  "w-full justify-start px-4 py-2 transition-[background-color,color] duration-300 ease-in-out hover:bg-primary/7 hover:text-foreground",
-                  isActive
-                    ? "bg-primary/15 text-primary hover:bg-primary/20 hover:text-primary font-semibold"
-                    : "text-foreground/80"
-                )}
-              >
+                    buttonVariants({ variant: "ghost" }),
+                    "group w-full justify-start px-4 py-2 text-left transition-all duration-200 ease-out hover:bg-primary/10 hover:text-primary hover:translate-x-0.5 focus-visible:bg-primary/10 focus-visible:text-primary focus-visible:ring-0",
+                    isActive
+                      ? "bg-primary/15 text-primary hover:bg-primary/20 hover:text-primary font-semibold"
+                      : "text-foreground/80"
+                  )}
+                >
                 <Icon className="mr-2 h-4 w-4" />
                 {item.label}
               </Link>

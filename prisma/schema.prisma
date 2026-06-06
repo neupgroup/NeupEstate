@@ -947,6 +947,7 @@ model Competitor {
 
   sources     CompetitorSource[]
   pages       CompetitorPage[]
+  listings    CompetitorListing[]
 
   @@map("competitors")
 }
