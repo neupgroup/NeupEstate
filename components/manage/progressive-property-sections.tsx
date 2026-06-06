@@ -119,6 +119,7 @@ interface ProgressivePropertySectionsProps {
     agencyRule?: AgencyCustomizationRule | null;
     onSectionAdvance?: (fromIndex: number, toIndex: number) => Promise<void> | void;
     fieldChangeNotes?: Partial<Record<string, string>>;
+    previousAmenities?: string;
 }
 
 export function ProgressivePropertySections({
@@ -130,6 +131,7 @@ export function ProgressivePropertySections({
     agencyRule,
     onSectionAdvance,
     fieldChangeNotes,
+    previousAmenities,
 }: ProgressivePropertySectionsProps) {
     const router = useRouter();
     const pathname = usePathname();
@@ -172,7 +174,7 @@ export function ProgressivePropertySections({
             title: "Features & Amenities",
             description: "List the key features and amenities available at the property.",
             fields: ["amenities"],
-            render: () => <FeaturesAmenitiesSection control={form.control} fieldChangeNotes={fieldChangeNotes} />,
+            render: () => <FeaturesAmenitiesSection control={form.control} fieldChangeNotes={fieldChangeNotes} previousAmenities={previousAmenities} />,
         },
         {
             id: "pricing",

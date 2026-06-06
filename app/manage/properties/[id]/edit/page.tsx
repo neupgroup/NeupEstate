@@ -627,6 +627,7 @@ export default function EditPropertyPage() {
                         agencyRule={agencyRule}
                         onSectionAdvance={handleSectionAdvance}
                         fieldChangeNotes={fieldChangeNotes}
+                        previousAmenities={baseValues?.amenities}
                     />
                 </form>
             </Form>

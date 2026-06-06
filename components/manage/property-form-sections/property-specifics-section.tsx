@@ -6,7 +6,6 @@ import {
     LandTopographySchema,
     LandUsageSchema,
     LandZoningSchema,
-    FurnishingStatusSchema,
 } from "@/types";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -69,6 +68,47 @@ function SelectionField({ name, label, options }: { name: string; label: string;
     );
 }
 
+function FurnishingField({ name }: { name: string }) {
+    const { watch, setValue } = useFormContext<CreatePropertyFormValues>();
+    const value = (watch(name as any) as string | undefined) ?? "";
+    const options = [
+        { value: "Furnished", label: "Furnished" },
+        { value: "Semi-Furnished", label: "Semi Furnished" },
+        { value: "Unfurnished", label: "Non Furnished" },
+    ] as const;
+
+    return (
+        <FormField name={name as any} render={() => (
+            <FormItem>
+                <FormLabel className="flex items-center gap-2 text-base font-bold text-foreground">
+                    <span>🛋️</span>
+                    <span>Furnishing</span>
+                </FormLabel>
+                <div className="flex flex-wrap gap-2">
+                    {options.map((option) => {
+                        const isSelected = value === option.value;
+                        return (
+                            <button
+                                key={option.value}
+                                type="button"
+                                onClick={() => setValue(name as any, isSelected ? undefined : option.value as any, { shouldDirty: true, shouldValidate: true })}
+                                className={[
+                                    "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+                                    "border-border bg-background text-foreground hover:border-foreground hover:text-foreground",
+                                    isSelected ? "border-foreground bg-black/5 text-foreground" : "",
+                                ].join(" ")}
+                            >
+                                {option.label}
+                            </button>
+                        );
+                    })}
+                </div>
+                <FormMessage />
+            </FormItem>
+        )} />
+    );
+}
+
 function CompassField({ name, label, variant, note }: { name: string; label: string; variant?: "house" | "land"; note?: string }) {
     return (
         <FormField name={name as any} render={() => (
@@ -77,19 +117,6 @@ function CompassField({ name, label, variant, note }: { name: string; label: str
                     <FacingInput name={name} label={label} variant={variant} note={note} />
                 </FormControl>
                 <FormMessage />
-            </FormItem>
-        )} />
-    );
-}
-
-function CheckboxField({ control, name, label }: { control: any; name: any; label: string }) {
-    return (
-        <FormField control={control} name={name} render={({ field }) => (
-            <FormItem className="flex items-center gap-2 space-y-0">
-                <FormControl>
-                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                </FormControl>
-                <FormLabel className="font-normal cursor-pointer">{label}</FormLabel>
             </FormItem>
         )} />
     );
@@ -150,7 +177,7 @@ export function PropertySpecificsSection({ control, category, fieldChangeNotes }
                         </div>
                     </div>
                     <RoadAccessCard name="roadAccess" note={fieldChangeNotes?.roadAccess} />
-                    <CheckboxField control={control} name="apartmentDetails.furnishing" label="Furnished" />
+                    <FurnishingField name="apartmentDetails.furnishing" />
                 </div>
             )}
 
@@ -173,7 +200,7 @@ export function PropertySpecificsSection({ control, category, fieldChangeNotes }
                             <YearPickerCard name="buildCompleted" label="Build End Year" emoji="🏁" note={fieldChangeNotes?.buildCompleted} />
                         </div>
                     </div>
-                    <SelectionField name="apartmentDetails.furnishing" label="Furnishing" options={FurnishingStatusSchema.options} />
+                    <FurnishingField name="apartmentDetails.furnishing" />
                 </div>
             )}
 
@@ -188,7 +215,7 @@ export function PropertySpecificsSection({ control, category, fieldChangeNotes }
                         <YearPickerCard name="buildStart"     label="Build Start Year" emoji="🏗️" note={fieldChangeNotes?.buildStart} />
                         <YearPickerCard name="buildCompleted" label="Build End Year"   emoji="🏁" note={fieldChangeNotes?.buildCompleted} />
                     </div>
-                    <SelectionField name="apartmentDetails.furnishing" label="Furnishing" options={FurnishingStatusSchema.options} />
+                    <FurnishingField name="apartmentDetails.furnishing" />
 
                     {/* Individual Units */}
                     <div className="space-y-3">
@@ -220,7 +247,7 @@ export function PropertySpecificsSection({ control, category, fieldChangeNotes }
                                             <Note text={fieldChangeNotes?.[`apartmentUnits.${index}.area`]} />
                                         </div>
                                     </div>
-                                    <SelectionField name={`apartmentUnits.${index}.furnishing`} label="Furnishing" options={FurnishingStatusSchema.options} />
+                                    <FurnishingField name={`apartmentUnits.${index}.furnishing`} />
                                 </div>
                             </div>
                         ))}

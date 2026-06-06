@@ -8,8 +8,6 @@ const AMENITY_GROUPS: { label: string; items: { name: string; emoji: string }[] 
     {
         label: "Interior",
         items: [
-            { name: "Full Furnished", emoji: "🛋️" },
-            { name: "Semi Furnished", emoji: "🪑" },
             { name: "Air Conditioning", emoji: "❄️" },
             { name: "Central Heating", emoji: "🔥" },
             { name: "Fireplace", emoji: "🪵" },
@@ -95,30 +93,22 @@ const AMENITY_GROUPS: { label: string; items: { name: string; emoji: string }[] 
             { name: "Pet Friendly", emoji: "🐾" },
         ],
     },
-    {
-        label: "Nearby",
-        items: [
-            { name: "Near School", emoji: "🏫" },
-            { name: "Near Hospital", emoji: "🏥" },
-            { name: "Near Market", emoji: "🛒" },
-            { name: "Near Bus Stop", emoji: "🚌" },
-            { name: "Near Highway", emoji: "🛣️" },
-            { name: "Near Airport", emoji: "✈️" },
-            { name: "Near Park", emoji: "🌲" },
-        ],
-    },
 ];
 
 interface FeaturesAmenitiesSectionProps {
     control: any;
     fieldChangeNotes?: Partial<Record<string, string>>;
+    previousAmenities?: string;
 }
 
-export function FeaturesAmenitiesSection({ control, fieldChangeNotes }: FeaturesAmenitiesSectionProps) {
+export function FeaturesAmenitiesSection({ control, fieldChangeNotes, previousAmenities }: FeaturesAmenitiesSectionProps) {
     const { watch, setValue } = useFormContext<CreatePropertyFormValues>();
 
     const raw = watch("amenities") || "";
     const selected: string[] = raw ? raw.split(",").map((s: string) => s.trim()).filter(Boolean) : [];
+    const previousSelected: string[] = previousAmenities
+        ? previousAmenities.split(",").map((s) => s.trim()).filter(Boolean)
+        : [];
 
     // flat list of all items for lookup
     const allItems = AMENITY_GROUPS.flatMap((g) => g.items);
@@ -142,48 +132,34 @@ export function FeaturesAmenitiesSection({ control, fieldChangeNotes }: Features
                             {fieldChangeNotes?.amenities && (
                                 <p className="text-xs text-muted-foreground">{fieldChangeNotes.amenities}</p>
                             )}
-                            {/* Selected pills at top */}
-                            {selected.length > 0 && (
-                                <div className="space-y-2">
-                                    <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Selected</p>
-                                    <div className="flex flex-wrap gap-2">
-                                        {selected.map((name) => {
-                                            const item = allItems.find((i) => i.name === name);
-                                            return (
-                                                <button
-                                                    key={name}
-                                                    type="button"
-                                                    onClick={() => remove(name)}
-                                                    className="flex items-center gap-1.5 rounded-full border-2 border-primary bg-primary/5 px-3 py-1.5 text-sm font-medium text-primary transition-all hover:bg-destructive/10 hover:border-destructive hover:text-destructive"
-                                                >
-                                                    <span>{item?.emoji}</span>
-                                                    <span>{name}</span>
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Unselected grouped pills */}
                             {AMENITY_GROUPS.map((group) => {
-                                const unselected = group.items.filter((i) => !selected.includes(i.name));
-                                if (unselected.length === 0) return null;
                                 return (
                                     <div key={group.label} className="space-y-2">
                                         <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{group.label}</p>
                                         <div className="flex flex-wrap gap-2">
-                                            {unselected.map((item) => (
+                                            {group.items.map((item) => {
+                                                const isSelected = selected.includes(item.name);
+                                                const wasPreviouslySelected = previousSelected.includes(item.name);
+                                                const toneClass = isSelected
+                                                    ? (wasPreviouslySelected ? "border-foreground bg-black/5 text-foreground" : "border-emerald-500 bg-emerald-50 text-foreground")
+                                                    : (wasPreviouslySelected ? "border-red-500 bg-red-50 text-foreground" : "border-border bg-background text-foreground");
+
+                                                return (
                                                 <button
                                                     key={item.name}
                                                     type="button"
-                                                    onClick={() => add(item.name)}
-                                                    className="flex items-center gap-1.5 rounded-full border-2 border-border bg-background px-3 py-1.5 text-sm font-medium text-foreground transition-all hover:border-primary hover:text-primary"
+                                                    onClick={() => (isSelected ? remove(item.name) : add(item.name))}
+                                                    className={[
+                                                        "flex items-center gap-1.5 rounded-full border-2 px-3 py-1.5 text-sm font-medium transition-all",
+                                                        toneClass,
+                                                        !isSelected ? "hover:border-foreground hover:text-foreground" : "",
+                                                    ].join(" ")}
                                                 >
                                                     <span>{item.emoji}</span>
                                                     <span>{item.name}</span>
                                                 </button>
-                                            ))}
+                                                );
+                                            })}
                                         </div>
                                     </div>
                                 );
