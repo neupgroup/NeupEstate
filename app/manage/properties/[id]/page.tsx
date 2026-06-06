@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ClientLink } from "@/components/client-link";
 import { AreaDisplayToggle } from "@/components/manage/area-display-toggle";
 import { FacingDisplayToggle } from "@/components/manage/facing-display-toggle";
+import { RoadAccessDisplayToggle } from "@/components/manage/road-access-display-toggle";
 import { ChevronLeft, ExternalLink, PenSquare } from "lucide-react";
 
 type PageProps = {
@@ -215,7 +216,7 @@ export default async function ViewPropertyPage({ params }: PageProps) {
                     <Field label="Build End Year" value={property.buildCompleted} />
                     <Field label="Floors" value={property.floors} />
                     <Field label="On Floor" value={property.onFloor} />
-                    <Field label="Road Access" value={property.roadAccess ? `${property.roadAccess} ft` : undefined} />
+                    <RoadAccessDisplayToggle value={property.roadAccess} />
                 </ReadonlyGrid>
             </Section>
 

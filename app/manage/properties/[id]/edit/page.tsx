@@ -239,7 +239,7 @@ export default function EditPropertyPage() {
     function formatPreviousValueForPath(path: string, value: any): string {
         if (path === 'roadAccess' && value != null && value !== '') {
             const numeric = Number(value);
-            return Number.isFinite(numeric) ? `${numeric} feet` : formatPreviousValue(value);
+            return Number.isFinite(numeric) ? `${numeric} meters` : formatPreviousValue(value);
         }
         return formatPreviousValue(value);
     }

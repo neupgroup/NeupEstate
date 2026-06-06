@@ -184,9 +184,9 @@ model PropertyHouseDetail {
   bikeParkingSpots Int
   furnished        Boolean
   buildYear        Int
-  area             Decimal  @db.Decimal(12, 2)
+  area             Decimal  @db.Decimal(10, 8)
   facing           String   @db.VarChar(50)
-  roadAccess       Decimal  @db.Decimal(8, 2)
+  roadAccess       Decimal  @db.Decimal(10, 8)
 
   property         Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
@@ -206,9 +206,9 @@ model PropertyApartmentDetail {
   furnished        Boolean
   blockName        String   @db.VarChar(100)
   unitNumber       String   @db.VarChar(100)
-  superArea        Decimal  @db.Decimal(12, 2)
-  builtUpArea      Decimal  @db.Decimal(12, 2)
-  maintenanceFee   Decimal  @db.Decimal(18, 2)
+  superArea        Decimal  @db.Decimal(10, 8)
+  builtUpArea      Decimal  @db.Decimal(10, 8)
+  maintenanceFee   Decimal  @db.Decimal(10, 8)
 
   property         Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
@@ -217,9 +217,9 @@ model PropertyApartmentDetail {
 
 model PropertyLandDetail {
   propertyId            String   @id @unique
-  area                  Decimal  @db.Decimal(12, 2)
+  area                  Decimal  @db.Decimal(10, 8)
   facing                String   @db.VarChar(50)
-  roadAccess            Decimal  @db.Decimal(8, 2)
+  roadAccess            Decimal  @db.Decimal(10, 8)
   plotShape             String   @db.VarChar(100)
   cornerPlot            Boolean
   waterAvailable        Boolean
@@ -236,8 +236,8 @@ model PropertyCommercialDetail {
   floor         Int
   washrooms     Int
   parkingSpots  Int
-  frontage      Decimal  @db.Decimal(12, 2)
-  usableArea    Decimal  @db.Decimal(12, 2)
+  frontage      Decimal  @db.Decimal(10, 8)
+  usableArea    Decimal  @db.Decimal(10, 8)
   buildingType  String   @db.VarChar(100)
 
   property      Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)

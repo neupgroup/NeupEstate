@@ -322,7 +322,7 @@ export interface Property {
     embedding?: number[];
     floors?: number;
     onFloor?: number;
-    roadAccess?: number; // in feet
+    roadAccess?: number; // stored in meters
     latitude?: number;
     longitude?: number;
     fetchHistory?: { fetchedAt: string; data: ExtractedPropertyData }[];
