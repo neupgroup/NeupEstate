@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { MoveDiagonal } from "lucide-react";
 
 type SystemKey = "sqft" | "sqm" | "aana" | "bigha";
 
@@ -79,11 +80,16 @@ export function AreaDisplayToggle({ value }: { value?: number | null }) {
         <button
             type="button"
             onClick={() => setSystemIndex((current) => (current + 1) % ORDER.length)}
-            className="w-full rounded-xl border bg-background px-4 py-3 text-left transition-colors hover:bg-muted/40"
+            className="group flex w-full items-center gap-3 rounded-lg border border-border/70 bg-background px-3 py-2.5 text-left transition-colors duration-200 ease-out hover:border-primary/40 hover:bg-primary/5"
             title="Click to change area format"
         >
-            <div className="text-xs uppercase tracking-wide text-muted-foreground">Area</div>
-            <div className="mt-1 text-sm font-medium text-foreground">{formatted}</div>
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-primary/15 bg-primary/10 text-primary transition-colors duration-200 ease-out group-hover:border-primary/35 group-hover:bg-primary/15">
+                <MoveDiagonal className="h-5 w-5" />
+            </div>
+            <div className="min-w-0">
+                <div className="text-xs uppercase tracking-wide text-muted-foreground">Area</div>
+                <div className="mt-1 text-sm font-medium text-foreground">{formatted}</div>
+            </div>
         </button>
     );
 }

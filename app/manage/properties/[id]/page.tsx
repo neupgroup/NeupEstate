@@ -6,7 +6,7 @@ import { ClientLink } from "@/components/client-link";
 import { AreaDisplayToggle } from "@/components/manage/area-display-toggle";
 import { FacingDisplayToggle } from "@/components/manage/facing-display-toggle";
 import { RoadAccessDisplayToggle } from "@/components/manage/road-access-display-toggle";
-import { Bath, BedDouble, Bike, CarFront, ChefHat, ChevronLeft, ExternalLink, PenSquare, Sofa, UtensilsCrossed } from "lucide-react";
+import { Bath, BedDouble, Bike, CalendarDays, CarFront, ChefHat, ChevronLeft, ExternalLink, Layers3, PenSquare, Sofa, SquareUserRound, UtensilsCrossed } from "lucide-react";
 
 type PageProps = {
     params: Promise<{ id: string }>;
@@ -28,6 +28,10 @@ function formatValue(value: unknown): string {
 function formatHtmlDescription(value: string | undefined) {
     if (!value) return "Not set";
     return value;
+}
+
+function formatAmenityIconName(amenity: string) {
+    return amenity.toLowerCase().trim().replace(/\s+/g, "-");
 }
 
 function formatPurposeSummary(purposes: string[] | null | undefined) {
@@ -134,23 +138,28 @@ function Section({
     );
 }
 
-function Field({ label, value }: { label: string; value: unknown }) {
+function Field({ label, value, icon }: { label: string; value: unknown; icon: ReactNode }) {
     return (
-        <div className="rounded-lg border border-border/70 bg-background px-3 py-2.5">
-            <div className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{label}</div>
-            <div className="mt-1 text-sm font-medium text-foreground whitespace-pre-wrap break-words">
-                {typeof value === "string" && value.includes("<") ? (
-                    <div dangerouslySetInnerHTML={{ __html: formatHtmlDescription(value) }} />
-                ) : (
-                    formatValue(value)
-                )}
+        <div className="group flex items-center gap-3 rounded-lg border border-border/70 bg-background px-3 py-2.5 transition-colors duration-200 ease-out hover:border-primary/40 hover:bg-primary/5">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-primary/15 bg-primary/10 text-primary transition-colors duration-200 ease-out group-hover:border-primary/35 group-hover:bg-primary/15">
+                {icon}
+            </div>
+            <div className="min-w-0">
+                <div className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{label}</div>
+                <div className="mt-1 text-sm font-medium text-foreground whitespace-pre-wrap break-words">
+                    {typeof value === "string" && value.includes("<") ? (
+                        <div dangerouslySetInnerHTML={{ __html: formatHtmlDescription(value) }} />
+                    ) : (
+                        formatValue(value)
+                    )}
+                </div>
             </div>
         </div>
     );
 }
 
 function ReadonlyGrid({ children }: { children: ReactNode }) {
-    return <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{children}</div>;
+    return <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">{children}</div>;
 }
 
 function RoomTile({
@@ -174,6 +183,22 @@ function RoomTile({
                 <div className="text-sm text-muted-foreground">
                     {normalizedValue == null ? "Not set" : normalizedValue}
                 </div>
+            </div>
+        </div>
+    );
+}
+
+function AmenityTile({ amenity }: { amenity: string }) {
+    const iconName = formatAmenityIconName(amenity);
+    const iconUrl = `https://neupgroup.com/estate/assets/ammenity/${iconName}.svg`;
+
+    return (
+        <div className="group flex items-center gap-3 rounded-lg border border-border/70 bg-background px-3 py-2.5 transition-colors duration-200 ease-out hover:border-primary/40 hover:bg-primary/5">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-primary/15 bg-primary/10 text-primary transition-colors duration-200 ease-out group-hover:border-primary/35 group-hover:bg-primary/15">
+                <img src={iconUrl} alt={amenity} className="h-5 w-5" loading="lazy" />
+            </div>
+            <div className="min-w-0">
+                <div className="text-sm font-medium text-foreground">{amenity}</div>
             </div>
         </div>
     );
@@ -237,10 +262,10 @@ export default async function ViewPropertyPage({ params }: PageProps) {
                 <ReadonlyGrid>
                     <AreaDisplayToggle value={property.area} />
                     <FacingDisplayToggle value={property.facing} />
-                    <Field label="Build Start Year" value={property.buildStart} />
-                    <Field label="Build End Year" value={property.buildCompleted} />
-                    <Field label="Floors" value={property.floors} />
-                    <Field label="On Floor" value={property.onFloor} />
+                    <Field label="Build Start Year" value={property.buildStart} icon={<CalendarDays className="h-5 w-5" />} />
+                    <Field label="Build End Year" value={property.buildCompleted} icon={<CalendarDays className="h-5 w-5" />} />
+                    <Field label="Floors" value={property.floors} icon={<Layers3 className="h-5 w-5" />} />
+                    <Field label="On Floor" value={property.onFloor} icon={<SquareUserRound className="h-5 w-5" />} />
                     <RoadAccessDisplayToggle value={property.roadAccess} />
                 </ReadonlyGrid>
             </Section>
@@ -272,9 +297,15 @@ export default async function ViewPropertyPage({ params }: PageProps) {
             </Section>
 
             <Section title="Features & Amenities" description="Shared features and highlights.">
-                <ReadonlyGrid>
-                    <Field label="Amenities" value={property.amenities} />
-                </ReadonlyGrid>
+                {property.amenities?.length ? (
+                    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                        {property.amenities.map((amenity) => (
+                            <AmenityTile key={amenity} amenity={amenity} />
+                        ))}
+                    </div>
+                ) : (
+                    <Field label="Amenities" value="None" icon={<Layers3 className="h-5 w-5" />} />
+                )}
             </Section>
 
             <Section title="Pricing Details" description="Price and pricing metadata.">

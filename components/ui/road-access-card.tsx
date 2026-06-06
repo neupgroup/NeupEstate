@@ -76,7 +76,7 @@ export function RoadAccessCard({ name, note }: { name: string; note?: string }) 
                     className="flex items-center gap-2 text-base font-bold text-left"
                 >
                     <span>🛣️</span>
-                    <span className="text-foreground">Road Access</span>
+t                     <span className="text-foreground">Road Access</span>
                     <span className="text-xs text-muted-foreground">
                         {unit}
                     </span>
