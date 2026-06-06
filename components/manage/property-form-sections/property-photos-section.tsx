@@ -12,9 +12,10 @@ import { SafeImage } from "@/components/safe-image";
 
 interface PropertyPhotosSectionProps {
     control: Control<CreatePropertyFormValues>;
+    fieldChangeNotes?: Partial<Record<string, string>>;
 }
 
-export function PropertyPhotosSection({ control }: PropertyPhotosSectionProps) {
+export function PropertyPhotosSection({ control, fieldChangeNotes }: PropertyPhotosSectionProps) {
     const { watch } = useFormContext<CreatePropertyFormValues>();
     const { fields, append, remove } = useFieldArray({
         control: control as any,
@@ -23,6 +24,9 @@ export function PropertyPhotosSection({ control }: PropertyPhotosSectionProps) {
 
     return (
         <section className="space-y-6">
+            {fieldChangeNotes?.images && (
+                <p className="text-xs text-muted-foreground">{fieldChangeNotes.images}</p>
+            )}
             <div className="space-y-4">
                 {fields.map((field, index) => (
                     <div key={field.id} className="relative">

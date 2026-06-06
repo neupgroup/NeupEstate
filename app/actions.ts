@@ -526,6 +526,102 @@ export async function getPropertyChangeDraftAction(changeId: string): Promise<{
   }
 }
 
+export async function getPropertyChangeContextAction(propertyId: string): Promise<{
+  success: boolean;
+  currentUserChange?: {
+    id: string;
+    status: string;
+    isApproved: boolean | null;
+    data: Record<string, any>;
+    modifiedOn: string;
+    accountId: string;
+  } | null;
+  recentActivity?: {
+    hasCurrentUserChangeInLast7Days: boolean;
+    hasOtherUserChangeInLast7Days: boolean;
+    latestOutcome?: 'accepted' | 'declined' | 'pending' | null;
+    latestOutcomeAt?: string | null;
+    latestOutcomeMessage?: string | null;
+  };
+  error?: string;
+}> {
+  try {
+    await requirePermission(PERMISSIONS.manage.propertySelfUpdate);
+    const accountId = await requireIdentity();
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    const [currentUserChange, currentUserRecentChanges, otherRecentChanges, latestOutcomeChange] = await Promise.all([
+      prisma.propertyChange.findFirst({
+        where: {
+          propertyId,
+          accountId,
+        },
+        orderBy: { modifiedOn: 'desc' },
+      }),
+      prisma.propertyChange.count({
+        where: {
+          propertyId,
+          accountId,
+          modifiedOn: { gte: sevenDaysAgo },
+        },
+      }),
+      prisma.propertyChange.count({
+        where: {
+          propertyId,
+          accountId: { not: accountId },
+          modifiedOn: { gte: sevenDaysAgo },
+        },
+      }),
+      prisma.propertyChange.findFirst({
+        where: {
+          propertyId,
+          accountId,
+          isApproved: { not: null },
+          modifiedOn: { gte: sevenDaysAgo },
+        },
+        orderBy: { modifiedOn: 'desc' },
+      }),
+    ]);
+
+    const latestOutcome = latestOutcomeChange
+      ? latestOutcomeChange.isApproved
+        ? 'accepted'
+        : 'declined'
+      : currentUserChange && currentUserChange.isApproved === null
+        ? 'pending'
+        : null;
+
+    return {
+      success: true,
+      currentUserChange: currentUserChange ? {
+        id: currentUserChange.id,
+        status: currentUserChange.status,
+        isApproved: currentUserChange.isApproved,
+        data: currentUserChange.data as Record<string, any>,
+        modifiedOn: currentUserChange.modifiedOn.toISOString(),
+        accountId: currentUserChange.accountId,
+      } : null,
+      recentActivity: {
+        hasCurrentUserChangeInLast7Days: currentUserRecentChanges > 0,
+        hasOtherUserChangeInLast7Days: otherRecentChanges > 0,
+        latestOutcome,
+        latestOutcomeAt: latestOutcomeChange?.modifiedOn?.toISOString?.() || null,
+        latestOutcomeMessage: latestOutcome === 'accepted'
+          ? 'Your changes have been accepted.'
+          : latestOutcome === 'declined'
+            ? 'Your changes have been declined.'
+            : latestOutcome === 'pending'
+              ? 'Your changes are awaiting review.'
+              : null,
+      },
+    };
+  } catch (e: any) {
+    await logProblem(e, `getPropertyChangeContextAction ${propertyId}`);
+    return { success: false, error: e.message || 'Failed to load property change context.' };
+  }
+}
+
 function mapPropertyToCreateFormValues(property: Property): Partial<CreatePropertyFormValues> {
   return {
     title: property.title,

@@ -13,6 +13,7 @@ import { cn } from "@/logica/core/utils";
 
 interface PricingDetailsSectionProps {
     control: Control<CreatePropertyFormValues>;
+    fieldChangeNotes?: Partial<Record<string, string>>;
 }
 
 type BasisOption = {
@@ -99,7 +100,7 @@ function getBasisOptions(categories: string[], purposes: string[]): BasisOption[
     });
 }
 
-export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
+export function PricingDetailsSection({ control, fieldChangeNotes }: PricingDetailsSectionProps) {
     const { watch, setValue, unregister } = useFormContext<CreatePropertyFormValues>();
     const [manuallyExpandedBasis, setManuallyExpandedBasis] = useState<string[]>([]);
     const categories = (watch("categories" as any) as unknown as string[]) || [];
@@ -216,6 +217,7 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
                                 ))}
                             </SelectContent>
                         </Select>
+                        {fieldChangeNotes?.["pricing.currency"] && <p className="text-xs text-muted-foreground">{fieldChangeNotes["pricing.currency"]}</p>}
                         <FormMessage />
                     </FormItem>
                 )}
@@ -265,6 +267,7 @@ export function PricingDetailsSection({ control }: PricingDetailsSectionProps) {
                                 Show price requires at least one price.
                             </p>
                         )}
+                        {fieldChangeNotes?.["pricing.priceDisplayMode"] && <p className="text-xs text-muted-foreground">{fieldChangeNotes["pricing.priceDisplayMode"]}</p>}
                         <FormMessage />
                     </FormItem>
                 )}

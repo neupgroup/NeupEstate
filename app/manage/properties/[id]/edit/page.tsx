@@ -4,9 +4,9 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { useTransition, useState, useEffect } from 'react';
+import { useTransition, useState, useEffect, useMemo } from 'react';
 import { UpdatePropertySchema, type Property, type User, type UpdatePropertyFormValues } from '@/types';
-import { updatePropertyAction, approvePropertyAction, deletePropertyAction, rewritePropertyDetailsAction, getCurrentAccountId, savePropertyChangeDraftAction, getPropertyChangeDraftAction } from '@/app/actions';
+import { updatePropertyAction, approvePropertyAction, deletePropertyAction, rewritePropertyDetailsAction, getCurrentAccountId, savePropertyChangeDraftAction, getPropertyChangeDraftAction, getPropertyChangeContextAction } from '@/app/actions';
 import { getPropertyById } from "@/services/property-service";
 import { getUsers } from "@/services/user-service";
 import { useAgencyCustomization } from '@/logica/core/hooks/use-agency-customization';
@@ -27,6 +27,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { ClientLink } from '@/components/client-link';
 import { SourceOriginationManager } from "@/components/manage/source-origination-manager";
 import { ProgressivePropertySections } from '@/components/manage/progressive-property-sections';
@@ -35,6 +36,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 export default function EditPropertyPage() {
     const [property, setProperty] = useState<Property | null>(null);
     const [users, setUsers] = useState<User[]>([]);
+    const [baseValues, setBaseValues] = useState<UpdatePropertyFormValues | null>(null);
+    const [pendingDraftValues, setPendingDraftValues] = useState<Partial<UpdatePropertyFormValues> | null>(null);
     const params = useParams<{ id: string }>();
     const propertyId = Array.isArray(params?.id) ? params.id[0] : params?.id;
     const router = useRouter();
@@ -46,6 +49,23 @@ export default function EditPropertyPage() {
     const [isRewriting, startRewriteTransition] = useTransition();
     const [accountId, setAccountId] = useState<string | null>(null);
     const [changeId, setChangeId] = useState<string | null>(searchParams.get('request') || searchParams.get('changes'));
+    const [changeContext, setChangeContext] = useState<{
+        currentUserChange?: {
+            id: string;
+            status: string;
+            isApproved: boolean | null;
+            data: Record<string, any>;
+            modifiedOn: string;
+            accountId: string;
+        } | null;
+        recentActivity?: {
+            hasCurrentUserChangeInLast7Days: boolean;
+            hasOtherUserChangeInLast7Days: boolean;
+            latestOutcome?: 'accepted' | 'declined' | 'pending' | null;
+            latestOutcomeAt?: string | null;
+            latestOutcomeMessage?: string | null;
+        };
+    } | null>(null);
 
     const { rule: agencyRule } = useAgencyCustomization(accountId, 'property');
 
@@ -133,6 +153,109 @@ export default function EditPropertyPage() {
         }, {});
     }
 
+    function isPlainObject(value: unknown): value is Record<string, any> {
+        return Boolean(value) && typeof value === 'object' && !Array.isArray(value) && !(value instanceof Date);
+    }
+
+    function stripHtml(value: string) {
+        return value.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+    }
+
+    function normalizeComparableValue(value: any): any {
+        if (value == null) return value;
+        if (typeof value === 'string') return stripHtml(value).trim();
+        if (Array.isArray(value)) return value.map(normalizeComparableValue);
+        if (isPlainObject(value)) {
+            if ('sqft' in value && Object.keys(value).length <= 4) {
+                return value.sqft;
+            }
+            return Object.fromEntries(
+                Object.entries(value)
+                    .filter(([, entry]) => entry !== undefined)
+                    .map(([key, entry]) => [key, normalizeComparableValue(entry)]),
+            );
+        }
+        return value;
+    }
+
+    function prettifyPath(path: string): string {
+        if (path === 'purposes' || path === 'purpose') return 'Property purpose';
+        if (path === 'categories' || path === 'category') return 'Property type';
+        if (path === 'types' || path === 'type') return 'Property nature';
+        if (path.startsWith('pricing.')) return `Pricing ${path.split('.').slice(1).join(' ')}`;
+        if (path.startsWith('structuredLocation.')) return `Location ${path.split('.').slice(1).join(' ')}`;
+        if (path.startsWith('landDetails.')) return `Land details ${path.split('.').slice(1).join(' ')}`;
+        if (path.startsWith('plots.')) return `Plots ${path.split('.').slice(1).join(' ')}`;
+        if (path.startsWith('apartmentUnits.')) return `Apartment units ${path.split('.').slice(1).join(' ')}`;
+        return path
+            .split('.')
+            .filter(Boolean)
+            .pop()
+            ?.replace(/([A-Z])/g, ' $1')
+            .replace(/[-_]/g, ' ')
+            .replace(/\b\w/g, (char) => char.toUpperCase())
+            .trim() || 'Field';
+    }
+
+    function formatValue(value: any): string {
+        if (value == null || value === '') return 'Not set';
+        if (typeof value === 'boolean') return value ? 'Yes' : 'No';
+        if (typeof value === 'number') return String(value);
+        if (typeof value === 'string') return value;
+        if (Array.isArray(value)) {
+            if (value.length === 0) return 'None';
+            return value.map((entry) => formatValue(entry)).join(', ');
+        }
+        if (isPlainObject(value)) {
+            if ('sqft' in value && Object.keys(value).length <= 4) {
+                return `${value.sqft ?? '0'} sqft`;
+            }
+            return Object.entries(value)
+                .filter(([, entry]) => entry !== undefined && entry !== null && entry !== '')
+                .map(([key, entry]) => `${key}: ${formatValue(entry)}`)
+                .join(', ') || 'None';
+        }
+        return String(value);
+    }
+
+    function collectChangedFields(base: any, next: any, prefix = ''): Array<{ path: string; previous: any; current: any }> {
+        const changes: Array<{ path: string; previous: any; current: any }> = [];
+        const baseValue = normalizeComparableValue(base);
+        const nextValue = normalizeComparableValue(next);
+
+        if (Array.isArray(baseValue) || Array.isArray(nextValue)) {
+            const baseJson = JSON.stringify(baseValue ?? null);
+            const nextJson = JSON.stringify(nextValue ?? null);
+            if (baseJson !== nextJson) {
+                changes.push({ path: prefix || 'field', previous: base, current: next });
+            }
+            return changes;
+        }
+
+        if (isPlainObject(baseValue) || isPlainObject(nextValue)) {
+            const keys = new Set([
+                ...Object.keys(isPlainObject(baseValue) ? baseValue : {}),
+                ...Object.keys(isPlainObject(nextValue) ? nextValue : {}),
+            ]);
+
+            for (const key of keys) {
+                const path = prefix ? `${prefix}.${key}` : key;
+                changes.push(...collectChangedFields(
+                    isPlainObject(base) ? base?.[key] : undefined,
+                    isPlainObject(next) ? next?.[key] : undefined,
+                    path,
+                ));
+            }
+            return changes;
+        }
+
+        if (baseValue !== nextValue) {
+            changes.push({ path: prefix || 'field', previous: base, current: next });
+        }
+
+        return changes;
+    }
+
     function replaceRequestParam(requestId: string) {
         const params = new URLSearchParams(window.location.search);
         params.set('request', requestId);
@@ -144,13 +267,15 @@ export default function EditPropertyPage() {
         if (!propertyId) return;
 
         async function loadData() {
-            const [propData, userData, resolvedAccountId] = await Promise.all([
+            const [propData, userData, resolvedAccountId, reviewContext] = await Promise.all([
                 getPropertyById(propertyId, { includeInactive: true }),
                 getUsers(),
                 getCurrentAccountId(),
+                getPropertyChangeContextAction(propertyId),
             ]);
 
             if (resolvedAccountId) setAccountId(resolvedAccountId);
+            if (reviewContext.success) setChangeContext(reviewContext);
 
             if (!propData) {
                 toast({ variant: 'destructive', title: 'Error', description: 'Property not found.' });
@@ -161,7 +286,7 @@ export default function EditPropertyPage() {
             setProperty(propData);
             setUsers(userData);
 
-            const baseValues = {
+            const resolvedBaseValues = {
                 title: propData.title,
                 description: propData.description,
                 bedrooms: propData.bedrooms,
@@ -226,16 +351,23 @@ export default function EditPropertyPage() {
             if (draftId) {
                 const draft = await getPropertyChangeDraftAction(draftId);
                 if (draft.success && draft.data && (!draft.propertyId || draft.propertyId === propData.id)) {
-                    form.reset({
-                        ...baseValues,
+                    const mergedDraftValues = {
+                        ...resolvedBaseValues,
                         ...(draft.data as Partial<UpdatePropertyFormValues>),
+                    };
+                    form.reset({
+                        ...mergedDraftValues,
                     });
+                    setBaseValues(resolvedBaseValues as UpdatePropertyFormValues);
+                    setPendingDraftValues(draft.data as Partial<UpdatePropertyFormValues>);
                     setChangeId(draftId);
                     return;
                 }
             }
 
-            form.reset(baseValues);
+            form.reset(resolvedBaseValues);
+            setBaseValues(resolvedBaseValues as UpdatePropertyFormValues);
+            setPendingDraftValues(null);
         }
         loadData();
     }, [propertyId, router, toast, form, searchParams]);
@@ -361,6 +493,41 @@ export default function EditPropertyPage() {
         });
     };
 
+    const pendingFieldChanges = useMemo(() => {
+        const changeData = pendingDraftValues || changeContext?.currentUserChange?.data;
+        if (!baseValues || !changeData) return [];
+        return collectChangedFields(baseValues, { ...baseValues, ...changeData })
+            .map((change) => ({
+                ...change,
+                label: prettifyPath(change.path),
+            }))
+            .filter((change) => formatValue(normalizeComparableValue(change.previous)) !== formatValue(normalizeComparableValue(change.current)));
+    }, [baseValues, pendingDraftValues, changeContext?.currentUserChange?.data]);
+
+    const fieldChangeNotes = useMemo(() => {
+        if (!pendingFieldChanges.length) return {};
+        const notes: Record<string, string> = {};
+        for (const change of pendingFieldChanges) {
+            const label = prettifyPath(change.path).toLowerCase();
+            notes[change.path] = `Previously, the ${label} was ${formatValue(normalizeComparableValue(change.previous))}.`;
+        }
+        return notes;
+    }, [pendingFieldChanges]);
+
+    const reviewMessage = useMemo(() => {
+        const latest = changeContext?.recentActivity?.latestOutcomeMessage;
+        if (latest) return latest;
+        if (changeContext?.recentActivity?.hasOtherUserChangeInLast7Days) {
+            return 'Information for this property has been changed in the last 7 days.';
+        }
+        return null;
+    }, [changeContext]);
+
+    const showPreviouslySection = Boolean(
+        changeContext?.currentUserChange &&
+        changeContext.currentUserChange.isApproved === null
+    );
+
     if (!property) {
         return (
             <div className="space-y-6 max-w-6xl mx-auto">
@@ -375,62 +542,65 @@ export default function EditPropertyPage() {
         <div className="space-y-6 max-w-6xl mx-auto">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit, onSubmitInvalid)} className="space-y-6">
-                    <Card>
-                        <CardHeader>
-                            <div className="flex flex-col sm:flex-row justify-between sm:items-start gap-4">
-                                <div>
-                                    <CardTitle>Edit Property</CardTitle>
-                                    <CardDescription>Update the details for "{property.title}".</CardDescription>
-                                    {property.isApproved && (
-                                        <a
-                                            href={`/properties/${property.slug || property.id}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="mt-2 inline-flex items-center gap-2 text-sm text-primary hover:underline"
-                                        >
-                                            View on site
-                                            <ExternalLink className="h-4 w-4" />
-                                        </a>
-                                    )}
-                                </div>
-                                <div className="flex flex-row sm:flex-col lg:flex-row gap-2 self-start sm:self-end">
-                                    <Button variant="secondary" type="button" onClick={handleRewrite} disabled={isRewriting || isSaving}>
-                                        {isRewriting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <PenSquare className="mr-2 h-4 w-4" />}
-                                        AI Rewrite
+                    {(reviewMessage || showPreviouslySection) && (
+                        <div className="rounded-lg border bg-muted/20 px-4 py-3 text-sm text-muted-foreground">
+                            {reviewMessage || 'Changes on this property are being reviewed.'}
+                        </div>
+                    )}
+                    <div className="flex flex-col gap-4 rounded-none border-0 px-0 py-0 sm:flex-row sm:items-start sm:justify-between">
+                        <div>
+                            <CardTitle className="text-2xl">Edit Property</CardTitle>
+                            <CardDescription className="mt-1">
+                                Update the details for "{property.title}".
+                            </CardDescription>
+                            {property.isApproved && (
+                                <a
+                                    href={`/properties/${property.slug || property.id}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="mt-2 inline-flex items-center gap-2 text-sm text-primary hover:underline"
+                                >
+                                    View on site
+                                    <ExternalLink className="h-4 w-4" />
+                                </a>
+                            )}
+                        </div>
+                        <div className="flex flex-row sm:flex-col lg:flex-row gap-2 self-start sm:self-end">
+                            <Button variant="secondary" type="button" onClick={handleRewrite} disabled={isRewriting || isSaving}>
+                                {isRewriting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <PenSquare className="mr-2 h-4 w-4" />}
+                                AI Rewrite
+                            </Button>
+                            {!property.isApproved && (
+                                <Button variant="outline" type="button" onClick={handleApprove} disabled={isApproving}>
+                                    {isApproving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CheckCircle className="mr-2 h-4 w-4" />}
+                                    Approve
+                                </Button>
+                            )}
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <Button variant="destructive" type="button" disabled={isDeleting}>
+                                        {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
+                                        Delete
                                     </Button>
-                                    {!property.isApproved && (
-                                        <Button variant="outline" type="button" onClick={handleApprove} disabled={isApproving}>
-                                            {isApproving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CheckCircle className="mr-2 h-4 w-4" />}
-                                            Approve
-                                        </Button>
-                                    )}
-                                    <AlertDialog>
-                                        <AlertDialogTrigger asChild>
-                                            <Button variant="destructive" type="button" disabled={isDeleting}>
-                                                {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
-                                                Delete
-                                            </Button>
-                                        </AlertDialogTrigger>
-                                        <AlertDialogContent>
-                                            <AlertDialogHeader>
-                                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                            <AlertDialogDescription>
-                                                This action cannot be undone. This will permanently delete the property
-                                                and remove its data from our servers.
-                                            </AlertDialogDescription>
-                                            </AlertDialogHeader>
-                                            <AlertDialogFooter>
-                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                            <AlertDialogAction onClick={handleDelete} className="bg-destructive hover:bg-destructive/90">
-                                                Yes, delete property
-                                            </AlertDialogAction>
-                                            </AlertDialogFooter>
-                                        </AlertDialogContent>
-                                    </AlertDialog>
-                                </div>
-                            </div>
-                        </CardHeader>
-                    </Card>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This action cannot be undone. This will permanently delete the property
+                                        and remove its data from our servers.
+                                    </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction onClick={handleDelete} className="bg-destructive hover:bg-destructive/90">
+                                        Yes, delete property
+                                    </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        </div>
+                    </div>
 
                     <ProgressivePropertySections
                         form={form}
@@ -440,6 +610,7 @@ export default function EditPropertyPage() {
                         submitLabel={isSaving ? 'Saving Changes...' : 'Save Changes'}
                         agencyRule={agencyRule}
                         onSectionAdvance={handleSectionAdvance}
+                        fieldChangeNotes={fieldChangeNotes}
                     />
                 </form>
             </Form>

@@ -11,6 +11,7 @@ import { cn } from "@/logica/core/utils";
 
 interface TitleDescriptionSectionProps {
     control: Control<CreatePropertyFormValues>;
+    fieldChangeNotes?: Partial<Record<string, string>>;
 }
 
 function RichTextEditor({
@@ -84,7 +85,7 @@ function RichTextEditor({
     );
 }
 
-export function TitleDescriptionSection({ control }: TitleDescriptionSectionProps) {
+export function TitleDescriptionSection({ control, fieldChangeNotes }: TitleDescriptionSectionProps) {
     return (
         <section className="space-y-6">
             <div className="space-y-6">
@@ -97,6 +98,7 @@ export function TitleDescriptionSection({ control }: TitleDescriptionSectionProp
                             <FormControl>
                                 <Input placeholder="e.g., Modern Downtown Loft" {...field} />
                             </FormControl>
+                            {fieldChangeNotes?.title && <p className="text-xs text-muted-foreground">{fieldChangeNotes.title}</p>}
                             <FormMessage />
                         </FormItem>
                     )}
@@ -115,6 +117,7 @@ export function TitleDescriptionSection({ control }: TitleDescriptionSectionProp
                                     placeholder="Describe the property..."
                                 />
                             </FormControl>
+                            {fieldChangeNotes?.description && <p className="text-xs text-muted-foreground">{fieldChangeNotes.description}</p>}
                             <FormMessage />
                         </FormItem>
                     )}

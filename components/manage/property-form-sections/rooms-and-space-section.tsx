@@ -9,6 +9,7 @@ import { CounterCard } from "@/components/ui/counter-card";
 interface RoomsAndSpaceSectionProps {
     control: Control<CreatePropertyFormValues>;
     category: string | undefined;
+    fieldChangeNotes?: Partial<Record<string, string>>;
 }
 
 type RoomKey =
@@ -36,7 +37,7 @@ const ROOMS: RoomConfig[] = [
     { key: "bikeParkingSpots", label: "Bike Parking", emoji: "🏍️" },
 ];
 
-export function RoomsAndSpaceSection({ category }: RoomsAndSpaceSectionProps) {
+export function RoomsAndSpaceSection({ category, fieldChangeNotes }: RoomsAndSpaceSectionProps) {
     const { watch, setValue } = useFormContext<CreatePropertyFormValues>();
     const values = watch([
         "bedrooms",
@@ -72,15 +73,17 @@ export function RoomsAndSpaceSection({ category }: RoomsAndSpaceSectionProps) {
             {active.length > 0 && (
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {active.map((r) => (
-                        <CounterCard
-                            key={r.key}
-                            name={r.key}
-                            label={r.label}
-                            emoji={r.emoji}
-                            sublabel="Number of Rooms"
-                            steps={[-1, 1, 2]}
-                            onRemove={() => remove(r)}
-                        />
+                        <div key={r.key} className="space-y-1">
+                            <CounterCard
+                                name={r.key}
+                                label={r.label}
+                                emoji={r.emoji}
+                                sublabel="Number of Rooms"
+                                steps={[-1, 1, 2]}
+                                onRemove={() => remove(r)}
+                            />
+                            {fieldChangeNotes?.[r.key] && <p className="text-xs text-muted-foreground">{fieldChangeNotes[r.key]}</p>}
+                        </div>
                     ))}
                 </div>
             )}

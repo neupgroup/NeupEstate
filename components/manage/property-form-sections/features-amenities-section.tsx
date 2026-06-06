@@ -111,9 +111,10 @@ const AMENITY_GROUPS: { label: string; items: { name: string; emoji: string }[] 
 
 interface FeaturesAmenitiesSectionProps {
     control: any;
+    fieldChangeNotes?: Partial<Record<string, string>>;
 }
 
-export function FeaturesAmenitiesSection({ control }: FeaturesAmenitiesSectionProps) {
+export function FeaturesAmenitiesSection({ control, fieldChangeNotes }: FeaturesAmenitiesSectionProps) {
     const { watch, setValue } = useFormContext<CreatePropertyFormValues>();
 
     const raw = watch("amenities") || "";
@@ -138,6 +139,9 @@ export function FeaturesAmenitiesSection({ control }: FeaturesAmenitiesSectionPr
                 render={() => (
                     <FormItem>
                         <div className="space-y-8">
+                            {fieldChangeNotes?.amenities && (
+                                <p className="text-xs text-muted-foreground">{fieldChangeNotes.amenities}</p>
+                            )}
                             {/* Selected pills at top */}
                             {selected.length > 0 && (
                                 <div className="space-y-2">

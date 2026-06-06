@@ -23,6 +23,7 @@ import { PlusCircle, Trash2 } from "lucide-react";
 interface PropertySpecificsSectionProps {
     control: Control<CreatePropertyFormValues>;
     category: string | undefined;
+    fieldChangeNotes?: Partial<Record<string, string>>;
 }
 
 const HOUSE_TYPES       = ["House", "Bungalow", "Villa", "Multiplex"];
@@ -42,6 +43,11 @@ function FF({ control, name, label, placeholder, type = "text" }: { control: any
             </FormItem>
         )} />
     );
+}
+
+function Note({ text }: { text?: string }) {
+    if (!text) return null;
+    return <p className="text-xs text-muted-foreground">{text}</p>;
 }
 
 function SelectionField({ name, label, options }: { name: string; label: string; options: readonly string[] }) {
@@ -96,7 +102,7 @@ function CheckboxField({ control, name, label }: { control: any; name: any; labe
     );
 }
 
-export function PropertySpecificsSection({ control, category }: PropertySpecificsSectionProps) {
+export function PropertySpecificsSection({ control, category, fieldChangeNotes }: PropertySpecificsSectionProps) {
     const { fields: plotFields, append: appendPlot, remove: removePlot } = useFieldArray({ control, name: "plots" });
     const { fields: unitFields, append: appendUnit, remove: removeUnit } = useFieldArray({ control, name: "apartmentUnits" });
 
@@ -114,12 +120,24 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
             {isDualAreaFacing && (
                 <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <AreaInput label="House Area" />
-                        <AreaInput label="Property (Land) Area" name="landDetails.area" />
+                        <div className="space-y-1">
+                            <AreaInput label="House Area" />
+                            <Note text={fieldChangeNotes?.area} />
+                        </div>
+                        <div className="space-y-1">
+                            <AreaInput label="Property (Land) Area" name="landDetails.area" />
+                            <Note text={fieldChangeNotes?.["landDetails.area"]} />
+                        </div>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                        <CompassField name="facing"             label="House Facing" variant="house" />
-                        <CompassField name="landDetails.facing" label="Land Facing"  variant="land" />
+                        <div className="space-y-1">
+                            <CompassField name="facing" label="House Facing" variant="house" />
+                            <Note text={fieldChangeNotes?.facing} />
+                        </div>
+                        <div className="space-y-1">
+                            <CompassField name="landDetails.facing" label="Land Facing" variant="land" />
+                            <Note text={fieldChangeNotes?.["landDetails.facing"]} />
+                        </div>
                     </div>
                 </div>
             )}
@@ -127,20 +145,38 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
             {/* ── Single facing + area: Apartment / Penthouse ── */}
             {isApartment && (
                 <div className="space-y-6">
-                    <AreaInput label="Total Area" />
-                    <CompassField name="facing" label="Property Facing" variant="house" />
+                    <div className="space-y-1">
+                        <AreaInput label="Total Area" />
+                        <Note text={fieldChangeNotes?.area} />
+                    </div>
+                    <div className="space-y-1">
+                        <CompassField name="facing" label="Property Facing" variant="house" />
+                        <Note text={fieldChangeNotes?.facing} />
+                    </div>
                 </div>
             )}
 
             {/* ── House / Bungalow / Villa / Multiplex ── */}
             {isHouse && (
                 <div className="space-y-6">
-                    <CounterCard name="floors" label="Total Floors" emoji="🏢" sublabel="Number of Floors" steps={[-1, 1, 2]} />
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <YearPickerCard name="buildStart"     label="Build Start Year" emoji="🏗️" />
-                        <YearPickerCard name="buildCompleted" label="Build End Year"   emoji="🏁" />
+                    <div className="space-y-1">
+                        <CounterCard name="floors" label="Total Floors" emoji="🏢" sublabel="Number of Floors" steps={[-1, 1, 2]} />
+                        <Note text={fieldChangeNotes?.floors} />
                     </div>
-                    <RoadAccessCard name="roadAccess" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-1">
+                            <YearPickerCard name="buildStart" label="Build Start Year" emoji="🏗️" />
+                            <Note text={fieldChangeNotes?.buildStart} />
+                        </div>
+                        <div className="space-y-1">
+                            <YearPickerCard name="buildCompleted" label="Build End Year" emoji="🏁" />
+                            <Note text={fieldChangeNotes?.buildCompleted} />
+                        </div>
+                    </div>
+                    <div className="space-y-1">
+                        <RoadAccessCard name="roadAccess" />
+                        <Note text={fieldChangeNotes?.roadAccess} />
+                    </div>
                     <CheckboxField control={control} name="apartmentDetails.furnishing" label="Furnished" />
                 </div>
             )}
@@ -149,12 +185,24 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
             {isFlat && (
                 <div className="space-y-6">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <CounterCard name="onFloor" label="On Floor"     emoji="📏" sublabel="Floor Number"    steps={[-1, 1, 2]} />
-                        <CounterCard name="floors"  label="Total Floors" emoji="🏢" sublabel="Number of Floors" steps={[-1, 1, 2]} />
+                        <div className="space-y-1">
+                            <CounterCard name="onFloor" label="On Floor" emoji="📏" sublabel="Floor Number" steps={[-1, 1, 2]} />
+                            <Note text={fieldChangeNotes?.onFloor} />
+                        </div>
+                        <div className="space-y-1">
+                            <CounterCard name="floors" label="Total Floors" emoji="🏢" sublabel="Number of Floors" steps={[-1, 1, 2]} />
+                            <Note text={fieldChangeNotes?.floors} />
+                        </div>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <YearPickerCard name="buildStart"     label="Build Start Year" emoji="🏗️" />
-                        <YearPickerCard name="buildCompleted" label="Build End Year"   emoji="🏁" />
+                        <div className="space-y-1">
+                            <YearPickerCard name="buildStart" label="Build Start Year" emoji="🏗️" />
+                            <Note text={fieldChangeNotes?.buildStart} />
+                        </div>
+                        <div className="space-y-1">
+                            <YearPickerCard name="buildCompleted" label="Build End Year" emoji="🏁" />
+                            <Note text={fieldChangeNotes?.buildCompleted} />
+                        </div>
                     </div>
                     <SelectionField name="apartmentDetails.furnishing" label="Furnishing" options={FurnishingStatusSchema.options} />
                 </div>
@@ -198,7 +246,10 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
                                         <FormItem><FormLabel>Bathrooms</FormLabel><FormControl><Input type="number" {...field} /></FormControl><FormMessage /></FormItem>
                                     )} />
                                     <div className="col-span-2">
-                                        <AreaInput label="Area" name={`apartmentUnits.${index}.area`} />
+                                        <div className="space-y-1">
+                                            <AreaInput label="Area" name={`apartmentUnits.${index}.area`} />
+                                            <Note text={fieldChangeNotes?.[`apartmentUnits.${index}.area`]} />
+                                        </div>
                                     </div>
                                     <SelectionField name={`apartmentUnits.${index}.furnishing`} label="Furnishing" options={FurnishingStatusSchema.options} />
                                 </div>
@@ -215,10 +266,10 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
             {isLand && (
                 <div className="space-y-6">
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                        <FF control={control} name="landDetails.frontage" label="Frontage (ft)"    placeholder="e.g., 20" type="number" />
-                        <FF control={control} name="landDetails.depth"    label="Depth (ft)"       placeholder="e.g., 50" type="number" />
+                        <div className="space-y-1"><FF control={control} name="landDetails.frontage" label="Frontage (ft)" placeholder="e.g., 20" type="number" /><Note text={fieldChangeNotes?.["landDetails.frontage"]} /></div>
+                        <div className="space-y-1"><FF control={control} name="landDetails.depth" label="Depth (ft)" placeholder="e.g., 50" type="number" /><Note text={fieldChangeNotes?.["landDetails.depth"]} /></div>
                     </div>
-                    <RoadAccessCard name="roadAccess" />
+                    <div className="space-y-1"><RoadAccessCard name="roadAccess" /><Note text={fieldChangeNotes?.roadAccess} /></div>
                     <SelectionField name="landDetails.usage"      label="Usage"      options={LandUsageSchema.options} />
                     <SelectionField name="landDetails.zoning"     label="Zoning"     options={LandZoningSchema.options} />
                     <SelectionField name="landDetails.topography" label="Topography" options={LandTopographySchema.options} />
@@ -239,7 +290,10 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
                                         <FormItem><FormLabel>Plot ID</FormLabel><FormControl><Input placeholder="e.g., PLOT-A" {...field} /></FormControl><FormMessage /></FormItem>
                                     )} />
                                     <div className="col-span-2">
-                                        <AreaInput label="Area" name={`plots.${index}.area`} />
+                                        <div className="space-y-1">
+                                            <AreaInput label="Area" name={`plots.${index}.area`} />
+                                            <Note text={fieldChangeNotes?.[`plots.${index}.area`]} />
+                                        </div>
                                     </div>
                                     <FF control={control} name={`plots.${index}.frontage`} label="Frontage (ft)" type="number" />
                                     <FF control={control} name={`plots.${index}.depth`}    label="Depth (ft)"    type="number" />
@@ -258,12 +312,21 @@ export function PropertySpecificsSection({ control, category }: PropertySpecific
             {/* ── Commercial / Shop Space ── */}
             {isCommercial && (
                 <div className="space-y-6">
-                    <CounterCard name="floors" label="Floor Number" emoji="🏢" sublabel="Floor Number" steps={[-1, 1, 2]} />
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <YearPickerCard name="buildStart"     label="Build Start Year" emoji="🏗️" />
-                        <YearPickerCard name="buildCompleted" label="Build End Year"   emoji="🏁" />
+                    <div className="space-y-1">
+                        <CounterCard name="floors" label="Floor Number" emoji="🏢" sublabel="Floor Number" steps={[-1, 1, 2]} />
+                        <Note text={fieldChangeNotes?.floors} />
                     </div>
-                    <RoadAccessCard name="roadAccess" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-1">
+                            <YearPickerCard name="buildStart" label="Build Start Year" emoji="🏗️" />
+                            <Note text={fieldChangeNotes?.buildStart} />
+                        </div>
+                        <div className="space-y-1">
+                            <YearPickerCard name="buildCompleted" label="Build End Year" emoji="🏁" />
+                            <Note text={fieldChangeNotes?.buildCompleted} />
+                        </div>
+                    </div>
+                    <div className="space-y-1"><RoadAccessCard name="roadAccess" /><Note text={fieldChangeNotes?.roadAccess} /></div>
                 </div>
             )}
 

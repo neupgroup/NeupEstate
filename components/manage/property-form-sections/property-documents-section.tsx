@@ -58,9 +58,10 @@ function DocumentGroup({ control, index: docIndex, remove }: { control: Control<
 
 interface PropertyDocumentsSectionProps {
     control: Control<CreatePropertyFormValues>;
+    fieldChangeNotes?: Partial<Record<string, string>>;
 }
 
-export function PropertyDocumentsSection({ control }: PropertyDocumentsSectionProps) {
+export function PropertyDocumentsSection({ control, fieldChangeNotes }: PropertyDocumentsSectionProps) {
     const { fields, append, remove } = useFieldArray({
         control,
         name: "documents"
@@ -68,6 +69,9 @@ export function PropertyDocumentsSection({ control }: PropertyDocumentsSectionPr
 
     return (
         <section className="space-y-6">
+            {fieldChangeNotes?.documents && (
+                <p className="text-xs text-muted-foreground">{fieldChangeNotes.documents}</p>
+            )}
             <div className="space-y-4">
                 {fields.map((field, index) => (
                     <DocumentGroup

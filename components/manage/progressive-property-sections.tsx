@@ -118,6 +118,7 @@ interface ProgressivePropertySectionsProps {
     /** Optional agency customization rule — enforced on top of Zod validation */
     agencyRule?: AgencyCustomizationRule | null;
     onSectionAdvance?: (fromIndex: number, toIndex: number) => Promise<void> | void;
+    fieldChangeNotes?: Partial<Record<string, string>>;
 }
 
 export function ProgressivePropertySections({
@@ -128,6 +129,7 @@ export function ProgressivePropertySections({
     submitLabel,
     agencyRule,
     onSectionAdvance,
+    fieldChangeNotes,
 }: ProgressivePropertySectionsProps) {
     const router = useRouter();
     const pathname = usePathname();
@@ -146,7 +148,7 @@ export function ProgressivePropertySections({
             title: "Basic Information",
             description: "Set the listing purpose, property type, and nature.",
             fields: ["purposes", "category", "type"],
-            render: () => <BasicDetailsSection control={form.control} />,
+            render: () => <BasicDetailsSection control={form.control} fieldChangeNotes={fieldChangeNotes} />,
         },
         {
             id: "specifics",
@@ -154,7 +156,7 @@ export function ProgressivePropertySections({
             title: "Property Specifics",
             description: "Enter the size, age, floors, and structural details.",
             fields: ["area", "areaUnit", "buildStart", "buildCompleted", "facing", "landDetails.facing", "floors", "onFloor", "landDetails", "plots", "apartmentUnits"],
-            render: () => <PropertySpecificsSection control={form.control} category={category} />,
+            render: () => <PropertySpecificsSection control={form.control} category={category} fieldChangeNotes={fieldChangeNotes} />,
         },
         ...(categories.includes("Land") ? [] : [{
             id: "rooms",
@@ -162,7 +164,7 @@ export function ProgressivePropertySections({
             title: "Rooms & Space",
             description: "Specify the number of rooms, parking, and other spaces.",
             fields: ["bedrooms", "bathrooms", "kitchens", "diningRooms", "livingRooms", "carParkingSpots", "bikeParkingSpots"],
-            render: () => <RoomsAndSpaceSection control={form.control} category={category} />,
+            render: () => <RoomsAndSpaceSection control={form.control} category={category} fieldChangeNotes={fieldChangeNotes} />,
         } satisfies PropertyFormStep]),
         {
             id: "features",
@@ -170,7 +172,7 @@ export function ProgressivePropertySections({
             title: "Features & Amenities",
             description: "List the key features and amenities available at the property.",
             fields: ["amenities"],
-            render: () => <FeaturesAmenitiesSection control={form.control} />,
+            render: () => <FeaturesAmenitiesSection control={form.control} fieldChangeNotes={fieldChangeNotes} />,
         },
         {
             id: "pricing",
@@ -178,7 +180,7 @@ export function ProgressivePropertySections({
             title: "Pricing Details",
             description: "Set the listed price, payment basis, and negotiability.",
             fields: ["pricing"],
-            render: () => <PricingDetailsSection control={form.control} />,
+            render: () => <PricingDetailsSection control={form.control} fieldChangeNotes={fieldChangeNotes} />,
         },
         {
             id: "location",
@@ -186,7 +188,7 @@ export function ProgressivePropertySections({
             title: "Location Details",
             description: "Provide the address, geo-coordinates, and nearby landmarks.",
             fields: ["structuredLocation"],
-            render: () => <LocationDetailsSection control={form.control} />,
+            render: () => <LocationDetailsSection control={form.control} fieldChangeNotes={fieldChangeNotes} />,
         },
         {
             id: "owners",
@@ -194,7 +196,7 @@ export function ProgressivePropertySections({
             title: "Owner Information",
             description: "Search and select one or more client owners for this property.",
             fields: ["owners"],
-            render: () => <OwnerInfoSection control={form.control} setValue={form.setValue} users={users} formErrors={form.formState.errors} />,
+            render: () => <OwnerInfoSection control={form.control} setValue={form.setValue} users={users} formErrors={form.formState.errors} fieldChangeNotes={fieldChangeNotes} />,
         },
         {
             id: "photos",
@@ -202,7 +204,7 @@ export function ProgressivePropertySections({
             title: "Property Photos",
             description: "Upload photos that best represent the property.",
             fields: ["images"],
-            render: () => <PropertyPhotosSection control={form.control} />,
+            render: () => <PropertyPhotosSection control={form.control} fieldChangeNotes={fieldChangeNotes} />,
         },
         {
             id: "documents",
@@ -210,7 +212,7 @@ export function ProgressivePropertySections({
             title: "Property Documents",
             description: "Attach ownership documents, blueprints, or legal papers.",
             fields: ["documents"],
-            render: () => <PropertyDocumentsSection control={form.control} />,
+            render: () => <PropertyDocumentsSection control={form.control} fieldChangeNotes={fieldChangeNotes} />,
         },
         {
             id: "copy",
@@ -218,7 +220,7 @@ export function ProgressivePropertySections({
             title: "Title & Description",
             description: "Write a compelling title and description for the listing.",
             fields: ["title", "description"],
-            render: () => <TitleDescriptionSection control={form.control} />,
+            render: () => <TitleDescriptionSection control={form.control} fieldChangeNotes={fieldChangeNotes} />,
         },
     ], [category, form.control, form.formState.errors, isEditForm, users]);
 

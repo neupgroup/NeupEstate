@@ -9,9 +9,10 @@ import { useEffect } from "react";
 
 interface BasicDetailsSectionProps {
     control: Control<CreatePropertyFormValues>;
+    fieldChangeNotes?: Partial<Record<'purposes' | 'categories' | 'types', string>>;
 }
 
-export function BasicDetailsSection({ control }: BasicDetailsSectionProps) {
+export function BasicDetailsSection({ control, fieldChangeNotes }: BasicDetailsSectionProps) {
     const { watch, setValue } = useFormContext<CreatePropertyFormValues>();
     const selectedPurposes = watch("purposes") || [];
     const selectedCategories = (watch("categories" as any) as unknown as string[]) || [];
@@ -79,6 +80,9 @@ export function BasicDetailsSection({ control }: BasicDetailsSectionProps) {
                             disabled={disabledPurposes}
                             multi
                         />
+                        {fieldChangeNotes?.purposes && (
+                            <p className="text-xs text-muted-foreground">{fieldChangeNotes.purposes}</p>
+                        )}
                         <FormMessage />
                     </FormItem>
                 )}
@@ -97,6 +101,9 @@ export function BasicDetailsSection({ control }: BasicDetailsSectionProps) {
                             disabled={disabledCategories}
                             multi
                         />
+                        {fieldChangeNotes?.categories && (
+                            <p className="text-xs text-muted-foreground">{fieldChangeNotes.categories}</p>
+                        )}
                         <FormMessage />
                     </FormItem>
                 )}
@@ -115,6 +122,9 @@ export function BasicDetailsSection({ control }: BasicDetailsSectionProps) {
                             disabled={allDisabledNatures}
                             multi
                         />
+                        {fieldChangeNotes?.types && (
+                            <p className="text-xs text-muted-foreground">{fieldChangeNotes.types}</p>
+                        )}
                         <FormMessage />
                     </FormItem>
                 )}

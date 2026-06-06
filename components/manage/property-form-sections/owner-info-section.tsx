@@ -184,9 +184,10 @@ interface OwnerInfoSectionProps {
     setValue: UseFormSetValue<CreatePropertyFormValues>;
     users: User[];
     formErrors: any;
+    fieldChangeNotes?: Partial<Record<string, string>>;
 }
 
-export function OwnerInfoSection({ control, setValue, formErrors }: OwnerInfoSectionProps) {
+export function OwnerInfoSection({ control, setValue, formErrors, fieldChangeNotes }: OwnerInfoSectionProps) {
     const { fields, append, remove, replace } = useFieldArray({
         control,
         name: "owners",
@@ -236,6 +237,9 @@ export function OwnerInfoSection({ control, setValue, formErrors }: OwnerInfoSec
 
     return (
         <section className="space-y-6">
+            {fieldChangeNotes?.owners && (
+                <p className="text-xs text-muted-foreground">{fieldChangeNotes.owners}</p>
+            )}
             <FormMessage>{formErrors.owners?.root?.message || formErrors.owners?.message}</FormMessage>
             <div className="space-y-4">
                 {fields.length === 0 ? (
