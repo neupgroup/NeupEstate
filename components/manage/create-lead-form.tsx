@@ -9,6 +9,7 @@ import { LeadType, LeadPriority } from '@prisma/client';
 import { searchClients, createLead, saveClient } from '@/services/lead-service';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { PhoneInput } from '@/components/ui/phone-input';
 import { Button } from '@/components/ui/button';
 import { SelectionCards } from '@/components/ui/selection-cards';
 import { cn } from '@/logica/core/utils';
@@ -301,7 +302,7 @@ export function CreateLeadForm() {
                                         <FormItem><FormLabel>Email</FormLabel><FormControl><Input type="email" placeholder="john@example.com" {...field} /></FormControl><FormMessage /></FormItem>
                                     )} />
                                     <FormField control={clientForm.control} name="phone" render={({ field }) => (
-                                        <FormItem><FormLabel>Phone</FormLabel><FormControl><Input placeholder="+977 98XXXXXXXX" {...field} /></FormControl><FormMessage /></FormItem>
+                                        <FormItem><FormLabel>Phone</FormLabel><FormControl><PhoneInput placeholder="np 98XXXXXXXX" {...field} /></FormControl><FormMessage /></FormItem>
                                     )} />
                                     <FormField control={clientForm.control} name="source" render={({ field }) => (
                                         <FormItem><FormLabel>Source <span className="text-muted-foreground text-xs">(optional)</span></FormLabel><FormControl><Input placeholder="e.g. Referral, Facebook" {...field} /></FormControl><FormMessage /></FormItem>

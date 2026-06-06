@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { PhoneInput } from '@/components/ui/phone-input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/logica/core/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
@@ -76,7 +77,7 @@ export default function CreateConversationPage() {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Customer Phone Number</FormLabel>
-                                <FormControl><Input placeholder="e.g., +15551234567" {...field} /></FormControl>
+                                <FormControl><PhoneInput placeholder="us 5551234567 or np 9840000000" {...field} /></FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}

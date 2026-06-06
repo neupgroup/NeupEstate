@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams, useRouter } from 'next/navigation';
 import { useTransition, useState, useEffect, useMemo } from 'react';
 import { UpdatePropertySchema, type Property, type User, type UpdatePropertyFormValues } from '@/types';
-import { approvePropertyAction, deletePropertyAction, rewritePropertyDetailsAction, getCurrentAccountId, savePropertyChangeDraftAction, getPropertyChangeContextAction } from '@/app/actions';
+import { getCurrentAccountId, savePropertyChangeDraftAction, getPropertyChangeContextAction } from '@/app/actions';
 import { getPropertyById } from "@/services/property-service";
 import { getUsers } from "@/services/user-service";
 import { useAgencyCustomization } from '@/logica/core/hooks/use-agency-customization';
@@ -14,18 +14,7 @@ import { useAgencyCustomization } from '@/logica/core/hooks/use-agency-customiza
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/logica/core/hooks/use-toast';
-import { Loader2, CheckCircle, Trash2, PenSquare, ExternalLink } from 'lucide-react';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { ExternalLink } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ClientLink } from '@/components/client-link';
@@ -43,9 +32,6 @@ export default function EditPropertyPage() {
     const router = useRouter();
     const { toast } = useToast();
     const [isSaving, startSaveTransition] = useTransition();
-    const [isApproving, startApproveTransition] = useTransition();
-    const [isDeleting, startDeleteTransition] = useTransition();
-    const [isRewriting, startRewriteTransition] = useTransition();
     const [accountId, setAccountId] = useState<string | null>(null);
     const [changeContext, setChangeContext] = useState<{
         currentUserChange?: {
@@ -456,71 +442,6 @@ export default function EditPropertyPage() {
         }
     }
 
-    const handleApprove = () => {
-        if (!property) return;
-        startApproveTransition(async () => {
-            const result = await approvePropertyAction(property.id);
-            if (result.success) {
-                toast({
-                    title: "Property Approved",
-                    description: `"${property.title}" is now live on the site.`,
-                });
-                router.refresh();
-            } else {
-                toast({
-                    variant: 'destructive',
-                    title: "Approval Failed",
-                    description: result.error,
-                });
-            }
-        });
-    };
-
-    const handleDelete = () => {
-        if (!property) return;
-        startDeleteTransition(async () => {
-            const result = await deletePropertyAction(property.id);
-            if (result.success) {
-                toast({
-                    title: "Property Deleted",
-                    description: `"${property.title}" has been permanently deleted.`,
-                });
-                router.push('/manage/properties');
-            } else {
-                toast({
-                    variant: 'destructive',
-                    title: "Deletion Failed",
-                    description: result.error,
-                });
-            }
-        });
-    };
-    
-    const handleRewrite = () => {
-        if (!property) return;
-        startRewriteTransition(async () => {
-            toast({
-                title: "AI is rewriting...",
-                description: "This may take a moment.",
-            });
-            const result = await rewritePropertyDetailsAction(property.id);
-            if (result.success && result.data) {
-                form.setValue('title', result.data.rewrittenTitle, { shouldValidate: true, shouldDirty: true });
-                form.setValue('description', result.data.rewrittenDescription, { shouldValidate: true, shouldDirty: true });
-                toast({
-                    title: "Rewrite Successful",
-                    description: "The property title and description have been updated.",
-                });
-            } else {
-                toast({
-                    variant: 'destructive',
-                    title: "Rewrite Failed",
-                    description: result.error,
-                });
-            }
-        });
-    };
-
     const pendingFieldChanges = useMemo(() => {
         const changeData = pendingDraftValues || changeContext?.currentUserChange?.data;
         if (!baseValues || !changeData) return [];
@@ -593,48 +514,14 @@ export default function EditPropertyPage() {
                                 </a>
                             )}
                         </div>
-                        <div className="flex flex-row sm:flex-col lg:flex-row gap-2 self-start sm:self-end">
-                            <Button variant="secondary" type="button" onClick={handleRewrite} disabled={isRewriting || isSaving}>
-                                {isRewriting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <PenSquare className="mr-2 h-4 w-4" />}
-                                AI Rewrite
-                            </Button>
-                            {!property.isApproved && (
-                                <Button variant="outline" type="button" onClick={handleApprove} disabled={isApproving}>
-                                    {isApproving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <CheckCircle className="mr-2 h-4 w-4" />}
-                                    Approve
-                                </Button>
-                            )}
-                            <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                    <Button variant="destructive" type="button" disabled={isDeleting}>
-                                        {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
-                                        Delete
-                                    </Button>
-                                </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                        This action cannot be undone. This will permanently delete the property
-                                        and remove its data from our servers.
-                                    </AlertDialogDescription>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                    <AlertDialogAction onClick={handleDelete} className="bg-destructive hover:bg-destructive/90">
-                                        Yes, delete property
-                                    </AlertDialogAction>
-                                    </AlertDialogFooter>
-                                </AlertDialogContent>
-                            </AlertDialog>
-                        </div>
+                        <div className="flex flex-row sm:flex-col lg:flex-row gap-2 self-start sm:self-end" />
                     </div>
 
                     <ProgressivePropertySections
                         form={form}
                         users={users}
                         isEditForm={true}
-                        isSubmitting={isSaving || isRewriting}
+                        isSubmitting={isSaving}
                         submitLabel={isSaving ? 'Requesting Review...' : 'Request Review'}
                         agencyRule={agencyRule}
                         onSectionAdvance={handleSectionAdvance}

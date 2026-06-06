@@ -12,6 +12,7 @@ import { getUsers } from '@/services/user-service';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { PhoneInput } from '@/components/ui/phone-input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/logica/core/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
@@ -159,10 +160,10 @@ export default function CreateAgentPage() {
                                             <FormMessage />
                                         </FormItem>
                                     )}/>
-                                     <FormField control={form.control} name="phone" render={({ field }) => (
+                                    <FormField control={form.control} name="phone" render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Phone Number (Optional)</FormLabel>
-                                            <FormControl><Input placeholder="e.g., (123) 456-7890" {...field} /></FormControl>
+                                            <FormControl><PhoneInput placeholder="np 98xxxxxxxx" {...field} /></FormControl>
                                             <FormMessage />
                                         </FormItem>
                                     )}/>

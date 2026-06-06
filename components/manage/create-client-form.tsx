@@ -8,6 +8,7 @@ import { z } from 'zod';
 import { saveClient } from '@/services/lead-service';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { PhoneInput } from '@/components/ui/phone-input';
 import { Button } from '@/components/ui/button';
 
 const createClientSchema = z.object({
@@ -85,7 +86,7 @@ export function CreateClientForm({ accountId }: CreateClientFormProps) {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Phone</FormLabel>
-                                    <FormControl><Input placeholder="98xxxxxxxx" {...field} /></FormControl>
+                                    <FormControl><PhoneInput placeholder="np 98xxxxxxxx" {...field} /></FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}

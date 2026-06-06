@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { PhoneInput } from '@/components/ui/phone-input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/logica/core/hooks/use-toast';
 import { Loader2, Pencil, Trash2, PlusCircle, Link2, Info, CalendarDays, Clock, UserCircle, Fingerprint, Activity, Hourglass, Bookmark, BarChart, Wifi } from 'lucide-react';
@@ -44,7 +45,13 @@ const ContactFieldArray = ({ control, name, label, typeOptions, disabled }: { co
                         render={({ field }) => (
                             <FormItem className="flex-grow">
                                 <FormLabel className="text-xs">Value</FormLabel>
-                                <FormControl><Input {...field} disabled={disabled} /></FormControl>
+                                <FormControl>
+                                    {name === 'phone' ? (
+                                        <PhoneInput {...field} disabled={disabled} />
+                                    ) : (
+                                        <Input {...field} disabled={disabled} />
+                                    )}
+                                </FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}

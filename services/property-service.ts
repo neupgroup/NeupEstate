@@ -3,6 +3,7 @@
 import { prisma } from '@/logica/core/prisma';
 import { logProblem } from './problem-service';
 import type { Property, CreatePropertyInput, PropertyFilters, ExtractedPropertyData, UpdatePropertyInput } from '@/types';
+import { areaValueToSqft } from '@/types';
 import { Prisma, PropertyType, PropertyStatus, PropertyPurpose } from '@prisma/client';
 import { mapPurposeToEnum, mapPurposeFromEnum, mapTypeToEnum, mapTypeFromEnum, mapStatusToEnum, mapStatusFromEnum } from '@/logica/core/adapters/enum-mappers';
 
@@ -686,29 +687,30 @@ function buildCoreData(d: Partial<CreatePropertyInput> & Record<string, any>) {
 }
 
 async function upsertDetailTable(propertyId: string, type: PropertyType, d: any) {
+  const area = areaValueToSqft(d.area);
   if (type === PropertyType.HOUSE) {
     await prisma.propertyHouseDetail.upsert({
       where: { propertyId },
-      create: { propertyId, bedrooms: d.bedrooms ?? 0, bathrooms: d.bathrooms ?? 0, floors: d.floors ?? 0, kitchens: d.kitchens ?? 0, livingRooms: d.livingRooms ?? 0, diningRooms: d.diningRooms ?? 0, carParkingSpots: d.carParkingSpots ?? 0, bikeParkingSpots: d.bikeParkingSpots ?? 0, furnished: false, buildYear: 0, area: d.area ?? 0, facing: d.facing ?? '', roadAccess: d.roadAccess ?? 0 },
-      update: { bedrooms: d.bedrooms ?? 0, bathrooms: d.bathrooms ?? 0, floors: d.floors ?? 0, kitchens: d.kitchens ?? 0, livingRooms: d.livingRooms ?? 0, diningRooms: d.diningRooms ?? 0, carParkingSpots: d.carParkingSpots ?? 0, bikeParkingSpots: d.bikeParkingSpots ?? 0, area: d.area ?? 0, facing: d.facing ?? '', roadAccess: d.roadAccess ?? 0 },
+      create: { propertyId, bedrooms: d.bedrooms ?? 0, bathrooms: d.bathrooms ?? 0, floors: d.floors ?? 0, kitchens: d.kitchens ?? 0, livingRooms: d.livingRooms ?? 0, diningRooms: d.diningRooms ?? 0, carParkingSpots: d.carParkingSpots ?? 0, bikeParkingSpots: d.bikeParkingSpots ?? 0, furnished: false, buildYear: 0, area, facing: d.facing ?? '', roadAccess: d.roadAccess ?? 0 },
+      update: { bedrooms: d.bedrooms ?? 0, bathrooms: d.bathrooms ?? 0, floors: d.floors ?? 0, kitchens: d.kitchens ?? 0, livingRooms: d.livingRooms ?? 0, diningRooms: d.diningRooms ?? 0, carParkingSpots: d.carParkingSpots ?? 0, bikeParkingSpots: d.bikeParkingSpots ?? 0, area, facing: d.facing ?? '', roadAccess: d.roadAccess ?? 0 },
     });
   } else if (type === PropertyType.APARTMENT) {
     await prisma.propertyApartmentDetail.upsert({
       where: { propertyId },
-      create: { propertyId, bedrooms: d.bedrooms ?? 0, bathrooms: d.bathrooms ?? 0, onFloor: d.onFloor ?? 0, totalFloors: d.floors ?? 0, balconies: 0, lifts: 0, carParkingSpots: d.carParkingSpots ?? 0, bikeParkingSpots: d.bikeParkingSpots ?? 0, furnished: false, blockName: '', unitNumber: '', superArea: d.area ?? 0, builtUpArea: d.area ?? 0, maintenanceFee: 0 },
-      update: { bedrooms: d.bedrooms ?? 0, bathrooms: d.bathrooms ?? 0, onFloor: d.onFloor ?? 0, totalFloors: d.floors ?? 0, carParkingSpots: d.carParkingSpots ?? 0, bikeParkingSpots: d.bikeParkingSpots ?? 0, superArea: d.area ?? 0, builtUpArea: d.area ?? 0 },
+      create: { propertyId, bedrooms: d.bedrooms ?? 0, bathrooms: d.bathrooms ?? 0, onFloor: d.onFloor ?? 0, totalFloors: d.floors ?? 0, balconies: 0, lifts: 0, carParkingSpots: d.carParkingSpots ?? 0, bikeParkingSpots: d.bikeParkingSpots ?? 0, furnished: false, blockName: '', unitNumber: '', superArea: area, builtUpArea: area, maintenanceFee: 0 },
+      update: { bedrooms: d.bedrooms ?? 0, bathrooms: d.bathrooms ?? 0, onFloor: d.onFloor ?? 0, totalFloors: d.floors ?? 0, carParkingSpots: d.carParkingSpots ?? 0, bikeParkingSpots: d.bikeParkingSpots ?? 0, superArea: area, builtUpArea: area },
     });
   } else if (type === PropertyType.LAND) {
     await prisma.propertyLandDetail.upsert({
       where: { propertyId },
-      create: { propertyId, area: d.area ?? 0, facing: d.facing ?? '', roadAccess: d.roadAccess ?? 0, plotShape: '', cornerPlot: false, waterAvailable: false, electricityAvailable: false, boundaryWall: false },
-      update: { area: d.area ?? 0, facing: d.facing ?? '', roadAccess: d.roadAccess ?? 0 },
+      create: { propertyId, area, facing: d.facing ?? '', roadAccess: d.roadAccess ?? 0, plotShape: '', cornerPlot: false, waterAvailable: false, electricityAvailable: false, boundaryWall: false },
+      update: { area, facing: d.facing ?? '', roadAccess: d.roadAccess ?? 0 },
     });
   } else if (type === PropertyType.COMMERCIAL) {
     await prisma.propertyCommercialDetail.upsert({
       where: { propertyId },
-      create: { propertyId, floor: d.floors ?? 0, washrooms: d.bathrooms ?? 0, parkingSpots: d.carParkingSpots ?? 0, frontage: 0, usableArea: d.area ?? 0, buildingType: '' },
-      update: { floor: d.floors ?? 0, washrooms: d.bathrooms ?? 0, parkingSpots: d.carParkingSpots ?? 0, usableArea: d.area ?? 0 },
+      create: { propertyId, floor: d.floors ?? 0, washrooms: d.bathrooms ?? 0, parkingSpots: d.carParkingSpots ?? 0, frontage: 0, usableArea: area, buildingType: '' },
+      update: { floor: d.floors ?? 0, washrooms: d.bathrooms ?? 0, parkingSpots: d.carParkingSpots ?? 0, usableArea: area },
     });
   }
 }

@@ -11,6 +11,7 @@ import { updateAgentAction, deleteAgentAction } from '@/app/actions';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { PhoneInput } from '@/components/ui/phone-input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/logica/core/hooks/use-toast';
 import { Loader2, Trash2, Pencil } from 'lucide-react';
@@ -249,7 +250,7 @@ export function EditAgentForm({ agent, users }: EditAgentFormProps) {
                                      <FormField control={form.control} name="phone" render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Phone Number (Optional)</FormLabel>
-                                            <FormControl><Input placeholder="e.g., (123) 456-7890" {...field} disabled={!isEditing} /></FormControl>
+                                            <FormControl><PhoneInput placeholder="np 98xxxxxxxx" {...field} disabled={!isEditing} /></FormControl>
                                             <FormMessage />
                                         </FormItem>
                                     )}/>

@@ -143,6 +143,27 @@ function parseLooseText(text: string): Record<string, number> {
   return out;
 }
 
+function parseTextForSystem(text: string, system: SystemKey): Record<string, number> {
+  if (hasExplicitSystemHint(text)) return parseLooseText(text);
+
+  const values = text
+    .match(/\d+(?:\.\d+)?/g)
+    ?.map((value) => Number(value))
+    .filter((value) => Number.isFinite(value)) ?? [];
+
+  if (!values.length) return {};
+
+  const out: Record<string, number> = {};
+  const units = SYSTEM_KEYS[system];
+  for (const [index, value] of values.entries()) {
+    const unit = units[index];
+    if (!unit) break;
+    out[unit] = value;
+  }
+
+  return out;
+}
+
 function hasExplicitSystemHint(text: string): boolean {
   const lower = text.toLowerCase();
   return /(ropani|aana|ana|anna|annaa|aannaa|paisa|daam|bigha|kattha|dhur|sqft|sq\s*ft|sqm|sq\s*m)/i.test(lower);
@@ -256,7 +277,8 @@ export function AreaInput({ label = "Total Area", name = "area", className, note
   })();
 
   function applyParsed(nextText: string, opts?: { keepText?: boolean; forceSystem?: SystemKey }) {
-    const parsed = parseLooseText(nextText);
+    const fallbackSystem = opts?.forceSystem ?? activeSystem;
+    const parsed = parseTextForSystem(nextText, fallbackSystem);
     const nextSystem = opts?.forceSystem ?? (hasExplicitSystemHint(nextText) ? detectSystem(parsed) : activeSystem);
     const converted = fromSqm(toSqm(parsed), nextSystem);
     setActiveSystem(nextSystem);
@@ -304,14 +326,14 @@ export function AreaInput({ label = "Total Area", name = "area", className, note
   }
 
   function nudge(unit: string, delta: number) {
-    const parsed = parseLooseText(text);
-    parsed[unit] = Math.max(0, Number(parsed[unit] ?? 0) + delta);
-    const systemKey = detectSystem(parsed);
-    const converted = fromSqm(toSqm(parsed), systemKey);
-    setActiveSystem(systemKey);
+    const parsed = parseTextForSystem(text, activeSystem);
+    const basis = toSqm(parsed) > 0 ? parsed : fromSqm(toSqm(currentVals), activeSystem);
+    const next = { ...basis, [unit]: Math.max(0, Number(basis[unit] ?? 0) + delta) };
+    const converted = fromSqm(toSqm(next), activeSystem);
+    setActiveSystem(activeSystem);
     setSystemTouched(true);
-    canonicalSqm.current = toSqm(parsed);
-    setText(formatText(converted, systemKey));
+    canonicalSqm.current = toSqm(next);
+    setText(getDisplayText(converted, activeSystem, isFocused));
     for (const u of ALL_UNITS) setValue(`${name}.${u}` as any, undefined, { shouldDirty: true, shouldValidate: true });
     for (const [u, v] of Object.entries(converted)) setValue(`${name}.${u}` as any, v > 0 ? v : undefined, { shouldDirty: true, shouldValidate: true });
   }
