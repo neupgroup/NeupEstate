@@ -1,13 +1,12 @@
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { getPropertyById } from "@/services/property-service";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ClientLink } from "@/components/client-link";
 import { AreaDisplayToggle } from "@/components/manage/area-display-toggle";
 import { FacingDisplayToggle } from "@/components/manage/facing-display-toggle";
 import { RoadAccessDisplayToggle } from "@/components/manage/road-access-display-toggle";
-import { ChevronLeft, ExternalLink, PenSquare } from "lucide-react";
+import { Bath, BedDouble, Bike, CarFront, ChefHat, ChevronLeft, ExternalLink, PenSquare, Sofa, UtensilsCrossed } from "lucide-react";
 
 type PageProps = {
     params: Promise<{ id: string }>;
@@ -125,20 +124,20 @@ function Section({
     children: ReactNode;
 }) {
     return (
-        <Card className="border-border/60">
-            <CardHeader>
-                <CardTitle className="text-lg">{title}</CardTitle>
-                {description && <CardDescription>{description}</CardDescription>}
-            </CardHeader>
-            <CardContent className="space-y-3">{children}</CardContent>
-        </Card>
+        <section className="space-y-3">
+            <div className="space-y-0.5">
+                <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+                {description && <p className="text-sm text-muted-foreground">{description}</p>}
+            </div>
+            {children}
+        </section>
     );
 }
 
 function Field({ label, value }: { label: string; value: unknown }) {
     return (
-        <div className="rounded-xl border bg-background px-4 py-3">
-            <div className="text-xs uppercase tracking-wide text-muted-foreground">{label}</div>
+        <div className="rounded-lg border border-border/70 bg-background px-3 py-2.5">
+            <div className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{label}</div>
             <div className="mt-1 text-sm font-medium text-foreground whitespace-pre-wrap break-words">
                 {typeof value === "string" && value.includes("<") ? (
                     <div dangerouslySetInnerHTML={{ __html: formatHtmlDescription(value) }} />
@@ -151,7 +150,33 @@ function Field({ label, value }: { label: string; value: unknown }) {
 }
 
 function ReadonlyGrid({ children }: { children: ReactNode }) {
-    return <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">{children}</div>;
+    return <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{children}</div>;
+}
+
+function RoomTile({
+    icon,
+    label,
+    value,
+}: {
+    icon: ReactNode;
+    label: string;
+    value: unknown;
+}) {
+    const normalizedValue = typeof value === "number" ? value : null;
+
+    return (
+        <div className="group flex items-center gap-3 rounded-lg border border-border/70 bg-background px-3 py-2.5 transition-colors duration-200 ease-out hover:border-primary/40 hover:bg-primary/5">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-primary/15 bg-primary/10 text-primary transition-colors duration-200 ease-out group-hover:border-primary/35 group-hover:bg-primary/15">
+                {icon}
+            </div>
+            <div className="min-w-0">
+                <div className="text-sm font-medium text-foreground">{label}</div>
+                <div className="text-sm text-muted-foreground">
+                    {normalizedValue == null ? "Not set" : normalizedValue}
+                </div>
+            </div>
+        </div>
+    );
 }
 
 export default async function ViewPropertyPage({ params }: PageProps) {
@@ -176,7 +201,7 @@ export default async function ViewPropertyPage({ params }: PageProps) {
     });
 
     return (
-        <div className="space-y-6 max-w-6xl mx-auto">
+        <div className="space-y-10 max-w-6xl mx-auto">
             <ClientLink
                 href="/manage/properties"
                 className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
@@ -220,16 +245,30 @@ export default async function ViewPropertyPage({ params }: PageProps) {
                 </ReadonlyGrid>
             </Section>
 
-            <Section title="Rooms & Space" description="Room counts and parking capacity.">
-                <ReadonlyGrid>
-                    <Field label="Bedrooms" value={property.bedrooms} />
-                    <Field label="Bathrooms" value={property.bathrooms} />
-                    <Field label="Kitchens" value={property.kitchens} />
-                    <Field label="Dining Rooms" value={property.diningRooms} />
-                    <Field label="Living Rooms" value={property.livingRooms} />
-                    <Field label="Car Parking Spots" value={property.carParkingSpots} />
-                    <Field label="Bike Parking Spots" value={property.bikeParkingSpots} />
-                </ReadonlyGrid>
+            <Section title="Rooms and Spaces" description="Room counts and parking capacity.">
+                <div className="flex gap-4 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory md:mx-0 md:px-0 md:grid md:grid-cols-4 md:overflow-visible md:pb-0">
+                    <div className="min-w-[40%] flex-none snap-start md:min-w-0">
+                        <RoomTile icon={<BedDouble className="h-5 w-5" />} label="Bedrooms" value={property.bedrooms} />
+                    </div>
+                    <div className="min-w-[40%] flex-none snap-start md:min-w-0">
+                        <RoomTile icon={<Bath className="h-5 w-5" />} label="Bathrooms" value={property.bathrooms} />
+                    </div>
+                    <div className="min-w-[40%] flex-none snap-start md:min-w-0">
+                        <RoomTile icon={<ChefHat className="h-5 w-5" />} label="Kitchens" value={property.kitchens} />
+                    </div>
+                    <div className="min-w-[40%] flex-none snap-start md:min-w-0">
+                        <RoomTile icon={<UtensilsCrossed className="h-5 w-5" />} label="Dining Rooms" value={property.diningRooms} />
+                    </div>
+                    <div className="min-w-[40%] flex-none snap-start md:min-w-0">
+                        <RoomTile icon={<Sofa className="h-5 w-5" />} label="Living Rooms" value={property.livingRooms} />
+                    </div>
+                    <div className="min-w-[40%] flex-none snap-start md:min-w-0">
+                        <RoomTile icon={<CarFront className="h-5 w-5" />} label="Car Parking Spots" value={property.carParkingSpots} />
+                    </div>
+                    <div className="min-w-[40%] flex-none snap-start md:min-w-0">
+                        <RoomTile icon={<Bike className="h-5 w-5" />} label="Bike Parking Spots" value={property.bikeParkingSpots} />
+                    </div>
+                </div>
             </Section>
 
             <Section title="Features & Amenities" description="Shared features and highlights.">
