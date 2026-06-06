@@ -132,7 +132,7 @@ export function FeaturesAmenitiesSection({ control, fieldChangeNotes }: Features
     };
 
     return (
-        <section className="space-y-6">
+        <section className="space-y-10">
             <FormField
                 control={control}
                 name="amenities"

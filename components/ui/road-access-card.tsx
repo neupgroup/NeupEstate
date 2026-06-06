@@ -1,89 +1,104 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { cn } from "@/logica/core/utils";
 
 interface RoadAccessCardProps {
     name: string;
+    note?: string;
 }
 
-// Common road widths in feet
-const PRESETS = [8, 10, 12, 16, 20, 24, 30, 40];
-
-export function RoadAccessCard({ name }: RoadAccessCardProps) {
+export function RoadAccessCard({ name, note }: RoadAccessCardProps) {
     const { watch, setValue } = useFormContext();
-    const raw = watch(name as any);
-    const value = raw !== undefined && raw !== "" ? Number(raw) : undefined;
+    const value = watch(name as any) as number | undefined;
+    const [text, setText] = useState("");
+    const [touched, setTouched] = useState(false);
 
-    function set(ft: number) {
-        setValue(name as any, value === ft ? undefined : ft, {
+    useEffect(() => {
+        if (!touched) {
+            setText(value === undefined || value === null ? "" : String(value));
+        }
+    }, [value, touched]);
+
+    function select(next?: number) {
+        const normalized = next === undefined ? undefined : Math.max(0, next);
+        setValue(name as any, normalized, {
             shouldDirty: true,
             shouldValidate: true,
         });
+        setText(normalized === undefined ? "" : String(normalized));
+        setTouched(true);
     }
 
-    function handleInput(e: React.ChangeEvent<HTMLInputElement>) {
-        const n = e.target.value === "" ? undefined : Number(e.target.value);
-        setValue(name as any, n, { shouldDirty: true, shouldValidate: true });
+    function onBlur() {
+        if (!text.trim()) {
+            select(undefined);
+            return;
+        }
+        if (/^\d+$/.test(text.trim())) {
+            select(Number(text.trim()));
+            return;
+        }
+        setText(value === undefined || value === null ? "" : String(value));
+    }
+
+    function nudge(delta: number) {
+        select(Number(value ?? 0) + delta);
     }
 
     return (
-        <div className="rounded-2xl border bg-card shadow-sm p-4 space-y-3">
-            {/* Header */}
-            <div className="flex items-center gap-2 text-base font-bold">
-                <span>🛣️</span>
-                <span className="text-primary">Road Access</span>
-                {value !== undefined && (
-                    <span className="ml-auto text-sm font-semibold text-muted-foreground">
-                        {value} ft
-                    </span>
-                )}
+        <div className={cn("space-y-2 w-full max-w-2xl")}>
+            <div className="space-y-1">
+                <div className="flex items-center gap-2 text-base font-bold">
+                    <span>🛣️</span>
+                    <span className="text-primary">Road Access</span>
+                    <span className="text-xs text-muted-foreground font-medium">(Feet System)</span>
+                </div>
+
+                {note && <p className="text-xs text-muted-foreground">{note}</p>}
+
+                <input
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    placeholder="e.g. 18"
+                    value={text}
+                    onChange={(event) => {
+                        const nextText = event.target.value;
+                        if (nextText === "" || /^\d*$/.test(nextText)) {
+                            setText(nextText);
+                            setTouched(true);
+                        }
+                    }}
+                    onBlur={onBlur}
+                    className={cn(
+                        "w-full rounded-xl border bg-background px-3 py-2 text-sm outline-none",
+                        "focus:ring-2 focus:ring-ring focus:border-primary"
+                    )}
+                />
             </div>
 
-            <div className="rounded-xl bg-muted p-3 space-y-3">
-                {/* Preset chips */}
-                <p className="text-xs text-muted-foreground font-medium">Common widths</p>
-                <div className="grid grid-cols-4 gap-1.5">
-                    {PRESETS.map(ft => {
-                        const isSelected = value === ft;
-                        return (
-                            <button
-                                key={ft}
-                                type="button"
-                                onClick={() => set(ft)}
-                                className={cn(
-                                    "rounded-lg py-1.5 text-xs font-semibold border transition-all",
-                                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                                    isSelected
-                                        ? "bg-primary text-primary-foreground border-primary shadow-sm"
-                                        : "bg-background border-border text-foreground hover:border-primary hover:text-primary hover:bg-primary/5"
-                                )}
-                            >
-                                {ft} ft
-                            </button>
-                        );
-                    })}
-                </div>
-
-                {/* Custom input */}
-                <div className="flex items-center gap-2 pt-1">
-                    <p className="text-xs text-muted-foreground font-medium shrink-0">Custom</p>
-                    <div className="flex items-center gap-1.5 flex-1">
-                        <input
-                            type="number"
-                            min={1}
-                            placeholder="e.g. 18"
-                            value={value !== undefined && !PRESETS.includes(value) ? value : ""}
-                            onChange={handleInput}
-                            className={cn(
-                                "w-full rounded-lg border border-border bg-background px-3 py-1.5 text-sm",
-                                "focus:outline-none focus:ring-2 focus:ring-ring focus:border-primary",
-                                "placeholder:text-muted-foreground"
-                            )}
-                        />
-                        <span className="text-xs text-muted-foreground shrink-0">ft</span>
-                    </div>
-                </div>
+            <div className="flex flex-wrap gap-2">
+                {[
+                    { label: "+1 feet", delta: 1 },
+                    { label: "-1 feet", delta: -1 },
+                    { label: "+2 feet", delta: 2 },
+                    { label: "-2 feet", delta: -2 },
+                    { label: "+5 feet", delta: 5 },
+                    { label: "-5 feet", delta: -5 },
+                    { label: "+10 feet", delta: 10 },
+                    { label: "-10 feet", delta: -10 },
+                ].map((action) => (
+                    <button
+                        key={action.label}
+                        type="button"
+                        onClick={() => nudge(action.delta)}
+                        className="rounded-full border px-3 py-1.5 text-xs font-medium transition-colors border-border bg-background hover:border-primary hover:text-primary"
+                    >
+                        {action.label}
+                    </button>
+                ))}
             </div>
         </div>
     );

@@ -111,8 +111,8 @@ export function AdminPropertyDraftRow({
         day: 'numeric',
     });
     const href = draft.propertyId
-        ? `/manage/properties/${draft.propertyId}/edit?request=${draft.id}`
-        : `/manage/properties/create?request=${draft.id}`;
+        ? `/manage/properties/${draft.propertyId}/edit`
+        : `/manage/properties/create`;
     const badgeLabel = draft.status === 'creating'
         ? 'Incomplete'
         : draft.status === 'deleting'

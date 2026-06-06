@@ -73,7 +73,7 @@ function OwnerClientPicker({
     }, [query]);
 
     return (
-        <div className="space-y-4 rounded-lg border p-4">
+        <div className="space-y-6 rounded-lg border p-4">
             <div className="flex items-center justify-between gap-3">
                 <div>
                     <h4 className="font-medium">Owner {index + 1}</h4>
@@ -236,12 +236,12 @@ export function OwnerInfoSection({ control, setValue, formErrors, fieldChangeNot
     }
 
     return (
-        <section className="space-y-6">
+        <section className="space-y-10">
             {fieldChangeNotes?.owners && (
                 <p className="text-xs text-muted-foreground">{fieldChangeNotes.owners}</p>
             )}
             <FormMessage>{formErrors.owners?.root?.message || formErrors.owners?.message}</FormMessage>
-            <div className="space-y-4">
+            <div className="space-y-6">
                 {fields.length === 0 ? (
                     <div className="rounded-lg border border-dashed p-4 text-sm text-muted-foreground">
                         Add one or more client owners for this property.

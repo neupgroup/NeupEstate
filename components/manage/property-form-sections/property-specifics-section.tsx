@@ -15,7 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { SelectionCards } from "@/components/ui/selection-cards";
 import { AreaInput } from "@/components/ui/area-input";
 import { CounterCard } from "@/components/ui/counter-card";
-import { CompassPicker } from "@/components/ui/compass-picker";
+import { FacingInput } from "@/components/ui/facing-input";
 import { YearPickerCard } from "@/components/ui/year-picker-card";
 import { RoadAccessCard } from "@/components/ui/road-access-card";
 import { PlusCircle, Trash2 } from "lucide-react";
@@ -69,19 +69,12 @@ function SelectionField({ name, label, options }: { name: string; label: string;
     );
 }
 
-function CompassField({ name, label, variant }: { name: string; label: string; variant?: "house" | "land" }) {
-    const { watch, setValue } = useFormContext<CreatePropertyFormValues>();
-    const value = watch(name as any) as string | undefined;
+function CompassField({ name, label, variant, note }: { name: string; label: string; variant?: "house" | "land"; note?: string }) {
     return (
         <FormField name={name as any} render={() => (
             <FormItem>
                 <FormControl>
-                    <CompassPicker
-                        label={label}
-                        variant={variant}
-                        value={value}
-                        onChange={(dir) => setValue(name as any, dir ?? null, { shouldDirty: true, shouldValidate: true })}
-                    />
+                    <FacingInput name={name} label={label} variant={variant} note={note} />
                 </FormControl>
                 <FormMessage />
             </FormItem>
@@ -114,30 +107,22 @@ export function PropertySpecificsSection({ control, category, fieldChangeNotes }
     const isCommercial = COMMERCIAL_TYPES.includes(category ?? "");
 
     return (
-        <section className="space-y-8">
+        <section className="space-y-10">
 
             {/* ── Dual facing + area: House/Bungalow/Villa/Multiplex/Commercial/Shop/Flat ── */}
             {isDualAreaFacing && (
                 <div className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-8">
                         <div className="space-y-1">
-                            <AreaInput label="House Area" />
-                            <Note text={fieldChangeNotes?.area} />
+                            <AreaInput label="House Area" className="w-full" note={fieldChangeNotes?.area} />
                         </div>
                         <div className="space-y-1">
-                            <AreaInput label="Property (Land) Area" name="landDetails.area" />
-                            <Note text={fieldChangeNotes?.["landDetails.area"]} />
+                            <AreaInput label="Property (Land) Area" name="landDetails.area" className="w-full" note={fieldChangeNotes?.["landDetails.area"]} />
                         </div>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                        <div className="space-y-1">
-                            <CompassField name="facing" label="House Facing" variant="house" />
-                            <Note text={fieldChangeNotes?.facing} />
-                        </div>
-                        <div className="space-y-1">
-                            <CompassField name="landDetails.facing" label="Land Facing" variant="land" />
-                            <Note text={fieldChangeNotes?.["landDetails.facing"]} />
-                        </div>
+                    <div className="space-y-8">
+                        <CompassField name="facing" label="House Facing" variant="house" note={fieldChangeNotes?.facing} />
+                        <CompassField name="landDetails.facing" label="Land Facing" variant="land" note={fieldChangeNotes?.["landDetails.facing"]} />
                     </div>
                 </div>
             )}
@@ -146,37 +131,25 @@ export function PropertySpecificsSection({ control, category, fieldChangeNotes }
             {isApartment && (
                 <div className="space-y-6">
                     <div className="space-y-1">
-                        <AreaInput label="Total Area" />
-                        <Note text={fieldChangeNotes?.area} />
+                        <AreaInput label="Total Area" note={fieldChangeNotes?.area} />
                     </div>
-                    <div className="space-y-1">
-                        <CompassField name="facing" label="Property Facing" variant="house" />
-                        <Note text={fieldChangeNotes?.facing} />
-                    </div>
+                    <CompassField name="facing" label="Property Facing" variant="house" note={fieldChangeNotes?.facing} />
                 </div>
             )}
 
             {/* ── House / Bungalow / Villa / Multiplex ── */}
             {isHouse && (
                 <div className="space-y-6">
-                    <div className="space-y-1">
-                        <CounterCard name="floors" label="Total Floors" emoji="🏢" sublabel="Number of Floors" steps={[-1, 1, 2]} />
-                        <Note text={fieldChangeNotes?.floors} />
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <CounterCard name="floors" label="Total Floors" emoji="🏢" sublabel="Number of Floors" steps={[-1, 1, 2]} note={fieldChangeNotes?.floors} />
+                    <div className="space-y-8">
                         <div className="space-y-1">
-                            <YearPickerCard name="buildStart" label="Build Start Year" emoji="🏗️" />
-                            <Note text={fieldChangeNotes?.buildStart} />
+                            <YearPickerCard name="buildStart" label="Build Start Year" emoji="🏗️" note={fieldChangeNotes?.buildStart} />
                         </div>
                         <div className="space-y-1">
-                            <YearPickerCard name="buildCompleted" label="Build End Year" emoji="🏁" />
-                            <Note text={fieldChangeNotes?.buildCompleted} />
+                            <YearPickerCard name="buildCompleted" label="Build End Year" emoji="🏁" note={fieldChangeNotes?.buildCompleted} />
                         </div>
                     </div>
-                    <div className="space-y-1">
-                        <RoadAccessCard name="roadAccess" />
-                        <Note text={fieldChangeNotes?.roadAccess} />
-                    </div>
+                    <RoadAccessCard name="roadAccess" note={fieldChangeNotes?.roadAccess} />
                     <CheckboxField control={control} name="apartmentDetails.furnishing" label="Furnished" />
                 </div>
             )}
@@ -186,22 +159,18 @@ export function PropertySpecificsSection({ control, category, fieldChangeNotes }
                 <div className="space-y-6">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="space-y-1">
-                            <CounterCard name="onFloor" label="On Floor" emoji="📏" sublabel="Floor Number" steps={[-1, 1, 2]} />
-                            <Note text={fieldChangeNotes?.onFloor} />
+                            <CounterCard name="onFloor" label="On Floor" emoji="📏" sublabel="Floor Number" steps={[-1, 1, 2]} note={fieldChangeNotes?.onFloor} />
                         </div>
                         <div className="space-y-1">
-                            <CounterCard name="floors" label="Total Floors" emoji="🏢" sublabel="Number of Floors" steps={[-1, 1, 2]} />
-                            <Note text={fieldChangeNotes?.floors} />
+                            <CounterCard name="floors" label="Total Floors" emoji="🏢" sublabel="Number of Floors" steps={[-1, 1, 2]} note={fieldChangeNotes?.floors} />
                         </div>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-8">
                         <div className="space-y-1">
-                            <YearPickerCard name="buildStart" label="Build Start Year" emoji="🏗️" />
-                            <Note text={fieldChangeNotes?.buildStart} />
+                            <YearPickerCard name="buildStart" label="Build Start Year" emoji="🏗️" note={fieldChangeNotes?.buildStart} />
                         </div>
                         <div className="space-y-1">
-                            <YearPickerCard name="buildCompleted" label="Build End Year" emoji="🏁" />
-                            <Note text={fieldChangeNotes?.buildCompleted} />
+                            <YearPickerCard name="buildCompleted" label="Build End Year" emoji="🏁" note={fieldChangeNotes?.buildCompleted} />
                         </div>
                     </div>
                     <SelectionField name="apartmentDetails.furnishing" label="Furnishing" options={FurnishingStatusSchema.options} />
@@ -211,13 +180,13 @@ export function PropertySpecificsSection({ control, category, fieldChangeNotes }
             {/* ── Apartment / Penthouse ── */}
             {isApartment && (
                 <div className="space-y-6">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <CounterCard name="onFloor" label="On Floor"     emoji="📏" sublabel="Floor Number"    steps={[-1, 1, 2]} />
-                        <CounterCard name="floors"  label="Total Floors" emoji="🏢" sublabel="Number of Floors" steps={[-1, 1, 2]} />
+                    <div className="space-y-8">
+                        <CounterCard name="onFloor" label="On Floor"     emoji="📏" sublabel="Floor Number"    steps={[-1, 1, 2]} note={fieldChangeNotes?.onFloor} />
+                        <CounterCard name="floors"  label="Total Floors" emoji="🏢" sublabel="Number of Floors" steps={[-1, 1, 2]} note={fieldChangeNotes?.floors} />
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <YearPickerCard name="buildStart"     label="Build Start Year" emoji="🏗️" />
-                        <YearPickerCard name="buildCompleted" label="Build End Year"   emoji="🏁" />
+                    <div className="space-y-8">
+                        <YearPickerCard name="buildStart"     label="Build Start Year" emoji="🏗️" note={fieldChangeNotes?.buildStart} />
+                        <YearPickerCard name="buildCompleted" label="Build End Year"   emoji="🏁" note={fieldChangeNotes?.buildCompleted} />
                     </div>
                     <SelectionField name="apartmentDetails.furnishing" label="Furnishing" options={FurnishingStatusSchema.options} />
 

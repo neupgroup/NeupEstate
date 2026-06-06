@@ -447,7 +447,6 @@ function deepMergeJson<T>(base: T, patch: any): T {
 }
 
 export async function savePropertyChangeDraftAction(input: {
-  changeId?: string | null;
   propertyId: string;
   data: Record<string, any>;
   status: PropertyChangeDraftStatus;
@@ -456,16 +455,21 @@ export async function savePropertyChangeDraftAction(input: {
   try {
     await requirePermission(PERMISSIONS.manage.propertySelfUpdate);
     const actorId = await requireIdentity();
-    const existingDraft = input.changeId
-      ? await prisma.propertyChange.findUnique({ where: { id: input.changeId } })
-      : null;
+    const existingDraft = await prisma.propertyChange.findFirst({
+      where: {
+        propertyId: input.propertyId,
+        accountId: actorId,
+        isApproved: null,
+      },
+      orderBy: { modifiedOn: 'desc' },
+    });
 
     const data = {
       propertyId: input.propertyId,
       accountId: actorId,
       status: input.status,
       isApproved: input.isApproved ?? existingDraft?.isApproved ?? null,
-      data: input.changeId
+      data: existingDraft
         ? deepMergeJson(
             existingDraft?.data ?? {},
             input.data,
@@ -474,9 +478,9 @@ export async function savePropertyChangeDraftAction(input: {
       modifiedOn: new Date(),
     };
 
-    const draft = input.changeId
+    const draft = existingDraft
       ? await prisma.propertyChange.update({
-          where: { id: input.changeId },
+          where: { id: existingDraft.id },
           data,
         })
       : await prisma.propertyChange.create({ data });
@@ -556,6 +560,7 @@ export async function getPropertyChangeContextAction(propertyId: string): Promis
         where: {
           propertyId,
           accountId,
+          isApproved: null,
         },
         orderBy: { modifiedOn: 'desc' },
       }),

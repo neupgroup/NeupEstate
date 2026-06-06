@@ -202,7 +202,7 @@ export default function IntelligencePage() {
                                     <p className="text-xs text-muted-foreground">ID: {result.propertyId}</p>
                                     <ClientLink
                                         href={result.kind === 'draft'
-                                          ? `/manage/properties/create?request=${result.requestId || result.propertyId}`
+                                          ? `/manage/properties/create`
                                           : `/manage/properties/${result.propertyId}/edit`}
                                         className="text-lg font-semibold truncate hover:underline block"
                                     >

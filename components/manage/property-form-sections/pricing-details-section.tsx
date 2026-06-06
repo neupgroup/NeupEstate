@@ -198,7 +198,7 @@ export function PricingDetailsSection({ control, fieldChangeNotes }: PricingDeta
     }
 
     return (
-        <section className="space-y-6">
+        <section className="space-y-10">
             <FormField
                 control={control}
                 name="pricing.currency"

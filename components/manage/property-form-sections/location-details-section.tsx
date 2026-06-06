@@ -13,8 +13,8 @@ interface LocationDetailsSectionProps {
 
 export function LocationDetailsSection({ control, fieldChangeNotes }: LocationDetailsSectionProps) {
     return (
-        <section className="space-y-6">
-            <div className="space-y-6">
+        <section className="space-y-10">
+            <div className="space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <FormField control={control} name="structuredLocation.country" render={({ field }) => (<FormItem><FormLabel>Country</FormLabel><FormControl><Input placeholder="e.g., Nepal" {...field} /></FormControl>{fieldChangeNotes?.["structuredLocation.country"] && <p className="text-xs text-muted-foreground">{fieldChangeNotes["structuredLocation.country"]}</p>}<FormMessage /></FormItem>)} />
                     <FormField control={control} name="structuredLocation.province" render={({ field }) => (<FormItem><FormLabel>Province/State</FormLabel><FormControl><Input placeholder="e.g., Bagmati" {...field} /></FormControl>{fieldChangeNotes?.["structuredLocation.province"] && <p className="text-xs text-muted-foreground">{fieldChangeNotes["structuredLocation.province"]}</p>}<FormMessage /></FormItem>)} />

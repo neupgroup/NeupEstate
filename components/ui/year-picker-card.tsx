@@ -1,104 +1,120 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronRight, Triangle } from "lucide-react";
 import { cn } from "@/logica/core/utils";
 
 interface YearPickerCardProps {
     name: string;
     label: string;
     emoji: string;
+    className?: string;
+    note?: string;
 }
 
 const CURRENT_YEAR = new Date().getFullYear();
-const DECADE_SIZE = 12; // 3 rows × 4 cols
+type YearSystem = "bs" | "ad";
 
-export function YearPickerCard({ name, label, emoji }: YearPickerCardProps) {
+function formatYearText(year?: number): string {
+    return year ? String(year) : "";
+}
+
+function parseYearText(text: string): number | undefined {
+    const match = text.match(/\d{4}/);
+    if (!match) return undefined;
+    const year = Number(match[0]);
+    if (!Number.isFinite(year)) return undefined;
+    return year;
+}
+
+export function YearPickerCard({ name, label, emoji, className, note }: YearPickerCardProps) {
     const { watch, setValue } = useFormContext();
     const value = watch(name as any) as number | undefined;
+    const [text, setText] = useState("");
+    const [touched, setTouched] = useState(false);
+    const [system, setSystem] = useState<YearSystem>("ad");
 
-    // Start the decade view on the decade containing the selected year,
-    // or the current decade if nothing is selected.
-    const baseYear = value
-        ? Math.floor(value / DECADE_SIZE) * DECADE_SIZE
-        : Math.floor(CURRENT_YEAR / DECADE_SIZE) * DECADE_SIZE;
+    useEffect(() => {
+        if (!touched) {
+            setText(formatYearText(value));
+        }
+    }, [value, touched]);
 
-    const [decadeStart, setDecadeStart] = useState(baseYear);
-
-    const years = Array.from({ length: DECADE_SIZE }, (_, i) => decadeStart + i);
-
-    function select(year: number) {
-        setValue(name as any, value === year ? undefined : year, {
+    function select(year?: number) {
+        setValue(name as any, year, {
             shouldDirty: true,
             shouldValidate: true,
         });
+        setText(formatYearText(year));
+        setTouched(true);
+    }
+
+    function onBlur() {
+        const parsed = parseYearText(text);
+        if (parsed && parsed <= CURRENT_YEAR + 2) {
+            select(parsed);
+        } else {
+            setText(formatYearText(value));
+        }
+    }
+
+    function adjust(delta: number) {
+        select((value ?? CURRENT_YEAR) + delta);
     }
 
     return (
-        <div className="rounded-2xl border bg-card shadow-sm p-4 space-y-3">
-            {/* Header */}
-            <div className="flex items-center gap-2 text-base font-bold">
-                <span>{emoji}</span>
-                <span className="text-primary">{label}</span>
-                {value && (
-                    <span className="ml-auto text-sm font-semibold text-muted-foreground">
-                        {value}
-                    </span>
-                )}
+        <div className={cn("space-y-2 w-full max-w-2xl", className)}>
+            <div className="space-y-1">
+                <div className="flex items-center gap-2 text-base font-bold">
+                    <span>{emoji}</span>
+                    <span className="text-primary">{label}</span>
+                    <button
+                        type="button"
+                        onClick={() => setSystem((current) => (current === "ad" ? "bs" : "ad"))}
+                        className="text-xs text-muted-foreground hover:text-foreground"
+                    >
+                        ({system.toUpperCase()} System) <ChevronRight className="inline h-3 w-3" />
+                    </button>
+                </div>
+
+                {note && <p className="text-xs text-muted-foreground">{note}</p>}
+
+                <input
+                    type="text"
+                    inputMode="numeric"
+                    value={text}
+                    onChange={(event) => {
+                        setText(event.target.value);
+                        setTouched(true);
+                    }}
+                    onBlur={onBlur}
+                    placeholder="e.g. 2025"
+                    className={cn(
+                        "w-full rounded-xl border bg-background px-3 py-2 text-sm outline-none",
+                    )}
+                />
             </div>
 
-            {/* Decade navigator + grid */}
-            <div className="rounded-xl bg-muted p-3 space-y-3">
-                {/* Decade nav */}
-                <div className="flex items-center justify-between">
+            <div className="flex flex-wrap gap-2">
+                {[
+                    { label: "+1 year", delta: 1 },
+                    { label: "-1 year", delta: -1 },
+                    { label: "+5 years", delta: 5 },
+                    { label: "-5 years", delta: -5 },
+                ].map((action) => (
                     <button
+                        key={action.label}
                         type="button"
-                        title="Previous years"
-                        onClick={() => setDecadeStart(d => d - DECADE_SIZE)}
-                        className="flex h-7 w-7 items-center justify-center rounded-lg border border-border bg-background hover:border-primary hover:text-primary transition-colors"
+                        onClick={() => adjust(action.delta)}
+                        className={cn(
+                            "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+                            "border-border bg-background hover:border-primary hover:text-primary",
+                        )}
                     >
-                        <ChevronLeft className="h-4 w-4" />
+                        {action.label}
                     </button>
-                    <span className="text-xs font-semibold text-muted-foreground">
-                        {decadeStart} – {decadeStart + DECADE_SIZE - 1}
-                    </span>
-                    <button
-                        type="button"
-                        title="Next years"
-                        onClick={() => setDecadeStart(d => d + DECADE_SIZE)}
-                        disabled={decadeStart + DECADE_SIZE > CURRENT_YEAR + 2}
-                        className="flex h-7 w-7 items-center justify-center rounded-lg border border-border bg-background hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:pointer-events-none"
-                    >
-                        <ChevronRight className="h-4 w-4" />
-                    </button>
-                </div>
-
-                {/* Year grid — 4 columns */}
-                <div className="grid grid-cols-4 gap-1.5">
-                    {years.map(year => {
-                        const isSelected = value === year;
-                        const isFuture = year > CURRENT_YEAR + 1;
-                        return (
-                            <button
-                                key={year}
-                                type="button"
-                                disabled={isFuture}
-                                onClick={() => select(year)}
-                                className={cn(
-                                    "rounded-lg py-1.5 text-xs font-semibold border transition-all",
-                                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                                    isSelected
-                                        ? "bg-primary text-primary-foreground border-primary shadow-sm"
-                                        : "bg-background border-border text-foreground hover:border-primary hover:text-primary hover:bg-primary/5",
-                                    isFuture && "opacity-30 pointer-events-none"
-                                )}
-                            >
-                                {year}
-                            </button>
-                        );
-                    })}
-                </div>
+                ))}
             </div>
         </div>
     );

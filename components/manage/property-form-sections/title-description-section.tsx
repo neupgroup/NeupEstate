@@ -42,7 +42,7 @@ function RichTextEditor({
     }
 
     return (
-        <div className="space-y-2">
+        <div className="space-y-4">
             <div className="flex flex-wrap gap-1 rounded-md border bg-muted/30 p-1">
                 <Button type="button" variant="ghost" size="sm" onClick={() => exec("bold")}>
                     <Bold className="h-4 w-4" />
@@ -87,8 +87,8 @@ function RichTextEditor({
 
 export function TitleDescriptionSection({ control, fieldChangeNotes }: TitleDescriptionSectionProps) {
     return (
-        <section className="space-y-6">
-            <div className="space-y-6">
+        <section className="space-y-10">
+            <div className="space-y-8">
                 <FormField
                     control={control}
                     name="title"

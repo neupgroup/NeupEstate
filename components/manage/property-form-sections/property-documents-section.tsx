@@ -17,7 +17,7 @@ function DocumentGroup({ control, index: docIndex, remove }: { control: Control<
     });
 
     return (
-        <div className="p-4 border rounded-md space-y-4">
+        <div className="p-4 border rounded-md space-y-6">
             <div className="flex justify-between items-center">
                 <FormLabel>Document Group {docIndex + 1}</FormLabel>
                 <Button type="button" variant="ghost" size="icon" onClick={() => remove(docIndex)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
@@ -33,7 +33,7 @@ function DocumentGroup({ control, index: docIndex, remove }: { control: Control<
                     </FormItem>
                 )}
             />
-            <div className="space-y-2">
+            <div className="space-y-4">
                 <Label>Document Links</Label>
                 {urlFields.map((urlField, urlIndex) => (
                     <div key={urlField.id} className="relative">
@@ -68,11 +68,11 @@ export function PropertyDocumentsSection({ control, fieldChangeNotes }: Property
     });
 
     return (
-        <section className="space-y-6">
+        <section className="space-y-10">
             {fieldChangeNotes?.documents && (
                 <p className="text-xs text-muted-foreground">{fieldChangeNotes.documents}</p>
             )}
-            <div className="space-y-4">
+            <div className="space-y-6">
                 {fields.map((field, index) => (
                     <DocumentGroup
                         key={field.id}

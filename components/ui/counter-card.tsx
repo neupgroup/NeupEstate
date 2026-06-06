@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { X } from "lucide-react";
 import { cn } from "@/logica/core/utils";
@@ -12,6 +13,7 @@ interface CounterCardProps {
     steps?: number[];
     onRemove?: () => void;
     className?: string;
+    note?: string;
 }
 
 export function CounterCard({
@@ -22,47 +24,96 @@ export function CounterCard({
     steps = [-1, 1, 2],
     onRemove,
     className,
+    note,
 }: CounterCardProps) {
     const { watch, setValue } = useFormContext<Record<string, number | undefined>>();
-    const value = Number(watch(name) ?? 1);
+    const value = watch(name);
+    const [text, setText] = useState("");
+    const [touched, setTouched] = useState(false);
 
-    const set = (next: number) =>
-        setValue(name, Math.max(0, next), { shouldDirty: true, shouldValidate: true });
+    useEffect(() => {
+        if (!touched) {
+            setText(value === undefined || value === null ? "" : String(value));
+        }
+    }, [value, touched]);
+
+    function select(next?: number) {
+        setValue(name, next === undefined ? undefined : Math.max(0, next), {
+            shouldDirty: true,
+            shouldValidate: true,
+        });
+        setText(next === undefined ? "" : String(Math.max(0, next)));
+        setTouched(true);
+    }
+
+    function onBlur() {
+        if (!text.trim()) {
+            select(undefined);
+            return;
+        }
+        const parsed = Number(text);
+        if (Number.isFinite(parsed) && /^\d+$/.test(text.trim())) {
+            select(parsed);
+            return;
+        }
+        setText(value === undefined || value === null ? "" : String(value));
+    }
+
+    function nudge(delta: number) {
+        select(Number(value ?? 0) + delta);
+    }
 
     return (
-        <div className={cn("min-w-0 rounded-2xl border bg-card shadow-sm p-4 space-y-3", className)}>
-            <div className="flex min-w-0 items-center justify-between gap-3">
-                <span className="flex min-w-0 items-center gap-2 text-base font-bold">
+        <div className={cn("space-y-2 w-full max-w-2xl", className)}>
+            <div className="space-y-1">
+                <div className="flex items-center gap-2 text-base font-bold">
                     <span>{emoji}</span>
-                    <span className="min-w-0 break-words text-primary">{label}</span>
-                </span>
-                {onRemove && (
-                    <button
-                        type="button"
-                        onClick={onRemove}
-                        className="flex h-8 w-8 items-center justify-center rounded-full bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors"
-                    >
-                        <X className="h-4 w-4" />
-                    </button>
-                )}
-            </div>
-            <div className="rounded-xl bg-muted p-3 space-y-2">
-                <p className="text-xs text-muted-foreground font-medium">{sublabel}</p>
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                    <span className="text-2xl font-bold text-primary">{value}</span>
-                    <div className="flex flex-wrap gap-2">
-                        {steps.map((delta) => (
-                            <button
-                                key={delta}
-                                type="button"
-                                onClick={() => set(value + delta)}
-                                className="rounded-xl border-2 border-border bg-background px-3 py-1.5 text-sm font-bold hover:border-primary hover:text-primary transition-colors"
-                            >
-                                {delta > 0 ? `+${delta}` : delta}
-                            </button>
-                        ))}
-                    </div>
+                    <span className="text-primary">{label}</span>
+                    {onRemove && (
+                        <button
+                            type="button"
+                            onClick={onRemove}
+                            className="ml-auto flex h-8 w-8 items-center justify-center rounded-full bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors"
+                        >
+                            <X className="h-4 w-4" />
+                        </button>
+                    )}
                 </div>
+
+                {note && <p className="text-xs text-muted-foreground">{note}</p>}
+
+                <input
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    placeholder="e.g. 2"
+                    value={text}
+                    onChange={(event) => {
+                        const nextText = event.target.value;
+                        if (nextText === "" || /^\d*$/.test(nextText)) {
+                            setText(nextText);
+                            setTouched(true);
+                        }
+                    }}
+                    onBlur={onBlur}
+                    className={cn(
+                        "w-full rounded-xl border bg-background px-3 py-2 text-sm outline-none",
+                        "focus:ring-2 focus:ring-ring focus:border-primary"
+                    )}
+                />
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+                {steps.map((delta) => (
+                    <button
+                        key={delta}
+                        type="button"
+                        onClick={() => nudge(delta)}
+                        className="rounded-full border px-3 py-1.5 text-xs font-medium transition-colors border-border bg-background hover:border-primary hover:text-primary"
+                    >
+                        {delta > 0 ? `+${delta}` : delta}
+                    </button>
+                ))}
             </div>
         </div>
     );

@@ -23,11 +23,11 @@ export function PropertyPhotosSection({ control, fieldChangeNotes }: PropertyPho
     });
 
     return (
-        <section className="space-y-6">
+        <section className="space-y-10">
             {fieldChangeNotes?.images && (
                 <p className="text-xs text-muted-foreground">{fieldChangeNotes.images}</p>
             )}
-            <div className="space-y-4">
+            <div className="space-y-6">
                 {fields.map((field, index) => (
                     <div key={field.id} className="relative">
                         <Link href={watch(`images.${index}`) || '#'} target="_blank" rel="noopener noreferrer" className="absolute left-2 top-1/2 -translate-y-1/2 z-10">

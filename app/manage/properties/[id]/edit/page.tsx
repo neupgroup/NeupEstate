@@ -3,10 +3,10 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useTransition, useState, useEffect, useMemo } from 'react';
 import { UpdatePropertySchema, type Property, type User, type UpdatePropertyFormValues } from '@/types';
-import { updatePropertyAction, approvePropertyAction, deletePropertyAction, rewritePropertyDetailsAction, getCurrentAccountId, savePropertyChangeDraftAction, getPropertyChangeDraftAction, getPropertyChangeContextAction } from '@/app/actions';
+import { updatePropertyAction, approvePropertyAction, deletePropertyAction, rewritePropertyDetailsAction, getCurrentAccountId, savePropertyChangeDraftAction, getPropertyChangeContextAction } from '@/app/actions';
 import { getPropertyById } from "@/services/property-service";
 import { getUsers } from "@/services/user-service";
 import { useAgencyCustomization } from '@/logica/core/hooks/use-agency-customization';
@@ -41,14 +41,12 @@ export default function EditPropertyPage() {
     const params = useParams<{ id: string }>();
     const propertyId = Array.isArray(params?.id) ? params.id[0] : params?.id;
     const router = useRouter();
-    const searchParams = useSearchParams();
     const { toast } = useToast();
     const [isSaving, startSaveTransition] = useTransition();
     const [isApproving, startApproveTransition] = useTransition();
     const [isDeleting, startDeleteTransition] = useTransition();
     const [isRewriting, startRewriteTransition] = useTransition();
     const [accountId, setAccountId] = useState<string | null>(null);
-    const [changeId, setChangeId] = useState<string | null>(searchParams.get('request') || searchParams.get('changes'));
     const [changeContext, setChangeContext] = useState<{
         currentUserChange?: {
             id: string;
@@ -182,6 +180,21 @@ export default function EditPropertyPage() {
         if (path === 'purposes' || path === 'purpose') return 'Property purpose';
         if (path === 'categories' || path === 'category') return 'Property type';
         if (path === 'types' || path === 'type') return 'Property nature';
+        if (path === 'buildStart') return 'Build start year';
+        if (path === 'buildCompleted') return 'Build end year';
+        if (path === 'onFloor') return 'Floor number';
+        if (path === 'floors') return 'Total floors';
+        if (path === 'roadAccess') return 'Road access';
+        if (path === 'title') return 'Title';
+        if (path === 'description') return 'Description';
+        if (path === 'amenities') return 'Amenities';
+        if (path === 'images') return 'Photos';
+        if (path === 'documents') return 'Documents';
+        if (path === 'owners') return 'Owners';
+        if (path === 'pricing.listed') return 'Rental price';
+        if (path === 'pricing.priceDisplayMode') return 'Price display mode';
+        if (path === 'pricing.currency') return 'Currency';
+        if (path === 'pricing.basis') return 'Price basis';
         if (path.startsWith('pricing.')) return `Pricing ${path.split('.').slice(1).join(' ')}`;
         if (path.startsWith('structuredLocation.')) return `Location ${path.split('.').slice(1).join(' ')}`;
         if (path.startsWith('landDetails.')) return `Land details ${path.split('.').slice(1).join(' ')}`;
@@ -216,6 +229,19 @@ export default function EditPropertyPage() {
                 .join(', ') || 'None';
         }
         return String(value);
+    }
+
+    function formatPreviousValue(value: any): string {
+        if (value == null || value === '') return 'unset';
+        return formatValue(value);
+    }
+
+    function formatPreviousValueForPath(path: string, value: any): string {
+        if (path === 'roadAccess' && value != null && value !== '') {
+            const numeric = Number(value);
+            return Number.isFinite(numeric) ? `${numeric} feet` : formatPreviousValue(value);
+        }
+        return formatPreviousValue(value);
     }
 
     function collectChangedFields(base: any, next: any, prefix = ''): Array<{ path: string; previous: any; current: any }> {
@@ -254,13 +280,6 @@ export default function EditPropertyPage() {
         }
 
         return changes;
-    }
-
-    function replaceRequestParam(requestId: string) {
-        const params = new URLSearchParams(window.location.search);
-        params.set('request', requestId);
-        params.delete('changes');
-        window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`);
     }
 
     useEffect(() => {
@@ -347,30 +366,13 @@ export default function EditPropertyPage() {
                 buildCompleted: propData.buildCompleted,
             };
 
-            const draftId = searchParams.get('request') || searchParams.get('changes');
-            if (draftId) {
-                const draft = await getPropertyChangeDraftAction(draftId);
-                if (draft.success && draft.data && (!draft.propertyId || draft.propertyId === propData.id)) {
-                    const mergedDraftValues = {
-                        ...resolvedBaseValues,
-                        ...(draft.data as Partial<UpdatePropertyFormValues>),
-                    };
-                    form.reset({
-                        ...mergedDraftValues,
-                    });
-                    setBaseValues(resolvedBaseValues as UpdatePropertyFormValues);
-                    setPendingDraftValues(draft.data as Partial<UpdatePropertyFormValues>);
-                    setChangeId(draftId);
-                    return;
-                }
-            }
-
-            form.reset(resolvedBaseValues);
+            const currentDraft = reviewContext.success ? reviewContext.currentUserChange?.data : null;
+            form.reset(currentDraft ? { ...resolvedBaseValues, ...currentDraft } : resolvedBaseValues);
             setBaseValues(resolvedBaseValues as UpdatePropertyFormValues);
-            setPendingDraftValues(null);
+            setPendingDraftValues((currentDraft as Partial<UpdatePropertyFormValues>) || null);
         }
         loadData();
-    }, [propertyId, router, toast, form, searchParams]);
+    }, [propertyId, router, toast, form]);
 
     async function onSubmit(values: UpdatePropertyFormValues) {
         if (!property) return;
@@ -410,21 +412,35 @@ export default function EditPropertyPage() {
             : values;
 
         const result = await savePropertyChangeDraftAction({
-            changeId,
             propertyId: property.id,
             status: 'changing',
             data,
         });
 
-        if (result.success && result.changeId) {
-            setChangeId(result.changeId);
-            replaceRequestParam(result.changeId);
-        } else {
+        if (!result.success) {
             toast({
                 variant: 'destructive',
                 title: 'Could not save request',
                 description: result.error || 'Please try again before continuing.',
             });
+            return;
+        }
+
+        if (result.changeId) {
+            setChangeContext((current) => current ? ({
+                ...current,
+                currentUserChange: current.currentUserChange ? {
+                    ...current.currentUserChange,
+                    data,
+                } : {
+                    id: result.changeId!,
+                    status: 'changing',
+                    isApproved: null,
+                    data,
+                    modifiedOn: new Date().toISOString(),
+                    accountId: accountId || '',
+                },
+            }) : current);
         }
     }
 
@@ -509,7 +525,7 @@ export default function EditPropertyPage() {
         const notes: Record<string, string> = {};
         for (const change of pendingFieldChanges) {
             const label = prettifyPath(change.path).toLowerCase();
-            notes[change.path] = `Previously, the ${label} was ${formatValue(normalizeComparableValue(change.previous))}.`;
+            notes[change.path] = `Previously, the ${label} was ${formatPreviousValueForPath(change.path, normalizeComparableValue(change.previous))}.`;
         }
         return notes;
     }, [pendingFieldChanges]);

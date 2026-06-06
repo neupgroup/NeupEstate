@@ -66,7 +66,7 @@ export function BasicDetailsSection({ control, fieldChangeNotes }: BasicDetailsS
     };
 
     return (
-        <section className="space-y-8">
+        <section className="space-y-10">
             <FormField
                 control={control}
                 name="purposes"
