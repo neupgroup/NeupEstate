@@ -9,6 +9,7 @@ import { BedDouble, Bath, SquareGanttChart, MapPin, Building, Home, Box, Utensil
 import { PropertyImageCarousel, SafeImage, EmiCalculatorChart, PropertyMap, PropertyQA } from '@/components/estate';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { PropertyDetailRenderNotice } from '@/components/property-detail-render-notice';
 import type { Property } from '@/types';
 import { areaValueToSqft } from '@/types';
 import type { Metadata, ResolvingMetadata } from 'next';
@@ -21,7 +22,85 @@ function stripHtml(html: string) {
 }
 
 function RichTextHtml({ html }: { html: string }) {
-  return <div className="prose max-w-none text-gray-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: html }} />;
+    return <div className="prose max-w-none text-gray-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: html }} />;
+}
+
+type RenderIssue = {
+  field: string;
+  receivedType: string;
+  fallback: 'N/A' | 'hidden';
+};
+
+function describeValueType(value: unknown): string {
+  if (Array.isArray(value)) {
+    return `array(${value.length})`;
+  }
+
+  if (value === null) {
+    return 'null';
+  }
+
+  return typeof value;
+}
+
+function collectStringArray(value: unknown, field: string, issues: RenderIssue[]): string[] {
+  if (Array.isArray(value)) {
+    const items = value.filter((item): item is string => typeof item === 'string' && item.trim().length > 0);
+    if (items.length !== value.length) {
+      issues.push({
+        field,
+        receivedType: describeValueType(value),
+        fallback: 'hidden',
+      });
+    }
+    return items;
+  }
+
+  if (value !== undefined && value !== null) {
+    issues.push({
+      field,
+      receivedType: describeValueType(value),
+      fallback: 'hidden',
+    });
+  }
+
+  return [];
+}
+
+function formatPricingOptions(value: unknown, issues: RenderIssue[]): string {
+  if (Array.isArray(value)) {
+    const options = value.filter((option): option is string => typeof option === 'string' && option.trim().length > 0);
+    if (options.length !== value.length) {
+      issues.push({
+        field: 'pricing.options',
+        receivedType: describeValueType(value),
+        fallback: 'N/A',
+      });
+    }
+    return options.length > 0 ? options.join(', ') : 'N/A';
+  }
+
+  if (value !== undefined && value !== null) {
+    issues.push({
+      field: 'pricing.options',
+      receivedType: describeValueType(value),
+      fallback: 'N/A',
+    });
+  }
+
+  return 'N/A';
+}
+
+function formatOptionalText(value: unknown): string {
+  if (typeof value === 'string') {
+    return value.trim() || 'N/A';
+  }
+
+  if (typeof value === 'number' || typeof value === 'boolean') {
+    return String(value);
+  }
+
+  return value == null ? 'N/A' : String(value);
 }
 
 type Props = {
@@ -51,7 +130,7 @@ export async function generateMetadata(
   const siteName = 'Neup.Estate';
   const title = `${property.title} | ${siteName}`;
   const description = stripHtml(property.description).substring(0, 160);
-  const imageUrl = property.images && property.images.length > 0 ? property.images[0] : 'https://placehold.co/1200x630.png';
+  const imageUrl = Array.isArray(property.images) && property.images.length > 0 ? property.images[0] : 'https://placehold.co/1200x630.png';
   const propertyUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://neupgroup.com/estate'}/properties/${property.slug || property.id}`;
 
   return {
@@ -168,7 +247,7 @@ function generateSchema(property: Property) {
             }
         }),
         ...(property.bedrooms && { numberOfRooms: property.bedrooms }),
-        ...(property.amenities && property.amenities.length > 0 && {
+        ...(Array.isArray(property.amenities) && property.amenities.length > 0 && {
             amenityFeature: property.amenities.map(amenity => ({
                 '@type': 'LocationFeatureSpecification',
                 name: amenity,
@@ -219,9 +298,68 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
     return redirect(`/properties/${property.slug}`);
   }
 
-  const ownerNames = property.owners?.map((owner) => owner.clientName).filter(Boolean) || [];
-  const primaryOwnerName = ownerNames[0] || 'N/A';
-  
+  const renderIssues: RenderIssue[] = [];
+  const safeImages = Array.isArray(property.images) ? property.images : [];
+  const safeAmenities = collectStringArray(property.amenities, 'amenities', renderIssues);
+  const safePricingOptions = formatPricingOptions(property.pricing?.options, renderIssues);
+  const safeDocuments = Array.isArray(property.documents)
+    ? property.documents.filter((doc) => Array.isArray(doc?.urls))
+    : [];
+  if (property.documents !== undefined && !Array.isArray(property.documents)) {
+    renderIssues.push({
+      field: 'documents',
+      receivedType: describeValueType(property.documents),
+      fallback: 'hidden',
+    });
+  }
+
+  const safeOwnerNames = Array.isArray(property.owners)
+    ? property.owners.map((owner) => owner.clientName).filter((name): name is string => Boolean(name))
+    : [];
+  if (property.owners !== undefined && !Array.isArray(property.owners)) {
+    renderIssues.push({
+      field: 'owners',
+      receivedType: describeValueType(property.owners),
+      fallback: 'N/A',
+    });
+  }
+  const primaryOwnerName = safeOwnerNames[0] || 'N/A';
+  const safePlots = Array.isArray(property.plots) ? property.plots : [];
+  if (property.plots !== undefined && !Array.isArray(property.plots)) {
+    renderIssues.push({
+      field: 'plots',
+      receivedType: describeValueType(property.plots),
+      fallback: 'hidden',
+    });
+  }
+  const safeApartmentUnits = Array.isArray(property.apartmentUnits) ? property.apartmentUnits : [];
+  if (property.apartmentUnits !== undefined && !Array.isArray(property.apartmentUnits)) {
+    renderIssues.push({
+      field: 'apartmentUnits',
+      receivedType: describeValueType(property.apartmentUnits),
+      fallback: 'hidden',
+    });
+  }
+  if (property.images !== undefined && !Array.isArray(property.images)) {
+    renderIssues.push({
+      field: 'images',
+      receivedType: describeValueType(property.images),
+      fallback: 'hidden',
+    });
+  }
+
+  if (renderIssues.length > 0) {
+    await logProblem(
+      new Error('Property detail page rendered with malformed property data.'),
+      `PropertyDetailPage render (slug/ID: ${slug})`,
+      {
+        propertyId: property.id,
+        propertySlug: property.slug || null,
+        issues: renderIssues,
+      },
+    );
+  }
+
   const formatPrice = (price: number, currency: string = 'USD') => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -230,11 +368,12 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
     }).format(price);
   };
 
-  const schemaJson = generateSchema(property);
+  const schemaJson = generateSchema({ ...property, images: safeImages, amenities: safeAmenities });
   const hiddenPriceLabel = getHiddenPriceLabel(property);
 
   return (
     <>
+      <PropertyDetailRenderNotice show={renderIssues.length > 0} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: schemaJson }}
@@ -242,7 +381,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
-            <PropertyImageCarousel images={property.images} title={property.title} />
+            <PropertyImageCarousel images={safeImages} title={property.title} />
 
             <div className="mt-8">
               <h1 className="text-4xl font-headline font-bold">{property.title}</h1>
@@ -272,26 +411,30 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
 
             <div className="border-t pt-6">
               <h2 className="text-2xl font-headline font-semibold mb-4">Amenities</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {property.amenities.map((amenity) => {
-                  const iconName = amenity.toLowerCase().replace(/\s+/g, '-');
-                  const iconUrl = `https://neupgroup.com/estate/assets/ammenity/${iconName}.svg`;
-                  
-                  return (
-                    <div key={amenity} className="flex items-center gap-3 p-3 border rounded-lg bg-secondary/30">
-                      <SafeImage
-                          src={iconUrl}
-                          alt={amenity}
-                          width={24}
-                          height={24}
-                          className="h-6 w-6"
-                          fallbackSrc="https://placehold.co/24x24.png"
-                      />
-                      <span className="text-sm font-medium">{amenity}</span>
-                    </div>
-                  );
-                })}
-              </div>
+              {safeAmenities.length > 0 ? (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {safeAmenities.map((amenity) => {
+                    const iconName = amenity.toLowerCase().replace(/\s+/g, '-');
+                    const iconUrl = `https://neupgroup.com/estate/assets/ammenity/${iconName}.svg`;
+
+                    return (
+                      <div key={amenity} className="flex items-center gap-3 p-3 border rounded-lg bg-secondary/30">
+                        <SafeImage
+                            src={iconUrl}
+                            alt={amenity}
+                            width={24}
+                            height={24}
+                            className="h-6 w-6"
+                            fallbackSrc="https://placehold.co/24x24.png"
+                        />
+                        <span className="text-sm font-medium">{amenity}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">N/A</p>
+              )}
             </div>
             
             {property.pricing && (
@@ -300,8 +443,8 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
                   <DetailItem label="Minimum Price" value={hiddenPriceLabel || (property.pricing.minimum ? formatPrice(property.pricing.minimum, property.pricing.currency) : 'N/A')} />
                   <DetailItem label="Maximum Price" value={hiddenPriceLabel || (property.pricing.maximum ? formatPrice(property.pricing.maximum, property.pricing.currency) : 'N/A')} />
                   <DetailItem label="Negotiable" value={property.pricing.negotiable ? 'Yes' : 'No'} />
-                  <DetailItem label="Basis" value={property.pricing.basis} />
-                  <DetailItem label="Options" value={property.pricing.options?.join(', ')} />
+                  <DetailItem label="Basis" value={formatOptionalText(property.pricing.basis)} />
+                  <DetailItem label="Options" value={safePricingOptions} />
               </DetailCard>
             )}
 
@@ -320,18 +463,18 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
             
             <DetailCard title="Owner Information" icon={<UserIcon className="h-5 w-5"/>}>
               <DetailItem label="Primary Owner" value={primaryOwnerName} />
-              <DetailItem label="All Owners" value={ownerNames.length ? ownerNames.join(', ') : 'N/A'} />
+              <DetailItem label="All Owners" value={safeOwnerNames.length ? safeOwnerNames.join(', ') : 'N/A'} />
             </DetailCard>
 
-            {property.documents && property.documents.length > 0 && (
+            {safeDocuments.length > 0 && (
               <Card>
                   <CardHeader><CardTitle className="flex items-center gap-2 text-lg"><FileText/>Documents</CardTitle></CardHeader>
                   <CardContent className="space-y-3">
-                      {property.documents.map((doc, index) => (
+                      {safeDocuments.map((doc, index) => (
                           <div key={index}>
                               <h4 className="font-semibold">{doc.name}</h4>
                               <ul className="list-disc list-inside mt-1">
-                                  {doc.urls.map(url => (
+                                  {doc.urls.map((url: { value: string }) => (
                                       <li key={url.value}><a href={url.value} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">{url.value}</a></li>
                                   ))}
                               </ul>
@@ -385,7 +528,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
               </div>
             )}
 
-            {property.category === 'Land' && property.plots && property.plots.length > 0 && (
+            {property.category === 'Land' && safePlots.length > 0 && (
               <div className="mt-6 border-t pt-6">
                   <h2 className="text-2xl font-headline font-semibold mb-4">Available Plots</h2>
                   <Table>
@@ -399,7 +542,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
                           </TableRow>
                       </TableHeader>
                       <TableBody>
-                          {property.plots.map((plot) => (
+                          {safePlots.map((plot) => (
                               <TableRow key={plot.id}>
                                   <TableCell className="font-medium">{plot.id}</TableCell>
                                   <TableCell>{areaValueToSqft(plot.area).toLocaleString()} {plot.areaUnit}</TableCell>
@@ -424,11 +567,11 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
               </div>
             )}
 
-            {property.category === 'Apartment' && property.apartmentUnits && property.apartmentUnits.length > 0 && (
+            {property.category === 'Apartment' && safeApartmentUnits.length > 0 && (
               <div className="mt-6 border-t pt-6">
                   <h2 className="text-2xl font-headline font-semibold mb-4">Available Units</h2>
                   <div className="space-y-4">
-                      {property.apartmentUnits.map((unit) => (
+                      {safeApartmentUnits.map((unit) => (
                           <Card key={unit.id}>
                               <CardHeader>
                                   <CardTitle className="flex items-center gap-2"><Home className="h-5 w-5 text-primary" /> {unit.id}</CardTitle>
