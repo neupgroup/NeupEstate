@@ -65,6 +65,10 @@ model Account {
   role         AuthzRole? @relation(fields: [roleId], references: [id], onDelete: SetNull)
   agencyAccount Account?   @relation("AccountAgency", fields: [agency], references: [id], onDelete: SetNull)
   agentAccount  Account?   @relation("AccountAgent", fields: [agent], references: [id], onDelete: SetNull)
+  agencyOf      Account[]  @relation("AccountAgency")
+  agentOf       Account[]  @relation("AccountAgent")
+  agencyAgentMapAsAgency AgencyAgentMap[] @relation("AgencyAgentMapAgency")
+  agencyAgentMapAsAgent  AgencyAgentMap[] @relation("AgencyAgentMapAgent")
   intelligenceMappings IntelligenceMapping[]
   intelligenceAlerts    IntelligenceAlert[]
   propertyChanges       PropertyChange[]

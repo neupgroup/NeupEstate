@@ -184,12 +184,16 @@ export async function crawlCompetitorSourcesAction(
           discoveredCount += 1;
           const existingPage = existingPages.find((page) => page.source === url);
           let pageId = existingPage?.id ?? null;
+          let visibleHtml = '';
 
           if (existingPage && isLoggedStatus(existingPage.lastLoggedStatus)) {
             continue;
           }
 
           try {
+            const rawHtml = await fetchPageSourceCode(url);
+            visibleHtml = extractVisibleHtml(rawHtml);
+
             if (!shouldIndexCrawledUrl(url, competitor.crawlRules)) {
               pageId = await upsertCompetitorPage({
                 competitorId,
@@ -206,8 +210,6 @@ export async function crawlCompetitorSourcesAction(
               continue;
             }
 
-            const rawHtml = await fetchPageSourceCode(url);
-            const visibleHtml = extractVisibleHtml(rawHtml);
             const aiResult = await extractIntelligencePage({ url, htmlContent: visibleHtml });
 
             if (!aiResult.success) {
@@ -261,14 +263,11 @@ export async function crawlCompetitorSourcesAction(
                   title: listingResult.title?.trim() || aiResult.title?.trim() || buildDefaultTitle(url, existingPage?.title),
                   description: listingResult.description?.trim() || aiResult.description?.trim() || existingPage?.description || undefined,
                   purpose: listingResult.purpose ?? aiResult.purpose ?? 'sales',
-                  agentName: listingResult.agentName ?? aiResult.agentName,
+                  agentName: listingResult.agentName,
                   price: listingResult.price ?? aiResult.price ?? null,
-                  priceBasis: listingResult.priceBasis ?? aiResult.priceBasis,
-                  isSold: listingResult.isSold ?? aiResult.isSold ?? false,
-                  details: {
-                    ...(aiResult.details ?? {}),
-                    ...(listingResult.details ?? {}),
-                  },
+                  priceBasis: listingResult.priceBasis,
+                  isSold: listingResult.isSold ?? false,
+                  details: listingResult.details ?? undefined,
                 });
                 revalidatePath('/manage/intelligence/listings');
               }

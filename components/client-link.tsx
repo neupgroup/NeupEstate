@@ -2,11 +2,10 @@
 'use client';
 
 import Link, { type LinkProps } from 'next/link';
-import type { ReactNode } from 'react';
+import type { AnchorHTMLAttributes, ReactNode, RefAttributes } from 'react';
 
-type ClientLinkProps = LinkProps & React.RefAttributes<HTMLAnchorElement> & {
+type ClientLinkProps = LinkProps & AnchorHTMLAttributes<HTMLAnchorElement> & RefAttributes<HTMLAnchorElement> & {
     children: ReactNode;
-    className?: string;
     'aria-disabled'?: boolean;
 };
 

@@ -360,7 +360,11 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                             <span>{reviewMessage}</span>
                             {reviewLinkText && (
                                 reviewLinkText === "Cancel it" ? (
-                                    <form action={cancelPropertyChangeDraftAction.bind(null, currentChange?.id ?? "")}>
+                                    <form
+                                        action={async () => {
+                                            await cancelPropertyChangeDraftAction(currentChange?.id ?? "");
+                                        }}
+                                    >
                                         <Button
                                             type="submit"
                                             variant="link"

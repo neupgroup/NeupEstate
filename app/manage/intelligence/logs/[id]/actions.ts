@@ -68,14 +68,18 @@ export async function crawlCompetitorSourcesAction(competitorId: string) {
         for (const url of urls) {
           discoveredCount++;
           const existingPage = existingProperties.find((page) => page.source === url);
+          let visibleHtml = '';
 
           if (existingPage && isLoggedStatus(existingPage.lastLoggedStatus)) {
             continue;
           }
 
           try {
+            const rawHtml = await fetchPageSourceCode(url);
+            visibleHtml = extractVisibleHtml(rawHtml);
+
             if (!shouldIndexCrawledUrl(url, competitor.crawlRules)) {
-            await upsertCompetitorPage({
+              await upsertCompetitorPage({
                 competitorId,
                 title: buildDefaultTitle(url, existingPage?.title),
                 description: existingPage?.description ?? undefined,
@@ -90,8 +94,6 @@ export async function crawlCompetitorSourcesAction(competitorId: string) {
               continue;
             }
 
-            const rawHtml = await fetchPageSourceCode(url);
-            const visibleHtml = extractVisibleHtml(rawHtml);
             const aiResult = await extractIntelligencePage({ url, htmlContent: visibleHtml });
 
             if (!aiResult.success) {

@@ -17,7 +17,7 @@ export function ProfileV1({
         <>
           <AvatarImage src={imageSrc} alt={displayName || "Profile"} />
           <AvatarFallback className="text-xs font-semibold">
-            {getInitials(displayName || undefined)}
+            {getInitials(displayName || '')}
           </AvatarFallback>
         </>
       ) : (
@@ -28,4 +28,3 @@ export function ProfileV1({
     </Avatar>
   );
 }
-

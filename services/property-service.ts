@@ -668,7 +668,7 @@ function buildCoreData(d: Partial<CreatePropertyInput> & Record<string, any>) {
     locationText:      truncate(d.location ?? '', 255),
     geoLocation:       truncate(geo, 63),
     structuredLocation: d.structuredLocation ? JSON.stringify(d.structuredLocation) : '',
-    agency:            typeof d.agency === 'object' ? d.agency?.id : (d.agency ?? null),
+    agency:            d.agency ?? null,
     agent:             d.agent ?? null,
     isFeatured:        d.isFeatured ?? false,
     isApproved:        d.isApproved ?? false,
