@@ -10,6 +10,8 @@ import type { PropertyFilters } from "@/types";
 import { ClientLink } from "@/components/client-link";
 import { requirePagePermission } from "@/logica/auth/page-guard";
 import { PERMISSIONS } from "@/logica/auth/permissions";
+import { getIdentity } from "@/services/neupid/get-identity";
+import { getAgencyAgentMapsByAgent } from "@/services/agency-agent-map-service";
 
 const PROPERTIES_PER_PAGE = 10;
 
@@ -20,6 +22,8 @@ export default async function ManagePropertiesPage({
 }) {
   await requirePagePermission(PERMISSIONS.manage.propertySelfView);
   await checkAuthenticationForWeb();
+  const identity = await getIdentity();
+  const currentAccountId = identity.authenticated ? identity.account.accountId : null;
   const sp = await searchParams ?? {};
 
   const currentPage   = Number(sp.page) || 1;
@@ -62,6 +66,8 @@ export default async function ManagePropertiesPage({
 
   const hasFilters = Object.keys(filters).length > 0;
   const isDefaultFeed = !hasFilters && !query && !isDraftsView;
+  const agencyLinks = currentAccountId ? await getAgencyAgentMapsByAgent(currentAccountId) : [];
+  const agencyIds = agencyLinks.map((link) => link.agencyId);
 
   const awaitingItems = (isDefaultFeed || isDraftsView)
     ? await getAwaitingReviewItems(500)
@@ -73,6 +79,8 @@ export default async function ManagePropertiesPage({
         filters: hasFilters ? filters : undefined,
         includeInactive: true,
         excludeArchived: true,
+        agentAccountId: currentAccountId ?? undefined,
+        agencyIds,
       });
   const properties = paginatedProperties.properties;
   const draftKindsByPropertyId = new Map<string, 'creating' | 'changing' | 'deleting'>();

@@ -288,12 +288,23 @@ export async function getProperties(opts: { includeInactive?: boolean } = {}): P
   } catch (e) { await logProblem(e, 'getProperties'); return []; }
 }
 
-export async function getPaginatedProperties(opts: { page?: number; limit?: number; filters?: PropertyFilters; includeInactive?: boolean; ownerAccountId?: string; excludeArchived?: boolean } = {}): Promise<{ properties: Property[]; totalCount: number }> {
+export async function getPaginatedProperties(opts: {
+  page?: number;
+  limit?: number;
+  filters?: PropertyFilters;
+  includeInactive?: boolean;
+  ownerAccountId?: string;
+  agentAccountId?: string;
+  agencyIds?: string[];
+  excludeArchived?: boolean;
+} = {}): Promise<{ properties: Property[]; totalCount: number }> {
   try {
     const page = Math.max(1, opts.page ?? 1);
     const limit = Math.max(1, opts.limit ?? 20);
     const filters = opts.filters ?? {};
     const where: any = {};
+    const andClauses: any[] = [];
+    const ownershipClauses: any[] = [];
 
     if (!opts.includeInactive) where.status = PropertyStatus.ACTIVE;
     if (opts.excludeArchived && !filters.status) {
@@ -314,13 +325,25 @@ export async function getPaginatedProperties(opts: { page?: number; limit?: numb
         ...(Number.isFinite(filters.maxBedrooms) ? { lte: filters.maxBedrooms } : {}),
       };
     }
-    if (filters.searchTerm) where.OR = [
-      { title: { contains: filters.searchTerm, mode: 'insensitive' } },
-      { description: { contains: filters.searchTerm, mode: 'insensitive' } },
-    ];
     if (Number.isFinite(filters.minPrice)) where.displayPrice = { ...where.displayPrice, gte: filters.minPrice };
     if (Number.isFinite(filters.maxPrice)) where.displayPrice = { ...where.displayPrice, lte: filters.maxPrice };
     if (opts.ownerAccountId) where.owners = { some: { ownerClientId: opts.ownerAccountId } };
+    if (opts.agentAccountId) ownershipClauses.push({ agent: opts.agentAccountId });
+    if (opts.agencyIds?.length) ownershipClauses.push({ agency: { in: opts.agencyIds } });
+    if (ownershipClauses.length > 0) {
+      andClauses.push({ OR: ownershipClauses });
+    }
+    if (filters.searchTerm) {
+      andClauses.push({
+        OR: [
+          { title: { contains: filters.searchTerm, mode: 'insensitive' } },
+          { description: { contains: filters.searchTerm, mode: 'insensitive' } },
+        ],
+      });
+    }
+    if (andClauses.length > 0) {
+      where.AND = andClauses;
+    }
 
     const [totalCount, records] = await Promise.all([
       prisma.property.count({ where }),
