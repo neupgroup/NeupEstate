@@ -527,6 +527,7 @@ export default function EditPropertyPage() {
                         onSectionAdvance={handleSectionAdvance}
                         fieldChangeNotes={fieldChangeNotes}
                         previousAmenities={baseValues?.amenities}
+                        previousImages={baseValues?.images}
                     />
                 </form>
             </Form>

@@ -180,7 +180,7 @@ function mapRecord(record: any): Property {
   const category = mapTypeFromEnum(record.type)       as Property['category'];
 
   const mediaImages: string[] = (record.media ?? []).map((m: any) => m.url).filter(Boolean);
-  const images = mediaImages.length > 0 ? mediaImages : (record.coverImage ? [record.coverImage] : []);
+  const images = mediaImages;
 
   const firstPrice = record.prices?.[0];
   const price = firstPrice ? Number(firstPrice.price) : Number(record.displayPrice ?? 0);

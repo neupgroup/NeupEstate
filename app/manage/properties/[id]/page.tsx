@@ -10,7 +10,8 @@ import { ClientLink } from "@/components/client-link";
 import { AreaDisplayToggle } from "@/components/manage/area-display-toggle";
 import { FacingDisplayToggle } from "@/components/manage/facing-display-toggle";
 import { RoadAccessDisplayToggle } from "@/components/manage/road-access-display-toggle";
-import { Bath, BedDouble, Bike, Building2, CalendarDays, CarFront, ChefHat, ChevronLeft, Clock3, ExternalLink, FileText, Hash, Images, Layers3, Link2, PenSquare, Sofa, SquareUserRound, Tag, UserRound, UtensilsCrossed } from "lucide-react";
+import { PropertyMediaGallery } from "@/components/manage/property-media-gallery";
+import { Bath, BedDouble, Bike, Building2, CalendarDays, CarFront, ChefHat, ChevronLeft, Clock3, ExternalLink, FileText, Hash, Layers3, Link2, PenSquare, Sofa, SquareUserRound, Tag, UserRound, UtensilsCrossed } from "lucide-react";
 
 type PageProps = {
     params: Promise<{ id: string }>;
@@ -259,6 +260,51 @@ function AmenityTile({ amenity }: { amenity: string }) {
     );
 }
 
+function DocumentGroupCard({
+    name,
+    urls,
+    index,
+}: {
+    name: string;
+    urls: Array<{ value: string }>;
+    index: number;
+}) {
+    return (
+        <div className="rounded-xl border border-border/70 bg-background p-4 shadow-sm">
+            <div className="flex items-start justify-between gap-3">
+                <div>
+                    <p className="text-sm font-semibold text-foreground">
+                        {name || `Document Group ${index + 1}`}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                        {urls.length} link{urls.length === 1 ? "" : "s"}
+                    </p>
+                </div>
+                <FileText className="h-4 w-4 text-muted-foreground" />
+            </div>
+
+            <div className="mt-4 space-y-2">
+                {urls.length > 0 ? (
+                    urls.map((url, urlIndex) => (
+                        <a
+                            key={`${url.value}-${urlIndex}`}
+                            href={url.value}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="flex items-center gap-2 rounded-lg border border-border/60 px-3 py-2 text-sm text-foreground transition-colors hover:border-primary/40 hover:bg-primary/5"
+                        >
+                            <Link2 className="h-4 w-4 shrink-0 text-muted-foreground" />
+                            <span className="truncate">{url.value}</span>
+                        </a>
+                    ))
+                ) : (
+                    <p className="text-sm text-muted-foreground">No document links.</p>
+                )}
+            </div>
+        </div>
+    );
+}
+
 function normalizeMode(mode?: string) {
     return mode?.toLowerCase?.() ?? "";
 }
@@ -315,7 +361,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
         : [];
 
     return (
-        <div className="space-y-10 max-w-6xl mx-auto">
+        <div className="space-y-4 max-w-6xl mx-auto">
             <ClientLink
                 href="/manage/properties"
                 className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
@@ -324,7 +370,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                 Back to Properties
             </ClientLink>
 
-            <div className="space-y-1">
+            <div className="space-y-0">
                 <div className="flex items-start gap-2">
                     <h1 className="text-2xl font-semibold tracking-tight">{property.title}</h1>
                     {siteUrl && (
@@ -382,6 +428,10 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                         </div>
                     </div>
                 )}
+            </div>
+
+            <div className="pt-0">
+                <PropertyMediaGallery images={property.images ?? []} title={property.title} />
             </div>
 
             {mode === "review" && canReviewProperty && (
@@ -491,11 +541,23 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                 </ReadonlyGrid>
             </Section>
 
-            <Section title="Photos" description="Photos and attached files.">
-                <ReadonlyGrid>
-                    <Field label="Images" value={property.images} icon={<Images className="h-5 w-5" />} />
-                    <Field label="Documents" value={property.documents} icon={<FileText className="h-5 w-5" />} />
-                </ReadonlyGrid>
+            <Section title="Documents" description="Attached files and reference links.">
+                {property.documents?.length ? (
+                    <div className="grid gap-4 lg:grid-cols-2">
+                        {property.documents.map((document, index) => (
+                            <DocumentGroupCard
+                                key={`${document.name}-${index}`}
+                                name={document.name}
+                                urls={document.urls ?? []}
+                                index={index}
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="rounded-lg border bg-muted/20 px-4 py-3 text-sm text-muted-foreground">
+                        No documents attached.
+                    </div>
+                )}
             </Section>
 
             <Section title="Source & Metadata" description="External source and record timestamps.">

@@ -1,32 +1,95 @@
 
 "use client";
 
-import { Control, useFieldArray, useFormContext } from "react-hook-form";
-import { useRef, useState } from "react";
+import { Control, useFieldArray, useFormContext, useWatch } from "react-hook-form";
+import { useEffect, useRef, useState } from "react";
 import Link from 'next/link';
 import { CreatePropertyFormValues } from "@/types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, ImagePlus, GripVertical, Trash2 } from "lucide-react";
-import { SafeImage } from "@/components/safe-image";
+import { ImagePlus, GripVertical, RotateCcw, Trash2 } from "lucide-react";
 import { useToast } from "@/logica/core/hooks/use-toast";
 import { uploadPropertyMediaFile } from "./media-upload";
 
 interface PropertyPhotosSectionProps {
     control: Control<CreatePropertyFormValues>;
     fieldChangeNotes?: Partial<Record<string, string>>;
+    previousImages?: string[];
 }
 
-export function PropertyPhotosSection({ control, fieldChangeNotes }: PropertyPhotosSectionProps) {
+function PropertyPreview({ src, alt }: { src: string; alt: string }) {
+    const [failed, setFailed] = useState(false);
+
+    if (!src || failed) {
+        return (
+            <div className="flex h-full w-full items-center justify-center bg-muted text-xs text-muted-foreground">
+                No image
+            </div>
+        );
+    }
+
+    return (
+        <img
+            src={src}
+            alt={alt}
+            loading="lazy"
+            className="h-full w-full object-cover"
+            onError={() => setFailed(true)}
+        />
+    );
+}
+
+export function PropertyPhotosSection({ control, fieldChangeNotes, previousImages }: PropertyPhotosSectionProps) {
     const { watch, getValues, setValue } = useFormContext<CreatePropertyFormValues>();
     const { toast } = useToast();
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [isUploading, setIsUploading] = useState(false);
     const [dragIndex, setDragIndex] = useState<number | null>(null);
-    const { fields, append, remove, move } = useFieldArray({
+    const { fields, append, remove, move, replace } = useFieldArray({
         control: control as any,
         name: "images" as any
     });
+    const watchedImages = useWatch({
+        control,
+        name: "images" as any,
+    });
+
+    useEffect(() => {
+        const nextImages = Array.isArray(watchedImages)
+            ? watchedImages.filter((image): image is string => typeof image === "string" && image.trim().length > 0)
+            : [];
+        const desiredImages = nextImages.length > 0 ? nextImages : [""];
+        const currentImages = Array.isArray(getValues("images"))
+            ? getValues("images").filter((image): image is string => typeof image === "string")
+            : [];
+
+        const arraysMatch =
+            currentImages.length === desiredImages.length &&
+            currentImages.every((image, index) => image === desiredImages[index]);
+
+        if (!arraysMatch) {
+            replace(desiredImages);
+        }
+    }, [getValues, replace, watchedImages]);
+
+    const currentImages = Array.isArray(watchedImages)
+        ? watchedImages.filter((image): image is string => typeof image === "string" && image.trim().length > 0)
+        : [];
+    const removedImages = (previousImages ?? [])
+        .filter((image): image is string => typeof image === "string" && image.trim().length > 0)
+        .filter((image) => !currentImages.includes(image));
+
+    function restoreImage(imageUrl: string) {
+        const existingImages = Array.isArray(getValues("images"))
+            ? getValues("images").filter((image): image is string => typeof image === "string" && image.trim().length > 0)
+            : [];
+
+        if (existingImages.includes(imageUrl)) return;
+
+        const nextImages = existingImages.length > 0 ? [...existingImages, imageUrl] : [imageUrl];
+        replace(nextImages);
+        setValue("images", nextImages, { shouldDirty: true, shouldValidate: true });
+    }
 
     function handleDropOnIndex(targetIndex: number) {
         if (dragIndex === null || dragIndex === targetIndex) return;
@@ -133,15 +196,7 @@ export function PropertyPhotosSection({ control, fieldChangeNotes }: PropertyPho
                             >
                                 <div className="relative aspect-square bg-muted">
                                     <Link href={imageUrl || "#"} target="_blank" rel="noopener noreferrer" className="block h-full w-full">
-                                        <SafeImage
-                                            src={imageUrl}
-                                            alt={`Preview ${index + 1}`}
-                                            width={600}
-                                            height={600}
-                                            className="h-full w-full object-cover"
-                                            fallbackSrc="https://placehold.co/600x600.png"
-                                            data-ai-hint="house interior"
-                                        />
+                                        <PropertyPreview src={imageUrl} alt={`Preview ${index + 1}`} />
                                     </Link>
                                     <div className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 text-[11px] font-medium text-white">
                                         <GripVertical className="h-3.5 w-3.5" />
@@ -165,6 +220,29 @@ export function PropertyPhotosSection({ control, fieldChangeNotes }: PropertyPho
                             </div>
                         );
                     })}
+
+                    {removedImages.map((imageUrl, index) => (
+                        <button
+                            key={`${imageUrl}-${index}`}
+                            type="button"
+                            onClick={() => restoreImage(imageUrl)}
+                            className="group relative overflow-hidden rounded-2xl border border-dashed border-amber-500/40 bg-card shadow-sm transition hover:border-amber-500/70 hover:shadow-md"
+                            aria-label={`Restore removed image ${index + 1}`}
+                        >
+                            <div className="relative aspect-square bg-muted">
+                                <PropertyPreview src={imageUrl} alt={`Removed preview ${index + 1}`} />
+                                <div className="absolute left-2 top-2 rounded-full bg-amber-500/95 px-2 py-1 text-[11px] font-semibold text-white shadow-sm">
+                                    (removed)
+                                </div>
+                                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-2 pb-2 pt-8">
+                                    <p className="truncate text-xs font-medium text-white">Click to restore</p>
+                                </div>
+                                <div className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-white/90 text-foreground shadow-md">
+                                    <RotateCcw className="h-3.5 w-3.5" />
+                                </div>
+                            </div>
+                        </button>
+                    ))}
                 </div>
                 <Input
                     ref={fileInputRef}

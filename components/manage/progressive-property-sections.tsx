@@ -120,6 +120,7 @@ interface ProgressivePropertySectionsProps {
     onSectionAdvance?: (fromIndex: number, toIndex: number) => Promise<void> | void;
     fieldChangeNotes?: Partial<Record<string, string>>;
     previousAmenities?: string;
+    previousImages?: string[];
 }
 
 export function ProgressivePropertySections({
@@ -132,6 +133,7 @@ export function ProgressivePropertySections({
     onSectionAdvance,
     fieldChangeNotes,
     previousAmenities,
+    previousImages,
 }: ProgressivePropertySectionsProps) {
     const router = useRouter();
     const pathname = usePathname();
@@ -206,7 +208,7 @@ export function ProgressivePropertySections({
             title: "Property Photos",
             description: "Upload photos that best represent the property.",
             fields: ["images"],
-            render: () => <PropertyPhotosSection control={form.control} fieldChangeNotes={fieldChangeNotes} />,
+            render: () => <PropertyPhotosSection control={form.control} fieldChangeNotes={fieldChangeNotes} previousImages={previousImages} />,
         },
         {
             id: "documents",
@@ -224,7 +226,7 @@ export function ProgressivePropertySections({
             fields: ["title", "description", "isPrivate", "showMap", "showOwnerInformation"],
             render: () => <TitleDescriptionSection control={form.control} fieldChangeNotes={fieldChangeNotes} />,
         },
-    ], [category, form.control, form.formState.errors, isEditForm, users]);
+    ], [category, fieldChangeNotes, form.control, form.formState.errors, isEditForm, previousAmenities, previousImages, users]);
 
     useEffect(() => {
         if (errorStepIndex === null) return;
