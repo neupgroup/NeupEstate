@@ -41,7 +41,7 @@ export const PERMISSIONS = {
     faqDelete: "manage.faq.delete",
     faqUpdate: "manage.faq.update",
     faqView: "manage.faq.view",
-    agentMapView: "manage.agentMap.view",
+    agentMapView: "manage.agent_map.view",
     notificationView: "manage.notification.view",
     notificationMarkRead: "manage.notification.markRead",
     notificationDelete: "manage.notification.delete",
