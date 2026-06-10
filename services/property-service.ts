@@ -669,7 +669,7 @@ function buildCoreData(d: Partial<CreatePropertyInput> & Record<string, any>) {
     geoLocation:       truncate(geo, 63),
     structuredLocation: d.structuredLocation ? JSON.stringify(d.structuredLocation) : '',
     agency:            typeof d.agency === 'object' ? d.agency?.id : (d.agency ?? null),
-    agent:             d.listingAgent ?? null,
+    agent:             d.agent ?? null,
     isFeatured:        d.isFeatured ?? false,
     isApproved:        d.isApproved ?? false,
     amenities:         Array.isArray(d.amenities) ? d.amenities : [],

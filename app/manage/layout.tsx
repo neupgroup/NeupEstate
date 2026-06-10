@@ -27,6 +27,7 @@ export default async function ManageLayout({
     canClientsView,
     canReviewsView,
     canFaqView,
+    canAgentMapView,
     canNotificationView,
   ] = await Promise.all([
     hasPermission(PERMISSIONS.manage.dashboardView),
@@ -38,6 +39,7 @@ export default async function ManageLayout({
     hasPermission(PERMISSIONS.manage.selfClientView),
     hasPermission(PERMISSIONS.manage.selfReviewsView),
     hasPermission(PERMISSIONS.manage.faqView),
+    hasPermission(PERMISSIONS.manage.agentMapView),
     hasPermission(PERMISSIONS.manage.notificationView),
   ]);
 
@@ -55,6 +57,7 @@ export default async function ManageLayout({
           canClientsView={canClientsView}
           canReviewsView={canReviewsView}
           canFaqView={canFaqView}
+          canAgentMapView={canAgentMapView}
           canNotificationView={canNotificationView}
         />
 

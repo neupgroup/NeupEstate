@@ -18,6 +18,7 @@ type Props = {
   canClientsView: boolean;
   canReviewsView: boolean;
   canFaqView: boolean;
+  canAgentMapView: boolean;
   canNotificationView: boolean;
 };
 
@@ -39,6 +40,7 @@ export function ManageSidebar(props: Props) {
     "/manage/clients": props.canClientsView,
     "/manage/reviews": props.canReviewsView,
     "/manage/faq": props.canFaqView,
+    "/manage/agentmap": props.canAgentMapView,
     "/manage/notifications": props.canNotificationView,
   };
 

@@ -10,9 +10,15 @@ import { CreatePropertySchema, type CreatePropertyFormValues, type User } from '
 import { createPropertyAction, getCurrentAccountId } from '@/app/actions';
 
 import { Form } from '@/components/ui/form';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/logica/core/hooks/use-toast';
 import { getUsers } from '@/services/user-service';
+import { getAccounts } from '@/services/account-service';
+import { getAgencyAgentMapsByAgent } from '@/services/agency-agent-map-service';
 import { useAgencyCustomization } from '@/logica/core/hooks/use-agency-customization';
+import type { Account } from '@/types';
+import { cn } from '@/logica/core/utils';
 
 import { ProgressivePropertySections } from '@/components/manage/progressive-property-sections';
 
@@ -23,11 +29,41 @@ export default function CreatePropertyPage() {
     const [isPending, startTransition] = useTransition();
     const [users, setUsers] = React.useState<User[]>([]);
     const [accountId, setAccountId] = useState<string | null>(null);
+    const [agencyAccounts, setAgencyAccounts] = useState<Account[]>([]);
+    const [agencyLinks, setAgencyLinks] = useState<{ id: string; agencyId: string; agentId: string; isPrimary: boolean }[]>([]);
+    const [postingAgencyId, setPostingAgencyId] = useState<string | null>(null);
 
     useEffect(() => {
-        getUsers().then(setUsers);
-        // Resolve the current user's accountId for agency customization lookup
-        getCurrentAccountId().then(id => setAccountId(id));
+        async function loadContext() {
+            const [userList, currentId, accountList] = await Promise.all([
+                getUsers(),
+                getCurrentAccountId(),
+                getAccounts(),
+            ]);
+
+            setUsers(userList);
+            setAccountId(currentId);
+
+            if (!currentId) {
+                setAgencyAccounts([]);
+                setAgencyLinks([]);
+                setPostingAgencyId(null);
+                return;
+            }
+
+            const links = await getAgencyAgentMapsByAgent(currentId);
+            const agencies = accountList.filter((account) => account.account_type === 'brand');
+
+            setAgencyLinks(links);
+            setAgencyAccounts(agencies);
+            setPostingAgencyId(
+                links.find((link) => link.isPrimary)?.agencyId ??
+                links[0]?.agencyId ??
+                null,
+            );
+        }
+
+        loadContext();
     }, []);
 
     const { rule: agencyRule } = useAgencyCustomization(accountId, 'property');
@@ -148,7 +184,7 @@ export default function CreatePropertyPage() {
 
     async function onSubmit(values: CreatePropertyFormValues) {
         startTransition(async () => {
-            const result = await createPropertyAction(values);
+            const result = await createPropertyAction(values, postingAgencyId);
             if (result.success) {
                 toast({
                     title: 'Property Created',
@@ -183,6 +219,49 @@ export default function CreatePropertyPage() {
         <div className="max-w-6xl mx-auto">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit, onSubmitInvalid)} className="space-y-6">
+                    {accountId && agencyLinks.length > 0 && (
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Post To Agency</CardTitle>
+                                <CardDescription>
+                                    {agencyLinks.length > 1
+                                        ? 'Choose which linked agency should receive this property.'
+                                        : 'This agent has one linked agency. It will be used by default.'}
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-3">
+                                <div className="grid gap-3 md:grid-cols-2">
+                                    {agencyAccounts
+                                        .filter((account) => agencyLinks.some((link) => link.agencyId === account.id))
+                                        .map((account) => {
+                                            const selected = postingAgencyId === account.id;
+                                            return (
+                                                <button
+                                                    key={account.id}
+                                                    type="button"
+                                                    onClick={() => setPostingAgencyId(account.id)}
+                                                    className={cn(
+                                                        'rounded-lg border px-4 py-3 text-left transition-colors hover:border-primary hover:bg-primary/5',
+                                                        selected ? 'border-primary bg-primary/10' : 'border-border bg-background',
+                                                    )}
+                                                >
+                                                    <div className="flex items-center justify-between gap-3">
+                                                        <div className="min-w-0">
+                                                            <p className="truncate font-medium">{account.display_name || account.id}</p>
+                                                            <p className="truncate text-xs text-muted-foreground">{account.id}</p>
+                                                        </div>
+                                                        {selected && <Badge>Selected</Badge>}
+                                                    </div>
+                                                </button>
+                                            );
+                                        })}
+                                </div>
+                                {agencyLinks.length > 1 && !postingAgencyId && (
+                                    <p className="text-sm text-destructive">Select an agency before creating the property.</p>
+                                )}
+                            </CardContent>
+                        </Card>
+                    )}
                     <ProgressivePropertySections
                         form={form}
                         users={users}

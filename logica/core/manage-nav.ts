@@ -2,7 +2,7 @@ import type { ComponentType } from "react";
 import {
   Home, Users, Settings, UserCog,
   LayoutDashboard, LineChart, Package, MessageSquareHeart, FileQuestion, Landmark, CalendarCheck,
-  Banknote, HelpCircle, Contact, FileSearch,
+  Banknote, HelpCircle, Contact, FileSearch, Link2,
   Lightbulb, UserCheck, Eye, Bell, LifeBuoy, Bookmark, Star, Flame, BarChart2,
 } from "lucide-react";
 
@@ -40,6 +40,7 @@ export const manageNav: ManageNavItem[] = [
   { type: "link", href: "/manage/agency", label: "My Agency", icon: Home },
   { type: "link", href: "/manage/agents", label: "Agents", icon: Users },
   { type: "link", href: "/manage/team", label: "Team", icon: Users },
+  { type: "link", href: "/manage/agentmap", label: "Agent Map", icon: Link2 },
   { type: "link", href: "/manage/accounts", label: "Users", icon: UserCog },
   { type: "link", href: "/manage/settings", label: "Settings", icon: Settings },
   { type: "link", href: "/manage/support", label: "Support", icon: LifeBuoy },

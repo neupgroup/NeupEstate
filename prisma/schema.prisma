@@ -60,11 +60,17 @@ model Account {
   displayImage String?   // denormalized from NeupID — set on first create
   connectionId String?
   roleId       String?   @map("role_id")
+  agency       String?
+  agent        String?
   role         AuthzRole? @relation(fields: [roleId], references: [id], onDelete: SetNull)
+  agencyAccount Account?   @relation("AccountAgency", fields: [agency], references: [id], onDelete: SetNull)
+  agentAccount  Account?   @relation("AccountAgent", fields: [agent], references: [id], onDelete: SetNull)
   intelligenceMappings IntelligenceMapping[]
   intelligenceAlerts    IntelligenceAlert[]
   propertyChanges       PropertyChange[]
 
+  @@index([agency])
+  @@index([agent])
   @@map("account")
 }
 
@@ -376,6 +382,22 @@ model AgencyMap {
   @@index([agencyAccountId])
   @@index([accountId])
   @@map("agency_map")
+}
+
+model AgencyAgentMap {
+  id        String   @id @default(cuid())
+  agencyId  String   @map("agency_id")
+  agentId   String   @map("agent_id")
+  isPrimary Boolean  @default(false) @map("is_primary")
+
+  agency    Account   @relation("AgencyAgentMapAgency", fields: [agencyId], references: [id], onDelete: Cascade)
+  agent     Account   @relation("AgencyAgentMapAgent", fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@unique([agencyId, agentId])
+  @@index([agencyId])
+  @@index([agentId])
+  @@index([isPrimary])
+  @@map("agency_agent_map")
 }
 
 model AgencyCustomization {

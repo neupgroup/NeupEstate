@@ -430,6 +430,8 @@ export type CreatePropertyInput =
     price: number;
     location: string;
     area: number;
+    agency?: string | null;
+    agent?: string | null;
     amenities: string[];
     images: string[];
     metaTags?: string[];

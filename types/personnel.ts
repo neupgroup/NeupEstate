@@ -61,6 +61,22 @@ export const CreateAgencyMapSchema = z.object({
 });
 export type CreateAgencyMapInput = z.infer<typeof CreateAgencyMapSchema>;
 
+// ── AgencyAgentMap ───────────────────────────────────────────────────────────
+
+export interface AgencyAgentMap {
+  id: string;
+  agencyId: string; // references Account.id (agency account)
+  agentId: string;  // references Account.id (agent account)
+  isPrimary: boolean;
+}
+
+export const CreateAgencyAgentMapSchema = z.object({
+  agencyId: z.string().min(1, 'Agency is required.'),
+  agentId: z.string().min(1, 'Agent is required.'),
+  isPrimary: z.boolean().default(false),
+});
+export type CreateAgencyAgentMapInput = z.infer<typeof CreateAgencyAgentMapSchema>;
+
 // ── AgencyCustomization ──────────────────────────────────────────────────────
 
 export const AgencyCustomizeForSchema = z.enum(['lead', 'property']);

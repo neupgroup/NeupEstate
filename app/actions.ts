@@ -7,6 +7,7 @@ import { recommendProperties as recommendPropertiesFlow } from "@/services/ai/ai
 import { extractAndSaveProperty as extractAndSavePropertyFlow, type ExtractPropertyDetailsOutput } from "@/services/ai/extract-property-details-flow";
 import { createProperty as createPropertyService, updateProperty as updatePropertyService, approveProperty, getProperties, deleteProperty as deletePropertyService, getPendingProperties, getAwaitingReviewItems, getPaginatedProperties, getPropertyById, getPropertyReviewRequests, updatePropertyWithExtractedData, addFetchToHistory, deleteFetchHistoryItem as deleteFetchHistoryItemService, updatePropertyImages, addImagesToFetchHistory, deleteImageFetchHistoryItem as deleteImageFetchHistoryItemService, toggleSavedProperty as toggleSavedPropertyService, getUsersBySavedProperty as getUsersBySavedPropertyService, getSavedPropertiesForUser as getSavedPropertiesForUserService, createPropertyLog } from '@/services/property-service';
 import { createAgency as createAgencyService, updateAgency as updateAgencyService, deleteAgency as deleteAgencyService } from '@/services/agency-service';
+import { createAgencyAgentMap as createAgencyAgentMapService, getAgencyAgentMapsByAgent as getAgencyAgentMapsByAgentService, getPrimaryAgencyForAgent as getPrimaryAgencyForAgentService } from '@/services/agency-agent-map-service';
 import { getAgentsByLocation as getAgentsByLocationService, createAgent as createAgentService, updateAgent as updateAgentService, deleteAgent as deleteAgentService } from '@/services/agent-service';
 import { addSitemap, getNewUrlsFromSitemap, processSitemapUrl, updateSitemapCheckedTime } from "@/services/sitemap-service";
 import { clearAllProblems } from "@/services/problem-service";
@@ -821,11 +822,13 @@ export async function getPropertyCreateDraftAction(propertyId: string): Promise<
 }
 
 export async function createPropertyAction(
-  data: CreatePropertyFormValues
+  data: CreatePropertyFormValues,
+  postingAgencyId?: string | null
 ): Promise<{ success: boolean; error?: string | null; propertyId?: string | null }> {
   try {
     await requirePermission(PERMISSIONS.manage.propertySelfCreate);
     const actorId = await requireIdentity();
+    const agencyLinks = await getAgencyAgentMapsByAgentService(actorId);
 
     const validatedData = CreatePropertySchema.parse(data);
     const orderedPurposes = validatedData.purposes?.length
@@ -847,6 +850,30 @@ export async function createPropertyAction(
     }
 
     const locationString = formatLocationString(validatedData.structuredLocation);
+
+    let agencyId: string | null = null;
+    let agentId: string | null = null;
+
+    if (agencyLinks.length > 0) {
+      const selectedAgencyId =
+        postingAgencyId?.trim() ||
+        (await getPrimaryAgencyForAgentService(actorId))?.agencyId ||
+        agencyLinks[0]?.agencyId ||
+        null;
+
+      if (!selectedAgencyId) {
+        return { success: false, error: "Please choose an agency to post this property.", propertyId: null };
+      }
+
+      const isLinkedAgency = agencyLinks.some((link) => link.agencyId === selectedAgencyId);
+      if (!isLinkedAgency) {
+        return { success: false, error: "The selected agency is not linked to this agent.", propertyId: null };
+      }
+
+      agencyId = selectedAgencyId;
+    } else {
+      agentId = actorId;
+    }
 
     const serviceInput: CreatePropertyInput = {
       ...validatedData,
@@ -871,6 +898,8 @@ export async function createPropertyAction(
       } as unknown as LandDetails : undefined,
       plots: validatedData.plots?.map(p => ({ ...p, area: areaValueToSqft(p.area) })) as unknown as PlotDetails[],
       apartmentUnits: validatedData.apartmentUnits?.map(u => ({ ...u, area: areaValueToSqft(u.area) })) as unknown as ApartmentUnit[],
+      agency: agencyId,
+      agent: agentId,
     };
     const propertyId = await createPropertyService({
       ...(serviceInput as any),
@@ -1063,6 +1092,34 @@ export async function deleteAgencyAction(agencyId: string) {
         await logProblem(error, `deleteAgencyAction (ID: ${agencyId})`);
         return { success: false, error: "Failed to delete agency." };
     }
+}
+
+export async function createAgencyAgentMapAction(
+  data: { agencyId: string; agentId: string; isPrimary?: boolean },
+): Promise<{ success: boolean; error?: string | null }> {
+  try {
+    await requirePermission(PERMISSIONS.manage.agentMapView);
+
+    const agencyId = data.agencyId?.trim();
+    const agentId = data.agentId?.trim();
+
+    if (!agencyId || !agentId) {
+      return { success: false, error: 'Select both an agency and an agent.' };
+    }
+
+    await createAgencyAgentMapService({
+      agencyId,
+      agentId,
+      isPrimary: Boolean(data.isPrimary),
+    });
+
+    revalidatePath('/manage/agentmap');
+    revalidatePath('/manage/properties/create');
+    return { success: true, error: null };
+  } catch (error: any) {
+    await logProblem(error, 'createAgencyAgentMapAction');
+    return { success: false, error: error?.message ?? 'Failed to create agency-agent mapping.' };
+  }
 }
 
 export async function approvePropertyAction(propertyId: string) {
