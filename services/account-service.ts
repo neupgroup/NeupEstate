@@ -185,6 +185,8 @@ export async function refreshAccountDisplayInfo(
     const remoteRole = extractRemoteRole(info.meta.response?.body);
     const displayName  = info.account.displayName  || null;
     const displayImage = info.account.displayImage || null;
+    const remoteRoleId = remoteRole?.id ?? null;
+    const remotePermissions = remoteRole?.permissions ?? [];
 
     await prisma.$transaction(async (tx) => {
       if (remoteRole) {
@@ -206,7 +208,7 @@ export async function refreshAccountDisplayInfo(
             appId,
             description: remoteRole.description ?? existingRole?.description ?? null,
             scope: remoteRole.scope ?? existingRole?.scope ?? null,
-            permissions: normalizeJsonValue(permissions) ?? Prisma.JsonNull,
+            permissions: normalizeJsonValue(remotePermissions) ?? Prisma.JsonNull,
           },
           create: {
             id: remoteRole.id,
@@ -214,7 +216,7 @@ export async function refreshAccountDisplayInfo(
             appId,
             description: remoteRole.description ?? null,
             scope: remoteRole.scope ?? null,
-            permissions: normalizeJsonValue(permissions) ?? Prisma.JsonNull,
+            permissions: normalizeJsonValue(remotePermissions) ?? Prisma.JsonNull,
           },
         });
       }
@@ -224,7 +226,7 @@ export async function refreshAccountDisplayInfo(
         data: {
           displayName,
           displayImage,
-          ...(roleId ? { roleId } : {}),
+          ...(remoteRoleId ? { roleId: remoteRoleId } : {}),
         },
       });
     });
@@ -247,7 +249,7 @@ export async function refreshAccountDisplayInfo(
       displayName,
       displayImage,
       roleId: syncedAccount?.roleId ?? null,
-      permissions,
+      permissions: normalizePermissions(syncedAccount?.role?.permissions),
     };
   } catch (error) {
     await logProblem(error, `refreshAccountDisplayInfo (ID: ${id})`);
