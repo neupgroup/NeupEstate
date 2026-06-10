@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Download, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { RefreshCw, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import { refreshAccountDisplayInfo } from '@/services/account-service';
 
 type Status = 'idle' | 'loading' | 'success' | 'error' | 'no_change';
@@ -10,10 +11,23 @@ type Status = 'idle' | 'loading' | 'success' | 'error' | 'no_change';
 interface Props {
   accountId: string;
   currentDisplayName?: string;
+  currentRoleId?: string | null;
+  currentPermissions?: string[];
   onRefreshed?: (displayName: string | null, displayImage: string | null) => void;
 }
 
-export function AccountRefreshButton({ accountId, currentDisplayName, onRefreshed }: Props) {
+function normalizePermissionList(value?: string[]): string {
+  return [...new Set((value ?? []).map((item) => item.trim()).filter(Boolean))].sort().join('|');
+}
+
+export function AccountRefreshButton({
+  accountId,
+  currentDisplayName,
+  currentRoleId,
+  currentPermissions,
+  onRefreshed,
+}: Props) {
+  const router = useRouter();
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState<string>('');
 
@@ -30,14 +44,19 @@ export function AccountRefreshButton({ accountId, currentDisplayName, onRefreshe
         return;
       }
 
-      const changed = result.displayName !== currentDisplayName;
+      const changedDisplayName = result.displayName !== currentDisplayName;
+      const changedRole = result.roleId !== currentRoleId;
+      const changedPermissions =
+        normalizePermissionList(result.permissions) !== normalizePermissionList(currentPermissions);
+      const changed = changedDisplayName || changedRole || changedPermissions;
       setStatus(changed ? 'success' : 'no_change');
       setMessage(
         changed
-          ? `Updated to "${result.displayName}"`
+          ? 'Synced profile, role, and permissions.'
           : 'Already up to date.',
       );
       onRefreshed?.(result.displayName, result.displayImage);
+      router.refresh();
     } catch {
       setStatus('error');
       setMessage('Something went wrong.');
@@ -62,9 +81,9 @@ export function AccountRefreshButton({ accountId, currentDisplayName, onRefreshe
         {status === 'loading' ? (
           <Loader2 className="h-3.5 w-3.5 animate-spin" />
         ) : (
-          <Download className="h-3.5 w-3.5" />
+          <RefreshCw className="h-3.5 w-3.5" />
         )}
-        {status === 'loading' ? 'Fetching…' : 'Download'}
+        {status === 'loading' ? 'Syncing…' : 'Sync'}
       </Button>
 
       {status === 'success' && (

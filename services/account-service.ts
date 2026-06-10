@@ -2,6 +2,7 @@
 
 'use server';
 
+import { Prisma } from '@prisma/client';
 import { prisma } from '@/logica/core/prisma';
 import { logProblem } from './problem-service';
 import { getAccountInformation, getSignedAccountInformation } from '@/services/account/lookup';
@@ -152,14 +153,19 @@ export async function updateUser(id: string, data: any): Promise<void> {
 }
 
 /**
- * Fetches the latest displayName and displayImage from NeupID and writes
- * them back to the local account row.
+ * Fetches the latest profile and access data from NeupID and writes it back
+ * to the local account row and linked authz role.
  *
  * Returns the updated fields, or null if the lookup failed.
  */
 export async function refreshAccountDisplayInfo(
   id: string,
-): Promise<{ displayName: string | null; displayImage: string | null } | null> {
+): Promise<{
+  displayName: string | null;
+  displayImage: string | null;
+  roleId: string | null;
+  permissions: string[];
+} | null> {
   try {
     const info = await getAccountInformation({ accountId: id });
     if (!info.found) {
@@ -176,19 +182,161 @@ export async function refreshAccountDisplayInfo(
       return null;
     }
 
+    const remoteRole = extractRemoteRole(info.meta.response?.body);
     const displayName  = info.account.displayName  || null;
     const displayImage = info.account.displayImage || null;
 
-    await prisma.account.update({
-      where: { id },
-      data: { displayName, displayImage },
+    await prisma.$transaction(async (tx) => {
+      if (remoteRole) {
+        const existingRole = await tx.authzRole.findUnique({
+          where: { id: remoteRole.id },
+          select: {
+            appId: true,
+            description: true,
+            scope: true,
+          },
+        });
+
+        const appId = existingRole?.appId ?? process.env.NEUP_APP_ID ?? 'neup.estate';
+
+        await tx.authzRole.upsert({
+          where: { id: remoteRole.id },
+          update: {
+            name: remoteRole.name ?? remoteRole.id,
+            appId,
+            description: remoteRole.description ?? existingRole?.description ?? null,
+            scope: remoteRole.scope ?? existingRole?.scope ?? null,
+            permissions: normalizeJsonValue(permissions) ?? Prisma.JsonNull,
+          },
+          create: {
+            id: remoteRole.id,
+            name: remoteRole.name ?? remoteRole.id,
+            appId,
+            description: remoteRole.description ?? null,
+            scope: remoteRole.scope ?? null,
+            permissions: normalizeJsonValue(permissions) ?? Prisma.JsonNull,
+          },
+        });
+      }
+
+      await tx.account.update({
+        where: { id },
+        data: {
+          displayName,
+          displayImage,
+          ...(roleId ? { roleId } : {}),
+        },
+      });
     });
 
-    return { displayName, displayImage };
+    const syncedAccount = await prisma.account.findUnique({
+      where: { id },
+      select: {
+        roleId: true,
+        role: {
+          select: {
+            permissions: true,
+          },
+        },
+      },
+    });
+
+    const permissions = normalizePermissions(syncedAccount?.role?.permissions);
+
+    return {
+      displayName,
+      displayImage,
+      roleId: syncedAccount?.roleId ?? null,
+      permissions,
+    };
   } catch (error) {
     await logProblem(error, `refreshAccountDisplayInfo (ID: ${id})`);
     return null;
   }
+}
+
+type LookupRole = {
+  id?: unknown;
+  name?: unknown;
+  description?: unknown;
+  scope?: unknown;
+  permissions?: unknown;
+};
+
+type LookupBody = {
+  role?: unknown;
+  access?: unknown;
+  permissions?: unknown;
+  profile?: {
+    role?: unknown;
+  } | null;
+} | null;
+
+function asString(value: unknown): string | null {
+  return typeof value === 'string' && value.trim().length > 0 ? value.trim() : null;
+}
+
+function normalizePermissions(raw: unknown): string[] {
+  if (!raw) return [];
+
+  if (Array.isArray(raw)) {
+    return raw.filter((value): value is string => typeof value === 'string' && value.trim().length > 0);
+  }
+
+  if (typeof raw === 'object') {
+    return Object.entries(raw as Record<string, unknown>)
+      .filter(([, value]) => value === true)
+      .map(([key]) => key)
+      .filter((permission) => permission.trim().length > 0);
+  }
+
+  return [];
+}
+
+function normalizeJsonValue(value: unknown): Prisma.InputJsonValue | Prisma.NullableJsonNullValueInput | undefined {
+  if (value === undefined) return undefined;
+  if (value === null) return Prisma.JsonNull;
+  return value as Prisma.InputJsonValue;
+}
+
+function extractRemoteRole(body: unknown): {
+  id: string;
+  name: string | null;
+  description: string | null;
+  scope: string | null;
+  permissions: string[];
+} | null {
+  const payload = body as LookupBody;
+  const profileRole = payload?.profile?.role;
+  const fromProfile = Array.isArray(profileRole) ? profileRole[0] : null;
+  const fromRoot = payload?.role;
+
+  const role = (fromProfile ?? fromRoot) as LookupRole | string | null | undefined;
+  if (!role) return null;
+
+  if (typeof role === 'string') {
+    const id = asString(role);
+    return id
+      ? {
+          id,
+          name: id,
+          description: null,
+          scope: null,
+          permissions: [],
+        }
+      : null;
+  }
+
+  const id = asString(role.id);
+  if (!id) return null;
+
+  return {
+    id,
+    name: asString(role.name) ?? id,
+    description: asString(role.description),
+    scope: asString(role.scope),
+    permissions: normalizePermissions(role.permissions),
+  };
 }
 
 /**

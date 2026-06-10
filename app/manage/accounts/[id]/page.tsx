@@ -1,17 +1,57 @@
+import { notFound } from 'next/navigation';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { prisma } from '@/logica/core/prisma';
 import { getAccountById } from '@/services/account-service';
 import { getRequirementByUserId } from '@/services/requirements-service';
 import { getSavedProperties, getPaginatedProperties } from '@/services/property-service';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AdminPropertyRow } from '@/components/manage/property-row';
-import { Activity, Bookmark, Home, Target } from 'lucide-react';
+import { Activity, Bookmark, Home, Shield, Target } from 'lucide-react';
 import { AccountRefreshButton } from '@/components/manage/account-refresh-button';
 import { DeleteAccountButton } from '@/components/manage/delete-account-button';
 import { fetchApplicationUsers } from "@/services/neupid/application-users";
 
+type RolePermissionMap = Record<string, unknown>;
+
+function normalizePermissions(raw: unknown): string[] {
+  if (!raw) return [];
+
+  if (Array.isArray(raw)) {
+    return raw.filter((value): value is string => typeof value === 'string' && value.trim().length > 0);
+  }
+
+  if (typeof raw === 'object') {
+    return Object.entries(raw as RolePermissionMap)
+      .filter(([, value]) => value === true)
+      .map(([key]) => key)
+      .filter((permission) => permission.trim().length > 0);
+  }
+
+  return [];
+}
+
 export default async function ManageAccountPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: accountId } = await params;
   const account = await getAccountById(accountId);
+  if (!account) notFound();
+
+  const accountRole = await prisma.account.findUnique({
+    where: { id: accountId },
+    select: {
+      role: {
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          scope: true,
+          permissions: true,
+          updatedOn: true,
+        },
+      },
+    },
+  });
+  const role = accountRole?.role ?? null;
+  const permissions = normalizePermissions(role?.permissions);
 
   const [requirements, savedProperties, ownedProperties, recentActivity, remoteUsersResult] = await Promise.all([
     getRequirementByUserId(accountId),
@@ -29,6 +69,80 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
 
   return (
     <div className="space-y-8">
+      <section className="space-y-3">
+        <div>
+          <h3 className="text-sm font-semibold">Role and Permissions</h3>
+          <p className="text-xs text-muted-foreground">
+            Access control assigned to this account in the authorization system.
+          </p>
+        </div>
+        <Card className="shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Shield className="h-4 w-4" />
+              Current Role
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {role ? (
+              <>
+                <div className="grid gap-3 md:grid-cols-3">
+                  <div className="rounded-lg border bg-muted/20 px-4 py-3">
+                    <p className="text-xs uppercase tracking-wide text-muted-foreground">Role name</p>
+                    <p className="mt-1 font-medium">{role.name}</p>
+                    <p className="mt-1 break-all text-xs text-muted-foreground">{role.id}</p>
+                  </div>
+                  <div className="rounded-lg border bg-muted/20 px-4 py-3">
+                    <p className="text-xs uppercase tracking-wide text-muted-foreground">Scope</p>
+                    <p className="mt-1 font-medium">{role.scope ?? 'Global'}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Updated {new Date(role.updatedOn).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                      })}
+                    </p>
+                  </div>
+                  <div className="rounded-lg border bg-muted/20 px-4 py-3">
+                    <p className="text-xs uppercase tracking-wide text-muted-foreground">Permissions</p>
+                    <p className="mt-1 font-medium">{permissions.length} assigned</p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Permissions are read from the linked authz role.
+                    </p>
+                  </div>
+                </div>
+
+                {role.description && (
+                  <div className="rounded-lg border bg-muted/20 px-4 py-3">
+                    <p className="text-xs uppercase tracking-wide text-muted-foreground">Description</p>
+                    <p className="mt-1 text-sm text-foreground/90">{role.description}</p>
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">Permission list</p>
+                  {permissions.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {permissions.map((permission) => (
+                        <Badge key={permission} variant="secondary" className="font-mono text-[11px]">
+                          {permission}
+                        </Badge>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">This role does not currently have any permissions configured.</p>
+                  )}
+                </div>
+              </>
+            ) : (
+              <div className="rounded-lg border border-dashed px-4 py-6 text-sm text-muted-foreground">
+                No role is assigned to this account yet.
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </section>
+
       <section className="space-y-3">
         <div>
           <h3 className="text-sm font-semibold">Activity</h3>
@@ -191,7 +305,12 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
       </section>
 
       <section className="pt-8 flex flex-wrap items-center gap-3">
-        <AccountRefreshButton accountId={accountId} currentDisplayName={account?.display_name} />
+        <AccountRefreshButton
+          accountId={accountId}
+          currentDisplayName={account?.display_name}
+          currentRoleId={role?.id ?? null}
+          currentPermissions={permissions}
+        />
         {!isSynced && (
           <DeleteAccountButton accountId={accountId} displayName={account?.display_name} />
         )}
