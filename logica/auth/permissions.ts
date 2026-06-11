@@ -27,6 +27,7 @@ export const PERMISSIONS = {
     propertyCollectionSelfTransfer: "manage.propertyCollection.self.transfer",
     propertyCollectionSelfTranser: "manage.propertyCollection.self.transer",
     propertyCollectionSelfView: "manage.propertyCollection.self.view",
+    accountsView: "manage.accounts.view",
     selfLeadView: "manage.self.lead.view",
     selfLeadCreate: "manage.self.lead.create",
     selfLeadDelete: "manage.self.lead.delete",

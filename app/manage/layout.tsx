@@ -23,6 +23,7 @@ export default async function ManageLayout({
     canIntelListings,
     canPropertyView,
     canCollectionView,
+    canAccountsView,
     canLeadsView,
     canClientsView,
     canReviewsView,
@@ -35,6 +36,7 @@ export default async function ManageLayout({
     hasPermission(PERMISSIONS.manage.intelligenceListingsView),
     hasPermission(PERMISSIONS.manage.propertySelfView),
     hasPermission(PERMISSIONS.manage.propertyCollectionSelfView),
+    hasPermission(PERMISSIONS.manage.accountsView),
     hasPermission(PERMISSIONS.manage.selfLeadView),
     hasPermission(PERMISSIONS.manage.selfClientView),
     hasPermission(PERMISSIONS.manage.selfReviewsView),
@@ -53,6 +55,7 @@ export default async function ManageLayout({
           canIntelListings={canIntelListings}
           canPropertyView={canPropertyView}
           canCollectionView={canCollectionView}
+          canAccountsView={canAccountsView}
           canLeadsView={canLeadsView}
           canClientsView={canClientsView}
           canReviewsView={canReviewsView}

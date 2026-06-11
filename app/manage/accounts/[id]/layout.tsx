@@ -9,6 +9,8 @@ import { logProblem } from '@/services/problem-service';
 import { ClientLink } from '@/components/client-link';
 import { Badge } from '@/components/ui/badge';
 import { ChevronLeft, User, ShieldAlert, CalendarDays, Clock, BadgeCheck } from 'lucide-react';
+import { requirePagePermission } from '@/logica/auth/page-guard';
+import { PERMISSIONS } from '@/logica/auth/permissions';
 
 export default async function ManageAccountLayout({
   children,
@@ -17,6 +19,7 @@ export default async function ManageAccountLayout({
   children: React.ReactNode;
   params: Promise<{ id: string }>;
 }) {
+  await requirePagePermission(PERMISSIONS.manage.accountsView);
   const authAccount = await requireAuth();
   const { id: accountId } = await params;
 
