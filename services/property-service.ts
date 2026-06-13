@@ -866,6 +866,10 @@ async function resolveMergedPropertyData(id: string, patch: Partial<CreateProper
 
   // `getPropertyById()` returns a display object for `agency`; Prisma expects the scalar FK value.
   merged.agency = normalizePropertyAgency(patch.agency) ?? currentRecord.agency;
+  if (patch.owner !== undefined && patch.owners === undefined) {
+    merged.owners = normalizePropertyOwners(patch.owner);
+  }
+  delete (merged as Record<string, any>).owner;
 
   return merged;
 }
@@ -931,11 +935,21 @@ function normalizeArrayLikeValue(value: unknown): unknown[] {
 }
 
 function normalizePropertyOwners(owners: unknown): NonNullable<CreatePropertyInput['owners']> {
-  return normalizeArrayLikeValue(owners)
+  const rawEntries = Array.isArray(owners)
+    ? owners
+    : owners && typeof owners === 'object'
+      ? [owners]
+      : [];
+
+  return rawEntries
     .filter((owner): owner is Record<string, any> => Boolean(owner) && typeof owner === 'object' && !Array.isArray(owner))
     .map((owner) => ({
-      ownerClientId: typeof owner.ownerClientId === 'string' ? owner.ownerClientId.trim() : '',
-      isPrimaryOwner: Boolean(owner.isPrimaryOwner),
+      ownerClientId: typeof owner.ownerClientId === 'string'
+        ? owner.ownerClientId.trim()
+        : typeof owner.id === 'string'
+          ? owner.id.trim()
+          : '',
+      isPrimaryOwner: Boolean(owner.isPrimaryOwner ?? owner.isprimary),
       clientName: typeof owner.clientName === 'string' ? owner.clientName : undefined,
       clientEmail: typeof owner.clientEmail === 'string' ? owner.clientEmail : undefined,
       clientPhone: typeof owner.clientPhone === 'string' ? owner.clientPhone : undefined,

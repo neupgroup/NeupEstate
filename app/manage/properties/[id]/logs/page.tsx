@@ -9,7 +9,7 @@ import { PropertyReviewRequests } from "@/components/manage/property-review-requ
 import { PropertyImageGrid } from "@/components/manage/property-image-grid";
 import { PropertyImageDiffGrid } from "@/components/manage/property-image-diff-grid";
 import { getPropertyById, getPropertyLogs, getPropertyReviewRequests } from "@/services/property-service";
-import { ArrowLeft, UserRound } from "lucide-react";
+import { ArrowLeft, MinusCircle, PlusCircle, UserRound } from "lucide-react";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -77,6 +77,270 @@ function getPathValue(source: unknown, path: string): unknown {
 
 function isImageField(field: string) {
   return field.toLowerCase() === "images";
+}
+
+function isOwnershipField(field: string) {
+  return field.toLowerCase() === "owners";
+}
+
+function isOwnerReferenceField(field: string) {
+  return field.toLowerCase() === "owner";
+}
+
+type OwnerLogEntry = {
+  key: string;
+  name: string;
+  email: string;
+  phone: string;
+  primary: boolean;
+};
+
+function isOwnerLikeRecord(value: unknown): value is Record<string, unknown> {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  const record = value as Record<string, unknown>;
+  return [
+    "clientName",
+    "name",
+    "ownerName",
+    "ownerClientName",
+    "clientEmail",
+    "email",
+    "ownerEmail",
+    "clientPhone",
+    "phone",
+    "ownerPhone",
+    "ownerClientId",
+    "id",
+  ].some((key) => key in record);
+}
+
+function normalizeOwnerLogEntries(value: unknown): OwnerLogEntry[] {
+  const rawEntries = Array.isArray(value)
+    ? value
+    : isOwnerLikeRecord(value)
+      ? [value]
+      : value && typeof value === "object"
+        ? Object.values(value as Record<string, unknown>)
+        : [];
+
+  return rawEntries
+    .filter((entry): entry is Record<string, unknown> => Boolean(entry) && typeof entry === "object" && !Array.isArray(entry))
+    .map((entry, index) => {
+      const name = (entry.clientName ?? entry.name ?? entry.ownerName ?? entry.ownerClientName ?? entry.ownerClientId ?? "") as string | number | null | undefined;
+      const email = (entry.clientEmail ?? entry.email ?? entry.ownerEmail ?? "") as string | number | null | undefined;
+      const phone = (entry.clientPhone ?? entry.phone ?? entry.ownerPhone ?? "") as string | number | null | undefined;
+
+      return {
+        key: String(entry.ownerClientId ?? entry.id ?? index),
+        name: typeof name === "number" ? String(name) : String(name ?? "").trim(),
+        email: typeof email === "number" ? String(email) : String(email ?? "").trim(),
+        phone: typeof phone === "number" ? String(phone) : String(phone ?? "").trim(),
+        primary: Boolean(entry.isPrimaryOwner),
+      };
+    })
+    .filter((entry) => entry.name.length > 0 || entry.email.length > 0 || entry.phone.length > 0);
+}
+
+function renderOwnerDetail(label: string, value: string) {
+  return (
+    <div className="space-y-1">
+      <div className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{label}</div>
+      <div className="text-sm text-foreground">{value || "Not set"}</div>
+    </div>
+  );
+}
+
+function renderOwnerCard(entry: OwnerLogEntry, tone: "removed" | "added", index: number) {
+  const Icon = tone === "removed" ? MinusCircle : PlusCircle;
+  const cardClasses = tone === "removed"
+    ? "border-red-200 bg-red-50/60 dark:border-red-900/50 dark:bg-red-950/20"
+    : "border-emerald-200 bg-emerald-50/60 dark:border-emerald-900/50 dark:bg-emerald-950/20";
+
+  return (
+    <div key={`${tone}-${entry.key}-${index}`} className={`rounded-xl border p-4 ${cardClasses}`}>
+      <div className="flex items-center gap-2">
+        <Icon className={`h-4 w-4 ${tone === "removed" ? "text-red-600" : "text-emerald-600"}`} />
+        <div className="text-sm font-semibold text-foreground">
+          {tone === "removed" ? "Previous owner" : "New owner"}
+        </div>
+        {entry.primary && (
+          <span className="inline-flex h-5 items-center rounded-full border border-primary/20 bg-primary/10 px-1.5 text-[10px] font-semibold uppercase tracking-wide text-primary">
+            (p)
+          </span>
+        )}
+      </div>
+      <div className="mt-4 grid gap-3">
+        {tone === "removed" ? (
+          <>
+            {renderOwnerDetail("Owner name", entry.name)}
+            {renderOwnerDetail("Owner phone", entry.phone)}
+            {renderOwnerDetail("Owner email", entry.email)}
+          </>
+        ) : (
+          <>
+            {renderOwnerDetail("Owner name", entry.name)}
+            {renderOwnerDetail("Owner email", entry.email)}
+            {renderOwnerDetail("Owner phone", entry.phone)}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function renderOwnershipChange(previousValue: unknown, currentValue: unknown, approved: boolean) {
+  const previousOwners = normalizeOwnerLogEntries(previousValue);
+  const currentOwners = normalizeOwnerLogEntries(currentValue);
+  const removedOwners = previousOwners.filter((previousOwner) => {
+    return !currentOwners.some((currentOwner) =>
+      currentOwner.key === previousOwner.key ||
+      (currentOwner.name === previousOwner.name &&
+        currentOwner.email === previousOwner.email &&
+        currentOwner.phone === previousOwner.phone),
+    );
+  });
+  const addedOwners = approved
+    ? currentOwners.filter((currentOwner) => {
+        return !previousOwners.some((previousOwner) =>
+          previousOwner.key === currentOwner.key ||
+          (previousOwner.name === currentOwner.name &&
+            previousOwner.email === currentOwner.email &&
+            previousOwner.phone === currentOwner.phone),
+        );
+      })
+    : currentOwners;
+
+  if (!removedOwners.length && !addedOwners.length) {
+    return null;
+  }
+
+  return (
+    <div className="mt-4 space-y-4">
+      {removedOwners.length > 0 && (
+        <div className="space-y-3">
+          {removedOwners.map((entry, index) => renderOwnerCard(entry, "removed", index))}
+        </div>
+      )}
+
+      {addedOwners.length > 0 && (
+        <div className="space-y-3">
+          {addedOwners.map((entry, index) => renderOwnerCard(entry, "added", index))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+type OwnerReferenceEntry = {
+  id: string;
+  primary: boolean;
+};
+
+function normalizeOwnerReferenceEntries(value: unknown): OwnerReferenceEntry[] {
+  const rawEntries = Array.isArray(value)
+    ? value
+    : value && typeof value === "object" && !Array.isArray(value)
+      ? [value]
+      : [];
+
+  return rawEntries
+    .filter((entry): entry is Record<string, unknown> => Boolean(entry) && typeof entry === "object" && !Array.isArray(entry))
+    .map((entry) => {
+      const id = typeof entry.id === "string"
+        ? entry.id.trim()
+        : typeof entry.ownerClientId === "string"
+          ? entry.ownerClientId.trim()
+          : "";
+
+      return {
+        id,
+        primary: Boolean(entry.isprimary ?? entry.isPrimaryOwner),
+      };
+    })
+    .filter((entry) => entry.id.length > 0);
+}
+
+function ownerReferenceValuesEqual(left: unknown, right: unknown): boolean {
+  return JSON.stringify(normalizeOwnerReferenceEntries(left)) === JSON.stringify(normalizeOwnerReferenceEntries(right));
+}
+
+function renderOwnerReferenceCard(entry: OwnerReferenceEntry, tone: "removed" | "added", index: number) {
+  const Icon = tone === "removed" ? MinusCircle : PlusCircle;
+  const cardClasses = tone === "removed"
+    ? "border-red-200 bg-red-50/60 dark:border-red-900/50 dark:bg-red-950/20"
+    : "border-emerald-200 bg-emerald-50/60 dark:border-emerald-900/50 dark:bg-emerald-950/20";
+
+  return (
+    <div key={`${tone}-${entry.id}-${index}`} className={`rounded-xl border p-4 ${cardClasses}`}>
+      <div className="flex items-center gap-2">
+        <Icon className={`h-4 w-4 ${tone === "removed" ? "text-red-600" : "text-emerald-600"}`} />
+        <div className="text-sm font-semibold text-foreground">
+          {tone === "removed" ? "Previous owner" : "New owner"}
+        </div>
+        {entry.primary && (
+          <span className="inline-flex h-5 items-center rounded-full border border-primary/20 bg-primary/10 px-1.5 text-[10px] font-semibold uppercase tracking-wide text-primary">
+            (p)
+          </span>
+        )}
+      </div>
+      <div className="mt-4 grid gap-3">
+        <div className="space-y-1">
+          <div className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Owner ID</div>
+          <div className="text-sm text-foreground break-all">{entry.id}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function renderOwnerReferenceChange(previousValue: unknown, currentValue: unknown, approved: boolean) {
+  const previousOwners = normalizeOwnerReferenceEntries(previousValue);
+  const currentOwners = normalizeOwnerReferenceEntries(currentValue);
+  const removedOwners = previousOwners.filter((previousOwner) => {
+    return !currentOwners.some((currentOwner) => currentOwner.id === previousOwner.id);
+  });
+  const addedOwners = approved
+    ? currentOwners.filter((currentOwner) => !previousOwners.some((previousOwner) => previousOwner.id === currentOwner.id))
+    : currentOwners;
+
+  if (!removedOwners.length && !addedOwners.length) {
+    return null;
+  }
+
+  return (
+    <div className="mt-4 space-y-4">
+      {removedOwners.length > 0 && (
+        <div className="space-y-3">
+          {removedOwners.map((entry, index) => renderOwnerReferenceCard(entry, "removed", index))}
+        </div>
+      )}
+
+      {addedOwners.length > 0 && (
+        <div className="space-y-3">
+          {addedOwners.map((entry, index) => renderOwnerReferenceCard(entry, "added", index))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function renderTitleChange(previousValue: unknown, currentValue: unknown, approved: boolean) {
+  const previousTitle = formatValue(previousValue);
+  const currentTitle = approved ? formatValue(currentValue) : formatValue(previousValue);
+
+  if (!previousTitle && !currentTitle) {
+    return null;
+  }
+
+  return (
+    <div className="mt-4 rounded-lg border bg-background p-4">
+      <div className="text-sm font-semibold text-foreground">Title:</div>
+      <div className="mt-2 space-y-1 text-sm text-foreground">
+        {approved && previousTitle !== "Not set" && <div className="line-through">{previousTitle}</div>}
+        <div>{currentTitle}</div>
+      </div>
+    </div>
+  );
 }
 
 function getLogTitle(log: { data: Array<{ field?: string | null; value?: unknown }> }, fallback: string) {
@@ -264,6 +528,14 @@ export default async function PropertyLogsPage({ params }: PageProps) {
                   const previousValue = approved ? getPathValue(beforeState, item.field) : item.value;
                   const currentValue = approved ? getPathValue(afterState, item.field) : undefined;
 
+                  if (isOwnerReferenceField(item.field)) {
+                    if (!approved) {
+                      return normalizeOwnerReferenceEntries(item.value).length > 0;
+                    }
+
+                    return !ownerReferenceValuesEqual(previousValue, currentValue);
+                  }
+
                   if (!approved) {
                     return hasRenderableValue(item.value);
                   }
@@ -339,7 +611,13 @@ export default async function PropertyLogsPage({ params }: PageProps) {
                                       </div>
                                     </div>
 
-                                    {approved ? isImageField(item.field) ? (
+                                    {item.field === "title" ? (
+                                      renderTitleChange(previousValue, currentValue, approved)
+                                    ) : approved && isOwnerReferenceField(item.field) ? (
+                                      renderOwnerReferenceChange(previousValue, currentValue, approved)
+                                    ) : approved && isOwnershipField(item.field) ? (
+                                      renderOwnershipChange(previousValue, currentValue, approved)
+                                    ) : approved ? isImageField(item.field) ? (
                                       <div className="mt-4">
                                         <PropertyImageDiffGrid items={getImageDiff(previousValue, currentValue)} />
                                       </div>
@@ -368,6 +646,19 @@ export default async function PropertyLogsPage({ params }: PageProps) {
                                             </div>
                                           </div>
                                         )}
+                                      </div>
+                                    ) : item.field === "title" ? (
+                                      <div className="mt-4 rounded-lg border bg-muted/20 p-3">
+                                        <div className="text-sm font-semibold text-foreground">Title:</div>
+                                        <div className="mt-2 text-sm text-foreground">{formatValue(item.value)}</div>
+                                      </div>
+                                    ) : isOwnerReferenceField(item.field) ? (
+                                      <div className="mt-4 space-y-3">
+                                        {normalizeOwnerReferenceEntries(item.value).map((entry, index) => renderOwnerReferenceCard(entry, "added", index))}
+                                      </div>
+                                    ) : isOwnershipField(item.field) ? (
+                                      <div className="mt-4 space-y-3">
+                                        {normalizeOwnerLogEntries(item.value).map((entry, index) => renderOwnerCard(entry, "added", index))}
                                       </div>
                                     ) : (
                                       <div className="mt-4 rounded-lg border bg-muted/20 p-3">

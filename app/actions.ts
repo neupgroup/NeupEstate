@@ -470,10 +470,37 @@ function normalizeOwnerEntries(value: unknown): NonNullable<CreatePropertyInput[
     .filter((entry) => entry.ownerClientId.length > 0) as NonNullable<CreatePropertyInput['owners']>;
 }
 
+function normalizeOwnerReferenceEntries(value: unknown): Array<{ id: string; isprimary: boolean }> {
+  const rawEntries = Array.isArray(value)
+    ? value
+    : value && typeof value === 'object'
+      ? [value]
+      : [];
+
+  return rawEntries
+    .filter((entry): entry is Record<string, any> => Boolean(entry) && typeof entry === 'object' && !Array.isArray(entry))
+    .map((entry) => {
+      const id = typeof entry.id === 'string'
+        ? entry.id.trim()
+        : typeof entry.ownerClientId === 'string'
+          ? entry.ownerClientId.trim()
+          : '';
+
+      return {
+        id,
+        isprimary: Boolean(entry.isprimary ?? entry.isPrimaryOwner),
+      };
+    })
+    .filter((entry) => entry.id.length > 0);
+}
+
 function normalizePropertyChangeData(data: Record<string, any>): Record<string, any> {
   const next = { ...data };
   for (const key of ['images', 'documents', 'plots', 'apartmentUnits']) {
     if (key in next) next[key] = normalizeArrayLikeValue(next[key]);
+  }
+  if ('owner' in next) {
+    next.owner = normalizeOwnerReferenceEntries(next.owner);
   }
   if ('owners' in next) {
     next.owners = normalizeOwnerEntries(next.owners);
@@ -1167,7 +1194,10 @@ export async function approvePropertyAction(propertyId: string) {
             requestedBy: actorId,
             approvedBy: actorId,
             approvedOn: new Date(),
-            data: Object.entries(property as Record<string, any>).map(([field, value]) => ({ field, value })),
+            data: Object.entries(property as Record<string, any>).map(([field, value]) => ({
+              field,
+              value: field === 'owner' ? normalizeOwnerReferenceEntries(value) : value,
+            })),
           });
         }
         revalidatePath('/manage/properties');
