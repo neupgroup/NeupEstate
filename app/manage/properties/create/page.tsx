@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTransition, useEffect, useState } from 'react';
 import { CreatePropertySchema, type CreatePropertyFormValues, type User } from '@/types';
 import { createPropertyAction, getCurrentAccountId } from '@/app/actions';
@@ -24,6 +24,7 @@ import { ProgressivePropertySections } from '@/components/manage/progressive-pro
 
 export default function CreatePropertyPage() {
     const router = useRouter();
+    const pathname = usePathname();
     const searchParams = useSearchParams();
     const { toast } = useToast();
     const [isPending, startTransition] = useTransition();
@@ -132,7 +133,7 @@ export default function CreatePropertyPage() {
         const section = getSectionForErrorPath(firstPath);
         const params = new URLSearchParams(window.location.search);
         params.set("section", section);
-        router.replace(`${window.location.pathname}?${params.toString()}`, { scroll: false });
+        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     }
 
     const form = useForm<CreatePropertyFormValues>({
@@ -171,13 +172,7 @@ export default function CreatePropertyPage() {
             roadAccessDetails: {},
             distancing: {},
             earnings: {},
-            owners: [{
-                ownerClientId: '',
-                isPrimaryOwner: true,
-                clientName: '',
-                clientEmail: '',
-                clientPhone: '',
-            }],
+            owners: [],
             documents: [],
         },
     });

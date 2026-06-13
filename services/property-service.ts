@@ -842,13 +842,32 @@ function deepMergePropertyData<T>(base: T, patch: any): T {
   return merged as T;
 }
 
+function normalizePropertyAgency(value: unknown): string | null | undefined {
+  if (value === undefined) return undefined;
+  if (value === null) return null;
+  if (typeof value === 'string') return value.trim() || null;
+  if (isPlainObject(value) && typeof value.id === 'string') {
+    return value.id !== 'unknown' ? value.id : null;
+  }
+  return undefined;
+}
+
 async function resolveMergedPropertyData(id: string, patch: Partial<CreatePropertyInput> & Record<string, any>) {
-  const current = await getPropertyById(id, { includeInactive: true });
-  if (!current) {
+  const [current, currentRecord] = await Promise.all([
+    getPropertyById(id, { includeInactive: true }),
+    prisma.property.findUnique({ where: { id }, select: { agency: true } }),
+  ]);
+
+  if (!current || !currentRecord) {
     throw new Error('Property not found.');
   }
 
-  return deepMergePropertyData(current as Record<string, any>, patch) as Partial<CreatePropertyInput> & Record<string, any>;
+  const merged = deepMergePropertyData(current as Record<string, any>, patch) as Partial<CreatePropertyInput> & Record<string, any>;
+
+  // `getPropertyById()` returns a display object for `agency`; Prisma expects the scalar FK value.
+  merged.agency = normalizePropertyAgency(patch.agency) ?? currentRecord.agency;
+
+  return merged;
 }
 
 async function upsertDetailTable(propertyId: string, type: PropertyType, d: any) {
@@ -880,8 +899,52 @@ async function upsertDetailTable(propertyId: string, type: PropertyType, d: any)
   }
 }
 
-async function upsertMedia(propertyId: string, images: string[]) {
-  const normalizedImages = images.filter((image): image is string => typeof image === 'string' && image.trim().length > 0);
+function normalizePropertyImages(images: unknown): string[] {
+  if (Array.isArray(images)) {
+    return images.filter((image): image is string => typeof image === 'string' && image.trim().length > 0);
+  }
+
+  if (typeof images === 'string') {
+    return images
+      .split(',')
+      .map((image) => image.trim())
+      .filter(Boolean);
+  }
+
+  if (images && typeof images === 'object') {
+    return Object.values(images as Record<string, unknown>)
+      .flatMap((value) => normalizePropertyImages(value))
+      .filter((image, index, self) => self.indexOf(image) === index);
+  }
+
+  return [];
+}
+
+function normalizeArrayLikeValue(value: unknown): unknown[] {
+  if (Array.isArray(value)) return value;
+  if (!value || typeof value !== 'object') return [];
+
+  return Object.entries(value as Record<string, unknown>)
+    .sort(([left], [right]) => Number(left) - Number(right))
+    .map(([, entry]) => entry)
+    .filter((entry) => entry !== undefined);
+}
+
+function normalizePropertyOwners(owners: unknown): NonNullable<CreatePropertyInput['owners']> {
+  return normalizeArrayLikeValue(owners)
+    .filter((owner): owner is Record<string, any> => Boolean(owner) && typeof owner === 'object' && !Array.isArray(owner))
+    .map((owner) => ({
+      ownerClientId: typeof owner.ownerClientId === 'string' ? owner.ownerClientId.trim() : '',
+      isPrimaryOwner: Boolean(owner.isPrimaryOwner),
+      clientName: typeof owner.clientName === 'string' ? owner.clientName : undefined,
+      clientEmail: typeof owner.clientEmail === 'string' ? owner.clientEmail : undefined,
+      clientPhone: typeof owner.clientPhone === 'string' ? owner.clientPhone : undefined,
+    }))
+    .filter((owner) => owner.ownerClientId.length > 0) as NonNullable<CreatePropertyInput['owners']>;
+}
+
+async function upsertMedia(propertyId: string, images: unknown) {
+  const normalizedImages = normalizePropertyImages(images);
   await prisma.propertyMedia.deleteMany({ where: { propertyId } });
   if (normalizedImages.length > 0) {
     await prisma.propertyMedia.createMany({
@@ -891,11 +954,12 @@ async function upsertMedia(propertyId: string, images: string[]) {
 }
 
 async function replacePropertyOwners(propertyId: string, owners: CreatePropertyInput['owners'] = []) {
+  const normalizedOwners = normalizePropertyOwners(owners);
   await prisma.propertyOwner.deleteMany({ where: { propertyId } });
-  if (!owners.length) return;
+  if (!normalizedOwners.length) return;
 
   await prisma.propertyOwner.createMany({
-    data: owners.map((owner, index) => ({
+    data: normalizedOwners.map((owner, index) => ({
       propertyId,
       ownerClientId: owner.ownerClientId,
       isPrimaryOwner: owner.isPrimaryOwner ?? index === 0,
@@ -957,11 +1021,10 @@ export async function updatePropertyWithExtractedData(id: string, d: ExtractedPr
 
 export async function updatePropertyImages(id: string, images: string[]): Promise<void> {
   try {
-    const normalizedImages = images.filter((image): image is string => typeof image === 'string' && image.trim().length > 0);
-    await upsertMedia(id, normalizedImages);
+    await upsertMedia(id, images);
     await prisma.property.update({
       where: { id },
-      data: { coverImage: normalizedImages[0] ?? '' },
+      data: { coverImage: normalizePropertyImages(images)[0] ?? '' },
     });
   } catch (e) { await logProblem(e, `updatePropertyImages ${id}`); throw new Error('Failed to update images.'); }
 }

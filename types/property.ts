@@ -404,7 +404,6 @@ export const CreatePropertySchema = z.object({
     distancing: DistancingSchema.optional(),
     earnings: EarningsSchema.optional(),
     owners: z.array(OwnerSchema)
-        .min(1, 'At least one owner is required.')
         .max(4, 'You can add up to 4 owners.')
         .refine((owners) => new Set(owners.map((owner) => owner.ownerClientId)).size === owners.length, {
             message: 'The same client cannot be selected more than once.',

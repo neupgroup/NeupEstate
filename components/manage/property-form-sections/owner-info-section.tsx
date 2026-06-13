@@ -78,7 +78,7 @@ function OwnerClientPicker({
                 <div>
                     <h4 className="font-medium">Owner {index + 1}</h4>
                     <p className="text-sm text-muted-foreground">
-                        Search by client name, phone number, or email and select the owner.
+                        Search by client name, phone number, or email and select an owner if you want to add one.
                     </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -244,7 +244,7 @@ export function OwnerInfoSection({ control, setValue, formErrors, fieldChangeNot
             <div className="space-y-6">
                 {fields.length === 0 ? (
                     <div className="rounded-lg border border-dashed p-4 text-sm text-muted-foreground">
-                        Add one or more client owners for this property.
+                        No owners added. This is optional.
                     </div>
                 ) : null}
 

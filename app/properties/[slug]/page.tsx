@@ -2,6 +2,7 @@
 
 import { notFound, redirect } from 'next/navigation';
 import { getPropertyById, getProperties, getPropertyBySlug } from '@/services/property-service';
+import { buildPublicAppUrl } from '@/services/auth/public-url';
 import { logProblem } from '@/services/problem-service';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -131,7 +132,7 @@ export async function generateMetadata(
   const title = `${property.title} | ${siteName}`;
   const description = stripHtml(property.description).substring(0, 160);
   const imageUrl = Array.isArray(property.images) && property.images.length > 0 ? property.images[0] : 'https://placehold.co/1200x630.png';
-  const propertyUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'https://neupgroup.com/estate'}/properties/${property.slug || property.id}`;
+  const propertyUrl = buildPublicAppUrl(undefined, `/properties/${property.slug || property.id}`);
 
   return {
     title,
@@ -196,9 +197,8 @@ const DetailItem = ({ label, value }: { label: string, value: React.ReactNode })
 );
 
 function generateSchema(property: Property) {
-    const baseURL = process.env.NEXT_PUBLIC_BASE_URL || 'https://neupgroup.com/estate';
     const slugOrId = property.slug || property.id;
-    const propertyUrl = `${baseURL}/properties/${slugOrId}`;
+    const propertyUrl = buildPublicAppUrl(undefined, `/properties/${slugOrId}`);
 
     let schemaType = 'Residence';
     switch (property.category) {

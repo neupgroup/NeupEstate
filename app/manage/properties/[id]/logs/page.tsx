@@ -246,8 +246,7 @@ export default async function PropertyLogsPage({ params }: PageProps) {
             </CardHeader>
           </Card>
         ) : (
-          <div className="relative pl-6">
-            <div className="absolute left-3 top-2 bottom-2 w-px bg-border" />
+          <div>
             <ul className="space-y-5">
               {timelineEntries.map(({ log, beforeState, afterState, approved }) => {
                 const changeItems = log.data
@@ -282,21 +281,8 @@ export default async function PropertyLogsPage({ params }: PageProps) {
                 });
 
                 return (
-                  <li key={log.id} className="relative">
-                    <div className="absolute left-3 top-6 z-10 flex h-6 w-6 -translate-x-1/2 items-center justify-center rounded-full border border-border bg-background">
-                      <div
-                        className={[
-                          "h-2.5 w-2.5 rounded-full",
-                          statusTone === "approved"
-                            ? "bg-emerald-500"
-                            : statusTone === "rejected"
-                              ? "bg-red-500"
-                              : "bg-slate-400",
-                        ].join(" ")}
-                      />
-                    </div>
-
-                    <Card className="ml-6">
+                  <li key={log.id}>
+                    <Card>
                       <CardHeader className="pb-0">
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">
@@ -314,13 +300,11 @@ export default async function PropertyLogsPage({ params }: PageProps) {
                               {logTitle}
                             </div>
                           </div>
-                          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
+                          <p className="text-xs text-muted-foreground">
                             <span className="font-medium text-foreground">Log #{log.id.slice(0, 8)}</span>
-                            <span className="text-muted-foreground">·</span>
-                            <span>
-                              Requested by {requestedBy} {formatRelativeTime(log.requestedOn)}
-                            </span>
-                            <span className="text-muted-foreground">·</span>
+                            {' · '}
+                            <span>Requested by {requestedBy} {formatRelativeTime(log.requestedOn)}</span>
+                            {' · '}
                             <span>
                               {statusTone === "approved"
                                 ? `Approved by ${approvedBy || "Unknown"} ${formatRelativeTime(log.approvedOn)}`
@@ -328,7 +312,7 @@ export default async function PropertyLogsPage({ params }: PageProps) {
                                   ? `Rejected by ${approvedBy || "Unknown"} ${formatRelativeTime(log.approvedOn || log.requestedOn)}`
                                   : `Approval pending`}
                             </span>
-                          </div>
+                          </p>
                         </div>
                       </CardHeader>
 

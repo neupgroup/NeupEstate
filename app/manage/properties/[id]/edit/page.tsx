@@ -3,7 +3,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useTransition, useState, useEffect, useMemo } from 'react';
 import { UpdatePropertySchema, type Property, type User, type UpdatePropertyFormValues } from '@/types';
 import { getCurrentAccountId, savePropertyChangeDraftAction, getPropertyChangeContextAction } from '@/app/actions';
@@ -29,6 +29,7 @@ export default function EditPropertyPage() {
     const [pendingDraftValues, setPendingDraftValues] = useState<Partial<UpdatePropertyFormValues> | null>(null);
     const params = useParams<{ id: string }>();
     const propertyId = Array.isArray(params?.id) ? params.id[0] : params?.id;
+    const pathname = usePathname();
     const router = useRouter();
     const { toast } = useToast();
     const [isSaving, startSaveTransition] = useTransition();
@@ -117,22 +118,51 @@ export default function EditPropertyPage() {
         const section = getSectionForErrorPath(firstPath);
         const params = new URLSearchParams(window.location.search);
         params.set("section", section);
-        router.replace(`${window.location.pathname}?${params.toString()}`, { scroll: false });
+        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     }
 
     const form = useForm<UpdatePropertyFormValues>({
         resolver: zodResolver(UpdatePropertySchema),
     });
 
-    function pickDirtyValues(values: any, dirty: any): Record<string, any> {
+    function pickDirtyValues(values: any, dirty: any): any {
+        if (Array.isArray(dirty) && Array.isArray(values)) {
+            const picked = dirty.reduce<any[]>((acc, entry, index) => {
+                if (entry === true) {
+                    acc[index] = values[index];
+                    return acc;
+                }
+
+                const nested = pickDirtyValues(values[index], entry);
+                const hasNestedValue = Array.isArray(nested)
+                    ? nested.length > 0
+                    : isPlainObject(nested)
+                        ? Object.keys(nested).length > 0
+                        : nested !== undefined;
+
+                if (hasNestedValue) {
+                    acc[index] = nested;
+                }
+                return acc;
+            }, []);
+
+            return picked;
+        }
+
         if (!dirty || typeof dirty !== 'object') return {};
+
         return Object.keys(dirty).reduce<Record<string, any>>((picked, key) => {
             if (dirty[key] === true) {
                 picked[key] = values?.[key];
                 return picked;
             }
             const nested = pickDirtyValues(values?.[key], dirty[key]);
-            if (Object.keys(nested).length > 0) picked[key] = nested;
+            const hasNestedValue = Array.isArray(nested)
+                ? nested.length > 0
+                : isPlainObject(nested)
+                    ? Object.keys(nested).length > 0
+                    : nested !== undefined;
+            if (hasNestedValue) picked[key] = nested;
             return picked;
         }, {});
     }
@@ -143,6 +173,37 @@ export default function EditPropertyPage() {
 
     function stripHtml(value: string) {
         return value.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+    }
+
+    function normalizeArrayLikeValue(value: unknown): unknown[] {
+        if (Array.isArray(value)) return value;
+        if (!value || typeof value !== 'object') return [];
+
+        return Object.entries(value as Record<string, unknown>)
+            .sort(([left], [right]) => Number(left) - Number(right))
+            .map(([, entry]) => entry)
+            .filter((entry) => entry !== undefined);
+    }
+
+    function normalizeOwnerEntries(value: unknown): any[] {
+        return normalizeArrayLikeValue(value)
+            .filter((entry): entry is Record<string, any> => Boolean(entry) && typeof entry === 'object' && !Array.isArray(entry))
+            .map((entry) => ({
+                ...entry,
+                ownerClientId: typeof entry.ownerClientId === 'string' ? entry.ownerClientId.trim() : '',
+            }))
+            .filter((entry) => entry.ownerClientId.length > 0);
+    }
+
+    function normalizeDraftValues(values: Record<string, any>): Record<string, any> {
+        return {
+            ...values,
+            owners: normalizeOwnerEntries(values.owners),
+            images: normalizeArrayLikeValue(values.images),
+            documents: normalizeArrayLikeValue(values.documents),
+            plots: normalizeArrayLikeValue(values.plots),
+            apartmentUnits: normalizeArrayLikeValue(values.apartmentUnits),
+        };
     }
 
     function normalizeComparableValue(value: any): any {
@@ -356,9 +417,11 @@ export default function EditPropertyPage() {
             };
 
             const currentDraft = reviewContext.success ? reviewContext.currentUserChange?.data : null;
-            form.reset(currentDraft ? { ...resolvedBaseValues, ...currentDraft } : resolvedBaseValues);
-            setBaseValues(resolvedBaseValues as UpdatePropertyFormValues);
-            setPendingDraftValues((currentDraft as Partial<UpdatePropertyFormValues>) || null);
+            const normalizedBaseValues = normalizeDraftValues(resolvedBaseValues);
+            const normalizedDraft = currentDraft ? normalizeDraftValues({ ...normalizedBaseValues, ...currentDraft }) : normalizedBaseValues;
+            form.reset(normalizedDraft);
+            setBaseValues(normalizedBaseValues as UpdatePropertyFormValues);
+            setPendingDraftValues((currentDraft ? normalizeDraftValues(currentDraft as Record<string, any>) : null) as Partial<UpdatePropertyFormValues> | null);
         }
         loadData();
     }, [propertyId, router, toast, form]);

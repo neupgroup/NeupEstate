@@ -447,6 +447,40 @@ function deepMergeJson<T>(base: T, patch: any): T {
   return merged as T;
 }
 
+function normalizeArrayLikeValue(value: unknown): unknown[] {
+  if (Array.isArray(value)) return value;
+  if (!value || typeof value !== 'object') return [];
+
+  return Object.entries(value as Record<string, unknown>)
+    .sort(([left], [right]) => Number(left) - Number(right))
+    .map(([, entry]) => entry)
+    .filter((entry) => entry !== undefined);
+}
+
+function normalizeOwnerEntries(value: unknown): NonNullable<CreatePropertyInput['owners']> {
+  return normalizeArrayLikeValue(value)
+    .filter((entry): entry is Record<string, any> => Boolean(entry) && typeof entry === 'object' && !Array.isArray(entry))
+    .map((entry) => ({
+      ownerClientId: typeof entry.ownerClientId === 'string' ? entry.ownerClientId.trim() : '',
+      isPrimaryOwner: Boolean(entry.isPrimaryOwner),
+      clientName: typeof entry.clientName === 'string' ? entry.clientName : undefined,
+      clientEmail: typeof entry.clientEmail === 'string' ? entry.clientEmail : undefined,
+      clientPhone: typeof entry.clientPhone === 'string' ? entry.clientPhone : undefined,
+    }))
+    .filter((entry) => entry.ownerClientId.length > 0) as NonNullable<CreatePropertyInput['owners']>;
+}
+
+function normalizePropertyChangeData(data: Record<string, any>): Record<string, any> {
+  const next = { ...data };
+  for (const key of ['images', 'documents', 'plots', 'apartmentUnits']) {
+    if (key in next) next[key] = normalizeArrayLikeValue(next[key]);
+  }
+  if ('owners' in next) {
+    next.owners = normalizeOwnerEntries(next.owners);
+  }
+  return next;
+}
+
 export async function savePropertyChangeDraftAction(input: {
   propertyId: string;
   data: Record<string, any>;
@@ -465,17 +499,16 @@ export async function savePropertyChangeDraftAction(input: {
       orderBy: { modifiedOn: 'desc' },
     });
 
+    const normalizedExistingData = existingDraft ? normalizePropertyChangeData((existingDraft.data ?? {}) as Record<string, any>) : {};
+    const normalizedInputData = normalizePropertyChangeData(input.data);
     const data = {
       propertyId: input.propertyId,
       accountId: actorId,
       status: input.status,
       isApproved: input.isApproved ?? existingDraft?.isApproved ?? null,
       data: existingDraft
-        ? deepMergeJson(
-            existingDraft?.data ?? {},
-            input.data,
-          )
-        : input.data,
+        ? deepMergeJson(normalizedExistingData, normalizedInputData)
+        : normalizedInputData,
       modifiedOn: new Date(),
     };
 
@@ -520,7 +553,7 @@ export async function getPropertyChangeDraftAction(changeId: string): Promise<{
 
     return {
       success: true,
-      data: draft.data as Record<string, any>,
+      data: normalizePropertyChangeData(draft.data as Record<string, any>),
       status: draft.status,
       isApproved: draft.isApproved,
       propertyId: draft.propertyId,
@@ -604,7 +637,7 @@ export async function getPropertyChangeContextAction(propertyId: string): Promis
         id: currentUserChange.id,
         status: currentUserChange.status,
         isApproved: currentUserChange.isApproved,
-        data: currentUserChange.data as Record<string, any>,
+        data: normalizePropertyChangeData(currentUserChange.data as Record<string, any>),
         modifiedOn: currentUserChange.modifiedOn.toISOString(),
         accountId: currentUserChange.accountId,
       } : null,
@@ -673,9 +706,10 @@ export async function reviewPropertyChangeAction(input: {
     }
 
     if (input.approve) {
-      const acceptedFields = input.acceptedFields?.length ? input.acceptedFields : Object.keys(request.data as Record<string, any>);
+      const requestData = normalizePropertyChangeData(request.data as Record<string, any>);
+      const acceptedFields = input.acceptedFields?.length ? input.acceptedFields : Object.keys(requestData);
       const acceptedData = acceptedFields
-        .map((field) => ({ field, value: (request.data as Record<string, any>)[field] }))
+        .map((field) => ({ field, value: requestData[field] }))
         .filter((entry) => entry.value !== undefined);
 
       if (request.status === 'deleting') {
@@ -689,7 +723,7 @@ export async function reviewPropertyChangeAction(input: {
         });
       } else {
         const data = acceptedFields.reduce<Record<string, any>>((picked, field) => {
-          const value = (request.data as Record<string, any>)[field];
+          const value = requestData[field];
           if (value !== undefined) picked[field] = value;
           return picked;
         }, {});
@@ -728,7 +762,7 @@ export async function reviewPropertyChangeAction(input: {
         approvedBy: accountId,
         approvedOn: new Date(),
         data: input.acceptedFields
-          .map((field) => ({ field, value: (request.data as Record<string, any>)[field] }))
+          .map((field) => ({ field, value: normalizePropertyChangeData(request.data as Record<string, any>)[field] }))
           .filter((entry) => entry.value !== undefined),
       });
     }
@@ -891,7 +925,7 @@ export async function createPropertyAction(
       amenities: validatedData.amenities?.split(',').map(a => a.trim()).filter(Boolean) || [],
       images: validatedData.images?.filter(img => img.trim() !== '') || [],
       pricing,
-      owners: validatedData.owners,
+      owners: normalizeOwnerEntries(validatedData.owners),
       landDetails: validatedData.landDetails ? {
         ...validatedData.landDetails,
         area: areaValueToSqft(validatedData.landDetails.area),
@@ -969,7 +1003,7 @@ export async function updatePropertyAction(
       amenities: validatedData.amenities?.split(',').map(a => a.trim()).filter(Boolean) || [],
       images: validatedData.images?.filter(img => img.trim() !== '') || [],
       pricing,
-      owners: validatedData.owners,
+      owners: normalizeOwnerEntries(validatedData.owners),
       landDetails: validatedData.landDetails ? {
         ...validatedData.landDetails,
         area: areaValueToSqft(validatedData.landDetails.area),
