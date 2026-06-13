@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ClientLink } from "@/components/client-link";
@@ -511,11 +510,6 @@ export default async function PropertyLogsPage({ params }: PageProps) {
           </div>
         </div>
 
-        <Button asChild variant="outline">
-          <ClientLink href={`/manage/properties/${property.id}`}>
-            View property
-          </ClientLink>
-        </Button>
       </div>
 
       <div className="space-y-6">
