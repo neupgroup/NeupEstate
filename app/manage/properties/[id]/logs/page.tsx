@@ -390,15 +390,6 @@ function renderSimpleFieldChange(previousValue: unknown, currentValue: unknown, 
   );
 }
 
-function getLogTitle(log: { data: Array<{ field?: string | null; value?: unknown }> }, fallback: string) {
-  const titleEntry = log.data.find((entry) => String(entry?.field ?? "").toLowerCase() === "title");
-  const title = titleEntry?.value;
-
-  if (typeof title === "string" && title.trim().length > 0) return title.trim();
-  if (typeof title === "number") return String(title);
-  return fallback;
-}
-
 function getLogStatusTone(log: { approvedOn: string | null; approvedBy: string | null }) {
   if (log.approvedOn) return "approved";
   if (log.approvedBy && !log.approvedOn) return "rejected";
@@ -570,7 +561,7 @@ export default async function PropertyLogsPage({ params }: PageProps) {
                 const requestedBy = resolveAccountLabel(log.requestedByAccount, log.requestedBy);
                 const approvedBy = log.approvedBy ? resolveAccountLabel(log.approvedByAccount, log.approvedBy) : null;
                 const statusTone = getLogStatusTone(log);
-                const logTitle = getLogTitle(log, property.title);
+                const logTitle = formatValue(approved ? getPathValue(afterState, "title") : getPathValue(beforeState, "title"));
                 const visibleChanges = changeItems.filter((item) => {
                   const previousValue = approved ? getPathValue(beforeState, item.field) : item.value;
                   const currentValue = approved ? getPathValue(afterState, item.field) : undefined;
