@@ -1,6 +1,7 @@
 export const PERMISSIONS = {
   root: {
     propertiesView: "root.properties.view",
+    propertyLog: "root.property.log",
   },
   public: {
     propertyView: "public.property.view",

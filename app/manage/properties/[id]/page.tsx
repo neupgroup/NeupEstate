@@ -445,6 +445,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
     const reviewRequests = mode === "review" && canApproveProperty
         ? await getPropertyReviewRequests(property.id)
         : [];
+    const canViewPropertyLogs = await hasPermission(PERMISSIONS.root.propertyLog);
 
     return (
         <div className="space-y-4 max-w-6xl mx-auto">
@@ -673,12 +674,21 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
             </Section>
 
             <div className="flex justify-start">
-                <Button asChild>
-                    <ClientLink href={editUrl}>
-                        <PenSquare className="mr-2 h-4 w-4" />
-                        Edit Property
-                    </ClientLink>
-                </Button>
+                <div className="flex flex-wrap gap-3">
+                    <Button asChild>
+                        <ClientLink href={editUrl}>
+                            <PenSquare className="mr-2 h-4 w-4" />
+                            Edit Property
+                        </ClientLink>
+                    </Button>
+                    {canViewPropertyLogs ? (
+                        <Button asChild variant="outline">
+                            <ClientLink href={`/manage/properties/${property.id}/logs`}>
+                                View Logs
+                            </ClientLink>
+                        </Button>
+                    ) : null}
+                </div>
             </div>
         </div>
     );
