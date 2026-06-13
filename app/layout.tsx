@@ -49,7 +49,10 @@ export default async function RootLayout({
   const isGuestUser = me?.accountType === 'guest';
   const canShowManagePanel = me
     ? (await Promise.all(
-        Object.values(PERMISSIONS.manage).map((permission) => hasPermission(permission))
+        [
+          ...Object.values(PERMISSIONS.manage),
+          ...Object.values(PERMISSIONS.root),
+        ].map((permission) => hasPermission(permission))
       )).some(Boolean)
     : false;
   const initialUser = me

@@ -16,7 +16,15 @@ type ReviewRequest = {
   account?: { displayName?: string | null; neupId?: string | null } | null;
 };
 
-export function PropertyReviewRequests({ propertyId, requests }: { propertyId: string; requests: ReviewRequest[] }) {
+export function PropertyReviewRequests({
+  propertyId,
+  requests,
+  canApprove = false,
+}: {
+  propertyId: string;
+  requests: ReviewRequest[];
+  canApprove?: boolean;
+}) {
   const { toast } = useToast();
   const [selection, setSelection] = React.useState<Record<string, string[]>>({});
 
@@ -80,10 +88,12 @@ export function PropertyReviewRequests({ propertyId, requests }: { propertyId: s
                   Submitted by {request.account?.displayName || request.account?.neupId || request.accountId} on {new Date(request.modifiedOn).toLocaleString()}
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <Button type="button" onClick={() => approve(request)}>Approve</Button>
-                <Button type="button" variant="outline" onClick={() => reject(request)}>Disapprove</Button>
-              </div>
+              {canApprove && (
+                <div className="flex items-center gap-2">
+                  <Button type="button" onClick={() => approve(request)}>Approve</Button>
+                  <Button type="button" variant="outline" onClick={() => reject(request)}>Disapprove</Button>
+                </div>
+              )}
             </div>
 
             <div className="mt-4 grid gap-2 sm:grid-cols-2">

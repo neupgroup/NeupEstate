@@ -74,7 +74,7 @@ export function PropertyMediaGallery({ images, title }: PropertyMediaGalleryProp
     overlay?: ReactNode;
   }) {
     return (
-      <button type="button" onClick={() => setOpen(true)} className={`group relative overflow-hidden bg-muted ${className}`}>
+      <button type="button" onClick={() => setOpen(true)} className={`group relative h-full overflow-hidden bg-muted ${className}`}>
         <GalleryImage src={src} alt={alt} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.04]" />
         <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/10" />
         {overlay}
@@ -98,27 +98,27 @@ export function PropertyMediaGallery({ images, title }: PropertyMediaGalleryProp
         <MediaTile
           src={first}
           alt={`${title} photo 1`}
-          className="min-h-[280px] rounded-3xl"
+          className="rounded-3xl"
         />
       );
     }
 
     if (visibleImages.length === 2) {
       return (
-        <div className="grid gap-2 rounded-3xl md:grid-cols-2">
-          <MediaTile src={first} alt={`${title} photo 1`} className="min-h-[280px] rounded-3xl" />
-          <MediaTile src={second} alt={`${title} photo 2`} className="min-h-[280px] rounded-3xl" />
+        <div className="grid h-full gap-2 rounded-3xl md:grid-cols-2">
+          <MediaTile src={first} alt={`${title} photo 1`} className="rounded-3xl" />
+          <MediaTile src={second} alt={`${title} photo 2`} className="rounded-3xl" />
         </div>
       );
     }
 
     if (visibleImages.length === 3) {
       return (
-        <div className="grid gap-2 rounded-3xl md:grid-cols-2">
-          <MediaTile src={first} alt={`${title} photo 1`} className="min-h-[280px] rounded-3xl md:col-span-1" />
-          <div className="grid gap-2">
-            <MediaTile src={second} alt={`${title} photo 2`} className="min-h-[140px] rounded-3xl" />
-            <MediaTile src={third} alt={`${title} photo 3`} className="min-h-[140px] rounded-3xl" />
+        <div className="grid h-full gap-2 rounded-3xl md:grid-cols-2">
+          <MediaTile src={first} alt={`${title} photo 1`} className="rounded-3xl md:col-span-1" />
+          <div className="grid h-full gap-2">
+            <MediaTile src={second} alt={`${title} photo 2`} className="rounded-3xl" />
+            <MediaTile src={third} alt={`${title} photo 3`} className="rounded-3xl" />
           </div>
         </div>
       );
@@ -126,13 +126,13 @@ export function PropertyMediaGallery({ images, title }: PropertyMediaGalleryProp
 
     if (visibleImages.length === 4) {
       return (
-        <div className="grid gap-2 rounded-3xl md:grid-cols-2">
-          <MediaTile src={first} alt={`${title} photo 1`} className="min-h-[280px] rounded-3xl" />
-          <div className="grid grid-rows-2 gap-2">
-            <MediaTile src={second} alt={`${title} photo 2`} className="min-h-[140px] rounded-3xl" />
+        <div className="grid h-full gap-2 rounded-3xl md:grid-cols-2">
+          <MediaTile src={first} alt={`${title} photo 1`} className="rounded-3xl" />
+          <div className="grid h-full grid-rows-2 gap-2">
+            <MediaTile src={second} alt={`${title} photo 2`} className="rounded-3xl" />
             <div className="grid grid-cols-2 gap-2">
-              <MediaTile src={third} alt={`${title} photo 3`} className="min-h-[140px] rounded-3xl" />
-              <MediaTile src={fourth} alt={`${title} photo 4`} className="min-h-[140px] rounded-3xl" />
+              <MediaTile src={third} alt={`${title} photo 3`} className="rounded-3xl" />
+              <MediaTile src={fourth} alt={`${title} photo 4`} className="rounded-3xl" />
             </div>
           </div>
         </div>
@@ -141,33 +141,33 @@ export function PropertyMediaGallery({ images, title }: PropertyMediaGalleryProp
 
     if (visibleImages.length === 5) {
       return (
-        <div className="grid gap-2 rounded-3xl md:grid-cols-2">
-          <MediaTile src={first} alt={`${title} photo 1`} className="min-h-[280px] rounded-3xl" />
-          <div className="grid grid-cols-2 gap-2">
-            <MediaTile src={second} alt={`${title} photo 2`} className="min-h-[140px] rounded-3xl" />
-            <MediaTile src={third} alt={`${title} photo 3`} className="min-h-[140px] rounded-3xl" />
-            <MediaTile src={fourth} alt={`${title} photo 4`} className="min-h-[140px] rounded-3xl" />
-            <MediaTile src={fifth} alt={`${title} photo 5`} className="min-h-[140px] rounded-3xl" />
+        <div className="grid h-full gap-2 rounded-3xl md:grid-cols-2">
+          <MediaTile src={first} alt={`${title} photo 1`} className="rounded-3xl" />
+          <div className="grid h-full grid-cols-2 gap-2">
+            <MediaTile src={second} alt={`${title} photo 2`} className="rounded-3xl" />
+            <MediaTile src={third} alt={`${title} photo 3`} className="rounded-3xl" />
+            <MediaTile src={fourth} alt={`${title} photo 4`} className="rounded-3xl" />
+            <MediaTile src={fifth} alt={`${title} photo 5`} className="rounded-3xl" />
           </div>
         </div>
       );
     }
 
     return (
-      <div className="grid gap-2 rounded-3xl md:grid-cols-2">
-        <MediaTile src={first} alt={`${title} photo 1`} className="min-h-[280px] rounded-3xl" />
-        <div className="grid gap-2">
+      <div className="grid h-full gap-2 rounded-3xl md:grid-cols-2">
+        <MediaTile src={first} alt={`${title} photo 1`} className="rounded-3xl" />
+        <div className="grid h-full gap-2">
           <div className="grid grid-cols-2 gap-2">
-            <MediaTile src={second} alt={`${title} photo 2`} className="min-h-[140px] rounded-3xl" />
-            <MediaTile src={third} alt={`${title} photo 3`} className="min-h-[140px] rounded-3xl" />
+            <MediaTile src={second} alt={`${title} photo 2`} className="rounded-3xl" />
+            <MediaTile src={third} alt={`${title} photo 3`} className="rounded-3xl" />
           </div>
           <div className="grid grid-cols-3 gap-2">
-            <MediaTile src={fourth} alt={`${title} photo 4`} className="min-h-[140px] rounded-3xl" />
-            <MediaTile src={fifth} alt={`${title} photo 5`} className="min-h-[140px] rounded-3xl" />
+            <MediaTile src={fourth} alt={`${title} photo 4`} className="rounded-3xl" />
+            <MediaTile src={fifth} alt={`${title} photo 5`} className="rounded-3xl" />
             <MediaTile
               src={visibleImages[5]}
               alt={`${title} photo 6`}
-              className="min-h-[140px] rounded-3xl"
+              className="rounded-3xl"
               overlay={extraCount > 0 ? <MoreOverlay /> : undefined}
             />
           </div>
@@ -177,7 +177,7 @@ export function PropertyMediaGallery({ images, title }: PropertyMediaGalleryProp
   }
 
   const collage = (
-    <div className="relative">
+    <div className="relative h-[320px] overflow-hidden rounded-3xl sm:h-[360px] lg:h-[420px]">
       {renderCollage()}
 
       {mounted && visibleImages.length > 5 && (

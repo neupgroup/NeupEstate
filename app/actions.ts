@@ -658,7 +658,7 @@ export async function reviewPropertyChangeAction(input: {
   acceptedFields?: string[];
 }): Promise<{ success: boolean; error?: string }> {
   try {
-    await requirePermission(PERMISSIONS.manage.selfReviewsReply);
+    await requirePermission(PERMISSIONS.manage.propertyReviewApprove);
     const accountId = await requireIdentity();
     const request = await prisma.propertyChange.findFirst({
       where: {

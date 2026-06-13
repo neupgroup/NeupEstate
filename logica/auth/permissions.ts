@@ -1,4 +1,7 @@
 export const PERMISSIONS = {
+  root: {
+    propertiesView: "root.properties.view",
+  },
   public: {
     propertyView: "public.property.view",
     propertyInquire: "public.property.inquire",
@@ -21,6 +24,8 @@ export const PERMISSIONS = {
     propertySelfDelete: "manage.property.self.delete",
     propertySelfTransfer: "manage.property.self.transfer",
     propertySelfCreate: "manage.property.self.create",
+    propertyReviewView: "root.property.review.view",
+    propertyReviewApprove: "root.property.review.approve",
     propertyCollectionSelfCreate: "manage.propertyCollection.self.create",
     propertyCollectionSelfUpdate: "manage.propertyCollection.self.update",
     propertyCollectionSelfDelete: "manage.propertyCollection.self.delete",

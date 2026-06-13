@@ -311,6 +311,7 @@ export async function getPaginatedProperties(opts: {
       where.status = { not: PropertyStatus.ARCHIVED };
     }
     if (filters.id) where.id = filters.id;
+    if (filters.ids?.length) where.id = { in: filters.ids };
     if (filters.status) where.status = mapStatusToEnum(filters.status);
     if (filters.sourceUrl) where.fetchHistory = { some: { sourceUrl: filters.sourceUrl } };
     if (filters.isOwnerListing === true) where.agency = null;
@@ -477,29 +478,55 @@ export async function getPendingProperties(limit = 50): Promise<Property[]> {
   } catch (e) { await logProblem(e, 'getPendingProperties'); return []; }
 }
 
-export async function getAwaitingReviewItems(limit = 50): Promise<AwaitingReviewItem[]> {
+export async function getAwaitingReviewItems(
+  limit = 50,
+  opts: { accountId?: string | null; includeAll?: boolean } = {},
+): Promise<AwaitingReviewItem[]> {
   try {
-    const [pendingProperties, drafts] = await Promise.all([
-      getPendingProperties(limit),
-      prisma.propertyChange.findMany({
-        where: {
-          isApproved: null,
-          status: { in: ['creating', 'changing', 'deleting'] },
-        },
-        orderBy: { modifiedOn: 'desc' },
-        take: limit,
-        include: {
-          property: {
-            select: {
-              id: true,
-              title: true,
-              locationText: true,
-              type: true,
+    if (!opts.includeAll && !opts.accountId) {
+      return [];
+    }
+
+    const reviewChangeWhere = {
+      isApproved: null,
+      status: { in: ['creating', 'changing', 'deleting'] },
+      ...(opts.includeAll ? {} : opts.accountId ? { accountId: opts.accountId } : {}),
+    };
+
+    const [pendingProperties, drafts] = opts.includeAll
+      ? await Promise.all([
+          getPendingProperties(limit),
+          prisma.propertyChange.findMany({
+            where: reviewChangeWhere,
+            orderBy: { modifiedOn: 'desc' },
+            take: limit,
+            include: {
+              property: {
+                select: {
+                  id: true,
+                  title: true,
+                  locationText: true,
+                  type: true,
+                },
+              },
+            },
+          }),
+        ])
+      : [[], await prisma.propertyChange.findMany({
+          where: reviewChangeWhere,
+          orderBy: { modifiedOn: 'desc' },
+          take: limit,
+          include: {
+            property: {
+              select: {
+                id: true,
+                title: true,
+                locationText: true,
+                type: true,
+              },
             },
           },
-        },
-      }),
-    ]);
+        })] as const;
 
     const draftItems = drafts.map((draft) => {
       const data = (draft.data && typeof draft.data === 'object' && !Array.isArray(draft.data))
@@ -539,6 +566,37 @@ export async function getAwaitingReviewItems(limit = 50): Promise<AwaitingReview
       status: property.status,
       modifiedOn: property.updatedAt || '',
     }));
+
+    if (!opts.includeAll) {
+      const pendingIds = new Set(draftItems.map((item) => item.propertyId).filter((id): id is string => Boolean(id)));
+      if (pendingIds.size === 0) return [];
+
+      const scopedProperties = await prisma.property.findMany({
+        where: {
+          id: { in: Array.from(pendingIds) },
+        },
+        orderBy: { updatedAt: 'desc' },
+        include: PROPERTY_INCLUDE,
+      });
+
+      const scopedPropertyItems: AwaitingReviewItem[] = scopedProperties.map((record) => {
+        const property = mapRecord(record);
+        return {
+          id: property.id,
+          title: property.title,
+          location: property.location,
+          category: property.category,
+          kind: 'property' as const,
+          propertyId: property.id,
+          status: property.status,
+          modifiedOn: property.updatedAt || '',
+        };
+      });
+
+      return [...draftItems, ...scopedPropertyItems]
+        .sort((a, b) => String(b.modifiedOn || '').localeCompare(String(a.modifiedOn || '')))
+        .slice(0, limit);
+    }
 
     return [...draftItems, ...propertyItems]
       .sort((a, b) => String(b.modifiedOn || '').localeCompare(String(a.modifiedOn || '')))

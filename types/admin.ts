@@ -19,6 +19,7 @@ export type SitemapLog = {
 
 export const PropertyFiltersSchema = z.object({
   id: z.string().optional(),
+  ids: z.array(z.string()).optional(),
   searchTerm: z.string().optional(),
   status: z.enum(['approved', 'pending']).optional(),
   minPrice: z.coerce.number().optional(),

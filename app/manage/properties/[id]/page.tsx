@@ -323,7 +323,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
         structuredLocation: property.structuredLocation,
         location: property.location,
     });
-    const canReviewProperty = await hasPermission(PERMISSIONS.manage.selfReviewsView);
+    const canApproveProperty = await hasPermission(PERMISSIONS.manage.propertyReviewApprove);
     const currentAccountId = await getCurrentAccountId();
     const changeContext = await getPropertyChangeContextAction(property.id);
     const currentChange = changeContext.success ? changeContext.currentUserChange : null;
@@ -347,16 +347,12 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
     });
     const reviewTone = pendingReviewTone(currentChange?.status ?? property.status);
     const reviewMessage = currentChange?.status === "deleting"
-        ? `The deletion request on ${canReviewProperty ? "this" : isMyChange ? "your" : "this"} property has not been approved. It will be deleted after review.`
+        ? `The deletion request on ${canApproveProperty ? "this" : isMyChange ? "your" : "this"} property has not been approved. It will be deleted after review.`
         : currentChange?.status === "changing"
-            ? `The change on ${canReviewProperty ? "this" : isMyChange ? "your" : "this"} property has not been published. It will be visible after review.`
-            : `The ${canReviewProperty ? "this" : isMyChange ? "your" : "this"} property has not been published. It will be visible after review.`;
-    const reviewLinkText = canReviewProperty
-        ? "Review it"
-        : currentChange?.status === "deleting"
-            ? "Cancel it"
-            : null;
-    const reviewRequests = mode === "review" && canReviewProperty
+            ? `The change on ${canApproveProperty ? "this" : isMyChange ? "your" : "this"} property has not been published. It will be visible after review.`
+            : `The ${canApproveProperty ? "this" : isMyChange ? "your" : "this"} property has not been published. It will be visible after review.`;
+    const showCancelDraftAction = currentChange?.status === "deleting" && !canApproveProperty;
+    const reviewRequests = mode === "review" && canApproveProperty
         ? await getPropertyReviewRequests(property.id)
         : [];
 
@@ -404,27 +400,25 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                     >
                         <div className="flex flex-wrap items-center gap-1">
                             <span>{reviewMessage}</span>
-                            {reviewLinkText && (
-                                reviewLinkText === "Cancel it" ? (
-                                    <form
-                                        action={async () => {
-                                            await cancelPropertyChangeDraftAction(currentChange?.id ?? "");
-                                        }}
+                            {canApproveProperty ? (
+                                <ClientLink href={`/manage/properties/${property.id}?mode=review`} className="inline-flex items-center rounded-full border border-current/20 px-2.5 py-1 text-xs font-medium underline underline-offset-2">
+                                    Open approval view
+                                </ClientLink>
+                            ) : showCancelDraftAction ? (
+                                <form
+                                    action={async () => {
+                                        await cancelPropertyChangeDraftAction(currentChange?.id ?? "");
+                                    }}
+                                >
+                                    <Button
+                                        type="submit"
+                                        variant="link"
+                                        className="h-auto p-0 align-baseline underline font-medium text-inherit"
                                     >
-                                        <Button
-                                            type="submit"
-                                            variant="link"
-                                            className="h-auto p-0 align-baseline underline font-medium text-inherit"
-                                        >
-                                            Don&apos;t want to delete, cancel it!
-                                        </Button>
-                                    </form>
-                                ) : (
-                                    <ClientLink href={`/manage/properties/${property.id}?mode=review`} className="underline font-medium">
-                                        Review it
-                                    </ClientLink>
-                                )
-                            )}
+                                        Don&apos;t want to delete, cancel it!
+                                    </Button>
+                                </form>
+                            ) : null}
                         </div>
                     </div>
                 )}
@@ -434,7 +428,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                 <PropertyMediaGallery images={property.images ?? []} title={property.title} />
             </div>
 
-            {mode === "review" && canReviewProperty && (
+            {mode === "review" && canApproveProperty && (
                 <section className="space-y-3">
                     <div className="space-y-0.5">
                         <h2 className="text-lg font-semibold tracking-tight">Review Requests</h2>
@@ -442,7 +436,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                     </div>
                     {reviewRequests.length ? (
                         <div className="space-y-4">
-                            <PropertyReviewRequests propertyId={property.id} requests={reviewRequests} />
+                            <PropertyReviewRequests propertyId={property.id} requests={reviewRequests} canApprove={canApproveProperty} />
                         </div>
                     ) : (
                         <div className="rounded-lg border bg-muted/20 px-4 py-3 text-sm text-muted-foreground">

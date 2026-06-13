@@ -8,10 +8,11 @@ import { AdminPropertySearch } from "@/components/manage/admin-property-search";
 import { parseAdminFilter } from "@/services/ai/parse-admin-filter-flow";
 import type { PropertyFilters } from "@/types";
 import { ClientLink } from "@/components/client-link";
-import { requirePagePermission } from "@/logica/auth/page-guard";
 import { PERMISSIONS } from "@/logica/auth/permissions";
 import { getIdentity } from "@/services/neupid/get-identity";
 import { getAgencyAgentMapsByAgent } from "@/services/agency-agent-map-service";
+import { hasPermission } from "@/logica/auth/authorization";
+import { notFound } from "next/navigation";
 
 const PROPERTIES_PER_PAGE = 10;
 
@@ -20,11 +21,16 @@ export default async function ManagePropertiesPage({
 }: {
   searchParams?: Promise<Record<string, string | undefined>>;
 }) {
-  await requirePagePermission(PERMISSIONS.manage.propertySelfView);
   await checkAuthenticationForWeb();
   const identity = await getIdentity();
   const currentAccountId = identity.authenticated ? identity.account.accountId : null;
   const sp = await searchParams ?? {};
+  const canViewOwnProperties = await hasPermission(PERMISSIONS.manage.propertySelfView);
+  const canViewAllProperties = await hasPermission(PERMISSIONS.root.propertiesView);
+  const canViewAllAwaitingReviews = await hasPermission(PERMISSIONS.manage.propertyReviewView);
+  if (!canViewOwnProperties && !canViewAllProperties) {
+    notFound();
+  }
 
   const currentPage   = Number(sp.page) || 1;
   const query         = sp.q        || '';
@@ -38,9 +44,10 @@ export default async function ManagePropertiesPage({
   const minBedrooms   = sp.minBedrooms ? Number(sp.minBedrooms) : undefined;
   const minBathrooms  = sp.minBathrooms? Number(sp.minBathrooms): undefined;
   const isDraftsView  = statusParam === 'drafts';
+  const isAwaitingReviewView = statusParam === 'pending';
 
   let filters: PropertyFilters = {};
-  if (statusParam && statusParam !== 'drafts') filters.status = statusParam as 'approved' | 'pending';
+  if (statusParam && !['drafts', 'pending'].includes(statusParam)) filters.status = statusParam as 'approved' | 'pending';
   if (ownerParam === '1') filters.isOwnerListing = true;
   if (purposeParam)  filters.purpose      = [purposeParam as any];
   if (categoryParam) filters.category     = [categoryParam as any];
@@ -65,13 +72,23 @@ export default async function ManagePropertiesPage({
   }
 
   const hasFilters = Object.keys(filters).length > 0;
-  const isDefaultFeed = !hasFilters && !query && !isDraftsView;
+  const isDefaultFeed = !hasFilters && !query && !isDraftsView && !isAwaitingReviewView;
   const agencyLinks = currentAccountId ? await getAgencyAgentMapsByAgent(currentAccountId) : [];
   const agencyIds = agencyLinks.map((link) => link.agencyId);
 
-  const awaitingItems = (isDefaultFeed || isDraftsView)
-    ? await getAwaitingReviewItems(500)
+  const awaitingItems = (isDefaultFeed || isDraftsView || isAwaitingReviewView)
+    ? await getAwaitingReviewItems(500, {
+        accountId: currentAccountId,
+        includeAll: canViewAllAwaitingReviews,
+      })
     : [];
+  const awaitingReviewIds = isAwaitingReviewView
+    ? Array.from(new Set(awaitingItems.map((item) => item.propertyId).filter((id): id is string => Boolean(id))))
+    : [];
+
+  if (isAwaitingReviewView) {
+    filters.ids = awaitingReviewIds.length ? awaitingReviewIds : ["__no_results__"];
+  }
 
   const paginatedProperties = await getPaginatedProperties({
         page: currentPage,
@@ -79,8 +96,8 @@ export default async function ManagePropertiesPage({
         filters: hasFilters ? filters : undefined,
         includeInactive: true,
         excludeArchived: true,
-        agentAccountId: currentAccountId ?? undefined,
-        agencyIds,
+        agentAccountId: canViewAllProperties ? undefined : currentAccountId ?? undefined,
+        agencyIds: canViewAllProperties ? undefined : agencyIds,
       });
   const properties = paginatedProperties.properties;
   const draftKindsByPropertyId = new Map<string, 'creating' | 'changing' | 'deleting'>();
@@ -91,7 +108,8 @@ export default async function ManagePropertiesPage({
   const filteredProperties = isDraftsView
     ? properties.filter((property) => draftKindsByPropertyId.has(property.id))
     : properties;
-  const totalCount = isDraftsView ? filteredProperties.length : paginatedProperties.totalCount;
+  const totalCount = paginatedProperties.totalCount;
+  const countLabel = totalCount === 1 ? 'property' : 'properties';
   const totalPages = Math.ceil(totalCount / PROPERTIES_PER_PAGE);
   const defaultPageItems = filteredProperties.slice((currentPage - 1) * PROPERTIES_PER_PAGE, currentPage * PROPERTIES_PER_PAGE);
   const hasAnyRows = defaultPageItems.length > 0;
@@ -104,9 +122,9 @@ export default async function ManagePropertiesPage({
           Properties
         </h2>
         <p className="text-sm text-muted-foreground mt-1">
-          {hasFilters || query || isDraftsView
-            ? `Found ${totalCount} ${totalCount === 1 ? 'property' : 'properties'}`
-            : `${totalCount} ${totalCount === 1 ? 'property' : 'properties'} total`}
+          {hasFilters || query || isDraftsView || isAwaitingReviewView
+            ? `Found ${totalCount} ${countLabel}${isAwaitingReviewView ? ' awaiting review' : ''}`
+            : `${totalCount} ${countLabel} total`}
         </p>
       </div>
 
