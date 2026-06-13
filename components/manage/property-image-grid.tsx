@@ -7,20 +7,24 @@ function PropertyImageTile({ src, alt }: { src: string; alt: string }) {
 
   if (!src || failed) {
     return (
-      <div className="flex aspect-square items-center justify-center rounded-lg border border-dashed border-border bg-muted/30 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+      <div className="group relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-lg border border-dashed border-border bg-muted/30 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
         Deleted
+        <div className="pointer-events-none absolute inset-0 bg-primary/0 transition duration-300 group-hover:bg-primary/20" />
       </div>
     );
   }
 
   return (
-    <img
-      src={src}
-      alt={alt}
-      loading="lazy"
-      className="aspect-square w-full rounded-lg border object-cover"
-      onError={() => setFailed(true)}
-    />
+    <div className="group relative h-20 w-20 overflow-hidden rounded-lg border">
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        className="h-full w-full object-cover transition duration-300 group-hover:scale-110"
+        onError={() => setFailed(true)}
+      />
+      <div className="pointer-events-none absolute inset-0 bg-primary/0 transition duration-300 group-hover:bg-primary/20" />
+    </div>
   );
 }
 
@@ -37,7 +41,7 @@ export function PropertyImageGrid({
     <div className="space-y-2">
       {label && <div className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{label}</div>}
       {images.length ? (
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+        <div className="flex flex-wrap gap-2">
           {images.map((src, index) => (
             <PropertyImageTile key={`${src}-${index}`} src={src} alt={`${label || "Image"} ${index + 1}`} />
           ))}

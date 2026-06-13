@@ -9,7 +9,7 @@ import { PropertyReviewRequests } from "@/components/manage/property-review-requ
 import { PropertyImageGrid } from "@/components/manage/property-image-grid";
 import { PropertyImageDiffGrid } from "@/components/manage/property-image-diff-grid";
 import { getPropertyById, getPropertyLogs, getPropertyReviewRequests } from "@/services/property-service";
-import { ArrowLeft, MinusCircle, PlusCircle, UserRound } from "lucide-react";
+import { ArrowLeft, Mail, Phone } from "lucide-react";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -87,6 +87,11 @@ function isOwnerReferenceField(field: string) {
   return field.toLowerCase() === "owner";
 }
 
+function isCardField(field: string) {
+  const normalized = field.toLowerCase();
+  return normalized === "images" || normalized === "owners" || normalized === "owner" || normalized === "pricing" || normalized === "amenities";
+}
+
 type OwnerLogEntry = {
   key: string;
   name: string;
@@ -141,48 +146,41 @@ function normalizeOwnerLogEntries(value: unknown): OwnerLogEntry[] {
     .filter((entry) => entry.name.length > 0 || entry.email.length > 0 || entry.phone.length > 0);
 }
 
-function renderOwnerDetail(label: string, value: string) {
+function LogSectionTitle({ title, description }: { title: string; description?: string }) {
   return (
-    <div className="space-y-1">
-      <div className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{label}</div>
-      <div className="text-sm text-foreground">{value || "Not set"}</div>
+    <div>
+      <div className="text-lg font-bold tracking-tight text-foreground">{title}</div>
+      {description ? <div className="mt-0.5 text-xs text-muted-foreground space-y-2">{description}</div> : null}
     </div>
   );
 }
 
 function renderOwnerCard(entry: OwnerLogEntry, tone: "removed" | "added", index: number) {
-  const Icon = tone === "removed" ? MinusCircle : PlusCircle;
   const cardClasses = tone === "removed"
     ? "border-red-200 bg-red-50/60 dark:border-red-900/50 dark:bg-red-950/20"
     : "border-emerald-200 bg-emerald-50/60 dark:border-emerald-900/50 dark:bg-emerald-950/20";
 
   return (
     <div key={`${tone}-${entry.key}-${index}`} className={`rounded-xl border p-4 ${cardClasses}`}>
-      <div className="flex items-center gap-2">
-        <Icon className={`h-4 w-4 ${tone === "removed" ? "text-red-600" : "text-emerald-600"}`} />
-        <div className="text-sm font-semibold text-foreground">
-          {tone === "removed" ? "Previous owner" : "New owner"}
+      <div className="min-w-0 space-y-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="text-sm font-semibold text-foreground">{entry.name || "Not set"}</div>
+          {entry.primary && (
+            <span className="inline-flex h-5 items-center rounded-full border border-primary/20 bg-primary/10 px-1.5 text-[10px] font-semibold uppercase tracking-wide text-primary">
+              (P)
+            </span>
+          )}
         </div>
-        {entry.primary && (
-          <span className="inline-flex h-5 items-center rounded-full border border-primary/20 bg-primary/10 px-1.5 text-[10px] font-semibold uppercase tracking-wide text-primary">
-            (p)
-          </span>
-        )}
-      </div>
-      <div className="mt-4 grid gap-3">
-        {tone === "removed" ? (
-          <>
-            {renderOwnerDetail("Owner name", entry.name)}
-            {renderOwnerDetail("Owner phone", entry.phone)}
-            {renderOwnerDetail("Owner email", entry.email)}
-          </>
-        ) : (
-          <>
-            {renderOwnerDetail("Owner name", entry.name)}
-            {renderOwnerDetail("Owner email", entry.email)}
-            {renderOwnerDetail("Owner phone", entry.phone)}
-          </>
-        )}
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-sm text-foreground">
+            <Phone className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+            <span className="break-all">{entry.phone || "Not set"}</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm text-foreground">
+            <Mail className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+            <span className="break-all">{entry.email || "Not set"}</span>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -265,7 +263,6 @@ function ownerReferenceValuesEqual(left: unknown, right: unknown): boolean {
 }
 
 function renderOwnerReferenceCard(entry: OwnerReferenceEntry, tone: "removed" | "added", index: number) {
-  const Icon = tone === "removed" ? MinusCircle : PlusCircle;
   const cardClasses = tone === "removed"
     ? "border-red-200 bg-red-50/60 dark:border-red-900/50 dark:bg-red-950/20"
     : "border-emerald-200 bg-emerald-50/60 dark:border-emerald-900/50 dark:bg-emerald-950/20";
@@ -273,7 +270,6 @@ function renderOwnerReferenceCard(entry: OwnerReferenceEntry, tone: "removed" | 
   return (
     <div key={`${tone}-${entry.id}-${index}`} className={`rounded-xl border p-4 ${cardClasses}`}>
       <div className="flex items-center gap-2">
-        <Icon className={`h-4 w-4 ${tone === "removed" ? "text-red-600" : "text-emerald-600"}`} />
         <div className="text-sm font-semibold text-foreground">
           {tone === "removed" ? "Previous owner" : "New owner"}
         </div>
@@ -327,18 +323,69 @@ function renderOwnerReferenceChange(previousValue: unknown, currentValue: unknow
 function renderTitleChange(previousValue: unknown, currentValue: unknown, approved: boolean) {
   const previousTitle = formatValue(previousValue);
   const currentTitle = approved ? formatValue(currentValue) : formatValue(previousValue);
+  const previousHasValue = hasRenderableValue(previousValue);
+  const currentHasValue = approved ? hasRenderableValue(currentValue) : hasRenderableValue(previousValue);
+  const changeCaption = !previousHasValue && currentHasValue
+    ? "The title was added."
+    : previousHasValue && !currentHasValue
+      ? "The title was removed."
+      : "The title was changed.";
 
   if (!previousTitle && !currentTitle) {
     return null;
   }
 
   return (
-    <div className="mt-4 rounded-lg border bg-background p-4">
-      <div className="text-sm font-semibold text-foreground">Title:</div>
-      <div className="mt-2 space-y-1 text-sm text-foreground">
-        {approved && previousTitle !== "Not set" && <div className="line-through">{previousTitle}</div>}
-        <div>{currentTitle}</div>
+    <div className="mt-4">
+      <LogSectionTitle title="Title:" description={changeCaption} />
+      <div className="mt-3 space-y-1">
+        {approved && previousTitle !== "Not set" && (
+          <div className="line-through text-sm text-muted-foreground">{previousTitle}</div>
+        )}
+        {currentHasValue && <div className="text-base text-foreground">{currentTitle}</div>}
       </div>
+    </div>
+  );
+}
+
+function renderDescriptionChange(previousValue: unknown, currentValue: unknown, approved: boolean) {
+  const previousDescription = formatValue(previousValue);
+  const currentDescription = approved ? formatValue(currentValue) : formatValue(previousValue);
+  const currentHasValue = approved ? hasRenderableValue(currentValue) : hasRenderableValue(previousValue);
+
+  if (!previousDescription && !currentDescription) {
+    return null;
+  }
+
+  return (
+    <div className="mt-4">
+      <div className="mt-2.5 space-y-1 text-sm text-foreground">
+        {approved && previousDescription !== "Not set" && <div className="line-through">{previousDescription}</div>}
+        {currentHasValue && <div className="whitespace-pre-wrap break-words">{currentDescription}</div>}
+      </div>
+    </div>
+  );
+}
+
+function renderSimpleFieldChange(previousValue: unknown, currentValue: unknown, approved: boolean) {
+  if (!approved) {
+    return <div className="mt-3 text-sm text-foreground">{formatValue(previousValue)}</div>;
+  }
+
+  return (
+    <div className="mt-3 space-y-2 text-sm text-foreground">
+      {hasRenderableValue(previousValue) && (
+        <div className="space-y-1">
+          <div className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Previous</div>
+          <div>{formatValue(previousValue)}</div>
+        </div>
+      )}
+      {hasRenderableValue(currentValue) && (
+        <div className="space-y-1">
+          <div className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Current</div>
+          <div>{formatValue(currentValue)}</div>
+        </div>
+      )}
     </div>
   );
 }
@@ -589,89 +636,142 @@ export default async function PropertyLogsPage({ params }: PageProps) {
                       </CardHeader>
 
                       <CardContent className="space-y-4">
-                        <Separator />
+                        <Separator className="mt-4 -mx-6 w-[calc(100%+3rem)]" />
 
                         {visibleChanges.length > 0 ? (
                           <div className="space-y-3">
-                            <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                              <UserRound className="h-4 w-4 text-muted-foreground" />
-                              Field changes
-                            </div>
-
                             <div className="space-y-4">
-                              {visibleChanges.map((item) => {
+                              {visibleChanges.map((item, index) => {
                                 const previousValue = approved ? getPathValue(beforeState, item.field) : item.value;
                                 const currentValue = approved ? getPathValue(afterState, item.field) : undefined;
+                                const cardField = isCardField(item.field);
+                                const outlinedField = cardField && item.field !== "images" && !isOwnerReferenceField(item.field) && !isOwnershipField(item.field);
                                 return (
-                                  <div key={`${log.id}-${item.field}`} className="rounded-xl border bg-background p-4">
-                                    <div className="flex flex-wrap items-start justify-between gap-3">
-                                      <div>
-                                        <div className="text-sm font-semibold text-foreground">{humanizeField(item.field)}</div>
-                                        <div className="text-xs text-muted-foreground">Changed in this timeline entry</div>
-                                      </div>
+                                  <div key={`${log.id}-${item.field}`}>
+                                    <div className={outlinedField ? "rounded-xl border bg-background p-4" : "space-y-1"}>
+                                      {item.field === "title" ? (
+                                        renderTitleChange(previousValue, currentValue, approved)
+                                      ) : item.field === "description" ? (
+                                        <div className="space-y-4">
+                                          <LogSectionTitle
+                                            title="Description:"
+                                            description={
+                                              !hasRenderableValue(previousValue) && hasRenderableValue(currentValue)
+                                                ? "The description was added."
+                                                : hasRenderableValue(previousValue) && !hasRenderableValue(currentValue)
+                                                  ? "The description was removed."
+                                                  : "The description was changed."
+                                            }
+                                          />
+                                          {renderDescriptionChange(previousValue, currentValue, approved)}
+                                        </div>
+                                      ) : approved && isOwnerReferenceField(item.field) ? (
+                                        <div className="space-y-2">
+                                          <LogSectionTitle
+                                            title={`${humanizeField(item.field)}:`}
+                                            description="Changed in this timeline entry"
+                                          />
+                                          {renderOwnerReferenceChange(previousValue, currentValue, approved)}
+                                        </div>
+                                      ) : approved && isOwnershipField(item.field) ? (
+                                        <div className="space-y-2">
+                                          <LogSectionTitle
+                                            title={`${humanizeField(item.field)}:`}
+                                            description="Changed in this timeline entry"
+                                          />
+                                          {renderOwnershipChange(previousValue, currentValue, approved)}
+                                        </div>
+                                      ) : item.field === "images" ? (
+                                        <div className="space-y-2">
+                                          <LogSectionTitle
+                                            title={`${humanizeField(item.field)}:`}
+                                            description="Changed in this timeline entry"
+                                          />
+                                          {approved ? (
+                                            <div className="mt-4">
+                                              <PropertyImageDiffGrid items={getImageDiff(previousValue, currentValue)} />
+                                            </div>
+                                          ) : (
+                                            <div className="mt-4">
+                                              <PropertyImageGrid images={normalizeImageList(item.value)} />
+                                            </div>
+                                          )}
+                                        </div>
+                                      ) : outlinedField && approved ? (
+                                        <div className="space-y-2">
+                                          <LogSectionTitle
+                                            title={`${humanizeField(item.field)}:`}
+                                            description="Changed in this timeline entry"
+                                          />
+                                          <div className="mt-2.5">
+                                            {item.field === "pricing" ? (
+                                              <div className="space-y-2">
+                                                {hasRenderableValue(previousValue) && (
+                                                  <div className="space-y-1">
+                                                    <div className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Previous</div>
+                                                    <div className="whitespace-pre-wrap break-words text-sm text-foreground">{formatValue(previousValue)}</div>
+                                                  </div>
+                                                )}
+                                                {hasRenderableValue(currentValue) && (
+                                                  <div className="space-y-1">
+                                                    <div className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Current</div>
+                                                    <div className="whitespace-pre-wrap break-words text-sm text-foreground">{formatValue(currentValue)}</div>
+                                                  </div>
+                                                )}
+                                              </div>
+                                            ) : (
+                                              <div className="grid gap-3 lg:grid-cols-2">
+                                                {hasRenderableValue(previousValue) && (
+                                                  <div className="space-y-1">
+                                                    <div className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Previous</div>
+                                                    <div className="whitespace-pre-wrap break-words text-sm text-foreground">
+                                                      {formatValue(previousValue)}
+                                                    </div>
+                                                  </div>
+                                                )}
+
+                                                {hasRenderableValue(currentValue) && (
+                                                  <div className="space-y-1">
+                                                    <div className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Current</div>
+                                                    <div className="whitespace-pre-wrap break-words text-sm text-foreground">
+                                                      {formatValue(currentValue)}
+                                                    </div>
+                                                  </div>
+                                                )}
+                                              </div>
+                                            )}
+                                          </div>
+                                        </div>
+                                      ) : outlinedField ? (
+                                        <div className="space-y-2">
+                                          <LogSectionTitle
+                                            title={`${humanizeField(item.field)}:`}
+                                            description="Changed in this timeline entry"
+                                          />
+                                          <div className="mt-2.5 space-y-3">
+                                            {item.field === "owner" ? (
+                                              normalizeOwnerReferenceEntries(item.value).map((entry, index) => renderOwnerReferenceCard(entry, "added", index))
+                                            ) : item.field === "owners" ? (
+                                              normalizeOwnerLogEntries(item.value).map((entry, index) => renderOwnerCard(entry, "added", index))
+                                            ) : (
+                                              <div className="whitespace-pre-wrap break-words text-sm text-foreground">
+                                                {formatValue(item.value)}
+                                              </div>
+                                            )}
+                                          </div>
+                                        </div>
+                                      ) : (
+                                        <div className="space-y-2">
+                                          <LogSectionTitle
+                                            title={`${humanizeField(item.field)}:`}
+                                            description="Changed in this timeline entry"
+                                          />
+                                          {renderSimpleFieldChange(previousValue, currentValue, approved)}
+                                        </div>
+                                      )}
                                     </div>
-
-                                    {item.field === "title" ? (
-                                      renderTitleChange(previousValue, currentValue, approved)
-                                    ) : approved && isOwnerReferenceField(item.field) ? (
-                                      renderOwnerReferenceChange(previousValue, currentValue, approved)
-                                    ) : approved && isOwnershipField(item.field) ? (
-                                      renderOwnershipChange(previousValue, currentValue, approved)
-                                    ) : approved ? isImageField(item.field) ? (
-                                      <div className="mt-4">
-                                        <PropertyImageDiffGrid items={getImageDiff(previousValue, currentValue)} />
-                                      </div>
-                                    ) : (
-                                      <div className="mt-4 grid gap-3 lg:grid-cols-2">
-                                        {hasRenderableValue(previousValue) && (
-                                          <div className="rounded-lg border bg-muted/20 p-3">
-                                            <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-                                              <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-semibold text-white">-</span>
-                                              Previous
-                                            </div>
-                                            <div className="mt-2 whitespace-pre-wrap break-words text-sm text-foreground">
-                                              {formatValue(previousValue)}
-                                            </div>
-                                          </div>
-                                        )}
-
-                                        {hasRenderableValue(currentValue) && (
-                                          <div className="rounded-lg border bg-background p-3">
-                                            <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-                                              <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-semibold text-white">+</span>
-                                              Current
-                                            </div>
-                                            <div className="mt-2 whitespace-pre-wrap break-words text-sm text-foreground">
-                                              {formatValue(currentValue)}
-                                            </div>
-                                          </div>
-                                        )}
-                                      </div>
-                                    ) : item.field === "title" ? (
-                                      <div className="mt-4 rounded-lg border bg-muted/20 p-3">
-                                        <div className="text-sm font-semibold text-foreground">Title:</div>
-                                        <div className="mt-2 text-sm text-foreground">{formatValue(item.value)}</div>
-                                      </div>
-                                    ) : isOwnerReferenceField(item.field) ? (
-                                      <div className="mt-4 space-y-3">
-                                        {normalizeOwnerReferenceEntries(item.value).map((entry, index) => renderOwnerReferenceCard(entry, "added", index))}
-                                      </div>
-                                    ) : isOwnershipField(item.field) ? (
-                                      <div className="mt-4 space-y-3">
-                                        {normalizeOwnerLogEntries(item.value).map((entry, index) => renderOwnerCard(entry, "added", index))}
-                                      </div>
-                                    ) : (
-                                      <div className="mt-4 rounded-lg border bg-muted/20 p-3">
-                                        {isImageField(item.field) ? (
-                                          <div className="mt-2">
-                                            <PropertyImageGrid images={normalizeImageList(item.value)} />
-                                          </div>
-                                        ) : (
-                                          <div className="mt-2 whitespace-pre-wrap break-words text-sm text-foreground">
-                                            {formatValue(item.value)}
-                                          </div>
-                                        )}
-                                      </div>
+                                    {index < visibleChanges.length - 1 && (
+                                      <Separator className="mx-6 my-4 w-[calc(100%-3rem)]" />
                                     )}
                                   </div>
                                 );
