@@ -565,7 +565,7 @@ model CrmClient {
   propertyOwners PropertyOwner[]
 
   @@index([lastName])
-  @@map("client")
+  @@map("lead")
 }
 
 model ClientContact {
@@ -609,7 +609,7 @@ model ClientLead {
   @@index([clientId])
   @@index([type])
   @@index([priority])
-  @@map("lead")
+  @@map("lead_shared")
 }
 
 model LeadActivity {
