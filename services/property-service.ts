@@ -680,6 +680,55 @@ export async function createPropertyLog(input: {
   }
 }
 
+export async function getPropertyLogs(propertyId: string): Promise<Array<{
+  id: string;
+  propertyId: string;
+  requestedBy: string;
+  approvedBy: string | null;
+  data: Record<string, any>[];
+  requestedOn: string;
+  approvedOn: string | null;
+  requestedByAccount: { id: string; displayName: string | null; neupId: string | null } | null;
+  approvedByAccount: { id: string; displayName: string | null; neupId: string | null } | null;
+}>> {
+  try {
+    const logs = await prisma.propertyLog.findMany({
+      where: { propertyId },
+      orderBy: [{ requestedOn: 'desc' }, { id: 'desc' }],
+    });
+
+    const accountIds = Array.from(
+      new Set(
+        logs.flatMap((log) => [log.requestedBy, log.approvedBy].filter((id): id is string => Boolean(id))),
+      ),
+    );
+
+    const accounts = accountIds.length
+      ? await prisma.account.findMany({
+          where: { id: { in: accountIds } },
+          select: { id: true, displayName: true, neupId: true },
+        })
+      : [];
+
+    const accountMap = new Map(accounts.map((account) => [account.id, account]));
+
+    return logs.map((log) => ({
+      id: log.id,
+      propertyId: log.propertyId,
+      requestedBy: log.requestedBy,
+      approvedBy: log.approvedBy,
+      data: Array.isArray(log.data) ? log.data as Record<string, any>[] : [],
+      requestedOn: log.requestedOn.toISOString(),
+      approvedOn: log.approvedOn ? log.approvedOn.toISOString() : null,
+      requestedByAccount: accountMap.get(log.requestedBy) ?? null,
+      approvedByAccount: log.approvedBy ? accountMap.get(log.approvedBy) ?? null : null,
+    }));
+  } catch (e) {
+    await logProblem(e, `getPropertyLogs ${propertyId}`);
+    return [];
+  }
+}
+
 export async function getPropertiesByAgent(agentId: string, opts: { includeInactive?: boolean } = {}): Promise<Property[]> {
   try {
     const where: any = { agent: agentId };
@@ -767,6 +816,41 @@ function buildCoreData(d: Partial<CreatePropertyInput> & Record<string, any>) {
   };
 }
 
+function isPlainObject(value: unknown): value is Record<string, any> {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value) && !(value instanceof Date);
+}
+
+function deepMergePropertyData<T>(base: T, patch: any): T {
+  if (!isPlainObject(base) || !isPlainObject(patch)) {
+    return (patch === undefined ? base : patch) as T;
+  }
+
+  const merged: Record<string, any> = { ...base };
+  for (const [key, value] of Object.entries(patch)) {
+    if (value === undefined) continue;
+    if (value === null) {
+      delete merged[key];
+      continue;
+    }
+
+    const current = merged[key];
+    merged[key] = isPlainObject(current) && isPlainObject(value)
+      ? deepMergePropertyData(current, value)
+      : value;
+  }
+
+  return merged as T;
+}
+
+async function resolveMergedPropertyData(id: string, patch: Partial<CreatePropertyInput> & Record<string, any>) {
+  const current = await getPropertyById(id, { includeInactive: true });
+  if (!current) {
+    throw new Error('Property not found.');
+  }
+
+  return deepMergePropertyData(current as Record<string, any>, patch) as Partial<CreatePropertyInput> & Record<string, any>;
+}
+
 async function upsertDetailTable(propertyId: string, type: PropertyType, d: any) {
   const area = areaValueToSqft(d.area);
   if (type === PropertyType.HOUSE) {
@@ -797,10 +881,11 @@ async function upsertDetailTable(propertyId: string, type: PropertyType, d: any)
 }
 
 async function upsertMedia(propertyId: string, images: string[]) {
+  const normalizedImages = images.filter((image): image is string => typeof image === 'string' && image.trim().length > 0);
   await prisma.propertyMedia.deleteMany({ where: { propertyId } });
-  if (images.length > 0) {
+  if (normalizedImages.length > 0) {
     await prisma.propertyMedia.createMany({
-      data: images.map((url, i) => ({ propertyId, url, type: 'photo', alt: '', sortOrder: i, isPrimary: i === 0 })),
+      data: normalizedImages.map((url, i) => ({ propertyId, url, type: 'photo', alt: '', sortOrder: i, isPrimary: i === 0 })),
     });
   }
 }
@@ -856,11 +941,12 @@ export async function addProperty(d: Omit<ExtractedPropertyData, 'embedding'>): 
 
 export async function updateProperty(id: string, d: UpdatePropertyInput): Promise<void> {
   try {
-    const coreData = buildCoreData(d);
+    const merged = await resolveMergedPropertyData(id, d as Partial<CreatePropertyInput> & Record<string, any>);
+    const coreData = buildCoreData(merged);
     await prisma.property.update({ where: { id }, data: coreData as any });
-    await upsertDetailTable(id, mapTypeToEnum((d as any).category ?? d.categories?.[0]), d);
-    if (d.images) await upsertMedia(id, d.images);
-    await replacePropertyOwners(id, d.owners);
+    await upsertDetailTable(id, mapTypeToEnum((merged as any).category ?? merged.categories?.[0]), merged);
+    if (merged.images !== undefined) await upsertMedia(id, merged.images ?? []);
+    await replacePropertyOwners(id, merged.owners);
   } catch (e) { await logProblem(e, `updateProperty ${id}`); throw new Error('Failed to update property.'); }
 }
 
@@ -871,8 +957,12 @@ export async function updatePropertyWithExtractedData(id: string, d: ExtractedPr
 
 export async function updatePropertyImages(id: string, images: string[]): Promise<void> {
   try {
-    await upsertMedia(id, images);
-    if (images[0]) await prisma.property.update({ where: { id }, data: { coverImage: images[0] } });
+    const normalizedImages = images.filter((image): image is string => typeof image === 'string' && image.trim().length > 0);
+    await upsertMedia(id, normalizedImages);
+    await prisma.property.update({
+      where: { id },
+      data: { coverImage: normalizedImages[0] ?? '' },
+    });
   } catch (e) { await logProblem(e, `updatePropertyImages ${id}`); throw new Error('Failed to update images.'); }
 }
 

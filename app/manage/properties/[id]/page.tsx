@@ -214,6 +214,96 @@ function Field({ label, value, icon }: { label: string; value: unknown; icon: Re
     );
 }
 
+function OwnerCard({
+    owner,
+    index,
+}: {
+    owner: {
+        clientName?: string | null;
+        clientEmail?: string | null;
+        clientPhone?: string | null;
+        isPrimaryOwner?: boolean | null;
+    };
+    index: number;
+}) {
+    const name = owner.clientName?.trim() || `Owner ${index + 1}`;
+    const email = owner.clientEmail?.trim();
+    const phone = owner.clientPhone?.trim();
+
+    return (
+        <div className="rounded-xl border border-border/70 bg-background p-4 shadow-sm transition-colors hover:border-primary/40 hover:bg-primary/5">
+            <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                    <div className="text-sm font-semibold text-foreground">{name}</div>
+                    <div className="mt-1 text-xs text-muted-foreground">
+                        {email || phone ? "Contact details" : "No contact details available"}
+                    </div>
+                </div>
+                {owner.isPrimaryOwner && (
+                    <span className="shrink-0 rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-[11px] font-medium text-primary">
+                        Primary
+                    </span>
+                )}
+            </div>
+
+            <div className="mt-4 space-y-2 text-sm">
+                <div className="flex items-center justify-between gap-3 rounded-lg bg-muted/40 px-3 py-2">
+                    <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Email</span>
+                    <span className="truncate text-right font-medium text-foreground">{email || "Not set"}</span>
+                </div>
+                <div className="flex items-center justify-between gap-3 rounded-lg bg-muted/40 px-3 py-2">
+                    <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Phone</span>
+                    <span className="truncate text-right font-medium text-foreground">{phone || "Not set"}</span>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function formatPricingValue(value: unknown): string {
+    if (value == null || value === "") return "Not set";
+    if (typeof value === "boolean") return value ? "Yes" : "No";
+    if (typeof value === "number") return String(value);
+    if (typeof value === "string") return value;
+    if (Array.isArray(value)) {
+        if (!value.length) return "None";
+        return value.map((entry) => formatPricingValue(entry)).join(", ");
+    }
+    if (typeof value === "object") {
+        const entries = Object.entries(value as Record<string, unknown>)
+            .filter(([, entry]) => entry != null && entry !== "");
+        if (!entries.length) return "None";
+        return entries.map(([key, entry]) => `${key}: ${formatPricingValue(entry)}`).join("\n");
+    }
+    return String(value);
+}
+
+function PricingCard({
+    label,
+    value,
+    icon,
+}: {
+    label: string;
+    value: unknown;
+    icon: ReactNode;
+}) {
+    return (
+        <div className="rounded-xl border border-border/70 bg-background p-4 shadow-sm transition-colors hover:border-primary/40 hover:bg-primary/5">
+            <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-primary/15 bg-primary/10 text-primary transition-colors duration-200 ease-out">
+                    {icon}
+                </div>
+                <div className="min-w-0">
+                    <div className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{label}</div>
+                    <div className="mt-1 text-sm font-medium text-foreground whitespace-pre-wrap break-words">
+                        {formatPricingValue(value)}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 function ReadonlyGrid({ children }: { children: ReactNode }) {
     return <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">{children}</div>;
 }
@@ -497,10 +587,22 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
             </Section>
 
             <Section title="Pricing Details" description="Price and pricing metadata.">
-                <ReadonlyGrid>
-                    <Field label="Price" value={property.price} icon={<Tag className="h-5 w-5" />} />
-                    <Field label="Pricing" value={property.pricing} icon={<Hash className="h-5 w-5" />} />
-                </ReadonlyGrid>
+                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                    <PricingCard label="Price" value={property.price} icon={<Tag className="h-5 w-5" />} />
+                    <PricingCard label="Currency" value={property.pricing?.currency} icon={<Hash className="h-5 w-5" />} />
+                    <PricingCard label="Display Mode" value={property.pricing?.priceDisplayMode} icon={<Hash className="h-5 w-5" />} />
+                    <PricingCard label="Minimum" value={property.pricing?.minimum} icon={<Hash className="h-5 w-5" />} />
+                    <PricingCard label="Maximum" value={property.pricing?.maximum} icon={<Hash className="h-5 w-5" />} />
+                    <PricingCard label="Listed" value={property.pricing?.listed} icon={<Hash className="h-5 w-5" />} />
+                    <PricingCard label="Negotiable" value={property.pricing?.negotiable} icon={<Hash className="h-5 w-5" />} />
+                    <PricingCard label="Basis" value={property.pricing?.basis} icon={<Hash className="h-5 w-5" />} />
+                    <PricingCard label="Basis Prices" value={property.pricing?.basisPrices} icon={<Hash className="h-5 w-5" />} />
+                    <PricingCard label="Basis Negotiable" value={property.pricing?.basisNegotiable} icon={<Hash className="h-5 w-5" />} />
+                    <PricingCard label="Basis Negotiable Prices" value={property.pricing?.basisNegotiablePrices} icon={<Hash className="h-5 w-5" />} />
+                    <PricingCard label="Basis Frequencies" value={property.pricing?.basisFrequencies} icon={<Hash className="h-5 w-5" />} />
+                    <PricingCard label="Basis Units" value={property.pricing?.basisUnits} icon={<Hash className="h-5 w-5" />} />
+                    <PricingCard label="Options" value={property.pricing?.options} icon={<Hash className="h-5 w-5" />} />
+                </div>
             </Section>
 
             {hasLocation && (
@@ -527,12 +629,19 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
             )}
 
             <Section title="Owner Information" description="Ownership and agent context.">
-                <ReadonlyGrid>
-                    <Field label="Owners" value={property.owners} icon={<UserRound className="h-5 w-5" />} />
-                    <Field label="Agency" value={property.agency?.name} icon={<Building2 className="h-5 w-5" />} />
-                    <Field label="Listing Agent" value={property.listingAgent} icon={<UserRound className="h-5 w-5" />} />
-                    <Field label="Owner Listing" value={property.isOwnerListing} icon={<UserRound className="h-5 w-5" />} />
-                </ReadonlyGrid>
+                <div className="space-y-4">
+                    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                        {property.owners?.length ? (
+                            property.owners.map((owner, index) => (
+                                <OwnerCard key={`${owner.ownerClientId || owner.clientName || index}-${index}`} owner={owner} index={index} />
+                            ))
+                        ) : (
+                            <div className="rounded-xl border border-border/70 bg-background p-4 text-sm text-muted-foreground">
+                                No owners recorded.
+                            </div>
+                        )}
+                    </div>
+                </div>
             </Section>
 
             <Section title="Documents" description="Attached files and reference links.">

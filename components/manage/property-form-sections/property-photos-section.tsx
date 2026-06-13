@@ -59,8 +59,9 @@ export function PropertyPhotosSection({ control, fieldChangeNotes, previousImage
             ? watchedImages.filter((image): image is string => typeof image === "string" && image.trim().length > 0)
             : [];
         const desiredImages = nextImages.length > 0 ? nextImages : [""];
-        const currentImages = Array.isArray(getValues("images"))
-            ? getValues("images").filter((image): image is string => typeof image === "string")
+        const currentImagesValue = getValues("images");
+        const currentImages = Array.isArray(currentImagesValue)
+            ? currentImagesValue.filter((image): image is string => typeof image === "string")
             : [];
 
         const arraysMatch =
@@ -80,8 +81,9 @@ export function PropertyPhotosSection({ control, fieldChangeNotes, previousImage
         .filter((image) => !currentImages.includes(image));
 
     function restoreImage(imageUrl: string) {
-        const existingImages = Array.isArray(getValues("images"))
-            ? getValues("images").filter((image): image is string => typeof image === "string" && image.trim().length > 0)
+        const existingImagesValue = getValues("images");
+        const existingImages = Array.isArray(existingImagesValue)
+            ? existingImagesValue.filter((image): image is string => typeof image === "string" && image.trim().length > 0)
             : [];
 
         if (existingImages.includes(imageUrl)) return;
