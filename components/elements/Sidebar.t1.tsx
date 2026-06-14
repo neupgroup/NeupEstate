@@ -15,7 +15,6 @@ type SidebarProps = {
   canPropertyView?: boolean;
   canCollectionView?: boolean;
   canLeadsView?: boolean;
-  canClientsView?: boolean;
   canReviewsView?: boolean;
   canFaqView?: boolean;
   canAgentMapView?: boolean;
@@ -37,7 +36,6 @@ export function SidebarT1(props: SidebarProps) {
     "/manage/properties": props.canPropertyView ?? true,
     "/manage/collection": props.canCollectionView ?? true,
     "/manage/leads": props.canLeadsView ?? true,
-    "/manage/clients": props.canClientsView ?? true,
     "/manage/reviews": props.canReviewsView ?? true,
     "/manage/faq": props.canFaqView ?? true,
     "/manage/agentmap": props.canAgentMapView ?? true,

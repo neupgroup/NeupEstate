@@ -16,8 +16,8 @@ export default async function LeadActivityPage({ params }: { params: Promise<{ i
     return (
         <div className="space-y-6">
             <div>
-                <ClientLink href={`/manage/clients/${client?.id}`} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4">
-                    <ChevronLeft className="h-4 w-4" /> {client?.firstName} {client?.lastName}
+                <ClientLink href="/manage/leads/unified" className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4">
+                    <ChevronLeft className="h-4 w-4" /> Back to Unified Leads
                 </ClientLink>
                 <div className="flex items-start justify-between">
                     <div>
@@ -29,6 +29,11 @@ export default async function LeadActivityPage({ params }: { params: Promise<{ i
                         <Badge variant="outline" className="capitalize">{lead.priority.toLowerCase()}</Badge>
                     </div>
                 </div>
+                <p className="text-sm text-muted-foreground mt-2">
+                    {client?.firstName} {client?.lastName}
+                    {client?.contact?.email ? ` · ${client.contact.email}` : ''}
+                    {client?.contact?.phone ? ` · ${client.contact.phone}` : ''}
+                </p>
             </div>
 
             <ActivityList activities={activities as any} />

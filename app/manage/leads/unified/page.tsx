@@ -1,41 +1,39 @@
 import { getUnifiedLeads } from '@/services/lead-service';
 import { checkAuthenticationForWeb } from '@/services/neupid/check-auth-web';
 import { ClientLink } from '@/components/client-link';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
-import { requirePagePermission } from '@/logica/auth/page-guard';
-import { PERMISSIONS } from '@/logica/auth/permissions';
 
-export default async function ManageLeadsPage() {
-    await requirePagePermission(PERMISSIONS.manage.selfLeadView);
+export default async function UnifiedLeadsPage() {
     await checkAuthenticationForWeb();
     const leads = await getUnifiedLeads();
 
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-2xl font-semibold leading-none tracking-tight">Leads</h2>
-                    <p className="text-sm text-muted-foreground mt-1">{leads.length} lead{leads.length !== 1 ? 's' : ''}</p>
+                    <h1 className="text-2xl font-semibold leading-none tracking-tight">Unified Leads</h1>
+                    <p className="text-sm text-muted-foreground mt-1">
+                        {leads.length} lead{leads.length !== 1 ? 's' : ''}
+                    </p>
                 </div>
-                <div className="flex items-center gap-2">
-                    <ClientLink href="/manage/leads/unified">
-                        <Button size="sm" variant="outline">Unified View</Button>
-                    </ClientLink>
-                    <ClientLink href="/manage/leads/create">
-                        <Button size="sm"><Plus className="h-4 w-4 mr-1" />New Lead</Button>
-                    </ClientLink>
-                </div>
+                <ClientLink href="/manage/leads/create">
+                    <Button size="sm">
+                        <Plus className="h-4 w-4 mr-1" />
+                        New Lead
+                    </Button>
+                </ClientLink>
             </div>
 
             {leads.length === 0 ? (
-                <p className="text-sm text-muted-foreground py-12 text-center">No leads yet. Create one to get started.</p>
+                <p className="text-sm text-muted-foreground py-12 text-center">No leads yet.</p>
             ) : (
                 <div className="space-y-3">
                     {leads.map((lead) => {
                         const contact = lead.client.contact as any;
                         const req = lead.requirement as Record<string, any> | null;
+
                         return (
                             <ClientLink
                                 key={lead.id}
@@ -44,8 +42,10 @@ export default async function ManageLeadsPage() {
                             >
                                 <div className="flex items-start justify-between gap-4">
                                     <div className="space-y-1 min-w-0">
-                                        <p className="font-semibold">{lead.client.firstName} {lead.client.lastName}</p>
                                         <div className="flex items-center gap-3 flex-wrap">
+                                            <p className="font-semibold">
+                                                {lead.client.firstName} {lead.client.lastName}
+                                            </p>
                                             {lead.leadOwner && (
                                                 <span className="text-xs text-muted-foreground border border-border rounded-full px-2 py-0.5">
                                                     Owner: {lead.leadOwner}
@@ -79,7 +79,9 @@ export default async function ManageLeadsPage() {
                                     </div>
                                     <div className="flex items-center gap-2 shrink-0">
                                         <Badge variant="outline">{lead.type}</Badge>
-                                        <Badge variant="outline" className="capitalize">{lead.priority.toLowerCase()}</Badge>
+                                        <Badge variant="outline" className="capitalize">
+                                            {lead.priority.toLowerCase()}
+                                        </Badge>
                                     </div>
                                 </div>
                             </ClientLink>

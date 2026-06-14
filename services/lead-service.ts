@@ -177,10 +177,9 @@ export async function createLead(data: CreateLeadInput): Promise<string> {
     }
 }
 
-export async function getLeads(accountId: string) {
+export async function getUnifiedLeads() {
     try {
         const leads = await prisma.clientLead.findMany({
-            where: { leadOwner: accountId },
             include: { client: { include: CLIENT_INCLUDE } },
             orderBy: { createdAt: 'desc' },
         });
@@ -189,7 +188,7 @@ export async function getLeads(accountId: string) {
             client: normalizeClient(lead.client),
         }));
     } catch (e) {
-        await logProblem(e, 'getLeads');
+        await logProblem(e, 'getUnifiedLeads');
         return [];
     }
 }
@@ -204,72 +203,6 @@ export async function getLeadById(id: string) {
     } catch (e) {
         await logProblem(e, `getLeadById ${id}`);
         return null;
-    }
-}
-
-export async function getClients(accountId: string) {
-    try {
-        const clients = await prisma.crmClient.findMany({
-            where: {
-                OR: [
-                    { leads: { some: { leadOwner: accountId } } },
-                    { links: { some: { trackerId: accountId } } },
-                ],
-            },
-            orderBy: { createdAt: 'desc' },
-            include: {
-                leads: { where: { leadOwner: accountId } },
-                contacts: true,
-            },
-        });
-        return clients.map(normalizeClient);
-    } catch (e) {
-        await logProblem(e, 'getClients');
-        return [];
-    }
-}
-
-export async function getClientById(id: string, accountId: string) {
-    try {
-        const client = await prisma.crmClient.findFirst({
-            where: {
-                id,
-                OR: [
-                    { leads: { some: { leadOwner: accountId } } },
-                    { links: { some: { trackerId: accountId } } },
-                ],
-            },
-            include: {
-                contacts: true,
-                leads: {
-                    where: { leadOwner: accountId },
-                    include: { activities: { orderBy: { activityOn: 'desc' } } },
-                    orderBy: { createdAt: 'desc' },
-                },
-            },
-        });
-        return client ? normalizeClient(client) : null;
-    } catch (e) {
-        await logProblem(e, `getClientById ${id}`);
-        return null;
-    }
-}
-
-export async function getClientActivity(clientId: string) {
-    try {
-        const leads = await prisma.clientLead.findMany({
-            where: { clientId },
-            select: { id: true, type: true, priority: true },
-        });
-        const leadIds = leads.map((l) => l.id);
-        const activities = await prisma.leadActivity.findMany({
-            where: { leadId: { in: leadIds } },
-            orderBy: { activityOn: 'desc' },
-        });
-        return { leads, activities };
-    } catch (e) {
-        await logProblem(e, `getClientActivity ${clientId}`);
-        return { leads: [], activities: [] };
     }
 }
 
@@ -289,62 +222,5 @@ export async function getLeadActivity(leadId: string) {
     } catch (e) {
         await logProblem(e, `getLeadActivity ${leadId}`);
         return { lead: null, activities: [] };
-    }
-}
-
-export interface MergeClientsInput {
-    keepClientId: string;
-    dropClientId: string;
-    mergedData: {
-        firstName: string;
-        lastName: string;
-        email?: string;
-        phone?: string;
-        source?: string;
-    };
-}
-
-export async function mergeClients(data: MergeClientsInput): Promise<void> {
-    try {
-        await prisma.$transaction(async (tx) => {
-            // Move all leads from dropped client to kept client
-            await tx.clientLead.updateMany({
-                where: { clientId: data.dropClientId },
-                data:  { clientId: data.keepClientId },
-            });
-
-            // Move all links from dropped client to kept client
-            await tx.clientLink.updateMany({
-                where: { clientId: data.dropClientId },
-                data:  { clientId: data.keepClientId },
-            });
-
-            await tx.clientContact.updateMany({
-                where: { clientId: data.dropClientId },
-                data: { clientId: data.keepClientId },
-            });
-
-            // Update kept client with merged data
-            await tx.crmClient.update({
-                where: { id: data.keepClientId },
-                data: {
-                    firstName: data.mergedData.firstName,
-                    lastName:  data.mergedData.lastName,
-                    source:    data.mergedData.source || null,
-                    contact: {},
-                },
-            });
-
-            await replaceClientContacts(tx, data.keepClientId, [
-                { type: 'email', value: data.mergedData.email },
-                { type: 'phone', value: data.mergedData.phone },
-            ]);
-
-            // Delete the dropped client
-            await tx.crmClient.delete({ where: { id: data.dropClientId } });
-        });
-    } catch (e) {
-        await logProblem(e, 'mergeClients');
-        throw new Error('Failed to merge clients.');
     }
 }

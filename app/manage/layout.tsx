@@ -26,7 +26,6 @@ export default async function ManageLayout({
     canCollectionView,
     canAccountsView,
     canLeadsView,
-    canClientsView,
     canReviewsView,
     canFaqView,
     canAgentMapView,
@@ -40,7 +39,6 @@ export default async function ManageLayout({
     hasPermission(PERMISSIONS.manage.propertyCollectionSelfView),
     hasPermission(PERMISSIONS.manage.accountsView),
     hasPermission(PERMISSIONS.manage.selfLeadView),
-    hasPermission(PERMISSIONS.manage.selfClientView),
     hasPermission(PERMISSIONS.manage.selfReviewsView),
     hasPermission(PERMISSIONS.manage.faqView),
     hasPermission(PERMISSIONS.manage.agentMapView),
@@ -60,7 +58,6 @@ export default async function ManageLayout({
           canCollectionView={canCollectionView}
           canAccountsView={canAccountsView}
           canLeadsView={canLeadsView}
-          canClientsView={canClientsView}
           canReviewsView={canReviewsView}
           canFaqView={canFaqView}
           canAgentMapView={canAgentMapView}
