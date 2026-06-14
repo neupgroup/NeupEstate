@@ -35,7 +35,7 @@ export default async function BaseLeadClientPage({ params }: { params: Promise<{
                         {client.source && <span className="text-xs text-muted-foreground border border-border rounded-full px-2 py-0.5">{client.source}</span>}
                     </div>
                 </div>
-                <ClientLink href="/manage/leads/shared/create">
+                <ClientLink href="/manage/leads/add">
                     <Button size="sm">
                         <Plus className="h-4 w-4 mr-1" />
                         New Lead

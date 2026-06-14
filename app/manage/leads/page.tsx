@@ -33,7 +33,7 @@ export default async function LeadsHomePage() {
                     </p>
                 </div>
                 <div className="flex items-center gap-2">
-                    <ClientLink href="/manage/leads/shared/create">
+                    <ClientLink href="/manage/leads/add">
                         <Button size="sm">
                             <Plus className="h-4 w-4 mr-1" />
                             New Lead

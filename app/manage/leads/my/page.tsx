@@ -22,7 +22,7 @@ export default async function MyLeadsPage() {
                         {leads.length} lead{leads.length !== 1 ? 's' : ''}
                     </p>
                 </div>
-                <ClientLink href="/manage/leads/shared/create">
+                <ClientLink href="/manage/leads/add">
                     <Button size="sm">
                         <Plus className="h-4 w-4 mr-1" />
                         New Lead

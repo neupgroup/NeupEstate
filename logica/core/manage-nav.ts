@@ -4,6 +4,7 @@ import {
   LayoutDashboard, LineChart, Package, MessageSquareHeart, FileQuestion, Landmark, CalendarCheck,
   Banknote, HelpCircle, Contact, FileSearch, Link2,
   Lightbulb, Eye, Bell, LifeBuoy, Bookmark, Star, Flame, BarChart2, UserCheck,
+  Plus,
 } from "lucide-react";
 
 export type ManageNavItem =
@@ -20,8 +21,9 @@ export const manageNav: ManageNavItem[] = [
   { type: "link", href: "/manage/collection", label: "Collection", icon: Package },
   { type: "heading", label: "Leads" },
   { type: "link", href: "/manage/leads", label: "Home", icon: Home },
-  { type: "link", href: "/manage/leads/base", label: "Base Leads", icon: Flame },
+  { type: "link", href: "/manage/leads/add", label: "Add Lead", icon: Plus },
   { type: "link", href: "/manage/leads/my", label: "My Leads", icon: UserCheck },
+  { type: "link", href: "/manage/leads/base", label: "Base Leads", icon: Flame },
   { type: "link", href: "/manage/leads/shared", label: "Shared Leads", icon: Users },
   { type: "link", href: "/manage/leads/alerts", label: "Alerts", icon: Bell },
   { type: "heading", label: "CRM" },

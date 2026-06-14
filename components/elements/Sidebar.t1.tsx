@@ -41,6 +41,7 @@ export function SidebarT1(props: SidebarProps) {
     "/manage/properties": props.canPropertyView ?? true,
     "/manage/collection": props.canCollectionView ?? true,
     "/manage/leads": props.canLeadsHomeView ?? true,
+    "/manage/leads/add": props.canLeadsHomeView ?? true,
     "/manage/leads/base": props.canLeadsBaseView ?? true,
     "/manage/leads/my": props.canLeadsMyView ?? true,
     "/manage/leads/shared": props.canLeadsSharedView ?? true,

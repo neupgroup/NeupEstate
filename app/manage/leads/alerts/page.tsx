@@ -22,7 +22,7 @@ export default async function LeadAlertsPage() {
                         {alerts.length} alert{alerts.length !== 1 ? 's' : ''}
                     </p>
                 </div>
-                <ClientLink href="/manage/leads/shared/create">
+                <ClientLink href="/manage/leads/add">
                     <Button size="sm" variant="outline">
                         <Bell className="h-4 w-4 mr-1" />
                         New Lead
