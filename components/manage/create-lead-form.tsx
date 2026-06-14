@@ -195,7 +195,7 @@ export function CreateLeadForm() {
                 leadOwner:   data.leadOwner,
                 requirement: { minBudget: data.minBudget, maxBudget: data.maxBudget, location: data.location, notes: data.notes },
             });
-            router.push('/manage/leads');
+            router.push('/manage/leads/shared');
         } catch {
             setSubmitting(false);
         }

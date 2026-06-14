@@ -1,92 +1,91 @@
-import { getUnifiedLeads } from '@/services/lead-service';
-import { checkAuthenticationForWeb } from '@/services/neupid/check-auth-web';
+import { getMyLeads, getUnifiedLeads } from '@/services/lead-service';
+import { checkAuthenticationForWeb, getAccountIdFromJWT } from '@/services/neupid/check-auth-web';
 import { ClientLink } from '@/components/client-link';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Plus } from 'lucide-react';
+import { Plus, Flame, Users, Bell, Home } from 'lucide-react';
 import { requirePagePermission } from '@/logica/auth/page-guard';
 import { PERMISSIONS } from '@/logica/auth/permissions';
 
-export default async function ManageLeadsPage() {
+export default async function LeadsHomePage() {
     await requirePagePermission(PERMISSIONS.manage.selfLeadView);
     await checkAuthenticationForWeb();
-    const leads = await getUnifiedLeads();
+    const accountId = await getAccountIdFromJWT();
+    const [baseLeads, myLeads] = await Promise.all([
+        getUnifiedLeads(),
+        accountId ? getMyLeads(accountId) : Promise.resolve([]),
+    ]);
+
+    const cards = [
+        { href: '/manage/leads/base', title: 'Base Leads', description: 'All leads grouped from the current lead table.', count: baseLeads.length, icon: Flame },
+        { href: '/manage/leads/my', title: 'My Leads', description: 'Leads assigned to your account.', count: myLeads.length, icon: Users },
+        { href: '/manage/leads/shared', title: 'Shared Leads', description: 'Lead activity and shared lead records.', count: baseLeads.length, icon: Users },
+        { href: '/manage/leads/alerts', title: 'Alerts', description: 'Priority leads and follow-ups that need attention.', count: baseLeads.filter((lead) => ['HIGH', 'URGENT'].includes(String(lead.priority))).length, icon: Bell },
+    ] as const;
 
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-4">
                 <div>
                     <h2 className="text-2xl font-semibold leading-none tracking-tight">Leads</h2>
-                    <p className="text-sm text-muted-foreground mt-1">{leads.length} lead{leads.length !== 1 ? 's' : ''}</p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                        {baseLeads.length} base lead{baseLeads.length !== 1 ? 's' : ''} · {myLeads.length} my lead{myLeads.length !== 1 ? 's' : ''}
+                    </p>
                 </div>
                 <div className="flex items-center gap-2">
-                    <ClientLink href="/manage/leads/unified">
-                        <Button size="sm" variant="outline">Unified View</Button>
-                    </ClientLink>
-                    <ClientLink href="/manage/leads/create">
-                        <Button size="sm"><Plus className="h-4 w-4 mr-1" />New Lead</Button>
+                    <ClientLink href="/manage/leads/shared/create">
+                        <Button size="sm">
+                            <Plus className="h-4 w-4 mr-1" />
+                            New Lead
+                        </Button>
                     </ClientLink>
                 </div>
             </div>
 
-            {leads.length === 0 ? (
-                <p className="text-sm text-muted-foreground py-12 text-center">No leads yet. Create one to get started.</p>
-            ) : (
-                <div className="space-y-3">
-                    {leads.map((lead) => {
-                        const contact = lead.client.contact as any;
-                        const req = lead.requirement as Record<string, any> | null;
-                        return (
-                            <ClientLink
-                                key={lead.id}
-                                href={`/manage/leads/${lead.id}/activity`}
-                                className="block rounded-lg border border-border px-5 py-4 hover:border-primary hover:bg-primary/5 transition-colors"
-                            >
-                                <div className="flex items-start justify-between gap-4">
-                                    <div className="space-y-1 min-w-0">
-                                        <p className="font-semibold">{lead.client.firstName} {lead.client.lastName}</p>
-                                        <div className="flex items-center gap-3 flex-wrap">
-                                            {lead.leadOwner && (
-                                                <span className="text-xs text-muted-foreground border border-border rounded-full px-2 py-0.5">
-                                                    Owner: {lead.leadOwner}
-                                                </span>
-                                            )}
-                                            {lead.client.source && (
-                                                <span className="text-xs text-muted-foreground border border-border rounded-full px-2 py-0.5">
-                                                    {lead.client.source}
-                                                </span>
-                                            )}
-                                        </div>
-                                        <div className="flex items-center gap-3 flex-wrap">
-                                            {contact?.phone && <span className="text-sm text-muted-foreground">{contact.phone}</span>}
-                                            {contact?.email && <span className="text-sm text-muted-foreground">{contact.email}</span>}
-                                        </div>
-                                        {req && (req.location || req.minBudget || req.maxBudget || req.notes) && (
-                                            <p className="text-xs text-muted-foreground">
-                                                {[
-                                                    req.location,
-                                                    req.minBudget && req.maxBudget
-                                                        ? `${req.minBudget.toLocaleString()} – ${req.maxBudget.toLocaleString()}`
-                                                        : req.minBudget
-                                                          ? `From ${req.minBudget.toLocaleString()}`
-                                                          : req.maxBudget
-                                                            ? `Up to ${req.maxBudget.toLocaleString()}`
-                                                            : null,
-                                                    req.notes,
-                                                ].filter(Boolean).join(' · ')}
-                                            </p>
-                                        )}
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                {cards.map((card) => {
+                    const Icon = card.icon;
+                    return (
+                        <ClientLink
+                            key={card.href}
+                            href={card.href}
+                            className="rounded-xl border border-border bg-card/40 p-5 hover:border-primary hover:bg-primary/5 transition-colors"
+                        >
+                            <div className="flex items-start justify-between gap-4">
+                                <div className="space-y-3">
+                                    <div className="flex items-center gap-2">
+                                        <Icon className="h-4 w-4 text-primary" />
+                                        <h3 className="font-semibold">{card.title}</h3>
                                     </div>
-                                    <div className="flex items-center gap-2 shrink-0">
-                                        <Badge variant="outline">{lead.type}</Badge>
-                                        <Badge variant="outline" className="capitalize">{lead.priority.toLowerCase()}</Badge>
-                                    </div>
+                                    <p className="text-sm text-muted-foreground">{card.description}</p>
                                 </div>
-                            </ClientLink>
-                        );
-                    })}
+                                <Badge variant="outline">{card.count}</Badge>
+                            </div>
+                        </ClientLink>
+                    );
+                })}
+            </div>
+
+            <div className="rounded-xl border border-border p-5">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Home className="h-4 w-4" />
+                    Quick links
                 </div>
-            )}
+                <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                    <ClientLink href="/manage/leads/base" className="rounded-lg border border-border px-4 py-3 hover:border-primary hover:bg-primary/5 transition-colors">
+                        Base Leads
+                    </ClientLink>
+                    <ClientLink href="/manage/leads/my" className="rounded-lg border border-border px-4 py-3 hover:border-primary hover:bg-primary/5 transition-colors">
+                        My Leads
+                    </ClientLink>
+                    <ClientLink href="/manage/leads/shared" className="rounded-lg border border-border px-4 py-3 hover:border-primary hover:bg-primary/5 transition-colors">
+                        Shared Leads
+                    </ClientLink>
+                    <ClientLink href="/manage/leads/alerts" className="rounded-lg border border-border px-4 py-3 hover:border-primary hover:bg-primary/5 transition-colors">
+                        Alerts
+                    </ClientLink>
+                </div>
+            </div>
         </div>
     );
 }

@@ -16,7 +16,12 @@ type Props = {
   canRootPropertiesView: boolean;
   canCollectionView: boolean;
   canAccountsView: boolean;
+  canLeadsHomeView: boolean;
   canLeadsView: boolean;
+  canLeadsBaseView: boolean;
+  canLeadsMyView: boolean;
+  canLeadsSharedView: boolean;
+  canLeadsAlertsView: boolean;
   canReviewsView: boolean;
   canFaqView: boolean;
   canAgentMapView: boolean;
@@ -38,7 +43,11 @@ export function ManageSidebar(props: Props) {
     "/manage/properties": props.canPropertyView || props.canRootPropertiesView,
     "/manage/collection": props.canCollectionView,
     "/manage/accounts": props.canAccountsView,
-    "/manage/leads": props.canLeadsView,
+    "/manage/leads": props.canLeadsHomeView,
+    "/manage/leads/base": props.canLeadsBaseView,
+    "/manage/leads/my": props.canLeadsMyView,
+    "/manage/leads/shared": props.canLeadsSharedView,
+    "/manage/leads/alerts": props.canLeadsAlertsView,
     "/manage/reviews": props.canReviewsView,
     "/manage/faq": props.canFaqView,
     "/manage/agentmap": props.canAgentMapView,

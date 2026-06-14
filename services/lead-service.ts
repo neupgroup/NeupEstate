@@ -193,6 +193,44 @@ export async function getUnifiedLeads() {
     }
 }
 
+export async function getMyLeads(accountId: string) {
+    try {
+        const leads = await prisma.clientLead.findMany({
+            where: { leadOwner: accountId },
+            include: { client: { include: CLIENT_INCLUDE } },
+            orderBy: { createdAt: 'desc' },
+        });
+        return leads.map((lead) => ({
+            ...lead,
+            client: normalizeClient(lead.client),
+        }));
+    } catch (e) {
+        await logProblem(e, 'getMyLeads');
+        return [];
+    }
+}
+
+export async function getUnifiedClientById(id: string) {
+    try {
+        const client = await prisma.crmClient.findUnique({
+            where: { id },
+            include: {
+                contacts: true,
+                leads: {
+                    include: {
+                        activities: { orderBy: { activityOn: 'desc' } },
+                    },
+                    orderBy: { createdAt: 'desc' },
+                },
+            },
+        });
+        return client ? normalizeClient(client) : null;
+    } catch (e) {
+        await logProblem(e, `getUnifiedClientById ${id}`);
+        return null;
+    }
+}
+
 export async function getLeadById(id: string) {
     try {
         const lead = await prisma.clientLead.findUnique({
