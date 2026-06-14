@@ -1,4 +1,4 @@
-import { getUnifiedLeads } from '@/services/lead-service';
+import { getBaseLeads } from '@/services/lead-service';
 import { checkAuthenticationForWeb } from '@/services/neupid/check-auth-web';
 import { ClientLink } from '@/components/client-link';
 import { Badge } from '@/components/ui/badge';
@@ -7,7 +7,7 @@ import { Plus } from 'lucide-react';
 
 export default async function BaseLeadsPage() {
     await checkAuthenticationForWeb();
-    const leads = await getUnifiedLeads();
+    const leads = await getBaseLeads();
 
     return (
         <div className="space-y-6">

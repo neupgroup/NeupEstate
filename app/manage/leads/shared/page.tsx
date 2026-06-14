@@ -1,4 +1,4 @@
-import { getUnifiedLeads } from '@/services/lead-service';
+import { getSharedLeads } from '@/services/lead-service';
 import { checkAuthenticationForWeb } from '@/services/neupid/check-auth-web';
 import { ClientLink } from '@/components/client-link';
 import { Badge } from '@/components/ui/badge';
@@ -7,7 +7,7 @@ import { Plus } from 'lucide-react';
 
 export default async function SharedLeadsPage() {
     await checkAuthenticationForWeb();
-    const leads = await getUnifiedLeads();
+    const leads = await getSharedLeads();
 
     return (
         <div className="space-y-6">
@@ -37,7 +37,7 @@ export default async function SharedLeadsPage() {
                         return (
                             <ClientLink
                                 key={lead.id}
-                                href={`/manage/leads/shared/${lead.id}`}
+                                href={`/manage/leads/shared/${lead.id}/activity`}
                                 className="block rounded-lg border border-border px-5 py-4 hover:border-primary hover:bg-primary/5 transition-colors"
                             >
                                 <div className="flex items-start justify-between gap-4">

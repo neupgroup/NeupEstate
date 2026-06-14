@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getUnifiedClientById } from '@/services/lead-service';
+import { getBaseClientById } from '@/services/lead-service';
 import { ClientLink } from '@/components/client-link';
 import { Badge } from '@/components/ui/badge';
 import { ChevronLeft, Plus } from 'lucide-react';
@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 
 export default async function BaseLeadClientPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const client = await getUnifiedClientById(id);
+    const client = await getBaseClientById(id);
 
     if (!client) notFound();
 
@@ -47,10 +47,9 @@ export default async function BaseLeadClientPage({ params }: { params: Promise<{
                 {client.leads.map((lead) => {
                     const req = lead.requirement as Record<string, any> | null;
                     return (
-                        <ClientLink
+                        <div
                             key={lead.id}
-                            href={`/manage/leads/shared/${lead.id}/activity`}
-                            className="block rounded-lg border border-border px-5 py-4 hover:border-primary hover:bg-primary/5 transition-colors"
+                            className="rounded-lg border border-border px-5 py-4"
                         >
                             <div className="flex items-start justify-between gap-4">
                                 <div className="space-y-1 min-w-0">
@@ -83,7 +82,7 @@ export default async function BaseLeadClientPage({ params }: { params: Promise<{
                                     <Badge variant="outline" className="capitalize">{lead.priority.toLowerCase()}</Badge>
                                 </div>
                             </div>
-                        </ClientLink>
+                        </div>
                     );
                 })}
             </div>

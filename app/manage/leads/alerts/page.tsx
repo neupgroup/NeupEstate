@@ -1,4 +1,4 @@
-import { getUnifiedLeads } from '@/services/lead-service';
+import { getSharedLeads } from '@/services/lead-service';
 import { checkAuthenticationForWeb } from '@/services/neupid/check-auth-web';
 import { ClientLink } from '@/components/client-link';
 import { Badge } from '@/components/ui/badge';
@@ -10,7 +10,7 @@ import { PERMISSIONS } from '@/logica/auth/permissions';
 export default async function LeadAlertsPage() {
     await requirePagePermission(PERMISSIONS.manage.selfLeadView);
     await checkAuthenticationForWeb();
-    const leads = await getUnifiedLeads();
+    const leads = await getSharedLeads();
     const alerts = leads.filter((lead) => ['HIGH', 'URGENT'].includes(String(lead.priority)) || !lead.leadOwner);
 
     return (
@@ -39,7 +39,7 @@ export default async function LeadAlertsPage() {
                         return (
                             <ClientLink
                                 key={lead.id}
-                                href={`/manage/leads/shared/${lead.id}`}
+                                href={`/manage/leads/shared/${lead.id}/activity`}
                                 className="block rounded-lg border border-border px-5 py-4 hover:border-primary hover:bg-primary/5 transition-colors"
                             >
                                 <div className="flex items-start justify-between gap-4">

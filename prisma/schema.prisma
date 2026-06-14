@@ -561,6 +561,7 @@ model CrmClient {
 
   links     ClientLink[]
   leads     ClientLead[]
+  sharedLeads SharedLead[]
   contacts  ClientContact[]
   propertyOwners PropertyOwner[]
 
@@ -604,12 +605,30 @@ model ClientLead {
   updatedAt   DateTime     @updatedAt
 
   client      CrmClient      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@index([clientId])
+  @@index([type])
+  @@index([priority])
+  @@map("base_leads")
+}
+
+model SharedLead {
+  id          String       @id @default(cuid())
+  clientId    String
+  type        LeadType
+  requirement Json?
+  priority    LeadPriority @default(MEDIUM)
+  leadOwner   String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  client      CrmClient    @relation(fields: [clientId], references: [id], onDelete: Cascade)
   activities  LeadActivity[]
 
   @@index([clientId])
   @@index([type])
   @@index([priority])
-  @@map("lead")
+  @@map("shared_leads")
 }
 
 model LeadActivity {
@@ -619,7 +638,7 @@ model LeadActivity {
   activityOn DateTime   @default(now())
   activityBy String
 
-  lead       ClientLead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  lead       SharedLead @relation(fields: [leadId], references: [id], onDelete: Cascade)
 
   @@index([leadId])
   @@index([activityOn])

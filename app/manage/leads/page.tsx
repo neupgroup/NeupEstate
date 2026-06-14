@@ -1,4 +1,4 @@
-import { getMyLeads, getUnifiedLeads } from '@/services/lead-service';
+import { getBaseLeads, getMyLeads, getSharedLeads } from '@/services/lead-service';
 import { checkAuthenticationForWeb, getAccountIdFromJWT } from '@/services/neupid/check-auth-web';
 import { ClientLink } from '@/components/client-link';
 import { Button } from '@/components/ui/button';
@@ -11,16 +11,17 @@ export default async function LeadsHomePage() {
     await requirePagePermission(PERMISSIONS.manage.selfLeadView);
     await checkAuthenticationForWeb();
     const accountId = await getAccountIdFromJWT();
-    const [baseLeads, myLeads] = await Promise.all([
-        getUnifiedLeads(),
+    const [baseLeads, sharedLeads, myLeads] = await Promise.all([
+        getBaseLeads(),
+        getSharedLeads(),
         accountId ? getMyLeads(accountId) : Promise.resolve([]),
     ]);
 
     const cards = [
-        { href: '/manage/leads/base', title: 'Base Leads', description: 'All leads grouped from the current lead table.', count: baseLeads.length, icon: Flame },
-        { href: '/manage/leads/my', title: 'My Leads', description: 'Leads assigned to your account.', count: myLeads.length, icon: Users },
-        { href: '/manage/leads/shared', title: 'Shared Leads', description: 'Lead activity and shared lead records.', count: baseLeads.length, icon: Users },
-        { href: '/manage/leads/alerts', title: 'Alerts', description: 'Priority leads and follow-ups that need attention.', count: baseLeads.filter((lead) => ['HIGH', 'URGENT'].includes(String(lead.priority))).length, icon: Bell },
+        { href: '/manage/leads/base', title: 'Base Leads', description: 'All leads grouped from the base_leads table.', count: baseLeads.length, icon: Flame },
+        { href: '/manage/leads/my', title: 'My Leads', description: 'Shared leads assigned to your account.', count: myLeads.length, icon: Users },
+        { href: '/manage/leads/shared', title: 'Shared Leads', description: 'Lead activity and shared_leads records.', count: sharedLeads.length, icon: Users },
+        { href: '/manage/leads/alerts', title: 'Alerts', description: 'Priority shared leads and follow-ups that need attention.', count: sharedLeads.filter((lead) => ['HIGH', 'URGENT'].includes(String(lead.priority))).length, icon: Bell },
     ] as const;
 
     return (
