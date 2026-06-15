@@ -1,62 +1,55 @@
 import { notFound } from 'next/navigation';
-import { getConversationById } from '@/services/conversation-service';
-import { getAccountById } from '@/services/account-service';
-import { EditUserForm } from '@/components/manage/edit-user-form';
-import type { Account, UpdateUserFormValues } from '@/types';
-import { getUsers } from '@/services/user-service';
-import { LeadDetailsCard } from '@/components/manage/lead-details-card';
+import { getLeadActivity } from '@/services/lead-service';
+import { getProperties } from '@/services/property-service';
+import { ClientLink } from '@/components/client-link';
+import { ChevronLeft } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { ActivityList } from '@/components/manage/activity-list';
 
 export default async function SharedLeadPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const conversation = await getConversationById(id);
+    const [{ lead, activities }, properties] = await Promise.all([
+        getLeadActivity(id),
+        getProperties({ includeInactive: true }),
+    ]);
 
-    if (!conversation) {
-        notFound();
-    }
+    if (!lead) notFound();
 
-    let account: Account | null = null;
-    if (conversation.userId) {
-        account = await getAccountById(conversation.userId);
-    }
-
-    if (!account) {
-        account = {
-            id: conversation.userId || conversation.id,
-            account_type: 'guest',
-            created_on: conversation.lastMessageAt,
-            accessed_on: conversation.lastMessageAt,
-            registered: false,
-        };
-    }
-
-    let userProfile: UpdateUserFormValues = { id: account.id, name: '' };
-
-    if (account.registered) {
-        const allUsers = await getUsers();
-        const registeredUser = allUsers.find(u => u.id === account.id);
-        if (registeredUser) {
-            userProfile = {
-                id: account.id,
-                name: registeredUser.name,
-                location: registeredUser.location,
-                email: Array.isArray(registeredUser.email) ? registeredUser.email : [],
-                phone: Array.isArray(registeredUser.phone) ? registeredUser.phone : [],
-            };
-        }
-    } else {
-        userProfile = {
-            id: account.id,
-            name: conversation.customerName || 'Guest User',
-            location: account.location || 'Not set',
-            email: conversation.customerEmail ? [{ type: 'primary', value: conversation.customerEmail }] : [],
-            phone: conversation.customerPhone ? [{ type: 'primary', value: conversation.customerPhone }] : [],
-        };
-    }
+    const client = lead.client as any;
+    const serializedActivities = activities.map((activity) => ({
+        ...activity,
+        activityOn: activity.activityOn.toISOString(),
+    }));
+    const serializedProperties = properties.map((property) => ({
+        id: property.id,
+        title: property.title,
+        location: property.location || null,
+    }));
 
     return (
         <div className="space-y-6">
-           <EditUserForm user={userProfile} account={account} />
-           <LeadDetailsCard lead={conversation} />
+            <div>
+                <ClientLink href="/manage/leads/shared" className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4">
+                    <ChevronLeft className="h-4 w-4" /> Back to Shared Leads
+                </ClientLink>
+                <div className="flex items-start justify-between">
+                    <div>
+                        <h2 className="text-2xl font-semibold">Lead Activity</h2>
+                        <p className="text-sm text-muted-foreground mt-1">{activities.length} event{activities.length !== 1 ? 's' : ''}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Badge variant="outline">{lead.type}</Badge>
+                        <Badge variant="outline" className="capitalize">{lead.priority.toLowerCase()}</Badge>
+                    </div>
+                </div>
+                <p className="text-sm text-muted-foreground mt-2">
+                    {client?.firstName} {client?.lastName}
+                    {client?.contact?.email ? ` · ${client.contact.email}` : ''}
+                    {client?.contact?.phone ? ` · ${client.contact.phone}` : ''}
+                </p>
+            </div>
+
+            <ActivityList activities={serializedActivities as any} leadId={lead.id} properties={serializedProperties} />
         </div>
     );
 }

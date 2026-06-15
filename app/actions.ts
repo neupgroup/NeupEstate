@@ -39,7 +39,7 @@ import { createModel as createModelService, updateModel as updateModelService, d
 import { createRequirement as createRequirementService, updateRequirement as updateRequirementService } from '@/services/requirements-service';
 import { resolveAccount, updateUser, getAccountById } from '@/services/account-service';
 import { deleteAccountAndData } from '@/services/account-service';
-import { createLead as createLeadService } from '@/services/lead-service';
+import { createLead as createLeadService, createLeadActivity as createLeadActivityService } from '@/services/lead-service';
 import { getIdentity } from '@/services/neupid/get-identity';
 import { requirePermission } from '@/logica/auth/authorization';
 import { PERMISSIONS } from '@/logica/auth/permissions';
@@ -1251,6 +1251,46 @@ export async function createLeadAction(
   } catch (error: any) {
     await logProblem(error, 'createLeadAction');
     return { success: false, error: error?.message ?? 'Failed to create lead.', leadId: null };
+  }
+}
+
+export async function addLeadActivityAction(
+  data: {
+    leadId: string;
+    activityType: 'follow_up' | 'visit' | 'meeting' | 'remarks';
+    activityOn?: string;
+    followUpMethod?: 'phone call' | 'whatsapp' | 'email';
+    propertyId?: string;
+    remarks: string;
+  },
+): Promise<{ success: boolean; error?: string | null; activityId?: string | null }> {
+  try {
+    await requirePermission(PERMISSIONS.manage.selfLeadAddActivity);
+    const actorId = await requireIdentity();
+    const account = await getAccountById(actorId);
+    const activityBy = account?.display_name?.trim() || actorId;
+
+    if (!data.leadId?.trim()) {
+      return { success: false, error: 'Lead ID is required.', activityId: null };
+    }
+
+    const activityId = await createLeadActivityService({
+      leadId: data.leadId,
+      activityType: data.activityType,
+      activityOn: data.activityOn,
+      followUpMethod: data.followUpMethod,
+      propertyId: data.propertyId,
+      remarks: data.remarks,
+      activityBy,
+    });
+
+    revalidatePath(`/manage/leads/shared/${data.leadId}`);
+    revalidatePath('/manage/leads/shared');
+    revalidatePath('/manage/leads');
+    return { success: true, error: null, activityId };
+  } catch (error: any) {
+    await logProblem(error, 'addLeadActivityAction');
+    return { success: false, error: error?.message ?? 'Failed to add lead activity.', activityId: null };
   }
 }
 

@@ -41,7 +41,7 @@ export default async function MyLeadsPage() {
                         return (
                             <ClientLink
                                 key={lead.id}
-                                href={`/manage/leads/shared/${lead.id}/activity`}
+                                href={`/manage/leads/shared/${lead.id}`}
                                 className="block rounded-lg border border-border px-5 py-4 hover:border-primary hover:bg-primary/5 transition-colors"
                             >
                                 <div className="flex items-start justify-between gap-4">
