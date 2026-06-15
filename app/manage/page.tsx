@@ -1,10 +1,14 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { getProperties } from "@/services/property-service";
+import { getAccounts } from "@/services/account-service";
+import { getAgencyAgentMapsByAgent } from "@/services/agency-agent-map-service";
+import { getAccountIdFromJWT } from "@/services/neupid/check-auth-web";
 import { Clock, DollarSign, CalendarCheck, Home } from "lucide-react";
 import { DailySchedule } from "@/components/manage/daily-schedule";
 import { requirePagePermission } from "@/logica/auth/page-guard";
 import { PERMISSIONS } from "@/logica/auth/permissions";
+import { AgencyInvitationsCard } from "@/components/manage/agency-invitations-card";
 
 async function getStats() {
     const allProperties = await getProperties({ includeInactive: true });
@@ -51,7 +55,22 @@ const StatCard = ({ title, value, icon, description }: { title: string, value: s
 export default async function ManageDashboardPage() {
     await requirePagePermission(PERMISSIONS.manage.dashboardView);
     
-    const stats = await getStats();
+    const [stats, accountId, accounts] = await Promise.all([
+        getStats(),
+        getAccountIdFromJWT(),
+        getAccounts(),
+    ]);
+
+    const invitations = accountId
+        ? (await getAgencyAgentMapsByAgent(accountId)).filter((link) => link.status === 'invited').map((link) => {
+            const agency = accounts.find((account) => account.id === link.agencyId);
+            return {
+                id: link.id,
+                agencyId: link.agencyId,
+                agencyName: agency?.display_name ?? link.agencyId,
+            };
+        })
+        : [];
 
     return (
         <div className="space-y-8">
@@ -87,6 +106,8 @@ export default async function ManageDashboardPage() {
                     description="Properties awaiting your approval."
                 />
             </div>
+
+            <AgencyInvitationsCard invitations={invitations} />
             
             <div>
                 <h2 className="text-2xl font-semibold tracking-tight">Schedule for the day</h2>

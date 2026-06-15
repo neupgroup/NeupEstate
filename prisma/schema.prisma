@@ -69,6 +69,8 @@ model Account {
   agentOf       Account[]  @relation("AccountAgent")
   agencyAgentMapAsAgency AgencyAgentMap[] @relation("AgencyAgentMapAgency")
   agencyAgentMapAsAgent  AgencyAgentMap[] @relation("AgencyAgentMapAgent")
+  leadOwnerClientLeads    ClientLead[]     @relation("ClientLeadOwner")
+  leadOwnerSharedLeads    SharedLead[]     @relation("SharedLeadOwner")
   intelligenceMappings IntelligenceMapping[]
   intelligenceAlerts    IntelligenceAlert[]
   propertyChanges       PropertyChange[]
@@ -392,7 +394,7 @@ model AgencyAgentMap {
   id        String   @id @default(cuid())
   agencyId  String   @map("agency_id")
   agentId   String   @map("agent_id")
-  isPrimary Boolean  @default(false) @map("is_primary")
+  status    String   @default("invited")
 
   agency    Account   @relation("AgencyAgentMapAgency", fields: [agencyId], references: [id], onDelete: Cascade)
   agent     Account   @relation("AgencyAgentMapAgent", fields: [agentId], references: [id], onDelete: Cascade)
@@ -400,7 +402,7 @@ model AgencyAgentMap {
   @@unique([agencyId, agentId])
   @@index([agencyId])
   @@index([agentId])
-  @@index([isPrimary])
+  @@index([status])
   @@map("agency_agent_map")
 }
 
@@ -605,10 +607,12 @@ model ClientLead {
   updatedAt   DateTime     @updatedAt
 
   client      CrmClient      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  leadOwnerAccount Account?   @relation("ClientLeadOwner", fields: [leadOwner], references: [id], onDelete: SetNull)
 
   @@index([clientId])
   @@index([type])
   @@index([priority])
+  @@index([leadOwner])
   @@map("base_leads")
 }
 
@@ -623,11 +627,13 @@ model SharedLead {
   updatedAt   DateTime     @updatedAt
 
   client      CrmClient    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  leadOwnerAccount Account? @relation("SharedLeadOwner", fields: [leadOwner], references: [id], onDelete: SetNull)
   activities  LeadActivity[]
 
   @@index([clientId])
   @@index([type])
   @@index([priority])
+  @@index([leadOwner])
   @@map("shared_leads")
 }
 

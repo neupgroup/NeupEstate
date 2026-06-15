@@ -31,7 +31,7 @@ export default function CreatePropertyPage() {
     const [users, setUsers] = React.useState<User[]>([]);
     const [accountId, setAccountId] = useState<string | null>(null);
     const [agencyAccounts, setAgencyAccounts] = useState<Account[]>([]);
-    const [agencyLinks, setAgencyLinks] = useState<{ id: string; agencyId: string; agentId: string; isPrimary: boolean }[]>([]);
+    const [agencyLinks, setAgencyLinks] = useState<{ id: string; agencyId: string; agentId: string; status: 'invited' }[]>([]);
     const [postingAgencyId, setPostingAgencyId] = useState<string | null>(null);
 
     useEffect(() => {
@@ -53,13 +53,13 @@ export default function CreatePropertyPage() {
             }
 
             const links = await getAgencyAgentMapsByAgent(currentId);
+            const invitedLinks = links.filter((link) => link.status === 'invited');
             const agencies = accountList.filter((account) => account.account_type === 'brand');
 
-            setAgencyLinks(links);
+            setAgencyLinks(invitedLinks);
             setAgencyAccounts(agencies);
             setPostingAgencyId(
-                links.find((link) => link.isPrimary)?.agencyId ??
-                links[0]?.agencyId ??
+                invitedLinks[0]?.agencyId ??
                 null,
             );
         }

@@ -120,6 +120,8 @@ function mapRecord(account: any): Account {
     accessed_on: account.accessedOn?.toISOString() ?? new Date().toISOString(),
     display_name:  account.displayName  ?? undefined,
     display_image: account.displayImage ?? undefined,
+    agency: account.agency ?? null,
+    agent: account.agent ?? null,
   };
 
   if (account.accountType !== 'guest') {

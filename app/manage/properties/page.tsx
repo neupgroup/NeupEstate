@@ -73,7 +73,7 @@ export default async function ManagePropertiesPage({
 
   const hasFilters = Object.keys(filters).length > 0;
   const isDefaultFeed = !hasFilters && !query && !isDraftsView && !isAwaitingReviewView;
-  const agencyLinks = currentAccountId ? await getAgencyAgentMapsByAgent(currentAccountId) : [];
+  const agencyLinks = currentAccountId ? (await getAgencyAgentMapsByAgent(currentAccountId)).filter((link) => link.status === 'invited') : [];
   const agencyIds = agencyLinks.map((link) => link.agencyId);
 
   const awaitingItems = (isDefaultFeed || isDraftsView || isAwaitingReviewView)

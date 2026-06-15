@@ -3,60 +3,73 @@
 import { useMemo, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { createAgencyAgentMapAction } from '@/app/actions';
-import type { Account } from '@/types';
-import type { AgencyAgentMap } from '@/types';
+import type { Account, AgencyAgentMap } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/logica/core/hooks/use-toast';
-import { Loader2, Link2, Search } from 'lucide-react';
+import { Loader2, Link2, Search, Users } from 'lucide-react';
 import { cn } from '@/logica/core/utils';
 
 type Props = {
-  currentAccountId: string;
   agencies: Account[];
+  accounts: Account[];
   initialLinks: AgencyAgentMap[];
+  selectedAgencyId: string | null;
 };
 
 function getAccountLabel(account: Account): string {
   return account.display_name || account.id;
 }
 
-export function AgentMapManager({ currentAccountId, agencies, initialLinks }: Props) {
+function isBrandAccount(account: Account): boolean {
+  return account.account_type === 'brand';
+}
+
+export function AgentMapManager({
+  agencies,
+  accounts,
+  initialLinks,
+  selectedAgencyId,
+}: Props) {
   const router = useRouter();
   const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
-  const [agencySearch, setAgencySearch] = useState('');
-  const [selectedAgencyId, setSelectedAgencyId] = useState<string | null>(
-    initialLinks.find((link) => link.isPrimary)?.agencyId ?? initialLinks[0]?.agencyId ?? null,
-  );
-  const [isPrimary, setIsPrimary] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const [agentSearch, setAgentSearch] = useState('');
 
   const agencyMap = useMemo(() => new Map(agencies.map((agency) => [agency.id, agency])), [agencies]);
+  const linkedAgentIds = useMemo(() => new Set(initialLinks.map((link) => link.agentId)), [initialLinks]);
 
-  const filteredAgencies = useMemo(() => {
-    const query = agencySearch.trim().toLowerCase();
-    if (!query) return agencies;
+  const selectedAgency = selectedAgencyId ? agencyMap.get(selectedAgencyId) ?? null : null;
 
-    return agencies.filter((agency) => {
+  const availableAgents = useMemo(() => {
+    return accounts.filter((account) => !isBrandAccount(account) && !linkedAgentIds.has(account.id));
+  }, [accounts, linkedAgentIds]);
+
+  const filteredAgents = useMemo(() => {
+    const query = agentSearch.trim().toLowerCase();
+    if (!query || !showSearch) return [];
+
+    return availableAgents.filter((account) => {
       const haystack = [
-        agency.id,
-        agency.display_name ?? '',
-        agency.display_image ?? '',
-        agency.account_type,
+        account.id,
+        account.display_name ?? '',
+        account.display_image ?? '',
+        account.account_type,
       ].join(' ').toLowerCase();
+
       return haystack.includes(query);
     });
-  }, [agencySearch, agencies]);
+  }, [agentSearch, availableAgents, showSearch]);
 
-  async function handleAddAgency() {
+  async function handleInvite(agentId: string) {
     if (!selectedAgencyId) {
       toast({
         variant: 'destructive',
         title: 'Select an agency',
-        description: 'Choose an agency before creating the link.',
+        description: 'Choose the agency before inviting an agent.',
       });
       return;
     }
@@ -64,133 +77,170 @@ export function AgentMapManager({ currentAccountId, agencies, initialLinks }: Pr
     startTransition(async () => {
       const result = await createAgencyAgentMapAction({
         agencyId: selectedAgencyId,
-        agentId: currentAccountId,
-        isPrimary,
+        agentId,
       });
 
       if (result.success) {
         toast({
-          title: 'Agency linked',
-          description: 'The agency-agent mapping was created successfully.',
+          title: 'Invitation sent',
+          description: 'The agent will see the invitation on their dashboard.',
         });
+        setAgentSearch('');
+        setShowSearch(false);
         router.refresh();
         return;
       }
 
       toast({
         variant: 'destructive',
-        title: 'Unable to create link',
-        description: result.error || 'Failed to create the agency-agent mapping.',
+        title: 'Unable to invite agent',
+        description: result.error || 'Failed to send the invitation.',
       });
     });
   }
 
-  const primaryLink = initialLinks.find((link) => link.isPrimary) ?? null;
+  function updateSelectedAgency(nextAgencyId: string) {
+    const nextUrl = new URL(window.location.href);
+    nextUrl.searchParams.set('selectedAgency', nextAgencyId);
+    router.replace(`${nextUrl.pathname}${nextUrl.search}`);
+    setShowSearch(false);
+    setAgentSearch('');
+  }
 
   return (
     <div className="space-y-6">
       <div className="space-y-2">
         <h2 className="text-2xl font-semibold leading-none tracking-tight">Agency Agent Map</h2>
         <p className="text-sm text-muted-foreground">
-          Link agencies to the current agent account so property posting can default to an agency when one is available.
+          Pick an agency, review the invited agents, and send new invitations from the same place.
         </p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Create Link</CardTitle>
-          <CardDescription>
-            Search for an agency, select it, and create the mapping for your current agent account.
-          </CardDescription>
+          <CardTitle>Select Agency</CardTitle>
+          <CardDescription>Switch the agency context before inviting or reviewing agents.</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Search agency</label>
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                value={agencySearch}
-                onChange={(event) => setAgencySearch(event.target.value)}
-                placeholder="Type agency name or account ID"
-                className="pl-9"
-              />
-            </div>
-          </div>
-
-          <div className="grid gap-3 md:grid-cols-2">
-            {filteredAgencies.map((agency) => {
-              const selected = selectedAgencyId === agency.id;
-              return (
-                <button
-                  key={agency.id}
-                  type="button"
-                  onClick={() => setSelectedAgencyId(agency.id)}
-                  className={cn(
-                    'rounded-lg border px-4 py-3 text-left transition-colors hover:border-primary hover:bg-primary/5',
-                    selected ? 'border-primary bg-primary/10' : 'border-border bg-background',
-                  )}
-                >
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="min-w-0">
-                      <p className="truncate font-medium">{getAccountLabel(agency)}</p>
-                      <p className="truncate text-xs text-muted-foreground">{agency.id}</p>
-                    </div>
-                    {selected && <Badge>Selected</Badge>}
+        <CardContent className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+          {agencies.map((agency) => {
+            const selected = agency.id === selectedAgencyId;
+            return (
+              <button
+                key={agency.id}
+                type="button"
+                onClick={() => updateSelectedAgency(agency.id)}
+                className={cn(
+                  'rounded-lg border px-4 py-3 text-left transition-colors hover:border-primary hover:bg-primary/5',
+                  selected ? 'border-primary bg-primary/10' : 'border-border bg-background',
+                )}
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="truncate font-medium">{getAccountLabel(agency)}</p>
+                    <p className="truncate text-xs text-muted-foreground">{agency.id}</p>
                   </div>
-                </button>
-              );
-            })}
-            {filteredAgencies.length === 0 && (
-              <div className="rounded-lg border border-dashed px-4 py-8 text-sm text-muted-foreground md:col-span-2">
-                No agencies matched your search.
-              </div>
-            )}
-          </div>
-
-          <div className="flex flex-col gap-4 rounded-lg border bg-muted/20 p-4 md:flex-row md:items-center md:justify-between">
-            <label className="flex items-center gap-3 text-sm">
-              <Checkbox checked={isPrimary} onCheckedChange={(checked) => setIsPrimary(Boolean(checked))} />
-              Set as primary agency for this agent
-            </label>
-            <Button type="button" onClick={handleAddAgency} disabled={isPending || !selectedAgencyId}>
-              {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Link2 className="mr-2 h-4 w-4" />}
-              Add Agency Link
-            </Button>
-          </div>
+                  {selected && <Badge>Selected</Badge>}
+                </div>
+              </button>
+            );
+          })}
+          {agencies.length === 0 && (
+            <div className="rounded-lg border border-dashed px-4 py-8 text-sm text-muted-foreground md:col-span-2 lg:col-span-3">
+              No agencies found for this account.
+            </div>
+          )}
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Current Links</CardTitle>
+          <CardTitle>Invited Agents</CardTitle>
           <CardDescription>
-            {initialLinks.length} agency link{initialLinks.length === 1 ? '' : 's'} for this agent.
+            {selectedAgency
+              ? `Agents already invited to ${getAccountLabel(selectedAgency)}.`
+              : 'Select an agency to view its invited agents.'}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          {initialLinks.length > 0 ? (
-            initialLinks.map((link) => {
-              const agency = agencyMap.get(link.agencyId);
-              return (
-                <div key={link.id} className="flex items-center justify-between rounded-lg border px-4 py-3">
-                  <div>
-                    <p className="font-medium">{agency ? getAccountLabel(agency) : link.agencyId}</p>
-                    <p className="text-xs text-muted-foreground">Agency ID: {link.agencyId}</p>
+          {selectedAgencyId ? (
+            initialLinks.length > 0 ? (
+              initialLinks.map((link) => {
+                const agent = accounts.find((account) => account.id === link.agentId);
+                return (
+                  <div key={link.id} className="flex items-center justify-between rounded-lg border px-4 py-3">
+                    <div className="min-w-0">
+                      <p className="font-medium">{agent ? getAccountLabel(agent) : link.agentId}</p>
+                      <p className="truncate text-xs text-muted-foreground">Agent ID: {link.agentId}</p>
+                    </div>
+                    <Badge variant="secondary">Invited</Badge>
                   </div>
-                  <div className="flex items-center gap-2">
-                    {link.isPrimary && <Badge variant="secondary">Primary</Badge>}
-                    <Badge variant="outline">Agent: {currentAccountId}</Badge>
-                  </div>
-                </div>
-              );
-            })
+                );
+              })
+            ) : (
+              <div className="rounded-lg border border-dashed px-4 py-8 text-sm text-muted-foreground">
+                No agents have been invited yet.
+              </div>
+            )
           ) : (
-            <p className="text-sm text-muted-foreground">No agency links exist yet for this agent.</p>
+            <div className="rounded-lg border border-dashed px-4 py-8 text-sm text-muted-foreground">
+              Choose an agency to review invitations.
+            </div>
           )}
 
-          {primaryLink && (
-            <div className="rounded-lg border bg-muted/30 px-4 py-3 text-sm text-muted-foreground">
-              Properties will default to the primary agency unless you choose another one during posting.
+          <div className="flex items-center justify-between gap-3 rounded-lg border bg-muted/20 p-4">
+            <div className="min-w-0">
+              <p className="font-medium">Invite another agent</p>
+              <p className="text-sm text-muted-foreground">
+                Search the directory and invite people who are not yet in this agency.
+              </p>
+            </div>
+            <Button type="button" variant="secondary" onClick={() => setShowSearch((value) => !value)} disabled={!selectedAgencyId}>
+              <Link2 className="mr-2 h-4 w-4" />
+              {showSearch ? 'Hide search' : 'Add agent'}
+            </Button>
+          </div>
+
+          {showSearch && selectedAgencyId && (
+            <div className="space-y-3 rounded-lg border bg-card p-4">
+              <div className="relative">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  value={agentSearch}
+                  onChange={(event) => setAgentSearch(event.target.value)}
+                  placeholder="Search agent name or ID"
+                  className="pl-9"
+                />
+              </div>
+
+              {agentSearch.trim() ? (
+                <div className="space-y-2">
+                  {filteredAgents.map((agent) => (
+                    <div
+                      key={agent.id}
+                      className="flex items-center justify-between gap-3 rounded-lg border px-4 py-3"
+                    >
+                      <div className="min-w-0">
+                        <p className="font-medium">{getAccountLabel(agent)}</p>
+                        <p className="truncate text-xs text-muted-foreground">{agent.id}</p>
+                      </div>
+                      <Button type="button" onClick={() => handleInvite(agent.id)} disabled={isPending}>
+                        {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Users className="mr-2 h-4 w-4" />}
+                        Invite
+                      </Button>
+                    </div>
+                  ))}
+
+                  {filteredAgents.length === 0 && (
+                    <div className="rounded-lg border border-dashed px-4 py-6 text-sm text-muted-foreground">
+                      No agents matched your search, or they are already invited to this agency.
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  Start typing to see agents that are not yet part of this agency.
+                </p>
+              )}
             </div>
           )}
         </CardContent>

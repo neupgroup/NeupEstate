@@ -7,7 +7,7 @@ import { recommendProperties as recommendPropertiesFlow } from "@/services/ai/ai
 import { extractAndSaveProperty as extractAndSavePropertyFlow, type ExtractPropertyDetailsOutput } from "@/services/ai/extract-property-details-flow";
 import { createProperty as createPropertyService, updateProperty as updatePropertyService, approveProperty, getProperties, deleteProperty as deletePropertyService, getPendingProperties, getAwaitingReviewItems, getPaginatedProperties, getPropertyById, getPropertyReviewRequests, updatePropertyWithExtractedData, addFetchToHistory, deleteFetchHistoryItem as deleteFetchHistoryItemService, updatePropertyImages, addImagesToFetchHistory, deleteImageFetchHistoryItem as deleteImageFetchHistoryItemService, toggleSavedProperty as toggleSavedPropertyService, getUsersBySavedProperty as getUsersBySavedPropertyService, getSavedPropertiesForUser as getSavedPropertiesForUserService, createPropertyLog } from '@/services/property-service';
 import { createAgency as createAgencyService, updateAgency as updateAgencyService, deleteAgency as deleteAgencyService } from '@/services/agency-service';
-import { createAgencyAgentMap as createAgencyAgentMapService, getAgencyAgentMapsByAgent as getAgencyAgentMapsByAgentService, getPrimaryAgencyForAgent as getPrimaryAgencyForAgentService } from '@/services/agency-agent-map-service';
+import { createAgencyAgentMap as createAgencyAgentMapService, getAgencyAgentMapsByAgent as getAgencyAgentMapsByAgentService, getAgencyAgentMapsByAgency as getAgencyAgentMapsByAgencyService } from '@/services/agency-agent-map-service';
 import { getAgentsByLocation as getAgentsByLocationService, createAgent as createAgentService, updateAgent as updateAgentService, deleteAgent as deleteAgentService } from '@/services/agent-service';
 import { addSitemap, getNewUrlsFromSitemap, processSitemapUrl, updateSitemapCheckedTime } from "@/services/sitemap-service";
 import { clearAllProblems } from "@/services/problem-service";
@@ -37,8 +37,9 @@ import { createMortgageRequest as createMortgageRequestService } from '@/service
 import { createContactSubmission as createContactSubmissionService } from '@/services/contact-service';
 import { createModel as createModelService, updateModel as updateModelService, deleteModel as deleteModelService, setDefaultModel as setDefaultModelService } from '@/services/model-service';
 import { createRequirement as createRequirementService, updateRequirement as updateRequirementService } from '@/services/requirements-service';
-import { resolveAccount, updateUser } from '@/services/account-service';
+import { resolveAccount, updateUser, getAccountById } from '@/services/account-service';
 import { deleteAccountAndData } from '@/services/account-service';
+import { createLead as createLeadService } from '@/services/lead-service';
 import { getIdentity } from '@/services/neupid/get-identity';
 import { requirePermission } from '@/logica/auth/authorization';
 import { PERMISSIONS } from '@/logica/auth/permissions';
@@ -890,6 +891,7 @@ export async function createPropertyAction(
     await requirePermission(PERMISSIONS.manage.propertySelfCreate);
     const actorId = await requireIdentity();
     const agencyLinks = await getAgencyAgentMapsByAgentService(actorId);
+    const invitedAgencyLinks = agencyLinks.filter((link) => link.status === 'invited');
 
     const validatedData = CreatePropertySchema.parse(data);
     const orderedPurposes = validatedData.purposes?.length
@@ -915,18 +917,17 @@ export async function createPropertyAction(
     let agencyId: string | null = null;
     let agentId: string | null = null;
 
-    if (agencyLinks.length > 0) {
+    if (invitedAgencyLinks.length > 0) {
       const selectedAgencyId =
         postingAgencyId?.trim() ||
-        (await getPrimaryAgencyForAgentService(actorId))?.agencyId ||
-        agencyLinks[0]?.agencyId ||
+        invitedAgencyLinks[0]?.agencyId ||
         null;
 
       if (!selectedAgencyId) {
         return { success: false, error: "Please choose an agency to post this property.", propertyId: null };
       }
 
-      const isLinkedAgency = agencyLinks.some((link) => link.agencyId === selectedAgencyId);
+      const isLinkedAgency = invitedAgencyLinks.some((link) => link.agencyId === selectedAgencyId);
       if (!isLinkedAgency) {
         return { success: false, error: "The selected agency is not linked to this agent.", propertyId: null };
       }
@@ -1156,7 +1157,7 @@ export async function deleteAgencyAction(agencyId: string) {
 }
 
 export async function createAgencyAgentMapAction(
-  data: { agencyId: string; agentId: string; isPrimary?: boolean },
+  data: { agencyId: string; agentId: string },
 ): Promise<{ success: boolean; error?: string | null }> {
   try {
     await requirePermission(PERMISSIONS.manage.agentMapView);
@@ -1171,15 +1172,81 @@ export async function createAgencyAgentMapAction(
     await createAgencyAgentMapService({
       agencyId,
       agentId,
-      isPrimary: Boolean(data.isPrimary),
+      status: 'invited',
     });
 
     revalidatePath('/manage/agentmap');
     revalidatePath('/manage/properties/create');
+    revalidatePath('/manage');
+    revalidatePath('/manage/dashboard');
     return { success: true, error: null };
   } catch (error: any) {
     await logProblem(error, 'createAgencyAgentMapAction');
     return { success: false, error: error?.message ?? 'Failed to create agency-agent mapping.' };
+  }
+}
+
+export async function createLeadAction(
+  data: {
+    existingClientId?: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    phone?: string;
+    source?: string;
+    type: any;
+    priority: any;
+    leadOwner?: string;
+    requirement?: Record<string, any>;
+  },
+): Promise<{ success: boolean; error?: string | null; leadId?: string | null }> {
+  try {
+    await requirePermission(PERMISSIONS.manage.selfLeadCreate);
+    const actorId = await requireIdentity();
+    const currentAccount = await getAccountById(actorId);
+    const fallbackAgencyId = currentAccount?.account_type === 'brand'
+      ? actorId
+      : currentAccount?.agency ??
+        (await getAgencyAgentMapsByAgentService(actorId)).find((link) => link.status === 'invited')?.agencyId ??
+        null;
+
+    if (data.leadOwner?.trim()) {
+      if (!fallbackAgencyId) {
+        return { success: false, error: 'You can only assign a lead owner from your agency.', leadId: null };
+      }
+
+      const agencyMembers = await getAgencyAgentMapsByAgencyService(fallbackAgencyId);
+      const allowedOwnerIds = new Set(
+        agencyMembers
+          .filter((member) => member.status === 'invited')
+          .map((member) => member.agentId),
+      );
+
+      if (!allowedOwnerIds.has(data.leadOwner.trim())) {
+        return { success: false, error: 'Lead owner must be an agent in your agency.', leadId: null };
+      }
+    }
+
+    const leadId = await createLeadService({
+      existingClientId: data.existingClientId,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      phone: data.phone,
+      source: data.source,
+      type: data.type,
+      priority: data.priority,
+      leadOwner: data.leadOwner?.trim() || undefined,
+      requirement: data.requirement,
+    });
+
+    revalidatePath('/manage/leads');
+    revalidatePath('/manage/leads/my');
+    revalidatePath('/manage/leads/shared');
+    return { success: true, error: null, leadId };
+  } catch (error: any) {
+    await logProblem(error, 'createLeadAction');
+    return { success: false, error: error?.message ?? 'Failed to create lead.', leadId: null };
   }
 }
 

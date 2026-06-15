@@ -67,13 +67,13 @@ export interface AgencyAgentMap {
   id: string;
   agencyId: string; // references Account.id (agency account)
   agentId: string;  // references Account.id (agent account)
-  isPrimary: boolean;
+  status: 'invited';
 }
 
 export const CreateAgencyAgentMapSchema = z.object({
   agencyId: z.string().min(1, 'Agency is required.'),
   agentId: z.string().min(1, 'Agent is required.'),
-  isPrimary: z.boolean().default(false),
+  status: z.literal('invited').default('invited'),
 });
 export type CreateAgencyAgentMapInput = z.infer<typeof CreateAgencyAgentMapSchema>;
 

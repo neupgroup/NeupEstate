@@ -2,26 +2,20 @@
 
 import { prisma } from '@/logica/core/prisma';
 import { logProblem } from './problem-service';
-import type { AgencyAgentMap, CreateAgencyAgentMapInput } from '@/types';
+import { getAccounts } from './account-service';
+import type { Account, AgencyAgentMap, CreateAgencyAgentMapInput } from '@/types';
 
 function mapRecord(record: any): AgencyAgentMap {
   return {
     id: record.id,
     agencyId: record.agencyId,
     agentId: record.agentId,
-    isPrimary: Boolean(record.isPrimary),
+    status: record.status === 'invited' ? 'invited' : 'invited',
   };
 }
 
 export async function createAgencyAgentMap(input: CreateAgencyAgentMapInput): Promise<AgencyAgentMap> {
   try {
-    if (input.isPrimary) {
-      await prisma.agencyAgentMap.updateMany({
-        where: { agentId: input.agentId },
-        data: { isPrimary: false },
-      });
-    }
-
     const record = await prisma.agencyAgentMap.upsert({
       where: {
         agencyId_agentId: {
@@ -32,24 +26,24 @@ export async function createAgencyAgentMap(input: CreateAgencyAgentMapInput): Pr
       create: {
         agencyId: input.agencyId,
         agentId: input.agentId,
-        isPrimary: input.isPrimary ?? false,
+        status: input.status ?? 'invited',
       },
       update: {
-        isPrimary: input.isPrimary ?? false,
+        status: input.status ?? 'invited',
       },
     });
 
     return mapRecord(record);
   } catch (e) {
     await logProblem(e, 'createAgencyAgentMap');
-    throw new Error('Failed to create agency-agent mapping.');
+    throw new Error('Failed to create agency-agent invitation.');
   }
 }
 
 export async function getAgencyAgentMaps(): Promise<AgencyAgentMap[]> {
   try {
     const records = await prisma.agencyAgentMap.findMany({
-      orderBy: [{ isPrimary: 'desc' }, { agencyId: 'asc' }, { agentId: 'asc' }],
+      orderBy: [{ agencyId: 'asc' }, { agentId: 'asc' }],
     });
     return records.map(mapRecord);
   } catch (e) {
@@ -62,7 +56,7 @@ export async function getAgencyAgentMapsByAgent(agentId: string): Promise<Agency
   try {
     const records = await prisma.agencyAgentMap.findMany({
       where: { agentId },
-      orderBy: [{ isPrimary: 'desc' }, { agencyId: 'asc' }],
+      orderBy: [{ agencyId: 'asc' }],
     });
     return records.map(mapRecord);
   } catch (e) {
@@ -75,7 +69,7 @@ export async function getAgencyAgentMapsByAgency(agencyId: string): Promise<Agen
   try {
     const records = await prisma.agencyAgentMap.findMany({
       where: { agencyId },
-      orderBy: [{ isPrimary: 'desc' }, { agentId: 'asc' }],
+      orderBy: [{ agentId: 'asc' }],
     });
     return records.map(mapRecord);
   } catch (e) {
@@ -87,7 +81,7 @@ export async function getAgencyAgentMapsByAgency(agencyId: string): Promise<Agen
 export async function getPrimaryAgencyForAgent(agentId: string): Promise<AgencyAgentMap | null> {
   try {
     const record = await prisma.agencyAgentMap.findFirst({
-      where: { agentId, isPrimary: true },
+      where: { agentId },
       orderBy: [{ agencyId: 'asc' }],
     });
     return record ? mapRecord(record) : null;
@@ -97,11 +91,26 @@ export async function getPrimaryAgencyForAgent(agentId: string): Promise<AgencyA
   }
 }
 
+export async function getAgencyAgentAccountsByAgency(agencyId: string): Promise<Account[]> {
+  try {
+    const [links, accounts] = await Promise.all([
+      getAgencyAgentMapsByAgency(agencyId),
+      getAccounts(),
+    ]);
+
+    const agentIds = new Set(links.map((link) => link.agentId));
+    return accounts.filter((account) => agentIds.has(account.id) && account.account_type !== 'brand');
+  } catch (e) {
+    await logProblem(e, `getAgencyAgentAccountsByAgency ${agencyId}`);
+    return [];
+  }
+}
+
 export async function deleteAgencyAgentMap(id: string): Promise<void> {
   try {
     await prisma.agencyAgentMap.delete({ where: { id } });
   } catch (e) {
     await logProblem(e, `deleteAgencyAgentMap ${id}`);
-    throw new Error('Failed to delete agency-agent mapping.');
+    throw new Error('Failed to delete agency-agent invitation.');
   }
 }
