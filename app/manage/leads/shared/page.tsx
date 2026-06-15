@@ -1,5 +1,8 @@
 import { getSharedLeads } from '@/services/lead-service';
 import { checkAuthenticationForWeb } from '@/services/neupid/check-auth-web';
+import { getAccountIdFromJWT } from '@/services/neupid/check-auth-web';
+import { getAccountById } from '@/services/account-service';
+import { getAgencyAgentMapsByAgent } from '@/services/agency-agent-map-service';
 import { ClientLink } from '@/components/client-link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -7,7 +10,16 @@ import { Plus } from 'lucide-react';
 
 export default async function SharedLeadsPage() {
     await checkAuthenticationForWeb();
+    const accountId = await getAccountIdFromJWT();
+    const account = accountId ? await getAccountById(accountId) : null;
+    const agencyLinks = accountId ? await getAgencyAgentMapsByAgent(accountId) : [];
+    const canViewAllLeads =
+        account?.account_type === 'brand' ||
+        agencyLinks.some((link) => link.status === 'accepted' && link.isAdmin);
     const leads = await getSharedLeads();
+    const visibleLeads = canViewAllLeads || !accountId
+        ? leads
+        : leads.filter((lead) => lead.leadOwner === accountId);
 
     return (
         <div className="space-y-6">
@@ -15,7 +27,7 @@ export default async function SharedLeadsPage() {
                 <div>
                     <h1 className="text-2xl font-semibold leading-none tracking-tight">Shared Leads</h1>
                     <p className="text-sm text-muted-foreground mt-1">
-                        {leads.length} lead{leads.length !== 1 ? 's' : ''}
+                        {visibleLeads.length} lead{visibleLeads.length !== 1 ? 's' : ''}
                     </p>
                 </div>
                 <ClientLink href="/manage/leads/add">
@@ -26,11 +38,11 @@ export default async function SharedLeadsPage() {
                 </ClientLink>
             </div>
 
-            {leads.length === 0 ? (
+            {visibleLeads.length === 0 ? (
                 <p className="text-sm text-muted-foreground py-12 text-center">No leads yet.</p>
             ) : (
                 <div className="space-y-3">
-                    {leads.map((lead) => {
+                    {visibleLeads.map((lead) => {
                         const contact = lead.client.contact as any;
                         const req = lead.requirement as Record<string, any> | null;
 

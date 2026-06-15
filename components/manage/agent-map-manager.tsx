@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/logica/core/hooks/use-toast';
 import { Loader2, Link2, Search, Users } from 'lucide-react';
 import { cn } from '@/logica/core/utils';
@@ -38,6 +39,7 @@ export function AgentMapManager({
   const [isPending, startTransition] = useTransition();
   const [showSearch, setShowSearch] = useState(false);
   const [agentSearch, setAgentSearch] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const agencyMap = useMemo(() => new Map(agencies.map((agency) => [agency.id, agency])), [agencies]);
   const linkedAgentIds = useMemo(() => new Set(initialLinks.map((link) => link.agentId)), [initialLinks]);
@@ -78,6 +80,7 @@ export function AgentMapManager({
       const result = await createAgencyAgentMapAction({
         agencyId: selectedAgencyId,
         agentId,
+        isAdmin,
       });
 
       if (result.success) {
@@ -87,6 +90,7 @@ export function AgentMapManager({
         });
         setAgentSearch('');
         setShowSearch(false);
+        setIsAdmin(false);
         router.refresh();
         return;
       }
@@ -105,6 +109,7 @@ export function AgentMapManager({
     router.replace(`${nextUrl.pathname}${nextUrl.search}`);
     setShowSearch(false);
     setAgentSearch('');
+    setIsAdmin(false);
   }
 
   return (
@@ -172,7 +177,10 @@ export function AgentMapManager({
                       <p className="font-medium">{agent ? getAccountLabel(agent) : link.agentId}</p>
                       <p className="truncate text-xs text-muted-foreground">Agent ID: {link.agentId}</p>
                     </div>
-                    <Badge variant="secondary">Invited</Badge>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary">{link.status === 'accepted' ? 'Accepted' : 'Invited'}</Badge>
+                      {link.isAdmin && <Badge>Admin</Badge>}
+                    </div>
                   </div>
                 );
               })
@@ -194,10 +202,16 @@ export function AgentMapManager({
                 Search the directory and invite people who are not yet in this agency.
               </p>
             </div>
-            <Button type="button" variant="secondary" onClick={() => setShowSearch((value) => !value)} disabled={!selectedAgencyId}>
-              <Link2 className="mr-2 h-4 w-4" />
-              {showSearch ? 'Hide search' : 'Add agent'}
-            </Button>
+            <div className="flex items-center gap-3">
+              <label className="flex items-center gap-2 text-sm">
+                <Checkbox checked={isAdmin} onCheckedChange={(checked) => setIsAdmin(Boolean(checked))} disabled={!selectedAgencyId} />
+                Grant admin
+              </label>
+              <Button type="button" variant="secondary" onClick={() => setShowSearch((value) => !value)} disabled={!selectedAgencyId}>
+                <Link2 className="mr-2 h-4 w-4" />
+                {showSearch ? 'Hide search' : 'Add agent'}
+              </Button>
+            </div>
           </div>
 
           {showSearch && selectedAgencyId && (

@@ -17,7 +17,7 @@ import { getUsers } from '@/services/user-service';
 import { getAccounts } from '@/services/account-service';
 import { getAgencyAgentMapsByAgent } from '@/services/agency-agent-map-service';
 import { useAgencyCustomization } from '@/logica/core/hooks/use-agency-customization';
-import type { Account } from '@/types';
+import type { Account, AgencyAgentMap } from '@/types';
 import { cn } from '@/logica/core/utils';
 
 import { ProgressivePropertySections } from '@/components/manage/progressive-property-sections';
@@ -31,7 +31,7 @@ export default function CreatePropertyPage() {
     const [users, setUsers] = React.useState<User[]>([]);
     const [accountId, setAccountId] = useState<string | null>(null);
     const [agencyAccounts, setAgencyAccounts] = useState<Account[]>([]);
-    const [agencyLinks, setAgencyLinks] = useState<{ id: string; agencyId: string; agentId: string; status: 'invited' }[]>([]);
+    const [agencyLinks, setAgencyLinks] = useState<AgencyAgentMap[]>([]);
     const [postingAgencyId, setPostingAgencyId] = useState<string | null>(null);
 
     useEffect(() => {
@@ -53,13 +53,13 @@ export default function CreatePropertyPage() {
             }
 
             const links = await getAgencyAgentMapsByAgent(currentId);
-            const invitedLinks = links.filter((link) => link.status === 'invited');
+            const acceptedLinks = links.filter((link) => link.status === 'accepted');
             const agencies = accountList.filter((account) => account.account_type === 'brand');
 
-            setAgencyLinks(invitedLinks);
+            setAgencyLinks(acceptedLinks);
             setAgencyAccounts(agencies);
             setPostingAgencyId(
-                invitedLinks[0]?.agencyId ??
+                acceptedLinks[0]?.agencyId ??
                 null,
             );
         }

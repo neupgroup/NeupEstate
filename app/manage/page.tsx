@@ -68,6 +68,7 @@ export default async function ManageDashboardPage() {
                 id: link.id,
                 agencyId: link.agencyId,
                 agencyName: agency?.display_name ?? link.agencyId,
+                isAdmin: link.isAdmin,
             };
         })
         : [];

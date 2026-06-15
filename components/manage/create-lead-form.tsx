@@ -41,7 +41,7 @@ const clientSchema = z.object({
 const requirementSchema = z.object({
     type:      z.nativeEnum(LeadType),
     priority:  z.nativeEnum(LeadPriority),
-    leadOwner: z.string().optional(),
+    assignedTo: z.string().optional(),
     minBudget: z.coerce.number().optional(),
     maxBudget: z.coerce.number().optional(),
     location:  z.string().optional(),
@@ -131,8 +131,10 @@ export function CreateLeadForm() {
     const [submitting, setSubmitting]   = useState(false);
     const [isPending, startTransition]  = useTransition();
     const [agencyName, setAgencyName] = useState<string | null>(null);
-    const [leadOwnerSearch, setLeadOwnerSearch] = useState('');
+    const [assignedToSearch, setAssignedToSearch] = useState('');
     const [agencyAgents, setAgencyAgents] = useState<Account[]>([]);
+    const [hasAgencyContext, setHasAgencyContext] = useState(false);
+    const [currentAccountId, setCurrentAccountId] = useState<string | null>(null);
 
     const clientForm = useForm<ClientValues>({
         resolver: zodResolver(clientSchema),
@@ -153,18 +155,20 @@ export function CreateLeadForm() {
         async function loadAgencyOwners() {
             const currentAccountId = await getCurrentAccountId();
             if (!currentAccountId) return;
+            if (!cancelled) setCurrentAccountId(currentAccountId);
 
             const currentAccount = await getAccountById(currentAccountId);
             if (!currentAccount) return;
 
             const agencyId = currentAccount.account_type === 'brand'
                 ? currentAccountId
-                : currentAccount.agency ?? (await getAgencyAgentMapsByAgent(currentAccountId)).find((link) => link.status === 'invited')?.agencyId ?? null;
+                : currentAccount.agency ?? (await getAgencyAgentMapsByAgent(currentAccountId)).find((link) => link.status === 'accepted')?.agencyId ?? null;
 
             if (!agencyId) {
                 if (!cancelled) {
                     setAgencyName(null);
                     setAgencyAgents([]);
+                    setHasAgencyContext(false);
                 }
                 return;
             }
@@ -177,7 +181,7 @@ export function CreateLeadForm() {
 
             const allowedAgentIds = new Set(
                 agencyLinks
-                    .filter((link) => link.status === 'invited')
+                    .filter((link) => link.status === 'accepted')
                     .map((link) => link.agentId),
             );
 
@@ -186,6 +190,7 @@ export function CreateLeadForm() {
             if (!cancelled) {
                 setAgencyName(agencyAccount?.display_name ?? agencyId);
                 setAgencyAgents(agents);
+                setHasAgencyContext(true);
             }
         }
 
@@ -197,7 +202,7 @@ export function CreateLeadForm() {
     }, []);
 
     const filteredLeadOwners = useMemo(() => {
-        const q = leadOwnerSearch.trim().toLowerCase();
+        const q = assignedToSearch.trim().toLowerCase();
         if (!q) return agencyAgents;
         return agencyAgents.filter((account) => {
             const haystack = [
@@ -208,7 +213,7 @@ export function CreateLeadForm() {
             ].join(' ').toLowerCase();
             return haystack.includes(q);
         });
-    }, [agencyAgents, leadOwnerSearch]);
+    }, [agencyAgents, assignedToSearch]);
 
     function advance(to: number) {
         setActive(to);
@@ -260,12 +265,13 @@ export function CreateLeadForm() {
         setSubmitting(true);
         try {
             const clientData = clientForm.getValues();
+            const assignedTo = data.assignedTo?.trim() || currentAccountId || undefined;
             const result = await createLeadAction({
                 ...clientData,
                 existingClientId: selectedClient?.id ?? savedClientId ?? undefined,
                 type:        data.type,
                 priority:    data.priority,
-                leadOwner:   data.leadOwner,
+                assignedTo,
                 requirement: { minBudget: data.minBudget, maxBudget: data.maxBudget, location: data.location, notes: data.notes },
             });
             if (!result.success) {
@@ -471,98 +477,98 @@ export function CreateLeadForm() {
                                 <FormField control={reqForm.control} name="location" render={({ field }) => (
                                     <FormItem><FormLabel>Preferred Location <span className="text-muted-foreground text-xs">(optional)</span></FormLabel><FormControl><Input placeholder="e.g. Kathmandu, Lalitpur" {...field} /></FormControl><FormMessage /></FormItem>
                                 )} />
-                                <FormField control={reqForm.control} name="leadOwner" render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Lead Owner <span className="text-muted-foreground text-xs">(optional)</span></FormLabel>
-                                        <FormControl>
-                                            <div className="space-y-3">
-                                                <div className="relative">
-                                                    <UserSearch className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                                                    <Input
-                                                        value={leadOwnerSearch}
-                                                        onChange={(event) => {
-                                                            setLeadOwnerSearch(event.target.value);
-                                                            field.onChange('');
-                                                        }}
-                                                        placeholder={agencyName ? `Search agents in ${agencyName}` : 'Search agents in your agency'}
-                                                        className="pl-9"
-                                                        disabled={agencyAgents.length === 0}
-                                                    />
-                                                </div>
+                                {hasAgencyContext && agencyAgents.length > 0 && (
+                                  <FormField control={reqForm.control} name="assignedTo" render={({ field }) => (
+                                      <FormItem>
+                                          <FormLabel>Assigned To <span className="text-muted-foreground text-xs">(agency agents)</span></FormLabel>
+                                          <FormControl>
+                                              <div className="space-y-3">
+                                                  <div className="relative">
+                                                      <UserSearch className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                                      <Input
+                                                          value={assignedToSearch}
+                                                          onChange={(event) => {
+                                                              setAssignedToSearch(event.target.value);
+                                                              field.onChange('');
+                                                          }}
+                                                          placeholder={agencyName ? `Search agents in ${agencyName}` : 'Search agents in your agency'}
+                                                          className="pl-9"
+                                                      />
+                                                  </div>
 
-                                                {field.value && (
-                                                    <div className="flex items-center justify-between rounded-lg border bg-muted/20 px-3 py-2">
-                                                        <div className="min-w-0">
-                                                            <p className="text-sm font-medium">
-                                                                {agencyAgents.find((agent) => agent.id === field.value)?.display_name ?? field.value}
-                                                            </p>
-                                                            <p className="truncate text-xs text-muted-foreground">
-                                                                Selected lead owner
-                                                            </p>
-                                                        </div>
-                                                        <Button
-                                                            type="button"
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            onClick={() => {
-                                                                field.onChange('');
-                                                                setLeadOwnerSearch('');
-                                                            }}
-                                                        >
-                                                            <X className="mr-2 h-4 w-4" />
-                                                            Clear
-                                                        </Button>
-                                                    </div>
-                                                )}
+                                                  {field.value && (
+                                                      <div className="flex items-center justify-between rounded-lg border bg-muted/20 px-3 py-2">
+                                                          <div className="min-w-0">
+                                                              <p className="text-sm font-medium">
+                                                                  {agencyAgents.find((agent) => agent.id === field.value)?.display_name ?? field.value}
+                                                              </p>
+                                                              <p className="truncate text-xs text-muted-foreground">
+                                                                  Selected assignee
+                                                              </p>
+                                                          </div>
+                                                          <Button
+                                                              type="button"
+                                                              variant="ghost"
+                                                              size="sm"
+                                                              onClick={() => {
+                                                                  field.onChange('');
+                                                                  setAssignedToSearch('');
+                                                              }}
+                                                          >
+                                                              <X className="mr-2 h-4 w-4" />
+                                                              Clear
+                                                          </Button>
+                                                      </div>
+                                                  )}
 
-                                                {leadOwnerSearch.trim() && (
-                                                    <div className="space-y-2 rounded-lg border bg-card p-3">
-                                                        {filteredLeadOwners.length > 0 ? (
-                                                            filteredLeadOwners.map((agent) => (
-                                                                <button
-                                                                    key={agent.id}
-                                                                    type="button"
-                                                                    onClick={() => {
-                                                                        field.onChange(agent.id);
-                                                                        setLeadOwnerSearch(agent.display_name ?? agent.id);
-                                                                    }}
-                                                                    className={cn(
-                                                                        'flex w-full items-center justify-between rounded-lg border px-3 py-2 text-left transition-colors hover:border-primary hover:bg-primary/5',
-                                                                        field.value === agent.id ? 'border-primary bg-primary/10' : 'border-border bg-background',
-                                                                    )}
-                                                                >
-                                                                    <div className="min-w-0">
-                                                                        <p className="truncate text-sm font-medium">{agent.display_name || agent.id}</p>
-                                                                        <p className="truncate text-xs text-muted-foreground">{agent.id}</p>
-                                                                    </div>
-                                                                    <Badge variant={field.value === agent.id ? 'default' : 'outline'}>
-                                                                        {field.value === agent.id ? 'Selected' : 'Use'}
-                                                                    </Badge>
-                                                                </button>
-                                                            ))
-                                                        ) : (
-                                                            <p className="text-sm text-muted-foreground">
-                                                                No agents matched your agency search.
-                                                            </p>
-                                                        )}
-                                                    </div>
-                                                )}
-
-                                                {!agencyName && (
-                                                    <p className="text-sm text-muted-foreground">
-                                                        No agency context was found for this account, so lead owner suggestions are unavailable.
-                                                    </p>
-                                                )}
-                                                {agencyName && agencyAgents.length === 0 && (
-                                                    <p className="text-sm text-muted-foreground">
-                                                        No invited agents are available in {agencyName} yet.
-                                                    </p>
-                                                )}
-                                            </div>
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )} />
+                                                  {assignedToSearch.trim() && (
+                                                      <div className="space-y-2 rounded-lg border bg-card p-3">
+                                                          {filteredLeadOwners.length > 0 ? (
+                                                              filteredLeadOwners.map((agent) => (
+                                                                  <button
+                                                                      key={agent.id}
+                                                                      type="button"
+                                                                      onClick={() => {
+                                                                          field.onChange(agent.id);
+                                                                          setAssignedToSearch(agent.display_name ?? agent.id);
+                                                                      }}
+                                                                      className={cn(
+                                                                          'flex w-full items-center justify-between rounded-lg border px-3 py-2 text-left transition-colors hover:border-primary hover:bg-primary/5',
+                                                                          field.value === agent.id ? 'border-primary bg-primary/10' : 'border-border bg-background',
+                                                                      )}
+                                                                  >
+                                                                      <div className="min-w-0">
+                                                                          <p className="truncate text-sm font-medium">{agent.display_name || agent.id}</p>
+                                                                          <p className="truncate text-xs text-muted-foreground">{agent.id}</p>
+                                                                      </div>
+                                                                      <Badge variant={field.value === agent.id ? 'default' : 'outline'}>
+                                                                          {field.value === agent.id ? 'Selected' : 'Use'}
+                                                                      </Badge>
+                                                                  </button>
+                                                              ))
+                                                          ) : (
+                                                              <p className="text-sm text-muted-foreground">
+                                                                  No agents matched your agency search.
+                                                              </p>
+                                                          )}
+                                                      </div>
+                                                  )}
+                                              </div>
+                                          </FormControl>
+                                          <FormMessage />
+                                      </FormItem>
+                                  )} />
+                                )}
+                                {!hasAgencyContext && (
+                                  <p className="text-sm text-muted-foreground">
+                                    This account is not linked to an agency, so the lead will be assigned automatically to your account.
+                                  </p>
+                                )}
+                                {hasAgencyContext && agencyAgents.length === 0 && (
+                                  <p className="text-sm text-muted-foreground">
+                                    No accepted agency agents are available yet, so the lead will be assigned automatically to your account.
+                                  </p>
+                                )}
                                 <FormField control={reqForm.control} name="notes" render={({ field }) => (
                                     <FormItem><FormLabel>Notes <span className="text-muted-foreground text-xs">(optional)</span></FormLabel><FormControl><Input placeholder="Any additional context" {...field} /></FormControl><FormMessage /></FormItem>
                                 )} />

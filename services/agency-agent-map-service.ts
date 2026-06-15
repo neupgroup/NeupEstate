@@ -10,7 +10,8 @@ function mapRecord(record: any): AgencyAgentMap {
     id: record.id,
     agencyId: record.agencyId,
     agentId: record.agentId,
-    status: record.status === 'invited' ? 'invited' : 'invited',
+    status: record.status === 'accepted' ? 'accepted' : 'invited',
+    isAdmin: Boolean(record.isAdmin),
   };
 }
 
@@ -27,9 +28,11 @@ export async function createAgencyAgentMap(input: CreateAgencyAgentMapInput): Pr
         agencyId: input.agencyId,
         agentId: input.agentId,
         status: input.status ?? 'invited',
+        isAdmin: input.isAdmin ?? false,
       },
       update: {
         status: input.status ?? 'invited',
+        isAdmin: input.isAdmin ?? false,
       },
     });
 
@@ -82,12 +85,25 @@ export async function getPrimaryAgencyForAgent(agentId: string): Promise<AgencyA
   try {
     const record = await prisma.agencyAgentMap.findFirst({
       where: { agentId },
-      orderBy: [{ agencyId: 'asc' }],
+      orderBy: [{ status: 'desc' }, { agencyId: 'asc' }],
     });
     return record ? mapRecord(record) : null;
   } catch (e) {
     await logProblem(e, `getPrimaryAgencyForAgent ${agentId}`);
     return null;
+  }
+}
+
+export async function acceptAgencyAgentMap(id: string, isAdmin = false): Promise<AgencyAgentMap> {
+  try {
+    const record = await prisma.agencyAgentMap.update({
+      where: { id },
+      data: { status: 'accepted', isAdmin },
+    });
+    return mapRecord(record);
+  } catch (e) {
+    await logProblem(e, `acceptAgencyAgentMap ${id}`);
+    throw new Error('Failed to accept agency-agent invitation.');
   }
 }
 

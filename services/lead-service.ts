@@ -71,7 +71,7 @@ export interface CreateLeadInput {
     source?: string;
     type: LeadType;
     priority: LeadPriority;
-    leadOwner?: string;
+    assignedTo?: string;
     requirement?: Record<string, any>;
 }
 
@@ -172,7 +172,7 @@ export async function createLead(data: CreateLeadInput): Promise<string> {
                 clientId,
                 type:        data.type,
                 priority:    data.priority,
-                leadOwner:   data.leadOwner || null,
+                leadOwner:   data.assignedTo || null,
                 requirement: data.requirement ?? {},
             },
         });

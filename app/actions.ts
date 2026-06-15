@@ -891,7 +891,7 @@ export async function createPropertyAction(
     await requirePermission(PERMISSIONS.manage.propertySelfCreate);
     const actorId = await requireIdentity();
     const agencyLinks = await getAgencyAgentMapsByAgentService(actorId);
-    const invitedAgencyLinks = agencyLinks.filter((link) => link.status === 'invited');
+    const acceptedAgencyLinks = agencyLinks.filter((link) => link.status === 'accepted');
 
     const validatedData = CreatePropertySchema.parse(data);
     const orderedPurposes = validatedData.purposes?.length
@@ -917,17 +917,17 @@ export async function createPropertyAction(
     let agencyId: string | null = null;
     let agentId: string | null = null;
 
-    if (invitedAgencyLinks.length > 0) {
+    if (acceptedAgencyLinks.length > 0) {
       const selectedAgencyId =
         postingAgencyId?.trim() ||
-        invitedAgencyLinks[0]?.agencyId ||
+        acceptedAgencyLinks[0]?.agencyId ||
         null;
 
       if (!selectedAgencyId) {
         return { success: false, error: "Please choose an agency to post this property.", propertyId: null };
       }
 
-      const isLinkedAgency = invitedAgencyLinks.some((link) => link.agencyId === selectedAgencyId);
+      const isLinkedAgency = acceptedAgencyLinks.some((link) => link.agencyId === selectedAgencyId);
       if (!isLinkedAgency) {
         return { success: false, error: "The selected agency is not linked to this agent.", propertyId: null };
       }
@@ -1157,7 +1157,7 @@ export async function deleteAgencyAction(agencyId: string) {
 }
 
 export async function createAgencyAgentMapAction(
-  data: { agencyId: string; agentId: string },
+  data: { agencyId: string; agentId: string; isAdmin?: boolean },
 ): Promise<{ success: boolean; error?: string | null }> {
   try {
     await requirePermission(PERMISSIONS.manage.agentMapView);
@@ -1173,6 +1173,7 @@ export async function createAgencyAgentMapAction(
       agencyId,
       agentId,
       status: 'invited',
+      isAdmin: Boolean(data.isAdmin),
     });
 
     revalidatePath('/manage/agentmap');
@@ -1196,7 +1197,7 @@ export async function createLeadAction(
     source?: string;
     type: any;
     priority: any;
-    leadOwner?: string;
+    assignedTo?: string;
     requirement?: Record<string, any>;
   },
 ): Promise<{ success: boolean; error?: string | null; leadId?: string | null }> {
@@ -1207,10 +1208,12 @@ export async function createLeadAction(
     const fallbackAgencyId = currentAccount?.account_type === 'brand'
       ? actorId
       : currentAccount?.agency ??
-        (await getAgencyAgentMapsByAgentService(actorId)).find((link) => link.status === 'invited')?.agencyId ??
+        (await getAgencyAgentMapsByAgentService(actorId)).find((link) => link.status === 'accepted')?.agencyId ??
         null;
 
-    if (data.leadOwner?.trim()) {
+    const assignedTo = data.assignedTo?.trim() || actorId;
+
+    if (data.assignedTo?.trim()) {
       if (!fallbackAgencyId) {
         return { success: false, error: 'You can only assign a lead owner from your agency.', leadId: null };
       }
@@ -1218,11 +1221,12 @@ export async function createLeadAction(
       const agencyMembers = await getAgencyAgentMapsByAgencyService(fallbackAgencyId);
       const allowedOwnerIds = new Set(
         agencyMembers
-          .filter((member) => member.status === 'invited')
+          .filter((member) => member.status === 'accepted')
           .map((member) => member.agentId),
       );
+      allowedOwnerIds.add(actorId);
 
-      if (!allowedOwnerIds.has(data.leadOwner.trim())) {
+      if (!allowedOwnerIds.has(assignedTo)) {
         return { success: false, error: 'Lead owner must be an agent in your agency.', leadId: null };
       }
     }
@@ -1236,7 +1240,7 @@ export async function createLeadAction(
       source: data.source,
       type: data.type,
       priority: data.priority,
-      leadOwner: data.leadOwner?.trim() || undefined,
+      assignedTo,
       requirement: data.requirement,
     });
 
@@ -1247,6 +1251,36 @@ export async function createLeadAction(
   } catch (error: any) {
     await logProblem(error, 'createLeadAction');
     return { success: false, error: error?.message ?? 'Failed to create lead.', leadId: null };
+  }
+}
+
+export async function acceptAgencyAgentMapAction(mapId: string): Promise<{ success: boolean; error?: string | null }> {
+  try {
+    const actorId = await requireIdentity();
+    const link = await prisma.agencyAgentMap.findUnique({ where: { id: mapId } });
+
+    if (!link || link.agentId !== actorId) {
+      return { success: false, error: 'Invitation not found.' };
+    }
+
+    await prisma.agencyAgentMap.update({
+      where: { id: mapId },
+      data: {
+        status: 'accepted',
+      },
+    });
+
+    revalidatePath('/manage');
+    revalidatePath('/manage/dashboard');
+    revalidatePath('/manage/properties/create');
+    revalidatePath('/manage/properties');
+    revalidatePath('/manage/leads/base');
+    revalidatePath('/manage/leads/shared');
+    revalidatePath('/manage/leads/my');
+    return { success: true, error: null };
+  } catch (error: any) {
+    await logProblem(error, 'acceptAgencyAgentMapAction');
+    return { success: false, error: error?.message ?? 'Failed to accept invitation.' };
   }
 }
 

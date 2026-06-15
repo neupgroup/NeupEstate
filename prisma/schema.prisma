@@ -395,6 +395,7 @@ model AgencyAgentMap {
   agencyId  String   @map("agency_id")
   agentId   String   @map("agent_id")
   status    String   @default("invited")
+  isAdmin   Boolean  @default(false) @map("is_admin")
 
   agency    Account   @relation("AgencyAgentMapAgency", fields: [agencyId], references: [id], onDelete: Cascade)
   agent     Account   @relation("AgencyAgentMapAgent", fields: [agentId], references: [id], onDelete: Cascade)
@@ -403,6 +404,7 @@ model AgencyAgentMap {
   @@index([agencyId])
   @@index([agentId])
   @@index([status])
+  @@index([isAdmin])
   @@map("agency_agent_map")
 }
 
