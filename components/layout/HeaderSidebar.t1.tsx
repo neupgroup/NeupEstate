@@ -4,7 +4,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import Header from "./Header.t1";
+import Header from "./header";
 import Sidebar from "../elements/Sidebar.t1";
 
 type HeaderSidebarProps = {
