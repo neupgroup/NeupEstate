@@ -7,10 +7,19 @@ import { Building, CheckCircle, RefreshCw } from "lucide-react";
 import { useState, type MouseEvent } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { createAccountAction, syncAccountAction } from "./actions";
-import type { BrandAccount } from "@/services/neupid/get-brand-accounts";
+
+export type AgencyManagementAccount = {
+  id: string;
+  displayName: string;
+  displayImage: string | null;
+  accountType: string;
+  status?: string | null;
+  isVerified?: boolean;
+  source: "brand" | "linked";
+};
 
 type BrandAccountCardProps = {
-  brandAccount: BrandAccount;
+  brandAccount: AgencyManagementAccount;
   existingAccount: {
     id: string;
     displayName: string | null;
@@ -33,7 +42,9 @@ export function BrandAccountCard({
   const searchParams = useSearchParams();
 
   const isExisting = !!existingAccount;
+  const isRemoteBrandAccount = brandAccount.source === "brand";
   const needsSync =
+    isRemoteBrandAccount &&
     isExisting &&
     (existingAccount.displayName !== brandAccount.displayName ||
       existingAccount.displayImage !== brandAccount.displayImage);
@@ -130,6 +141,11 @@ export function BrandAccountCard({
           <span className="font-medium text-sm leading-tight truncate">
             {brandAccount.displayName}
           </span>
+          {brandAccount.source === "linked" && (
+            <Badge variant="secondary" className="text-xs">
+              Linked
+            </Badge>
+          )}
           {isExisting && (
             <Badge
               variant="outline"
@@ -167,7 +183,7 @@ export function BrandAccountCard({
 
       {/* Right: Action */}
       <div className="flex-shrink-0">
-        {isExisting ? (
+        {isRemoteBrandAccount && isExisting ? (
           <Button
             size="sm"
             variant={needsSync ? "default" : "outline"}
@@ -180,7 +196,7 @@ export function BrandAccountCard({
             />
             {needsSync ? "Sync" : "Up to date"}
           </Button>
-        ) : (
+        ) : isRemoteBrandAccount ? (
           <Button
             size="sm"
             onClick={(event) => handleCreate(event)}
@@ -190,7 +206,12 @@ export function BrandAccountCard({
             <Building className="h-3.5 w-3.5 mr-1.5" />
             {isLoading ? "Creating…" : "Create"}
           </Button>
-        )}
+        ) : null}
+        {!isRemoteBrandAccount && !isExisting ? (
+          <Badge variant="outline" className="text-xs">
+            DB link only
+          </Badge>
+        ) : null}
       </div>
     </div>
   );
