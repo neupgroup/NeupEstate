@@ -51,7 +51,6 @@ export function ManageSidebar(props: Props) {
     "/manage/leads/alerts": props.canLeadsAlertsView,
     "/manage/reviews": props.canReviewsView,
     "/manage/faq": props.canFaqView,
-    "/manage/agentmap": props.canAgentMapView,
     "/manage/notifications": props.canNotificationView,
   };
 

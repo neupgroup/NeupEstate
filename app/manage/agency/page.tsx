@@ -4,6 +4,7 @@ import { requireAuth } from "@/services/auth/account";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, Building } from "lucide-react";
 import { BrandAccountCard } from "./brand-account-card";
+import { ClientLink } from "@/components/client-link";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
@@ -74,19 +75,52 @@ export default async function ManageAgencyPage({
       </div>
 
       {brandAccounts.length > 0 ? (
-        <div className="w-full border border-border rounded-lg overflow-hidden bg-background">
-          {brandAccounts.map((brandAccount, index) => {
-            const existingAccount = existingAccountMap.get(brandAccount.id);
-            return (
-              <BrandAccountCard
-                key={brandAccount.id}
-                brandAccount={brandAccount}
-                existingAccount={existingAccount || null}
-                isSelected={selectedAgency === brandAccount.id}
-                isLast={index === brandAccounts.length - 1}
-              />
-            );
-          })}
+        <div className="space-y-4">
+          <div className="w-full border border-border rounded-lg overflow-hidden bg-background">
+            {brandAccounts.map((brandAccount, index) => {
+              const existingAccount = existingAccountMap.get(brandAccount.id);
+              return (
+                <BrandAccountCard
+                  key={brandAccount.id}
+                  brandAccount={brandAccount}
+                  existingAccount={existingAccount || null}
+                  isSelected={selectedAgency === brandAccount.id}
+                  isLast={index === brandAccounts.length - 1}
+                />
+              );
+            })}
+          </div>
+
+          {selectedAgency ? (
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border bg-muted/30 px-4 py-3">
+              <div>
+                <p className="font-medium">Selected agency actions</p>
+                <p className="text-sm text-muted-foreground">
+                  Open agency-specific operational reporting or move to team management.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <ClientLink
+                  href={`/manage/customization?selectedAgency=${encodeURIComponent(selectedAgency)}`}
+                  className="inline-flex items-center rounded-md border px-4 py-2 text-sm font-medium transition-colors hover:bg-muted"
+                >
+                  Open customization
+                </ClientLink>
+                <ClientLink
+                  href={`/manage/report?selectedAgency=${encodeURIComponent(selectedAgency)}`}
+                  className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+                >
+                  Open reports
+                </ClientLink>
+                <ClientLink
+                  href={`/manage/team?selectedAgency=${encodeURIComponent(selectedAgency)}`}
+                  className="inline-flex items-center rounded-md border px-4 py-2 text-sm font-medium transition-colors hover:bg-muted"
+                >
+                  View team
+                </ClientLink>
+              </div>
+            </div>
+          ) : null}
         </div>
       ) : (
         <Alert>

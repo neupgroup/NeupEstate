@@ -68,7 +68,7 @@ export default function CreateAgentPage() {
                     title: 'Agent Created',
                     description: `The agent has been successfully created.`,
                 });
-                router.push('/manage/agents');
+                router.push('/manage/team');
             } else {
                 toast({
                     variant: 'destructive',

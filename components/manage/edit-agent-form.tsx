@@ -104,7 +104,7 @@ export function EditAgentForm({ agent, users }: EditAgentFormProps) {
                     title: "Agent Deleted",
                     description: `The agent has been permanently deleted.`,
                 });
-                router.push('/manage/agents');
+                router.push('/manage/team');
             } else {
                 toast({
                     variant: 'destructive',

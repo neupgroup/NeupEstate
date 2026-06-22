@@ -1,9 +1,10 @@
 import { requireAuth } from '@/services/auth/account';
-import { getAccountById } from '@/services/account-service';
+import { getAccountById, getAccounts } from '@/services/account-service';
 import {
   getAgencyMapByAccount,
   getAgencyMapsByAgency,
 } from '@/services/agency-customization-service';
+import { getAgencyAgentMapsByAgency } from '@/services/agency-agent-map-service';
 import { prisma } from '@/logica/core/prisma';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -25,6 +26,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { ClientLink } from '@/components/client-link';
+import { AgentMapManager } from '@/components/manage/agent-map-manager';
 import {
   AlertCircle,
   Building2,
@@ -99,8 +101,12 @@ export default async function ManageTeamPage({
       : membership?.agencyAccountId ?? authAccount.aid;
   const isDirectAgencyOwner = !membership;
 
-  const agencyMembers = await getAgencyMapsByAgency(agencyAccountId);
-  const agencyAccount = await getAccountById(agencyAccountId);
+  const [agencyMembers, agencyAccount, allAccounts, agencyAgentLinks] = await Promise.all([
+    getAgencyMapsByAgency(agencyAccountId),
+    getAccountById(agencyAccountId),
+    getAccounts(),
+    getAgencyAgentMapsByAgency(agencyAccountId),
+  ]);
 
   const relatedAccountIds = Array.from(
     new Set([agencyAccountId, ...agencyMembers.map((member) => member.accountId)]),
@@ -158,6 +164,7 @@ export default async function ManageTeamPage({
   const adminMembers = agencyMembers.filter((member) => member.role === 'admin').length;
 
   const agencyDisplayName = agencyAccount?.display_name ?? agencyAccountId;
+  const agencies = allAccounts.filter((account) => account.account_type === 'brand');
   const addMemberHref = `/manage/teams/create?selectedAgency=${encodeURIComponent(agencyAccountId)}`;
   const manageAgencyHref = `/manage/agency?selectedAgency=${encodeURIComponent(agencyAccountId)}`;
 
@@ -170,6 +177,9 @@ export default async function ManageTeamPage({
           </h2>
           <Badge variant={isDirectAgencyOwner ? 'default' : 'secondary'}>
             {isDirectAgencyOwner ? 'Brand account' : 'Agency member'}
+          </Badge>
+          <Badge variant="outline">
+            Agency: {agencyDisplayName}
           </Badge>
         </div>
         <p className="text-sm text-muted-foreground">
@@ -350,6 +360,16 @@ export default async function ManageTeamPage({
           </AlertDescription>
         </Alert>
       )}
+
+      <AgentMapManager
+        agencies={agencies}
+        accounts={allAccounts}
+        initialLinks={agencyAgentLinks}
+        selectedAgencyId={agencyAccountId}
+        title="Agency Invitations"
+        description={`Invite agents to ${agencyDisplayName} and review current invitation status.`}
+        showAgencySelector={false}
+      />
     </div>
   );
 }

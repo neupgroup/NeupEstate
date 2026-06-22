@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { createAgencyAgentMapAction } from '@/app/actions';
 import type { Account, AgencyAgentMap } from '@/types';
 import { Button } from '@/components/ui/button';
@@ -18,6 +18,9 @@ type Props = {
   accounts: Account[];
   initialLinks: AgencyAgentMap[];
   selectedAgencyId: string | null;
+  title?: string;
+  description?: string;
+  showAgencySelector?: boolean;
 };
 
 function getAccountLabel(account: Account): string {
@@ -33,8 +36,13 @@ export function AgentMapManager({
   accounts,
   initialLinks,
   selectedAgencyId,
+  title = 'Agency Agent Map',
+  description = 'Pick an agency, review the invited agents, and send new invitations from the same place.',
+  showAgencySelector = true,
 }: Props) {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
   const [showSearch, setShowSearch] = useState(false);
@@ -104,9 +112,10 @@ export function AgentMapManager({
   }
 
   function updateSelectedAgency(nextAgencyId: string) {
-    const nextUrl = new URL(window.location.href);
-    nextUrl.searchParams.set('selectedAgency', nextAgencyId);
-    router.replace(`${nextUrl.pathname}${nextUrl.search}`);
+    const nextParams = new URLSearchParams(searchParams.toString());
+    nextParams.set('selectedAgency', nextAgencyId);
+    const nextQuery = nextParams.toString();
+    router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname);
     setShowSearch(false);
     setAgentSearch('');
     setIsAdmin(false);
@@ -115,47 +124,47 @@ export function AgentMapManager({
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <h2 className="text-2xl font-semibold leading-none tracking-tight">Agency Agent Map</h2>
-        <p className="text-sm text-muted-foreground">
-          Pick an agency, review the invited agents, and send new invitations from the same place.
-        </p>
+        <h2 className="text-2xl font-semibold leading-none tracking-tight">{title}</h2>
+        <p className="text-sm text-muted-foreground">{description}</p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Select Agency</CardTitle>
-          <CardDescription>Switch the agency context before inviting or reviewing agents.</CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-          {agencies.map((agency) => {
-            const selected = agency.id === selectedAgencyId;
-            return (
-              <button
-                key={agency.id}
-                type="button"
-                onClick={() => updateSelectedAgency(agency.id)}
-                className={cn(
-                  'rounded-lg border px-4 py-3 text-left transition-colors hover:border-primary hover:bg-primary/5',
-                  selected ? 'border-primary bg-primary/10' : 'border-border bg-background',
-                )}
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <div className="min-w-0">
-                    <p className="truncate font-medium">{getAccountLabel(agency)}</p>
-                    <p className="truncate text-xs text-muted-foreground">{agency.id}</p>
+      {showAgencySelector ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>Select Agency</CardTitle>
+            <CardDescription>Switch the agency context before inviting or reviewing agents.</CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+            {agencies.map((agency) => {
+              const selected = agency.id === selectedAgencyId;
+              return (
+                <button
+                  key={agency.id}
+                  type="button"
+                  onClick={() => updateSelectedAgency(agency.id)}
+                  className={cn(
+                    'rounded-lg border px-4 py-3 text-left transition-colors hover:border-primary hover:bg-primary/5',
+                    selected ? 'border-primary bg-primary/10' : 'border-border bg-background',
+                  )}
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="truncate font-medium">{getAccountLabel(agency)}</p>
+                      <p className="truncate text-xs text-muted-foreground">{agency.id}</p>
+                    </div>
+                    {selected && <Badge>Selected</Badge>}
                   </div>
-                  {selected && <Badge>Selected</Badge>}
-                </div>
-              </button>
-            );
-          })}
-          {agencies.length === 0 && (
-            <div className="rounded-lg border border-dashed px-4 py-8 text-sm text-muted-foreground md:col-span-2 lg:col-span-3">
-              No agencies found for this account.
-            </div>
-          )}
-        </CardContent>
-      </Card>
+                </button>
+              );
+            })}
+            {agencies.length === 0 && (
+              <div className="rounded-lg border border-dashed px-4 py-8 text-sm text-muted-foreground md:col-span-2 lg:col-span-3">
+                No agencies found for this account.
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      ) : null}
 
       <Card>
         <CardHeader>

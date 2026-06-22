@@ -1527,7 +1527,7 @@ export async function createAgentAction(
     await requireIdentity();
     const validatedData = CreateAgentSchema.parse(data);
     const agentId = await createAgentService(validatedData);
-    revalidatePath('/manage/agents');
+    revalidatePath('/manage/team');
     return { success: true, agentId, error: null };
   } catch (e: any) {
     await logProblem(e, 'createAgentAction');
@@ -1546,7 +1546,7 @@ export async function updateAgentAction(
     await requireIdentity();
     const validatedData = UpdateAgentSchema.parse(data);
     await updateAgentService(id, validatedData);
-    revalidatePath('/manage/agents');
+    revalidatePath('/manage/team');
     revalidatePath(`/manage/agents/${id}/edit`);
     return { success: true, error: null };
   } catch (e: any) {
@@ -1561,7 +1561,7 @@ export async function updateAgentAction(
 export async function deleteAgentAction(agentId: string) {
     try {
         await deleteAgentService(agentId);
-        revalidatePath('/manage/agents');
+        revalidatePath('/manage/team');
         return { success: true };
     } catch (error: any) {
         await logProblem(error, `deleteAgentAction (ID: ${agentId})`);
