@@ -37,7 +37,7 @@ export default async function SiteDevLogsPage({
           <p className="text-sm text-muted-foreground">
             {setting.enabled
               ? `Showing ${logs.length} of ${totalCount} recorded requests.`
-              : 'Dev logs are currently disabled. Turn them on in settings to start recording requests.'}
+              : 'Dev logs are currently disabled. Update `.env` and set `SITE_DEV_LOGGING_STATUS=active` to start recording requests.'}
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -105,7 +105,7 @@ export default async function SiteDevLogsPage({
           <AlertDescription>
             {setting.enabled
               ? 'No API or webhook requests have been captured yet.'
-              : 'Enable dev logs in settings before requests will appear here.'}
+              : 'Update `.env` and set `SITE_DEV_LOGGING_STATUS=active` before requests will appear here.'}
           </AlertDescription>
         </Alert>
       )}

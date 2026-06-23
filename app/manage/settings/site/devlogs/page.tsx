@@ -26,7 +26,7 @@ export default async function SiteDevLogsSettingsPage() {
         <CardContent className="space-y-4">
           <SiteDevLogsToggle enabled={setting.enabled} />
           <p className="text-sm text-muted-foreground">
-            Use this only when you need debugging visibility. The recorded logs are shown at `/manage/site/devlogs`.
+            Update the `.env` file to update `SITE_DEV_LOGGING_STATUS`. Set it to `active` to enable request logging. Any other value, or leaving it undefined, keeps logging inactive.
           </p>
         </CardContent>
       </Card>

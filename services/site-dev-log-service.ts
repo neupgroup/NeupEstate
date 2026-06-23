@@ -4,7 +4,6 @@ import type { NextRequest } from 'next/server';
 import { prisma } from '@/logica/core/prisma';
 import type { SiteDevLogEntry, SiteDevLogSetting, SiteDevLogSource } from '@/types';
 
-const SITE_DEV_LOG_SETTINGS_ID = 'site';
 const SETTINGS_CACHE_TTL_MS = 5_000;
 const BODY_TEXT_LIMIT = 2_000;
 const OBJECT_ENTRY_LIMIT = 25;
@@ -41,11 +40,6 @@ type WrappedRouteContext = {
   params: Promise<Record<string, string | string[]>>;
 };
 
-type SiteDevLogSettingRow = {
-  enabled: boolean;
-  updatedAt: Date;
-};
-
 type SiteDevLogEntryRow = {
   id: string;
   requestId: string | null;
@@ -60,43 +54,16 @@ type SiteDevLogEntryRow = {
   createdAt: Date;
 };
 
-export async function getSiteDevLogSetting(): Promise<SiteDevLogSetting> {
-  try {
-    await prisma.$executeRaw`
-      INSERT INTO "site_dev_log_settings" ("id", "enabled", "updatedAt")
-      VALUES (${SITE_DEV_LOG_SETTINGS_ID}, false, NOW())
-      ON CONFLICT ("id") DO NOTHING
-    `;
+function readSiteDevLoggingStatusFromEnv(): boolean {
+  const status =
+    process.env.SITE_DEV_LOGGING_STATUS ??
+    process.env.siteDevLoggingStatus;
 
-    const [setting] = await prisma.$queryRaw<SiteDevLogSettingRow[]>`
-      SELECT "enabled", "updatedAt"
-      FROM "site_dev_log_settings"
-      WHERE "id" = ${SITE_DEV_LOG_SETTINGS_ID}
-      LIMIT 1
-    `;
-
-    return {
-      enabled: setting?.enabled ?? false,
-      updatedAt: setting?.updatedAt?.toISOString(),
-    };
-  } catch (error) {
-    console.error('Failed to load site dev log setting.', error);
-    return { enabled: false };
-  }
+  return status === 'active';
 }
 
-export async function updateSiteDevLogSetting(enabled: boolean): Promise<void> {
-  await prisma.$executeRaw`
-    INSERT INTO "site_dev_log_settings" ("id", "enabled", "updatedAt")
-    VALUES (${SITE_DEV_LOG_SETTINGS_ID}, ${enabled}, NOW())
-    ON CONFLICT ("id")
-    DO UPDATE SET
-      "enabled" = EXCLUDED."enabled",
-      "updatedAt" = NOW()
-  `;
-
-  cachedEnabled = enabled;
-  cachedEnabledExpiresAt = Date.now() + SETTINGS_CACHE_TTL_MS;
+export async function getSiteDevLogSetting(): Promise<SiteDevLogSetting> {
+  return { enabled: readSiteDevLoggingStatusFromEnv() };
 }
 
 export async function isSiteDevLoggingEnabled(): Promise<boolean> {
@@ -104,23 +71,9 @@ export async function isSiteDevLoggingEnabled(): Promise<boolean> {
     return cachedEnabled;
   }
 
-  try {
-    const [setting] = await prisma.$queryRaw<Array<{ enabled: boolean }>>`
-      SELECT "enabled"
-      FROM "site_dev_log_settings"
-      WHERE "id" = ${SITE_DEV_LOG_SETTINGS_ID}
-      LIMIT 1
-    `;
-
-    cachedEnabled = setting?.enabled ?? false;
-    cachedEnabledExpiresAt = Date.now() + SETTINGS_CACHE_TTL_MS;
-    return cachedEnabled ?? false;
-  } catch (error) {
-    console.error('Failed to check site dev log setting.', error);
-    cachedEnabled = false;
-    cachedEnabledExpiresAt = Date.now() + SETTINGS_CACHE_TTL_MS;
-    return false;
-  }
+  cachedEnabled = readSiteDevLoggingStatusFromEnv();
+  cachedEnabledExpiresAt = Date.now() + SETTINGS_CACHE_TTL_MS;
+  return cachedEnabled;
 }
 
 export async function createSiteDevLog(input: SiteDevLogInput): Promise<void> {
