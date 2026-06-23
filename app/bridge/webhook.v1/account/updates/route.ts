@@ -1,4 +1,5 @@
 import { createDecipheriv, createHash, createHmac, timingSafeEqual } from "crypto";
+import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/logica/core/prisma";
 import { logProblem } from "@/services/problem-service";
@@ -152,7 +153,10 @@ function isValidPayload(input: unknown): input is AccountUpdatePayload {
   );
 }
 
-async function persistAccountUpdate(payload: AccountUpdatePayload) {
+async function persistAccountUpdate(
+  tx: Prisma.TransactionClient,
+  payload: AccountUpdatePayload,
+) {
   webhookLog(payload.eventId, "Has asked to update account/user.");
   const accountId = payload.account.id.trim();
   if (!accountId) throw new Error("Missing account.id.");
@@ -172,7 +176,7 @@ async function persistAccountUpdate(payload: AccountUpdatePayload) {
       resolvedRoleId = roleId;
       webhookLog(payload.eventId, "Looking for role.", { roleId });
 
-      const existingRole = await prisma.authzRole.findUnique({
+      const existingRole = await tx.authzRole.findUnique({
         where: { id: roleId },
         select: { id: true },
       });
@@ -193,7 +197,7 @@ async function persistAccountUpdate(payload: AccountUpdatePayload) {
       accountId,
       connectionId,
     });
-    const roleUpdateResult = await prisma.account.updateMany({
+    const roleUpdateResult = await tx.account.updateMany({
       where: {
         OR: [{ id: accountId }, { connectionId }],
       },
@@ -236,7 +240,7 @@ async function persistAccountUpdate(payload: AccountUpdatePayload) {
   };
 
   webhookLog(payload.eventId, "Upserting account with changed fields.");
-  await prisma.account.upsert({
+  await tx.account.upsert({
     where: { id: accountId },
     update: updateData,
     create: {
@@ -270,7 +274,7 @@ async function persistAccountUpdate(payload: AccountUpdatePayload) {
     payload.account.neupId.trim().length > 0
   ) {
     webhookLog(payload.eventId, "Syncing secondary rows by neupId.");
-    await prisma.account.updateMany({
+    await tx.account.updateMany({
       where: {
         neupId: payload.account.neupId.trim(),
         NOT: { id: accountId },
@@ -346,11 +350,13 @@ const postHandler = async (req: NextRequest) => {
 
   const mergedChangedFields = new Set<string>();
   try {
-    for (const payload of payloads) {
-      webhookLog(payload.eventId, "Processing payload.");
-      await persistAccountUpdate(payload);
-      for (const field of payload.changedFields) mergedChangedFields.add(field);
-    }
+    await prisma.$transaction(async (tx) => {
+      for (const payload of payloads) {
+        webhookLog(payload.eventId, "Processing payload.");
+        await persistAccountUpdate(tx, payload);
+        for (const field of payload.changedFields) mergedChangedFields.add(field);
+      }
+    });
   } catch (error) {
     await logProblem(error, "bridge/webhook.v1/account/updates persist");
     if (error instanceof Error && error.message.startsWith("Role does not exist in authz_role:")) {

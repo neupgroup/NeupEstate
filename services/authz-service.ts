@@ -1,5 +1,5 @@
 import { prisma } from '@/logica/core/prisma';
-import { Prisma } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { logProblem } from './problem-service';
 
 // ============================================================================
@@ -11,6 +11,8 @@ export type AuthzTable =
   | 'authz_account_access_grant'
   | 'authz_assets_access_grant';
 
+type AuthzDbClient = PrismaClient | Prisma.TransactionClient;
+
 // ============================================================================
 // authz_role_capability
 // ============================================================================
@@ -21,9 +23,9 @@ export async function insertRoleCapability(data: {
   scope?: string | null;
   denormalizedCapability?: Prisma.InputJsonValue | null;
   roleName?: string | null;
-}): Promise<string> {
+}, db: AuthzDbClient = prisma): Promise<string> {
   try {
-    const record = await prisma.roleCapability.create({
+    const record = await db.roleCapability.create({
       data: {
         ...data,
         denormalizedCapability:
@@ -48,9 +50,10 @@ export async function updateRoleCapability(
     denormalizedCapability: Prisma.InputJsonValue | null;
     roleName: string | null;
   }>,
+  db: AuthzDbClient = prisma,
 ): Promise<void> {
   try {
-    await prisma.roleCapability.update({
+    await db.roleCapability.update({
       where: { id },
       data: {
         ...(data.roleId !== undefined        && { roleId: data.roleId }),
@@ -71,18 +74,18 @@ export async function updateRoleCapability(
   }
 }
 
-export async function deleteRoleCapability(id: string): Promise<void> {
+export async function deleteRoleCapability(id: string, db: AuthzDbClient = prisma): Promise<void> {
   try {
-    await prisma.roleCapability.delete({ where: { id } });
+    await db.roleCapability.delete({ where: { id } });
   } catch (e) {
     await logProblem(e, `authz:deleteRoleCapability ${id}`);
     throw new Error('Failed to delete role capability.');
   }
 }
 
-export async function deleteRoleCapabilities(ids: string[]): Promise<number> {
+export async function deleteRoleCapabilities(ids: string[], db: AuthzDbClient = prisma): Promise<number> {
   try {
-    const result = await prisma.roleCapability.deleteMany({
+    const result = await db.roleCapability.deleteMany({
       where: { id: { in: ids } },
     });
     return result.count;
@@ -92,9 +95,9 @@ export async function deleteRoleCapabilities(ids: string[]): Promise<number> {
   }
 }
 
-export async function deleteAllRoleCapabilities(): Promise<number> {
+export async function deleteAllRoleCapabilities(db: AuthzDbClient = prisma): Promise<number> {
   try {
-    const result = await prisma.roleCapability.deleteMany();
+    const result = await db.roleCapability.deleteMany();
     return result.count;
   } catch (e) {
     await logProblem(e, 'authz:deleteAllRoleCapabilities');
@@ -111,9 +114,9 @@ export async function insertAccountAccessGrant(data: {
   targetAccountId: string;
   roleId: string;
   portfolioId?: string | null;
-}): Promise<string> {
+}, db: AuthzDbClient = prisma): Promise<string> {
   try {
-    const record = await prisma.authzAccountAccessGrant.create({ data });
+    const record = await db.authzAccountAccessGrant.create({ data });
     return record.id;
   } catch (e) {
     await logProblem(e, 'authz:insertAccountAccessGrant');
@@ -129,27 +132,28 @@ export async function updateAccountAccessGrant(
     roleId: string;
     portfolioId: string | null;
   }>,
+  db: AuthzDbClient = prisma,
 ): Promise<void> {
   try {
-    await prisma.authzAccountAccessGrant.update({ where: { id }, data });
+    await db.authzAccountAccessGrant.update({ where: { id }, data });
   } catch (e) {
     await logProblem(e, `authz:updateAccountAccessGrant ${id}`);
     throw new Error('Failed to update account access grant.');
   }
 }
 
-export async function deleteAccountAccessGrant(id: string): Promise<void> {
+export async function deleteAccountAccessGrant(id: string, db: AuthzDbClient = prisma): Promise<void> {
   try {
-    await prisma.authzAccountAccessGrant.delete({ where: { id } });
+    await db.authzAccountAccessGrant.delete({ where: { id } });
   } catch (e) {
     await logProblem(e, `authz:deleteAccountAccessGrant ${id}`);
     throw new Error('Failed to delete account access grant.');
   }
 }
 
-export async function deleteAccountAccessGrants(ids: string[]): Promise<number> {
+export async function deleteAccountAccessGrants(ids: string[], db: AuthzDbClient = prisma): Promise<number> {
   try {
-    const result = await prisma.authzAccountAccessGrant.deleteMany({
+    const result = await db.authzAccountAccessGrant.deleteMany({
       where: { id: { in: ids } },
     });
     return result.count;
@@ -159,9 +163,9 @@ export async function deleteAccountAccessGrants(ids: string[]): Promise<number> 
   }
 }
 
-export async function deleteAllAccountAccessGrants(): Promise<number> {
+export async function deleteAllAccountAccessGrants(db: AuthzDbClient = prisma): Promise<number> {
   try {
-    const result = await prisma.authzAccountAccessGrant.deleteMany();
+    const result = await db.authzAccountAccessGrant.deleteMany();
     return result.count;
   } catch (e) {
     await logProblem(e, 'authz:deleteAllAccountAccessGrants');
@@ -179,9 +183,9 @@ export async function insertAssetsAccessGrant(data: {
   roleId: string;
   portfolioId?: string | null;
   assetType?: string | null;
-}): Promise<string> {
+}, db: AuthzDbClient = prisma): Promise<string> {
   try {
-    const record = await prisma.authzAssetsAccessGrant.create({ data });
+    const record = await db.authzAssetsAccessGrant.create({ data });
     return record.id;
   } catch (e) {
     await logProblem(e, 'authz:insertAssetsAccessGrant');
@@ -198,27 +202,28 @@ export async function updateAssetsAccessGrant(
     portfolioId: string | null;
     assetType: string | null;
   }>,
+  db: AuthzDbClient = prisma,
 ): Promise<void> {
   try {
-    await prisma.authzAssetsAccessGrant.update({ where: { id }, data });
+    await db.authzAssetsAccessGrant.update({ where: { id }, data });
   } catch (e) {
     await logProblem(e, `authz:updateAssetsAccessGrant ${id}`);
     throw new Error('Failed to update assets access grant.');
   }
 }
 
-export async function deleteAssetsAccessGrant(id: string): Promise<void> {
+export async function deleteAssetsAccessGrant(id: string, db: AuthzDbClient = prisma): Promise<void> {
   try {
-    await prisma.authzAssetsAccessGrant.delete({ where: { id } });
+    await db.authzAssetsAccessGrant.delete({ where: { id } });
   } catch (e) {
     await logProblem(e, `authz:deleteAssetsAccessGrant ${id}`);
     throw new Error('Failed to delete assets access grant.');
   }
 }
 
-export async function deleteAssetsAccessGrants(ids: string[]): Promise<number> {
+export async function deleteAssetsAccessGrants(ids: string[], db: AuthzDbClient = prisma): Promise<number> {
   try {
-    const result = await prisma.authzAssetsAccessGrant.deleteMany({
+    const result = await db.authzAssetsAccessGrant.deleteMany({
       where: { id: { in: ids } },
     });
     return result.count;
@@ -228,9 +233,9 @@ export async function deleteAssetsAccessGrants(ids: string[]): Promise<number> {
   }
 }
 
-export async function deleteAllAssetsAccessGrants(): Promise<number> {
+export async function deleteAllAssetsAccessGrants(db: AuthzDbClient = prisma): Promise<number> {
   try {
-    const result = await prisma.authzAssetsAccessGrant.deleteMany();
+    const result = await db.authzAssetsAccessGrant.deleteMany();
     return result.count;
   } catch (e) {
     await logProblem(e, 'authz:deleteAllAssetsAccessGrants');

@@ -146,12 +146,15 @@ function normalizeJsonValue(value: unknown): Prisma.InputJsonValue | Prisma.Null
   return value as Prisma.InputJsonValue;
 }
 
-async function persistRoleEvent(payload: RolePayload): Promise<RoleAction> {
+async function persistRoleEvent(
+  tx: Prisma.TransactionClient,
+  payload: RolePayload,
+): Promise<RoleAction> {
   const roleId = getRoleId(payload);
   if (!roleId) throw new Error("Missing role id.");
 
   if (payload.eventType === "role.deleted") {
-    await prisma.authzRole.deleteMany({
+    await tx.authzRole.deleteMany({
       where: { id: roleId },
     });
     return "deleted_role";
@@ -172,12 +175,12 @@ async function persistRoleEvent(payload: RolePayload): Promise<RoleAction> {
     permissions: normalizeJsonValue(role.permissions ?? []),
   };
 
-  const existingRole = await prisma.authzRole.findUnique({
+  const existingRole = await tx.authzRole.findUnique({
     where: { id: roleId },
     select: { id: true },
   });
 
-  await prisma.authzRole.upsert({
+  await tx.authzRole.upsert({
     where: { id: roleId },
     update: updateData,
     create: {
@@ -240,10 +243,12 @@ const postHandler = async (req: NextRequest) => {
 
   const actions: RoleAction[] = [];
   try {
-    for (const payload of payloads) {
-      const action = await persistRoleEvent(payload);
-      actions.push(action);
-    }
+    await prisma.$transaction(async (tx) => {
+      for (const payload of payloads) {
+        const action = await persistRoleEvent(tx, payload);
+        actions.push(action);
+      }
+    });
   } catch (error) {
     await logProblem(error, "bridge/webhook.v1/roles persist");
     return fail("record_failed");

@@ -216,148 +216,147 @@ const postHandler = async (req: NextRequest) => {
   const bulkIds   = Array.isArray(id) ? id : undefined;
 
   try {
-    switch (table) {
-      // ======================================================================
-      case 'authz_role_capability': {
-        switch (operation) {
-          case 'insert': {
-            if (!data || Array.isArray(data)) return missingField('data (object)');
-            await validateRoleCapabilityScope(data);
-            const newId = await insertRoleCapability(data as any);
-            return NextResponse.json({ id: newId }, { status: 201 });
-          }
-          case 'updateOne': {
-            if (!singleId) return missingField('id (string)');
-            if (!data || Array.isArray(data)) return missingField('data (object)');
-            await validateRoleCapabilityScope(data, singleId);
-            await updateRoleCapability(singleId, data as any);
-            return NextResponse.json({ ok: true });
-          }
-          case 'update': {
-            if (!Array.isArray(data)) return missingField('data (array)');
-            await Promise.all(
-              data.map(async (item) => {
-                if (!item || typeof item !== 'object' || Array.isArray(item)) return;
+    return await prisma.$transaction(async (tx) => {
+      switch (table) {
+        case 'authz_role_capability': {
+          switch (operation) {
+            case 'insert': {
+              if (!data || Array.isArray(data)) return missingField('data (object)');
+              await validateRoleCapabilityScope(data);
+              const newId = await insertRoleCapability(data as any, tx);
+              return NextResponse.json({ id: newId }, { status: 201 });
+            }
+            case 'updateOne': {
+              if (!singleId) return missingField('id (string)');
+              if (!data || Array.isArray(data)) return missingField('data (object)');
+              await validateRoleCapabilityScope(data, singleId);
+              await updateRoleCapability(singleId, data as any, tx);
+              return NextResponse.json({ ok: true });
+            }
+            case 'update': {
+              if (!Array.isArray(data)) return missingField('data (array)');
+              for (const item of data) {
+                if (!item || typeof item !== 'object' || Array.isArray(item)) continue;
                 const { id: rid, ...rest } = item as Record<string, unknown>;
                 if (typeof rid !== 'string' || !rid.trim()) {
                   throw new ScopeValidationError('Each `update` record must include an `id` string.');
                 }
                 await validateRoleCapabilityScope(rest, rid);
-              }),
-            );
-            await Promise.all(
-              (data as any[]).map(({ id: rid, ...rest }) => updateRoleCapability(rid, rest)),
-            );
-            return NextResponse.json({ ok: true, count: data.length });
+              }
+              for (const item of data as any[]) {
+                const { id: rid, ...rest } = item;
+                await updateRoleCapability(rid, rest, tx);
+              }
+              return NextResponse.json({ ok: true, count: data.length });
+            }
+            case 'deleteOne': {
+              if (!singleId) return missingField('id (string)');
+              await deleteRoleCapability(singleId, tx);
+              return NextResponse.json({ ok: true });
+            }
+            case 'delete': {
+              if (!bulkIds?.length) return missingField('id (array)');
+              const count = await deleteRoleCapabilities(bulkIds, tx);
+              return NextResponse.json({ ok: true, count });
+            }
+            case 'deleteAll': {
+              const count = await deleteAllRoleCapabilities(tx);
+              return NextResponse.json({ ok: true, count });
+            }
+            default:
+              return unknownOperation(operation);
           }
-          case 'deleteOne': {
-            if (!singleId) return missingField('id (string)');
-            await deleteRoleCapability(singleId);
-            return NextResponse.json({ ok: true });
-          }
-          case 'delete': {
-            if (!bulkIds?.length) return missingField('id (array)');
-            const count = await deleteRoleCapabilities(bulkIds);
-            return NextResponse.json({ ok: true, count });
-          }
-          case 'deleteAll': {
-            const count = await deleteAllRoleCapabilities();
-            return NextResponse.json({ ok: true, count });
-          }
-          default:
-            return unknownOperation(operation);
         }
-      }
 
-      // ======================================================================
-      case 'authz_account_access_grant': {
-        switch (operation) {
-          case 'insert': {
-            if (!data || Array.isArray(data)) return missingField('data (object)');
-            const newId = await insertAccountAccessGrant(data as any);
-            return NextResponse.json({ id: newId }, { status: 201 });
+        case 'authz_account_access_grant': {
+          switch (operation) {
+            case 'insert': {
+              if (!data || Array.isArray(data)) return missingField('data (object)');
+              const newId = await insertAccountAccessGrant(data as any, tx);
+              return NextResponse.json({ id: newId }, { status: 201 });
+            }
+            case 'updateOne': {
+              if (!singleId) return missingField('id (string)');
+              if (!data || Array.isArray(data)) return missingField('data (object)');
+              await updateAccountAccessGrant(singleId, data as any, tx);
+              return NextResponse.json({ ok: true });
+            }
+            case 'update': {
+              if (!Array.isArray(data)) return missingField('data (array)');
+              for (const item of data as any[]) {
+                const { id: rid, ...rest } = item;
+                await updateAccountAccessGrant(rid, rest, tx);
+              }
+              return NextResponse.json({ ok: true, count: data.length });
+            }
+            case 'deleteOne': {
+              if (!singleId) return missingField('id (string)');
+              await deleteAccountAccessGrant(singleId, tx);
+              return NextResponse.json({ ok: true });
+            }
+            case 'delete': {
+              if (!bulkIds?.length) return missingField('id (array)');
+              const count = await deleteAccountAccessGrants(bulkIds, tx);
+              return NextResponse.json({ ok: true, count });
+            }
+            case 'deleteAll': {
+              const count = await deleteAllAccountAccessGrants(tx);
+              return NextResponse.json({ ok: true, count });
+            }
+            default:
+              return unknownOperation(operation);
           }
-          case 'updateOne': {
-            if (!singleId) return missingField('id (string)');
-            if (!data || Array.isArray(data)) return missingField('data (object)');
-            await updateAccountAccessGrant(singleId, data as any);
-            return NextResponse.json({ ok: true });
-          }
-          case 'update': {
-            if (!Array.isArray(data)) return missingField('data (array)');
-            await Promise.all(
-              (data as any[]).map(({ id: rid, ...rest }) => updateAccountAccessGrant(rid, rest)),
-            );
-            return NextResponse.json({ ok: true, count: data.length });
-          }
-          case 'deleteOne': {
-            if (!singleId) return missingField('id (string)');
-            await deleteAccountAccessGrant(singleId);
-            return NextResponse.json({ ok: true });
-          }
-          case 'delete': {
-            if (!bulkIds?.length) return missingField('id (array)');
-            const count = await deleteAccountAccessGrants(bulkIds);
-            return NextResponse.json({ ok: true, count });
-          }
-          case 'deleteAll': {
-            const count = await deleteAllAccountAccessGrants();
-            return NextResponse.json({ ok: true, count });
-          }
-          default:
-            return unknownOperation(operation);
         }
-      }
 
-      // ======================================================================
-      case 'authz_assets_access_grant': {
-        switch (operation) {
-          case 'insert': {
-            if (!data || Array.isArray(data)) return missingField('data (object)');
-            const newId = await insertAssetsAccessGrant(data as any);
-            return NextResponse.json({ id: newId }, { status: 201 });
+        case 'authz_assets_access_grant': {
+          switch (operation) {
+            case 'insert': {
+              if (!data || Array.isArray(data)) return missingField('data (object)');
+              const newId = await insertAssetsAccessGrant(data as any, tx);
+              return NextResponse.json({ id: newId }, { status: 201 });
+            }
+            case 'updateOne': {
+              if (!singleId) return missingField('id (string)');
+              if (!data || Array.isArray(data)) return missingField('data (object)');
+              await updateAssetsAccessGrant(singleId, data as any, tx);
+              return NextResponse.json({ ok: true });
+            }
+            case 'update': {
+              if (!Array.isArray(data)) return missingField('data (array)');
+              for (const item of data as any[]) {
+                const { id: rid, ...rest } = item;
+                await updateAssetsAccessGrant(rid, rest, tx);
+              }
+              return NextResponse.json({ ok: true, count: data.length });
+            }
+            case 'deleteOne': {
+              if (!singleId) return missingField('id (string)');
+              await deleteAssetsAccessGrant(singleId, tx);
+              return NextResponse.json({ ok: true });
+            }
+            case 'delete': {
+              if (!bulkIds?.length) return missingField('id (array)');
+              const count = await deleteAssetsAccessGrants(bulkIds, tx);
+              return NextResponse.json({ ok: true, count });
+            }
+            case 'deleteAll': {
+              const count = await deleteAllAssetsAccessGrants(tx);
+              return NextResponse.json({ ok: true, count });
+            }
+            default:
+              return unknownOperation(operation);
           }
-          case 'updateOne': {
-            if (!singleId) return missingField('id (string)');
-            if (!data || Array.isArray(data)) return missingField('data (object)');
-            await updateAssetsAccessGrant(singleId, data as any);
-            return NextResponse.json({ ok: true });
-          }
-          case 'update': {
-            if (!Array.isArray(data)) return missingField('data (array)');
-            await Promise.all(
-              (data as any[]).map(({ id: rid, ...rest }) => updateAssetsAccessGrant(rid, rest)),
-            );
-            return NextResponse.json({ ok: true, count: data.length });
-          }
-          case 'deleteOne': {
-            if (!singleId) return missingField('id (string)');
-            await deleteAssetsAccessGrant(singleId);
-            return NextResponse.json({ ok: true });
-          }
-          case 'delete': {
-            if (!bulkIds?.length) return missingField('id (array)');
-            const count = await deleteAssetsAccessGrants(bulkIds);
-            return NextResponse.json({ ok: true, count });
-          }
-          case 'deleteAll': {
-            const count = await deleteAllAssetsAccessGrants();
-            return NextResponse.json({ ok: true, count });
-          }
-          default:
-            return unknownOperation(operation);
         }
-      }
 
-      // ======================================================================
-      default:
-        return NextResponse.json(
-          {
-            error: `Unknown table: "${table}". Valid values: authz_role_capability, authz_account_access_grant, authz_assets_access_grant.`,
-          },
-          { status: 400 },
-        );
-    }
+        default:
+          return NextResponse.json(
+            {
+              error: `Unknown table: "${table}". Valid values: authz_role_capability, authz_account_access_grant, authz_assets_access_grant.`,
+            },
+            { status: 400 },
+          );
+      }
+    });
   } catch (err: any) {
     if (err instanceof ScopeValidationError) {
       return NextResponse.json({ error: err.message }, { status: 400 });
