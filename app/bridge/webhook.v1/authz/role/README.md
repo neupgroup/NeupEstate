@@ -174,6 +174,10 @@ Delete every record in the table. No other fields needed.
 }
 ```
 
+When `scope` is provided for `authz_role_capability`, the webhook now validates it against
+the allowed app scope tokens declared inside `denormalizedCapability`. Random or undeclared
+tokens are rejected with `400`.
+
 ### `authz_account_access_grant`
 ```typescript
 {

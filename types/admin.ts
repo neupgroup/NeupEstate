@@ -76,6 +76,27 @@ export interface Problem {
   details?: Record<string, any>;
 }
 
+export type SiteDevLogSource = 'api' | 'webhook';
+
+export interface SiteDevLogSetting {
+  enabled: boolean;
+  updatedAt?: string;
+}
+
+export interface SiteDevLogEntry {
+  id: string;
+  requestId?: string;
+  source: SiteDevLogSource;
+  method?: string;
+  path: string;
+  statusCode?: number;
+  outcome?: string;
+  durationMs?: number;
+  summary?: string;
+  details?: Record<string, any>;
+  createdAt: string;
+}
+
 export interface UserActivity {
   id: string;
   userId: string;

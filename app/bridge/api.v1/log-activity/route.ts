@@ -2,8 +2,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logUserActivity } from '@/app/actions';
 import type { PropertyActivityEvent } from '@/types';
+import { withRequestDevLog } from '@/services/site-dev-log-service';
 
-export async function POST(req: NextRequest) {
+const postHandler = async (req: NextRequest) => {
   try {
     const body = await req.json();
     const { userId, propertyId, events } = body as {
@@ -24,4 +25,6 @@ export async function POST(req: NextRequest) {
     console.error('Error in /api/log-activity:', error);
     return NextResponse.json({ message: 'Invalid request body.' }, { status: 400 });
   }
-}
+};
+
+export const POST = withRequestDevLog({ source: 'api', name: 'bridge/api.v1/log-activity' }, postHandler);

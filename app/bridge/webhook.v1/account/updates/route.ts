@@ -2,6 +2,7 @@ import { createDecipheriv, createHash, createHmac, timingSafeEqual } from "crypt
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/logica/core/prisma";
 import { logProblem } from "@/services/problem-service";
+import { withRequestDevLog } from "@/services/site-dev-log-service";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -280,7 +281,7 @@ async function persistAccountUpdate(payload: AccountUpdatePayload) {
   webhookLog(payload.eventId, "Finished persistence for this payload.");
 }
 
-export async function POST(req: NextRequest) {
+const postHandler = async (req: NextRequest) => {
   webhookLog(undefined, "Received webhook request.");
   const appSecret = getAppSecret();
   if (!appSecret) {
@@ -374,9 +375,9 @@ export async function POST(req: NextRequest) {
     success: true,
     changedFields: Array.from(mergedChangedFields),
   });
-}
+};
 
-export async function GET() {
+const getHandler = async (req: NextRequest) => {
   return NextResponse.json(
     {
       success: false,
@@ -384,4 +385,7 @@ export async function GET() {
     },
     { status: 400 }
   );
-}
+};
+
+export const POST = withRequestDevLog({ source: 'webhook', name: 'bridge/webhook.v1/account/updates:POST' }, postHandler);
+export const GET = withRequestDevLog({ source: 'webhook', name: 'bridge/webhook.v1/account/updates:GET' }, getHandler);

@@ -3,6 +3,9 @@ import { GET as getBridgeUser } from '@/app/bridge/api.v1/auth/user/route';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(req: NextRequest) {
-  return getBridgeUser(req);
+export async function GET(
+  req: NextRequest,
+  context: { params: Promise<Record<string, string | string[]>> },
+) {
+  return getBridgeUser(req, context);
 }

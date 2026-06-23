@@ -1,8 +1,11 @@
 import { NextRequest } from 'next/server';
 import { getAuthenticatedMeResponse } from '@/services/auth/me';
+import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(req: NextRequest) {
+const getHandler = async (req: NextRequest) => {
   return getAuthenticatedMeResponse(req);
-}
+};
+
+export const GET = withRequestDevLog({ source: 'api', name: 'api/auth/me' }, getHandler);

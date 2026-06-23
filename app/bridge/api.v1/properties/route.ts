@@ -15,6 +15,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getBridgePropertiesByAccount } from '@/services/property-service';
 import { logProblem } from '@/services/problem-service';
+import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';
 
@@ -50,7 +51,7 @@ function readQueryValue(
   return primaryValue || fallbackValue;
 }
 
-export async function GET(req: NextRequest) {
+const getHandler = async (req: NextRequest) => {
   const { searchParams } = req.nextUrl;
 
   try {
@@ -114,4 +115,6 @@ export async function GET(req: NextRequest) {
       { status: 500 },
     );
   }
-}
+};
+
+export const GET = withRequestDevLog({ source: 'api', name: 'bridge/api.v1/properties' }, getHandler);

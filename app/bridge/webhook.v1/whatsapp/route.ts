@@ -5,11 +5,12 @@ import { logProblem } from '@/services/problem-service';
 import { getWhatsAppConfig, sendWhatsAppMessage } from '@/services/whatsapp-service';
 import { chatWithAi } from '@/services/ai/whatsapp-chat-agent-flow';
 import { createTemporaryAccount, updateAccountAccessInfo } from '@/services/account-service';
+import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';
 
 // Handle the webhooks verification GET request from Meta
-export async function GET(req: NextRequest) {
+const getHandler = async (req: NextRequest) => {
     const { searchParams } = new URL(req.url);
     const mode = searchParams.get('hub.mode');
     const token = searchParams.get('hub.verify_token');
@@ -34,10 +35,10 @@ export async function GET(req: NextRequest) {
         await logProblem(new Error(errorMessage), 'WhatsApp Webhook Verification');
         return new NextResponse('Forbidden: Mismatched token', { status: 403 });
     }
-}
+};
 
 // Handle incoming message notifications POST request from Meta
-export async function POST(req: NextRequest) {
+const postHandler = async (req: NextRequest) => {
     try {
         const body = await req.json();
 
@@ -123,4 +124,7 @@ export async function POST(req: NextRequest) {
         await logProblem(error, 'WhatsApp Webhook Processing');
         return new NextResponse('Internal Server Error', { status: 500 });
     }
-}
+};
+
+export const GET = withRequestDevLog({ source: 'webhook', name: 'bridge/webhook.v1/whatsapp:GET' }, getHandler);
+export const POST = withRequestDevLog({ source: 'webhook', name: 'bridge/webhook.v1/whatsapp:POST' }, postHandler);

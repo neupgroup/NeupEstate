@@ -874,6 +874,33 @@ model WhatsAppConfig {
   @@map("whatsapp_config")
 }
 
+model SiteDevLogSetting {
+  id        String   @id
+  enabled   Boolean  @default(false)
+  updatedAt DateTime @updatedAt
+
+  @@map("site_dev_log_settings")
+}
+
+model SiteDevLogEntry {
+  id         String   @id @default(cuid())
+  requestId  String?
+  source     String
+  method     String?
+  path       String
+  statusCode Int?
+  outcome    String?
+  durationMs Int?
+  summary    String?
+  details    Json?
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([source, createdAt])
+  @@index([path, createdAt])
+  @@map("site_dev_log_entries")
+}
+
 model WhatsAppTemplate {
   id            String   @id @default(cuid())
   name          String

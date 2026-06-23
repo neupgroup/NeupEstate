@@ -11,6 +11,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getBridgePropertiesByAccount } from '@/services/property-service';
 import { logProblem } from '@/services/problem-service';
+import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,7 +32,7 @@ function parseFields(value: string | null): string[] | undefined {
   return value.split(',').map((field) => field.trim()).filter(Boolean);
 }
 
-export async function GET(req: NextRequest) {
+const getHandler = async (req: NextRequest) => {
   const { searchParams } = req.nextUrl;
   const agencyId = searchParams.get('agency')?.trim() || undefined;
   const agentId = searchParams.get('agent')?.trim() || undefined;
@@ -82,4 +83,6 @@ export async function GET(req: NextRequest) {
       { status: 500 },
     );
   }
-}
+};
+
+export const GET = withRequestDevLog({ source: 'api', name: 'bridge/api.v1/property' }, getHandler);

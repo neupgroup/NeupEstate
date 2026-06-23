@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/logica/core/prisma";
 import { logProblem } from "@/services/problem-service";
+import { withRequestDevLog } from "@/services/site-dev-log-service";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -188,7 +189,7 @@ async function persistRoleEvent(payload: RolePayload): Promise<RoleAction> {
   return existingRole ? "updated_role" : "created_role";
 }
 
-export async function POST(req: NextRequest) {
+const postHandler = async (req: NextRequest) => {
   const appSecret = getAppSecret();
   if (!appSecret) {
     return fail("misconfigured_secret", "Set BRIDGE_APP_SECRET or NEUP_APP_SECRET.", 500);
@@ -249,9 +250,9 @@ export async function POST(req: NextRequest) {
   }
 
   return NextResponse.json({ success: true, actions });
-}
+};
 
-export async function GET() {
+const getHandler = async (req: NextRequest) => {
   return NextResponse.json(
     {
       success: false,
@@ -259,4 +260,7 @@ export async function GET() {
     },
     { status: 400 }
   );
-}
+};
+
+export const POST = withRequestDevLog({ source: 'webhook', name: 'bridge/webhook.v1/roles:POST' }, postHandler);
+export const GET = withRequestDevLog({ source: 'webhook', name: 'bridge/webhook.v1/roles:GET' }, getHandler);

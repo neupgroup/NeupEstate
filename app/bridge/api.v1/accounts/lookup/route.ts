@@ -24,6 +24,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAccountInformation } from '@/services/account/lookup';
 import { logProblem } from '@/services/problem-service';
+import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';
 
@@ -49,7 +50,7 @@ async function resolveLookup(accountId?: string, neupId?: string) {
   return NextResponse.json({ success: true, account: result.account });
 }
 
-export async function GET(req: NextRequest) {
+const getHandler = async (req: NextRequest) => {
   const { searchParams } = req.nextUrl;
   const accountId = searchParams.get('accountId')?.trim() || undefined;
   const neupId    = searchParams.get('neupId')?.trim()    || undefined;
@@ -63,9 +64,9 @@ export async function GET(req: NextRequest) {
       { status: 500 },
     );
   }
-}
+};
 
-export async function POST(req: NextRequest) {
+const postHandler = async (req: NextRequest) => {
   try {
     let body: any = {};
     try {
@@ -93,4 +94,7 @@ export async function POST(req: NextRequest) {
       { status: 500 },
     );
   }
-}
+};
+
+export const GET = withRequestDevLog({ source: 'api', name: 'bridge/api.v1/accounts/lookup:GET' }, getHandler);
+export const POST = withRequestDevLog({ source: 'api', name: 'bridge/api.v1/accounts/lookup:POST' }, postHandler);

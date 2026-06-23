@@ -12,6 +12,7 @@ import { getAgentsByLocation as getAgentsByLocationService, createAgent as creat
 import { addSitemap, getNewUrlsFromSitemap, processSitemapUrl, updateSitemapCheckedTime } from "@/services/sitemap-service";
 import { clearAllProblems } from "@/services/problem-service";
 import { logProblem } from "@/services/problem-service";
+import { clearSiteDevLogs, updateSiteDevLogSetting } from "@/services/site-dev-log-service";
 import type { NaturalLanguageSearchOutput, Property, CreatePropertyInput, UpdatePropertyInput, CreateAgencyInput, UpdateAgencyInput, PropertyApprovalResult, CreatePropertyFormValues, UpdatePropertyFormValues, CreateAgencyFormValues, UpdateAgencyFormValues, PropertyFilters, ExtractedPropertyData, SitemapLog, PropertyAmendmentResult, RewritePropertyDetailsOutput, PropertyAssuranceResult, Agent, CreateAgentFormValues, UpdateAgentFormValues, StructuredLocation, CreateWhatsAppTemplateFormValues, WhatsAppConfig, WhatsAppTemplate, CreateConversationFormValues, CreateUserActivityInput, PropertyImageUpdateResult, CreateFaqFormValues, UpdateFaqFormValues, CreateInquiryFormValues, InquiryStatus, UpdatePromptFormValues, CreatePromptFormValues, User, CreatePropertyRequestFormValues, CreateSalesRequestFormValues, CreateVisitRequestFormValues, CreateMortgageRequestFormValues, CreateContactSubmissionFormValues, PropertyActivityEvent, UserPreferences, AIModel, CreateAIModelFormValues, UpdateAIModelFormValues, CreateRequirementFormValues, Requirement, UpdateUserFormValues, LandDetails, PlotDetails, ApartmentUnit } from "@/types";
 import { CreatePropertySchema, UpdatePropertySchema, CreateAgencySchema, UpdateAgencySchema, PropertyPurposeSchema, PropertyCategorySchema, PropertyUsageTypeSchema, CreateAgentSchema, UpdateAgentSchema, CreateWhatsAppTemplateSchema, WhatsAppConfigSchema, CreateConversationSchema, CreateFaqSchema, UpdateFaqSchema, CreateInquirySchema, UpdatePromptSchema, CreatePromptSchema, CreatePropertyRequestSchema, CreateSalesRequestSchema, CreateVisitRequestSchema, CreateMortgageRequestSchema, CreateContactSubmissionSchema, CreateAIModelSchema, UpdateAIModelSchema, CreateRequirementSchema, UpdateUserSchema, areaValueToSqft } from "@/types";
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
@@ -1584,6 +1585,33 @@ export async function updateWhatsAppConfigAction(
       return { success: false, error: e.message };
     }
     return { success: false, error: 'An unexpected server error occurred.' };
+  }
+}
+
+export async function updateSiteDevLogsSettingAction(
+  enabled: boolean
+): Promise<{ success: boolean; error?: string | null }> {
+  try {
+    await updateSiteDevLogSetting(enabled);
+    revalidatePath('/manage/settings/site/devlogs');
+    revalidatePath('/manage/site');
+    revalidatePath('/manage/site/devlogs');
+    return { success: true, error: null };
+  } catch (e: any) {
+    await logProblem(e, 'updateSiteDevLogsSettingAction');
+    return { success: false, error: 'An unexpected server error occurred.' };
+  }
+}
+
+export async function clearSiteDevLogsAction(): Promise<{ success: boolean; error?: string }> {
+  try {
+    await clearSiteDevLogs();
+    revalidatePath('/manage/site');
+    revalidatePath('/manage/site/devlogs');
+    return { success: true };
+  } catch (error: any) {
+    await logProblem(error, 'clearSiteDevLogsAction');
+    return { success: false, error: 'Failed to clear dev logs.' };
   }
 }
 

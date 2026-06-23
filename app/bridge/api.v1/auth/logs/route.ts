@@ -7,8 +7,9 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { readAuthLogs } from '@/services/auth';
+import { withRequestDevLog } from '@/services/site-dev-log-service';
 
-export async function GET(req: NextRequest) {
+const getHandler = async (req: NextRequest) => {
   // TODO: Add admin authentication check in production
   // const account = await requireRegisteredAuth(req);
   // if (account.aid !== ADMIN_ACCOUNT_ID) {
@@ -37,4 +38,6 @@ export async function GET(req: NextRequest) {
       { status: 500 }
     );
   }
-}
+};
+
+export const GET = withRequestDevLog({ source: 'api', name: 'bridge/api.v1/auth/logs' }, getHandler);

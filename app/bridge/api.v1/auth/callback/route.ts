@@ -17,6 +17,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/logica/core/prisma';
 import { logProblem } from '@/services/problem-service';
 import { getAuthenticatedAccount } from '@/services/auth';
+import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 function getRedirectTarget(request: NextRequest): string {
   const redirectsTo = request.nextUrl.searchParams.get('redirectsTo');
@@ -67,10 +68,13 @@ async function handleCallback(request: NextRequest) {
   }
 }
 
-export async function GET(req: NextRequest) {
+const getHandler = async (req: NextRequest) => {
   return await handleCallback(req);
-}
+};
 
-export async function POST(req: NextRequest) {
+const postHandler = async (req: NextRequest) => {
   return await handleCallback(req);
-}
+};
+
+export const GET = withRequestDevLog({ source: 'api', name: 'bridge/api.v1/auth/callback:GET' }, getHandler);
+export const POST = withRequestDevLog({ source: 'api', name: 'bridge/api.v1/auth/callback:POST' }, postHandler);

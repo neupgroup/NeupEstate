@@ -8,13 +8,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/logica/core/prisma';
 import { logProblem } from '@/services/problem-service';
+import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(
+const getHandler = async (
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
-) {
+) => {
   const { id } = await params;
 
   if (!id?.trim()) {
@@ -85,4 +86,6 @@ export async function GET(
       { status: 500 },
     );
   }
-}
+};
+
+export const GET = withRequestDevLog({ source: 'api', name: 'bridge/api.v1/intelligence/property/[id]' }, getHandler);

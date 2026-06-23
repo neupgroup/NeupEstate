@@ -4,7 +4,7 @@ import {
   LayoutDashboard, LineChart, Package, MessageSquareHeart, FileQuestion, Landmark, CalendarCheck,
   Banknote, HelpCircle, Contact, FileSearch,
   Lightbulb, Eye, Bell, LifeBuoy, Bookmark, Star, Flame, BarChart2, UserCheck,
-  Plus, FileBarChart, Bot,
+  Plus, FileBarChart, Bot, Activity,
 } from "lucide-react";
 
 export type ManageNavItem =
@@ -49,6 +49,7 @@ export const manageNav: ManageNavItem[] = [
   { type: "link", href: "/manage/report", label: "Report", icon: FileBarChart },
   { type: "link", href: "/manage/team", label: "Team", icon: Users },
   { type: "link", href: "/manage/accounts", label: "Users", icon: UserCog },
+  { type: "link", href: "/manage/site", label: "Site", icon: Activity },
   { type: "link", href: "/manage/settings", label: "Settings", icon: Settings },
   { type: "link", href: "/manage/support", label: "Support", icon: LifeBuoy },
 ];

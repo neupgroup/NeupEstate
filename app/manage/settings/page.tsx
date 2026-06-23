@@ -28,8 +28,11 @@ export default function SettingsPage() {
             <div className="block px-4 py-3 font-medium opacity-50 cursor-not-allowed">
                 Pages Management
             </div>
-              <ClientLink href="/manage/agency" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
+            <ClientLink href="/manage/agency" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
                 Agency Details
+            </ClientLink>
+            <ClientLink href="/manage/settings/site/devlogs" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
+                Site Dev Logs
             </ClientLink>
         </div>
       </div>
@@ -123,8 +126,11 @@ export default function SettingsPage() {
           View system error logs or get help.
         </p>
         <div className="border rounded-lg overflow-hidden">
-            <ClientLink href="/manage/problems" className="block px-4 py-3 hover:bg-muted/50 transition-colors font-medium">
+            <ClientLink href="/manage/site/errors" className="block px-4 py-3 hover:bg-muted/50 transition-colors font-medium">
                 Error Log
+            </ClientLink>
+            <ClientLink href="/manage/site/devlogs" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
+                Request Dev Logs
             </ClientLink>
             <div className="block px-4 py-3 border-t font-medium opacity-50 cursor-not-allowed">
                 Request a Feature
