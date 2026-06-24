@@ -165,7 +165,7 @@ export async function refreshAccountDisplayInfo(
 ): Promise<{
   displayName: string | null;
   displayImage: string | null;
-  roleId: string | null;
+  roleIds: string[];
   permissions: string[];
 } | null> {
   try {
@@ -184,41 +184,36 @@ export async function refreshAccountDisplayInfo(
       return null;
     }
 
-    const remoteRole = extractRemoteRole(info.meta.response?.body);
+    const remoteRoles = extractRemoteRoles(info.meta.response?.body);
     const displayName  = info.account.displayName  || null;
     const displayImage = info.account.displayImage || null;
-    const remoteRoleId = remoteRole?.id ?? null;
-    const remotePermissions = remoteRole?.permissions ?? [];
+    const primaryRoleId = remoteRoles[0]?.id ?? null;
+    const appId = process.env.NEUP_APP_ID ?? 'neup.estate';
 
     await prisma.$transaction(async (tx) => {
-      if (remoteRole) {
-        const existingRole = await tx.authzRole.findUnique({
-          where: { id: remoteRole.id },
-          select: {
-            appId: true,
-            description: true,
-            scope: true,
-          },
-        });
-
-        const appId = existingRole?.appId ?? process.env.NEUP_APP_ID ?? 'neup.estate';
-
+      for (const remoteRole of remoteRoles) {
         await tx.authzRole.upsert({
           where: { id: remoteRole.id },
           update: {
-            name: remoteRole.name ?? remoteRole.id,
+            name: remoteRole.name,
             appId,
-            description: remoteRole.description ?? existingRole?.description ?? null,
-            scope: remoteRole.scope ?? existingRole?.scope ?? null,
-            permissions: normalizeJsonValue(remotePermissions) ?? Prisma.JsonNull,
+            description: remoteRole.description,
+            scope: remoteRole.scope,
+            acquisitionType: remoteRole.acquisitionType,
+            approvalPolicy: remoteRole.approvalPolicy,
+            applicableFor: normalizeJsonValue(remoteRole.applicableFor ?? []) ?? Prisma.JsonNull,
+            permissions: normalizeJsonValue(remoteRole.permissions) ?? Prisma.JsonNull,
           },
           create: {
             id: remoteRole.id,
-            name: remoteRole.name ?? remoteRole.id,
+            name: remoteRole.name,
             appId,
-            description: remoteRole.description ?? null,
-            scope: remoteRole.scope ?? null,
-            permissions: normalizeJsonValue(remotePermissions) ?? Prisma.JsonNull,
+            description: remoteRole.description,
+            scope: remoteRole.scope,
+            acquisitionType: remoteRole.acquisitionType,
+            approvalPolicy: remoteRole.approvalPolicy,
+            applicableFor: normalizeJsonValue(remoteRole.applicableFor ?? []) ?? Prisma.JsonNull,
+            permissions: normalizeJsonValue(remoteRole.permissions) ?? Prisma.JsonNull,
           },
         });
       }
@@ -228,13 +223,31 @@ export async function refreshAccountDisplayInfo(
         data: {
           displayName,
           displayImage,
-          ...(remoteRoleId ? { roleId: remoteRoleId } : {}),
+          roleId: primaryRoleId,
         },
       });
+
+      await tx.accountAccess.deleteMany({
+        where: {
+          accountId: id,
+          appId,
+        },
+      });
+
+      if (remoteRoles.length > 0) {
+        await tx.accountAccess.createMany({
+          data: remoteRoles.map((role) => ({
+            accountId: id,
+            appId,
+            roleId: role.id,
+          })),
+          skipDuplicates: true,
+        });
+      }
     });
 
-    const syncedAccount = await prisma.account.findUnique({
-      where: { id },
+    const syncedAccessRows = await prisma.accountAccess.findMany({
+      where: { accountId: id },
       select: {
         roleId: true,
         role: {
@@ -244,14 +257,17 @@ export async function refreshAccountDisplayInfo(
         },
       },
     });
-
-    const permissions = normalizePermissions(syncedAccount?.role?.permissions);
+    const permissions = [
+      ...new Set(
+        syncedAccessRows.flatMap((row) => normalizePermissions(row.role?.permissions))
+      ),
+    ];
 
     return {
       displayName,
       displayImage,
-      roleId: syncedAccount?.roleId ?? null,
-      permissions: normalizePermissions(syncedAccount?.role?.permissions),
+      roleIds: syncedAccessRows.map((row) => row.roleId),
+      permissions,
     };
   } catch (error) {
     await logProblem(error, `refreshAccountDisplayInfo (ID: ${id})`);
@@ -264,17 +280,33 @@ type LookupRole = {
   name?: unknown;
   description?: unknown;
   scope?: unknown;
+  acquisitionType?: unknown;
+  approvalPolicy?: unknown;
+  applicableFor?: unknown;
   permissions?: unknown;
 };
 
 type LookupBody = {
   role?: unknown;
+  roles?: unknown;
   access?: unknown;
   permissions?: unknown;
   profile?: {
     role?: unknown;
+    roles?: unknown;
   } | null;
 } | null;
+
+type NormalizedRemoteRole = {
+  id: string;
+  name: string;
+  description: string | null;
+  scope: string | null;
+  acquisitionType: string | null;
+  approvalPolicy: string | null;
+  applicableFor: string[];
+  permissions: string[];
+};
 
 function asString(value: unknown): string | null {
   return typeof value === 'string' && value.trim().length > 0 ? value.trim() : null;
@@ -303,44 +335,57 @@ function normalizeJsonValue(value: unknown): Prisma.InputJsonValue | Prisma.Null
   return value as Prisma.InputJsonValue;
 }
 
-function extractRemoteRole(body: unknown): {
-  id: string;
-  name: string | null;
-  description: string | null;
-  scope: string | null;
-  permissions: string[];
-} | null {
+function extractRemoteRoles(body: unknown): NormalizedRemoteRole[] {
   const payload = body as LookupBody;
-  const profileRole = payload?.profile?.role;
-  const fromProfile = Array.isArray(profileRole) ? profileRole[0] : null;
-  const fromRoot = payload?.role;
+  const candidates = [
+    payload?.profile?.roles,
+    payload?.profile?.role,
+    payload?.roles,
+    payload?.role,
+  ];
 
-  const role = (fromProfile ?? fromRoot) as LookupRole | string | null | undefined;
-  if (!role) return null;
+  const normalized = candidates.flatMap((candidate) =>
+    Array.isArray(candidate) ? candidate : candidate ? [candidate] : []
+  );
 
-  if (typeof role === 'string') {
-    const id = asString(role);
-    return id
-      ? {
-          id,
-          name: id,
-          description: null,
-          scope: null,
-          permissions: [],
-        }
-      : null;
-  }
+  const roles = normalized
+    .map((role): NormalizedRemoteRole | null => {
+      if (typeof role === 'string') {
+        const id = asString(role);
+        return id
+          ? {
+              id,
+              name: id,
+              description: null,
+              scope: null,
+              acquisitionType: null,
+              approvalPolicy: null,
+              applicableFor: [],
+              permissions: [],
+            }
+          : null;
+      }
 
-  const id = asString(role.id);
-  if (!id) return null;
+      const record = role as LookupRole | null | undefined;
+      const id = asString(record?.id);
+      if (!id) return null;
 
-  return {
-    id,
-    name: asString(role.name) ?? id,
-    description: asString(role.description),
-    scope: asString(role.scope),
-    permissions: normalizePermissions(role.permissions),
-  };
+      return {
+        id,
+        name: asString(record?.name) ?? id,
+        description: asString(record?.description),
+        scope: asString(record?.scope),
+        acquisitionType: asString(record?.acquisitionType),
+        approvalPolicy: asString(record?.approvalPolicy),
+        applicableFor: Array.isArray(record?.applicableFor)
+          ? record.applicableFor.filter((value): value is string => typeof value === 'string' && value.trim().length > 0)
+          : [],
+        permissions: normalizePermissions(record?.permissions),
+      };
+    })
+    .filter((role): role is NormalizedRemoteRole => Boolean(role));
+
+  return Array.from(new Map(roles.map((role) => [role.id, role])).values());
 }
 
 /**
@@ -351,6 +396,7 @@ function extractRemoteRole(body: unknown): {
 export async function deleteAccountAndData(id: string): Promise<void> {
   try {
     await prisma.$transaction([
+      prisma.accountAccess.deleteMany({ where: { accountId: id } }),
       prisma.authzAccountAccessGrant.deleteMany({ where: { OR: [{ ownerAccountId: id }, { targetAccountId: id }] } }),
       prisma.authzAssetsAccessGrant.deleteMany({ where: { accountId: id } }),
       prisma.agencyAgentMap.deleteMany({ where: { OR: [{ agencyId: id }, { agentId: id }] } }),

@@ -31,6 +31,9 @@ type RolePayload = {
     name: string;
     description?: string | null;
     scope?: string | null;
+    acquisitionType?: string | null;
+    approvalPolicy?: string | null;
+    applicableFor?: string[];
     permissions?: string[];
   };
 };
@@ -115,6 +118,11 @@ function isValidRolePayload(input: unknown): input is RolePayload {
     return (
       (role.description === undefined || role.description === null || typeof role.description === "string") &&
       (role.scope === undefined || role.scope === null || typeof role.scope === "string") &&
+      (role.acquisitionType === undefined || role.acquisitionType === null || typeof role.acquisitionType === "string") &&
+      (role.approvalPolicy === undefined || role.approvalPolicy === null || typeof role.approvalPolicy === "string") &&
+      (role.applicableFor === undefined ||
+        (Array.isArray(role.applicableFor) &&
+          role.applicableFor.every((value) => typeof value === "string"))) &&
       Array.isArray(role.permissions) &&
       role.permissions.every((permission) => typeof permission === "string")
     );
@@ -124,6 +132,9 @@ function isValidRolePayload(input: unknown): input is RolePayload {
   return (
     role.description === undefined &&
     role.scope === undefined &&
+    role.acquisitionType === undefined &&
+    role.approvalPolicy === undefined &&
+    role.applicableFor === undefined &&
     role.permissions === undefined
   );
 }
@@ -172,6 +183,9 @@ async function persistRoleEvent(
     appId,
     description: typeof role.description === "string" ? role.description : null,
     scope: typeof role.scope === "string" ? role.scope : null,
+    acquisitionType: typeof role.acquisitionType === "string" ? role.acquisitionType : null,
+    approvalPolicy: typeof role.approvalPolicy === "string" ? role.approvalPolicy : null,
+    applicableFor: normalizeJsonValue(role.applicableFor ?? []) ?? Prisma.JsonNull,
     permissions: normalizeJsonValue(role.permissions ?? []),
   };
 

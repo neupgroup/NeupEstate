@@ -30,6 +30,16 @@ type AccountUpdatePayload = {
     neupId?: string;
     isMinor?: boolean;
     accountType?: string;
+    roles?: Array<{
+      id?: string;
+      name?: string;
+      description?: string | null;
+      scope?: string | null;
+      acquisitionType?: string | null;
+      approvalPolicy?: string | null;
+      applicableFor?: string[];
+      permissions?: string[];
+    }>;
   };
   profile?: {
     displayName?: string;
@@ -54,6 +64,17 @@ type SupportedChangedField =
   | "access"
   | "isMinor"
   | "accountType";
+
+type NormalizedAccountRole = {
+  id: string;
+  name: string;
+  description: string | null;
+  scope: string | null;
+  acquisitionType: string | null;
+  approvalPolicy: string | null;
+  applicableFor: string[];
+  permissions: string[];
+};
 
 function fail(error: string, reason?: string, status = 400) {
   return NextResponse.json(
@@ -153,6 +174,62 @@ function isValidPayload(input: unknown): input is AccountUpdatePayload {
   );
 }
 
+function normalizeJsonValue(value: unknown): Prisma.InputJsonValue | Prisma.NullableJsonNullValueInput | undefined {
+  if (value === undefined) return undefined;
+  if (value === null) return Prisma.JsonNull;
+  return value as Prisma.InputJsonValue;
+}
+
+function normalizeRoleState(payload: AccountUpdatePayload): NormalizedAccountRole[] {
+  if (Array.isArray(payload.account.roles)) {
+    return payload.account.roles
+      .map((role) => {
+        const roleId = typeof role?.id === "string" ? role.id.trim() : "";
+        if (!roleId) return null;
+
+        const applicableFor = Array.isArray(role.applicableFor)
+          ? role.applicableFor.filter((value): value is string => typeof value === "string")
+          : [];
+        const permissions = Array.isArray(role.permissions)
+          ? role.permissions.filter((value): value is string => typeof value === "string")
+          : [];
+
+        return {
+          id: roleId,
+          name: typeof role.name === "string" && role.name.trim().length > 0 ? role.name.trim() : roleId,
+          description: typeof role.description === "string" ? role.description : null,
+          scope: typeof role.scope === "string" ? role.scope : null,
+          acquisitionType: typeof role.acquisitionType === "string" ? role.acquisitionType : null,
+          approvalPolicy: typeof role.approvalPolicy === "string" ? role.approvalPolicy : null,
+          applicableFor,
+          permissions,
+        };
+      })
+      .filter((role): role is NormalizedAccountRole => Boolean(role));
+  }
+
+  if (payload.role && typeof payload.role.id === "string" && payload.role.id.trim().length > 0) {
+    const roleId = payload.role.id.trim();
+    return [
+      {
+        id: roleId,
+        name:
+          typeof payload.role.name === "string" && payload.role.name.trim().length > 0
+            ? payload.role.name.trim()
+            : roleId,
+        description: null,
+        scope: null,
+        acquisitionType: null,
+        approvalPolicy: null,
+        applicableFor: [] as string[],
+        permissions: [] as string[],
+      },
+    ];
+  }
+
+  return [];
+}
+
 async function persistAccountUpdate(
   tx: Prisma.TransactionClient,
   payload: AccountUpdatePayload,
@@ -167,58 +244,43 @@ async function persistAccountUpdate(
 
   const changedFields = new Set(payload.changedFields);
   const hasChangedField = (field: SupportedChangedField): boolean => changedFields.has(field);
+  const rolesWereProvided = Array.isArray(payload.account.roles) || Boolean(payload.role);
+  const normalizedRoles = normalizeRoleState(payload);
+  const primaryRoleId = normalizedRoles[0]?.id ?? null;
 
-  let resolvedRoleId: string | undefined;
-  if (payload.role && typeof payload.role.id === "string") {
-    webhookLog(payload.eventId, "Has asked to update role of user.");
-    const roleId = payload.role.id.trim();
-    if (roleId) {
-      resolvedRoleId = roleId;
-      webhookLog(payload.eventId, "Looking for role.", { roleId });
-
-      const existingRole = await tx.authzRole.findUnique({
-        where: { id: roleId },
-        select: { id: true },
-      });
-
-      if (!existingRole) {
-        webhookLog(payload.eventId, "Role not found in authz_role table.", { roleId });
-        throw new Error(`Role does not exist in authz_role: ${roleId}`);
-      }
-      webhookLog(payload.eventId, "Role found in authz_role table.", { roleId });
-    }
-  }
-
-  // Direct role mapping contract:
-  // set account.role_id from payload.role.id for rows matching account.id or connectionId.
-  if (resolvedRoleId) {
-    webhookLog(payload.eventId, "Updating role on account table.", {
-      roleId: resolvedRoleId,
+  if (rolesWereProvided) {
+    webhookLog(payload.eventId, "Replacing account role state from payload.", {
+      appId: payload.appId,
       accountId,
-      connectionId,
-    });
-    const roleUpdateResult = await tx.account.updateMany({
-      where: {
-        OR: [{ id: accountId }, { connectionId }],
-      },
-      data: {
-        roleId: resolvedRoleId,
-        accessedOn: new Date(),
-      },
+      roleCount: normalizedRoles.length,
     });
 
-    if (roleUpdateResult.count === 0) {
-      webhookLog(payload.eventId, "No matching user found for role update.", {
-        roleId: resolvedRoleId,
-        accountId,
-        connectionId,
+    for (const role of normalizedRoles) {
+      await tx.authzRole.upsert({
+        where: { id: role.id },
+        update: {
+          name: role.name,
+          appId: payload.appId,
+          description: role.description,
+          scope: role.scope,
+          acquisitionType: role.acquisitionType,
+          approvalPolicy: role.approvalPolicy,
+          applicableFor: normalizeJsonValue(role.applicableFor) ?? Prisma.JsonNull,
+          permissions: normalizeJsonValue(role.permissions) ?? Prisma.JsonNull,
+        },
+        create: {
+          id: role.id,
+          name: role.name,
+          appId: payload.appId,
+          description: role.description,
+          scope: role.scope,
+          acquisitionType: role.acquisitionType,
+          approvalPolicy: role.approvalPolicy,
+          applicableFor: normalizeJsonValue(role.applicableFor) ?? Prisma.JsonNull,
+          permissions: normalizeJsonValue(role.permissions) ?? Prisma.JsonNull,
+        },
       });
-      throw new Error("No account matched by account.id or connectionId for role update.");
     }
-    webhookLog(payload.eventId, "Updated role on database table.", {
-      roleId: resolvedRoleId,
-      updatedRows: roleUpdateResult.count,
-    });
   }
 
   const updateData = {
@@ -235,7 +297,7 @@ async function persistAccountUpdate(
       ? { accountType: payload.account.accountType }
       : {}),
     connectionId,
-    ...(resolvedRoleId ? { roleId: resolvedRoleId } : {}),
+    ...(rolesWereProvided ? { roleId: primaryRoleId } : {}),
     accessedOn: new Date(),
   };
 
@@ -262,11 +324,31 @@ async function persistAccountUpdate(
           ? payload.profile.displayImage
           : null,
       connectionId,
-      roleId: resolvedRoleId ?? null,
+      roleId: rolesWereProvided ? primaryRoleId : null,
       createdOn: new Date(),
       accessedOn: new Date(),
     },
   });
+
+  if (rolesWereProvided) {
+    await tx.accountAccess.deleteMany({
+      where: {
+        accountId,
+        appId: payload.appId,
+      },
+    });
+
+    if (normalizedRoles.length > 0) {
+      await tx.accountAccess.createMany({
+        data: normalizedRoles.map((role) => ({
+          accountId,
+          appId: payload.appId,
+          roleId: role.id,
+        })),
+        skipDuplicates: true,
+      });
+    }
+  }
 
   if (
     hasChangedField("neupId") &&
@@ -274,6 +356,16 @@ async function persistAccountUpdate(
     payload.account.neupId.trim().length > 0
   ) {
     webhookLog(payload.eventId, "Syncing secondary rows by neupId.");
+    const secondaryAccountIds = (
+      await tx.account.findMany({
+        where: {
+          neupId: payload.account.neupId.trim(),
+          NOT: { id: accountId },
+        },
+        select: { id: true },
+      })
+    ).map((account) => account.id);
+
     await tx.account.updateMany({
       where: {
         neupId: payload.account.neupId.trim(),
@@ -281,6 +373,28 @@ async function persistAccountUpdate(
       },
       data: updateData,
     });
+
+    if (rolesWereProvided && secondaryAccountIds.length > 0) {
+      await tx.accountAccess.deleteMany({
+        where: {
+          accountId: { in: secondaryAccountIds },
+          appId: payload.appId,
+        },
+      });
+
+      if (normalizedRoles.length > 0) {
+        await tx.accountAccess.createMany({
+          data: secondaryAccountIds.flatMap((secondaryAccountId) =>
+            normalizedRoles.map((role) => ({
+              accountId: secondaryAccountId,
+              appId: payload.appId,
+              roleId: role.id,
+            }))
+          ),
+          skipDuplicates: true,
+        });
+      }
+    }
   }
   webhookLog(payload.eventId, "Finished persistence for this payload.");
 }

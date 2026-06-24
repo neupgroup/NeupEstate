@@ -11,7 +11,7 @@ type Status = 'idle' | 'loading' | 'success' | 'error' | 'no_change';
 interface Props {
   accountId: string;
   currentDisplayName?: string;
-  currentRoleId?: string | null;
+  currentRoleIds?: string[];
   currentPermissions?: string[];
   onRefreshed?: (displayName: string | null, displayImage: string | null) => void;
 }
@@ -20,10 +20,14 @@ function normalizePermissionList(value?: string[]): string {
   return [...new Set((value ?? []).map((item) => item.trim()).filter(Boolean))].sort().join('|');
 }
 
+function normalizeRoleList(value?: string[]): string {
+  return [...new Set((value ?? []).map((item) => item.trim()).filter(Boolean))].sort().join('|');
+}
+
 export function AccountRefreshButton({
   accountId,
   currentDisplayName,
-  currentRoleId,
+  currentRoleIds,
   currentPermissions,
   onRefreshed,
 }: Props) {
@@ -45,7 +49,7 @@ export function AccountRefreshButton({
       }
 
       const changedDisplayName = result.displayName !== currentDisplayName;
-      const changedRole = result.roleId !== currentRoleId;
+      const changedRole = normalizeRoleList(result.roleIds) !== normalizeRoleList(currentRoleIds);
       const changedPermissions =
         normalizePermissionList(result.permissions) !== normalizePermissionList(currentPermissions);
       const changed = changedDisplayName || changedRole || changedPermissions;

@@ -4,7 +4,6 @@ import { Pagination } from '@/components/manage/pagination';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { ClientLink } from '@/components/client-link';
 import { getSiteDevLogs, getSiteDevLogSetting } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';
@@ -40,27 +39,15 @@ export default async function SiteDevLogsPage({
               : 'Dev logs are currently disabled. Update `.env` and set `SITE_DEV_LOGGING_STATUS=active` to start recording requests.'}
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <ClientLink href="/manage/site/devlogs" className="rounded-md border px-3 py-2 text-sm font-medium hover:bg-muted/40">
-            All
-          </ClientLink>
-          <ClientLink href="/manage/site/devlogs?source=api" className="rounded-md border px-3 py-2 text-sm font-medium hover:bg-muted/40">
-            API
-          </ClientLink>
-          <ClientLink href="/manage/site/devlogs?source=webhook" className="rounded-md border px-3 py-2 text-sm font-medium hover:bg-muted/40">
-            Webhooks
-          </ClientLink>
-          <ClearSiteDevLogsButton />
-        </div>
       </div>
 
       {logs.length > 0 ? (
         <div className="space-y-4">
           {logs.map((log) => (
-            <Card key={log.id}>
-              <CardContent className="space-y-3 p-5">
+            <Card key={log.id} className="min-w-0 overflow-hidden">
+              <CardContent className="min-w-0 space-y-3 p-5">
                 <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                  <div className="space-y-2">
+                  <div className="min-w-0 space-y-2">
                     <div className="flex flex-wrap items-center gap-2">
                       <Badge variant={log.source === 'webhook' ? 'default' : 'secondary'}>
                         {log.source}
@@ -73,21 +60,25 @@ export default async function SiteDevLogsPage({
                       ) : null}
                       {log.outcome ? <Badge variant="outline">{log.outcome}</Badge> : null}
                     </div>
-                    <div className="font-mono text-sm">{log.path}</div>
+                    <div className="min-w-0 whitespace-normal break-all font-mono text-sm">
+                      {log.path}
+                    </div>
                     {log.summary ? (
-                      <p className="text-sm text-muted-foreground">{log.summary}</p>
+                      <p className="whitespace-normal break-all text-sm text-muted-foreground">
+                        {log.summary}
+                      </p>
                     ) : null}
                   </div>
-                  <div className="text-right text-xs text-muted-foreground">
+                  <div className="min-w-0 whitespace-normal break-all text-right text-xs text-muted-foreground">
                     <div>{new Date(log.createdAt).toLocaleString()}</div>
                     {typeof log.durationMs === 'number' ? <div>{log.durationMs} ms</div> : null}
                   </div>
                 </div>
 
                 {log.details ? (
-                  <details className="rounded-md border bg-muted/20 p-3">
+                  <details className="min-w-0 rounded-md border bg-muted/20 p-3">
                     <summary className="cursor-pointer text-sm font-medium">View request details</summary>
-                    <pre className="mt-3 whitespace-pre-wrap break-words text-xs font-mono">
+                    <pre className="mt-3 min-w-0 whitespace-pre-wrap break-all text-xs font-mono">
                       {JSON.stringify(log.details, null, 2)}
                     </pre>
                   </details>
@@ -97,6 +88,9 @@ export default async function SiteDevLogsPage({
           ))}
 
           {totalPages > 1 ? <Pagination currentPage={currentPage} totalPages={totalPages} /> : null}
+          <div className="flex justify-start">
+            <ClearSiteDevLogsButton />
+          </div>
         </div>
       ) : (
         <Alert>

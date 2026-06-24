@@ -34,10 +34,15 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
   const { id: accountId } = await params;
   const account = await getAccountById(accountId);
   if (!account) notFound();
-
-  const accountRole = await prisma.account.findUnique({
+  const localAccount = await prisma.account.findUnique({
     where: { id: accountId },
+    select: { roleId: true },
+  });
+
+  const accountRoles = await prisma.accountAccess.findMany({
+    where: { accountId },
     select: {
+      roleId: true,
       role: {
         select: {
           id: true,
@@ -49,9 +54,30 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
         },
       },
     },
+    orderBy: { roleId: 'asc' },
   });
-  const role = accountRole?.role ?? null;
-  const permissions = normalizePermissions(role?.permissions);
+  const fallbackPrimaryRole = !accountRoles.length && localAccount?.roleId
+    ? await prisma.authzRole.findUnique({
+        where: { id: localAccount.roleId },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          scope: true,
+          permissions: true,
+          updatedOn: true,
+        },
+      })
+    : null;
+  const roles = (
+    accountRoles.length > 0
+      ? accountRoles.map((entry) => entry.role)
+      : fallbackPrimaryRole
+        ? [fallbackPrimaryRole]
+        : []
+  ).filter((role): role is NonNullable<(typeof accountRoles)[number]['role']> => Boolean(role));
+  const permissions = [...new Set(roles.flatMap((role) => normalizePermissions(role.permissions)))];
+  const roleIds = roles.map((role) => role.id);
 
   const [requirements, savedProperties, ownedProperties, recentActivity, remoteUsersResult] = await Promise.all([
     getRequirementByUserId(accountId),
@@ -80,44 +106,63 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-base">
               <Shield className="h-4 w-4" />
-              Current Role
+              Current Roles
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {role ? (
+            {roles.length > 0 ? (
               <>
                 <div className="grid gap-3 md:grid-cols-3">
                   <div className="rounded-lg border bg-muted/20 px-4 py-3">
-                    <p className="text-xs uppercase tracking-wide text-muted-foreground">Role name</p>
-                    <p className="mt-1 font-medium">{role.name}</p>
-                    <p className="mt-1 break-all text-xs text-muted-foreground">{role.id}</p>
-                  </div>
-                  <div className="rounded-lg border bg-muted/20 px-4 py-3">
-                    <p className="text-xs uppercase tracking-wide text-muted-foreground">Scope</p>
-                    <p className="mt-1 font-medium">{role.scope ?? 'Global'}</p>
+                    <p className="text-xs uppercase tracking-wide text-muted-foreground">Assigned roles</p>
+                    <p className="mt-1 font-medium">{roles.length}</p>
                     <p className="mt-1 text-xs text-muted-foreground">
-                      Updated {new Date(role.updatedOn).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric',
-                      })}
+                      Current app access rows linked to this account.
                     </p>
                   </div>
                   <div className="rounded-lg border bg-muted/20 px-4 py-3">
                     <p className="text-xs uppercase tracking-wide text-muted-foreground">Permissions</p>
                     <p className="mt-1 font-medium">{permissions.length} assigned</p>
                     <p className="mt-1 text-xs text-muted-foreground">
-                      Permissions are read from the linked authz role.
+                      Permissions are unioned across all assigned roles.
+                    </p>
+                  </div>
+                  <div className="rounded-lg border bg-muted/20 px-4 py-3">
+                    <p className="text-xs uppercase tracking-wide text-muted-foreground">Last role update</p>
+                    <p className="mt-1 font-medium">
+                      {new Date(
+                        roles.reduce((latest, role) =>
+                          role.updatedOn > latest ? role.updatedOn : latest,
+                        roles[0].updatedOn)
+                      ).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                      })}
+                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Based on the most recently synced role definition.
                     </p>
                   </div>
                 </div>
 
-                {role.description && (
-                  <div className="rounded-lg border bg-muted/20 px-4 py-3">
-                    <p className="text-xs uppercase tracking-wide text-muted-foreground">Description</p>
-                    <p className="mt-1 text-sm text-foreground/90">{role.description}</p>
+                <div className="space-y-3">
+                  <p className="text-sm font-medium">Assigned role list</p>
+                  <div className="grid gap-3">
+                    {roles.map((role) => (
+                      <div key={role.id} className="rounded-lg border bg-muted/20 px-4 py-3">
+                        <p className="font-medium">{role.name}</p>
+                        <p className="mt-1 break-all text-xs text-muted-foreground">{role.id}</p>
+                        <p className="mt-2 text-xs text-muted-foreground">
+                          Scope: {role.scope ?? 'Global'}
+                        </p>
+                        {role.description ? (
+                          <p className="mt-2 text-sm text-foreground/90">{role.description}</p>
+                        ) : null}
+                      </div>
+                    ))}
                   </div>
-                )}
+                </div>
 
                 <div className="space-y-2">
                   <p className="text-sm font-medium">Permission list</p>
@@ -136,7 +181,7 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
               </>
             ) : (
               <div className="rounded-lg border border-dashed px-4 py-6 text-sm text-muted-foreground">
-                No role is assigned to this account yet.
+                No roles are assigned to this account yet.
               </div>
             )}
           </CardContent>
@@ -308,7 +353,7 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
         <AccountRefreshButton
           accountId={accountId}
           currentDisplayName={account?.display_name}
-          currentRoleId={role?.id ?? null}
+          currentRoleIds={roleIds}
           currentPermissions={permissions}
         />
         {!isSynced && (

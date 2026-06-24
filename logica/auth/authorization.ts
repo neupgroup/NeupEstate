@@ -3,7 +3,7 @@ import { getIdentity } from "@/services/neupid/get-identity";
 import { cache } from "react";
 
 type AccountPermission = string;
-type AccountRole = string | null;
+type AccountRole = string[];
 
 function normalizePermissions(raw: unknown): AccountPermission[] {
   if (!raw) return [];
@@ -21,34 +21,46 @@ function normalizePermissions(raw: unknown): AccountPermission[] {
   return [];
 }
 
-const getCurrentAccountRoleId = cache(async (): Promise<string | null> => {
+const getCurrentAccountRoleIds = cache(async (): Promise<string[]> => {
   const identity = await getIdentity();
-  if (!identity.authenticated) return null;
+  if (!identity.authenticated) return [];
 
-  const account = await prisma.account.findUnique({
-    where: { id: identity.account.accountId },
-    select: { roleId: true },
-  });
+  const [accessRows, account] = await Promise.all([
+    prisma.accountAccess.findMany({
+      where: { accountId: identity.account.accountId },
+      select: { roleId: true },
+    }),
+    prisma.account.findUnique({
+      where: { id: identity.account.accountId },
+      select: { roleId: true },
+    }),
+  ]);
 
-  return account?.roleId ?? null;
+  const roleIds = accessRows.map((row) => row.roleId.trim()).filter(Boolean);
+  if (roleIds.length > 0) {
+    return [...new Set(roleIds)];
+  }
+
+  if (!account?.roleId) return [];
+  return [account.roleId];
 });
 
 // Returns the current account's permissions.
 export const getAccountsPermission = cache(async (): Promise<AccountPermission[]> => {
-  const roleId = await getCurrentAccountRoleId();
-  if (!roleId) return [];
+  const roleIds = await getCurrentAccountRoleIds();
+  if (roleIds.length === 0) return [];
 
-  const role = await prisma.authzRole.findUnique({
-    where: { id: roleId },
+  const roles = await prisma.authzRole.findMany({
+    where: { id: { in: roleIds } },
     select: { permissions: true },
   });
 
-  return normalizePermissions(role?.permissions);
+  return [...new Set(roles.flatMap((role) => normalizePermissions(role.permissions)))];
 });
 
-// Returns the current account's role.
+// Returns the current account's roles.
 export async function getAccountRole(): Promise<AccountRole> {
-  return getCurrentAccountRoleId();
+  return getCurrentAccountRoleIds();
 }
 
 export async function hasPermission(permission: string): Promise<boolean> {
@@ -76,17 +88,26 @@ export async function canAccountDoThis(
     return false;
   }
 
-  const account = await prisma.account.findUnique({
-    where: { id: accountId },
-    select: { roleId: true },
-  });
-  if (!account?.roleId) return false;
+  const [accessRows, account] = await Promise.all([
+    prisma.accountAccess.findMany({
+      where: { accountId },
+      select: { roleId: true },
+    }),
+    prisma.account.findUnique({
+      where: { id: accountId },
+      select: { roleId: true },
+    }),
+  ]);
+  const roleIds = accessRows.map((row) => row.roleId.trim()).filter(Boolean);
+  const resolvedRoleIds =
+    roleIds.length > 0 ? [...new Set(roleIds)] : account?.roleId ? [account.roleId] : [];
+  if (resolvedRoleIds.length === 0) return false;
 
-  const role = await prisma.authzRole.findUnique({
-    where: { id: account.roleId },
+  const roles = await prisma.authzRole.findMany({
+    where: { id: { in: resolvedRoleIds } },
     select: { permissions: true },
   });
 
-  const permissions = normalizePermissions(role?.permissions);
+  const permissions = [...new Set(roles.flatMap((role) => normalizePermissions(role.permissions)))];
   return permissions.includes(action);
 }

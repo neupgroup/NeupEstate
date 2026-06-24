@@ -62,7 +62,8 @@ model Account {
   roleId       String?   @map("role_id")
   agency       String?
   agent        String?
-  role         AuthzRole? @relation(fields: [roleId], references: [id], onDelete: SetNull)
+  role         AuthzRole? @relation("AccountPrimaryRole", fields: [roleId], references: [id], onDelete: SetNull)
+  accessRows   AccountAccess[]
   agencyAccount Account?   @relation("AccountAgency", fields: [agency], references: [id], onDelete: SetNull)
   agentAccount  Account?   @relation("AccountAgent", fields: [agent], references: [id], onDelete: SetNull)
   agencyOf      Account[]  @relation("AccountAgency")
@@ -990,12 +991,31 @@ model AuthzRole {
   description String?
   appId       String   @map("app_id")
   scope       String?
+  acquisitionType String? @map("acquisition_type")
+  approvalPolicy  String? @map("approval_policy")
+  applicableFor   Json?   @map("applicable_for")
   permissions Json?
   updatedOn   DateTime @updatedAt
 
-  accounts    Account[]
+  accounts    Account[] @relation("AccountPrimaryRole")
+  accessRows  AccountAccess[]
 
   @@map("authz_role")
+}
+
+model AccountAccess {
+  accountId String   @map("account_id")
+  appId     String   @map("app_id")
+  roleId    String   @map("role_id")
+  updatedOn DateTime @updatedAt @map("updated_on")
+
+  account Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  role    AuthzRole @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([accountId, appId, roleId])
+  @@index([appId], map: "account_access_app_id_idx")
+  @@index([roleId], map: "account_access_role_id_idx")
+  @@map("account_access")
 }
 
 model RoleCapability {
