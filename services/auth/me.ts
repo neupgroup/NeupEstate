@@ -7,6 +7,11 @@ type MeRow = {
   accountType?: string | null;
   displayName?: string | null;
   displayImage?: string | null;
+  workingProfile?: string | null;
+  workingProfileAccount?: {
+    id: string;
+    displayName: string | null;
+  } | null;
 };
 
 export type AuthenticatedMe = {
@@ -17,6 +22,8 @@ export type AuthenticatedMe = {
   registered: boolean;
   displayName: string | null;
   displayImage: string | null;
+  workingProfile: string | null;
+  workingProfileDisplayName: string | null;
 };
 
 function readAccountRow(accountId: string) {
@@ -27,6 +34,13 @@ function readAccountRow(accountId: string) {
       accountType: true,
       displayName: true,
       displayImage: true,
+      workingProfile: true,
+      workingProfileAccount: {
+        select: {
+          id: true,
+          displayName: true,
+        },
+      },
     },
   }) as Promise<MeRow | null>;
 }
@@ -38,6 +52,13 @@ async function readAccountRowFallback(accountId: string) {
       accountType: true,
       displayName: true,
       displayImage: true,
+      workingProfile: true,
+      workingProfileAccount: {
+        select: {
+          id: true,
+          displayName: true,
+        },
+      },
     },
   }) as Promise<MeRow | null>;
 }
@@ -65,6 +86,11 @@ export async function getAuthenticatedMeData(): Promise<AuthenticatedMe | null> 
       registered: (row?.accountType ?? (account.guest === 1 ? 'guest' : 'individual')) !== 'guest',
       displayName: row?.displayName ?? null,
       displayImage: row?.displayImage ?? null,
+      workingProfile: row?.workingProfile ?? null,
+      workingProfileDisplayName:
+        row?.workingProfile && row.workingProfile !== account.aid
+          ? row.workingProfileAccount?.displayName ?? row.workingProfileAccount?.id ?? row.workingProfile
+          : null,
     };
   } catch {
     return {
@@ -75,6 +101,8 @@ export async function getAuthenticatedMeData(): Promise<AuthenticatedMe | null> 
       registered: account.guest !== 1,
       displayName: null,
       displayImage: null,
+      workingProfile: null,
+      workingProfileDisplayName: null,
     };
   }
 }

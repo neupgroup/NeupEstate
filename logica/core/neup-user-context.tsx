@@ -31,6 +31,8 @@ export type NeupUser = {
   displayImage?: string;
   accountType?: string;
   verified?: boolean;
+  workingProfile?: string | null;
+  workingProfileDisplayName?: string | null;
 };
 
 // ---------------------------------------------------------------------------

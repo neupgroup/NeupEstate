@@ -36,11 +36,14 @@ export function HeaderV1({
     accountType?: string | null;
     neupId?: string | null;
     verified?: boolean | null;
+    workingProfile?: string | null;
+    workingProfileDisplayName?: string | null;
   } | null;
 }) {
   const displayName = getAccountDisplayName(user?.displayName);
   const handleText = getAccountHandle(user?.neupId);
   const effectiveUser = user;
+  const activeProfileName = user?.workingProfileDisplayName?.trim() || null;
 
   const renderPublicNav = () =>
     publicNavLinks.map((link) => {
@@ -96,7 +99,14 @@ export function HeaderV1({
           <div className="flex-1 justify-start flex">
             <Link href="/" className="flex items-center gap-2">
               <img src="https://cdn.neupgroup.com/neupestate/logo.png" alt="Neup.Estate Logo" className="h-9 w-9 object-contain" />
-              <span className="font-headline text-lg font-bold">Neup.Estate</span>
+              <div className="flex min-w-0 flex-col">
+                <span className="font-headline text-lg font-bold leading-tight">Neup.Estate</span>
+                {activeProfileName ? (
+                  <span className="max-w-[180px] truncate text-[11px] leading-tight text-muted-foreground sm:max-w-[220px]">
+                    {activeProfileName}
+                  </span>
+                ) : null}
+              </div>
             </Link>
           </div>
 
