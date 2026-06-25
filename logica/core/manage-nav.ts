@@ -43,7 +43,6 @@ export const manageNav: ManageNavItem[] = [
   { type: "link", href: "/manage/market-insights", label: "Market Insights", icon: Lightbulb },
   { type: "link", href: "/manage/competition", label: "Competition", icon: Eye },
   { type: "heading", label: "Management" },
-  { type: "link", href: "/manage/agency", label: "My Agency", icon: Home },
   { type: "link", href: "/manage/customization", label: "Customization", icon: Settings },
   { type: "link", href: "/manage/report", label: "Report", icon: FileBarChart },
   { type: "link", href: "/manage/team", label: "Team", icon: Users },

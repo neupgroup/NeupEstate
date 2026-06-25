@@ -1,5 +1,6 @@
 import { requireAuth } from '@/services/auth/account';
 import { getAccountById, getAccounts } from '@/services/account-service';
+import { getBrandAccounts } from '@/services/neupid/get-brand-accounts';
 import {
   getAgencyMapByAccount,
   getAgencyMapsByAgency,
@@ -27,9 +28,9 @@ import {
 } from '@/components/ui/table';
 import { ClientLink } from '@/components/client-link';
 import { AgentMapManager } from '@/components/manage/agent-map-manager';
+import { BrandAccountCard, type AgencyManagementAccount } from './brand-account-card';
 import {
   AlertCircle,
-  Building2,
   Clock3,
   Globe,
   Shield,
@@ -83,8 +84,64 @@ export default async function ManageTeamPage({
 }) {
   const authAccount = await requireAuth();
   const selectedAgency = await getSelectedAgency(searchParams);
+  const [brandAccountsResult, membership, linkedAgencyMappings, localAccount] = await Promise.all([
+    getBrandAccounts(),
+    getAgencyMapByAccount(authAccount.aid),
+    prisma.agencyMap.findMany({
+      where: { accountId: authAccount.aid },
+      select: { agencyAccountId: true },
+      orderBy: { agencyAccountId: 'asc' },
+    }),
+    prisma.account.findUnique({
+      where: { id: authAccount.aid },
+      select: { id: true, displayName: true, displayImage: true, accountType: true, workingProfile: true },
+    }),
+  ]);
+  const brandAccounts = brandAccountsResult.success ? brandAccountsResult.accounts : [];
+  const linkedAgencyIds = Array.from(
+    new Set(
+      [
+        localAccount?.accountType === 'brand' ? localAccount.id : null,
+        membership?.agencyAccountId ?? null,
+        ...linkedAgencyMappings.map((mapping) => mapping.agencyAccountId),
+        ...brandAccounts.map((account) => account.id),
+      ].filter((value): value is string => Boolean(value)),
+    ),
+  );
 
-  const membership = await getAgencyMapByAccount(authAccount.aid);
+  const existingAccounts =
+    linkedAgencyIds.length > 0
+      ? await prisma.account.findMany({
+          where: { id: { in: linkedAgencyIds } },
+          select: { id: true, displayName: true, displayImage: true, accountType: true },
+        })
+      : [];
+
+  const existingAccountMap = new Map(existingAccounts.map((account) => [account.id, account]));
+
+  const remoteBrandCards: AgencyManagementAccount[] = brandAccounts.map((brandAccount) => ({
+    ...brandAccount,
+    source: 'brand',
+  }));
+
+  const localAgencyCards: AgencyManagementAccount[] = linkedAgencyIds
+    .filter((agencyAccountId) => !brandAccounts.some((brandAccount) => brandAccount.id === agencyAccountId))
+    .map((agencyAccountId) => {
+      const existingAccount = existingAccountMap.get(agencyAccountId);
+      return {
+        id: agencyAccountId,
+        displayName: existingAccount?.displayName || agencyAccountId,
+        displayImage: existingAccount?.displayImage || null,
+        accountType: existingAccount?.accountType || 'brand',
+        status: null,
+        isVerified: false,
+        source: 'linked' as const,
+      };
+    });
+
+  const accessibleAgencies: AgencyManagementAccount[] = [...remoteBrandCards, ...localAgencyCards];
+  const accessibleAgencyIds = new Set(accessibleAgencies.map((agency) => agency.id));
+
   const selectedAgencyMembers = selectedAgency
     ? await getAgencyMapsByAgency(selectedAgency)
     : [];
@@ -93,12 +150,13 @@ export default async function ManageTeamPage({
     selectedAgency === null ||
     selectedAgency === authAccount.aid ||
     membership?.agencyAccountId === selectedAgency ||
-    selectedAgencyMembers.some((member) => member.accountId === authAccount.aid);
+    selectedAgencyMembers.some((member) => member.accountId === authAccount.aid) ||
+    accessibleAgencyIds.has(selectedAgency ?? '');
 
   const agencyAccountId =
-    selectedAgencyIsAllowed && selectedAgency
+    selectedAgencyIsAllowed && selectedAgency && accessibleAgencyIds.has(selectedAgency)
       ? selectedAgency
-      : membership?.agencyAccountId ?? authAccount.aid;
+      : membership?.agencyAccountId ?? accessibleAgencies[0]?.id ?? authAccount.aid;
   const isDirectAgencyOwner = !membership;
 
   const [agencyMembers, agencyAccount, allAccounts, agencyAgentLinks] = await Promise.all([
@@ -164,17 +222,77 @@ export default async function ManageTeamPage({
   const adminMembers = agencyMembers.filter((member) => member.role === 'admin').length;
 
   const agencyDisplayName = agencyAccount?.display_name ?? agencyAccountId;
-  const agencies = allAccounts.filter((account) => account.account_type === 'brand');
   const addMemberHref = `/manage/teams/create?selectedAgency=${encodeURIComponent(agencyAccountId)}`;
-  const manageAgencyHref = `/manage/agency?selectedAgency=${encodeURIComponent(agencyAccountId)}`;
 
   return (
     <div className="space-y-8">
+      {!brandAccountsResult.success ? (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error Loading Brand Accounts</AlertTitle>
+          <AlertDescription>
+            {brandAccountsResult.error || 'Failed to fetch brand accounts from NeupID'}
+          </AlertDescription>
+        </Alert>
+      ) : null}
+
+      {accessibleAgencies.length > 0 ? (
+        <div className="space-y-4">
+          <div>
+            <h2 className="text-2xl font-semibold leading-none tracking-tight">Team</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Switch agency context and manage team members from the same page.
+            </p>
+          </div>
+
+          <div className="w-full overflow-hidden rounded-lg border border-border bg-background">
+            {accessibleAgencies.map((brandAccount, index) => (
+              <BrandAccountCard
+                key={brandAccount.id}
+                brandAccount={brandAccount}
+                existingAccount={existingAccountMap.get(brandAccount.id) || null}
+                isSelected={agencyAccountId === brandAccount.id}
+                isDefault={localAccount?.workingProfile === brandAccount.id}
+                isLast={index === accessibleAgencies.length - 1}
+              />
+            ))}
+          </div>
+
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border bg-muted/30 px-4 py-3">
+            <div>
+              <p className="font-medium">Selected agency actions</p>
+              <p className="text-sm text-muted-foreground">
+                Open agency-specific customization or reporting for the active team context.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <ClientLink
+                href={`/manage/customization?selectedAgency=${encodeURIComponent(agencyAccountId)}`}
+                className="inline-flex items-center rounded-md border px-4 py-2 text-sm font-medium transition-colors hover:bg-muted"
+              >
+                Open customization
+              </ClientLink>
+              <ClientLink
+                href={`/manage/report?selectedAgency=${encodeURIComponent(agencyAccountId)}`}
+                className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                Open reports
+              </ClientLink>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <Alert>
+          <Globe className="h-4 w-4" />
+          <AlertTitle>No Accessible Accounts Found</AlertTitle>
+          <AlertDescription>
+            No accessible agency or brand accounts were found for this login.
+          </AlertDescription>
+        </Alert>
+      )}
+
       <div className="space-y-3">
         <div className="flex flex-wrap items-center gap-3">
-          <h2 className="text-2xl font-semibold leading-none tracking-tight">
-            Team
-          </h2>
           <Badge variant={isDirectAgencyOwner ? 'default' : 'secondary'}>
             {isDirectAgencyOwner ? 'Brand account' : 'Agency member'}
           </Badge>
@@ -233,13 +351,6 @@ export default async function ManageTeamPage({
             </div>
           </div>
 
-          <ClientLink
-            href={manageAgencyHref}
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
-          >
-            <Building2 className="h-4 w-4" />
-            View agency settings
-          </ClientLink>
         </div>
 
         <div className="flex items-center justify-between rounded-lg border bg-muted/30 px-4 py-3">
@@ -362,7 +473,7 @@ export default async function ManageTeamPage({
       )}
 
       <AgentMapManager
-        agencies={agencies}
+        agencies={allAccounts.filter((account) => account.account_type === 'brand')}
         accounts={allAccounts}
         initialLinks={agencyAgentLinks}
         selectedAgencyId={agencyAccountId}

@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Building } from "lucide-react";
 import { useState, type MouseEvent } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { createAccountAction, setWorkingProfileAction } from "./actions";
+import { createAccountAction, setWorkingProfileAction } from "./account-actions";
 
 export type AgencyManagementAccount = {
   id: string;
@@ -121,15 +121,14 @@ export function BrandAccountCard({
         }
       }}
     >
-      {/* Left: Logo / Avatar */}
-      <div className="flex-shrink-0 w-12 h-12 rounded-md overflow-hidden border border-border bg-muted flex items-center justify-center">
+      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center overflow-hidden rounded-md border border-border bg-muted">
         {brandAccount.displayImage ? (
           <SafeImage
             src={brandAccount.displayImage}
             alt={brandAccount.displayName}
             width={48}
             height={48}
-            className="object-cover w-full h-full"
+            className="h-full w-full object-cover"
             fallbackSrc="https://placehold.co/48x48.png"
           />
         ) : (
@@ -137,10 +136,9 @@ export function BrandAccountCard({
         )}
       </div>
 
-      {/* Center: Name + meta */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-medium text-sm leading-tight truncate">
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="truncate text-sm font-medium leading-tight">
             {brandAccount.displayName}
           </span>
           {isDefault ? (
@@ -148,38 +146,31 @@ export function BrandAccountCard({
               Default
             </Badge>
           ) : null}
-          {brandAccount.source === "linked" && (
+          {brandAccount.source === "linked" ? (
             <Badge variant="secondary" className="text-xs">
               Linked
             </Badge>
-          )}
-          {brandAccount.isVerified && (
+          ) : null}
+          {brandAccount.isVerified ? (
             <Badge variant="secondary" className="text-xs">
               Verified
             </Badge>
-          )}
+          ) : null}
         </div>
-        <p className="text-xs text-muted-foreground mt-0.5">
+        <p className="mt-0.5 text-xs text-muted-foreground">
           {getAccountTypeLabel(brandAccount.accountType)}
-          {brandAccount.status && (
+          {brandAccount.status ? (
             <>
               {" · "}
-              <span
-                className={
-                  brandAccount.status === "active"
-                    ? "text-green-600"
-                    : "text-muted-foreground"
-                }
-              >
+              <span className={brandAccount.status === "active" ? "text-green-600" : "text-muted-foreground"}>
                 {brandAccount.status}
               </span>
             </>
-          )}
+          ) : null}
         </p>
-        {error && <p className="text-xs text-red-600 mt-1">{error}</p>}
+        {error ? <p className="mt-1 text-xs text-red-600">{error}</p> : null}
       </div>
 
-      {/* Right: Action */}
       <div className="flex-shrink-0">
         {isRemoteBrandAccount && !isExisting ? (
           <Button
@@ -188,7 +179,7 @@ export function BrandAccountCard({
             type="button"
             disabled={isLoading}
           >
-            <Building className="h-3.5 w-3.5 mr-1.5" />
+            <Building className="mr-1.5 h-3.5 w-3.5" />
             {isLoading ? "Creating…" : "Create"}
           </Button>
         ) : null}

@@ -379,11 +379,11 @@ export default async function ManageReportPage({
     <div className="space-y-8">
       <div className="space-y-3">
         <ClientLink
-          href={selectedAgency ? `/manage/agency?selectedAgency=${encodeURIComponent(agencyAccountId)}` : '/manage/agency'}
+          href={selectedAgency ? `/manage/team?selectedAgency=${encodeURIComponent(agencyAccountId)}` : '/manage/team'}
           className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to agency management
+          Back to team management
         </ClientLink>
 
         <div className="flex flex-wrap items-center gap-3">

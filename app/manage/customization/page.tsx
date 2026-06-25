@@ -96,8 +96,8 @@ export default async function ManageCustomizationPage({
 
   const agencyDisplayName = agencyAccount?.display_name ?? agencyAccountId;
   const backHref = selectedAgency
-    ? `/manage/agency?selectedAgency=${encodeURIComponent(agencyAccountId)}`
-    : '/manage/agency';
+    ? `/manage/team?selectedAgency=${encodeURIComponent(agencyAccountId)}`
+    : '/manage/team';
 
   return (
     <div className="space-y-8">
@@ -107,7 +107,7 @@ export default async function ManageCustomizationPage({
           className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to agency management
+          Back to team management
         </ClientLink>
 
         <div className="flex flex-wrap items-center gap-3">
