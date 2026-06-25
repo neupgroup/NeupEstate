@@ -6,6 +6,7 @@ export type AccountType = z.infer<typeof AccountTypeSchema>;
 
 const BaseAccountSchema = z.object({
   id: z.string(),
+  neup_id: z.string().nullable().optional(),
   created_on: z.string(), // ISO string
   accessed_on: z.string(), // ISO string
   created_from_ip: z.string().optional(),

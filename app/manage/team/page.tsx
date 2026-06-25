@@ -29,6 +29,7 @@ import {
 import { ClientLink } from '@/components/client-link';
 import { AgentMapManager } from '@/components/manage/agent-map-manager';
 import { BrandAccountCard, type AgencyManagementAccount } from './brand-account-card';
+import { syncBrandAccountsToLocalAccounts } from './account-actions';
 import {
   AlertCircle,
   Clock3,
@@ -98,6 +99,7 @@ export default async function ManageTeamPage({
     }),
   ]);
   const brandAccounts = brandAccountsResult.success ? brandAccountsResult.accounts : [];
+  await syncBrandAccountsToLocalAccounts(brandAccounts);
   const linkedAgencyIds = Array.from(
     new Set(
       [
@@ -256,29 +258,6 @@ export default async function ManageTeamPage({
                 isLast={index === accessibleAgencies.length - 1}
               />
             ))}
-          </div>
-
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border bg-muted/30 px-4 py-3">
-            <div>
-              <p className="font-medium">Selected agency actions</p>
-              <p className="text-sm text-muted-foreground">
-                Open agency-specific customization or reporting for the active team context.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <ClientLink
-                href={`/manage/customization?selectedAgency=${encodeURIComponent(agencyAccountId)}`}
-                className="inline-flex items-center rounded-md border px-4 py-2 text-sm font-medium transition-colors hover:bg-muted"
-              >
-                Open customization
-              </ClientLink>
-              <ClientLink
-                href={`/manage/report?selectedAgency=${encodeURIComponent(agencyAccountId)}`}
-                className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-              >
-                Open reports
-              </ClientLink>
-            </div>
           </div>
         </div>
       ) : (

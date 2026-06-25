@@ -10,6 +10,7 @@ import { createAccountAction, setWorkingProfileAction } from "./account-actions"
 
 export type AgencyManagementAccount = {
   id: string;
+  neupId?: string | null;
   displayName: string;
   displayImage: string | null;
   accountType: string;
@@ -86,6 +87,7 @@ export function BrandAccountCard({
     try {
       const result = await createAccountAction({
         id: brandAccount.id,
+        neupId: brandAccount.neupId,
         accountType: brandAccount.accountType,
         displayName: brandAccount.displayName,
         displayImage: brandAccount.displayImage,

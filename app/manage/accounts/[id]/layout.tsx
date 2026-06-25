@@ -41,6 +41,9 @@ export default async function ManageAccountLayout({
   ]);
 
   const isRegistered = account.registered;
+  const accountHandle = account.account_type === 'guest'
+    ? 'guest'
+    : account.neup_id?.trim() || 'unknown';
 
   return (
     <div className="space-y-6">
@@ -82,7 +85,9 @@ export default async function ManageAccountLayout({
                 </Badge>
               </div>
 
-              <p className="break-all font-mono text-xs text-muted-foreground">{account.id}</p>
+              <p className="break-all font-mono text-xs text-muted-foreground">
+                @{accountHandle} #{account.id}
+              </p>
 
               <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
                 <span className="inline-flex items-center gap-1 rounded-full border bg-muted/40 px-3 py-1">

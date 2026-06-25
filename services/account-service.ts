@@ -116,6 +116,7 @@ export async function updateAccountAccessInfo(id: string): Promise<void> {
 function mapRecord(account: any): Account {
   const base = {
     id: account.id,
+    neup_id: account.neupId ?? null,
     created_on: account.createdOn?.toISOString() ?? new Date().toISOString(),
     accessed_on: account.accessedOn?.toISOString() ?? new Date().toISOString(),
     display_name:  account.displayName  ?? undefined,

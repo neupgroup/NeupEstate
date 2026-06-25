@@ -107,6 +107,17 @@ function getRoleName(role: unknown): string | null {
   return null;
 }
 
+function pickString(record: Record<string, unknown> | null | undefined, keys: string[]): string | null {
+  if (!record) return null;
+  for (const key of keys) {
+    const value = record[key];
+    if (typeof value === 'string' && value.trim()) {
+      return value.trim();
+    }
+  }
+  return null;
+}
+
 // ---------------------------------------------------------------------------
 // Service function
 // ---------------------------------------------------------------------------
@@ -211,7 +222,21 @@ export async function getAccountInformation(
 
   const body = responseBody as {
     success?: boolean;
-    account?: AccountInfo;
+    account?: Partial<AccountInfo> & {
+      id?: string;
+      account_id?: string;
+      accountType?: string;
+      account_type?: string;
+      displayName?: string;
+      display_name?: string;
+      displayImage?: string;
+      display_image?: string;
+      neupId?: string;
+      neup_id?: string;
+      neupid?: string;
+      nid?: string;
+      handle?: string;
+    };
     profile?: {
       accountId?: string;
       displayName?: string;
@@ -225,7 +250,17 @@ export async function getAccountInformation(
   }
 
   if (body.account) {
-    return { found: true, account: body.account, meta };
+    return {
+      found: true,
+      account: {
+        accountId: pickString(body.account, ['accountId', 'account_id', 'id']) ?? '',
+        displayName: pickString(body.account, ['displayName', 'display_name']) ?? '',
+        displayImage: pickString(body.account, ['displayImage', 'display_image']) ?? '',
+        accountType: pickString(body.account, ['accountType', 'account_type']) ?? 'individual',
+        neupId: pickString(body.account, ['neupId', 'neup_id', 'neupid', 'nid', 'handle']) ?? '',
+      },
+      meta,
+    };
   }
 
   if (body.profile?.accountId) {

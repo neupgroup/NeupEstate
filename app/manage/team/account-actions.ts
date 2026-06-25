@@ -4,9 +4,11 @@ import { prisma } from '@/logica/core/prisma';
 import { logProblem } from '@/services/problem-service';
 import { getIdentity } from '@/services/neupid/get-identity';
 import { getBrandAccounts } from '@/services/neupid/get-brand-accounts';
+import type { BrandAccount } from '@/services/neupid/get-brand-accounts';
 
 type CreateAccountInput = {
   id: string;
+  neupId?: string | null;
   accountType: string;
   displayName: string;
   displayImage: string | null;
@@ -33,6 +35,7 @@ export async function createAccountAction(input: CreateAccountInput): Promise<Ac
     await prisma.account.create({
       data: {
         id: input.id,
+        neupId: input.neupId?.trim() || null,
         accountType: input.accountType,
         displayName: input.displayName,
         displayImage: input.displayImage,
@@ -46,6 +49,32 @@ export async function createAccountAction(input: CreateAccountInput): Promise<Ac
       success: false,
       error: error instanceof Error ? error.message : 'Failed to create account'
     };
+  }
+}
+
+export async function syncBrandAccountsToLocalAccounts(
+  accounts: BrandAccount[],
+): Promise<void> {
+  const accountsWithNeupId = accounts.filter((account) => account.neupId?.trim());
+  if (!accountsWithNeupId.length) return;
+
+  try {
+    await Promise.all(
+      accountsWithNeupId.map((account) =>
+        prisma.account.updateMany({
+          where: { id: account.id },
+          data: {
+            neupId: account.neupId?.trim() || null,
+            displayName: account.displayName || null,
+            displayImage: account.displayImage || null,
+            accountType: account.accountType || 'brand',
+            accessedOn: new Date(),
+          },
+        }),
+      ),
+    );
+  } catch (error) {
+    await logProblem(error, 'syncBrandAccountsToLocalAccounts');
   }
 }
 

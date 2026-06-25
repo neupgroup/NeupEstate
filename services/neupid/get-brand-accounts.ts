@@ -30,6 +30,56 @@ export type BrandAccountsResponse = {
   error?: string;
 };
 
+function pickString(record: Record<string, unknown>, keys: string[]): string | null {
+  for (const key of keys) {
+    const value = record[key];
+    if (typeof value === 'string' && value.trim()) {
+      return value.trim();
+    }
+  }
+  return null;
+}
+
+function pickStringArray(record: Record<string, unknown>, keys: string[]): string[] {
+  for (const key of keys) {
+    const value = record[key];
+    if (Array.isArray(value)) {
+      return value.filter((item): item is string => typeof item === 'string');
+    }
+  }
+  return [];
+}
+
+function pickBoolean(record: Record<string, unknown>, keys: string[], fallback = false): boolean {
+  for (const key of keys) {
+    const value = record[key];
+    if (typeof value === 'boolean') {
+      return value;
+    }
+  }
+  return fallback;
+}
+
+function normalizeBrandAccount(value: unknown): BrandAccount | null {
+  if (!value || typeof value !== 'object') return null;
+
+  const record = value as Record<string, unknown>;
+  const id = pickString(record, ['id', 'accountId', 'account_id']);
+  if (!id) return null;
+
+  return {
+    id,
+    displayName: pickString(record, ['displayName', 'display_name', 'name']) ?? id,
+    displayImage: pickString(record, ['displayImage', 'display_image', 'image', 'logoUrl']),
+    status: pickString(record, ['status']) ?? 'active',
+    isVerified: pickBoolean(record, ['isVerified', 'is_verified']),
+    accountType: pickString(record, ['accountType', 'account_type', 'type']) ?? 'brand',
+    capabilities: pickStringArray(record, ['capabilities']),
+    lastActivityAt: pickString(record, ['lastActivityAt', 'last_activity_at']),
+    neupId: pickString(record, ['neupId', 'neup_id', 'neupid', 'nid', 'handle']),
+  };
+}
+
 // ─── API Configuration ───────────────────────────────────────────────────────
 
 const BRANDS_ENDPOINT = 'https://neupgroup.com/account/bridge/api.v1/accounts/brands';
@@ -106,8 +156,10 @@ export async function getBrandAccounts(): Promise<BrandAccountsResponse> {
       };
     }
 
-    // Validate and return accounts
-    const accounts: BrandAccount[] = Array.isArray(data.accounts) ? data.accounts : [];
+    const rawAccounts: unknown[] = Array.isArray(data.accounts) ? data.accounts : [];
+    const accounts = rawAccounts
+      .map(normalizeBrandAccount)
+      .filter((account): account is BrandAccount => Boolean(account));
 
     return {
       success: true,
