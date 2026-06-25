@@ -3,10 +3,10 @@
 import { SafeImage } from "@/components/safe-image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Building, CheckCircle, RefreshCw } from "lucide-react";
+import { Building } from "lucide-react";
 import { useState, type MouseEvent } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { createAccountAction, syncAccountAction } from "./actions";
+import { createAccountAction, setWorkingProfileAction } from "./actions";
 
 export type AgencyManagementAccount = {
   id: string;
@@ -43,13 +43,26 @@ export function BrandAccountCard({
 
   const isExisting = !!existingAccount;
   const isRemoteBrandAccount = brandAccount.source === "brand";
-  const needsSync =
-    isRemoteBrandAccount &&
-    isExisting &&
-    (existingAccount.displayName !== brandAccount.displayName ||
-      existingAccount.displayImage !== brandAccount.displayImage);
 
-  const handleCardClick = () => {
+  const handleCardClick = async () => {
+    if (isSelected && isExisting) {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const result = await setWorkingProfileAction(brandAccount.id);
+        if (result.success) {
+          router.refresh();
+        } else {
+          setError(result.error || "Failed to set working profile");
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An error occurred");
+      } finally {
+        setIsLoading(false);
+      }
+      return;
+    }
+
     const params = new URLSearchParams(searchParams.toString());
     params.set("selectedAgency", brandAccount.id);
     router.replace(`${pathname}?${params.toString()}`);
@@ -78,28 +91,6 @@ export function BrandAccountCard({
     }
   };
 
-  const handleSync = async (event?: MouseEvent) => {
-    event?.stopPropagation();
-    setIsLoading(true);
-    setError(null);
-    try {
-      const result = await syncAccountAction({
-        id: brandAccount.id,
-        displayName: brandAccount.displayName,
-        displayImage: brandAccount.displayImage,
-      });
-      if (result.success) {
-        router.refresh();
-      } else {
-        setError(result.error || "Failed to sync account");
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <div
       className={[
@@ -115,7 +106,7 @@ export function BrandAccountCard({
       onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
-          handleCardClick();
+          void handleCardClick();
         }
       }}
     >
@@ -146,15 +137,6 @@ export function BrandAccountCard({
               Linked
             </Badge>
           )}
-          {isExisting && (
-            <Badge
-              variant="outline"
-              className="bg-green-50 text-green-700 border-green-300 text-xs"
-            >
-              <CheckCircle className="h-3 w-3 mr-1" />
-              Synced
-            </Badge>
-          )}
           {brandAccount.isVerified && (
             <Badge variant="secondary" className="text-xs">
               Verified
@@ -183,20 +165,7 @@ export function BrandAccountCard({
 
       {/* Right: Action */}
       <div className="flex-shrink-0">
-        {isRemoteBrandAccount && isExisting ? (
-          <Button
-            size="sm"
-            variant={needsSync ? "default" : "outline"}
-            onClick={(event) => handleSync(event)}
-            type="button"
-            disabled={isLoading || !needsSync}
-          >
-            <RefreshCw
-              className={`h-3.5 w-3.5 mr-1.5 ${isLoading ? "animate-spin" : ""}`}
-            />
-            {needsSync ? "Sync" : "Up to date"}
-          </Button>
-        ) : isRemoteBrandAccount ? (
+        {isRemoteBrandAccount && !isExisting ? (
           <Button
             size="sm"
             onClick={(event) => handleCreate(event)}

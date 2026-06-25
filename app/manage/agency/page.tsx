@@ -20,10 +20,9 @@ export default async function ManageAgencyPage({
 }: {
   searchParams?: Promise<SearchParams>;
 }) {
-  // Require authentication — redirects to login if not authenticated
   const authAccount = await requireAuth();
   const selectedAgency = await getSelectedAgency(searchParams);
-  const [brandAccountsResult, membership, linkedAgencyMappings, localBrandAccounts] = await Promise.all([
+  const [brandAccountsResult, membership, linkedAgencyMappings, localAccount] = await Promise.all([
     getBrandAccounts(),
     getAgencyMapByAccount(authAccount.aid),
     prisma.agencyMap.findMany({
@@ -31,62 +30,41 @@ export default async function ManageAgencyPage({
       select: { agencyAccountId: true },
       orderBy: { agencyAccountId: "asc" },
     }),
-    prisma.account.findMany({
-      where: { accountType: "brand" },
+    prisma.account.findUnique({
+      where: { id: authAccount.aid },
       select: { id: true, displayName: true, displayImage: true, accountType: true },
-      orderBy: [{ displayName: "asc" }, { id: "asc" }],
     }),
   ]);
 
   const brandAccounts = brandAccountsResult.success ? brandAccountsResult.accounts : [];
-  const localBrandAgencyCards: AgencyManagementAccount[] = localBrandAccounts
-    .filter((account) => !brandAccounts.some((brandAccount) => brandAccount.id === account.id))
-    .map((account) => ({
-      id: account.id,
-      displayName: account.displayName || account.id,
-      displayImage: account.displayImage || null,
-      accountType: account.accountType,
-      status: null,
-      isVerified: false,
-      source: "linked" as const,
-    }));
   const linkedAgencyIds = Array.from(
     new Set(
       [
+        localAccount?.accountType === "brand" ? localAccount.id : null,
         membership?.agencyAccountId ?? null,
         ...linkedAgencyMappings.map((mapping) => mapping.agencyAccountId),
-        ...localBrandAccounts.map((account) => account.id),
+        ...brandAccounts.map((account) => account.id),
       ].filter((value): value is string => Boolean(value)),
     ),
   );
 
-  const localAccountIds = Array.from(
-    new Set([...brandAccounts.map((account) => account.id), ...linkedAgencyIds]),
-  );
-
-  const existingAccountIds =
-    localAccountIds.length > 0
+  const existingAccounts =
+    linkedAgencyIds.length > 0
       ? await prisma.account.findMany({
-          where: { id: { in: localAccountIds } },
+          where: { id: { in: linkedAgencyIds } },
           select: { id: true, displayName: true, displayImage: true, accountType: true },
         })
       : [];
 
-  const existingAccountMap = new Map(
-    existingAccountIds.map((acc) => [acc.id, acc])
-  );
+  const existingAccountMap = new Map(existingAccounts.map((account) => [account.id, account]));
 
-  const brandAgencyCards: AgencyManagementAccount[] = brandAccounts.map((brandAccount) => ({
+  const remoteBrandCards: AgencyManagementAccount[] = brandAccounts.map((brandAccount) => ({
     ...brandAccount,
     source: "brand",
   }));
 
-  const linkedAgencyCards: AgencyManagementAccount[] = linkedAgencyIds
-    .filter(
-      (agencyAccountId) =>
-        !brandAccounts.some((brandAccount) => brandAccount.id === agencyAccountId) &&
-        !localBrandAgencyCards.some((account) => account.id === agencyAccountId),
-    )
+  const localAgencyCards: AgencyManagementAccount[] = linkedAgencyIds
+    .filter((agencyAccountId) => !brandAccounts.some((brandAccount) => brandAccount.id === agencyAccountId))
     .map((agencyAccountId) => {
       const existingAccount = existingAccountMap.get(agencyAccountId);
       return {
@@ -100,14 +78,13 @@ export default async function ManageAgencyPage({
       };
     });
 
-  const accessibleAgencies = [...brandAgencyCards, ...localBrandAgencyCards, ...linkedAgencyCards];
+  const accessibleAgencies: AgencyManagementAccount[] = [...remoteBrandCards, ...localAgencyCards];
   const accessibleAgencyIds = new Set(accessibleAgencies.map((agency) => agency.id));
   const effectiveSelectedAgency =
     (selectedAgency && accessibleAgencyIds.has(selectedAgency) ? selectedAgency : null) ??
-    linkedAgencyIds[0] ??
-    brandAccounts[0]?.id ??
+    accessibleAgencies[0]?.id ??
     null;
-  const supplementalAgencyCount = localBrandAgencyCards.length + linkedAgencyCards.length;
+  const createdAgencyCount = existingAccounts.length;
 
   return (
     <div className="space-y-6">
@@ -116,10 +93,10 @@ export default async function ManageAgencyPage({
           Agency Management
         </h2>
         <p className="text-sm text-muted-foreground">
-          {brandAccounts.length} brand account
-          {brandAccounts.length !== 1 ? "s" : ""} found
-          {supplementalAgencyCount > 0
-            ? `, plus ${supplementalAgencyCount} agenc${supplementalAgencyCount === 1 ? "y" : "ies"} from the local database`
+          {accessibleAgencies.length} accessible account
+          {accessibleAgencies.length !== 1 ? "s" : ""}
+          {createdAgencyCount > 0
+            ? `, ${createdAgencyCount} already created in the local database`
             : ""}
         </p>
       </div>
@@ -139,12 +116,11 @@ export default async function ManageAgencyPage({
         <div className="space-y-4">
           <div className="w-full border border-border rounded-lg overflow-hidden bg-background">
             {accessibleAgencies.map((brandAccount, index) => {
-              const existingAccount = existingAccountMap.get(brandAccount.id);
               return (
                 <BrandAccountCard
                   key={brandAccount.id}
                   brandAccount={brandAccount}
-                  existingAccount={existingAccount || null}
+                  existingAccount={existingAccountMap.get(brandAccount.id) || null}
                   isSelected={effectiveSelectedAgency === brandAccount.id}
                   isLast={index === accessibleAgencies.length - 1}
                 />
@@ -186,9 +162,9 @@ export default async function ManageAgencyPage({
       ) : (
         <Alert>
           <Building className="h-4 w-4" />
-          <AlertTitle>No Brand Accounts Found</AlertTitle>
+          <AlertTitle>No Accessible Accounts Found</AlertTitle>
           <AlertDescription>
-            No brand accounts were found in your NeupID account.
+            No accessible agency or brand accounts were found for this login.
           </AlertDescription>
         </Alert>
       )}

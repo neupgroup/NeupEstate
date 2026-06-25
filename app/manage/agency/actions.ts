@@ -2,6 +2,8 @@
 
 import { prisma } from '@/logica/core/prisma';
 import { logProblem } from '@/services/problem-service';
+import { getIdentity } from '@/services/neupid/get-identity';
+import { getBrandAccounts } from '@/services/neupid/get-brand-accounts';
 
 type CreateAccountInput = {
   id: string;
@@ -91,6 +93,78 @@ export async function syncAccountAction(input: SyncAccountInput): Promise<Action
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to sync account'
+    };
+  }
+}
+
+export async function setWorkingProfileAction(accountId: string): Promise<ActionResult> {
+  try {
+    const identity = await getIdentity();
+    if (!identity.authenticated) {
+      return {
+        success: false,
+        error: 'Authentication required.',
+      };
+    }
+
+    const actorId = identity.account.accountId;
+    const [targetAccount, actorAccount, agencyMembership, brandAccountsResult] = await Promise.all([
+      prisma.account.findUnique({ where: { id: accountId }, select: { id: true } }),
+      prisma.account.findUnique({ where: { id: actorId }, select: { id: true } }),
+      prisma.agencyMap.findFirst({
+        where: {
+          accountId: actorId,
+          agencyAccountId: accountId,
+        },
+        select: { id: true },
+      }),
+      getBrandAccounts(),
+    ]);
+
+    if (!targetAccount) {
+      return {
+        success: false,
+        error: 'The selected account does not exist in the local database yet.',
+      };
+    }
+
+    if (!actorAccount) {
+      return {
+        success: false,
+        error: 'Your account is not available in the local database.',
+      };
+    }
+
+    const hasRemoteAccess =
+      brandAccountsResult.success &&
+      brandAccountsResult.accounts.some((account) => account.id === accountId);
+
+    const canAccessTarget =
+      actorId === accountId ||
+      Boolean(agencyMembership) ||
+      hasRemoteAccess;
+
+    if (!canAccessTarget) {
+      return {
+        success: false,
+        error: 'You do not have access to set this working profile.',
+      };
+    }
+
+    await prisma.account.update({
+      where: { id: actorId },
+      data: {
+        workingProfile: accountId,
+        accessedOn: new Date(),
+      },
+    });
+
+    return { success: true };
+  } catch (error) {
+    await logProblem(error, `setWorkingProfileAction ${accountId}`);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to set working profile',
     };
   }
 }

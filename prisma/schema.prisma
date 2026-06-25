@@ -62,12 +62,15 @@ model Account {
   roleId       String?   @map("role_id")
   agency       String?
   agent        String?
+  workingProfile String? @map("working_profile")
   role         AuthzRole? @relation("AccountPrimaryRole", fields: [roleId], references: [id], onDelete: SetNull)
   accessRows   AccountAccess[]
   agencyAccount Account?   @relation("AccountAgency", fields: [agency], references: [id], onDelete: SetNull)
   agentAccount  Account?   @relation("AccountAgent", fields: [agent], references: [id], onDelete: SetNull)
+  workingProfileAccount Account? @relation("AccountWorkingProfile", fields: [workingProfile], references: [id], onDelete: SetNull)
   agencyOf      Account[]  @relation("AccountAgency")
   agentOf       Account[]  @relation("AccountAgent")
+  workingProfileOf Account[] @relation("AccountWorkingProfile")
   agencyAgentMapAsAgency AgencyAgentMap[] @relation("AgencyAgentMapAgency")
   agencyAgentMapAsAgent  AgencyAgentMap[] @relation("AgencyAgentMapAgent")
   leadOwnerClientLeads    ClientLead[]     @relation("ClientLeadOwner")
@@ -78,6 +81,7 @@ model Account {
 
   @@index([agency])
   @@index([agent])
+  @@index([workingProfile])
   @@map("account")
 }
 
