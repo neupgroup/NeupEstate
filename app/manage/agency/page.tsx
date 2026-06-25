@@ -32,7 +32,7 @@ export default async function ManageAgencyPage({
     }),
     prisma.account.findUnique({
       where: { id: authAccount.aid },
-      select: { id: true, displayName: true, displayImage: true, accountType: true },
+      select: { id: true, displayName: true, displayImage: true, accountType: true, workingProfile: true },
     }),
   ]);
 
@@ -122,6 +122,7 @@ export default async function ManageAgencyPage({
                   brandAccount={brandAccount}
                   existingAccount={existingAccountMap.get(brandAccount.id) || null}
                   isSelected={effectiveSelectedAgency === brandAccount.id}
+                  isDefault={localAccount?.workingProfile === brandAccount.id}
                   isLast={index === accessibleAgencies.length - 1}
                 />
               );

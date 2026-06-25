@@ -18,6 +18,15 @@ export type AgencyManagementAccount = {
   source: "brand" | "linked";
 };
 
+function getAccountTypeLabel(accountType: string) {
+  const normalized = accountType.trim().toLowerCase();
+  if (normalized === "brand" || normalized === "branch") {
+    return "Agency Account";
+  }
+
+  return "Agency Profile";
+}
+
 type BrandAccountCardProps = {
   brandAccount: AgencyManagementAccount;
   existingAccount: {
@@ -26,6 +35,7 @@ type BrandAccountCardProps = {
     displayImage: string | null;
   } | null;
   isSelected: boolean;
+  isDefault: boolean;
   isLast: boolean;
 };
 
@@ -33,6 +43,7 @@ export function BrandAccountCard({
   brandAccount,
   existingAccount,
   isSelected,
+  isDefault,
   isLast,
 }: BrandAccountCardProps) {
   const [isLoading, setIsLoading] = useState(false);
@@ -132,6 +143,11 @@ export function BrandAccountCard({
           <span className="font-medium text-sm leading-tight truncate">
             {brandAccount.displayName}
           </span>
+          {isDefault ? (
+            <Badge variant="outline" className="text-xs">
+              Default
+            </Badge>
+          ) : null}
           {brandAccount.source === "linked" && (
             <Badge variant="secondary" className="text-xs">
               Linked
@@ -144,7 +160,7 @@ export function BrandAccountCard({
           )}
         </div>
         <p className="text-xs text-muted-foreground mt-0.5">
-          {brandAccount.accountType}
+          {getAccountTypeLabel(brandAccount.accountType)}
           {brandAccount.status && (
             <>
               {" · "}
