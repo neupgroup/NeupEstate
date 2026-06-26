@@ -60,9 +60,9 @@ function getRoleLabel(role: string) {
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
-async function getSelectedAgency(searchParams?: Promise<SearchParams>) {
+async function getWorkingProfile(searchParams?: Promise<SearchParams>) {
   const resolvedSearchParams = (await searchParams) ?? {};
-  const value = resolvedSearchParams.selectedAgency;
+  const value = resolvedSearchParams.workingProfile;
   return Array.isArray(value) ? value[0] : value?.trim() || null;
 }
 
@@ -72,7 +72,7 @@ export default async function ManageTeamPage({
   searchParams?: Promise<SearchParams>;
 }) {
   const authAccount = await requireAuth();
-  const selectedAgency = await getSelectedAgency(searchParams);
+  const selectedAgency = await getWorkingProfile(searchParams);
   const [brandAccountsResult, membership] = await Promise.all([
     getBrandAccounts(),
     getAgencyMapByAccount(authAccount.aid),
@@ -168,8 +168,8 @@ export default async function ManageTeamPage({
     }));
 
   const agencyDisplayName = agencyAccount?.display_name ?? agencyAccountId;
-  const addMemberHref = `/manage/teams/create?selectedAgency=${encodeURIComponent(agencyAccountId)}`;
-  const switchHref = `/manage/switch?selectedAgency=${encodeURIComponent(agencyAccountId)}`;
+  const addMemberHref = `/manage/teams/create?workingProfile=${encodeURIComponent(agencyAccountId)}`;
+  const switchHref = `/manage/switch?workingProfile=${encodeURIComponent(agencyAccountId)}`;
 
   return (
     <div className="space-y-8">

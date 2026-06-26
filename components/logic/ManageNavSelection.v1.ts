@@ -20,11 +20,10 @@ export function getLongestMatchingManageNavHrefV1(pathname: string, navItems: Ma
     .sort((a, b) => b.length - a.length)[0];
 }
 
-export function appendSelectedAgencyV1(href: string, selectedAgency?: string | null) {
-  if (!selectedAgency) return href;
+export function appendWorkingProfileV1(href: string, workingProfile?: string | null) {
+  if (!workingProfile) return href;
 
   const url = new URL(href, "http://local");
-  url.searchParams.set("selectedAgency", selectedAgency);
+  url.searchParams.set("workingProfile", workingProfile);
   return `${url.pathname}${url.search}`;
 }
-

@@ -71,10 +71,10 @@ export function getLongestMatchingManageNavHref(pathname: string) {
     .sort((a, b) => b.length - a.length)[0];
 }
 
-export function appendSelectedAgency(href: string, selectedAgency?: string | null) {
-  if (!selectedAgency) return href;
+export function appendWorkingProfile(href: string, workingProfile?: string | null) {
+  if (!workingProfile) return href;
 
   const url = new URL(href, "http://local");
-  url.searchParams.set("selectedAgency", selectedAgency);
+  url.searchParams.set("workingProfile", workingProfile);
   return `${url.pathname}${url.search}`;
 }

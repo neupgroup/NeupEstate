@@ -6,7 +6,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/logica/core/utils";
 import { getAccountDisplayName, getAccountHandle } from "@/logica/core/account-display";
 import { isActivePublicHrefV1 } from "@/components/logic/PublicNavSelection.v1";
-import { appendSelectedAgencyV1, getLongestMatchingManageNavHrefV1 } from "@/components/logic/ManageNavSelection.v1";
+import { appendWorkingProfileV1, getLongestMatchingManageNavHrefV1 } from "@/components/logic/ManageNavSelection.v1";
 import { manageNav } from "@/logica/core/manage-nav";
 import { ProfileV1 } from "@/components/elements/Profile.v1";
 
@@ -20,14 +20,14 @@ const publicNavLinks = [
 export function HeaderV1({
   pathname,
   isManage,
-  selectedAgency,
+  workingProfile,
   menuOpen,
   setMenuOpen,
   user,
 }: {
   pathname: string;
   isManage: boolean;
-  selectedAgency: string | null;
+  workingProfile: string | null;
   menuOpen: boolean;
   setMenuOpen: (open: boolean) => void;
   user: {
@@ -78,7 +78,7 @@ export function HeaderV1({
       return (
         <Link
           key={item.href}
-          href={appendSelectedAgencyV1(item.href, selectedAgency)}
+          href={appendWorkingProfileV1(item.href, workingProfile)}
           onClick={() => setMenuOpen(false)}
           className={cn(
             buttonVariants({ variant: "ghost", size: "sm" }),

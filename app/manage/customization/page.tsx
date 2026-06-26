@@ -9,14 +9,14 @@ import { AlertCircle, ArrowLeft, Building2, Settings2, UsersRound } from 'lucide
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
-async function getSelectedAgency(searchParams?: Promise<SearchParams>) {
+async function getWorkingProfile(searchParams?: Promise<SearchParams>) {
   const resolvedSearchParams = (await searchParams) ?? {};
-  const value = resolvedSearchParams.selectedAgency;
+  const value = resolvedSearchParams.workingProfile;
   return Array.isArray(value) ? value[0] : value?.trim() || null;
 }
 
 async function getAgencyAccessContext(accountId: string, searchParams?: Promise<SearchParams>) {
-  const selectedAgency = await getSelectedAgency(searchParams);
+  const selectedAgency = await getWorkingProfile(searchParams);
   const membership = await getAgencyMapByAccount(accountId);
   const selectedAgencyMembers = selectedAgency
     ? await getAgencyMapsByAgency(selectedAgency)
@@ -96,7 +96,7 @@ export default async function ManageCustomizationPage({
 
   const agencyDisplayName = agencyAccount?.display_name ?? agencyAccountId;
   const backHref = selectedAgency
-    ? `/manage/team?selectedAgency=${encodeURIComponent(agencyAccountId)}`
+    ? `/manage/team?workingProfile=${encodeURIComponent(agencyAccountId)}`
     : '/manage/team';
 
   return (

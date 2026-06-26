@@ -113,7 +113,7 @@ export function AgentMapManager({
 
   function updateSelectedAgency(nextAgencyId: string) {
     const nextParams = new URLSearchParams(searchParams.toString());
-    nextParams.set('selectedAgency', nextAgencyId);
+    nextParams.set('workingProfile', nextAgencyId);
     const nextQuery = nextParams.toString();
     router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname);
     setShowSearch(false);

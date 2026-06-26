@@ -55,14 +55,14 @@ function formatPercent(value: number) {
   return `${value.toFixed(value >= 10 ? 0 : 1)}%`;
 }
 
-async function getSelectedAgency(searchParams?: Promise<SearchParams>) {
+async function getWorkingProfile(searchParams?: Promise<SearchParams>) {
   const resolvedSearchParams = (await searchParams) ?? {};
-  const value = resolvedSearchParams.selectedAgency;
+  const value = resolvedSearchParams.workingProfile;
   return Array.isArray(value) ? value[0] : value?.trim() || null;
 }
 
 async function getAgencyAccessContext(accountId: string, searchParams?: Promise<SearchParams>) {
-  const selectedAgency = await getSelectedAgency(searchParams);
+  const selectedAgency = await getWorkingProfile(searchParams);
   const membership = await getAgencyMapByAccount(accountId);
   const selectedAgencyMembers = selectedAgency
     ? await getAgencyMapsByAgency(selectedAgency)
@@ -379,7 +379,7 @@ export default async function ManageReportPage({
     <div className="space-y-8">
       <div className="space-y-3">
         <ClientLink
-          href={selectedAgency ? `/manage/team?selectedAgency=${encodeURIComponent(agencyAccountId)}` : '/manage/team'}
+          href={selectedAgency ? `/manage/team?workingProfile=${encodeURIComponent(agencyAccountId)}` : '/manage/team'}
           className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4" />

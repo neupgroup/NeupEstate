@@ -3,9 +3,9 @@ import { TeamMemberForm } from '../team-member-form';
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
-async function getSelectedAgency(searchParams?: Promise<SearchParams>) {
+async function getWorkingProfile(searchParams?: Promise<SearchParams>) {
   const resolvedSearchParams = (await searchParams) ?? {};
-  const value = resolvedSearchParams.selectedAgency;
+  const value = resolvedSearchParams.workingProfile;
   return Array.isArray(value) ? value[0] : value?.trim() || null;
 }
 
@@ -16,7 +16,7 @@ export default async function CreateTeamMemberPage({
 }) {
   // Require authentication
   await requireAuth();
-  const selectedAgency = await getSelectedAgency(searchParams);
+  const selectedAgency = await getWorkingProfile(searchParams);
 
   return (
     <div className="space-y-6">

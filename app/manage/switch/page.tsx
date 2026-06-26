@@ -8,9 +8,9 @@ import { syncBrandAccountsToLocalAccounts } from '../team/account-actions';
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
-async function getSelectedAgency(searchParams?: Promise<SearchParams>) {
+async function getWorkingProfile(searchParams?: Promise<SearchParams>) {
   const resolvedSearchParams = (await searchParams) ?? {};
-  const value = resolvedSearchParams.selectedAgency;
+  const value = resolvedSearchParams.workingProfile;
   return Array.isArray(value) ? value[0] : value?.trim() || null;
 }
 
@@ -20,7 +20,7 @@ export default async function ManageSwitchPage({
   searchParams?: Promise<SearchParams>;
 }) {
   const authAccount = await requireAuth();
-  const selectedAgency = await getSelectedAgency(searchParams);
+  const selectedAgency = await getWorkingProfile(searchParams);
 
   const [brandAccountsResult, membership, linkedAgencyMappings, localAccount] = await Promise.all([
     getBrandAccounts(),

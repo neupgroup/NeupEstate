@@ -76,7 +76,7 @@ export function BrandAccountCard({
     }
 
     const params = new URLSearchParams(searchParams.toString());
-    params.set("selectedAgency", brandAccount.id);
+    params.set("workingProfile", brandAccount.id);
     router.replace(`${pathname}?${params.toString()}`);
   };
 

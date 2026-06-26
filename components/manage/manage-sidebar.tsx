@@ -6,7 +6,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/logica/core/utils";
 import { manageNav } from "@/logica/core/manage-nav";
-import { appendSelectedAgencyV1, getLongestMatchingManageNavHrefV1 } from "@/components/logic/ManageNavSelection.v1";
+import { appendWorkingProfileV1, getLongestMatchingManageNavHrefV1 } from "@/components/logic/ManageNavSelection.v1";
 
 type Props = {
   canDashboard: boolean;
@@ -34,7 +34,7 @@ export function ManageSidebar(props: Props) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const activeHref = getLongestMatchingManageNavHrefV1(pathname, manageNav);
-  const selectedAgency = searchParams.get("selectedAgency");
+  const workingProfile = searchParams.get("workingProfile");
 
   const permissionMap: Record<string, boolean> = {
     "/manage": props.canDashboard,
@@ -88,7 +88,7 @@ export function ManageSidebar(props: Props) {
             return (
                 <Link
                   key={item.href}
-                  href={appendSelectedAgencyV1(item.href, selectedAgency)}
+                  href={appendWorkingProfileV1(item.href, workingProfile)}
                   className={cn(
                     buttonVariants({ variant: "ghost" }),
                     "group w-full justify-start px-4 py-2 text-left transition-all duration-200 ease-out hover:bg-primary/10 hover:text-primary hover:translate-x-0.5 focus-visible:bg-primary/10 focus-visible:text-primary focus-visible:ring-0",

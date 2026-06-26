@@ -10,7 +10,7 @@ export function HeaderLayoutV1() {
   const searchParams = useSearchParams();
   const user = useNeupUser();
   const [menuOpen, setMenuOpen] = useState(false);
-  const selectedAgency = searchParams.get("selectedAgency");
+  const workingProfile = searchParams.get("workingProfile");
 
   useEffect(() => {
     setMenuOpen(false);
@@ -27,7 +27,7 @@ export function HeaderLayoutV1() {
     <HeaderV1
       pathname={pathname}
       isManage={pathname.startsWith("/manage")}
-      selectedAgency={selectedAgency}
+      workingProfile={workingProfile}
       menuOpen={menuOpen}
       setMenuOpen={setMenuOpen}
       user={user}
