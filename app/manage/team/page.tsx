@@ -19,7 +19,6 @@ import {
   AvatarImage,
 } from '@/components/ui/avatar';
 import { ClientLink } from '@/components/client-link';
-import { AgentMapManager } from '@/components/manage/agent-map-manager';
 import {
   AlertCircle,
   ChevronRight,
@@ -103,6 +102,14 @@ export default async function ManageTeamPage({
     getAccounts(),
     getAgencyAgentMapsByAgency(agencyAccountId),
   ]);
+  const actorAccount = await prisma.account.findUnique({
+    where: { id: authAccount.aid },
+    select: {
+      id: true,
+      displayName: true,
+      accountType: true,
+    },
+  });
 
   const relatedAccountIds = Array.from(
     new Set([agencyAccountId, ...agencyMembers.map((member) => member.accountId)]),
@@ -168,7 +175,17 @@ export default async function ManageTeamPage({
     }));
 
   const agencyDisplayName = agencyAccount?.display_name ?? agencyAccountId;
-  const addMemberHref = `/manage/teams/create?workingProfile=${encodeURIComponent(agencyAccountId)}`;
+  const actorDisplayName = actorAccount?.displayName ?? authAccount.aid;
+  const currentProfileType = agencyAccount?.account_type;
+  const manageAccessDescription =
+    !selectedAgency && actorAccount?.accountType === 'individual'
+      ? `Manage access to your account (${actorDisplayName}).`
+      : currentProfileType === 'brand'
+        ? `Manage access to this agency (${agencyDisplayName}).`
+        : `Manage access to this account (${agencyDisplayName}).`;
+  const addMemberHref = agencyAccountId
+    ? `https://neupgroup.com/account/access/team?workingProfile=${encodeURIComponent(agencyAccountId)}`
+    : 'https://neupgroup.com/account/access/team';
   const switchHref = `/manage/switch?workingProfile=${encodeURIComponent(agencyAccountId)}`;
 
   return (
@@ -208,9 +225,9 @@ export default async function ManageTeamPage({
                 <UsersRound className="h-5 w-5" />
               </div>
               <div className="min-w-0">
-                <h3 className="text-base font-semibold">Add team</h3>
+                <h3 className="text-base font-semibold">Manage team</h3>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Use this to add or join the agency agent map for {agencyDisplayName}.
+                  {manageAccessDescription}
                 </p>
               </div>
             </div>
@@ -331,15 +348,6 @@ export default async function ManageTeamPage({
         </div>
       </section>
 
-      <AgentMapManager
-        agencies={allAccounts.filter((account) => account.account_type === 'brand')}
-        accounts={allAccounts}
-        initialLinks={agencyAgentLinks}
-        selectedAgencyId={agencyAccountId}
-        title="Agency Invitations"
-        description={`Invite agents to ${agencyDisplayName} and review current invitation status.`}
-        showAgencySelector={false}
-      />
     </div>
   );
 }
