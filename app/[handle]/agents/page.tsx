@@ -87,7 +87,7 @@ export default async function PublicAgencyAgentsPage({
           <Alert>
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>No Agents Found</AlertTitle>
-            <AlertDescription>This agency does not have any public agents yet.</AlertDescription>
+            <AlertDescription>This agency does not have any agents yet.</AlertDescription>
           </Alert>
         )}
       </div>

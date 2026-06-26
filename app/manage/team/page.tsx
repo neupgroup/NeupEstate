@@ -18,23 +18,11 @@ import {
   AvatarFallback,
   AvatarImage,
 } from '@/components/ui/avatar';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { ClientLink } from '@/components/client-link';
 import { AgentMapManager } from '@/components/manage/agent-map-manager';
-import { BrandAccountCard, type AgencyManagementAccount } from './brand-account-card';
-import { syncBrandAccountsToLocalAccounts } from './account-actions';
 import {
   AlertCircle,
-  Clock3,
-  Globe,
-  Shield,
+  ChevronRight,
   UsersRound,
 } from 'lucide-react';
 
@@ -85,64 +73,13 @@ export default async function ManageTeamPage({
 }) {
   const authAccount = await requireAuth();
   const selectedAgency = await getSelectedAgency(searchParams);
-  const [brandAccountsResult, membership, linkedAgencyMappings, localAccount] = await Promise.all([
+  const [brandAccountsResult, membership] = await Promise.all([
     getBrandAccounts(),
     getAgencyMapByAccount(authAccount.aid),
-    prisma.agencyMap.findMany({
-      where: { accountId: authAccount.aid },
-      select: { agencyAccountId: true },
-      orderBy: { agencyAccountId: 'asc' },
-    }),
-    prisma.account.findUnique({
-      where: { id: authAccount.aid },
-      select: { id: true, displayName: true, displayImage: true, accountType: true, workingProfile: true },
-    }),
   ]);
-  const brandAccounts = brandAccountsResult.success ? brandAccountsResult.accounts : [];
-  await syncBrandAccountsToLocalAccounts(brandAccounts);
-  const linkedAgencyIds = Array.from(
-    new Set(
-      [
-        localAccount?.accountType === 'brand' ? localAccount.id : null,
-        membership?.agencyAccountId ?? null,
-        ...linkedAgencyMappings.map((mapping) => mapping.agencyAccountId),
-        ...brandAccounts.map((account) => account.id),
-      ].filter((value): value is string => Boolean(value)),
-    ),
+  const accessibleAgencyIds = new Set(
+    (brandAccountsResult.success ? brandAccountsResult.accounts : []).map((account) => account.id),
   );
-
-  const existingAccounts =
-    linkedAgencyIds.length > 0
-      ? await prisma.account.findMany({
-          where: { id: { in: linkedAgencyIds } },
-          select: { id: true, displayName: true, displayImage: true, accountType: true },
-        })
-      : [];
-
-  const existingAccountMap = new Map(existingAccounts.map((account) => [account.id, account]));
-
-  const remoteBrandCards: AgencyManagementAccount[] = brandAccounts.map((brandAccount) => ({
-    ...brandAccount,
-    source: 'brand',
-  }));
-
-  const localAgencyCards: AgencyManagementAccount[] = linkedAgencyIds
-    .filter((agencyAccountId) => !brandAccounts.some((brandAccount) => brandAccount.id === agencyAccountId))
-    .map((agencyAccountId) => {
-      const existingAccount = existingAccountMap.get(agencyAccountId);
-      return {
-        id: agencyAccountId,
-        displayName: existingAccount?.displayName || agencyAccountId,
-        displayImage: existingAccount?.displayImage || null,
-        accountType: existingAccount?.accountType || 'brand',
-        status: null,
-        isVerified: false,
-        source: 'linked' as const,
-      };
-    });
-
-  const accessibleAgencies: AgencyManagementAccount[] = [...remoteBrandCards, ...localAgencyCards];
-  const accessibleAgencyIds = new Set(accessibleAgencies.map((agency) => agency.id));
 
   const selectedAgencyMembers = selectedAgency
     ? await getAgencyMapsByAgency(selectedAgency)
@@ -158,8 +95,7 @@ export default async function ManageTeamPage({
   const agencyAccountId =
     selectedAgencyIsAllowed && selectedAgency && accessibleAgencyIds.has(selectedAgency)
       ? selectedAgency
-      : membership?.agencyAccountId ?? accessibleAgencies[0]?.id ?? authAccount.aid;
-  const isDirectAgencyOwner = !membership;
+      : membership?.agencyAccountId ?? authAccount.aid;
 
   const [agencyMembers, agencyAccount, allAccounts, agencyAgentLinks] = await Promise.all([
     getAgencyMapsByAgency(agencyAccountId),
@@ -222,9 +158,18 @@ export default async function ManageTeamPage({
   const registeredMembers = memberRows.filter(({ account }) => account.registered).length;
   const lockedMembers = agencyMembers.filter((member) => member.lockIn).length;
   const adminMembers = agencyMembers.filter((member) => member.role === 'admin').length;
+  const memberAccountIds = new Set(memberRows.map(({ account }) => account.id));
+  const accountDirectory = new Map(allAccounts.map((account) => [account.id, account]));
+  const invitedRows = agencyAgentLinks
+    .filter((link) => !memberAccountIds.has(link.agentId))
+    .map((link) => ({
+      link,
+      account: accountDirectory.get(link.agentId) ?? null,
+    }));
 
   const agencyDisplayName = agencyAccount?.display_name ?? agencyAccountId;
   const addMemberHref = `/manage/teams/create?selectedAgency=${encodeURIComponent(agencyAccountId)}`;
+  const switchHref = `/manage/switch?selectedAgency=${encodeURIComponent(agencyAccountId)}`;
 
   return (
     <div className="space-y-8">
@@ -238,218 +183,153 @@ export default async function ManageTeamPage({
         </Alert>
       ) : null}
 
-      {accessibleAgencies.length > 0 ? (
-        <div className="space-y-4">
+      <section className="space-y-4">
+        <div className="space-y-3">
           <div>
-            <h2 className="text-2xl font-semibold leading-none tracking-tight">Team</h2>
+            <h1 className="text-2xl font-semibold leading-none tracking-tight">
+              Team{' '}
+              <span className="text-muted-foreground">
+                (at <ClientLink href={switchHref} className="hover:underline">{agencyDisplayName}</ClientLink>)
+              </span>
+            </h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              Switch agency context and manage team members from the same page.
+              Review everyone connected to this working profile, including pending invited users, then switch your working profile if needed.
             </p>
           </div>
-
-          <div className="w-full overflow-hidden rounded-lg border border-border bg-background">
-            {accessibleAgencies.map((brandAccount, index) => (
-              <BrandAccountCard
-                key={brandAccount.id}
-                brandAccount={brandAccount}
-                existingAccount={existingAccountMap.get(brandAccount.id) || null}
-                isSelected={agencyAccountId === brandAccount.id}
-                isDefault={localAccount?.workingProfile === brandAccount.id}
-                isLast={index === accessibleAgencies.length - 1}
-              />
-            ))}
-          </div>
-        </div>
-      ) : (
-        <Alert>
-          <Globe className="h-4 w-4" />
-          <AlertTitle>No Accessible Accounts Found</AlertTitle>
-          <AlertDescription>
-            No accessible agency or brand accounts were found for this login.
-          </AlertDescription>
-        </Alert>
-      )}
-
-      <div className="space-y-3">
-        <div className="flex flex-wrap items-center gap-3">
-          <Badge variant={isDirectAgencyOwner ? 'default' : 'secondary'}>
-            {isDirectAgencyOwner ? 'Brand account' : 'Agency member'}
-          </Badge>
-          <Badge variant="outline">
-            Agency: {agencyDisplayName}
-          </Badge>
-        </div>
-        <p className="text-sm text-muted-foreground">
-          Accounts connected to {agencyDisplayName}. This is the roster for the agency brand account
-          that you manage or belong to.
-        </p>
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-4">
-        <div className="rounded-lg border bg-card p-4">
-          <p className="text-xs uppercase tracking-wider text-muted-foreground">Members</p>
-          <p className="mt-2 text-2xl font-semibold">{totalMembers}</p>
-        </div>
-        <div className="rounded-lg border bg-card p-4">
-          <p className="text-xs uppercase tracking-wider text-muted-foreground">Registered</p>
-          <p className="mt-2 text-2xl font-semibold">{registeredMembers}</p>
-        </div>
-        <div className="rounded-lg border bg-card p-4">
-          <p className="text-xs uppercase tracking-wider text-muted-foreground">Admins</p>
-          <p className="mt-2 text-2xl font-semibold">{adminMembers}</p>
-        </div>
-        <div className="rounded-lg border bg-card p-4">
-          <p className="text-xs uppercase tracking-wider text-muted-foreground">Locked</p>
-          <p className="mt-2 text-2xl font-semibold">{lockedMembers}</p>
-        </div>
-      </div>
-
-      <div className="rounded-xl border bg-card p-5 space-y-5">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-4 min-w-0">
-            <Avatar className="h-12 w-12 border">
-              <AvatarImage
-                src={agencyAccount?.display_image || undefined}
-                alt={agencyDisplayName}
-              />
-              <AvatarFallback>{getInitials(agencyAccount?.display_name ?? null)}</AvatarFallback>
-            </Avatar>
-            <div className="min-w-0">
-              <div className="flex flex-wrap items-center gap-2">
-                <h3 className="truncate text-lg font-semibold">{agencyDisplayName}</h3>
-                {membership && (
-                  <Badge variant="outline">
-                    <Shield className="mr-1 h-3 w-3" />
-                    Your role: {getRoleLabel(membership.role)}
-                  </Badge>
-                )}
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Brand account ID: {agencyAccountId}
-              </p>
-            </div>
-          </div>
-
         </div>
 
-        <div className="flex items-center justify-between rounded-lg border bg-muted/30 px-4 py-3">
-          <div className="text-sm">
-            <p className="font-medium">Selected agency is active</p>
-            <p className="text-muted-foreground">
-              New team members will be created for this agency.
-            </p>
-          </div>
+        <div className="overflow-hidden rounded-xl border bg-card divide-y divide-border">
           <ClientLink
             href={addMemberHref}
-            className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
+            className="flex w-full items-center justify-between gap-4 bg-primary/5 p-4 transition-colors hover:bg-primary/10"
           >
-            <UsersRound className="h-4 w-4" />
-            Add team member
+            <div className="flex min-w-0 flex-1 items-center gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary">
+                <UsersRound className="h-5 w-5" />
+              </div>
+              <div className="min-w-0">
+                <h3 className="text-base font-semibold">Add team</h3>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Use this to add or join the agency agent map for {agencyDisplayName}.
+                </p>
+              </div>
+            </div>
+            <ChevronRight className="h-5 w-5 shrink-0 text-muted-foreground/50" />
           </ClientLink>
-        </div>
 
-        {memberRows.length > 0 ? (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Account</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Created</TableHead>
-                <TableHead>Last active</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {memberRows.map(({ member, account }) => {
-                const displayName = account.displayName ?? account.id;
-                const isCurrentAccount = account.id === authAccount.aid;
+          {memberRows.map(({ member, account }) => {
+            const displayName = account.displayName ?? account.id;
+            const isCurrentAccount = account.id === authAccount.aid;
 
-                return (
-                  <TableRow key={member.id}>
-                    <TableCell className="font-medium">
-                      <div className="flex items-center gap-3">
-                        <Avatar className="h-9 w-9">
-                          <AvatarImage
-                            src={account.displayImage || undefined}
-                            alt={displayName}
-                          />
-                          <AvatarFallback>{getInitials(account.displayName)}</AvatarFallback>
-                        </Avatar>
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-2">
-                            <ClientLink
-                              href={`/manage/accounts/${account.id}`}
-                              className="truncate hover:underline"
-                            >
-                              {displayName}
-                            </ClientLink>
-                            {isCurrentAccount && (
-                              <Badge variant="outline" className="text-xs">
-                                You
-                              </Badge>
-                            )}
-                          </div>
-                          <p className="text-xs text-muted-foreground truncate">{account.id}</p>
-                        </div>
+            return (
+              <div key={member.id} className="flex flex-col justify-between p-5">
+                <div className="space-y-4">
+                  <div className="flex items-start gap-3">
+                    <Avatar className="h-12 w-12 border">
+                      <AvatarImage src={account.displayImage || undefined} alt={displayName} />
+                      <AvatarFallback>{getInitials(account.displayName)}</AvatarFallback>
+                    </Avatar>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <ClientLink
+                          href={`/manage/accounts/${account.id}`}
+                          className="truncate text-base font-semibold hover:underline"
+                        >
+                          {displayName}
+                        </ClientLink>
+                        {isCurrentAccount ? (
+                          <Badge variant="outline" className="text-xs">
+                            You
+                          </Badge>
+                        ) : null}
                       </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={getRoleBadgeVariant(member.role)}>
-                        <UsersRound className="mr-1 h-3 w-3" />
-                        {getRoleLabel(member.role)}
+                      <p className="mt-1 truncate text-xs text-muted-foreground">{account.id}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    <Badge variant={getRoleBadgeVariant(member.role)}>
+                      <UsersRound className="mr-1 h-3 w-3" />
+                      {getRoleLabel(member.role)}
+                    </Badge>
+                    <Badge variant={account.registered ? 'default' : 'secondary'}>
+                      {account.registered ? 'Registered' : 'Guest'}
+                    </Badge>
+                    <Badge variant="outline" className="capitalize">
+                      {account.accountType}
+                    </Badge>
+                    {member.lockIn ? <Badge variant="outline">Locked</Badge> : null}
+                  </div>
+                </div>
+
+                <div className="grid gap-3 pt-4 text-sm text-muted-foreground sm:grid-cols-2">
+                  <div>
+                    <p className="text-xs uppercase tracking-wider">Created</p>
+                    <p className="mt-1 text-foreground">{new Date(account.createdOn).toLocaleDateString()}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-wider">Last active</p>
+                    <p className="mt-1 text-foreground">{new Date(account.accessedOn).toLocaleDateString()}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+
+          {invitedRows.map(({ link, account }) => {
+            const displayName = account?.display_name || link.agentId;
+
+            return (
+              <div key={link.id} className="flex flex-col justify-between p-5">
+                <div className="space-y-4">
+                  <div className="flex items-start gap-3">
+                    <Avatar className="h-12 w-12 border">
+                      <AvatarImage src={account?.display_image || undefined} alt={displayName} />
+                      <AvatarFallback>{getInitials(account?.display_name ?? null)}</AvatarFallback>
+                    </Avatar>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-base font-semibold">{displayName}</p>
+                      <p className="mt-1 truncate text-xs text-muted-foreground">{link.agentId}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    <Badge variant="secondary">
+                      {link.status === 'accepted' ? 'Accepted invite' : 'Invited'}
+                    </Badge>
+                    {link.isAdmin ? <Badge>Admin invite</Badge> : null}
+                    {account ? (
+                      <Badge variant="outline" className="capitalize">
+                        {account.account_type}
                       </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-wrap gap-2">
-                        <Badge variant={account.registered ? 'default' : 'secondary'}>
-                          {account.registered ? 'Registered' : 'Guest'}
-                        </Badge>
-                        <Badge variant="outline" className="capitalize">
-                          {account.accountType}
-                        </Badge>
-                        {member.lockIn && (
-                          <Badge variant="outline">Locked</Badge>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm text-muted-foreground">
-                        {new Date(account.createdOn).toLocaleDateString()}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      <span className="flex items-center gap-1 text-sm text-muted-foreground">
-                        <Clock3 className="h-3.5 w-3.5" />
-                        {new Date(account.accessedOn).toLocaleDateString()}
-                      </span>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        ) : (
-          <Alert>
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>No connected accounts found</AlertTitle>
-            <AlertDescription>
-              {membership
-                ? 'Your account is linked to an agency, but no member accounts have been mapped yet.'
-                : 'This brand account does not have any linked team members yet.'}
-            </AlertDescription>
-          </Alert>
-        )}
-      </div>
+                    ) : null}
+                  </div>
+                </div>
 
-      {!memberRows.length && !membership && (
-        <Alert>
-          <Globe className="h-4 w-4" />
-          <AlertTitle>No agency mapping yet</AlertTitle>
-          <AlertDescription>
-            Create or join an agency brand account first, then linked accounts will appear here.
-          </AlertDescription>
-        </Alert>
-      )}
+                <p className="pt-4 text-sm text-muted-foreground">
+                  This user is associated through the agency invitation flow and has not been added to the mapped roster yet.
+                </p>
+              </div>
+            );
+          })}
+
+          {memberRows.length === 0 && invitedRows.length === 0 ? (
+            <div className="p-5">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="mt-0.5 h-4 w-4 text-muted-foreground" />
+                <div>
+                  <p className="font-medium">No connected accounts found</p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {membership
+                      ? 'Your account is linked to an agency, but no member accounts have been mapped yet.'
+                      : 'This brand account does not have any linked team members yet.'}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </section>
 
       <AgentMapManager
         agencies={allAccounts.filter((account) => account.account_type === 'brand')}
