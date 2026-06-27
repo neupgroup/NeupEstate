@@ -11,7 +11,7 @@ import { AreaDisplayToggle } from "@/components/manage/area-display-toggle";
 import { FacingDisplayToggle } from "@/components/manage/facing-display-toggle";
 import { RoadAccessDisplayToggle } from "@/components/manage/road-access-display-toggle";
 import { PropertyMediaGallery } from "@/components/manage/property-media-gallery";
-import { Bath, BedDouble, Bike, Building2, CalendarDays, CarFront, ChefHat, ChevronLeft, ExternalLink, FileText, Layers3, Link2, PenSquare, Sofa, SquareUserRound, Tag, UserRound, UtensilsCrossed } from "lucide-react";
+import { Bath, BedDouble, Bike, Building2, CalendarDays, CarFront, ChefHat, ChevronLeft, ExternalLink, FilePenLine, FileText, Layers3, Link2, PenSquare, Sofa, SquareUserRound, Tag, UserRound, UtensilsCrossed } from "lucide-react";
 
 type PageProps = {
     params: Promise<{ id: string }>;
@@ -181,16 +181,29 @@ function pendingReviewTone(status?: string | null) {
 function Section({
     title,
     description,
+    editHref,
     children,
 }: {
     title: string;
     description?: string;
+    editHref?: string;
     children: ReactNode;
 }) {
     return (
-        <section className="space-y-3">
+        <section className="space-y-3 pb-4">
             <div className="space-y-0.5">
-                <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+                <div className="flex items-center gap-2">
+                    <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+                    {editHref ? (
+                        <ClientLink
+                            href={editHref}
+                            aria-label={`Edit ${title}`}
+                            className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                        >
+                            <FilePenLine className="h-3.5 w-3.5" />
+                        </ClientLink>
+                    ) : null}
+                </div>
                 {description && <p className="text-sm text-muted-foreground">{description}</p>}
             </div>
             {children}
@@ -604,6 +617,12 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
         : [];
     const canViewPropertyLogs = await hasPermission(PERMISSIONS.root.propertyLog);
     const pricingCards = getPricingCards(property);
+    const visibleDocuments = (property.documents ?? [])
+        .map((document) => ({
+            ...document,
+            urls: (document.urls ?? []).filter((url) => Boolean(url?.value?.trim())),
+        }))
+        .filter((document) => document.urls.length > 0);
 
     return (
         <div className="space-y-4 max-w-6xl mx-auto">
@@ -673,7 +692,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                 )}
             </div>
 
-            <div className="pt-0">
+            <div className="pt-0 pb-4">
                 <PropertyMediaGallery images={property.images ?? []} title={property.title} />
             </div>
 
@@ -695,7 +714,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                 </section>
             )}
 
-            <Section title="Property Specifics" description="Core measurements and structural details.">
+            <Section title="Property Specifics" description="Core measurements and structural details." editHref={`${editUrl}?section=specifics`}>
                 <ReadonlyGrid>
                     <AreaDisplayToggle value={property.area} />
                     <FacingDisplayToggle value={property.facing} />
@@ -707,7 +726,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                 </ReadonlyGrid>
             </Section>
 
-            <Section title="Rooms and Spaces" description="Room counts and parking capacity.">
+            <Section title="Rooms and Spaces" description="Room counts and parking capacity." editHref={`${editUrl}?section=space`}>
                 <div className="flex gap-4 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory md:mx-0 md:px-0 md:grid md:grid-cols-4 md:overflow-visible md:pb-0">
                     <div className="min-w-[40%] flex-none snap-start md:min-w-0">
                         <RoomTile icon={<BedDouble className="h-5 w-5" />} label="Bedrooms" value={property.bedrooms} />
@@ -733,7 +752,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                 </div>
             </Section>
 
-            <Section title="Features & Amenities" description="Shared features and highlights.">
+            <Section title="Features & Amenities" description="Shared features and highlights." editHref={`${editUrl}?section=ammenities`}>
                 {property.amenities?.length ? (
                     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                         {property.amenities.map((amenity) => (
@@ -745,7 +764,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                 )}
             </Section>
 
-            <Section title="Pricing Details" description="Price and pricing metadata.">
+            <Section title="Pricing Details" description="Price and pricing metadata." editHref={`${editUrl}?section=pricing`}>
                 {pricingCards.length ? (
                     <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                         {pricingCards.map((card) => (
@@ -764,7 +783,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
             </Section>
 
             {hasLocation && (
-                <Section title="Location Details" description="Structured location and coordinates.">
+                <Section title="Location Details" description="Structured location and coordinates." editHref={`${editUrl}?section=location`}>
                     <div className="space-y-2 text-sm text-muted-foreground">
                         {locationSummary ? <p className="font-medium text-foreground">{locationSummary}</p> : null}
                         <p>
@@ -786,7 +805,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                 </Section>
             )}
 
-            <Section title="Owner Information" description="Ownership and agent context.">
+            <Section title="Owner Information" description="Ownership and agent context." editHref={`${editUrl}?section=owners`}>
                 <div className="space-y-4">
                     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                         {property.owners?.length ? (
@@ -802,24 +821,20 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                 </div>
             </Section>
 
-            <Section title="Documents" description="Attached files and reference links.">
-                {property.documents?.length ? (
+            {visibleDocuments.length > 0 ? (
+                <Section title="Documents" description="Attached files and reference links." editHref={`${editUrl}?section=documents`}>
                     <div className="grid gap-4 lg:grid-cols-2">
-                        {property.documents.map((document, index) => (
+                        {visibleDocuments.map((document, index) => (
                             <DocumentGroupCard
                                 key={`${document.name}-${index}`}
                                 name={document.name}
-                                urls={document.urls ?? []}
+                                urls={document.urls}
                                 index={index}
                             />
                         ))}
                     </div>
-                ) : (
-                    <div className="rounded-lg border bg-muted/20 px-4 py-3 text-sm text-muted-foreground">
-                        No documents attached.
-                    </div>
-                )}
-            </Section>
+                </Section>
+            ) : null}
 
             <div className="flex justify-start">
                 <div className="flex flex-wrap gap-3">
