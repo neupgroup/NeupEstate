@@ -37,6 +37,7 @@ import { createMortgageRequest as createMortgageRequestService } from '@/service
 import { createContactSubmission as createContactSubmissionService } from '@/services/contact-service';
 import { createModel as createModelService, updateModel as updateModelService, deleteModel as deleteModelService, setDefaultModel as setDefaultModelService } from '@/services/model-service';
 import { createRequirement as createRequirementService, updateRequirement as updateRequirementService } from '@/services/requirements-service';
+import { createPropertyDraftRequest } from '@/services/bridge-property-service';
 import { resolveAccount, updateUser, getAccountById } from '@/services/account-service';
 import { deleteAccountAndData } from '@/services/account-service';
 import { createLead as createLeadService, createLeadActivity as createLeadActivityService } from '@/services/lead-service';
@@ -799,110 +800,9 @@ export async function createPropertyAction(
   try {
     await requirePermission(PERMISSIONS.manage.propertySelfCreate);
     const actorId = await requireIdentity();
-    const agencyLinks = await getAgencyAgentMapsByAgentService(actorId);
-    const acceptedAgencyLinks = agencyLinks.filter((link) => link.status === 'accepted');
-
-    const validatedData = CreatePropertySchema.parse(data);
-    const orderedPurposes = validatedData.purposes?.length
-      ? validatedData.purposes
-      : validatedData.purpose
-        ? [validatedData.purpose]
-        : [];
-
-    if (orderedPurposes.length === 0) {
-      return { success: false, error: "Please select at least one purpose.", propertyId: null };
-    }
-
-    const priceDisplayMode = validatedData.pricing?.priceDisplayMode ?? 'show-price';
-    const resolvedPrice = firstPositivePrice(validatedData.pricing);
-    const pricing = cleanPricing(validatedData.pricing);
-
-    if (priceDisplayMode === 'show-price' && resolvedPrice <= 0) {
-      return { success: false, error: "Show price requires at least one price.", propertyId: null };
-    }
-
-    const locationString = formatLocationString(validatedData.structuredLocation);
-
-    let agencyId: string | null = null;
-    let agentId: string | null = null;
-
-    if (acceptedAgencyLinks.length > 0) {
-      const selectedAgencyId =
-        postingAgencyId?.trim() ||
-        acceptedAgencyLinks[0]?.agencyId ||
-        null;
-
-      if (!selectedAgencyId) {
-        return { success: false, error: "Please choose an agency to post this property.", propertyId: null };
-      }
-
-      const isLinkedAgency = acceptedAgencyLinks.some((link) => link.agencyId === selectedAgencyId);
-      if (!isLinkedAgency) {
-        return { success: false, error: "The selected agency is not linked to this agent.", propertyId: null };
-      }
-
-      agencyId = selectedAgencyId;
-    } else {
-      agentId = actorId;
-    }
-
-    const serviceInput: CreatePropertyInput = {
-      ...validatedData,
-      purpose: orderedPurposes[0],
-      purposes: orderedPurposes,
-      location: locationString,
-      price: resolvedPrice,
-      details: {
-        priceDisplayMode,
-        showMap: validatedData.showMap ?? true,
-        showOwnerInformation: validatedData.showOwnerInformation ?? true,
-        isPrivate: validatedData.isPrivate ?? false,
-      },
-      area: areaValueToSqft(validatedData.area),
-      amenities: validatedData.amenities?.split(',').map(a => a.trim()).filter(Boolean) || [],
-      images: validatedData.images?.filter(img => img.trim() !== '') || [],
-      pricing,
-      owners: normalizeOwnerEntries(validatedData.owners),
-      landDetails: validatedData.landDetails ? {
-        ...validatedData.landDetails,
-        area: areaValueToSqft(validatedData.landDetails.area),
-      } as unknown as LandDetails : undefined,
-      plots: validatedData.plots?.map(p => ({ ...p, area: areaValueToSqft(p.area) })) as unknown as PlotDetails[],
-      apartmentUnits: validatedData.apartmentUnits?.map(u => ({ ...u, area: areaValueToSqft(u.area) })) as unknown as ApartmentUnit[],
-      agency: agencyId,
-      agent: agentId,
-    };
-
-    const existingDraft = await prisma.propertyChange.findFirst({
-      where: {
-        accountId: actorId,
-        propertyId: null,
-        status: 'creating',
-        isApproved: null,
-      },
-      orderBy: { modifiedOn: 'desc' },
-    });
-
-    const draftPayload = {
-      accountId: actorId,
-      propertyId: null,
-      status: 'creating',
-      isApproved: null,
-      data: serviceInput as any,
-      modifiedOn: new Date(),
-    };
-
-    const draft = existingDraft
-      ? await prisma.propertyChange.update({
-          where: { id: existingDraft.id },
-          data: draftPayload,
-        })
-      : await prisma.propertyChange.create({
-          data: draftPayload,
-        });
-
+    const draft = await createPropertyDraftRequest({ actorId, postingAgencyId, data });
     revalidatePath('/manage/properties');
-    return { success: true, propertyId: null, changeId: draft.id, error: null };
+    return { success: true, propertyId: null, changeId: draft.requestId, error: null };
   } catch (e: any) {
     await logProblem(e, 'createPropertyAction');
     if (e instanceof z.ZodError) {

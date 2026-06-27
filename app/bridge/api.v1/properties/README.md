@@ -1,6 +1,10 @@
 # Properties API Guide
 
-**Endpoint:** `GET /bridge/api.v1/properties`
+**Canonical Endpoint:** `GET /bridge/api.v1/property/list`
+
+Legacy aliases:
+- `GET /bridge/api.v1/properties`
+- `GET /bridge/api.v1/property`
 
 This endpoint returns active properties for either:
 - a linked agency: `?agency_id=<accountId>`
@@ -96,6 +100,6 @@ That service:
 ## Example Requests
 
 ```bash
-curl "http://localhost:3000/bridge/api.v1/properties?agency_id=acc_123"
-curl "http://localhost:3000/bridge/api.v1/properties?account_id=acc_456&fields=id,title,price&limit=10&offset=0"
+curl "http://localhost:3000/bridge/api.v1/property/list?agency_id=acc_123"
+curl "http://localhost:3000/bridge/api.v1/property/list?account_id=acc_456&fields=id,title,price&limit=10&offset=0"
 ```

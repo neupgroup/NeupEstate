@@ -1,0 +1,448 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+import { prisma } from '@/logica/core/prisma';
+import { areaValueToSqft, CreatePropertySchema, type CreatePropertyFormValues, type CreatePropertyInput, type LandDetails, type PlotDetails, type ApartmentUnit, type StructuredLocation } from '@/types';
+import { getAgencyAgentMapsByAgent } from '@/services/agency-agent-map-service';
+import { getBridgePropertiesByAccount } from '@/services/property-service';
+
+function parsePositiveInteger(value: string | null, fallback: number): number {
+  if (!value) return fallback;
+  const parsed = Number(value);
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+function parseOffset(value: string | null): number {
+  if (!value) return 0;
+  const parsed = Number(value);
+  return Number.isInteger(parsed) && parsed >= 0 ? parsed : 0;
+}
+
+function parseFields(value: string | null): string[] | undefined {
+  if (!value) return undefined;
+  return value.split(',').map((field) => field.trim()).filter(Boolean);
+}
+
+function readQueryValue(
+  searchParams: URLSearchParams,
+  primaryKey: string,
+  fallbackKey?: string,
+): string | undefined {
+  const primaryValue = searchParams.get(primaryKey)?.trim() || undefined;
+  const fallbackValue = fallbackKey ? searchParams.get(fallbackKey)?.trim() || undefined : undefined;
+
+  if (primaryValue && fallbackValue && primaryValue !== fallbackValue) {
+    throw new Error(`Provide only one of ${primaryKey} or ${fallbackKey}.`);
+  }
+
+  return primaryValue || fallbackValue;
+}
+
+function formatLocationString(structuredLocation?: StructuredLocation): string {
+  if (!structuredLocation) return '';
+  const parts = [
+    structuredLocation.street,
+    structuredLocation.ward ? `Ward ${structuredLocation.ward}` : '',
+    structuredLocation.municipality,
+    structuredLocation.district,
+    structuredLocation.province,
+    structuredLocation.country,
+  ];
+  return parts.filter(Boolean).join(', ');
+}
+
+function firstPositivePrice(pricing?: CreatePropertyFormValues['pricing']): number {
+  const direct = Number(pricing?.listed ?? 0);
+  if (direct > 0) return direct;
+
+  const prices = Object.values(pricing?.basisPrices ?? {})
+    .map((value) => Number(value ?? 0))
+    .filter((value) => value > 0);
+
+  return prices[0] ?? 0;
+}
+
+function cleanPricing(pricing?: CreatePropertyFormValues['pricing']) {
+  if (!pricing) return undefined;
+
+  const cleanNumberMap = (map?: Record<string, number | undefined>): Record<string, number> | undefined => {
+    const entries = Object.entries(map ?? {})
+      .map(([key, value]) => [key, Number(value ?? 0)] as const)
+      .filter(([, value]) => value > 0);
+    return entries.length ? Object.fromEntries(entries) : undefined;
+  };
+  const cleanStringMap = (map?: Record<string, string | undefined>): Record<string, string> | undefined => {
+    const entries = Object.entries(map ?? {}).filter((entry): entry is [string, string] => Boolean(entry[1]));
+    return entries.length ? Object.fromEntries(entries) : undefined;
+  };
+
+  const basisPrices = cleanNumberMap(pricing.basisPrices);
+  const basisNegotiablePrices = cleanNumberMap(pricing.basisNegotiablePrices);
+  const activeBasis = new Set([
+    ...Object.keys(basisPrices ?? {}),
+    ...Object.keys(basisNegotiablePrices ?? {}),
+  ]);
+  const basisNegotiable = Object.fromEntries(
+    Object.entries(pricing.basisNegotiable ?? {}).filter(([basis, value]) => value && activeBasis.has(basis)),
+  );
+
+  return {
+    ...pricing,
+    listed: pricing.listed && pricing.listed > 0 ? pricing.listed : undefined,
+    basisPrices,
+    basisNegotiable: Object.keys(basisNegotiable).length ? basisNegotiable : undefined,
+    basisNegotiablePrices,
+    basisFrequencies: cleanStringMap(pricing.basisFrequencies),
+    basisUnits: cleanStringMap(pricing.basisUnits),
+    options: Array.isArray(pricing.options) ? pricing.options : pricing.options?.split(',').map((option) => option.trim()).filter(Boolean) as any,
+  };
+}
+
+function normalizeArrayLikeValue(value: unknown): unknown[] {
+  if (Array.isArray(value)) return value;
+  if (!value || typeof value !== 'object') return [];
+
+  return Object.entries(value as Record<string, unknown>)
+    .sort(([left], [right]) => Number(left) - Number(right))
+    .map(([, entry]) => entry)
+    .filter((entry) => entry !== undefined);
+}
+
+function normalizeOwnerEntries(value: unknown): NonNullable<CreatePropertyInput['owners']> {
+  return normalizeArrayLikeValue(value)
+    .filter((entry): entry is Record<string, any> => Boolean(entry) && typeof entry === 'object' && !Array.isArray(entry))
+    .map((entry) => ({
+      ownerClientId: typeof entry.ownerClientId === 'string' ? entry.ownerClientId.trim() : '',
+      isPrimaryOwner: Boolean(entry.isPrimaryOwner),
+      clientName: typeof entry.clientName === 'string' ? entry.clientName : undefined,
+      clientEmail: typeof entry.clientEmail === 'string' ? entry.clientEmail : undefined,
+      clientPhone: typeof entry.clientPhone === 'string' ? entry.clientPhone : undefined,
+    }))
+    .filter((entry) => entry.ownerClientId.length > 0) as NonNullable<CreatePropertyInput['owners']>;
+}
+
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
+function hasPositiveNumber(value: unknown): boolean {
+  return typeof value === 'number'
+    ? Number.isFinite(value) && value > 0
+    : typeof value === 'string'
+      ? Number(value) > 0
+      : false;
+}
+
+function hasAnyLocationValue(location: unknown): boolean {
+  if (!location || typeof location !== 'object' || Array.isArray(location)) return false;
+  const candidate = location as Record<string, unknown>;
+  return [
+    candidate.country,
+    candidate.province,
+    candidate.district,
+    candidate.municipality,
+    candidate.ward,
+    candidate.street,
+    candidate.landmark,
+    candidate.coordinates,
+  ].some((value) => {
+    if (typeof value === 'number') return Number.isFinite(value);
+    return isNonEmptyString(value);
+  });
+}
+
+function hasPositivePriceInMap(value: unknown): boolean {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  return Object.values(value as Record<string, unknown>).some((entry) => hasPositiveNumber(entry));
+}
+
+function hasAreaValue(value: unknown): boolean {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  return Object.values(value as Record<string, unknown>).some((entry) => hasPositiveNumber(entry));
+}
+
+function hasNonEmptyStringArray(value: unknown): boolean {
+  return Array.isArray(value) && value.some((entry) => isNonEmptyString(entry));
+}
+
+function getMissingPropertyCreateInfo(payload: unknown): string[] {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
+    return ['title', 'description', 'purpose', 'category', 'type', 'location', 'area', 'price', 'images'];
+  }
+
+  const data = payload as Record<string, unknown>;
+  const missing = new Set<string>();
+
+  if (!isNonEmptyString(data.title)) missing.add('title');
+  if (!isNonEmptyString(data.description)) missing.add('description');
+  if (!Array.isArray(data.purposes) || data.purposes.length === 0) missing.add('purpose');
+  if (!Array.isArray(data.categories) || data.categories.length === 0) missing.add('category');
+  if (!Array.isArray(data.types) || data.types.length === 0) missing.add('type');
+  if (!hasAnyLocationValue(data.structuredLocation)) missing.add('location');
+  if (!hasAreaValue(data.area)) missing.add('area');
+  if (!hasNonEmptyStringArray(data.images)) missing.add('images');
+
+  const pricing = data.pricing && typeof data.pricing === 'object' && !Array.isArray(data.pricing)
+    ? data.pricing as Record<string, unknown>
+    : undefined;
+  const priceDisplayMode = typeof pricing?.priceDisplayMode === 'string' ? pricing.priceDisplayMode : 'show-price';
+
+  if (priceDisplayMode === 'show-price') {
+    const basis = typeof pricing?.basis === 'string' ? pricing.basis.trim() : '';
+    const listedPricePresent = hasPositiveNumber(pricing?.listed);
+    const basisPrices = pricing?.basisPrices && typeof pricing.basisPrices === 'object' && !Array.isArray(pricing.basisPrices)
+      ? pricing.basisPrices as Record<string, unknown>
+      : undefined;
+    const basisSpecificPricePresent = basis ? hasPositiveNumber(basisPrices?.[basis]) : false;
+    const anyBasisPricePresent = hasPositivePriceInMap(basisPrices);
+
+    if (basis) {
+      if (!basisSpecificPricePresent) {
+        missing.add('price[basis]');
+      }
+    } else if (!listedPricePresent && !anyBasisPricePresent) {
+      missing.add('price');
+    }
+  }
+
+  return Array.from(missing);
+}
+
+export async function createPropertyDraftRequest(input: {
+  actorId: string;
+  postingAgencyId?: string | null;
+  data: CreatePropertyFormValues;
+}): Promise<{ requestId: string }> {
+  const actor = await prisma.account.findUnique({
+    where: { id: input.actorId },
+    select: { id: true },
+  });
+
+  if (!actor) {
+    throw new Error('Account not found.');
+  }
+
+  const validatedData = CreatePropertySchema.parse(input.data);
+  const agencyLinks = await getAgencyAgentMapsByAgent(input.actorId);
+  const acceptedAgencyLinks = agencyLinks.filter((link) => link.status === 'accepted');
+
+  const orderedPurposes = validatedData.purposes?.length
+    ? validatedData.purposes
+    : validatedData.purpose
+      ? [validatedData.purpose]
+      : [];
+
+  if (orderedPurposes.length === 0) {
+    throw new Error('Please select at least one purpose.');
+  }
+
+  const priceDisplayMode = validatedData.pricing?.priceDisplayMode ?? 'show-price';
+  const resolvedPrice = firstPositivePrice(validatedData.pricing);
+  const pricing = cleanPricing(validatedData.pricing);
+
+  if (priceDisplayMode === 'show-price' && resolvedPrice <= 0) {
+    throw new Error('Show price requires at least one price.');
+  }
+
+  const locationString = formatLocationString(validatedData.structuredLocation);
+
+  let agencyId: string | null = null;
+  let agentId: string | null = null;
+
+  if (acceptedAgencyLinks.length > 0) {
+    const selectedAgencyId =
+      input.postingAgencyId?.trim() ||
+      acceptedAgencyLinks[0]?.agencyId ||
+      null;
+
+    if (!selectedAgencyId) {
+      throw new Error('Please choose an agency to post this property.');
+    }
+
+    const isLinkedAgency = acceptedAgencyLinks.some((link) => link.agencyId === selectedAgencyId);
+    if (!isLinkedAgency) {
+      throw new Error('The selected agency is not linked to this agent.');
+    }
+
+    agencyId = selectedAgencyId;
+  } else {
+    agentId = input.actorId;
+  }
+
+  const serviceInput: CreatePropertyInput = {
+    ...validatedData,
+    purpose: orderedPurposes[0],
+    purposes: orderedPurposes,
+    location: locationString,
+    price: resolvedPrice,
+    details: {
+      priceDisplayMode,
+      showMap: validatedData.showMap ?? true,
+      showOwnerInformation: validatedData.showOwnerInformation ?? true,
+      isPrivate: validatedData.isPrivate ?? false,
+    },
+    area: areaValueToSqft(validatedData.area),
+    amenities: validatedData.amenities?.split(',').map((item) => item.trim()).filter(Boolean) || [],
+    images: validatedData.images?.filter((image) => image.trim() !== '') || [],
+    pricing,
+    owners: normalizeOwnerEntries(validatedData.owners),
+    landDetails: validatedData.landDetails ? {
+      ...validatedData.landDetails,
+      area: areaValueToSqft(validatedData.landDetails.area),
+    } as unknown as LandDetails : undefined,
+    plots: validatedData.plots?.map((plot) => ({ ...plot, area: areaValueToSqft(plot.area) })) as unknown as PlotDetails[],
+    apartmentUnits: validatedData.apartmentUnits?.map((unit) => ({ ...unit, area: areaValueToSqft(unit.area) })) as unknown as ApartmentUnit[],
+    agency: agencyId,
+    agent: agentId,
+  };
+
+  const existingDraft = await prisma.propertyChange.findFirst({
+    where: {
+      accountId: input.actorId,
+      propertyId: null,
+      status: 'creating',
+      isApproved: null,
+    },
+    orderBy: { modifiedOn: 'desc' },
+  });
+
+  const draftPayload = {
+    accountId: input.actorId,
+    propertyId: null,
+    status: 'creating',
+    isApproved: null,
+    data: serviceInput as any,
+    modifiedOn: new Date(),
+  };
+
+  const draft = existingDraft
+    ? await prisma.propertyChange.update({
+        where: { id: existingDraft.id },
+        data: draftPayload,
+      })
+    : await prisma.propertyChange.create({
+        data: draftPayload,
+      });
+
+  return { requestId: draft.id };
+}
+
+export async function handleBridgePropertyList(
+  req: NextRequest,
+  options?: {
+    allowLegacyAliases?: boolean;
+    filterTypeLabel?: 'agency' | 'account' | 'agent';
+    routeLabel?: string;
+  },
+) {
+  const { searchParams } = req.nextUrl;
+  const allowLegacyAliases = options?.allowLegacyAliases ?? true;
+  const routeLabel = options?.routeLabel ?? 'bridge/api.v1/property/list';
+
+  try {
+    const agencyId = readQueryValue(searchParams, 'agency_id', allowLegacyAliases ? 'agency' : undefined);
+    const accountId = readQueryValue(searchParams, 'account_id', allowLegacyAliases ? 'agent' : undefined);
+
+    if (!agencyId && !accountId) {
+      return NextResponse.json(
+        { success: false, error: 'Provide either agency_id or account_id.' },
+        { status: 400 },
+      );
+    }
+
+    if (agencyId && accountId) {
+      return NextResponse.json(
+        { success: false, error: 'Provide only one of agency_id or account_id.' },
+        { status: 400 },
+      );
+    }
+
+    const result = await getBridgePropertiesByAccount({
+      agencyId,
+      agentId: accountId,
+      fields: parseFields(searchParams.get('fields')),
+      limit: parsePositiveInteger(searchParams.get('limit'), 20),
+      offset: parseOffset(searchParams.get('offset')),
+    });
+
+    return NextResponse.json({
+      success: true,
+      filter: agencyId
+        ? { type: 'agency', accountId: agencyId }
+        : { type: options?.filterTypeLabel ?? 'account', accountId },
+      ...result,
+    });
+  } catch (err) {
+    const error = err instanceof Error ? err : new Error(String(err));
+    if (error.message.startsWith('Provide only one of ')) {
+      return NextResponse.json(
+        { success: false, error: error.message },
+        { status: 400 },
+      );
+    }
+
+    throw Object.assign(error, { routeLabel });
+  }
+}
+
+export async function handleBridgePropertyCreate(req: NextRequest) {
+  const body = await req.json().catch(() => ({}));
+  const accountId =
+    typeof body?.accountId === 'string' ? body.accountId.trim() :
+    req.headers.get('accountId')?.trim() ||
+    undefined;
+  const postingAgencyId =
+    typeof body?.postingAgencyId === 'string' ? body.postingAgencyId.trim() :
+    req.headers.get('postingAgencyId')?.trim() ||
+    req.headers.get('agencyId')?.trim() ||
+    undefined;
+  const propertyPayload = body?.property && typeof body.property === 'object'
+    ? body.property
+    : body;
+
+  if (!accountId) {
+    return NextResponse.json(
+      { success: false, error: 'Provide accountId in the request body or headers.' },
+      { status: 400 },
+    );
+  }
+
+  const missingInfo = getMissingPropertyCreateInfo(propertyPayload);
+  if (missingInfo.length > 0) {
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'missing_info',
+        desc: missingInfo,
+      },
+      { status: 400 },
+    );
+  }
+
+  try {
+    const result = await createPropertyDraftRequest({
+      actorId: accountId,
+      postingAgencyId,
+      data: propertyPayload as CreatePropertyFormValues,
+    });
+
+    return NextResponse.json({
+      success: true,
+      requestId: result.requestId,
+      status: 'awaiting review',
+    });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { success: false, error: error.message },
+        { status: 400 },
+      );
+    }
+
+    const message = error instanceof Error ? error.message : 'Failed to create property draft.';
+    const status = message === 'Account not found.' ? 404 : 400;
+    return NextResponse.json(
+      { success: false, error: message },
+      { status },
+    );
+  }
+}
