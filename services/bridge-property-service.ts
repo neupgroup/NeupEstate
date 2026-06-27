@@ -120,6 +120,49 @@ function normalizeOwnerEntries(value: unknown): NonNullable<CreatePropertyInput[
     .filter((entry) => entry.ownerClientId.length > 0) as NonNullable<CreatePropertyInput['owners']>;
 }
 
+function isPlainObject(value: unknown): value is Record<string, any> {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
+function deepMergeJson<T>(base: T, patch: any): T {
+  if (!isPlainObject(base) || !isPlainObject(patch)) {
+    return (patch === undefined ? base : patch) as T;
+  }
+
+  const merged: Record<string, any> = { ...base };
+  for (const [key, value] of Object.entries(patch)) {
+    if (value === undefined) continue;
+    if (value === null) {
+      delete merged[key];
+      continue;
+    }
+    const current = merged[key];
+    merged[key] = isPlainObject(current) && isPlainObject(value)
+      ? deepMergeJson(current, value)
+      : value;
+  }
+
+  return merged as T;
+}
+
+function normalizePropertyChangeData(data: Record<string, any>): Record<string, any> {
+  const next = { ...data };
+  for (const key of ['images', 'documents', 'plots', 'apartmentUnits']) {
+    if (key in next) next[key] = normalizeArrayLikeValue(next[key]);
+  }
+  if ('owners' in next) {
+    next.owners = normalizeOwnerEntries(next.owners);
+  }
+  if (next.pricing && typeof next.pricing === 'object' && !Array.isArray(next.pricing)) {
+    const pricing = { ...next.pricing } as Record<string, any>;
+    if (Array.isArray(pricing.options)) {
+      pricing.options = pricing.options.filter((option) => typeof option === 'string' && option.trim().length > 0);
+    }
+    next.pricing = pricing;
+  }
+  return next;
+}
+
 function isNonEmptyString(value: unknown): value is string {
   return typeof value === 'string' && value.trim().length > 0;
 }
@@ -162,6 +205,23 @@ function hasAreaValue(value: unknown): boolean {
 
 function hasNonEmptyStringArray(value: unknown): boolean {
   return Array.isArray(value) && value.some((entry) => isNonEmptyString(entry));
+}
+
+function stripBridgeControlFields(value: unknown): Record<string, unknown> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
+
+  const {
+    accountId: _accountId,
+    postingAgencyId: _postingAgencyId,
+    agencyId: _agencyId,
+    requestId: _requestId,
+    propertyId: _propertyId,
+    property: _property,
+    data: _data,
+    ...rest
+  } = value as Record<string, unknown>;
+
+  return rest;
 }
 
 function getMissingPropertyCreateInfo(payload: unknown): string[] {
@@ -326,6 +386,113 @@ export async function createPropertyDraftRequest(input: {
   return { requestId: draft.id };
 }
 
+export async function editUncreatedPropertyDraftRequest(input: {
+  requestId: string;
+  actorId?: string;
+  postingAgencyId?: string | null;
+  data: CreatePropertyFormValues;
+}): Promise<{ requestId: string }> {
+  const request = await prisma.propertyChange.findUnique({
+    where: { id: input.requestId },
+    select: {
+      id: true,
+      accountId: true,
+      propertyId: true,
+      status: true,
+      isApproved: true,
+    },
+  });
+
+  if (!request || request.propertyId || request.status !== 'creating' || request.isApproved !== null) {
+    throw new Error('Pending create request not found.');
+  }
+
+  if (input.actorId && request.accountId !== input.actorId) {
+    throw new Error('The provided requestId does not belong to the provided accountId.');
+  }
+
+  const result = await createPropertyDraftRequest({
+    actorId: request.accountId,
+    postingAgencyId: input.postingAgencyId,
+    data: input.data,
+  });
+
+  if (result.requestId !== input.requestId) {
+    throw new Error('The provided requestId does not match the active pending create request.');
+  }
+
+  return result;
+}
+
+export async function saveApprovedPropertyChangeRequest(input: {
+  propertyId: string;
+  accountId?: string;
+  data: Record<string, any>;
+}): Promise<{ requestId: string }> {
+  const property = await prisma.property.findUnique({
+    where: { id: input.propertyId },
+    select: {
+      id: true,
+      isApproved: true,
+    },
+  });
+
+  if (!property) {
+    throw new Error('Property not found.');
+  }
+
+  if (!property.isApproved) {
+    throw new Error('Only approved properties can be edited by propertyId. Use requestId for pending create requests.');
+  }
+
+  const actorId =
+    input.accountId?.trim() ||
+    (await prisma.propertyChange.findFirst({
+      where: {
+        propertyId: input.propertyId,
+        isApproved: null,
+      },
+      orderBy: { modifiedOn: 'desc' },
+      select: { accountId: true },
+    }))?.accountId ||
+    null;
+
+  if (!actorId) {
+    throw new Error('Provide accountId to edit an approved property.');
+  }
+
+  const existingDraft = await prisma.propertyChange.findFirst({
+    where: {
+      propertyId: input.propertyId,
+      accountId: actorId,
+      isApproved: null,
+    },
+    orderBy: { modifiedOn: 'desc' },
+  });
+
+  const normalizedExistingData = existingDraft ? normalizePropertyChangeData((existingDraft.data ?? {}) as Record<string, any>) : {};
+  const normalizedInputData = normalizePropertyChangeData(input.data);
+  const data = {
+    propertyId: input.propertyId,
+    accountId: actorId,
+    status: 'changing',
+    isApproved: existingDraft?.isApproved ?? null,
+    data: existingDraft
+      ? deepMergeJson(normalizedExistingData, normalizedInputData)
+      : normalizedInputData,
+    modifiedOn: new Date(),
+  };
+
+  const draft = existingDraft
+    ? await prisma.propertyChange.update({
+        where: { id: existingDraft.id },
+        data,
+      })
+    : await prisma.propertyChange.create({ data });
+
+  return { requestId: draft.id };
+}
+
 export async function handleBridgePropertyList(
   req: NextRequest,
   options?: {
@@ -397,7 +564,7 @@ export async function handleBridgePropertyCreate(req: NextRequest) {
     undefined;
   const propertyPayload = body?.property && typeof body.property === 'object'
     ? body.property
-    : body;
+    : stripBridgeControlFields(body);
 
   if (!accountId) {
     return NextResponse.json(
@@ -440,6 +607,117 @@ export async function handleBridgePropertyCreate(req: NextRequest) {
 
     const message = error instanceof Error ? error.message : 'Failed to create property draft.';
     const status = message === 'Account not found.' ? 404 : 400;
+    return NextResponse.json(
+      { success: false, error: message },
+      { status },
+    );
+  }
+}
+
+export async function handleBridgePropertyEdit(req: NextRequest) {
+  const body = await req.json().catch(() => ({}));
+  const accountId =
+    typeof body?.accountId === 'string' ? body.accountId.trim() :
+    req.headers.get('accountId')?.trim() ||
+    undefined;
+  const postingAgencyId =
+    typeof body?.postingAgencyId === 'string' ? body.postingAgencyId.trim() :
+    req.headers.get('postingAgencyId')?.trim() ||
+    req.headers.get('agencyId')?.trim() ||
+    undefined;
+  const requestId =
+    typeof body?.requestId === 'string' ? body.requestId.trim() :
+    req.headers.get('requestId')?.trim() ||
+    undefined;
+  const propertyId =
+    typeof body?.propertyId === 'string' ? body.propertyId.trim() :
+    req.headers.get('propertyId')?.trim() ||
+    undefined;
+  const propertyPayload = body?.property && typeof body.property === 'object'
+    ? body.property
+    : body?.data && typeof body.data === 'object'
+      ? body.data
+      : stripBridgeControlFields(body);
+
+  if (!requestId && !propertyId) {
+    return NextResponse.json(
+      { success: false, error: 'Provide either requestId or propertyId.' },
+      { status: 400 },
+    );
+  }
+
+  if (requestId && propertyId) {
+    return NextResponse.json(
+      { success: false, error: 'Provide only one of requestId or propertyId.' },
+      { status: 400 },
+    );
+  }
+
+  if (requestId) {
+    const missingInfo = getMissingPropertyCreateInfo(propertyPayload);
+    if (missingInfo.length > 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'missing_info',
+          desc: missingInfo,
+        },
+        { status: 400 },
+      );
+    }
+
+    try {
+      const result = await editUncreatedPropertyDraftRequest({
+        requestId,
+        actorId: accountId,
+        postingAgencyId,
+        data: propertyPayload as CreatePropertyFormValues,
+      });
+
+      return NextResponse.json({
+        success: true,
+        requestId: result.requestId,
+        status: 'awaiting review',
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return NextResponse.json(
+          { success: false, error: error.message },
+          { status: 400 },
+        );
+      }
+
+      const message = error instanceof Error ? error.message : 'Failed to edit property request.';
+      const status = message.includes('not found') ? 404 : 400;
+      return NextResponse.json(
+        { success: false, error: message },
+        { status },
+      );
+    }
+  }
+
+  if (!propertyPayload || typeof propertyPayload !== 'object' || Array.isArray(propertyPayload) || Object.keys(propertyPayload).length === 0) {
+    return NextResponse.json(
+      { success: false, error: 'Provide property data to edit.' },
+      { status: 400 },
+    );
+  }
+
+  try {
+    const result = await saveApprovedPropertyChangeRequest({
+      propertyId: propertyId!,
+      accountId,
+      data: propertyPayload as Record<string, any>,
+    });
+
+    return NextResponse.json({
+      success: true,
+      requestId: result.requestId,
+      status: 'awaiting review',
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Failed to edit approved property.';
+    const status = message.includes('not found') ? 404 : 400;
     return NextResponse.json(
       { success: false, error: message },
       { status },
