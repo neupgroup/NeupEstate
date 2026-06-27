@@ -45,12 +45,7 @@ export async function getSitemaps(): Promise<Sitemap[]> {
 }
 
 async function getExistingSourceUrls(): Promise<Set<string>> {
-    const rows = await prisma.propertyFetchHistory.findMany({
-        where: { sourceUrl: { not: null } },
-        select: { sourceUrl: true },
-    });
-
-    return new Set(rows.map((row) => row.sourceUrl).filter((url): url is string => Boolean(url)));
+    return new Set();
 }
 
 export async function getNewUrlsFromSitemap(sitemapId: string): Promise<{ sitemapUrl: string, newUrls: string[], logs: SitemapLog[] }> {

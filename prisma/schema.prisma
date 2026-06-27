@@ -143,7 +143,6 @@ model Property {
   landDetail         PropertyLandDetail?
   commercialDetail   PropertyCommercialDetail?
   prices             PropertyPrice[]
-  fetchHistory       PropertyFetchHistory[]
   owners             PropertyOwner[]
   documents          PropertyDocument[]
   changes            PropertyChange[]
@@ -291,22 +290,6 @@ model PropertyPrice {
 
   @@index([propertyId])
   @@map("property_price")
-}
-
-model PropertyFetchHistory {
-  id         String   @id @default(cuid())
-  propertyId String
-  sourceUrl  String?
-  fetchedAt  DateTime @default(now())
-  type       String   @default("data") // data | images
-  data       Json?
-  images     String[] @default([])
-
-  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-
-  @@index([propertyId])
-  @@index([fetchedAt])
-  @@map("property_fetch_history")
 }
 
 model PropertyOwner {

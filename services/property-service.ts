@@ -91,7 +91,6 @@ const BRIDGE_PROPERTY_FIELDS = [
   'isFeatured',
   'isApproved',
   'status',
-  'sourceUrl',
   'createdAt',
   'updatedAt',
   'floors',
@@ -343,7 +342,6 @@ export async function getPaginatedProperties(opts: {
     if (filters.id) where.id = filters.id;
     if (filters.ids?.length) where.id = { in: filters.ids };
     if (filters.status) where.status = mapStatusToEnum(filters.status);
-    if (filters.sourceUrl) where.fetchHistory = { some: { sourceUrl: filters.sourceUrl } };
     if (filters.isOwnerListing === true) where.agency = null;
     if (filters.isOwnerListing === false) where.agency = { not: null };
     if (filters.purpose?.length) where.purpose = { in: filters.purpose.map(mapPurposeToEnum) };
@@ -1040,9 +1038,6 @@ export async function addProperty(d: Omit<ExtractedPropertyData, 'embedding'>): 
     if (!created.slug) await prisma.property.update({ where: { id: created.id }, data: { slug: created.id } });
     await upsertDetailTable(created.id, created.type, rest);
     await upsertMedia(created.id, rest.images ?? []);
-    if (rest.sourceUrl) {
-      await prisma.propertyFetchHistory.create({ data: { propertyId: created.id, sourceUrl: rest.sourceUrl, type: 'data', data: rest } });
-    }
     return created.id;
   } catch (e) { await logProblem(e, 'addProperty'); throw new Error('Failed to add property.'); }
 }
@@ -1083,32 +1078,6 @@ export async function deleteProperty(propertyId: string): Promise<void> {
   try {
     await prisma.property.delete({ where: { id: propertyId } });
   } catch (e) { await logProblem(e, `deleteProperty ${propertyId}`); throw new Error('Failed to delete property.'); }
-}
-
-// ─── Fetch History ────────────────────────────────────────────────────────────
-
-export async function addFetchToHistory(propertyId: string, data: ExtractedPropertyData): Promise<void> {
-  try {
-    await prisma.propertyFetchHistory.create({ data: { propertyId, type: 'data', data: data as any } });
-  } catch (e) { await logProblem(e, `addFetchToHistory ${propertyId}`); }
-}
-
-export async function deleteFetchHistoryItem(propertyId: string, fetchedAt: string): Promise<void> {
-  try {
-    await prisma.propertyFetchHistory.deleteMany({ where: { propertyId, fetchedAt: new Date(fetchedAt) } });
-  } catch (e) { await logProblem(e, `deleteFetchHistoryItem ${propertyId}`); }
-}
-
-export async function addImagesToFetchHistory(propertyId: string, images: string[]): Promise<void> {
-  try {
-    await prisma.propertyFetchHistory.create({ data: { propertyId, type: 'images', images } });
-  } catch (e) { await logProblem(e, `addImagesToFetchHistory ${propertyId}`); }
-}
-
-export async function deleteImageFetchHistoryItem(propertyId: string, fetchedAt: string): Promise<void> {
-  try {
-    await prisma.propertyFetchHistory.deleteMany({ where: { propertyId, fetchedAt: new Date(fetchedAt), type: 'images' } });
-  } catch (e) { await logProblem(e, `deleteImageFetchHistoryItem ${propertyId}`); }
 }
 
 // ─── Saved Properties ─────────────────────────────────────────────────────────

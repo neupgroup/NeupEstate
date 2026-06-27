@@ -11,7 +11,7 @@ import { AreaDisplayToggle } from "@/components/manage/area-display-toggle";
 import { FacingDisplayToggle } from "@/components/manage/facing-display-toggle";
 import { RoadAccessDisplayToggle } from "@/components/manage/road-access-display-toggle";
 import { PropertyMediaGallery } from "@/components/manage/property-media-gallery";
-import { Bath, BedDouble, Bike, Building2, CalendarDays, CarFront, ChefHat, ChevronLeft, Clock3, ExternalLink, FileText, Hash, Layers3, Link2, PenSquare, Sofa, SquareUserRound, Tag, UserRound, UtensilsCrossed } from "lucide-react";
+import { Bath, BedDouble, Bike, Building2, CalendarDays, CarFront, ChefHat, ChevronLeft, ExternalLink, FileText, Layers3, Link2, PenSquare, Sofa, SquareUserRound, Tag, UserRound, UtensilsCrossed } from "lucide-react";
 
 type PageProps = {
     params: Promise<{ id: string }>;
@@ -282,14 +282,166 @@ function formatPricingValue(value: unknown): string {
     return String(value);
 }
 
+function formatPriceAmount(value: number, currency: string = "NPR"): string {
+    const symbol = currency === "NPR" ? "NRs." : currency === "USD" ? "$" : currency === "INR" ? "INR" : currency;
+    return `${symbol} ${new Intl.NumberFormat("en-US", {
+        maximumFractionDigits: Number.isInteger(value) ? 0 : 2,
+    }).format(value)}`;
+}
+
+function formatPricingBasisLabel(basis: string): string {
+    const labels: Record<string, string> = {
+        "house-rent": "House rent",
+        "land-sale-unit": "Land sale per unit",
+        "land-rent-unit": "Land rent per unit",
+        "land-rent-flat": "Land flat rent",
+        "apartment-rent": "Apartment rent",
+        "house-sale-flat": "House sale",
+        "house-rent-monthly": "House rent",
+        "house-rent-annual": "House rent",
+        "land-sale-per-aana": "Land sale per aana",
+        "land-sale-per-ropani": "Land sale per ropani",
+        "land-sale-per-sqft": "Land sale per sqft",
+        "land-sale-flat": "Land flat sale",
+        "land-rent-monthly-per-aana": "Land rent per aana",
+        "land-rent-monthly-per-ropani": "Land rent per ropani",
+        "land-rent-monthly-per-sqft": "Land rent per sqft",
+        "land-rent-monthly-flat": "Land flat rent",
+        "land-rent-annual-flat": "Land flat rent",
+        "apartment-sale-flat": "Apartment sale",
+        "apartment-rent-monthly": "Apartment rent",
+        "apartment-rent-annual": "Apartment rent",
+        "flat-price": "Flat price",
+        "per-month": "Monthly price",
+        "per-annum": "Annual price",
+        "per-aana": "Price per aana",
+        "per-ropani": "Price per ropani",
+        "per-sqft": "Price per sqft",
+        "per-month-flat": "Monthly flat price",
+        "per-annum-flat": "Annual flat price",
+    };
+
+    return labels[basis] || basis.replace(/[-_]/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function formatPricingBasisSuffix({
+    basis,
+    frequency,
+    unit,
+}: {
+    basis: string;
+    frequency?: string | null;
+    unit?: string | null;
+}) {
+    const normalizedFrequency = frequency?.trim();
+    const normalizedUnit = unit?.trim();
+    const hasPerUnitBasis = basis.includes("unit") || basis.includes("per-aana") || basis.includes("per-ropani") || basis.includes("per-sqft");
+    const hasFlatBasis = basis.includes("flat") || basis === "flat-price";
+
+    if (normalizedFrequency && normalizedUnit) {
+        return `per ${normalizedUnit} per ${normalizedFrequency}`;
+    }
+
+    if (normalizedUnit && hasPerUnitBasis) {
+        return `per ${normalizedUnit}`;
+    }
+
+    if (normalizedFrequency && (!hasFlatBasis || basis.includes("rent"))) {
+        return `per ${normalizedFrequency}`;
+    }
+
+    return null;
+}
+
+function formatHiddenPriceMode(mode?: string | null) {
+    if (mode === "price-on-call") return "Price on call";
+    if (mode === "offer-yours-first") return "Offer yours first";
+    return "Price not available";
+}
+
+function getPricingCards(property: {
+    price?: number | null;
+    pricing?: {
+        currency?: string | null;
+        priceDisplayMode?: string | null;
+        listed?: number | null;
+        negotiable?: boolean | null;
+        basis?: string | null;
+        basisPrices?: Record<string, number | undefined> | null;
+        basisNegotiable?: Record<string, boolean | undefined> | null;
+        basisNegotiablePrices?: Record<string, number | undefined> | null;
+        basisFrequencies?: Record<string, string | undefined> | null;
+        basisUnits?: Record<string, string | undefined> | null;
+    } | null;
+}) {
+    const pricing = property.pricing;
+    const currency = pricing?.currency || "NPR";
+    const basisPrices = pricing?.basisPrices ?? {};
+    const basisKeys = Array.from(
+        new Set([
+            ...Object.keys(basisPrices),
+            ...(pricing?.basis ? [pricing.basis] : []),
+        ]),
+    );
+
+    const cards = basisKeys
+        .map((basis) => {
+            const amount = Number(basisPrices[basis] ?? 0);
+            const negotiable = Boolean(pricing?.basisNegotiable?.[basis]);
+            const negotiableAmount = Number(pricing?.basisNegotiablePrices?.[basis] ?? 0);
+
+            if (amount <= 0 && negotiableAmount <= 0) return null;
+
+            const suffix = formatPricingBasisSuffix({
+                basis,
+                frequency: pricing?.basisFrequencies?.[basis] ?? null,
+                unit: pricing?.basisUnits?.[basis] ?? null,
+            });
+
+            return {
+                label: formatPricingBasisLabel(basis),
+                value: [formatPriceAmount(amount > 0 ? amount : negotiableAmount, currency), suffix].filter(Boolean).join(" "),
+                note: negotiable
+                    ? negotiableAmount > 0 && negotiableAmount !== amount
+                        ? `Negotiable from ${formatPriceAmount(negotiableAmount, currency)}`
+                        : "Negotiable"
+                    : null,
+            };
+        })
+        .filter((card): card is { label: string; value: string; note: string | null } => Boolean(card));
+
+    if (cards.length) return cards;
+
+    const listed = Number(pricing?.listed ?? property.price ?? 0);
+    if (listed > 0) {
+        return [{
+            label: pricing?.basis ? formatPricingBasisLabel(pricing.basis) : "Listed price",
+            value: formatPriceAmount(listed, currency),
+            note: pricing?.negotiable ? "Negotiable" : null,
+        }];
+    }
+
+    if (pricing?.priceDisplayMode && pricing.priceDisplayMode !== "show-price") {
+        return [{
+            label: "Public price",
+            value: formatHiddenPriceMode(pricing.priceDisplayMode),
+            note: null,
+        }];
+    }
+
+    return [];
+}
+
 function PricingCard({
     label,
     value,
     icon,
+    note,
 }: {
     label: string;
     value: unknown;
     icon: ReactNode;
+    note?: string | null;
 }) {
     return (
         <div className="rounded-xl border border-border/70 bg-background p-4 shadow-sm transition-colors hover:border-primary/40 hover:bg-primary/5">
@@ -302,6 +454,7 @@ function PricingCard({
                     <div className="mt-1 text-sm font-medium text-foreground whitespace-pre-wrap break-words">
                         {formatPricingValue(value)}
                     </div>
+                    {note ? <div className="mt-1 text-xs text-muted-foreground">{note}</div> : null}
                 </div>
             </div>
         </div>
@@ -450,6 +603,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
         ? await getPropertyReviewRequests(property.id)
         : [];
     const canViewPropertyLogs = await hasPermission(PERMISSIONS.root.propertyLog);
+    const pricingCards = getPricingCards(property);
 
     return (
         <div className="space-y-4 max-w-6xl mx-auto">
@@ -592,22 +746,21 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
             </Section>
 
             <Section title="Pricing Details" description="Price and pricing metadata.">
-                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                    <PricingCard label="Price" value={property.price} icon={<Tag className="h-5 w-5" />} />
-                    <PricingCard label="Currency" value={property.pricing?.currency} icon={<Hash className="h-5 w-5" />} />
-                    <PricingCard label="Display Mode" value={property.pricing?.priceDisplayMode} icon={<Hash className="h-5 w-5" />} />
-                    <PricingCard label="Minimum" value={property.pricing?.minimum} icon={<Hash className="h-5 w-5" />} />
-                    <PricingCard label="Maximum" value={property.pricing?.maximum} icon={<Hash className="h-5 w-5" />} />
-                    <PricingCard label="Listed" value={property.pricing?.listed} icon={<Hash className="h-5 w-5" />} />
-                    <PricingCard label="Negotiable" value={property.pricing?.negotiable} icon={<Hash className="h-5 w-5" />} />
-                    <PricingCard label="Basis" value={property.pricing?.basis} icon={<Hash className="h-5 w-5" />} />
-                    <PricingCard label="Basis Prices" value={property.pricing?.basisPrices} icon={<Hash className="h-5 w-5" />} />
-                    <PricingCard label="Basis Negotiable" value={property.pricing?.basisNegotiable} icon={<Hash className="h-5 w-5" />} />
-                    <PricingCard label="Basis Negotiable Prices" value={property.pricing?.basisNegotiablePrices} icon={<Hash className="h-5 w-5" />} />
-                    <PricingCard label="Basis Frequencies" value={property.pricing?.basisFrequencies} icon={<Hash className="h-5 w-5" />} />
-                    <PricingCard label="Basis Units" value={property.pricing?.basisUnits} icon={<Hash className="h-5 w-5" />} />
-                    <PricingCard label="Options" value={property.pricing?.options} icon={<Hash className="h-5 w-5" />} />
-                </div>
+                {pricingCards.length ? (
+                    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                        {pricingCards.map((card) => (
+                            <PricingCard
+                                key={`${card.label}-${card.value}`}
+                                label={card.label}
+                                value={card.value}
+                                note={card.note}
+                                icon={<Tag className="h-5 w-5" />}
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    <Field label="Pricing" value="Not set" icon={<Tag className="h-5 w-5" />} />
+                )}
             </Section>
 
             {hasLocation && (
@@ -666,15 +819,6 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                         No documents attached.
                     </div>
                 )}
-            </Section>
-
-            <Section title="Source & Metadata" description="External source and record timestamps.">
-                <ReadonlyGrid>
-                    <Field label="Source URL" value={property.sourceUrl} icon={<Link2 className="h-5 w-5" />} />
-                    <Field label="Created At" value={property.createdAt} icon={<Clock3 className="h-5 w-5" />} />
-                    <Field label="Updated At" value={property.updatedAt} icon={<Clock3 className="h-5 w-5" />} />
-                    <Field label="Slug" value={property.slug} icon={<Hash className="h-5 w-5" />} />
-                </ReadonlyGrid>
             </Section>
 
             <div className="flex justify-start">

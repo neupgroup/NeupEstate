@@ -316,7 +316,6 @@ export interface Property {
     isFeatured?: boolean;
     isApproved?: boolean;
     status?: 'AWAITING_DELETION' | 'PENDING' | 'ACTIVE' | 'SOLD' | 'RENTED' | 'ARCHIVED';
-    sourceUrl?: string;
     createdAt?: string; // ISO 8601 date string
     updatedAt?: string; // ISO 8601 date string
     embedding?: number[];
@@ -325,8 +324,6 @@ export interface Property {
     roadAccess?: number; // stored in meters
     latitude?: number;
     longitude?: number;
-    fetchHistory?: { fetchedAt: string; data: ExtractedPropertyData }[];
-    imageFetchHistory?: { fetchedAt: string; images: string[] }[];
     kitchens?: number;
     diningRooms?: number;
     livingRooms?: number;

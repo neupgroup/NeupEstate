@@ -58,11 +58,8 @@ export default async function ManagePropertiesPage({
   if (minBathrooms)  filters.minBathrooms = minBathrooms;
 
   if (query) {
-    let isUrl = false;
-    try { new URL(query); isUrl = true; } catch (_) {}
     const isRecordId = /^c[a-z0-9]{24}$/.test(query);
     if (isRecordId)      { filters.id = query; }
-    else if (isUrl)      { filters.sourceUrl = query; }
     else {
       try {
         const parsed = await parseAdminFilter({ query });

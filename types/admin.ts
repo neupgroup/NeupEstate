@@ -40,7 +40,6 @@ export const PropertyFiltersSchema = z.object({
   minRoadAccess: z.coerce.number().optional(),
   maxRoadAccess: z.coerce.number().optional(),
   bedrooms: z.coerce.number().optional(),
-  sourceUrl: z.string().optional(),
   listingBy: z.array(z.enum(['owners', 'developers', 'agencies'])).optional(),
   kitchens: z.coerce.number().optional(),
   diningRooms: z.coerce.number().optional(),

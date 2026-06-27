@@ -18,7 +18,6 @@ import { ExternalLink } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ClientLink } from '@/components/client-link';
-import { SourceOriginationManager } from "@/components/manage/source-origination-manager";
 import { ProgressivePropertySections } from '@/components/manage/progressive-property-sections';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -594,10 +593,6 @@ export default function EditPropertyPage() {
                     />
                 </form>
             </Form>
-
-            {property.sourceUrl && (
-                <SourceOriginationManager property={property} />
-            )}
         </div>
     );
 }

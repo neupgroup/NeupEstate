@@ -5,7 +5,7 @@
 import { naturalLanguagePropertySearch as naturalLanguagePropertySearchFlow } from "@/services/ai/natural-language-property-search";
 import { recommendProperties as recommendPropertiesFlow } from "@/services/ai/ai-powered-recommendations";
 import { extractAndSaveProperty as extractAndSavePropertyFlow, type ExtractPropertyDetailsOutput } from "@/services/ai/extract-property-details-flow";
-import { createProperty as createPropertyService, updateProperty as updatePropertyService, approveProperty, getProperties, deleteProperty as deletePropertyService, getPendingProperties, getAwaitingReviewItems, getPaginatedProperties, getPropertyById, getPropertyReviewRequests, updatePropertyWithExtractedData, addFetchToHistory, deleteFetchHistoryItem as deleteFetchHistoryItemService, updatePropertyImages, addImagesToFetchHistory, deleteImageFetchHistoryItem as deleteImageFetchHistoryItemService, toggleSavedProperty as toggleSavedPropertyService, getUsersBySavedProperty as getUsersBySavedPropertyService, getSavedPropertiesForUser as getSavedPropertiesForUserService, createPropertyLog } from '@/services/property-service';
+import { createProperty as createPropertyService, updateProperty as updatePropertyService, approveProperty, getProperties, deleteProperty as deletePropertyService, getPendingProperties, getAwaitingReviewItems, getPaginatedProperties, getPropertyById, getPropertyReviewRequests, updatePropertyWithExtractedData, updatePropertyImages, toggleSavedProperty as toggleSavedPropertyService, getUsersBySavedProperty as getUsersBySavedPropertyService, getSavedPropertiesForUser as getSavedPropertiesForUserService, createPropertyLog } from '@/services/property-service';
 import { createAgency as createAgencyService, updateAgency as updateAgencyService, deleteAgency as deleteAgencyService } from '@/services/agency-service';
 import { createAgencyAgentMap as createAgencyAgentMapService, getAgencyAgentMapsByAgent as getAgencyAgentMapsByAgentService, getAgencyAgentMapsByAgency as getAgencyAgentMapsByAgencyService } from '@/services/agency-agent-map-service';
 import { getAgentsByLocation as getAgentsByLocationService, createAgent as createAgentService, updateAgent as updateAgentService, deleteAgent as deleteAgentService } from '@/services/agent-service';
@@ -29,7 +29,6 @@ import { suggestQuestions as suggestQuestionsFlow } from '@/services/ai/suggest-
 import { logActivity as logActivityService, updateAccountAccessInfo } from '@/services/activity-service';
 import { updateUserPreferences, getUserPreferences } from '@/services/user-preference-service';
 import { createFaq as createFaqService, updateFaq as updateFaqService, deleteFaq as deleteFaqService } from '@/services/faq-service';
-import { fetchAllImageUrlsFromPage } from '@/services/activities/fetch-page-images';
 import { updatePrompt as updatePromptService, createPrompt as createPromptService, deletePrompt as deletePromptService } from '@/services/prompt-service';
 import { createPropertyRequest as createPropertyRequestService, createInquiry as createInquiryService, updateInquiryStatus as updateInquiryStatusService } from '@/services/property-request-service';
 import { createSalesRequest as createSalesRequestService } from '@/services/sales-request-service';
@@ -202,23 +201,6 @@ export async function extractAndSaveProperty(
                 continue;
             }
 
-            const fallbackMatch = result.extractedData?.sourceUrl
-                ? await getPaginatedProperties({
-                    page: 1,
-                    limit: 1,
-                    filters: { sourceUrl: result.extractedData.sourceUrl },
-                })
-                : { properties: [], totalCount: 0 };
-
-            if (fallbackMatch.properties.length > 0) {
-                results.push({
-                    url,
-                    ...result,
-                    propertyId: fallbackMatch.properties[0].id,
-                });
-                continue;
-            }
-
             results.push({
                 url,
                 ...result,
@@ -240,96 +222,6 @@ export async function extractAndSaveProperty(
     return { success: true, results };
 }
 
-export async function fetchAndStoreHistoryAction(
-  propertyId: string
-): Promise<{ success: boolean; error?: string | null }> {
-  try {
-    const property = await getPropertyById(propertyId, { includeInactive: true });
-    if (!property) {
-      return { success: false, error: "Property not found." };
-    }
-    if (!property.sourceUrl) {
-      return { success: false, error: "Property has no source URL to refetch from." };
-    }
-
-    const result = await extractAndSavePropertyFlow({
-      url: property.sourceUrl,
-      saveToDb: false, // We are not saving directly, just extracting
-    });
-
-    if (result.error || !result.extractedData) {
-        const errorMsg = result.error || 'AI flow failed to return extracted data.';
-        await logProblem(new Error(errorMsg), `fetchAndStoreHistoryAction (ID: ${propertyId})`);
-        return { success: false, error: errorMsg };
-    }
-    
-    // New step: store in history instead of updating the property
-    await addFetchToHistory(propertyId, result.extractedData);
-    
-    revalidatePath(`/manage/properties/${propertyId}/edit`);
-    
-    return { success: true, error: null };
-  } catch (e: any) {
-    await logProblem(e, `fetchAndStoreHistoryAction (ID: ${propertyId})`);
-    return { success: false, error: e.message || "An unknown error occurred during refetch." };
-  }
-}
-
-export async function applyFetchedDataToPropertyAction(
-  propertyId: string,
-  data: ExtractedPropertyData
-): Promise<{ success: boolean; error?: string }> {
-  try {
-    // This function now just applies a given data object to the property
-    await updatePropertyWithExtractedData(propertyId, data);
-    revalidatePath(`/manage/properties/${propertyId}/edit`);
-    return { success: true };
-  } catch (e: any) {
-    await logProblem(e, `applyFetchedDataToPropertyAction (ID: ${propertyId})`);
-    return { success: false, error: e.message };
-  }
-}
-
-export async function deleteFetchHistoryItemAction(
-  propertyId: string,
-  fetchedAt: string
-): Promise<{ success: boolean; error?: string }> {
-  try {
-    await deleteFetchHistoryItemService(propertyId, fetchedAt);
-    revalidatePath(`/manage/properties/${propertyId}/edit`);
-    return { success: true };
-  } catch (e: any) {
-    await logProblem(e, `deleteFetchHistoryItemAction (ID: ${propertyId})`);
-    return { success: false, error: e.message || 'Failed to remove history item.' };
-  }
-}
-
-export async function fetchPropertyImagesAction(
-  propertyId: string
-): Promise<{ success: boolean; error?: string | null }> {
-  try {
-    const property = await getPropertyById(propertyId, { includeInactive: true });
-    if (!property?.sourceUrl) {
-      return { success: false, error: "Property has no source URL to fetch images from." };
-    }
-
-    const images = await fetchAllImageUrlsFromPage(property.sourceUrl);
-
-    if (images.length === 0) {
-      return { success: false, error: 'The scraper could not find any images on the page.' };
-    }
-    
-    await addImagesToFetchHistory(propertyId, images);
-    
-    revalidatePath(`/manage/properties/${propertyId}/edit`);
-    return { success: true };
-  } catch (e: any) {
-    // The scraper function now throws errors, which are caught here.
-    // The scraper also logs the error, so we just need to return a message.
-    return { success: false, error: e.message || "An unknown error occurred during image fetch." };
-  }
-}
-
 export async function applyFetchedImagesToPropertyAction(
   propertyId: string,
   images: string[]
@@ -341,20 +233,6 @@ export async function applyFetchedImagesToPropertyAction(
   } catch (e: any) {
     await logProblem(e, `applyFetchedImagesToPropertyAction (ID: ${propertyId})`);
     return { success: false, error: e.message };
-  }
-}
-
-export async function deleteImageFetchHistoryItemAction(
-  propertyId: string,
-  fetchedAt: string
-): Promise<{ success: boolean; error?: string }> {
-  try {
-    await deleteImageFetchHistoryItemService(propertyId, fetchedAt);
-    revalidatePath(`/manage/properties/${propertyId}/edit`);
-    return { success: true };
-  } catch (e: any) {
-    await logProblem(e, `deleteImageFetchHistoryItemAction (ID: ${propertyId})`);
-    return { success: false, error: e.message || 'Failed to remove image history item.' };
   }
 }
 
@@ -1493,9 +1371,8 @@ export async function getPendingPropertiesForAgent(limit: number): Promise<{ id:
 }
 
 export async function getApprovedPropertiesForAgent(limit: number): Promise<{ id:string; title: string }[]> {
-    const allProperties = await getProperties();
-    const propertiesToCheck = allProperties.filter(p => p.isApproved && p.sourceUrl).slice(0, limit);
-    return propertiesToCheck.map(p => ({ id: p.id, title: p.title }));
+    void limit;
+    return [];
 }
 
 export type MarketAnalysisState = {
