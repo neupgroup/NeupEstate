@@ -17,7 +17,7 @@ export interface SavedPropertyEntry {
 
 export interface PropertyDraftSummary {
   id: string;
-  propertyId: string;
+  propertyId?: string | null;
   title: string;
   location?: string;
   category?: string;
@@ -250,7 +250,7 @@ function mapRecord(record: any): Property {
     type:             record.type === PropertyType.COMMERCIAL ? 'Commercial' : 'Residential',
     images,
     amenities:        normalizeStringArray(record.amenities),
-    agency:           { id: record.agency || 'unknown', name: record.agency ? 'Agency' : 'Owner', logoUrl: 'https://placehold.co/200x80.png' },
+    agency:           { id: record.agency || 'unknown', name: record.agency || 'Owner', logoUrl: 'https://placehold.co/200x80.png' },
     listingAgent:     record.agent || undefined,
     isOwnerListing:   !record.agency,
     isFeatured:       Boolean(record.isFeatured),
@@ -276,6 +276,36 @@ function mapRecord(record: any): Property {
   } as Property;
 }
 
+async function hydratePropertyAccountLabels(properties: Property[]): Promise<Property[]> {
+  const accountIds = Array.from(new Set(
+    properties
+      .flatMap((property) => [property.agency?.id, property.listingAgent])
+      .filter((value): value is string => Boolean(value) && value !== 'unknown'),
+  ));
+
+  if (!accountIds.length) return properties;
+
+  const accounts = await prisma.account.findMany({
+    where: { id: { in: accountIds } },
+    select: { id: true, displayName: true },
+  });
+  const nameById = new Map(accounts.map((account) => [
+    account.id,
+    account.displayName?.trim() || account.id,
+  ]));
+
+  return properties.map((property) => ({
+    ...property,
+    agency: property.agency ? {
+      ...property.agency,
+      name: nameById.get(property.agency.id) || property.agency.name,
+    } : property.agency,
+    listingAgent: property.listingAgent
+      ? (nameById.get(property.listingAgent) || property.listingAgent)
+      : property.listingAgent,
+  }));
+}
+
 function onlyActive(p: Property) { return Boolean(p.isApproved); }
 
 // ─── Read ────────────────────────────────────────────────────────────────────
@@ -283,7 +313,7 @@ function onlyActive(p: Property) { return Boolean(p.isApproved); }
 export async function getProperties(opts: { includeInactive?: boolean } = {}): Promise<Property[]> {
   try {
     const records = await prisma.property.findMany({ orderBy: { updatedAt: 'desc' }, include: PROPERTY_INCLUDE });
-    const all = records.map(mapRecord);
+    const all = await hydratePropertyAccountLabels(records.map(mapRecord));
     return opts.includeInactive ? all : all.filter(onlyActive);
   } catch (e) { await logProblem(e, 'getProperties'); return []; }
 }
@@ -350,7 +380,7 @@ export async function getPaginatedProperties(opts: {
       prisma.property.count({ where }),
       prisma.property.findMany({ where, orderBy: { updatedAt: 'desc' }, take: limit, skip: (page - 1) * limit, include: PROPERTY_INCLUDE }),
     ]);
-    return { properties: records.map(mapRecord), totalCount };
+    return { properties: await hydratePropertyAccountLabels(records.map(mapRecord)), totalCount };
   } catch (e) { await logProblem(e, 'getPaginatedProperties'); return { properties: [], totalCount: 0 }; }
 }
 
@@ -412,7 +442,7 @@ export async function getPropertyById(id: string, opts: { includeInactive?: bool
   try {
     const record = await prisma.property.findUnique({ where: { id }, include: PROPERTY_INCLUDE });
     if (!record) return null;
-    const p = mapRecord(record);
+    const [p] = await hydratePropertyAccountLabels([mapRecord(record)]);
     return opts.includeInactive ? p : (p.isApproved ? p : null);
   } catch (e) { await logProblem(e, `getPropertyById ${id}`); return null; }
 }
@@ -421,7 +451,7 @@ export async function getPropertyBySlug(slug: string, opts: { includeInactive?: 
   try {
     const record = await prisma.property.findFirst({ where: { slug }, include: PROPERTY_INCLUDE });
     if (record) {
-      const p = mapRecord(record);
+      const [p] = await hydratePropertyAccountLabels([mapRecord(record)]);
       return opts.includeInactive ? p : (p.isApproved ? p : null);
     }
     return getPropertyById(slug, opts);
@@ -431,23 +461,23 @@ export async function getPropertyBySlug(slug: string, opts: { includeInactive?: 
 export async function getFeaturedProperties(limit = 4): Promise<Property[]> {
   try {
     const records = await prisma.property.findMany({ where: { isFeatured: true, status: PropertyStatus.ACTIVE }, orderBy: { updatedAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
-    if (records.length > 0) return records.map(mapRecord);
+    if (records.length > 0) return hydratePropertyAccountLabels(records.map(mapRecord));
     const fallback = await prisma.property.findMany({ where: { status: PropertyStatus.ACTIVE }, orderBy: { updatedAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
-    return fallback.map(mapRecord);
+    return hydratePropertyAccountLabels(fallback.map(mapRecord));
   } catch (e) { await logProblem(e, 'getFeaturedProperties'); return []; }
 }
 
 export async function getRecentProperties(limit = 4): Promise<Property[]> {
   try {
     const records = await prisma.property.findMany({ where: { status: PropertyStatus.ACTIVE }, orderBy: { createdAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
-    return records.map(mapRecord);
+    return hydratePropertyAccountLabels(records.map(mapRecord));
   } catch (e) { await logProblem(e, 'getRecentProperties'); return []; }
 }
 
 export async function getPropertiesByPurpose(purpose: 'Sale' | 'Rent' | 'Lease', limit = 4): Promise<Property[]> {
   try {
     const records = await prisma.property.findMany({ where: { purpose: mapPurposeToEnum(purpose), status: PropertyStatus.ACTIVE }, orderBy: { updatedAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
-    return records.map(mapRecord);
+    return hydratePropertyAccountLabels(records.map(mapRecord));
   } catch (e) { await logProblem(e, 'getPropertiesByPurpose'); return []; }
 }
 
@@ -458,7 +488,7 @@ export async function getFeaturedProjects(limit = 4): Promise<Property[]> {
 export async function getPremiumProperties(limit = 4): Promise<Property[]> {
   try {
     const records = await prisma.property.findMany({ where: { status: PropertyStatus.ACTIVE, displayPrice: { gt: 0 } }, orderBy: { displayPrice: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
-    return records.map(mapRecord);
+    return hydratePropertyAccountLabels(records.map(mapRecord));
   } catch (e) { await logProblem(e, 'getPremiumProperties'); return []; }
 }
 
@@ -609,7 +639,7 @@ export async function getAwaitingReviewItems(
 
 export async function getPropertyReviewRequests(propertyId: string): Promise<Array<{
   id: string;
-  propertyId: string;
+  propertyId?: string;
   accountId: string;
   status: string;
   isApproved: boolean | null;
@@ -640,7 +670,7 @@ export async function getPropertyReviewRequests(propertyId: string): Promise<Arr
 
     return rows.map((row) => ({
       id: row.id,
-      propertyId: row.propertyId,
+      propertyId: row.propertyId ?? undefined,
       accountId: row.accountId,
       status: row.status,
       isApproved: row.isApproved,
@@ -734,7 +764,7 @@ export async function getPropertiesByAgent(agentId: string, opts: { includeInact
     const where: any = { agent: agentId };
     if (!opts.includeInactive) where.status = PropertyStatus.ACTIVE;
     const records = await prisma.property.findMany({ where, orderBy: { updatedAt: 'desc' }, include: PROPERTY_INCLUDE });
-    return records.map(mapRecord);
+    return hydratePropertyAccountLabels(records.map(mapRecord));
   } catch (e) { await logProblem(e, `getPropertiesByAgent ${agentId}`); return []; }
 }
 

@@ -528,7 +528,7 @@ export default function EditPropertyPage() {
 
     const reviewMessage = useMemo(() => {
         const latest = changeContext?.recentActivity?.latestOutcomeMessage;
-        if (latest) return latest;
+        if (latest && latest !== 'Your changes have been declined.') return latest;
         if (changeContext?.recentActivity?.hasOtherUserChangeInLast7Days) {
             return 'Information for this property has been changed in the last 7 days.';
         }

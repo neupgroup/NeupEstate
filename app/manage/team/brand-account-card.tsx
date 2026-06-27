@@ -24,8 +24,17 @@ function getAccountTypeLabel(accountType: string) {
   if (normalized === "brand" || normalized === "branch") {
     return "Agency Account";
   }
+  if (normalized === "individual") {
+    return "Personal Account";
+  }
+  if (normalized === "dependent") {
+    return "Personal Profile";
+  }
+  if (normalized === "guest") {
+    return "Guest Profile";
+  }
 
-  return "Agency Profile";
+  return "Account Profile";
 }
 
 type BrandAccountCardProps = {

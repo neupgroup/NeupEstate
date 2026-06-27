@@ -182,8 +182,8 @@ export default function CreatePropertyPage() {
             const result = await createPropertyAction(values, postingAgencyId);
             if (result.success) {
                 toast({
-                    title: 'Property Created',
-                    description: `The property "${values.title}" has been successfully created.`,
+                    title: 'Review Requested',
+                    description: `The property "${values.title}" has been saved for approval.`,
                 });
                 router.push('/manage/properties');
             } else {

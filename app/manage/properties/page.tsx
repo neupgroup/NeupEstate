@@ -2,7 +2,7 @@
 import { getAwaitingReviewItems, getPaginatedProperties } from "@/services/property-service";
 import { checkAuthenticationForWeb } from "@/services/neupid/check-auth-web";
 import { FilePlus2 } from "lucide-react";
-import { AdminPropertyRow } from "@/components/manage/property-row";
+import { AdminPropertyDraftRow, AdminPropertyRow } from "@/components/manage/property-row";
 import { Pagination } from "@/components/manage/pagination";
 import { AdminPropertySearch } from "@/components/manage/admin-property-search";
 import { parseAdminFilter } from "@/services/ai/parse-admin-filter-flow";
@@ -85,6 +85,9 @@ export default async function ManagePropertiesPage({
   const awaitingReviewIds = isAwaitingReviewView
     ? Array.from(new Set(awaitingItems.map((item) => item.propertyId).filter((id): id is string => Boolean(id))))
     : [];
+  const standaloneDrafts = (isDefaultFeed || isDraftsView || isAwaitingReviewView)
+    ? awaitingItems.filter((item) => item.kind === 'draft' && !item.propertyId)
+    : [];
 
   if (isAwaitingReviewView) {
     filters.ids = awaitingReviewIds.length ? awaitingReviewIds : ["__no_results__"];
@@ -108,7 +111,7 @@ export default async function ManagePropertiesPage({
   const filteredProperties = isDraftsView
     ? properties.filter((property) => draftKindsByPropertyId.has(property.id))
     : properties;
-  const totalCount = paginatedProperties.totalCount;
+  const totalCount = paginatedProperties.totalCount + standaloneDrafts.length;
   const countLabel = totalCount === 1 ? 'property' : 'properties';
   const totalPages = Math.ceil(totalCount / PROPERTIES_PER_PAGE);
   const defaultPageItems = filteredProperties.slice((currentPage - 1) * PROPERTIES_PER_PAGE, currentPage * PROPERTIES_PER_PAGE);
@@ -153,6 +156,24 @@ export default async function ManagePropertiesPage({
         </ClientLink>
 
         {/* Property rows */}
+        {standaloneDrafts.length > 0 && (
+          standaloneDrafts.map((draft) => (
+            <div key={draft.id}>
+              <div className="border-t border-border" />
+              <AdminPropertyDraftRow
+                draft={{
+                  id: draft.id,
+                  propertyId: '',
+                  title: draft.title,
+                  location: draft.location,
+                  category: draft.category,
+                  status: (draft.status as 'creating' | 'changing' | 'deleting') ?? 'creating',
+                  modifiedOn: draft.modifiedOn ?? new Date().toISOString(),
+                }}
+              />
+            </div>
+          ))
+        )}
         {defaultPageItems.length > 0 ? (
           defaultPageItems.map((property) => (
             <div key={property.id}>
@@ -163,7 +184,7 @@ export default async function ManagePropertiesPage({
               />
             </div>
           ))
-        ) : !hasAnyRows ? (
+        ) : !hasAnyRows && standaloneDrafts.length === 0 ? (
           <div className="border-t border-border">
             <div className="px-5 py-8 text-center text-sm text-muted-foreground">
               {hasFilters || query

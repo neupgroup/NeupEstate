@@ -10,7 +10,7 @@ import { PropertyImageGrid } from "@/components/manage/property-image-grid";
 
 type ReviewRequest = {
   id: string;
-  propertyId: string;
+  propertyId?: string;
   accountId: string;
   status: string;
   data: Record<string, any>;

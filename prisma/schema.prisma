@@ -27,6 +27,7 @@ enum PropertyPurpose {
 
 enum PropertyStatus {
   AWAITING_CREATION
+  AWAITING_DELETION
   PENDING
   ACTIVE
   SOLD
@@ -338,7 +339,7 @@ model PropertyDocument {
 
 model PropertyChange {
   id         String   @id @default(cuid())
-  propertyId String   @map("property_id")
+  propertyId String?  @map("property_id")
   accountId  String   @map("account_id")
   data       Json
   status     String
@@ -346,7 +347,7 @@ model PropertyChange {
   createdOn  DateTime @default(now())
   modifiedOn DateTime @default(now())
 
-  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  property   Property? @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   account    Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
 
   @@index([propertyId])

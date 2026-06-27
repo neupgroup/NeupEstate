@@ -715,7 +715,7 @@ export async function cancelPropertyChangeDraftAction(changeId: string): Promise
 
 export async function reviewPropertyChangeAction(input: {
   changeId: string;
-  propertyId: string;
+  propertyId?: string | null;
   approve: boolean;
   acceptedFields?: string[];
 }): Promise<{ success: boolean; error?: string }> {
@@ -725,7 +725,7 @@ export async function reviewPropertyChangeAction(input: {
     const request = await prisma.propertyChange.findFirst({
       where: {
         id: input.changeId,
-        propertyId: input.propertyId,
+        ...(input.propertyId ? { propertyId: input.propertyId } : {}),
         isApproved: null,
       },
     });
@@ -741,10 +741,36 @@ export async function reviewPropertyChangeAction(input: {
         .map((field) => ({ field, value: requestData[field] }))
         .filter((entry) => entry.value !== undefined);
 
-      if (request.status === 'deleting') {
-        await deletePropertyService(input.propertyId);
+      if (request.status === 'creating') {
+        const createdPropertyId = await createPropertyService(requestData as CreatePropertyInput);
         await createPropertyLog({
-          propertyId: input.propertyId,
+          propertyId: createdPropertyId,
+          requestedBy: request.accountId,
+          approvedBy: accountId,
+          approvedOn: new Date(),
+          data: acceptedData,
+        });
+        await prisma.propertyChange.update({
+          where: { id: request.id },
+          data: {
+            propertyId: createdPropertyId,
+            isApproved: true,
+            modifiedOn: new Date(),
+          },
+        });
+        revalidatePath('/manage/properties');
+        revalidatePath(`/manage/properties/${createdPropertyId}`);
+        return { success: true };
+      }
+
+      if (!request.propertyId) {
+        return { success: false, error: 'Pending request is missing its property reference.' };
+      }
+
+      if (request.status === 'deleting') {
+        await deletePropertyService(request.propertyId);
+        await createPropertyLog({
+          propertyId: request.propertyId,
           requestedBy: request.accountId,
           approvedBy: accountId,
           approvedOn: new Date(),
@@ -756,10 +782,10 @@ export async function reviewPropertyChangeAction(input: {
           if (value !== undefined) picked[field] = value;
           return picked;
         }, {});
-        await updatePropertyWithExtractedData(input.propertyId, data as any);
-        await approveProperty(input.propertyId);
+        await updatePropertyWithExtractedData(request.propertyId, data as any);
+        await approveProperty(request.propertyId);
         await createPropertyLog({
-          propertyId: input.propertyId,
+          propertyId: request.propertyId,
           requestedBy: request.accountId,
           approvedBy: accountId,
           approvedOn: new Date(),
@@ -785,8 +811,12 @@ export async function reviewPropertyChangeAction(input: {
     });
 
     if (input.acceptedFields?.length) {
+      const requestPropertyId = request.propertyId;
+      if (!requestPropertyId) {
+        return { success: true };
+      }
       await createPropertyLog({
-        propertyId: input.propertyId,
+        propertyId: requestPropertyId,
         requestedBy: request.accountId,
         approvedBy: accountId,
         approvedOn: new Date(),
@@ -887,7 +917,7 @@ export async function getPropertyCreateDraftAction(propertyId: string): Promise<
 export async function createPropertyAction(
   data: CreatePropertyFormValues,
   postingAgencyId?: string | null
-): Promise<{ success: boolean; error?: string | null; propertyId?: string | null }> {
+): Promise<{ success: boolean; error?: string | null; propertyId?: string | null; changeId?: string | null }> {
   try {
     await requirePermission(PERMISSIONS.manage.propertySelfCreate);
     const actorId = await requireIdentity();
@@ -964,27 +994,43 @@ export async function createPropertyAction(
       agency: agencyId,
       agent: agentId,
     };
-    const propertyId = await createPropertyService({
-      ...(serviceInput as any),
-      status: 'awaitingCreation',
-      isApproved: false,
-      creatorId: actorId,
+
+    const existingDraft = await prisma.propertyChange.findFirst({
+      where: {
+        accountId: actorId,
+        propertyId: null,
+        status: 'creating',
+        isApproved: null,
+      },
+      orderBy: { modifiedOn: 'desc' },
     });
-    await createPropertyLog({
-      propertyId,
-      requestedBy: actorId,
-      approvedBy: actorId,
-      approvedOn: new Date(),
-      data: Object.entries(serviceInput).map(([field, value]) => ({ field, value })),
-    });
+
+    const draftPayload = {
+      accountId: actorId,
+      propertyId: null,
+      status: 'creating',
+      isApproved: null,
+      data: serviceInput as any,
+      modifiedOn: new Date(),
+    };
+
+    const draft = existingDraft
+      ? await prisma.propertyChange.update({
+          where: { id: existingDraft.id },
+          data: draftPayload,
+        })
+      : await prisma.propertyChange.create({
+          data: draftPayload,
+        });
+
     revalidatePath('/manage/properties');
-    return { success: true, propertyId, error: null };
+    return { success: true, propertyId: null, changeId: draft.id, error: null };
   } catch (e: any) {
     await logProblem(e, 'createPropertyAction');
     if (e instanceof z.ZodError) {
-        return { success: false, error: e.message, propertyId: null };
+        return { success: false, error: e.message, propertyId: null, changeId: null };
     }
-    return { success: false, error: "An unexpected server error occurred.", propertyId: null };
+    return { success: false, error: "An unexpected server error occurred.", propertyId: null, changeId: null };
   }
 }
 
@@ -1363,6 +1409,22 @@ export async function deletePropertyAction(propertyId: string) {
     }
 }
 
+export async function requestPropertyDeletionAction(propertyId: string) {
+    try {
+        await requirePermission(PERMISSIONS.manage.propertySelfDelete);
+        await prisma.property.update({
+            where: { id: propertyId },
+            data: { status: 'AWAITING_DELETION' },
+        });
+        revalidatePath('/manage/properties');
+        revalidatePath(`/manage/properties/${propertyId}`);
+        return { success: true };
+    } catch (error: any) {
+        await logProblem(error, `requestPropertyDeletionAction (ID: ${propertyId})`);
+        return { success: false, error: "Failed to request property deletion." };
+    }
+}
+
 const SitemapSchema = z.object({
     url: z.string().url({ message: "Please enter a valid sitemap URL." }),
 });
@@ -1419,7 +1481,9 @@ export async function runPropertyAssurance(propertyId: string): Promise<Property
 
 export async function getPendingPropertiesForAgent(limit: number): Promise<{ id: string; title: string; kind: 'property' | 'draft'; propertyId?: string; requestId?: string }[]> {
     const awaitingReviewItems = await getAwaitingReviewItems(limit);
-    return awaitingReviewItems.map((item) => ({
+    return awaitingReviewItems
+      .filter((item) => item.kind === 'property' || item.propertyId)
+      .map((item) => ({
       id: item.id,
       title: item.title,
       kind: item.kind,

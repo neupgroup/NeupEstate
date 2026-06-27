@@ -45,7 +45,7 @@ export default async function ManageSwitchPage({
   const linkedAgencyIds = Array.from(
     new Set(
       [
-        localAccount?.accountType === 'brand' ? localAccount.id : null,
+        localAccount?.id ?? null,
         membership?.agencyAccountId ?? null,
         ...linkedAgencyMappings.map((mapping) => mapping.agencyAccountId),
         ...brandAccounts.map((account) => account.id),

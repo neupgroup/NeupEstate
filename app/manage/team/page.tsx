@@ -108,6 +108,13 @@ export default async function ManageTeamPage({
       id: true,
       displayName: true,
       accountType: true,
+      workingProfile: true,
+      workingProfileAccount: {
+        select: {
+          id: true,
+          displayName: true,
+        },
+      },
     },
   });
 
@@ -176,6 +183,12 @@ export default async function ManageTeamPage({
 
   const agencyDisplayName = agencyAccount?.display_name ?? agencyAccountId;
   const actorDisplayName = actorAccount?.displayName ?? authAccount.aid;
+  const defaultProfileName =
+    actorAccount?.workingProfile && actorAccount.workingProfile !== authAccount.aid
+      ? actorAccount.workingProfileAccount?.displayName ??
+        actorAccount.workingProfileAccount?.id ??
+        actorAccount.workingProfile
+      : actorDisplayName;
   const currentProfileType = agencyAccount?.account_type;
   const manageAccessDescription =
     !selectedAgency && actorAccount?.accountType === 'individual'
@@ -211,6 +224,12 @@ export default async function ManageTeamPage({
             </h1>
             <p className="mt-2 text-sm text-muted-foreground">
               Review everyone connected to this working profile, including pending invited users, then switch your working profile if needed.
+            </p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Default profile:{' '}
+              <ClientLink href={switchHref} className="hover:underline">
+                {defaultProfileName}
+              </ClientLink>
             </p>
           </div>
         </div>

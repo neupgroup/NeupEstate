@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { getPropertyById, getPropertyReviewRequests } from "@/services/property-service";
 import { hasPermission } from "@/logica/auth/authorization";
 import { PERMISSIONS } from "@/logica/auth/permissions";
-import { cancelPropertyChangeDraftAction, getCurrentAccountId, getPropertyChangeContextAction } from "@/app/actions";
+import { cancelPropertyChangeDraftAction, getCurrentAccountId, getPropertyChangeContextAction, requestPropertyDeletionAction } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import { PropertyReviewRequests } from "@/components/manage/property-review-requests";
 import { ClientLink } from "@/components/client-link";
@@ -147,11 +147,15 @@ function getPropertyNotice(property: {
     isOwnerListing?: boolean | null;
     details?: { isPrivate?: boolean | null } | null;
 }) {
+    const normalizedStatus = property.status?.toLowerCase?.();
+    if (normalizedStatus === 'awaitingdeletion' || normalizedStatus === 'awaiting_deletion') {
+        return 'Deletion requested. Once the deletion request is made, it takes 30 days for the property to be deleted.';
+    }
+
     if (property.details?.isPrivate) {
         return 'This is a private property. It will not show up on the website for anyone outside your team.';
     }
 
-    const normalizedStatus = property.status?.toLowerCase?.();
     if (property.isApproved === false || normalizedStatus === 'pending' || normalizedStatus === 'awaitingreview' || normalizedStatus === 'awaiting review') {
         return 'This property has not been reviewed. It will be visible on website after the final review.';
     }
@@ -687,6 +691,18 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                                 View Logs
                             </ClientLink>
                         </Button>
+                    ) : null}
+                    {property.status !== "AWAITING_DELETION" ? (
+                        <form
+                            action={async () => {
+                                "use server";
+                                await requestPropertyDeletionAction(property.id);
+                            }}
+                        >
+                            <Button type="submit" variant="outline" className="text-destructive hover:text-destructive">
+                                Request Deletion
+                            </Button>
+                        </form>
                     ) : null}
                 </div>
             </div>

@@ -16,12 +16,24 @@ interface PropertyMediaGalleryProps {
   title: string;
 }
 
-function GalleryImage({ src, alt, className }: { src: string; alt: string; className?: string }) {
+function GalleryImage({
+  src,
+  alt,
+  className,
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+}) {
   const [failed, setFailed] = useState(false);
 
   if (!src || failed) {
     return (
-      <div className={`flex h-full w-full items-center justify-center bg-muted text-sm text-muted-foreground ${className || ""}`}>
+      <div
+        className={`flex h-full w-full items-center justify-center bg-muted text-sm text-muted-foreground ${
+          className || ""
+        }`}
+      >
         No image
       </div>
     );
@@ -38,10 +50,21 @@ function GalleryImage({ src, alt, className }: { src: string; alt: string; class
   );
 }
 
-export function PropertyMediaGallery({ images, title }: PropertyMediaGalleryProps) {
+export function PropertyMediaGallery({
+  images,
+  title,
+}: PropertyMediaGalleryProps) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const visibleImages = useMemo(() => images.filter((image) => typeof image === "string" && image.trim().length > 0), [images]);
+
+  const visibleImages = useMemo(
+    () =>
+      images.filter(
+        (image) =>
+          typeof image === "string" && image.trim().length > 0
+      ),
+    [images]
+  );
 
   useEffect(() => {
     setMounted(true);
@@ -74,22 +97,22 @@ export function PropertyMediaGallery({ images, title }: PropertyMediaGalleryProp
     overlay?: ReactNode;
   }) {
     return (
-      <button type="button" onClick={() => setOpen(true)} className={`group relative h-full overflow-hidden bg-muted ${className}`}>
-        <GalleryImage src={src} alt={alt} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.04]" />
-        <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/10" />
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className={`group relative block h-full min-h-0 min-w-0 overflow-hidden bg-muted ${className}`}
+      >
+        <GalleryImage
+          src={src}
+          alt={alt}
+          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
+        />
+
+        <div className="pointer-events-none absolute inset-0 bg-black/10 transition-colors duration-300 group-hover:bg-black/45" />
+
         {overlay}
       </button>
     );
-  }
-
-  function MoreOverlay() {
-    return extraCount > 0 ? (
-      <div className="absolute inset-0 flex items-center justify-center bg-black/45 text-white">
-        <div className="rounded-full bg-white/95 px-4 py-2 text-sm font-semibold text-foreground shadow-sm">
-          +{extraCount} more
-        </div>
-      </div>
-    ) : null;
   }
 
   function renderCollage() {
@@ -105,20 +128,43 @@ export function PropertyMediaGallery({ images, title }: PropertyMediaGalleryProp
 
     if (visibleImages.length === 2) {
       return (
-        <div className="grid h-full gap-2 rounded-3xl md:grid-cols-2">
-          <MediaTile src={first} alt={`${title} photo 1`} className="rounded-3xl" />
-          <MediaTile src={second} alt={`${title} photo 2`} className="rounded-3xl" />
+        <div className="grid h-full min-h-0 grid-cols-2 gap-2 rounded-3xl">
+          <MediaTile
+            src={first}
+            alt={`${title} photo 1`}
+            className="rounded-l-3xl"
+          />
+
+          <MediaTile
+            src={second}
+            alt={`${title} photo 2`}
+            className="rounded-r-3xl"
+          />
         </div>
       );
     }
 
     if (visibleImages.length === 3) {
       return (
-        <div className="grid h-full gap-2 rounded-3xl md:grid-cols-2">
-          <MediaTile src={first} alt={`${title} photo 1`} className="rounded-3xl md:col-span-1" />
-          <div className="grid h-full gap-2">
-            <MediaTile src={second} alt={`${title} photo 2`} className="rounded-3xl" />
-            <MediaTile src={third} alt={`${title} photo 3`} className="rounded-3xl" />
+        <div className="grid h-full min-h-0 grid-cols-2 gap-2 rounded-3xl">
+          <MediaTile
+            src={first}
+            alt={`${title} photo 1`}
+            className="rounded-l-3xl"
+          />
+
+          <div className="grid min-h-0 grid-rows-2 gap-2">
+            <MediaTile
+              src={second}
+              alt={`${title} photo 2`}
+              className="rounded-tr-3xl"
+            />
+
+            <MediaTile
+              src={third}
+              alt={`${title} photo 3`}
+              className="rounded-br-3xl"
+            />
           </div>
         </div>
       );
@@ -126,13 +172,32 @@ export function PropertyMediaGallery({ images, title }: PropertyMediaGalleryProp
 
     if (visibleImages.length === 4) {
       return (
-        <div className="grid h-full gap-2 rounded-3xl md:grid-cols-2">
-          <MediaTile src={first} alt={`${title} photo 1`} className="rounded-3xl" />
-          <div className="grid h-full grid-rows-2 gap-2">
-            <MediaTile src={second} alt={`${title} photo 2`} className="rounded-3xl" />
-            <div className="grid grid-cols-2 gap-2">
-              <MediaTile src={third} alt={`${title} photo 3`} className="rounded-3xl" />
-              <MediaTile src={fourth} alt={`${title} photo 4`} className="rounded-3xl" />
+        <div className="grid h-full min-h-0 grid-cols-2 gap-2 rounded-3xl">
+          <MediaTile
+            src={first}
+            alt={`${title} photo 1`}
+            className="rounded-l-3xl"
+          />
+
+          <div className="grid min-h-0 grid-rows-2 gap-2">
+            <MediaTile
+              src={second}
+              alt={`${title} photo 2`}
+              className="rounded-tr-3xl"
+            />
+
+            <div className="grid min-h-0 grid-cols-2 gap-2">
+              <MediaTile
+                src={third}
+                alt={`${title} photo 3`}
+                className=""
+              />
+
+              <MediaTile
+                src={fourth}
+                alt={`${title} photo 4`}
+                className="rounded-br-3xl"
+              />
             </div>
           </div>
         </div>
@@ -141,34 +206,91 @@ export function PropertyMediaGallery({ images, title }: PropertyMediaGalleryProp
 
     if (visibleImages.length === 5) {
       return (
-        <div className="grid h-full gap-2 rounded-3xl md:grid-cols-2">
-          <MediaTile src={first} alt={`${title} photo 1`} className="rounded-3xl" />
-          <div className="grid h-full grid-cols-2 gap-2">
-            <MediaTile src={second} alt={`${title} photo 2`} className="rounded-3xl" />
-            <MediaTile src={third} alt={`${title} photo 3`} className="rounded-3xl" />
-            <MediaTile src={fourth} alt={`${title} photo 4`} className="rounded-3xl" />
-            <MediaTile src={fifth} alt={`${title} photo 5`} className="rounded-3xl" />
+        <div className="grid h-full min-h-0 grid-cols-2 gap-2 rounded-3xl">
+          <MediaTile
+            src={first}
+            alt={`${title} photo 1`}
+            className="rounded-l-3xl"
+          />
+
+          <div className="grid min-h-0 grid-cols-2 grid-rows-2 gap-2">
+            <MediaTile
+              src={second}
+              alt={`${title} photo 2`}
+              className=""
+            />
+
+            <MediaTile
+              src={third}
+              alt={`${title} photo 3`}
+              className="rounded-tr-3xl"
+            />
+
+            <MediaTile
+              src={fourth}
+              alt={`${title} photo 4`}
+              className=""
+            />
+
+            <MediaTile
+              src={fifth}
+              alt={`${title} photo 5`}
+              className="rounded-br-3xl"
+            />
           </div>
         </div>
       );
     }
 
     return (
-      <div className="grid h-full gap-2 rounded-3xl md:grid-cols-2">
-        <MediaTile src={first} alt={`${title} photo 1`} className="rounded-3xl" />
-        <div className="grid h-full gap-2">
-          <div className="grid grid-cols-2 gap-2">
-            <MediaTile src={second} alt={`${title} photo 2`} className="rounded-3xl" />
-            <MediaTile src={third} alt={`${title} photo 3`} className="rounded-3xl" />
+      <div className="grid h-full min-h-0 grid-cols-2 gap-2 rounded-3xl">
+        <MediaTile
+          src={first}
+          alt={`${title} photo 1`}
+          className="rounded-l-3xl"
+        />
+
+        <div className="grid min-h-0 grid-rows-2 gap-2">
+          <div className="grid min-h-0 grid-cols-2 gap-2">
+            <MediaTile
+              src={second}
+              alt={`${title} photo 2`}
+              className=""
+            />
+
+            <MediaTile
+              src={third}
+              alt={`${title} photo 3`}
+              className="rounded-tr-3xl"
+            />
           </div>
-          <div className="grid grid-cols-3 gap-2">
-            <MediaTile src={fourth} alt={`${title} photo 4`} className="rounded-3xl" />
-            <MediaTile src={fifth} alt={`${title} photo 5`} className="rounded-3xl" />
+
+          <div className="grid min-h-0 grid-cols-3 gap-2">
+            <MediaTile
+              src={fourth}
+              alt={`${title} photo 4`}
+              className=""
+            />
+
+            <MediaTile
+              src={fifth}
+              alt={`${title} photo 5`}
+              className=""
+            />
+
             <MediaTile
               src={visibleImages[5]}
               alt={`${title} photo 6`}
-              className="rounded-3xl"
-              overlay={extraCount > 0 ? <MoreOverlay /> : undefined}
+              className="rounded-br-3xl"
+              overlay={
+                extraCount > 0 ? (
+                  <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-black/35 transition-colors duration-300 group-hover:bg-black/55">
+                    <span className="text-xl font-semibold text-white">
+                      +{extraCount}
+                    </span>
+                  </div>
+                ) : undefined
+              }
             />
           </div>
         </div>
@@ -177,14 +299,14 @@ export function PropertyMediaGallery({ images, title }: PropertyMediaGalleryProp
   }
 
   const collage = (
-    <div className="relative h-[320px] overflow-hidden rounded-3xl sm:h-[360px] lg:h-[420px]">
+    <div className="relative h-[320px] min-h-0 overflow-hidden rounded-3xl sm:h-[360px] lg:h-[420px]">
       {renderCollage()}
 
       {mounted && visibleImages.length > 5 && (
         <DialogTrigger asChild>
           <Button
             variant="secondary"
-            className="absolute bottom-4 right-4 z-10 gap-2 rounded-full border border-border/70 bg-background/95 px-4 shadow-lg backdrop-blur hover:bg-background"
+            className="absolute bottom-4 right-4 z-20 gap-2 rounded-full border border-border/70 bg-background/95 px-4 shadow-lg backdrop-blur hover:bg-background"
           >
             <Grid2x2 className="h-4 w-4" />
             Show all photos
@@ -207,7 +329,11 @@ export function PropertyMediaGallery({ images, title }: PropertyMediaGalleryProp
           <DialogHeader className="flex-row items-center justify-between border-b px-6 py-4 text-left">
             <div>
               <DialogTitle className="text-xl">{title}</DialogTitle>
-              <p className="text-sm text-muted-foreground">{visibleImages.length} photo{visibleImages.length === 1 ? "" : "s"}</p>
+
+              <p className="text-sm text-muted-foreground">
+                {visibleImages.length} photo
+                {visibleImages.length === 1 ? "" : "s"}
+              </p>
             </div>
           </DialogHeader>
 
@@ -225,9 +351,10 @@ export function PropertyMediaGallery({ images, title }: PropertyMediaGalleryProp
                     <GalleryImage
                       src={src}
                       alt={`${title} photo ${index + 1}`}
-                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
+                      className="h-full w-full object-cover transition-transform duration-300 hover:scale-[1.04]"
                     />
-                    <div className="pointer-events-none absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/10" />
+
+                    <div className="pointer-events-none absolute inset-0 bg-black/10 transition-colors duration-300 hover:bg-black/45" />
                   </div>
                 </a>
               ))}
