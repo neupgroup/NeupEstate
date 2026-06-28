@@ -49,6 +49,7 @@ const FIELD_LABELS: Record<string, string> = {
     "pricing.basisUnits": "Pricing unit",
     structuredLocation: "Location details",
     owners: "Owner information",
+    listingAgentAccountId: "Listing agent",
     images: "Property photos",
     title: "Title",
     description: "Description",
@@ -121,6 +122,13 @@ interface ProgressivePropertySectionsProps {
     fieldChangeNotes?: Partial<Record<string, string>>;
     previousAmenities?: string;
     previousImages?: string[];
+    listingContext?: {
+        name: string;
+        label: string;
+        agencyName?: string | null;
+    } | null;
+    canEditOwnership?: boolean;
+    listingAgentOptions?: Array<{ id: string; name: string; agencyId?: string | null; agencyName?: string | null }>;
 }
 
 export function ProgressivePropertySections({
@@ -134,6 +142,9 @@ export function ProgressivePropertySections({
     fieldChangeNotes,
     previousAmenities,
     previousImages,
+    listingContext,
+    canEditOwnership = true,
+    listingAgentOptions = [],
 }: ProgressivePropertySectionsProps) {
     const router = useRouter();
     const pathname = usePathname();
@@ -194,14 +205,14 @@ export function ProgressivePropertySections({
             fields: ["structuredLocation"],
             render: () => <LocationDetailsSection control={form.control} fieldChangeNotes={fieldChangeNotes} />,
         },
-        {
+        ...(canEditOwnership ? [{
             id: "owners",
             section: "owners",
             title: "Owner Information",
             description: "Search and select one or more client owners for this property.",
             fields: ["owners"],
             render: () => <OwnerInfoSection control={form.control} setValue={form.setValue} users={users} formErrors={form.formState.errors} fieldChangeNotes={fieldChangeNotes} />,
-        },
+        } satisfies PropertyFormStep] : []),
         {
             id: "photos",
             section: "photos",
@@ -223,10 +234,24 @@ export function ProgressivePropertySections({
             section: "copy",
             title: "Publishing and Copy",
             description: "Write the listing copy and control how it appears publicly.",
-            fields: ["title", "description", "isPrivate", "showMap", "showOwnerInformation"],
-            render: () => <TitleDescriptionSection control={form.control} fieldChangeNotes={fieldChangeNotes} />,
+            fields: [
+                "title",
+                "description",
+                "isPrivate",
+                "showMap",
+                "showOwnerInformation",
+            ],
+            render: () => (
+                <TitleDescriptionSection
+                    control={form.control}
+                    fieldChangeNotes={fieldChangeNotes}
+                    listingContext={listingContext}
+                    canEditListingContext={canEditOwnership}
+                    listingAgentOptions={listingAgentOptions}
+                />
+            ),
         },
-    ], [category, fieldChangeNotes, form.control, form.formState.errors, isEditForm, previousAmenities, previousImages, users]);
+    ], [canEditOwnership, category, fieldChangeNotes, form.control, isEditForm, listingAgentOptions, listingContext, previousAmenities, previousImages, users]);
 
     useEffect(() => {
         if (errorStepIndex === null) return;

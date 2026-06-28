@@ -277,6 +277,66 @@ function OwnerCard({
     );
 }
 
+function getListedBySummary(property: {
+    listingAgent?: string | null;
+    agency?: { name?: string | null } | null;
+    isOwnerListing?: boolean | null;
+    owners?: Array<{ clientName?: string | null; isPrimaryOwner?: boolean | null }> | null;
+}) {
+    const listingAgent = property.listingAgent?.trim();
+    const agencyName = property.agency?.name?.trim();
+    const primaryOwner = property.owners?.find((owner) => owner.isPrimaryOwner)?.clientName?.trim();
+    const fallbackOwner = property.owners?.find((owner) => owner.clientName?.trim())?.clientName?.trim();
+    const ownerName = primaryOwner || fallbackOwner;
+
+    if (listingAgent) {
+        return {
+            name: listingAgent,
+            label: agencyName ? `Agent, Agent from ${agencyName}` : "Agent",
+        };
+    }
+
+    if (property.isOwnerListing) {
+        return ownerName
+            ? { name: ownerName, label: "Owner" }
+            : { name: "Owner listing", label: "Owner" };
+    }
+
+    if (agencyName) {
+        return {
+            name: agencyName,
+            label: "Agency",
+        };
+    }
+
+    return {
+        name: "No listing agent/owner found.",
+        label: "No individual associated with this listing was found.",
+    };
+}
+
+function ListedByCard({
+    name,
+    label,
+}: {
+    name: string;
+    label: string;
+}) {
+    return (
+        <div className="rounded-xl border border-border/70 bg-background p-4 shadow-sm transition-colors hover:border-primary/40 hover:bg-primary/5">
+            <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-primary/15 bg-primary/10 text-primary transition-colors duration-200 ease-out">
+                    <UserRound className="h-5 w-5" />
+                </div>
+                <div className="min-w-0">
+                    <div className="text-sm font-semibold text-foreground">{name}</div>
+                    <div className="mt-1 text-sm text-muted-foreground">{label}</div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 function formatPricingValue(value: unknown): string {
     if (value == null || value === "") return "Not set";
     if (typeof value === "boolean") return value ? "Yes" : "No";
@@ -584,6 +644,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
         location: property.location,
     });
     const canApproveProperty = await hasPermission(PERMISSIONS.manage.propertyReviewApprove);
+    const canEditOwnership = await hasPermission(PERMISSIONS.manage.propertySelfTransfer);
     const currentAccountId = await getCurrentAccountId();
     const changeContext = await getPropertyChangeContextAction(property.id);
     const currentChange = changeContext.success ? changeContext.currentUserChange : null;
@@ -617,6 +678,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
         : [];
     const canViewPropertyLogs = await hasPermission(PERMISSIONS.root.propertyLog);
     const pricingCards = getPricingCards(property);
+    const listedBy = getListedBySummary(property);
     const visibleDocuments = (property.documents ?? [])
         .map((document) => ({
             ...document,
@@ -805,7 +867,13 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                 </Section>
             )}
 
-            <Section title="Owner Information" description="Ownership and agent context." editHref={`${editUrl}?section=owners`}>
+            <Section title="Listed by" description="The listing source for this property." editHref={`${editUrl}?section=copy`}>
+                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                    <ListedByCard name={listedBy.name} label={listedBy.label} />
+                </div>
+            </Section>
+
+            <Section title="Owner Information" description="Ownership details." editHref={canEditOwnership ? `${editUrl}?section=owners` : undefined}>
                 <div className="space-y-4">
                     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                         {property.owners?.length ? (

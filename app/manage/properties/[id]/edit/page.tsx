@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useTransition, useState, useEffect, useMemo } from 'react';
 import { UpdatePropertySchema, type Property, type User, type UpdatePropertyFormValues } from '@/types';
-import { getCurrentAccountId, savePropertyChangeDraftAction, getPropertyChangeContextAction } from '@/app/actions';
+import { getCurrentAccountId, savePropertyChangeDraftAction, getPropertyChangeContextAction, getPropertyEditCapabilitiesAction, getListingAgentOptionsAction } from '@/app/actions';
 import { getPropertyById } from "@/services/property-service";
 import { getUsers } from "@/services/user-service";
 import { useAgencyCustomization } from '@/logica/core/hooks/use-agency-customization';
@@ -33,6 +33,8 @@ export default function EditPropertyPage() {
     const { toast } = useToast();
     const [isSaving, startSaveTransition] = useTransition();
     const [accountId, setAccountId] = useState<string | null>(null);
+    const [canEditOwnership, setCanEditOwnership] = useState(false);
+    const [listingAgentOptions, setListingAgentOptions] = useState<Array<{ id: string; name: string; agencyId: string | null; agencyName: string | null }>>([]);
     const [changeContext, setChangeContext] = useState<{
         currentUserChange?: {
             id: string;
@@ -57,6 +59,7 @@ export default function EditPropertyPage() {
         if (path.startsWith("pricing.")) return "pricing";
         if (path.startsWith("structuredLocation")) return "location";
         if (path.startsWith("owners")) return "owners";
+        if (path.startsWith("listingAgentAccountId") || path.startsWith("listingAgent")) return "copy";
         if (path.startsWith("images")) return "photos";
         if (path.startsWith("documents")) return "documents";
         if (path === "title" || path === "description") return "copy";
@@ -332,87 +335,89 @@ export default function EditPropertyPage() {
         if (!propertyId) return;
 
         async function loadData() {
-            const [propData, userData, resolvedAccountId, reviewContext] = await Promise.all([
+            const [propertyData, userData, resolvedAccountId, reviewContext, capabilities] = await Promise.all([
                 getPropertyById(propertyId, { includeInactive: true }),
                 getUsers(),
                 getCurrentAccountId(),
                 getPropertyChangeContextAction(propertyId),
+                getPropertyEditCapabilitiesAction(),
             ]);
-
             if (resolvedAccountId) setAccountId(resolvedAccountId);
+            setCanEditOwnership(capabilities.success ? capabilities.canEditOwnership : false);
             if (reviewContext.success) setChangeContext(reviewContext);
 
-            if (!propData) {
+            if (!propertyData) {
                 toast({ variant: 'destructive', title: 'Error', description: 'Property not found.' });
                 router.push('/manage/properties');
                 return;
             }
 
-            setProperty(propData);
+            setProperty(propertyData);
             setUsers(userData);
 
             const resolvedBaseValues = {
-                title: propData.title,
-                description: propData.description,
-                bedrooms: propData.bedrooms,
-                bathrooms: propData.bathrooms,
-                kitchens: propData.kitchens,
-                diningRooms: propData.diningRooms,
-                livingRooms: propData.livingRooms,
-                carParkingSpots: propData.carParkingSpots,
-                bikeParkingSpots: propData.bikeParkingSpots,
+                title: propertyData.title,
+                description: propertyData.description,
+                bedrooms: propertyData.bedrooms,
+                bathrooms: propertyData.bathrooms,
+                kitchens: propertyData.kitchens,
+                diningRooms: propertyData.diningRooms,
+                livingRooms: propertyData.livingRooms,
+                carParkingSpots: propertyData.carParkingSpots,
+                bikeParkingSpots: propertyData.bikeParkingSpots,
                 // area is stored as a sqft number in the DB — wrap it back into AreaValue shape
-                area: propData.area ? { sqft: propData.area } : undefined,
-                purpose: propData.purpose,
-                purposes: propData.purposes?.length ? propData.purposes : [propData.purpose],
-                categories: propData.category ? [propData.category] : [],
-                types: propData.type ? [propData.type] : [],
-                amenities: Array.isArray(propData.amenities) ? propData.amenities.join(', ') : '',
-                images: Array.isArray(propData.images) ? propData.images : [],
-                listingAgent: propData.listingAgent || '',
-                isOwnerListing: propData.isOwnerListing || false,
-                isPrivate: Boolean((propData.details as any)?.isPrivate),
-                showMap: propData.details?.showMap ?? true,
-                showOwnerInformation: propData.details?.showOwnerInformation ?? true,
-                floors: propData.floors ?? undefined,
-                onFloor: propData.onFloor ?? undefined,
-                roadAccess: propData.roadAccess ?? undefined,
-                landDetails: propData.landDetails ? {
-                    ...propData.landDetails,
+                area: propertyData.area ? { sqft: propertyData.area } : undefined,
+                purpose: propertyData.purpose,
+                purposes: propertyData.purposes?.length ? propertyData.purposes : [propertyData.purpose],
+                categories: propertyData.category ? [propertyData.category] : [],
+                types: propertyData.type ? [propertyData.type] : [],
+                amenities: Array.isArray(propertyData.amenities) ? propertyData.amenities.join(', ') : '',
+                images: Array.isArray(propertyData.images) ? propertyData.images : [],
+                listingAgent: propertyData.listingAgent || '',
+                listingAgentAccountId: propertyData.listingAgentId || '',
+                isOwnerListing: propertyData.isOwnerListing || false,
+                isPrivate: Boolean((propertyData.details as any)?.isPrivate),
+                showMap: propertyData.details?.showMap ?? true,
+                showOwnerInformation: propertyData.details?.showOwnerInformation ?? true,
+                floors: propertyData.floors ?? undefined,
+                onFloor: propertyData.onFloor ?? undefined,
+                roadAccess: propertyData.roadAccess ?? undefined,
+                landDetails: propertyData.landDetails ? {
+                    ...propertyData.landDetails,
                     // landDetails.area is also stored as a sqft number — wrap it back
-                    area: propData.landDetails.area != null
-                        ? (typeof propData.landDetails.area === 'number'
-                            ? { sqft: propData.landDetails.area }
-                            : propData.landDetails.area)
+                    area: propertyData.landDetails.area != null
+                        ? (typeof propertyData.landDetails.area === 'number'
+                            ? { sqft: propertyData.landDetails.area }
+                            : propertyData.landDetails.area)
                         : undefined,
                 } : {},
-                plots: (propData.plots ?? []).map((p: any) => ({
+                plots: (propertyData.plots ?? []).map((p: any) => ({
                     ...p,
                     area: p.area != null
                         ? (typeof p.area === 'number' ? { sqft: p.area } : p.area)
                         : undefined,
                 })),
-                apartmentDetails: propData.apartmentDetails || {},
-                apartmentUnits: (propData.apartmentUnits ?? []).map((u: any) => ({
+                apartmentDetails: propertyData.apartmentDetails || {},
+                apartmentUnits: (propertyData.apartmentUnits ?? []).map((u: any) => ({
                     ...u,
                     area: u.area != null
                         ? (typeof u.area === 'number' ? { sqft: u.area } : u.area)
                         : undefined,
                 })),
-                structuredLocation: propData.structuredLocation || {},
-                pricing: propData.pricing ? {
-                    ...propData.pricing,
-                    options: Array.isArray(propData.pricing.options) ? propData.pricing.options.join(', ') : '',
-                } : { listed: propData.price },
-                roadAccessDetails: propData.roadAccessDetails || {},
-                distancing: propData.distancing || {},
-                earnings: propData.earnings || {},
-                owners: propData.owners || [],
-                documents: propData.documents || [],
-                areaUnit: propData.areaUnit,
-                facing: propData.facing,
-                buildStart: propData.buildStart,
-                buildCompleted: propData.buildCompleted,
+                structuredLocation: propertyData.structuredLocation || {},
+                pricing: propertyData.pricing ? {
+                    ...propertyData.pricing,
+                    options: Array.isArray(propertyData.pricing.options) ? propertyData.pricing.options.join(', ') : '',
+                } : { listed: propertyData.price },
+                roadAccessDetails: propertyData.roadAccessDetails || {},
+                distancing: propertyData.distancing || {},
+                earnings: propertyData.earnings || {},
+                owners: propertyData.owners || [],
+                documents: propertyData.documents || [],
+                areaUnit: propertyData.areaUnit,
+                facing: propertyData.facing,
+                buildStart: propertyData.buildStart,
+                buildCompleted: propertyData.buildCompleted,
             };
 
             const currentDraft = reviewContext.success ? reviewContext.currentUserChange?.data : null;
@@ -424,6 +429,28 @@ export default function EditPropertyPage() {
         }
         loadData();
     }, [propertyId, router, toast, form]);
+
+    useEffect(() => {
+        if (!property || !canEditOwnership) {
+            setListingAgentOptions([]);
+            return;
+        }
+
+        const activeProperty = property;
+
+        async function loadListingAgents() {
+            const result = await getListingAgentOptionsAction({
+                agencyId: activeProperty.agency?.id && activeProperty.agency.id !== 'unknown' ? activeProperty.agency.id : null,
+                currentAgentId: activeProperty.listingAgentId ?? null,
+            });
+
+            if (result.success) {
+                setListingAgentOptions(result.agents);
+            }
+        }
+
+        loadListingAgents();
+    }, [canEditOwnership, property]);
 
     async function onSubmit(values: UpdatePropertyFormValues) {
         if (!property) return;
@@ -539,6 +566,46 @@ export default function EditPropertyPage() {
         changeContext.currentUserChange.isApproved === null
     );
 
+    const listingContext = useMemo(() => {
+        if (!property) return null;
+
+        const listingAgent = property.listingAgent?.trim();
+        const agencyName = property.agency?.name?.trim();
+        const primaryOwner = property.owners?.find((owner) => owner.isPrimaryOwner)?.clientName?.trim();
+        const fallbackOwner = property.owners?.find((owner) => owner.clientName?.trim())?.clientName?.trim();
+        const ownerName = primaryOwner || fallbackOwner;
+
+        if (listingAgent) {
+            return {
+                name: listingAgent,
+                label: agencyName ? `Agent, Agent from ${agencyName}` : 'Agent',
+                agencyName: agencyName ?? null,
+            };
+        }
+
+        if (property.isOwnerListing) {
+            return {
+                name: ownerName || 'No listing agent/owner found.',
+                label: ownerName ? 'Owner' : 'No individual associated with this listing was found.',
+                agencyName: null,
+            };
+        }
+
+        if (agencyName) {
+            return {
+                name: agencyName,
+                label: 'Agency',
+                agencyName,
+            };
+        }
+
+        return {
+            name: 'No listing agent/owner found.',
+            label: 'No individual associated with this listing was found.',
+            agencyName: null,
+        };
+    }, [property]);
+
     if (!property) {
         return (
             <div className="space-y-6 max-w-6xl mx-auto">
@@ -590,6 +657,9 @@ export default function EditPropertyPage() {
                         fieldChangeNotes={fieldChangeNotes}
                         previousAmenities={baseValues?.amenities}
                         previousImages={baseValues?.images}
+                        listingContext={listingContext}
+                        canEditOwnership={canEditOwnership}
+                        listingAgentOptions={listingAgentOptions}
                     />
                 </form>
             </Form>

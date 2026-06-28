@@ -1,18 +1,26 @@
 "use client";
 
 import * as React from "react";
-import { Control } from "react-hook-form";
-import { Bold, Italic, Underline, List, ListOrdered, Pilcrow } from "lucide-react";
+import { Control, useWatch } from "react-hook-form";
+import { Bold, Building2, Italic, List, ListOrdered, Pilcrow, Underline, UserRound } from "lucide-react";
 import { CreatePropertyFormValues } from "@/types";
 import { Button } from "@/components/ui/button";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/logica/core/utils";
 
 interface TitleDescriptionSectionProps {
     control: Control<CreatePropertyFormValues>;
     fieldChangeNotes?: Partial<Record<string, string>>;
+    listingContext?: {
+        name: string;
+        label: string;
+        agencyName?: string | null;
+    } | null;
+    canEditListingContext?: boolean;
+    listingAgentOptions?: Array<{ id: string; name: string; agencyId?: string | null; agencyName?: string | null }>;
 }
 
 function RichTextEditor({
@@ -86,10 +94,100 @@ function RichTextEditor({
     );
 }
 
-export function TitleDescriptionSection({ control, fieldChangeNotes }: TitleDescriptionSectionProps) {
+export function TitleDescriptionSection({
+    control,
+    fieldChangeNotes,
+    listingContext,
+    canEditListingContext = false,
+    listingAgentOptions = [],
+}: TitleDescriptionSectionProps) {
+    const selectedListingAgentId = useWatch({
+        control,
+        name: "listingAgentAccountId",
+    });
+    const selectedListingAgent = listingAgentOptions.find((agent) => agent.id === selectedListingAgentId);
+    const selectedAgencyName = selectedListingAgent
+        ? (selectedListingAgent.agencyName?.trim() || null)
+        : (listingContext?.agencyName?.trim() || null);
+    const listingCardName = selectedListingAgent?.name || listingContext?.name || "No listing agent/owner found.";
+    const listingCardLabel = selectedListingAgent
+        ? (selectedAgencyName ? `Agent, Agent from ${selectedAgencyName}` : "Agent")
+        : (listingContext?.label || "No individual associated with this listing was found.");
+
     return (
         <section className="space-y-10">
             <div className="space-y-8">
+                {listingContext ? (
+                    <div className="space-y-4 rounded-lg border bg-muted/20 p-4">
+                        <div className="space-y-1">
+                            <h3 className="text-base font-semibold">Listed by</h3>
+                            <p className="text-sm text-muted-foreground">
+                                Review who is associated with this listing.
+                            </p>
+                        </div>
+
+                        <div className="rounded-lg border bg-background p-4">
+                            <div className="flex items-start gap-3">
+                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-primary/15 bg-primary/10 text-primary">
+                                    <UserRound className="h-5 w-5" />
+                                </div>
+                                <div className="min-w-0">
+                                    <p className="text-sm font-semibold text-foreground">{listingCardName}</p>
+                                    <p className="mt-1 text-sm text-muted-foreground">{listingCardLabel}</p>
+                                    {selectedAgencyName ? (
+                                        <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-border/70 bg-muted/40 px-3 py-1.5 text-xs text-muted-foreground">
+                                            <Building2 className="h-3.5 w-3.5" />
+                                            Connected agency: {selectedAgencyName}
+                                        </div>
+                                    ) : null}
+                                </div>
+                            </div>
+                        </div>
+
+                        {canEditListingContext ? (
+                            <FormField
+                                control={control}
+                                name="listingAgentAccountId"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Listing agent</FormLabel>
+                                        <Select
+                                            value={field.value?.trim() ? field.value : "__none__"}
+                                            onValueChange={(value) => field.onChange(value === "__none__" ? "" : value)}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select a listing agent" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value="__none__">No listing agent</SelectItem>
+                                                {listingAgentOptions.map((agent) => (
+                                                    <SelectItem key={agent.id} value={agent.id}>
+                                                        {agent.name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                        <p className="text-xs text-muted-foreground">
+                                            Only accounts with transfer permission can change the listing agent.
+                                        </p>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        ) : null}
+
+                        {canEditListingContext && selectedAgencyName ? (
+                            <div className="space-y-2">
+                                <FormLabel>Listing agency</FormLabel>
+                                <Input value={selectedAgencyName} readOnly disabled />
+                            </div>
+                        ) : null}
+
+                    </div>
+                ) : null}
+
                 <FormField
                     control={control}
                     name="title"

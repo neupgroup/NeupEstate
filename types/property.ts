@@ -312,6 +312,7 @@ export interface Property {
     amenities: string[];
     agency: Agency;
     listingAgent?: string;
+    listingAgentId?: string;
     isOwnerListing?: boolean;
     isFeatured?: boolean;
     isApproved?: boolean;
@@ -383,6 +384,7 @@ export const CreatePropertySchema = z.object({
 
     // Listing/Agent Details
     listingAgent: z.string().optional(),
+    listingAgentAccountId: z.string().optional(),
     isOwnerListing: z.boolean().optional().default(false),
     isPrivate: z.boolean().optional().default(false),
     showMap: z.boolean().optional().default(true),

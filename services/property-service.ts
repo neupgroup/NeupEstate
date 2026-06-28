@@ -251,6 +251,7 @@ function mapRecord(record: any): Property {
     amenities:        normalizeStringArray(record.amenities),
     agency:           { id: record.agency || 'unknown', name: record.agency || 'Owner', logoUrl: 'https://placehold.co/200x80.png' },
     listingAgent:     record.agent || undefined,
+    listingAgentId:   record.agent || undefined,
     isOwnerListing:   !record.agency,
     isFeatured:       Boolean(record.isFeatured),
     isApproved:       Boolean(record.isApproved),
@@ -880,6 +881,13 @@ function normalizePropertyAgency(value: unknown): string | null | undefined {
   return undefined;
 }
 
+function normalizePropertyAgent(value: unknown): string | null | undefined {
+  if (value === undefined) return undefined;
+  if (value === null) return null;
+  if (typeof value === 'string') return value.trim() || null;
+  return undefined;
+}
+
 async function resolveMergedPropertyData(id: string, patch: Partial<CreatePropertyInput> & Record<string, any>) {
   const [current, currentRecord] = await Promise.all([
     getPropertyById(id, { includeInactive: true }),
@@ -894,6 +902,9 @@ async function resolveMergedPropertyData(id: string, patch: Partial<CreateProper
 
   // `getPropertyById()` returns a display object for `agency`; Prisma expects the scalar FK value.
   merged.agency = normalizePropertyAgency(patch.agency) ?? currentRecord.agency;
+  if ('listingAgentAccountId' in patch) {
+    merged.agent = normalizePropertyAgent(patch.listingAgentAccountId);
+  }
   if (patch.owner !== undefined && patch.owners === undefined) {
     merged.owners = normalizePropertyOwners(patch.owner);
   }

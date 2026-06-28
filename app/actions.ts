@@ -7,7 +7,7 @@ import { recommendProperties as recommendPropertiesFlow } from "@/services/ai/ai
 import { extractAndSaveProperty as extractAndSavePropertyFlow, type ExtractPropertyDetailsOutput } from "@/services/ai/extract-property-details-flow";
 import { createProperty as createPropertyService, updateProperty as updatePropertyService, approveProperty, getProperties, deleteProperty as deletePropertyService, getPendingProperties, getAwaitingReviewItems, getPaginatedProperties, getPropertyById, getPropertyReviewRequests, updatePropertyWithExtractedData, updatePropertyImages, toggleSavedProperty as toggleSavedPropertyService, getUsersBySavedProperty as getUsersBySavedPropertyService, getSavedPropertiesForUser as getSavedPropertiesForUserService, createPropertyLog } from '@/services/property-service';
 import { createAgency as createAgencyService, updateAgency as updateAgencyService, deleteAgency as deleteAgencyService } from '@/services/agency-service';
-import { createAgencyAgentMap as createAgencyAgentMapService, getAgencyAgentMapsByAgent as getAgencyAgentMapsByAgentService, getAgencyAgentMapsByAgency as getAgencyAgentMapsByAgencyService } from '@/services/agency-agent-map-service';
+import { createAgencyAgentMap as createAgencyAgentMapService, getAgencyAgentAccountsByAgency as getAgencyAgentAccountsByAgencyService, getAgencyAgentMaps, getAgencyAgentMapsByAgent as getAgencyAgentMapsByAgentService, getAgencyAgentMapsByAgency as getAgencyAgentMapsByAgencyService } from '@/services/agency-agent-map-service';
 import { getAgentsByLocation as getAgentsByLocationService, createAgent as createAgentService, updateAgent as updateAgentService, deleteAgent as deleteAgentService } from '@/services/agent-service';
 import { addSitemap, getNewUrlsFromSitemap, processSitemapUrl, updateSitemapCheckedTime } from "@/services/sitemap-service";
 import { clearAllProblems } from "@/services/problem-service";
@@ -38,11 +38,11 @@ import { createContactSubmission as createContactSubmissionService } from '@/ser
 import { createModel as createModelService, updateModel as updateModelService, deleteModel as deleteModelService, setDefaultModel as setDefaultModelService } from '@/services/model-service';
 import { createRequirement as createRequirementService, updateRequirement as updateRequirementService } from '@/services/requirements-service';
 import { createPropertyDraftRequest } from '@/services/bridge-property-service';
-import { resolveAccount, updateUser, getAccountById } from '@/services/account-service';
+import { resolveAccount, updateUser, getAccountById, getAccounts } from '@/services/account-service';
 import { deleteAccountAndData } from '@/services/account-service';
 import { createLead as createLeadService, createLeadActivity as createLeadActivityService } from '@/services/lead-service';
 import { getIdentity } from '@/services/neupid/get-identity';
-import { requirePermission } from '@/logica/auth/authorization';
+import { hasPermission, requirePermission } from '@/logica/auth/authorization';
 import { PERMISSIONS } from '@/logica/auth/permissions';
 import { prisma } from '@/logica/core/prisma';
 
@@ -386,6 +386,16 @@ function normalizePropertyChangeData(data: Record<string, any>): Record<string, 
   if ('owners' in next) {
     next.owners = normalizeOwnerEntries(next.owners);
   }
+  if ('listingAgentAccountId' in next) {
+    next.listingAgentAccountId = typeof next.listingAgentAccountId === 'string'
+      ? next.listingAgentAccountId.trim()
+      : '';
+  }
+  if ('listingAgent' in next) {
+    next.listingAgent = typeof next.listingAgent === 'string'
+      ? next.listingAgent.trim()
+      : '';
+  }
   return next;
 }
 
@@ -397,6 +407,12 @@ export async function savePropertyChangeDraftAction(input: {
 }): Promise<{ success: boolean; changeId?: string; error?: string }> {
   try {
     await requirePermission(PERMISSIONS.manage.propertySelfUpdate);
+    if ('owners' in input.data || 'listingAgentAccountId' in input.data || 'listingAgent' in input.data) {
+      const canTransferOwnership = await hasPermission(PERMISSIONS.manage.propertySelfTransfer);
+      if (!canTransferOwnership) {
+        return { success: false, error: 'You do not have permission to edit listing ownership details.' };
+      }
+    }
     const actorId = await requireIdentity();
     const existingDraft = await prisma.propertyChange.findFirst({
       where: {
@@ -431,6 +447,128 @@ export async function savePropertyChangeDraftAction(input: {
   } catch (e: any) {
     await logProblem(e, 'savePropertyChangeDraftAction');
     return { success: false, error: e.message || 'Failed to save property draft.' };
+  }
+}
+
+export async function getPropertyEditCapabilitiesAction(): Promise<{
+  success: boolean;
+  canEditOwnership: boolean;
+}> {
+  try {
+    await requirePermission(PERMISSIONS.manage.propertySelfUpdate);
+    return {
+      success: true,
+      canEditOwnership: await hasPermission(PERMISSIONS.manage.propertySelfTransfer),
+    };
+  } catch (error) {
+    await logProblem(error, 'getPropertyEditCapabilitiesAction');
+    return {
+      success: false,
+      canEditOwnership: false,
+    };
+  }
+}
+
+export async function getListingAgentOptionsAction(input: {
+  agencyId?: string | null;
+  currentAgentId?: string | null;
+}): Promise<{
+  success: boolean;
+  agents: Array<{ id: string; name: string; agencyId: string | null; agencyName: string | null }>;
+}> {
+  try {
+    await requirePermission(PERMISSIONS.manage.propertySelfUpdate);
+    const actorId = await requireIdentity();
+    const canEditOwnership = await hasPermission(PERMISSIONS.manage.propertySelfTransfer);
+
+    if (!canEditOwnership) {
+      return { success: true, agents: [] };
+    }
+
+    const accounts = await getAccounts();
+    const accountById = new Map(accounts.map((account) => [account.id, account]));
+    const agencyLinks = await getAgencyAgentMaps();
+    const primaryAgencyByAgentId = new Map<string, { agencyId: string; agencyName: string | null }>();
+
+    for (const link of agencyLinks) {
+      if (link.status !== 'accepted' || primaryAgencyByAgentId.has(link.agentId)) continue;
+      const agencyAccount = accountById.get(link.agencyId);
+      primaryAgencyByAgentId.set(link.agentId, {
+        agencyId: link.agencyId,
+        agencyName: agencyAccount?.display_name?.trim() || agencyAccount?.id || link.agencyId,
+      });
+    }
+
+    const optionMap = new Map<string, {
+      name: string;
+      priority: number;
+      agencyId: string | null;
+      agencyName: string | null;
+    }>();
+
+    if (input.agencyId?.trim()) {
+      const agencyAgents = await getAgencyAgentAccountsByAgencyService(input.agencyId.trim());
+      for (const account of agencyAgents) {
+        const agencyContext = primaryAgencyByAgentId.get(account.id);
+        optionMap.set(account.id, {
+          name: account.display_name?.trim() || account.id,
+          priority: 0,
+          agencyId: agencyContext?.agencyId ?? null,
+          agencyName: agencyContext?.agencyName ?? null,
+        });
+      }
+    }
+
+    for (const account of accounts) {
+      if (account.account_type === 'brand' || account.account_type === 'guest') continue;
+      if (optionMap.has(account.id)) continue;
+      const agencyContext = primaryAgencyByAgentId.get(account.id);
+      optionMap.set(account.id, {
+        name: account.display_name?.trim() || account.id,
+        priority: 1,
+        agencyId: agencyContext?.agencyId ?? null,
+        agencyName: agencyContext?.agencyName ?? null,
+      });
+    }
+
+    for (const accountId of [input.currentAgentId?.trim(), actorId]) {
+      if (!accountId) continue;
+      const existing = optionMap.get(accountId);
+      if (existing) {
+        optionMap.set(accountId, { ...existing, priority: Math.min(existing.priority, 0) });
+        continue;
+      }
+      const account = await getAccountById(accountId);
+      if (account && account.account_type !== 'brand' && account.account_type !== 'guest') {
+        const agencyContext = primaryAgencyByAgentId.get(account.id);
+        optionMap.set(account.id, {
+          name: account.display_name?.trim() || account.id,
+          priority: 0,
+          agencyId: agencyContext?.agencyId ?? null,
+          agencyName: agencyContext?.agencyName ?? null,
+        });
+      }
+    }
+
+    return {
+      success: true,
+      agents: Array.from(optionMap.entries())
+        .map(([id, meta]) => ({
+          id,
+          name: meta.name,
+          priority: meta.priority,
+          agencyId: meta.agencyId,
+          agencyName: meta.agencyName,
+        }))
+        .sort((left, right) => {
+          if (left.priority !== right.priority) return left.priority - right.priority;
+          return left.name.localeCompare(right.name);
+        })
+        .map(({ id, name, agencyId, agencyName }) => ({ id, name, agencyId, agencyName })),
+    };
+  } catch (error) {
+    await logProblem(error, 'getListingAgentOptionsAction');
+    return { success: false, agents: [] };
   }
 }
 
@@ -734,6 +872,7 @@ function mapPropertyToCreateFormValues(property: Property): Partial<CreateProper
     amenities: Array.isArray(property.amenities) ? property.amenities.join(', ') : '',
     images: Array.isArray(property.images) ? property.images : [],
     listingAgent: property.listingAgent || '',
+    listingAgentAccountId: property.listingAgentId || '',
     isOwnerListing: property.isOwnerListing || false,
     floors: property.floors ?? undefined,
     onFloor: property.onFloor ?? undefined,
