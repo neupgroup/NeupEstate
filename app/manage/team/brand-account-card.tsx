@@ -3,6 +3,7 @@
 import { SafeImage } from "@/components/safe-image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { resolveStoredAccountType } from "@/services/account-type";
 import { Building } from "lucide-react";
 import { useState, type MouseEvent } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -46,6 +47,7 @@ type BrandAccountCardProps = {
     id: string;
     displayName: string | null;
     displayImage: string | null;
+    accountType?: string | null;
     connectionId?: string | null;
   } | null;
   isSelected: boolean;
@@ -71,6 +73,10 @@ export function BrandAccountCard({
   const isExisting = !!existingAccount;
   const hasConnection = Boolean(existingAccount?.connectionId?.trim());
   const isRemoteBrandAccount = brandAccount.source === "brand";
+  const displayAccountType = resolveStoredAccountType({
+    remoteAccountType: brandAccount.accountType,
+    existingAccountType: existingAccount?.accountType,
+  });
   const canCreateRemoteConnection =
     isRemoteBrandAccount &&
     supportsRemoteConnection(brandAccount.accountType) &&
@@ -188,7 +194,7 @@ export function BrandAccountCard({
           ) : null}
         </div>
         <p className="mt-0.5 text-xs text-muted-foreground">
-          {getAccountTypeLabel(brandAccount.accountType)}
+          {getAccountTypeLabel(displayAccountType)}
         </p>
         {error ? <p className="mt-1 text-xs text-red-600">{error}</p> : null}
       </div>

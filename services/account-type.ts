@@ -29,7 +29,7 @@ export function resolveStoredAccountType(args: {
   existingAccountType?: string | null;
 }): StoredAccountType {
   const baseType = normalizeBaseAccountType(args.remoteAccountType);
-  const existingType = normalizeBaseAccountType(args.existingAccountType);
+  const existingType = args.existingAccountType?.trim().toLowerCase();
 
   if (existingType === 'brand.agency' && baseType === 'brand') {
     return 'brand.agency';
