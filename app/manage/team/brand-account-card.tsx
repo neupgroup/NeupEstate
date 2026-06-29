@@ -14,7 +14,6 @@ export type AgencyManagementAccount = {
   displayName: string;
   displayImage: string | null;
   accountType: string;
-  status?: string | null;
   isVerified?: boolean;
   source: "brand" | "linked";
 };
@@ -48,10 +47,12 @@ type BrandAccountCardProps = {
     id: string;
     displayName: string | null;
     displayImage: string | null;
+    connectionId?: string | null;
   } | null;
   isSelected: boolean;
   isDefault: boolean;
   isLast: boolean;
+  allowSelection?: boolean;
 };
 
 export function BrandAccountCard({
@@ -60,6 +61,7 @@ export function BrandAccountCard({
   isSelected,
   isDefault,
   isLast,
+  allowSelection = true,
 }: BrandAccountCardProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -68,10 +70,18 @@ export function BrandAccountCard({
   const searchParams = useSearchParams();
 
   const isExisting = !!existingAccount;
+  const hasConnection = Boolean(existingAccount?.connectionId?.trim());
   const isRemoteBrandAccount = brandAccount.source === "brand";
-  const canCreateRemoteConnection = isRemoteBrandAccount && supportsRemoteConnection(brandAccount.accountType);
+  const canCreateRemoteConnection =
+    isRemoteBrandAccount &&
+    supportsRemoteConnection(brandAccount.accountType) &&
+    !hasConnection;
 
   const handleCardClick = async () => {
+    if (!allowSelection) {
+      return;
+    }
+
     if (isSelected && isExisting) {
       setIsLoading(true);
       setError(null);
@@ -122,16 +132,20 @@ export function BrandAccountCard({
   return (
     <div
       className={[
-        "flex items-center gap-4 px-4 py-3 bg-background transition-colors hover:bg-muted/40 cursor-pointer",
+        "flex items-center gap-4 px-4 py-3 bg-background transition-colors",
+        allowSelection ? "cursor-pointer hover:bg-muted/40" : "",
         isSelected ? "border border-primary/40 bg-muted/60 shadow-sm" : "",
         !isLast ? "border-b border-border" : "",
       ]
         .filter(Boolean)
         .join(" ")}
-      onClick={handleCardClick}
-      role="button"
-      tabIndex={0}
+      onClick={allowSelection ? handleCardClick : undefined}
+      role={allowSelection ? "button" : undefined}
+      tabIndex={allowSelection ? 0 : undefined}
       onKeyDown={(event) => {
+        if (!allowSelection) {
+          return;
+        }
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
           void handleCardClick();
@@ -176,14 +190,6 @@ export function BrandAccountCard({
         </div>
         <p className="mt-0.5 text-xs text-muted-foreground">
           {getAccountTypeLabel(brandAccount.accountType)}
-          {brandAccount.status ? (
-            <>
-              {" · "}
-              <span className={brandAccount.status === "active" ? "text-green-600" : "text-muted-foreground"}>
-                {brandAccount.status}
-              </span>
-            </>
-          ) : null}
         </p>
         {error ? <p className="mt-1 text-xs text-red-600">{error}</p> : null}
       </div>
@@ -197,7 +203,7 @@ export function BrandAccountCard({
             disabled={isLoading}
           >
             <Building className="mr-1.5 h-3.5 w-3.5" />
-            {isLoading ? "Creating…" : isExisting ? "Create again" : "Create"}
+            {isLoading ? "Creating…" : "Create"}
           </Button>
         ) : null}
         {!canCreateRemoteConnection && !isExisting ? (

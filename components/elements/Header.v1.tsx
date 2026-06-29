@@ -44,6 +44,7 @@ export function HeaderV1({
   const handleText = getAccountHandle(user?.neupId);
   const effectiveUser = user;
   const activeProfileName = user?.workingProfileDisplayName?.trim() || null;
+  const topAccountName = getAccountDisplayName(activeProfileName ?? user?.displayName);
 
   const renderPublicNav = () =>
     publicNavLinks.map((link) => {
@@ -116,10 +117,10 @@ export function HeaderV1({
             {effectiveUser && (
               <Link href="/profile" className="flex items-center gap-2 rounded-md px-1 py-1 transition-colors hover:bg-secondary/60">
                 <div className="mr-1 flex min-w-0 flex-col items-end">
-                  <span className="truncate text-sm font-semibold">{displayName}</span>
+                  <span className="truncate text-sm font-semibold">{topAccountName}</span>
                   <span className="text-xs text-muted-foreground">{handleText}</span>
                 </div>
-                <ProfileV1 displayName={displayName} imageSrc={effectiveUser.displayImage} />
+                <ProfileV1 displayName={topAccountName} imageSrc={effectiveUser.displayImage} />
               </Link>
             )}
 
@@ -144,10 +145,10 @@ export function HeaderV1({
       >
         {effectiveUser && (
           <Link href="/profile" onClick={() => setMenuOpen(false)} className="mx-3 mt-3 flex shrink-0 items-center gap-3 rounded-lg bg-secondary p-2.5">
-            <ProfileV1 displayName={displayName} imageSrc={effectiveUser.displayImage} />
+            <ProfileV1 displayName={topAccountName} imageSrc={effectiveUser.displayImage} />
             <div className="min-w-0 flex flex-col">
               <div className="flex items-center gap-1">
-                <span className="truncate text-sm font-semibold">{displayName}</span>
+                <span className="truncate text-sm font-semibold">{topAccountName}</span>
                 {effectiveUser.verified && <BadgeCheck className="h-3.5 w-3.5 shrink-0 text-primary" />}
               </div>
               <span className="text-xs text-muted-foreground">{handleText}</span>

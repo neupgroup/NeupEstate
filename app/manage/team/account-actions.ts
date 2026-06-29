@@ -41,6 +41,7 @@ export async function createAccountAction(input: CreateAccountInput): Promise<Ac
           accountType: input.accountType,
           displayName: input.displayName,
           displayImage: input.displayImage,
+          connectionId: remoteConnectionResult.connectionId,
           accessedOn: new Date(),
         },
       });
@@ -54,6 +55,7 @@ export async function createAccountAction(input: CreateAccountInput): Promise<Ac
         accountType: input.accountType,
         displayName: input.displayName,
         displayImage: input.displayImage,
+        connectionId: remoteConnectionResult.connectionId,
       }
     });
 
@@ -105,7 +107,7 @@ export async function setWorkingProfileAction(accountId: string): Promise<Action
 
     const actorId = identity.account.accountId;
     const [targetAccount, actorAccount, agencyMembership, brandAccountsResult] = await Promise.all([
-      prisma.account.findUnique({ where: { id: accountId }, select: { id: true } }),
+      prisma.account.findUnique({ where: { id: accountId }, select: { id: true, connectionId: true } }),
       prisma.account.findUnique({ where: { id: actorId }, select: { id: true } }),
       prisma.agencyMap.findFirst({
         where: {
@@ -121,6 +123,13 @@ export async function setWorkingProfileAction(accountId: string): Promise<Action
       return {
         success: false,
         error: 'The selected account does not exist in the local database yet.',
+      };
+    }
+
+    if (!targetAccount.connectionId?.trim()) {
+      return {
+        success: false,
+        error: 'The selected account has not been created yet.',
       };
     }
 
