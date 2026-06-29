@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Menu, X, BadgeCheck } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/logica/core/utils";
 import { getAccountDisplayName, getAccountHandle } from "@/logica/core/account-display";
@@ -31,6 +32,7 @@ export function HeaderV1({
   menuOpen: boolean;
   setMenuOpen: (open: boolean) => void;
   user: {
+    accountId?: string | null;
     displayName?: string | null;
     displayImage?: string | null;
     accountType?: string | null;
@@ -40,11 +42,63 @@ export function HeaderV1({
     workingProfileDisplayName?: string | null;
   } | null;
 }) {
-  const displayName = getAccountDisplayName(user?.displayName);
   const handleText = getAccountHandle(user?.neupId);
   const effectiveUser = user;
   const activeProfileName = user?.workingProfileDisplayName?.trim() || null;
-  const topAccountName = getAccountDisplayName(activeProfileName ?? user?.displayName);
+  const [selectedProfileName, setSelectedProfileName] = useState<string | null>(activeProfileName);
+  const topAccountName = getAccountDisplayName(user?.displayName);
+  const logoProfileName = selectedProfileName?.trim() || null;
+
+  useEffect(() => {
+    const normalizedWorkingProfile = workingProfile?.trim() || null;
+
+    if (!normalizedWorkingProfile || normalizedWorkingProfile === user?.accountId) {
+      setSelectedProfileName(null);
+      return;
+    }
+
+    if (normalizedWorkingProfile === user?.workingProfile && activeProfileName) {
+      setSelectedProfileName(activeProfileName);
+      return;
+    }
+
+    const controller = new AbortController();
+
+    const resolveSelectedProfile = async () => {
+      try {
+        const response = await fetch(
+          `/bridge/api.v1/accounts/lookup?accountId=${encodeURIComponent(normalizedWorkingProfile)}`,
+          {
+            cache: "no-store",
+            signal: controller.signal,
+          }
+        );
+
+        if (!response.ok) {
+          setSelectedProfileName(normalizedWorkingProfile);
+          return;
+        }
+
+        const data = await response.json();
+        const nextName =
+          typeof data?.account?.displayName === "string" && data.account.displayName.trim()
+            ? data.account.displayName.trim()
+            : normalizedWorkingProfile;
+
+        setSelectedProfileName(nextName);
+      } catch (error) {
+        if (controller.signal.aborted) {
+          return;
+        }
+
+        setSelectedProfileName(normalizedWorkingProfile);
+      }
+    };
+
+    void resolveSelectedProfile();
+
+    return () => controller.abort();
+  }, [activeProfileName, user?.accountId, user?.workingProfile, workingProfile]);
 
   const renderPublicNav = () =>
     publicNavLinks.map((link) => {
@@ -102,9 +156,9 @@ export function HeaderV1({
               <img src="https://cdn.neupgroup.com/neupestate/logo.png" alt="Neup.Estate Logo" className="h-9 w-9 object-contain" />
               <div className="flex min-w-0 flex-col">
                 <span className="font-headline text-lg font-bold leading-tight">Neup.Estate</span>
-                {activeProfileName ? (
+                {logoProfileName ? (
                   <span className="max-w-[180px] truncate text-[11px] leading-tight text-muted-foreground sm:max-w-[220px]">
-                    {activeProfileName}
+                    {logoProfileName}
                   </span>
                 ) : null}
               </div>

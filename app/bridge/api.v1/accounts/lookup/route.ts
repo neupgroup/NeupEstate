@@ -23,10 +23,41 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getAccountInformation } from '@/services/account/lookup';
+import { prisma } from '@/logica/core/prisma';
 import { logProblem } from '@/services/problem-service';
 import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';
+
+async function resolveLocalLookup(accountId?: string, neupId?: string) {
+  const account = await prisma.account.findFirst({
+    where: accountId
+      ? { id: accountId }
+      : { neupId },
+    select: {
+      id: true,
+      neupId: true,
+      displayName: true,
+      displayImage: true,
+      accountType: true,
+    },
+  });
+
+  if (!account) {
+    return null;
+  }
+
+  return {
+    success: true as const,
+    account: {
+      accountId: account.id,
+      displayName: account.displayName?.trim() || account.neupId?.trim() || account.id,
+      displayImage: account.displayImage?.trim() || '',
+      accountType: account.accountType?.trim() || 'individual',
+      neupId: account.neupId?.trim() || '',
+    },
+  };
+}
 
 async function resolveLookup(accountId?: string, neupId?: string) {
   if (!accountId && !neupId) {
@@ -34,6 +65,11 @@ async function resolveLookup(accountId?: string, neupId?: string) {
       { success: false, error: 'Provide either accountId or neupId.' },
       { status: 400 },
     );
+  }
+
+  const localResult = await resolveLocalLookup(accountId, neupId);
+  if (localResult) {
+    return NextResponse.json(localResult);
   }
 
   const result = await getAccountInformation(
