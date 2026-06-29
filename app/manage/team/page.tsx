@@ -25,6 +25,30 @@ import {
   UsersRound,
 } from 'lucide-react';
 
+const ACCOUNT_BASE_URL = 'https://neupgroup.com/account';
+
+function getNeupAppId() {
+  return process.env.NEUP_APP_ID?.trim() || 'neup.estate';
+}
+
+function buildTeamAccessHref(profileAccountId?: string | null) {
+  const url = new URL('/access/team', ACCOUNT_BASE_URL);
+  url.searchParams.set('app', getNeupAppId());
+  if (profileAccountId?.trim()) {
+    url.searchParams.set('profile', profileAccountId.trim());
+  }
+  return url.toString();
+}
+
+function buildRoleAccessHref(memberAccountId: string, workingProfileAccountId?: string | null) {
+  const url = new URL('/access/role', ACCOUNT_BASE_URL);
+  url.searchParams.set('member', memberAccountId);
+  if (workingProfileAccountId?.trim()) {
+    url.searchParams.set('workingProfile', workingProfileAccountId.trim());
+  }
+  return url.toString();
+}
+
 type TeamRow = {
   id: string;
   accountType: string;
@@ -196,9 +220,7 @@ export default async function ManageTeamPage({
       : currentProfileType === 'brand'
         ? `Manage access to this agency (${agencyDisplayName}).`
         : `Manage access to this account (${agencyDisplayName}).`;
-  const addMemberHref = agencyAccountId
-    ? `https://neupgroup.com/account/access/team?workingProfile=${encodeURIComponent(agencyAccountId)}`
-    : 'https://neupgroup.com/account/access/team';
+  const addMemberHref = buildTeamAccessHref(agencyAccountId);
   const switchHref = `/manage/switch?workingProfile=${encodeURIComponent(agencyAccountId)}`;
 
   return (
@@ -206,9 +228,9 @@ export default async function ManageTeamPage({
       {!brandAccountsResult.success ? (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error Loading Brand Accounts</AlertTitle>
+          <AlertTitle>Error Loading Accounts</AlertTitle>
           <AlertDescription>
-            {brandAccountsResult.error || 'Failed to fetch brand accounts from NeupID'}
+            {brandAccountsResult.error || 'Failed to fetch accounts from NeupID'}
           </AlertDescription>
         </Alert>
       ) : null}
@@ -256,6 +278,7 @@ export default async function ManageTeamPage({
           {memberRows.map(({ member, account }) => {
             const displayName = account.displayName ?? account.id;
             const isCurrentAccount = account.id === authAccount.aid;
+            const memberAccessHref = buildRoleAccessHref(account.id, agencyAccountId);
 
             return (
               <div key={member.id} className="flex flex-col justify-between p-5">
@@ -268,7 +291,7 @@ export default async function ManageTeamPage({
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
                         <ClientLink
-                          href={`/manage/accounts/${account.id}`}
+                          href={memberAccessHref}
                           className="truncate text-base font-semibold hover:underline"
                         >
                           {displayName}

@@ -46,8 +46,10 @@ export default async function SiteErrorsPage({
             <Alert key={problem.id} variant="destructive">
               <ServerCrash className="h-4 w-4" />
               <AlertTitle>Error in: {problem.context}</AlertTitle>
-              <AlertDescription>
-                <p className="font-semibold">{problem.message}</p>
+              <AlertDescription className="min-w-0">
+                <p className="font-semibold whitespace-pre-wrap break-words [overflow-wrap:anywhere]">
+                  {problem.message}
+                </p>
                 <p className="mt-1 text-xs text-muted-foreground">
                   Logged at: {new Date(problem.createdAt).toLocaleString()}
                 </p>
@@ -56,7 +58,7 @@ export default async function SiteErrorsPage({
                     <summary className="cursor-pointer text-xs font-medium hover:text-foreground">
                       View stack trace
                     </summary>
-                    <pre className="mt-1 whitespace-pre-wrap break-words rounded-md bg-background/50 p-2 text-xs font-mono">
+                    <pre className="mt-1 whitespace-pre-wrap break-words [overflow-wrap:anywhere] rounded-md bg-background/50 p-2 text-xs font-mono">
                       {problem.stack}
                     </pre>
                   </details>
@@ -66,7 +68,7 @@ export default async function SiteErrorsPage({
                     <summary className="cursor-pointer text-xs font-medium hover:text-foreground">
                       View error details
                     </summary>
-                    <pre className="mt-1 whitespace-pre-wrap break-words rounded-md bg-background/50 p-2 text-xs font-mono">
+                    <pre className="mt-1 whitespace-pre-wrap break-words [overflow-wrap:anywhere] rounded-md bg-background/50 p-2 text-xs font-mono">
                       {JSON.stringify(problem.details, null, 2)}
                     </pre>
                   </details>

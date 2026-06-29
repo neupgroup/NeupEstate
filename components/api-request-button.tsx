@@ -16,7 +16,7 @@ interface BrandAccount {
   status: string;
   isVerified: boolean;
   accountType: string;
-  capabilities: string[];
+  permissions: string[];
 }
 
 interface BrandAccountsResponse {
@@ -135,18 +135,18 @@ export function ApiRequestButton() {
                       )}
                     </div>
 
-                    {brand.capabilities && brand.capabilities.length > 0 && (
+                    {brand.permissions && brand.permissions.length > 0 && (
                       <div>
-                        <p className="text-xs text-muted-foreground mb-2">Capabilities:</p>
+                        <p className="text-xs text-muted-foreground mb-2">Permissions:</p>
                         <div className="flex flex-wrap gap-1">
-                          {brand.capabilities.slice(0, 3).map((cap) => (
-                            <Badge key={cap} variant="secondary" className="text-xs">
-                              {cap}
+                          {brand.permissions.slice(0, 3).map((permission) => (
+                            <Badge key={permission} variant="secondary" className="text-xs">
+                              {permission}
                             </Badge>
                           ))}
-                          {brand.capabilities.length > 3 && (
+                          {brand.permissions.length > 3 && (
                             <Badge variant="secondary" className="text-xs">
-                              +{brand.capabilities.length - 3} more
+                              +{brand.permissions.length - 3} more
                             </Badge>
                           )}
                         </div>

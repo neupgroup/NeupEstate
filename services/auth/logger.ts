@@ -8,6 +8,8 @@
  * Edge runtime and client-side will only log to console.
  */
 
+import { logProblem } from '@/services/problem-service';
+
 // ─── Configuration ───────────────────────────────────────────────────────────
 
 const LOG_DIR = 'logs';
@@ -69,6 +71,20 @@ function truncateToken(token: string | null | undefined): string {
  */
 function formatLogEntry(log: AuthErrorLog): string {
   return JSON.stringify(log) + '\n';
+}
+
+function getPrintableContext(
+  context?: {
+    reason?: string;
+    token?: string | null;
+    level?: LogLevel;
+    [key: string]: any;
+  },
+): Record<string, any> | undefined {
+  if (!context) return undefined;
+
+  const { reason: _reason, token: _token, level: _level, ...rest } = context;
+  return Object.keys(rest).length > 0 ? rest : undefined;
 }
 
 /**
@@ -142,6 +158,7 @@ export async function logAuthError(
   const level = context?.level || 'error';
   const errorMessage = error instanceof Error ? error.message : error;
   const stack = error instanceof Error ? error.stack : undefined;
+  const printableContext = getPrintableContext(context);
 
   const log: AuthErrorLog = {
     timestamp,
@@ -153,23 +170,26 @@ export async function logAuthError(
     context: context ? { ...context, token: undefined } : undefined,
   };
 
-  // Log to console (works everywhere)
-  const consolePrefix = `[Auth ${level.toUpperCase()}] ${timestamp}`;
-  
   switch (level) {
     case 'error':
-      console.error(consolePrefix, errorMessage);
-      if (context?.reason) console.error('  Reason:', context.reason);
-      if (context?.token) console.error('  Token:', truncateToken(context.token));
-      if (stack) console.error('  Stack:', stack);
       break;
     case 'warn':
-      console.warn(consolePrefix, errorMessage);
-      if (context?.reason) console.warn('  Reason:', context.reason);
       break;
     case 'info':
-      console.info(consolePrefix, errorMessage);
       break;
+  }
+
+  if (level === 'error') {
+    await logProblem(
+      error instanceof Error ? error : new Error(errorMessage),
+      'auth.logger',
+      {
+        reason: context?.reason,
+        operation: context?.operation,
+        token: truncateToken(context?.token),
+        authContext: context ? { ...context, token: undefined, level } : { level },
+      },
+    );
   }
 
   // Log to file (only in Node.js runtime, async, don't block)

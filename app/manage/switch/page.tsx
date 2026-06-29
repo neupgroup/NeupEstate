@@ -103,9 +103,9 @@ export default async function ManageSwitchPage({
       {!brandAccountsResult.success ? (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error Loading Brand Accounts</AlertTitle>
+          <AlertTitle>Error Loading Accounts</AlertTitle>
           <AlertDescription>
-            {brandAccountsResult.error || 'Failed to fetch brand accounts from NeupID'}
+            {brandAccountsResult.error || 'Failed to fetch accounts from NeupID'}
           </AlertDescription>
         </Alert>
       ) : null}
@@ -126,9 +126,9 @@ export default async function ManageSwitchPage({
       ) : (
         <Alert>
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>No Accessible Accounts Found</AlertTitle>
+          <AlertTitle>No Accessible Profiles Found</AlertTitle>
           <AlertDescription>
-            No accessible agency or brand accounts were found for this login.
+            No accessible accounts were found for this login.
           </AlertDescription>
         </Alert>
       )}

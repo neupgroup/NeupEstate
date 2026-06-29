@@ -3,7 +3,7 @@
 import { prisma } from '@/logica/core/prisma';
 import { logProblem } from '@/services/problem-service';
 import { getIdentity } from '@/services/neupid/get-identity';
-import { getBrandAccounts } from '@/services/neupid/get-brand-accounts';
+import { createBrandAccountConnection, getBrandAccounts } from '@/services/neupid/get-brand-accounts';
 import type { BrandAccount } from '@/services/neupid/get-brand-accounts';
 
 type CreateAccountInput = {
@@ -21,15 +21,30 @@ type ActionResult = {
 
 export async function createAccountAction(input: CreateAccountInput): Promise<ActionResult> {
   try {
+    const remoteConnectionResult = await createBrandAccountConnection(input.id);
+    if (!remoteConnectionResult.success) {
+      return {
+        success: false,
+        error: remoteConnectionResult.error,
+      };
+    }
+
     const existing = await prisma.account.findUnique({
       where: { id: input.id }
     });
 
     if (existing) {
-      return {
-        success: false,
-        error: 'Account already exists. Use sync instead.'
-      };
+      await prisma.account.update({
+        where: { id: input.id },
+        data: {
+          neupId: input.neupId?.trim() || null,
+          accountType: input.accountType,
+          displayName: input.displayName,
+          displayImage: input.displayImage,
+          accessedOn: new Date(),
+        },
+      });
+      return { success: true };
     }
 
     await prisma.account.create({

@@ -49,8 +49,10 @@ export default async function ProblemsPage({
                       <Alert key={problem.id} variant="destructive">
                           <ServerCrash className="h-4 w-4" />
                           <AlertTitle>Error in: {problem.context}</AlertTitle>
-                          <AlertDescription>
-                              <p className="font-semibold">{problem.message}</p>
+                          <AlertDescription className="min-w-0">
+                              <p className="font-semibold whitespace-pre-wrap break-words [overflow-wrap:anywhere]">
+                                  {problem.message}
+                              </p>
                               <p className="text-xs text-muted-foreground mt-1">
                                   Logged at: {new Date(problem.createdAt).toLocaleString()}
                               </p>
@@ -59,7 +61,7 @@ export default async function ProblemsPage({
                                       <summary className="cursor-pointer text-xs font-medium hover:text-foreground">
                                           View Stack Trace
                                       </summary>
-                                      <pre className="mt-1 p-2 bg-background/50 rounded-md text-xs whitespace-pre-wrap font-mono break-words">
+                                      <pre className="mt-1 p-2 bg-background/50 rounded-md text-xs whitespace-pre-wrap font-mono break-words [overflow-wrap:anywhere]">
                                           {problem.stack}
                                       </pre>
                                   </details>
@@ -69,13 +71,13 @@ export default async function ProblemsPage({
                                       <summary className="cursor-pointer text-xs font-medium hover:text-foreground">
                                           View API Call Details
                                       </summary>
-                                  <div className="mt-1 p-2 bg-background/50 rounded-md text-xs font-mono">
+                                  <div className="mt-1 min-w-0 p-2 bg-background/50 rounded-md text-xs font-mono">
                                           {Object.entries(problem.details)
                                             .filter(([key]) => key !== 'accountId' && key !== 'lookupError')
                                             .map(([key, value]) => (
                                               <div key={key} className="mb-2 last:mb-0">
                                                   <p className="font-semibold capitalize">{key.replace(/([A-Z])/g, ' $1')}:</p>
-                                                  <pre className="p-2 bg-black/10 dark:bg-white/10 rounded-md whitespace-pre-wrap break-all">
+                                                  <pre className="p-2 bg-black/10 dark:bg-white/10 rounded-md whitespace-pre-wrap break-words [overflow-wrap:anywhere]">
                                                       {typeof value === 'object' ? JSON.stringify(value, null, 2) : String(value)}
                                                   </pre>
                                               </div>

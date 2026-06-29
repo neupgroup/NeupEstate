@@ -37,6 +37,11 @@ function getAccountTypeLabel(accountType: string) {
   return "Account Profile";
 }
 
+function supportsRemoteConnection(accountType: string) {
+  const normalized = accountType.trim().toLowerCase();
+  return normalized === "brand" || normalized === "branch";
+}
+
 type BrandAccountCardProps = {
   brandAccount: AgencyManagementAccount;
   existingAccount: {
@@ -64,6 +69,7 @@ export function BrandAccountCard({
 
   const isExisting = !!existingAccount;
   const isRemoteBrandAccount = brandAccount.source === "brand";
+  const canCreateRemoteConnection = isRemoteBrandAccount && supportsRemoteConnection(brandAccount.accountType);
 
   const handleCardClick = async () => {
     if (isSelected && isExisting) {
@@ -183,7 +189,7 @@ export function BrandAccountCard({
       </div>
 
       <div className="flex-shrink-0">
-        {isRemoteBrandAccount && !isExisting ? (
+        {canCreateRemoteConnection ? (
           <Button
             size="sm"
             onClick={(event) => handleCreate(event)}
@@ -191,12 +197,12 @@ export function BrandAccountCard({
             disabled={isLoading}
           >
             <Building className="mr-1.5 h-3.5 w-3.5" />
-            {isLoading ? "Creating…" : "Create"}
+            {isLoading ? "Creating…" : isExisting ? "Create again" : "Create"}
           </Button>
         ) : null}
-        {!isRemoteBrandAccount && !isExisting ? (
+        {!canCreateRemoteConnection && !isExisting ? (
           <Badge variant="outline" className="text-xs">
-            DB link only
+            Profile only
           </Badge>
         ) : null}
       </div>
