@@ -21,14 +21,14 @@ const publicNavLinks = [
 export function HeaderV1({
   pathname,
   isManage,
-  workingProfile,
+  selectedProfile,
   menuOpen,
   setMenuOpen,
   user,
 }: {
   pathname: string;
   isManage: boolean;
-  workingProfile: string | null;
+  selectedProfile: string | null;
   menuOpen: boolean;
   setMenuOpen: (open: boolean) => void;
   user: {
@@ -50,14 +50,16 @@ export function HeaderV1({
   const logoProfileName = selectedProfileName?.trim() || null;
 
   useEffect(() => {
-    const normalizedWorkingProfile = workingProfile?.trim() || null;
+    const normalizedSelectedProfile = selectedProfile?.trim() || null;
+    const normalizedDefaultProfile = user?.workingProfile?.trim() || null;
+    const profileIdToShow = normalizedSelectedProfile ?? normalizedDefaultProfile;
 
-    if (!normalizedWorkingProfile || normalizedWorkingProfile === user?.accountId) {
+    if (!profileIdToShow || profileIdToShow === user?.accountId) {
       setSelectedProfileName(null);
       return;
     }
 
-    if (normalizedWorkingProfile === user?.workingProfile && activeProfileName) {
+    if (profileIdToShow === normalizedDefaultProfile && activeProfileName) {
       setSelectedProfileName(activeProfileName);
       return;
     }
@@ -67,7 +69,7 @@ export function HeaderV1({
     const resolveSelectedProfile = async () => {
       try {
         const response = await fetch(
-          `/bridge/api.v1/accounts/lookup?accountId=${encodeURIComponent(normalizedWorkingProfile)}`,
+          `/bridge/api.v1/accounts/lookup?accountId=${encodeURIComponent(profileIdToShow)}`,
           {
             cache: "no-store",
             signal: controller.signal,
@@ -75,7 +77,7 @@ export function HeaderV1({
         );
 
         if (!response.ok) {
-          setSelectedProfileName(normalizedWorkingProfile);
+          setSelectedProfileName(profileIdToShow);
           return;
         }
 
@@ -83,7 +85,7 @@ export function HeaderV1({
         const nextName =
           typeof data?.account?.displayName === "string" && data.account.displayName.trim()
             ? data.account.displayName.trim()
-            : normalizedWorkingProfile;
+            : profileIdToShow;
 
         setSelectedProfileName(nextName);
       } catch (error) {
@@ -91,14 +93,14 @@ export function HeaderV1({
           return;
         }
 
-        setSelectedProfileName(normalizedWorkingProfile);
+        setSelectedProfileName(profileIdToShow);
       }
     };
 
     void resolveSelectedProfile();
 
     return () => controller.abort();
-  }, [activeProfileName, user?.accountId, user?.workingProfile, workingProfile]);
+  }, [activeProfileName, selectedProfile, user?.accountId, user?.workingProfile]);
 
   const renderPublicNav = () =>
     publicNavLinks.map((link) => {
@@ -133,7 +135,7 @@ export function HeaderV1({
       return (
         <Link
           key={item.href}
-          href={appendWorkingProfileV1(item.href, workingProfile)}
+          href={appendWorkingProfileV1(item.href, selectedProfile)}
           onClick={() => setMenuOpen(false)}
           className={cn(
             buttonVariants({ variant: "ghost", size: "sm" }),

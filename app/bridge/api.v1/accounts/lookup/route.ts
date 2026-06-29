@@ -1,24 +1,44 @@
 /**
- * GET /bridge/api.v1/accounts/lookup
+ * ::neup.documentation::bridge-account-lookup-route
+ * ::api GET|POST /bridge/api.v1/accounts/lookup
  *
- * Resolves public account information by accountId or neupId.
- * No authentication required — these are public-facing profile fields.
+ * Resolves public account profile information by `accountId` or `neupId`.
  *
- * Query params (exactly one required):
- *   ?accountId=<uuid>
- *   ?neupId=<handle>        e.g. @neupcloud
+ * ::public
  *
- * 200 — account found
- *   { success: true, account: { accountId, displayName, displayImage, accountType, neupId } }
+ * This route returns a public account summary with:
+ * - `accountId`
+ * - `displayName`
+ * - `displayImage`
+ * - `accountType`
+ * - `neupId`
  *
- * 400 — neither param provided
- *   { success: false, error: "..." }
+ * Supported inputs:
+ * - `GET ?accountId=<id>`
+ * - `GET ?neupId=<handle>`
+ * - `POST { accountId }`
+ * - `POST { neupId }`
  *
- * 404 — no account matched
- *   { success: false, error: "..." }
+ * Response behavior:
+ * - `200` when an account is resolved
+ * - `400` when neither `accountId` nor `neupId` is provided
+ * - `404` when no account can be resolved
+ * - `500` on unexpected server failure
  *
- * 500 — upstream error
- *   { success: false, error: "..." }
+ * ::public end
+ *
+ * ::private
+ *
+ * Resolution order is intentional:
+ * 1. Check the local `account` row first.
+ * 2. If the local row already has a real `displayName`, return it immediately.
+ * 3. If the local row exists but only has fallback identity data, query the upstream account lookup service to fetch the richer profile name.
+ * 4. If upstream lookup fails but a local row exists, return the local fallback instead of failing the request.
+ *
+ * This avoids showing raw account ids in UI surfaces like the header subtitle when a richer upstream profile display name is available.
+ *
+ * ::private end
+ * ::end
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -48,6 +68,7 @@ async function resolveLocalLookup(accountId?: string, neupId?: string) {
   }
 
   return {
+    hasDisplayName: Boolean(account.displayName?.trim()),
     success: true as const,
     account: {
       accountId: account.id,
@@ -68,7 +89,7 @@ async function resolveLookup(accountId?: string, neupId?: string) {
   }
 
   const localResult = await resolveLocalLookup(accountId, neupId);
-  if (localResult) {
+  if (localResult?.hasDisplayName) {
     return NextResponse.json(localResult);
   }
 
@@ -77,6 +98,13 @@ async function resolveLookup(accountId?: string, neupId?: string) {
   );
 
   if (!result.found) {
+    if (localResult) {
+      return NextResponse.json({
+        success: true,
+        account: localResult.account,
+      });
+    }
+
     return NextResponse.json(
       { success: false, error: 'Account not found.' },
       { status: 404 },
