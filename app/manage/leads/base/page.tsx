@@ -14,7 +14,7 @@ export default async function BaseLeadsPage() {
     const account = accountId ? await getAccountById(accountId) : null;
     const agencyLinks = accountId ? await getAgencyAgentMapsByAgent(accountId) : [];
     const canViewAllLeads =
-        account?.account_type === 'brand' ||
+        ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'].includes(account?.account_type ?? '') ||
         agencyLinks.some((link) => link.status === 'accepted' && link.isAdmin);
     const leads = await getBaseLeads();
     const visibleLeads = canViewAllLeads || !accountId

@@ -22,6 +22,7 @@ import { headers } from 'next/headers';
 import { prisma } from '@/logica/core/prisma';
 import { getSignedAccountInformation } from '@/services/account/lookup';
 import { logProblem } from '@/services/problem-service';
+import { resolveStoredAccountType } from '@/services/account-type';
 
 /**
  * Ensures an account row exists for the current request's authenticated user.
@@ -102,7 +103,7 @@ export async function createAccount(): Promise<void> {
       data: {
         id: aid,
         neupId: neupIdFromLookup ?? null,
-        accountType,
+        accountType: resolveStoredAccountType({ remoteAccountType: accountType }),
         createdOn:  new Date(),
         accessedOn: new Date(),
         displayName,

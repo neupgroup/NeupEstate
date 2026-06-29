@@ -160,7 +160,7 @@ export function CreateLeadForm() {
             const currentAccount = await getAccountById(currentAccountId);
             if (!currentAccount) return;
 
-            const agencyId = currentAccount.account_type === 'brand'
+            const agencyId = ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'].includes(currentAccount.account_type)
                 ? currentAccountId
                 : currentAccount.agency ?? (await getAgencyAgentMapsByAgent(currentAccountId)).find((link) => link.status === 'accepted')?.agencyId ?? null;
 
@@ -185,7 +185,11 @@ export function CreateLeadForm() {
                     .map((link) => link.agentId),
             );
 
-            const agents = accounts.filter((account) => allowedAgentIds.has(account.id) && account.account_type !== 'brand');
+            const agents = accounts.filter(
+                (account) =>
+                    allowedAgentIds.has(account.id) &&
+                    !['brand', 'brand.agency', 'subbrand', 'subbrand.agency'].includes(account.account_type)
+            );
 
             if (!cancelled) {
                 setAgencyName(agencyAccount?.display_name ?? agencyId);

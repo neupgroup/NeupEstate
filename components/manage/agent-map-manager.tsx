@@ -28,7 +28,7 @@ function getAccountLabel(account: Account): string {
 }
 
 function isBrandAccount(account: Account): boolean {
-  return account.account_type === 'brand';
+  return ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'].includes(account.account_type);
 }
 
 export function AgentMapManager({

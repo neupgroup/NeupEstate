@@ -115,7 +115,11 @@ export async function getAgencyAgentAccountsByAgency(agencyId: string): Promise<
     ]);
 
     const agentIds = new Set(links.map((link) => link.agentId));
-    return accounts.filter((account) => agentIds.has(account.id) && account.account_type !== 'brand');
+    return accounts.filter(
+      (account) =>
+        agentIds.has(account.id) &&
+        !['brand', 'brand.agency', 'subbrand', 'subbrand.agency'].includes(account.account_type),
+    );
   } catch (e) {
     await logProblem(e, `getAgencyAgentAccountsByAgency ${agencyId}`);
     return [];

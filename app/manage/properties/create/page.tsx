@@ -54,7 +54,9 @@ export default function CreatePropertyPage() {
 
             const links = await getAgencyAgentMapsByAgent(currentId);
             const acceptedLinks = links.filter((link) => link.status === 'accepted');
-            const agencies = accountList.filter((account) => account.account_type === 'brand');
+            const agencies = accountList.filter((account) =>
+                ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'].includes(account.account_type)
+            );
 
             setAgencyLinks(acceptedLinks);
             setAgencyAccounts(agencies);

@@ -3,6 +3,7 @@
 import { prisma } from '@/logica/core/prisma';
 import { logProblem } from './problem-service';
 import type { Agency, CreateAgencyInput, UpdateAgencyInput } from '@/types';
+import { isAgencyLikeAccountType } from './account-type';
 
 export type PublicAgencyAccount = {
   id: string;
@@ -138,7 +139,7 @@ export async function getPublicAgencyAccounts({
     const records = await prisma.account.findMany({
       where: {
         accountType: {
-          in: ['brand', 'branch'],
+          in: ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'],
         },
       },
       select: {
@@ -211,7 +212,7 @@ export async function getPublicAccountProfileByNeupId(neupId: string): Promise<P
     });
 
     if (record) {
-      const counts = ['brand', 'branch'].includes(record.accountType)
+      const counts = isAgencyLikeAccountType(record.accountType)
         ? await getAgencyCounts(record.id)
         : undefined;
 
@@ -226,7 +227,7 @@ export async function getPublicAccountProfileByNeupId(neupId: string): Promise<P
 
 export async function getPublicAgencyAccountByNeupId(neupId: string): Promise<PublicAgencyAccount | null> {
   const account = await getPublicAccountProfileByNeupId(neupId);
-  if (!account || !['brand', 'branch'].includes(account.accountType)) {
+  if (!account || !isAgencyLikeAccountType(account.accountType)) {
     return null;
   }
 

@@ -45,6 +45,7 @@ import { getIdentity } from '@/services/neupid/get-identity';
 import { hasPermission, requirePermission } from '@/logica/auth/authorization';
 import { PERMISSIONS } from '@/logica/auth/permissions';
 import { prisma } from '@/logica/core/prisma';
+import { isAgencyLikeAccountType, promoteStoredAccountType } from '@/services/account-type';
 
 // ---------------------------------------------------------------------------
 // Identity guard
@@ -520,7 +521,10 @@ export async function getListingAgentOptionsAction(input: {
     }
 
     for (const account of accounts) {
-      if (account.account_type === 'brand' || account.account_type === 'guest') continue;
+      if (
+        ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'].includes(account.account_type) ||
+        account.account_type === 'guest'
+      ) continue;
       if (optionMap.has(account.id)) continue;
       const agencyContext = primaryAgencyByAgentId.get(account.id);
       optionMap.set(account.id, {
@@ -539,7 +543,11 @@ export async function getListingAgentOptionsAction(input: {
         continue;
       }
       const account = await getAccountById(accountId);
-      if (account && account.account_type !== 'brand' && account.account_type !== 'guest') {
+      if (
+        account &&
+        !['brand', 'brand.agency', 'subbrand', 'subbrand.agency'].includes(account.account_type) &&
+        account.account_type !== 'guest'
+      ) {
         const agencyContext = primaryAgencyByAgentId.get(account.id);
         optionMap.set(account.id, {
           name: account.display_name?.trim() || account.id,
@@ -1061,13 +1069,33 @@ export async function createAgencyAction(
 ): Promise<{ success: boolean; error?: string | null; agencyId?: string | null }> {
   try {
     await requirePermission(PERMISSIONS.public.createAgency);
-    await requireIdentity();
+    const actorId = await requireIdentity();
     const validatedData = CreateAgencySchema.parse(data);
     const serviceInput: CreateAgencyInput = {
       ...validatedData,
       branches: validatedData.branches?.split('\\n').map(b => b.trim()).filter(Boolean) || [],
     };
     const agencyId = await createAgencyService(serviceInput);
+    const actorAccount = await prisma.account.findUnique({
+      where: { id: actorId },
+      select: { id: true, accountType: true, workingProfile: true },
+    });
+
+    const targetAccountId = actorAccount?.workingProfile?.trim() || actorId;
+    const targetAccount =
+      targetAccountId === actorId
+        ? actorAccount
+        : await prisma.account.findUnique({
+            where: { id: targetAccountId },
+            select: { id: true, accountType: true },
+          });
+
+    if (targetAccount && isAgencyLikeAccountType(targetAccount.accountType)) {
+      await prisma.account.updateMany({
+        where: { id: targetAccount.id },
+        data: { accountType: promoteStoredAccountType(targetAccount.accountType, 'agency') },
+      });
+    }
     revalidatePath('/manage/team');
     revalidatePath('/agencies');
     return { success: true, agencyId, error: null };
@@ -1140,6 +1168,18 @@ export async function createAgencyAgentMapAction(
       isAdmin: Boolean(data.isAdmin),
     });
 
+    const agentAccount = await prisma.account.findUnique({
+      where: { id: agentId },
+      select: { accountType: true },
+    });
+
+    if (agentAccount) {
+      await prisma.account.updateMany({
+        where: { id: agentId },
+        data: { accountType: promoteStoredAccountType(agentAccount.accountType, 'worker') },
+      });
+    }
+
     revalidatePath('/manage/agentmap');
     revalidatePath('/manage/properties/create');
     revalidatePath('/manage');
@@ -1169,7 +1209,7 @@ export async function createLeadAction(
     await requirePermission(PERMISSIONS.manage.selfLeadCreate);
     const actorId = await requireIdentity();
     const currentAccount = await getAccountById(actorId);
-    const fallbackAgencyId = currentAccount?.account_type === 'brand'
+    const fallbackAgencyId = currentAccount && ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'].includes(currentAccount.account_type)
       ? actorId
       : currentAccount?.agency ??
         (await getAgencyAgentMapsByAgentService(actorId)).find((link) => link.status === 'accepted')?.agencyId ??
@@ -1508,6 +1548,16 @@ export async function createAgentAction(
     await requireIdentity();
     const validatedData = CreateAgentSchema.parse(data);
     const agentId = await createAgentService(validatedData);
+    if (validatedData.registered && validatedData.userId) {
+      const agentAccount = await prisma.account.findUnique({
+        where: { id: validatedData.userId },
+        select: { accountType: true },
+      });
+      await prisma.account.updateMany({
+        where: { id: validatedData.userId },
+        data: { accountType: promoteStoredAccountType(agentAccount?.accountType, 'agent') },
+      });
+    }
     revalidatePath('/manage/team');
     return { success: true, agentId, error: null };
   } catch (e: any) {

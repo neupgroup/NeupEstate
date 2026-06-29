@@ -23,7 +23,7 @@ export default async function PublicAgencyProfilePage({
   const account = await getPublicAccountProfileByNeupId(neupId);
   if (!account) notFound();
 
-  const isAgency = ['brand', 'branch'].includes(account.accountType);
+  const isAgency = ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'].includes(account.accountType);
 
   return (
     <main className="flex-1">

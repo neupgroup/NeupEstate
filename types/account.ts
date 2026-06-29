@@ -1,7 +1,17 @@
 
 import { z } from 'zod';
 
-export const AccountTypeSchema = z.enum(['brand', 'individual', 'dependent', 'guest']);
+export const AccountTypeSchema = z.enum([
+  'brand',
+  'brand.agency',
+  'subbrand',
+  'subbrand.agency',
+  'individual',
+  'individual.worker',
+  'individual.agent',
+  'dependent',
+  'guest',
+]);
 export type AccountType = z.infer<typeof AccountTypeSchema>;
 
 const BaseAccountSchema = z.object({
@@ -19,7 +29,16 @@ const BaseAccountSchema = z.object({
 
 export const RegisteredAccountSchema = BaseAccountSchema.extend({
   registered: z.literal(true),
-  account_type: z.enum(['brand', 'individual', 'dependent']),
+  account_type: z.enum([
+    'brand',
+    'brand.agency',
+    'subbrand',
+    'subbrand.agency',
+    'individual',
+    'individual.worker',
+    'individual.agent',
+    'dependent',
+  ]),
 });
 
 export const UnregisteredAccountSchema = BaseAccountSchema.extend({

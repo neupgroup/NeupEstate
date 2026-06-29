@@ -7,6 +7,7 @@ import { prisma } from '@/logica/core/prisma';
 import { logProblem } from './problem-service';
 import { getAccountInformation, getSignedAccountInformation } from '@/services/account/lookup';
 import type { Account } from '@/types';
+import { resolveStoredAccountType } from '@/services/account-type';
 
 /**
  * Ensures an account row exists for the given ssid and returns it.
@@ -53,7 +54,7 @@ export async function resolveAccount(
     await prisma.account.create({
       data: {
         id: aid,
-        accountType: 'individual',
+        accountType: resolveStoredAccountType({ remoteAccountType: 'individual' }),
         createdOn: new Date(),
         accessedOn: new Date(),
         displayName:  displayName  ?? null,
@@ -129,7 +130,15 @@ function mapRecord(account: any): Account {
     return {
       ...base,
       registered: true,
-      account_type: account.accountType as 'brand' | 'individual' | 'dependent',
+      account_type: account.accountType as
+        | 'brand'
+        | 'brand.agency'
+        | 'subbrand'
+        | 'subbrand.agency'
+        | 'individual'
+        | 'individual.worker'
+        | 'individual.agent'
+        | 'dependent',
     };
   }
   return {

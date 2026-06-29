@@ -89,7 +89,7 @@ export default async function AccountsPage({
   });
   const creatableAccounts = remoteBrandCards.filter((agency) => {
     const existingAccount = existingAccountMap.get(agency.id);
-    return !existingAccount?.connectionId?.trim() && ['brand', 'branch'].includes(agency.accountType.trim().toLowerCase());
+    return !existingAccount?.connectionId?.trim() && ['brand', 'subbrand'].includes(agency.accountType.trim().toLowerCase());
   });
   const switchableAccountIds = new Set(switchableAccounts.map((agency) => agency.id));
 

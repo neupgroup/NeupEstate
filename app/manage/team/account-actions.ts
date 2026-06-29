@@ -5,6 +5,7 @@ import { logProblem } from '@/services/problem-service';
 import { getIdentity } from '@/services/neupid/get-identity';
 import { createBrandAccountConnection, getBrandAccounts } from '@/services/neupid/get-brand-accounts';
 import type { BrandAccount } from '@/services/neupid/get-brand-accounts';
+import { resolveStoredAccountType } from '@/services/account-type';
 
 type CreateAccountInput = {
   id: string;
@@ -30,7 +31,8 @@ export async function createAccountAction(input: CreateAccountInput): Promise<Ac
     }
 
     const existing = await prisma.account.findUnique({
-      where: { id: input.id }
+      where: { id: input.id },
+      select: { accountType: true },
     });
 
     if (existing) {
@@ -38,7 +40,10 @@ export async function createAccountAction(input: CreateAccountInput): Promise<Ac
         where: { id: input.id },
         data: {
           neupId: input.neupId?.trim() || null,
-          accountType: input.accountType,
+          accountType: resolveStoredAccountType({
+            remoteAccountType: input.accountType,
+            existingAccountType: existing.accountType,
+          }),
           displayName: input.displayName,
           displayImage: input.displayImage,
           connectionId: remoteConnectionResult.connectionId,
@@ -52,7 +57,7 @@ export async function createAccountAction(input: CreateAccountInput): Promise<Ac
       data: {
         id: input.id,
         neupId: input.neupId?.trim() || null,
-        accountType: input.accountType,
+        accountType: resolveStoredAccountType({ remoteAccountType: input.accountType }),
         displayName: input.displayName,
         displayImage: input.displayImage,
         connectionId: remoteConnectionResult.connectionId,
@@ -84,8 +89,28 @@ export async function syncBrandAccountsToLocalAccounts(
             neupId: account.neupId?.trim() || null,
             displayName: account.displayName || null,
             displayImage: account.displayImage || null,
-            accountType: account.accountType || 'brand',
             accessedOn: new Date(),
+          },
+        }),
+      ),
+    );
+
+    const existingAccounts = await prisma.account.findMany({
+      where: { id: { in: accountsWithNeupId.map((account) => account.id) } },
+      select: { id: true, accountType: true },
+    });
+
+    const existingTypeById = new Map(existingAccounts.map((account) => [account.id, account.accountType]));
+
+    await Promise.all(
+      accountsWithNeupId.map((account) =>
+        prisma.account.updateMany({
+          where: { id: account.id },
+          data: {
+            accountType: resolveStoredAccountType({
+              remoteAccountType: account.accountType || 'brand',
+              existingAccountType: existingTypeById.get(account.id),
+            }),
           },
         }),
       ),

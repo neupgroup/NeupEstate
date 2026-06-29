@@ -20,15 +20,14 @@ export type AgencyManagementAccount = {
 
 function getAccountTypeLabel(accountType: string) {
   const normalized = accountType.trim().toLowerCase();
-  if (normalized === "brand" || normalized === "branch") {
-    return "Agency Account";
-  }
-  if (normalized === "individual") {
-    return "Personal Account";
-  }
-  if (normalized === "dependent") {
-    return "Personal Profile";
-  }
+  if (normalized === "brand") return "Brand Account";
+  if (normalized === "brand.agency") return "Agency Account";
+  if (normalized === "subbrand") return "Sub Brand Account";
+  if (normalized === "subbrand.agency") return "Agency Account";
+  if (normalized === "individual") return "Personal Account";
+  if (normalized === "individual.agent") return "Agent Account";
+  if (normalized === "individual.worker") return "Personal Account";
+  if (normalized === "dependent") return "Dependent Personal Account";
   if (normalized === "guest") {
     return "Guest Profile";
   }
@@ -38,7 +37,7 @@ function getAccountTypeLabel(accountType: string) {
 
 function supportsRemoteConnection(accountType: string) {
   const normalized = accountType.trim().toLowerCase();
-  return normalized === "brand" || normalized === "branch";
+  return normalized === "brand" || normalized === "subbrand";
 }
 
 type BrandAccountCardProps = {

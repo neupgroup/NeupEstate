@@ -1,6 +1,7 @@
 import { prisma } from "@/logica/core/prisma";
 import { verifyAuthJWT } from "@/services/auth/jwt";
 import { getSignedAccountInformation } from "@/services/account/lookup";
+import { resolveStoredAccountType } from "@/services/account-type";
 
 type AccountInfoSuccess = {
   success: true;
@@ -82,7 +83,7 @@ export async function getAccountInfo(authAccountCookie: string): Promise<GetAcco
     create: {
       id: aid,
       neupId: profile.neupId,
-      accountType: guest === 1 ? "guest" : "individual",
+      accountType: resolveStoredAccountType({ remoteAccountType: guest === 1 ? "guest" : "individual" }),
       displayName: profile.displayName,
       displayImage: profile.displayImage,
       createdOn: new Date(),
@@ -126,7 +127,7 @@ export async function createAccountInApp(
     create: {
       id: aid,
       neupId: profile.neupId,
-      accountType: guest === 1 ? "guest" : "individual",
+      accountType: resolveStoredAccountType({ remoteAccountType: guest === 1 ? "guest" : "individual" }),
       displayName: profile.displayName,
       displayImage: profile.displayImage,
       createdOn: new Date(),
