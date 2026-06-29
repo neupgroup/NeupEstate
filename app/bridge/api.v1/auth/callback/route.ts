@@ -1,16 +1,44 @@
 /**
- * /api/auth/callback
+ * ::neup.documentation::bridge-auth-callback-route
+ * ::api GET|POST /bridge/api.v1/auth/callback
  *
- * This endpoint is called after the user completes authentication with Neup.Account.
- * The Neup.Account bridge has already set the auth_account cookie on the client.
- * 
- * This route simply:
- * 1. Receives the callback
- * 2. Reads the aid from the cookie (if present)
- * 3. Upserts the account in the database
- * 4. Redirects to the requested destination
+ * Handles the post-authentication callback from Neup.Account.
  *
- * Cookie management is handled entirely by Neup.Account, not by this app.
+ * ::public
+ *
+ * This route is invoked after the upstream auth bridge completes authentication
+ * and sets the `auth_account` cookie on the client.
+ *
+ * Behavior:
+ * - reads the authenticated account from the bridge cookie
+ * - creates or updates a local account row when an authenticated account is present
+ * - redirects the user to `redirectsTo`, `returnTo`, or `/`
+ *
+ * Supported methods:
+ * - `GET`
+ * - `POST`
+ *
+ * Response behavior:
+ * - redirect to the requested destination on success
+ * - `500` JSON error on unexpected failure
+ *
+ * ::public end
+ *
+ * ::private
+ *
+ * This route does not manage the auth cookie itself. Cookie issuance is owned by
+ * the upstream Neup.Account bridge.
+ *
+ * Local account persistence is intentionally lightweight:
+ * - `id` is seeded from `aid`
+ * - `displayName` falls back to `nid` or `aid`
+ * - `accessedOn` is refreshed on every callback
+ *
+ * Both `GET` and `POST` flow through the same callback handler to keep redirect
+ * and account-upsert behavior consistent.
+ *
+ * ::private end
+ * ::end
  */
 
 import { NextRequest, NextResponse } from 'next/server';

@@ -1,16 +1,43 @@
 /**
- * app/api/auth/user/route.ts
+ * ::neup.documentation::bridge-auth-user-route
+ * ::api GET /bridge/api.v1/auth/user
  *
- * Returns comprehensive user information including:
- * - Verified account data from the auth cookie
- * - User profile (name, email, roles, teams, permissions)
- * - Access context from the bridge API
+ * Returns a fuller authenticated user payload than `/bridge/api.v1/auth/me`.
  *
- * Used by pages and client components to fetch authenticated user data.
+ * ::public
  *
- * GET /api/auth/user
- * Returns: { success: true; user: { aid, nid, guest, ...profileData } }
- *          { success: false; redirectTo: string } (on auth failure)
+ * This route combines authenticated bridge identity with profile and access data.
+ *
+ * Returned user fields include:
+ * - `aid`, `nid`, `sid`, `skey`
+ * - guest and verification state
+ * - `displayName`, `displayImage`, `accountType`
+ * - `profile` summary
+ * - `bridgeProfile` connection data
+ * - `access` role data
+ *
+ * Response behavior:
+ * - `200` with `{ success: true, user }` when authentication succeeds
+ * - `401` with `{ success: false, redirectTo }` when authentication fails
+ *
+ * ::public end
+ *
+ * ::private
+ *
+ * Resolution merges three sources:
+ * 1. authenticated cookie data from `getAuthenticatedAccount()`
+ * 2. local account state from Prisma
+ * 3. upstream signed account data from `getSignedAccountInformation()`
+ *
+ * Local database values are preferred when present. Upstream signed account data
+ * is used to fill gaps such as display name, neup id, bridge connection details,
+ * and role context.
+ *
+ * The route intentionally preserves a usable auth response even when database
+ * profile reads fail.
+ *
+ * ::private end
+ * ::end
  */
 
 import { NextRequest, NextResponse } from 'next/server';

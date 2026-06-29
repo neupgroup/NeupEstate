@@ -1,8 +1,36 @@
 /**
- * GET /api/auth/logs
+ * ::neup.documentation::bridge-auth-logs-route
+ * ::api GET /bridge/api.v1/auth/logs
  *
- * Returns recent authentication error logs for debugging.
- * Should be protected in production (admin-only).
+ * Returns recent authentication log entries for debugging.
+ *
+ * ::public
+ *
+ * This route returns recent auth log lines as parsed JSON where possible.
+ *
+ * Query params:
+ * - `lines=<number>`: number of recent log lines to read, default `100`
+ *
+ * Response shape:
+ * - `count`: number of log entries returned
+ * - `logs`: parsed JSON objects or `{ raw }` wrappers for non-JSON lines
+ *
+ * Response behavior:
+ * - `200` with log data
+ * - `500` when log reading fails
+ *
+ * ::public end
+ *
+ * ::private
+ *
+ * The route is currently open and includes a note to add admin protection in
+ * production. It should not be treated as a public diagnostics endpoint long term.
+ *
+ * Parsing is best-effort: each line is JSON-decoded independently, and invalid
+ * JSON is preserved as raw text instead of being dropped.
+ *
+ * ::private end
+ * ::end
  */
 
 import { NextRequest, NextResponse } from 'next/server';
