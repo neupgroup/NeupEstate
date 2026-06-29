@@ -1,3 +1,41 @@
+/**
+ * ::neup.documentation::manage-intelligence-logs-page
+ *
+ * Management page for reviewing crawled competitor pages and starting the crawl pipeline.
+ *
+ * ::public
+ *
+ * This page shows crawled competitor pages inside the intelligence area.
+ *
+ * Main responsibilities:
+ * - enforce the intelligence listings permission
+ * - show the crawl pipeline entry card and start action
+ * - list crawled competitor pages with listing status indicators
+ * - paginate the result set for easier review
+ *
+ * User-facing behavior:
+ * - pages that already produced a competitor listing are marked as complete
+ * - pages flagged as `not_to_log` are shown with a neutral status
+ * - unprocessed or failed pages remain highlighted as needing attention
+ *
+ * ::public end
+ *
+ * ::private
+ *
+ * The page reads from `competitor_pages` and left-joins `competitor_listings`
+ * so status can be derived without extra per-row queries.
+ *
+ * The top pipeline card is intentionally action-oriented: it explains the crawl,
+ * render, capture, image collection, storage, and AI conversion pipeline in one
+ * place and delegates execution to `StartCrawlButton`.
+ *
+ * Pagination is performed in memory after the raw query result is returned.
+ * That is acceptable for the current admin-style review surface but may need to
+ * move into SQL if the crawl log volume grows substantially.
+ *
+ * ::private end
+ * ::end
+ */
 import { prisma } from '@/logica/core/prisma';
 import { ClientLink } from '@/components/client-link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
