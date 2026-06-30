@@ -15,7 +15,7 @@ type RequestLike = {
   headers?: { get(name: string): string | null };
 };
 
-import { buildPublicAppUrl } from '@/services/auth/public-url';
+import { buildPublicAppUrl } from '@/logica/core/public-url';
 
 function getAppId(): string {
   return process.env.NEUP_APP_ID ?? '';

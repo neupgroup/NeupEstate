@@ -23,7 +23,7 @@ import { redirect } from 'next/navigation';
 import { getAuthCookieClient, getAuthCookieServer } from './cookie';
 import { verifyAuthJWT, decodeAuthJWT, type AuthAccountPayload } from './jwt';
 import { buildHandshakeGrantUrl } from './bridge';
-import { buildPublicAppUrl } from './public-url';
+import { buildPublicAppUrl } from '../../logica/core/public-url';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 

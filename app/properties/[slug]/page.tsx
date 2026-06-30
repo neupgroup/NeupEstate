@@ -2,7 +2,7 @@
 
 import { notFound, redirect } from 'next/navigation';
 import { getPropertyById, getProperties, getPropertyBySlug } from '@/services/property-service';
-import { buildPublicAppUrl } from '@/services/auth/public-url';
+import { buildPublicAppUrl } from '@/logica/core/public-url';
 import { logProblem } from '@/services/problem-service';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
