@@ -54,7 +54,31 @@ type BrandAccountCardProps = {
   isDefault: boolean;
   isLast: boolean;
   allowSelection?: boolean;
+  backs?: string | null;
 };
+
+function resolveBackPath(backs: string) {
+  const atIndex = backs.indexOf("@");
+  const encodedPath = atIndex >= 0 ? backs.slice(atIndex + 1) : backs;
+
+  try {
+    const decodedPath = decodeURIComponent(encodedPath);
+    return decodedPath.startsWith("/") ? decodedPath : null;
+  } catch {
+    return null;
+  }
+}
+
+function buildBackHref(backs: string, workingProfile: string) {
+  const backPath = resolveBackPath(backs);
+  if (!backPath) {
+    return null;
+  }
+
+  const url = new URL(backPath, window.location.origin);
+  url.searchParams.set('workingProfile', workingProfile);
+  return `${url.pathname}${url.search}${url.hash}`;
+}
 
 export function BrandAccountCard({
   brandAccount,
@@ -63,6 +87,7 @@ export function BrandAccountCard({
   isDefault,
   isLast,
   allowSelection = true,
+  backs = null,
 }: BrandAccountCardProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -87,13 +112,19 @@ export function BrandAccountCard({
       return;
     }
 
+    const backHref = backs ? buildBackHref(backs, brandAccount.id) : null;
+
     if (isSelected && isExisting) {
       setIsLoading(true);
       setError(null);
       try {
         const result = await setWorkingProfileAction(brandAccount.id);
         if (result.success) {
-          router.refresh();
+          if (backHref) {
+            router.replace(backHref);
+          } else {
+            router.refresh();
+          }
         } else {
           setError(result.error || "Failed to set working profile");
         }
@@ -102,6 +133,11 @@ export function BrandAccountCard({
       } finally {
         setIsLoading(false);
       }
+      return;
+    }
+
+    if (backHref) {
+      router.replace(backHref);
       return;
     }
 

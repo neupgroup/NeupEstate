@@ -221,7 +221,10 @@ export default async function ManageTeamPage({
         ? `Manage access to this agency (${agencyDisplayName}).`
         : `Manage access to this account (${agencyDisplayName}).`;
   const addMemberHref = buildTeamAccessHref(agencyAccountId);
-  const switchHref = `/accounts?workingProfile=${encodeURIComponent(agencyAccountId)}`;
+  const teamReturnPath = agencyAccountId === authAccount.aid
+    ? '/manage/team'
+    : `/manage/team?workingProfile=${encodeURIComponent(agencyAccountId)}`;
+  const switchHref = `/accounts?workingProfile=${encodeURIComponent(agencyAccountId)}&backs=${encodeURIComponent(`inapp@${encodeURIComponent(teamReturnPath)}`)}`;
 
   return (
     <div className="space-y-8">

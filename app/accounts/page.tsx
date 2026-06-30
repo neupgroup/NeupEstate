@@ -1,6 +1,7 @@
 import { requireAuth } from '@/services/auth/account';
 import { getBrandAccounts } from '@/services/neupid/get-brand-accounts';
 import { prisma } from '@/logica/core/prisma';
+import { ClientLink } from '@/components/client-link';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
 import { BrandAccountCard, type AgencyManagementAccount } from '../manage/team/brand-account-card';
@@ -14,13 +15,37 @@ async function getWorkingProfile(searchParams?: Promise<SearchParams>) {
   return Array.isArray(value) ? value[0] : value?.trim() || null;
 }
 
+async function getBacks(searchParams?: Promise<SearchParams>) {
+  const resolvedSearchParams = (await searchParams) ?? {};
+  const value = resolvedSearchParams.backs;
+  return Array.isArray(value) ? value[0] : value?.trim() || null;
+}
+
+function resolveBackPath(backs: string | null) {
+  if (!backs) return null;
+
+  const atIndex = backs.indexOf('@');
+  const encodedPath = atIndex >= 0 ? backs.slice(atIndex + 1) : backs;
+
+  try {
+    const decodedPath = decodeURIComponent(encodedPath);
+    return decodedPath.startsWith('/') ? decodedPath : null;
+  } catch {
+    return null;
+  }
+}
+
 export default async function AccountsPage({
   searchParams,
 }: {
   searchParams?: Promise<SearchParams>;
 }) {
   const authAccount = await requireAuth();
-  const selectedAgency = await getWorkingProfile(searchParams);
+  const [selectedAgency, backs] = await Promise.all([
+    getWorkingProfile(searchParams),
+    getBacks(searchParams),
+  ]);
+  const backPath = resolveBackPath(backs);
 
   const [brandAccountsResult, membership, linkedAgencyMappings, localAccount] = await Promise.all([
     getBrandAccounts(),
@@ -105,6 +130,14 @@ export default async function AccountsPage({
   return (
     <div className="container mx-auto space-y-6 px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto w-full max-w-3xl">
+        {backPath ? (
+          <ClientLink
+            href={backPath}
+            className="mb-3 inline-flex text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            &lt; Go Back
+          </ClientLink>
+        ) : null}
         <h1 className="text-2xl font-semibold leading-none tracking-tight">Accounts</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Switch the account context for this page and choose which profile should stay active by default.
@@ -138,6 +171,7 @@ export default async function AccountsPage({
                 isSelected={agencyAccountId === brandAccount.id}
                 isDefault={localAccount?.workingProfile === brandAccount.id}
                 isLast={index === switchableAccounts.length - 1}
+                backs={backs}
               />
             ))}
           </div>
@@ -170,6 +204,7 @@ export default async function AccountsPage({
                 isDefault={false}
                 isLast={index === creatableAccounts.length - 1}
                 allowSelection={false}
+                backs={backs}
               />
             ))}
           </div>
