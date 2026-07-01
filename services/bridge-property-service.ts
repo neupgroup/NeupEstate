@@ -3,7 +3,8 @@ import { z } from 'zod';
 import { prisma } from '@/logica/core/prisma';
 import { areaValueToSqft, CreatePropertySchema, type CreatePropertyFormValues, type CreatePropertyInput, type LandDetails, type PlotDetails, type ApartmentUnit, type StructuredLocation } from '@/types';
 import { getAgencyAgentMapsByAgent } from '@/services/agency-agent-map-service';
-import { getBridgePropertiesByAccount } from '@/services/property-service';
+import { addProperty as addPendingProperty, getBridgePropertiesByAccount } from '@/services/property-service';
+import { Prisma } from '@prisma/client';
 
 function parsePositiveInteger(value: string | null, fallback: number): number {
   if (!value) return fallback;
@@ -267,6 +268,29 @@ function getMissingPropertyCreateInfo(payload: unknown): string[] {
   return Array.from(missing);
 }
 
+function isPropertyIdNullConstraintError(error: unknown): boolean {
+  return error instanceof Prisma.PrismaClientKnownRequestError
+    && error.code === 'P2011'
+    && error.message.toLowerCase().includes('property_id');
+}
+
+/*
+::neup.documentation::create-property-draft-request
+
+::private
+
+Creates or refreshes the current account's pending property creation request.
+
+The primary path stores a `property_changes` row with a nullable `property_id`.
+If the live database still enforces `property_id` as non-nullable, the function
+falls back to creating a pending placeholder property and links the draft to it.
+That keeps property creation working while the schema migration state is being
+reconciled.
+
+::private end
+
+::end
+*/
 export async function createPropertyDraftRequest(input: {
   actorId: string;
   postingAgencyId?: string | null;
@@ -358,7 +382,6 @@ export async function createPropertyDraftRequest(input: {
   const existingDraft = await prisma.propertyChange.findFirst({
     where: {
       accountId: input.actorId,
-      propertyId: null,
       status: 'creating',
       isApproved: null,
     },
@@ -367,7 +390,7 @@ export async function createPropertyDraftRequest(input: {
 
   const draftPayload = {
     accountId: input.actorId,
-    propertyId: null,
+    propertyId: existingDraft?.propertyId ?? null,
     status: 'creating',
     isApproved: null,
     data: serviceInput as any,
@@ -381,6 +404,18 @@ export async function createPropertyDraftRequest(input: {
       })
     : await prisma.propertyChange.create({
         data: draftPayload,
+      }).catch(async (error) => {
+        if (!isPropertyIdNullConstraintError(error)) {
+          throw error;
+        }
+
+        const fallbackPropertyId = await addPendingProperty(serviceInput as any);
+        return prisma.propertyChange.create({
+          data: {
+            ...draftPayload,
+            propertyId: fallbackPropertyId,
+          },
+        });
       });
 
   return { requestId: draft.id };
@@ -403,7 +438,7 @@ export async function editUncreatedPropertyDraftRequest(input: {
     },
   });
 
-  if (!request || request.propertyId || request.status !== 'creating' || request.isApproved !== null) {
+  if (!request || request.status !== 'creating' || request.isApproved !== null) {
     throw new Error('Pending create request not found.');
   }
 

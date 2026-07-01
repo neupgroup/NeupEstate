@@ -719,17 +719,31 @@ export async function cancelPropertyChangeDraftAction(changeId: string): Promise
   try {
     await requirePermission(PERMISSIONS.manage.propertySelfUpdate);
     const accountId = await requireIdentity();
-    const deleted = await prisma.propertyChange.deleteMany({
+    const draft = await prisma.propertyChange.findFirst({
       where: {
         id: changeId,
         accountId,
         isApproved: null,
       },
+      select: {
+        id: true,
+        propertyId: true,
+        status: true,
+      },
     });
 
-    if (!deleted.count) {
+    if (!draft) {
       return { success: false, error: 'Pending request not found.' };
     }
+
+    if (draft.status === 'creating' && draft.propertyId) {
+      await deletePropertyService(draft.propertyId);
+      return { success: true };
+    }
+
+    await prisma.propertyChange.delete({
+      where: { id: draft.id },
+    });
 
     return { success: true };
   } catch (e: any) {
@@ -767,7 +781,13 @@ export async function reviewPropertyChangeAction(input: {
         .filter((entry) => entry.value !== undefined);
 
       if (request.status === 'creating') {
-        const createdPropertyId = await createPropertyService(requestData as CreatePropertyInput);
+        const createdPropertyId = request.propertyId
+          ? request.propertyId
+          : await createPropertyService(requestData as CreatePropertyInput);
+        if (request.propertyId) {
+          await updatePropertyWithExtractedData(createdPropertyId, requestData as any);
+          await approveProperty(createdPropertyId);
+        }
         await createPropertyLog({
           propertyId: createdPropertyId,
           requestedBy: request.accountId,
