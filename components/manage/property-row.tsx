@@ -152,6 +152,18 @@ export function AdminPropertyDraftRow({
         modifiedOn: string;
     };
 }) {
+    /*
+    ::neup.documentation::manage-property-draft-row-routing
+
+    ::private
+
+    Incomplete creation drafts reopen the create wizard. Once the request is
+    pending review, the row opens `/manage/properties/[id]` and uses the change
+    id when no live property record exists yet.
+
+    ::private end
+    ::end
+    */
     const lastUpdated = new Date(draft.modifiedOn).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'short',
@@ -160,8 +172,8 @@ export function AdminPropertyDraftRow({
     const href = draft.status === 'creation_draft'
         ? `/manage/properties/create?changeId=${draft.id}`
         : draft.propertyId
-            ? `/manage/properties/${draft.propertyId}/edit`
-            : `/manage/properties/create`;
+            ? `/manage/properties/${draft.propertyId}`
+            : `/manage/properties/${draft.id}`;
     const badgeLabel = draft.status === 'creation_draft'
         ? 'Incomplete'
         : draft.status === 'creation_pending'

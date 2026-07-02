@@ -4,6 +4,7 @@ import { getPropertyById, getPropertyReviewRequests } from "@/services/property-
 import { hasPermission } from "@/logica/auth/authorization";
 import { PERMISSIONS } from "@/logica/auth/permissions";
 import { cancelPropertyChangeDraftAction, getCurrentAccountId, getPropertyChangeContextAction, requestPropertyDeletionAction } from "@/app/actions";
+import { prisma } from "@/logica/core/prisma";
 import { Button } from "@/components/ui/button";
 import { PropertyReviewRequests } from "@/components/manage/property-review-requests";
 import { ClientLink } from "@/components/client-link";
@@ -638,25 +639,219 @@ function normalizeMode(mode?: string) {
     return mode?.toLowerCase?.() ?? "";
 }
 
+function normalizeStringArray(value: unknown): string[] {
+    if (typeof value === "string") {
+        return value
+            .split(",")
+            .map((entry) => entry.trim())
+            .filter(Boolean);
+    }
+    if (!Array.isArray(value)) return [];
+    return value
+        .filter((entry): entry is string => typeof entry === "string")
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+}
+
+function firstNonEmptyString(...values: Array<unknown>): string | null {
+    for (const value of values) {
+        if (typeof value === "string" && value.trim().length > 0) {
+            return value.trim();
+        }
+    }
+
+    return null;
+}
+
+function extractNumber(value: unknown): number | null {
+    if (typeof value === "number" && Number.isFinite(value)) return value;
+    if (typeof value === "string" && value.trim().length > 0) {
+        const parsed = Number(value);
+        return Number.isFinite(parsed) ? parsed : null;
+    }
+    return null;
+}
+
+function extractAreaNumber(value: unknown): number | null {
+    if (typeof value === "number" && Number.isFinite(value)) return value;
+    if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+
+    const candidate = value as Record<string, unknown>;
+    return extractNumber(candidate.sqft)
+        ?? extractNumber(candidate.ropani)
+        ?? extractNumber(candidate.bigha)
+        ?? extractNumber(candidate.kattha)
+        ?? extractNumber(candidate.dhur)
+        ?? extractNumber(candidate.aana)
+        ?? extractNumber(candidate.paisa)
+        ?? extractNumber(candidate.daam)
+        ?? extractNumber(candidate.squareMeter)
+        ?? null;
+}
+
+function normalizeDraftDocumentUrls(value: unknown): Array<{ value: string }> {
+    if (!Array.isArray(value)) return [];
+
+    return value
+        .map((entry) => {
+            if (typeof entry === "string" && entry.trim().length > 0) {
+                return { value: entry.trim() };
+            }
+
+            if (entry && typeof entry === "object" && typeof (entry as { value?: unknown }).value === "string") {
+                const normalizedValue = (entry as { value: string }).value.trim();
+                return normalizedValue ? { value: normalizedValue } : null;
+            }
+
+            return null;
+        })
+        .filter((entry): entry is { value: string } => Boolean(entry));
+}
+
+function mapCreationDraftToProperty(change: {
+    id: string;
+    status: string;
+    isApproved: boolean | null;
+    data: Record<string, any>;
+}) {
+    const data = change.data ?? {};
+    const purposes = normalizeStringArray(data.purposes);
+    const categories = normalizeStringArray(data.categories);
+    const types = normalizeStringArray(data.types);
+    const pricing = data.pricing && typeof data.pricing === "object" && !Array.isArray(data.pricing)
+        ? data.pricing
+        : null;
+    const structuredLocation = data.structuredLocation && typeof data.structuredLocation === "object" && !Array.isArray(data.structuredLocation)
+        ? data.structuredLocation
+        : null;
+    const details = data.details && typeof data.details === "object" && !Array.isArray(data.details)
+        ? data.details
+        : {
+            showMap: data.showMap ?? true,
+            showOwnerInformation: data.showOwnerInformation ?? true,
+            isPrivate: data.isPrivate ?? false,
+        };
+
+    return {
+        id: change.id,
+        slug: null,
+        title: firstNonEmptyString(data.title) ?? "Untitled draft property",
+        description: firstNonEmptyString(data.description) ?? "",
+        type: firstNonEmptyString(data.type, types[0]),
+        category: firstNonEmptyString(data.category, categories[0]),
+        purposes: purposes.length ? purposes : normalizeStringArray(data.purpose),
+        location: firstNonEmptyString(data.location) ?? "",
+        structuredLocation,
+        area: extractAreaNumber(data.area),
+        bedrooms: extractNumber(data.bedrooms),
+        bathrooms: extractNumber(data.bathrooms),
+        kitchens: extractNumber(data.kitchens),
+        diningRooms: extractNumber(data.diningRooms),
+        livingRooms: extractNumber(data.livingRooms),
+        carParkingSpots: extractNumber(data.carParkingSpots),
+        bikeParkingSpots: extractNumber(data.bikeParkingSpots),
+        facing: firstNonEmptyString(data.facing),
+        buildStart: extractNumber(data.buildStart),
+        buildCompleted: extractNumber(data.buildCompleted),
+        floors: extractNumber(data.floors),
+        onFloor: extractNumber(data.onFloor),
+        roadAccess: extractNumber(data.roadAccess),
+        price: extractNumber(data.price) ?? extractNumber(pricing?.listed),
+        pricing,
+        amenities: normalizeStringArray(data.amenities),
+        images: normalizeStringArray(data.images),
+        listingAgent: firstNonEmptyString(data.listingAgent),
+        agency: null,
+        owners: Array.isArray(data.owners) ? data.owners : [],
+        documents: Array.isArray(data.documents)
+            ? data.documents.map((document) => ({
+                name: firstNonEmptyString(document?.name) ?? "",
+                urls: normalizeDraftDocumentUrls(document?.urls),
+            }))
+            : [],
+        details,
+        status: change.status === "creation_pending" || change.status === "creating" ? "PENDING" : change.status,
+        isApproved: change.isApproved ?? false,
+        isOwnerListing: Boolean(data.isOwnerListing),
+        latitude: extractNumber(structuredLocation?.coordinates?.latitude),
+        longitude: extractNumber(structuredLocation?.coordinates?.longitude),
+    };
+}
+
+/*
+::neup.documentation::manage-property-detail-draft-fallback
+
+::private
+
+`/manage/properties/[id]` resolves a live property first, then falls back to a
+pending creation row in `property_changes` using the same route id. That keeps
+pre-approval creations entirely in the changes table while still giving them a
+detail and review page.
+
+::private end
+::end
+*/
+
 export default async function ViewPropertyPage({ params, searchParams }: PageProps) {
     const { id } = await params;
     const sp = await searchParams ?? {};
     const mode = normalizeMode(sp.mode);
-    const property = await getPropertyById(id, { includeInactive: true });
-    if (!property) notFound();
+    const currentAccountId = await getCurrentAccountId();
+    const canApproveProperty = await hasPermission(PERMISSIONS.manage.propertyReviewApprove);
+    const canEditOwnership = await hasPermission(PERMISSIONS.manage.propertySelfTransfer);
+    const resolvedProperty = await getPropertyById(id, { includeInactive: true });
+    const creationDraft = resolvedProperty
+        ? null
+        : await prisma.propertyChange.findFirst({
+            where: {
+                id,
+                status: { in: ["creation_draft", "creation_pending", "creating"] },
+                isApproved: null,
+            },
+            include: {
+                account: {
+                    select: {
+                        displayName: true,
+                        neupId: true,
+                    },
+                },
+            },
+        });
 
-    const editUrl = `/manage/properties/${property.id}/edit`;
-    const siteUrl = property.slug ? `/properties/${property.slug}` : null;
+    if (!resolvedProperty && !creationDraft) notFound();
+    if (creationDraft && !canApproveProperty && (!currentAccountId || creationDraft.accountId !== currentAccountId)) {
+        notFound();
+    }
+
+    const property = resolvedProperty ?? mapCreationDraftToProperty({
+        id: creationDraft!.id,
+        status: creationDraft!.status,
+        isApproved: creationDraft!.isApproved,
+        data: creationDraft!.data as Record<string, any>,
+    });
+    const isCreationDraftView = Boolean(creationDraft && !resolvedProperty);
+    const editUrl = isCreationDraftView
+        ? `/manage/properties/create?changeId=${creationDraft!.id}`
+        : `/manage/properties/${property.id}/edit`;
+    const siteUrl = resolvedProperty?.slug ? `/properties/${resolvedProperty.slug}` : null;
     const hasLocation = hasLocationValue(property.structuredLocation) || hasLocationValue(property.location) || hasLocationValue(property.latitude) || hasLocationValue(property.longitude);
     const locationSummary = formatLocationSummary({
         structuredLocation: property.structuredLocation,
         location: property.location,
     });
-    const canApproveProperty = await hasPermission(PERMISSIONS.manage.propertyReviewApprove);
-    const canEditOwnership = await hasPermission(PERMISSIONS.manage.propertySelfTransfer);
-    const currentAccountId = await getCurrentAccountId();
-    const changeContext = await getPropertyChangeContextAction(property.id);
-    const currentChange = changeContext.success ? changeContext.currentUserChange : null;
+    const changeContext = resolvedProperty ? await getPropertyChangeContextAction(resolvedProperty.id) : null;
+    const currentChange = resolvedProperty
+        ? (changeContext?.success ? changeContext.currentUserChange : null)
+        : creationDraft
+            ? {
+                id: creationDraft.id,
+                status: creationDraft.status,
+                isApproved: creationDraft.isApproved,
+                data: creationDraft.data as Record<string, any>,
+                modifiedOn: creationDraft.modifiedOn.toISOString(),
+                accountId: creationDraft.accountId,
+            }
+            : null;
     const isMyChange = Boolean(currentAccountId && currentChange?.accountId === currentAccountId);
     const awaitingReview = isPendingReview({
         isApproved: property.isApproved,
@@ -683,7 +878,24 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
             : `The ${canApproveProperty ? "this" : isMyChange ? "your" : "this"} property has not been published. It will be visible after review.`;
     const showCancelDraftAction = currentChange?.status === "deleting" && !canApproveProperty;
     const reviewRequests = mode === "review" && canApproveProperty
-        ? await getPropertyReviewRequests(property.id)
+        ? resolvedProperty
+            ? await getPropertyReviewRequests(resolvedProperty.id)
+            : creationDraft
+                ? [{
+                    id: creationDraft.id,
+                    propertyId: creationDraft.propertyId ?? undefined,
+                    accountId: creationDraft.accountId,
+                    status: creationDraft.status,
+                    isApproved: creationDraft.isApproved,
+                    data: creationDraft.data as Record<string, any>,
+                    createdOn: creationDraft.createdOn.toISOString(),
+                    modifiedOn: creationDraft.modifiedOn.toISOString(),
+                    account: creationDraft.account ? {
+                        displayName: creationDraft.account.displayName,
+                        neupId: creationDraft.account.neupId,
+                    } : null,
+                }]
+                : []
         : [];
     const canViewPropertyLogs = await hasPermission(PERMISSIONS.root.propertyLog);
     const pricingCards = getPricingCards(property);
@@ -740,7 +952,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                         <div className="flex flex-wrap items-center gap-1">
                             <span>{reviewMessage}</span>
                             {canApproveProperty ? (
-                                <ClientLink href={`/manage/properties/${property.id}?mode=review`} className="inline-flex items-center rounded-full border border-current/20 px-2.5 py-1 text-xs font-medium underline underline-offset-2">
+                                <ClientLink href={`/manage/properties/${id}?mode=review`} className="inline-flex items-center rounded-full border border-current/20 px-2.5 py-1 text-xs font-medium underline underline-offset-2">
                                     Open approval view
                                 </ClientLink>
                             ) : showCancelDraftAction ? (
@@ -775,7 +987,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                     </div>
                     {reviewRequests.length ? (
                         <div className="space-y-4">
-                            <PropertyReviewRequests propertyId={property.id} requests={reviewRequests} canApprove={canApproveProperty} />
+                            <PropertyReviewRequests propertyId={resolvedProperty?.id} requests={reviewRequests} canApprove={canApproveProperty} currentProperty={resolvedProperty} />
                         </div>
                     ) : (
                         <div className="rounded-lg border bg-muted/20 px-4 py-3 text-sm text-muted-foreground">
@@ -921,18 +1133,18 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                             Edit Property
                         </ClientLink>
                     </Button>
-                    {canViewPropertyLogs ? (
+                    {resolvedProperty && canViewPropertyLogs ? (
                         <Button asChild variant="outline">
-                            <ClientLink href={`/manage/properties/${property.id}/logs`}>
+                            <ClientLink href={`/manage/properties/${resolvedProperty.id}/logs`}>
                                 View Logs
                             </ClientLink>
                         </Button>
                     ) : null}
-                    {currentChange?.status !== "deleting" ? (
+                    {resolvedProperty && currentChange?.status !== "deleting" ? (
                         <form
                             action={async () => {
                                 "use server";
-                                await requestPropertyDeletionAction(property.id);
+                                await requestPropertyDeletionAction(resolvedProperty.id);
                             }}
                         >
                             <Button type="submit" variant="outline" className="text-destructive hover:text-destructive">

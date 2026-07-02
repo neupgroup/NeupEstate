@@ -5,7 +5,7 @@
 import { naturalLanguagePropertySearch as naturalLanguagePropertySearchFlow } from "@/services/ai/natural-language-property-search";
 import { recommendProperties as recommendPropertiesFlow } from "@/services/ai/ai-powered-recommendations";
 import { extractAndSaveProperty as extractAndSavePropertyFlow, type ExtractPropertyDetailsOutput } from "@/services/ai/extract-property-details-flow";
-import { createProperty as createPropertyService, updateProperty as updatePropertyService, approveProperty, getProperties, deleteProperty as deletePropertyService, getPendingProperties, getAwaitingReviewItems, getPaginatedProperties, getPropertyById, getPropertyReviewRequests, updatePropertyWithExtractedData, updatePropertyImages, toggleSavedProperty as toggleSavedPropertyService, getUsersBySavedProperty as getUsersBySavedPropertyService, getSavedPropertiesForUser as getSavedPropertiesForUserService, createPropertyLog, addProperty as addPendingProperty } from '@/services/property-service';
+import { createProperty as createPropertyService, updateProperty as updatePropertyService, approveProperty, getProperties, deleteProperty as deletePropertyService, getPendingProperties, getAwaitingReviewItems, getPaginatedProperties, getPropertyById, getPropertyReviewRequests, updatePropertyWithExtractedData, updatePropertyImages, toggleSavedProperty as toggleSavedPropertyService, getUsersBySavedProperty as getUsersBySavedPropertyService, getSavedPropertiesForUser as getSavedPropertiesForUserService, createPropertyLog } from '@/services/property-service';
 import { createAgency as createAgencyService, updateAgency as updateAgencyService, deleteAgency as deleteAgencyService } from '@/services/agency-service';
 import { createAgencyAgentMap as createAgencyAgentMapService, getAgencyAgentAccountsByAgency as getAgencyAgentAccountsByAgencyService, getAgencyAgentMaps, getAgencyAgentMapsByAgent as getAgencyAgentMapsByAgentService, getAgencyAgentMapsByAgency as getAgencyAgentMapsByAgencyService } from '@/services/agency-agent-map-service';
 import { getAgentsByLocation as getAgentsByLocationService, createAgent as createAgentService, updateAgent as updateAgentService, deleteAgent as deleteAgentService } from '@/services/agent-service';
@@ -401,138 +401,6 @@ function normalizePropertyChangeData(data: Record<string, any>): Record<string, 
   return next;
 }
 
-function readFirstSelectedValue(value: unknown): string | undefined {
-  if (typeof value === 'string' && value.trim().length > 0) return value.trim();
-  if (!Array.isArray(value)) return undefined;
-  return value.find((entry): entry is string => typeof entry === 'string' && entry.trim().length > 0)?.trim();
-}
-
-function normalizeImageEntries(value: unknown): string[] {
-  if (!Array.isArray(value)) return [];
-  return value
-    .filter((entry): entry is string => typeof entry === 'string')
-    .map((entry) => entry.trim())
-    .filter(Boolean);
-}
-
-async function createFallbackPropertyForDraft(input: {
-  actorId: string;
-  postingAgencyId?: string | null;
-  data: Record<string, any>;
-}): Promise<string> {
-  const purposes = Array.isArray(input.data.purposes)
-    ? input.data.purposes.filter((entry): entry is string => typeof entry === 'string' && entry.trim().length > 0)
-    : [];
-  const purpose = readFirstSelectedValue(input.data.purpose) ?? purposes[0];
-  const categories = Array.isArray(input.data.categories)
-    ? input.data.categories.filter((entry): entry is string => typeof entry === 'string' && entry.trim().length > 0)
-    : [];
-  const category = readFirstSelectedValue(input.data.category) ?? categories[0];
-  const types = Array.isArray(input.data.types)
-    ? input.data.types.filter((entry): entry is string => typeof entry === 'string' && entry.trim().length > 0)
-    : [];
-  const type = readFirstSelectedValue(input.data.type) ?? types[0];
-
-  if (!purpose || !category) {
-    throw new Error('Please complete the first step before leaving the page.');
-  }
-
-  const structuredLocation = isPlainObject(input.data.structuredLocation)
-    ? input.data.structuredLocation as StructuredLocation
-    : {};
-  const pricing = isPlainObject(input.data.pricing)
-    ? cleanPricing(input.data.pricing as CreatePropertyFormValues['pricing'])
-    : undefined;
-  const landDetails = isPlainObject(input.data.landDetails)
-    ? {
-        ...input.data.landDetails,
-        area: input.data.landDetails.area ? areaValueToSqft(input.data.landDetails.area as LandDetails['area']) : undefined,
-      } as LandDetails
-    : undefined;
-  const plots = normalizeArrayLikeValue(input.data.plots)
-    .filter((entry): entry is Record<string, any> => isPlainObject(entry))
-    .map((plot) => ({
-      ...plot,
-      area: plot.area ? areaValueToSqft(plot.area as PlotDetails['area']) : undefined,
-    })) as PlotDetails[];
-  const apartmentUnits = normalizeArrayLikeValue(input.data.apartmentUnits)
-    .filter((entry): entry is Record<string, any> => isPlainObject(entry))
-    .map((unit) => ({
-      ...unit,
-      area: unit.area ? areaValueToSqft(unit.area as ApartmentUnit['area']) : undefined,
-    })) as ApartmentUnit[];
-
-  return addPendingProperty({
-    title: typeof input.data.title === 'string' && input.data.title.trim().length > 0
-      ? input.data.title.trim()
-      : 'Untitled Draft Property',
-    description: typeof input.data.description === 'string' && input.data.description.trim().length > 0
-      ? input.data.description.trim()
-      : 'Draft property listing saved before completion.',
-    purpose: purpose as CreatePropertyInput['purpose'],
-    purposes: purposes.length ? purposes as CreatePropertyInput['purposes'] : [purpose as CreatePropertyInput['purpose']],
-    category: category as Property['category'],
-    categories: categories.length ? categories : [category],
-    type: typeof type === 'string' ? type : 'Residential',
-    types: types.length ? types : (typeof type === 'string' ? [type] : []),
-    location: formatLocationString(structuredLocation),
-    structuredLocation,
-    price: pricing ? firstPositivePrice(input.data.pricing as CreatePropertyFormValues['pricing']) : 0,
-    area: input.data.area ? areaValueToSqft(input.data.area as CreatePropertyFormValues['area']) : 0,
-    areaUnit: typeof input.data.areaUnit === 'string' && input.data.areaUnit.trim().length > 0 ? input.data.areaUnit : 'sqft',
-    bedrooms: Number(input.data.bedrooms ?? 0),
-    bathrooms: Number(input.data.bathrooms ?? 0),
-    kitchens: Number(input.data.kitchens ?? 0) || undefined,
-    diningRooms: Number(input.data.diningRooms ?? 0) || undefined,
-    livingRooms: Number(input.data.livingRooms ?? 0) || undefined,
-    carParkingSpots: Number(input.data.carParkingSpots ?? 0) || undefined,
-    bikeParkingSpots: Number(input.data.bikeParkingSpots ?? 0) || undefined,
-    amenities: typeof input.data.amenities === 'string'
-      ? input.data.amenities.split(',').map((entry) => entry.trim()).filter(Boolean)
-      : [],
-    images: normalizeImageEntries(input.data.images),
-    listingAgent: typeof input.data.listingAgent === 'string' ? input.data.listingAgent.trim() : '',
-    listingAgentAccountId: typeof input.data.listingAgentAccountId === 'string' ? input.data.listingAgentAccountId.trim() : '',
-    isOwnerListing: Boolean(input.data.isOwnerListing),
-    isPrivate: Boolean(input.data.isPrivate),
-    showMap: input.data.showMap ?? true,
-    showOwnerInformation: input.data.showOwnerInformation ?? true,
-    floors: Number(input.data.floors ?? 0) || undefined,
-    onFloor: Number(input.data.onFloor ?? 0) || undefined,
-    roadAccess: Number(input.data.roadAccess ?? 0) || undefined,
-    facing: typeof input.data.facing === 'string' ? input.data.facing : undefined,
-    buildStart: Number(input.data.buildStart ?? 0) || undefined,
-    buildCompleted: Number(input.data.buildCompleted ?? 0) || undefined,
-    landDetails,
-    plots,
-    apartmentDetails: isPlainObject(input.data.apartmentDetails) ? input.data.apartmentDetails : {},
-    apartmentUnits,
-    pricing,
-    details: {
-      priceDisplayMode: typeof input.data.pricing?.priceDisplayMode === 'string'
-        ? input.data.pricing.priceDisplayMode
-        : 'show-price',
-      showMap: input.data.showMap ?? true,
-      showOwnerInformation: input.data.showOwnerInformation ?? true,
-      isPrivate: Boolean(input.data.isPrivate),
-    },
-    roadAccessDetails: isPlainObject(input.data.roadAccessDetails) ? input.data.roadAccessDetails : undefined,
-    distancing: isPlainObject(input.data.distancing) ? input.data.distancing : undefined,
-    earnings: isPlainObject(input.data.earnings) ? input.data.earnings : undefined,
-    owners: normalizeOwnerEntries(input.data.owners),
-    documents: normalizeArrayLikeValue(input.data.documents)
-      .filter((entry): entry is Record<string, any> => isPlainObject(entry))
-      .map((document) => ({
-        name: typeof document.name === 'string' ? document.name : '',
-        urls: Array.isArray(document.urls)
-          ? document.urls.filter((url): url is string => typeof url === 'string' && url.trim().length > 0)
-          : [],
-      })),
-    agency: input.postingAgencyId?.trim() || null,
-    agent: input.postingAgencyId?.trim() ? null : input.actorId,
-  } as any);
-}
-
 /*
 ::neup.documentation::property-create-draft-actions
 
@@ -577,14 +445,8 @@ export async function savePropertyCreateDraftAction(input: {
     const mergedData = existingDraft
       ? deepMergeJson(normalizedExistingData, normalizedInputData)
       : normalizedInputData;
-    const draftPropertyId = existingDraft?.propertyId
-      ?? await createFallbackPropertyForDraft({
-        actorId,
-        postingAgencyId: input.postingAgencyId,
-        data: mergedData,
-      });
     const draftPayload = {
-      propertyId: draftPropertyId,
+      propertyId: existingDraft?.propertyId ?? null,
       accountId: actorId,
       status: existingDraft?.status === 'creation_pending'
         ? 'creation_pending' as const
@@ -1029,7 +891,7 @@ export async function reviewPropertyChangeAction(input: {
   propertyId?: string | null;
   approve: boolean;
   acceptedFields?: string[];
-}): Promise<{ success: boolean; error?: string }> {
+}): Promise<{ success: boolean; error?: string; propertyId?: string | null }> {
   try {
     await requirePermission(PERMISSIONS.manage.propertyReviewApprove);
     const accountId = await requireIdentity();
@@ -1077,7 +939,7 @@ export async function reviewPropertyChangeAction(input: {
         });
         revalidatePath('/manage/properties');
         revalidatePath(`/manage/properties/${createdPropertyId}`);
-        return { success: true };
+        return { success: true, propertyId: createdPropertyId };
       }
 
       if (!request.propertyId) {
@@ -1101,7 +963,7 @@ export async function reviewPropertyChangeAction(input: {
         });
         await deletePropertyService(request.propertyId);
         revalidatePath('/manage/properties');
-        return { success: true };
+        return { success: true, propertyId: null };
       } else {
         const data = acceptedFields.reduce<Record<string, any>>((picked, field) => {
           const value = requestData[field];
@@ -1125,7 +987,7 @@ export async function reviewPropertyChangeAction(input: {
           modifiedOn: new Date(),
         },
       });
-      return { success: true };
+      return { success: true, propertyId: request.propertyId };
     }
 
     await prisma.propertyChange.update({
@@ -1148,7 +1010,7 @@ export async function reviewPropertyChangeAction(input: {
     if (input.acceptedFields?.length) {
       const requestPropertyId = request.propertyId;
       if (!requestPropertyId) {
-        return { success: true };
+        return { success: true, propertyId: null };
       }
       await createPropertyLog({
         propertyId: requestPropertyId,
@@ -1160,7 +1022,7 @@ export async function reviewPropertyChangeAction(input: {
           .filter((entry) => entry.value !== undefined),
       });
     }
-    return { success: true };
+    return { success: true, propertyId: request.propertyId };
   } catch (e: any) {
     await logProblem(e, `reviewPropertyChangeAction ${input.propertyId}/${input.changeId}`);
     return { success: false, error: e.message || 'Failed to review property change.' };

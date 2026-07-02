@@ -65,11 +65,23 @@ export function PropertyReviewRequests({
   canApprove = false,
   currentProperty,
 }: {
-  propertyId: string;
+  propertyId?: string;
   requests: ReviewRequest[];
   canApprove?: boolean;
   currentProperty?: Property | null;
 }) {
+  /*
+  ::neup.documentation::property-review-requests-creation-drafts
+
+  ::private
+
+  Creation review cards can operate without a live `propertyId`. In that case
+  approval is keyed only by the `property_changes.id` so pre-approval creations
+  remain reviewable before a property row exists.
+
+  ::private end
+  ::end
+  */
   const { toast } = useToast();
   const router = useRouter();
   const [selection, setSelection] = React.useState<Record<string, string[]>>({});
@@ -98,6 +110,10 @@ export function PropertyReviewRequests({
         router.push("/manage/properties");
         return;
       }
+      if (!propertyId && result.propertyId) {
+        router.replace(`/manage/properties/${result.propertyId}`);
+        return;
+      }
       window.location.reload();
     }
   }
@@ -112,6 +128,10 @@ export function PropertyReviewRequests({
       toast({ variant: "destructive", title: "Review failed", description: result.error ?? "Could not reject request." });
     } else {
       toast({ title: "Request rejected" });
+      if (!propertyId && !result.propertyId) {
+        router.push("/manage/properties");
+        return;
+      }
       window.location.reload();
     }
   }
