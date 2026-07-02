@@ -42,7 +42,8 @@ function normalizePropertyTypeFilter(value: string | undefined): string {
 The manage properties index always surfaces the current account's in-progress
 creation flow from `property_changes`, including partial step-by-step drafts
 that do not yet have a live `property` row. Review queues still use the broader
-awaiting-review source separately.
+awaiting-review source separately. Filtered views count and paginate the same
+result set they render, so status tabs do not report broader property totals.
 
 ::private end
 ::end
@@ -104,8 +105,6 @@ export default async function ManagePropertiesPage({
     }
   }
 
-  const hasFilters = Object.keys(filters).length > 0;
-  const isDefaultFeed = !hasFilters && !query && !isCreationDraftsView && !isChangeDraftsView && !isActiveView;
   const agencyLinks = currentAccountId ? (await getAgencyAgentMapsByAgent(currentAccountId)).filter((link) => link.status === 'accepted') : [];
   const agencyIds = agencyLinks.map((link) => link.agencyId);
   const userDrafts = currentAccountId
@@ -136,6 +135,13 @@ export default async function ManagePropertiesPage({
   if (statusParam === 'pending') {
     filters.ids = awaitingReviewIds.length ? awaitingReviewIds : ["__no_results__"];
   }
+  if (isChangeDraftsView) {
+    const changeDraftPropertyIds = Array.from(changeFlowDraftPropertyIds);
+    filters.ids = changeDraftPropertyIds.length ? changeDraftPropertyIds : ["__no_results__"];
+  }
+
+  const hasFilters = Object.keys(filters).length > 0;
+  const isDefaultFeed = !hasFilters && !query && !isCreationDraftsView && !isChangeDraftsView && !isActiveView;
 
   const paginatedProperties = await getPaginatedProperties({
         page: currentPage,
@@ -161,20 +167,24 @@ export default async function ManagePropertiesPage({
     ? creationFlowDrafts
     : isChangeDraftsView
       ? changeFlowDrafts
-      : creationFlowDrafts;
+      : isDefaultFeed
+        ? creationFlowDrafts
+        : [];
   const filteredProperties = isCreationDraftsView
     ? []
     : isChangeDraftsView
-      ? properties.filter((property) => changeFlowDraftPropertyIds.has(property.id))
+      ? []
       : properties.filter((property) => !creationFlowDraftPropertyIds.has(property.id));
   const totalCount = isCreationDraftsView
     ? draftRows.length
     : isChangeDraftsView
-      ? paginatedProperties.totalCount
-      : paginatedProperties.totalCount + creationFlowDrafts.length - creationFlowDraftPropertyIds.size;
+      ? draftRows.length
+      : isDefaultFeed
+        ? paginatedProperties.totalCount + creationFlowDrafts.length - creationFlowDraftPropertyIds.size
+        : paginatedProperties.totalCount;
   const countLabel = totalCount === 1 ? 'property' : 'properties';
   const totalPages = Math.ceil(totalCount / PROPERTIES_PER_PAGE);
-  const defaultPageItems = filteredProperties.slice((currentPage - 1) * PROPERTIES_PER_PAGE, currentPage * PROPERTIES_PER_PAGE);
+  const defaultPageItems = filteredProperties;
   const hasAnyRows = defaultPageItems.length > 0;
 
   return (
