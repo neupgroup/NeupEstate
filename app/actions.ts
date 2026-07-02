@@ -1085,7 +1085,6 @@ export async function reviewPropertyChangeAction(input: {
       }
 
       if (request.status === 'deleting') {
-        await deletePropertyService(request.propertyId);
         await createPropertyLog({
           propertyId: request.propertyId,
           requestedBy: request.accountId,
@@ -1093,6 +1092,16 @@ export async function reviewPropertyChangeAction(input: {
           approvedOn: new Date(),
           data: acceptedData.length ? acceptedData : [{ field: 'status', value: 'deleting' }],
         });
+        await prisma.propertyChange.update({
+          where: { id: request.id },
+          data: {
+            isApproved: true,
+            modifiedOn: new Date(),
+          },
+        });
+        await deletePropertyService(request.propertyId);
+        revalidatePath('/manage/properties');
+        return { success: true };
       } else {
         const data = acceptedFields.reduce<Record<string, any>>((picked, field) => {
           const value = requestData[field];
@@ -1711,11 +1720,6 @@ export async function requestPropertyDeletionAction(propertyId: string) {
                 isApproved: null,
                 data: nextData,
             },
-        });
-
-        await prisma.property.update({
-            where: { id: propertyId },
-            data: { status: 'AWAITING_DELETION' },
         });
         revalidatePath('/manage/properties');
         revalidatePath(`/manage/properties/${propertyId}`);

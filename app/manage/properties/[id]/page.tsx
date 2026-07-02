@@ -928,7 +928,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                             </ClientLink>
                         </Button>
                     ) : null}
-                    {property.status !== "AWAITING_DELETION" ? (
+                    {currentChange?.status !== "deleting" ? (
                         <form
                             action={async () => {
                                 "use server";

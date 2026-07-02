@@ -7,6 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/logica/core/hooks/use-toast";
 import type { Property } from "@/types";
 import { PropertyImageGrid } from "@/components/manage/property-image-grid";
+import { useRouter } from "next/navigation";
 
 type ReviewRequest = {
   id: string;
@@ -70,6 +71,7 @@ export function PropertyReviewRequests({
   currentProperty?: Property | null;
 }) {
   const { toast } = useToast();
+  const router = useRouter();
   const [selection, setSelection] = React.useState<Record<string, string[]>>({});
 
   React.useEffect(() => {
@@ -92,6 +94,10 @@ export function PropertyReviewRequests({
       toast({ variant: "destructive", title: "Review failed", description: result.error ?? "Could not approve request." });
     } else {
       toast({ title: "Request approved" });
+      if (request.status === "deleting") {
+        router.push("/manage/properties");
+        return;
+      }
       window.location.reload();
     }
   }
