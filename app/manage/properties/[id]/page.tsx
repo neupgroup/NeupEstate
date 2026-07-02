@@ -168,13 +168,22 @@ function isPendingReview(property: {
     status?: string | null;
 }) {
     const normalizedStatus = property.status?.toLowerCase?.();
-    return property.isApproved === false || normalizedStatus === "pending" || normalizedStatus === "awaitingreview" || normalizedStatus === "awaiting review";
+    return (
+        property.isApproved === false ||
+        normalizedStatus === "pending" ||
+        normalizedStatus === "awaitingreview" ||
+        normalizedStatus === "awaiting review" ||
+        normalizedStatus === "awaiting_deletion" ||
+        normalizedStatus === "awaitingdeletion"
+    );
 }
 
 function pendingReviewTone(status?: string | null) {
     const normalized = status?.toLowerCase?.();
     if (normalized === "deleting") return "destructive";
+    if (normalized === "awaiting_deletion" || normalized === "awaitingdeletion") return "destructive";
     if (normalized === "changing") return "muted";
+    if (normalized === "creation_pending") return "info";
     return "info";
 }
 

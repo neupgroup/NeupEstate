@@ -5,7 +5,7 @@
 import { naturalLanguagePropertySearch as naturalLanguagePropertySearchFlow } from "@/services/ai/natural-language-property-search";
 import { recommendProperties as recommendPropertiesFlow } from "@/services/ai/ai-powered-recommendations";
 import { extractAndSaveProperty as extractAndSavePropertyFlow, type ExtractPropertyDetailsOutput } from "@/services/ai/extract-property-details-flow";
-import { createProperty as createPropertyService, updateProperty as updatePropertyService, approveProperty, getProperties, deleteProperty as deletePropertyService, getPendingProperties, getAwaitingReviewItems, getPaginatedProperties, getPropertyById, getPropertyReviewRequests, updatePropertyWithExtractedData, updatePropertyImages, toggleSavedProperty as toggleSavedPropertyService, getUsersBySavedProperty as getUsersBySavedPropertyService, getSavedPropertiesForUser as getSavedPropertiesForUserService, createPropertyLog } from '@/services/property-service';
+import { createProperty as createPropertyService, updateProperty as updatePropertyService, approveProperty, getProperties, deleteProperty as deletePropertyService, getPendingProperties, getAwaitingReviewItems, getPaginatedProperties, getPropertyById, getPropertyReviewRequests, updatePropertyWithExtractedData, updatePropertyImages, toggleSavedProperty as toggleSavedPropertyService, getUsersBySavedProperty as getUsersBySavedPropertyService, getSavedPropertiesForUser as getSavedPropertiesForUserService, createPropertyLog, addProperty as addPendingProperty } from '@/services/property-service';
 import { createAgency as createAgencyService, updateAgency as updateAgencyService, deleteAgency as deleteAgencyService } from '@/services/agency-service';
 import { createAgencyAgentMap as createAgencyAgentMapService, getAgencyAgentAccountsByAgency as getAgencyAgentAccountsByAgencyService, getAgencyAgentMaps, getAgencyAgentMapsByAgent as getAgencyAgentMapsByAgentService, getAgencyAgentMapsByAgency as getAgencyAgentMapsByAgencyService } from '@/services/agency-agent-map-service';
 import { getAgentsByLocation as getAgentsByLocationService, createAgent as createAgentService, updateAgent as updateAgentService, deleteAgent as deleteAgentService } from '@/services/agent-service';
@@ -37,7 +37,7 @@ import { createMortgageRequest as createMortgageRequestService } from '@/service
 import { createContactSubmission as createContactSubmissionService } from '@/services/contact-service';
 import { createModel as createModelService, updateModel as updateModelService, deleteModel as deleteModelService, setDefaultModel as setDefaultModelService } from '@/services/model-service';
 import { createRequirement as createRequirementService, updateRequirement as updateRequirementService } from '@/services/requirements-service';
-import { createPropertyDraftRequest } from '@/services/bridge-property-service';
+import { createPropertyDraftRequest, editUncreatedPropertyDraftRequest } from '@/services/bridge-property-service';
 import { resolveAccount, updateUser, getAccountById, getAccounts } from '@/services/account-service';
 import { deleteAccountAndData } from '@/services/account-service';
 import { createLead as createLeadService, createLeadActivity as createLeadActivityService } from '@/services/lead-service';
@@ -300,7 +300,8 @@ function cleanPricing(pricing?: CreatePropertyFormValues['pricing']) {
 }
 
 type PropertyChangeDraftStatus =
-  | 'creating'
+  | 'creation_draft'
+  | 'creation_pending'
   | 'changing'
   | 'deleting';
 
@@ -398,6 +399,257 @@ function normalizePropertyChangeData(data: Record<string, any>): Record<string, 
       : '';
   }
   return next;
+}
+
+function readFirstSelectedValue(value: unknown): string | undefined {
+  if (typeof value === 'string' && value.trim().length > 0) return value.trim();
+  if (!Array.isArray(value)) return undefined;
+  return value.find((entry): entry is string => typeof entry === 'string' && entry.trim().length > 0)?.trim();
+}
+
+function normalizeImageEntries(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .filter((entry): entry is string => typeof entry === 'string')
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+}
+
+async function createFallbackPropertyForDraft(input: {
+  actorId: string;
+  postingAgencyId?: string | null;
+  data: Record<string, any>;
+}): Promise<string> {
+  const purposes = Array.isArray(input.data.purposes)
+    ? input.data.purposes.filter((entry): entry is string => typeof entry === 'string' && entry.trim().length > 0)
+    : [];
+  const purpose = readFirstSelectedValue(input.data.purpose) ?? purposes[0];
+  const categories = Array.isArray(input.data.categories)
+    ? input.data.categories.filter((entry): entry is string => typeof entry === 'string' && entry.trim().length > 0)
+    : [];
+  const category = readFirstSelectedValue(input.data.category) ?? categories[0];
+  const types = Array.isArray(input.data.types)
+    ? input.data.types.filter((entry): entry is string => typeof entry === 'string' && entry.trim().length > 0)
+    : [];
+  const type = readFirstSelectedValue(input.data.type) ?? types[0];
+
+  if (!purpose || !category) {
+    throw new Error('Please complete the first step before leaving the page.');
+  }
+
+  const structuredLocation = isPlainObject(input.data.structuredLocation)
+    ? input.data.structuredLocation as StructuredLocation
+    : {};
+  const pricing = isPlainObject(input.data.pricing)
+    ? cleanPricing(input.data.pricing as CreatePropertyFormValues['pricing'])
+    : undefined;
+  const landDetails = isPlainObject(input.data.landDetails)
+    ? {
+        ...input.data.landDetails,
+        area: input.data.landDetails.area ? areaValueToSqft(input.data.landDetails.area as LandDetails['area']) : undefined,
+      } as LandDetails
+    : undefined;
+  const plots = normalizeArrayLikeValue(input.data.plots)
+    .filter((entry): entry is Record<string, any> => isPlainObject(entry))
+    .map((plot) => ({
+      ...plot,
+      area: plot.area ? areaValueToSqft(plot.area as PlotDetails['area']) : undefined,
+    })) as PlotDetails[];
+  const apartmentUnits = normalizeArrayLikeValue(input.data.apartmentUnits)
+    .filter((entry): entry is Record<string, any> => isPlainObject(entry))
+    .map((unit) => ({
+      ...unit,
+      area: unit.area ? areaValueToSqft(unit.area as ApartmentUnit['area']) : undefined,
+    })) as ApartmentUnit[];
+
+  return addPendingProperty({
+    title: typeof input.data.title === 'string' && input.data.title.trim().length > 0
+      ? input.data.title.trim()
+      : 'Untitled Draft Property',
+    description: typeof input.data.description === 'string' && input.data.description.trim().length > 0
+      ? input.data.description.trim()
+      : 'Draft property listing saved before completion.',
+    purpose: purpose as CreatePropertyInput['purpose'],
+    purposes: purposes.length ? purposes as CreatePropertyInput['purposes'] : [purpose as CreatePropertyInput['purpose']],
+    category: category as Property['category'],
+    categories: categories.length ? categories : [category],
+    type: typeof type === 'string' ? type : 'Residential',
+    types: types.length ? types : (typeof type === 'string' ? [type] : []),
+    location: formatLocationString(structuredLocation),
+    structuredLocation,
+    price: pricing ? firstPositivePrice(input.data.pricing as CreatePropertyFormValues['pricing']) : 0,
+    area: input.data.area ? areaValueToSqft(input.data.area as CreatePropertyFormValues['area']) : 0,
+    areaUnit: typeof input.data.areaUnit === 'string' && input.data.areaUnit.trim().length > 0 ? input.data.areaUnit : 'sqft',
+    bedrooms: Number(input.data.bedrooms ?? 0),
+    bathrooms: Number(input.data.bathrooms ?? 0),
+    kitchens: Number(input.data.kitchens ?? 0) || undefined,
+    diningRooms: Number(input.data.diningRooms ?? 0) || undefined,
+    livingRooms: Number(input.data.livingRooms ?? 0) || undefined,
+    carParkingSpots: Number(input.data.carParkingSpots ?? 0) || undefined,
+    bikeParkingSpots: Number(input.data.bikeParkingSpots ?? 0) || undefined,
+    amenities: typeof input.data.amenities === 'string'
+      ? input.data.amenities.split(',').map((entry) => entry.trim()).filter(Boolean)
+      : [],
+    images: normalizeImageEntries(input.data.images),
+    listingAgent: typeof input.data.listingAgent === 'string' ? input.data.listingAgent.trim() : '',
+    listingAgentAccountId: typeof input.data.listingAgentAccountId === 'string' ? input.data.listingAgentAccountId.trim() : '',
+    isOwnerListing: Boolean(input.data.isOwnerListing),
+    isPrivate: Boolean(input.data.isPrivate),
+    showMap: input.data.showMap ?? true,
+    showOwnerInformation: input.data.showOwnerInformation ?? true,
+    floors: Number(input.data.floors ?? 0) || undefined,
+    onFloor: Number(input.data.onFloor ?? 0) || undefined,
+    roadAccess: Number(input.data.roadAccess ?? 0) || undefined,
+    facing: typeof input.data.facing === 'string' ? input.data.facing : undefined,
+    buildStart: Number(input.data.buildStart ?? 0) || undefined,
+    buildCompleted: Number(input.data.buildCompleted ?? 0) || undefined,
+    landDetails,
+    plots,
+    apartmentDetails: isPlainObject(input.data.apartmentDetails) ? input.data.apartmentDetails : {},
+    apartmentUnits,
+    pricing,
+    details: {
+      priceDisplayMode: typeof input.data.pricing?.priceDisplayMode === 'string'
+        ? input.data.pricing.priceDisplayMode
+        : 'show-price',
+      showMap: input.data.showMap ?? true,
+      showOwnerInformation: input.data.showOwnerInformation ?? true,
+      isPrivate: Boolean(input.data.isPrivate),
+    },
+    roadAccessDetails: isPlainObject(input.data.roadAccessDetails) ? input.data.roadAccessDetails : undefined,
+    distancing: isPlainObject(input.data.distancing) ? input.data.distancing : undefined,
+    earnings: isPlainObject(input.data.earnings) ? input.data.earnings : undefined,
+    owners: normalizeOwnerEntries(input.data.owners),
+    documents: normalizeArrayLikeValue(input.data.documents)
+      .filter((entry): entry is Record<string, any> => isPlainObject(entry))
+      .map((document) => ({
+        name: typeof document.name === 'string' ? document.name : '',
+        urls: Array.isArray(document.urls)
+          ? document.urls.filter((url): url is string => typeof url === 'string' && url.trim().length > 0)
+          : [],
+      })),
+    agency: input.postingAgencyId?.trim() || null,
+    agent: input.postingAgencyId?.trim() ? null : input.actorId,
+  } as any);
+}
+
+/*
+::neup.documentation::property-create-draft-actions
+
+::private
+
+These actions persist the multi-step create form into `property_changes` before
+submission so unfinished work can be resumed. Partial saves keep raw form-shaped
+data; final submission rewrites the same draft row into the review-ready
+property payload.
+
+::private end
+::end
+*/
+export async function savePropertyCreateDraftAction(input: {
+  changeId?: string | null;
+  postingAgencyId?: string | null;
+  data: Record<string, any>;
+}): Promise<{ success: boolean; changeId?: string; propertyId?: string | null; error?: string }> {
+  try {
+    await requirePermission(PERMISSIONS.manage.propertySelfCreate);
+    const actorId = await requireIdentity();
+    const draftStatusFilter = input.changeId?.trim()
+      ? { in: ['creation_draft', 'creation_pending', 'creating'] }
+      : { in: ['creation_draft', 'creating'] };
+    const existingDraft = await prisma.propertyChange.findFirst({
+      where: {
+        accountId: actorId,
+        status: draftStatusFilter,
+        isApproved: null,
+        ...(input.changeId?.trim() ? { id: input.changeId.trim() } : {}),
+      },
+      orderBy: { modifiedOn: 'desc' },
+    });
+
+    const normalizedExistingData = existingDraft
+      ? normalizePropertyChangeData((existingDraft.data ?? {}) as Record<string, any>)
+      : {};
+    const normalizedInputData = normalizePropertyChangeData({
+      ...input.data,
+      postingAgencyId: input.postingAgencyId?.trim() || null,
+    });
+    const mergedData = existingDraft
+      ? deepMergeJson(normalizedExistingData, normalizedInputData)
+      : normalizedInputData;
+    const draftPropertyId = existingDraft?.propertyId
+      ?? await createFallbackPropertyForDraft({
+        actorId,
+        postingAgencyId: input.postingAgencyId,
+        data: mergedData,
+      });
+    const draftPayload = {
+      propertyId: draftPropertyId,
+      accountId: actorId,
+      status: existingDraft?.status === 'creation_pending'
+        ? 'creation_pending' as const
+        : 'creation_draft' as const,
+      isApproved: null,
+      data: mergedData,
+      modifiedOn: new Date(),
+    };
+
+    const draft = existingDraft
+      ? await prisma.propertyChange.update({
+          where: { id: existingDraft.id },
+          data: draftPayload,
+        })
+      : await prisma.propertyChange.create({ data: draftPayload });
+
+    return { success: true, changeId: draft.id, propertyId: draft.propertyId };
+  } catch (e: any) {
+    await logProblem(e, 'savePropertyCreateDraftAction');
+    return { success: false, error: e.message || 'Failed to save property draft.' };
+  }
+}
+
+export async function getCurrentPropertyCreateDraftAction(changeId?: string | null): Promise<{
+  success: boolean;
+  changeId?: string;
+  data?: Record<string, any>;
+  postingAgencyId?: string | null;
+  propertyId?: string | null;
+  error?: string;
+}> {
+  try {
+    await requirePermission(PERMISSIONS.manage.propertySelfCreate);
+    const actorId = await requireIdentity();
+    const draftStatusFilter = changeId?.trim()
+      ? { in: ['creation_draft', 'creation_pending', 'creating'] }
+      : { in: ['creation_draft', 'creating'] };
+    const draft = await prisma.propertyChange.findFirst({
+      where: {
+        accountId: actorId,
+        status: draftStatusFilter,
+        isApproved: null,
+        ...(changeId?.trim() ? { id: changeId.trim() } : {}),
+      },
+      orderBy: { modifiedOn: 'desc' },
+    });
+
+    if (!draft) {
+      return { success: true };
+    }
+
+    const normalizedData = normalizePropertyChangeData((draft.data ?? {}) as Record<string, any>);
+    return {
+      success: true,
+      changeId: draft.id,
+      data: normalizedData,
+      postingAgencyId: typeof normalizedData.postingAgencyId === 'string'
+        ? normalizedData.postingAgencyId
+        : null,
+      propertyId: draft.propertyId,
+    };
+  } catch (e: any) {
+    await logProblem(e, `getCurrentPropertyCreateDraftAction ${changeId ?? 'latest'}`);
+    return { success: false, error: e.message || 'Failed to load property draft.' };
+  }
 }
 
 export async function savePropertyChangeDraftAction(input: {
@@ -638,7 +890,11 @@ export async function getPropertyChangeContextAction(propertyId: string): Promis
   error?: string;
 }> {
   try {
-    await requirePermission(PERMISSIONS.manage.propertySelfUpdate);
+    const canUpdate = await hasPermission(PERMISSIONS.manage.propertySelfUpdate);
+    const canDelete = await hasPermission(PERMISSIONS.manage.propertySelfDelete);
+    if (!canUpdate && !canDelete) {
+      throw new Error('You do not have permission to access property change context.');
+    }
     const accountId = await requireIdentity();
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
@@ -717,7 +973,6 @@ export async function getPropertyChangeContextAction(propertyId: string): Promis
 
 export async function cancelPropertyChangeDraftAction(changeId: string): Promise<{ success: boolean; error?: string }> {
   try {
-    await requirePermission(PERMISSIONS.manage.propertySelfUpdate);
     const accountId = await requireIdentity();
     const draft = await prisma.propertyChange.findFirst({
       where: {
@@ -736,15 +991,32 @@ export async function cancelPropertyChangeDraftAction(changeId: string): Promise
       return { success: false, error: 'Pending request not found.' };
     }
 
-    if (draft.status === 'creating' && draft.propertyId) {
+    if (draft.status === 'deleting') {
+      await requirePermission(PERMISSIONS.manage.propertySelfDelete);
+    } else {
+      await requirePermission(PERMISSIONS.manage.propertySelfUpdate);
+    }
+
+    if ((draft.status === 'creation_draft' || draft.status === 'creation_pending' || draft.status === 'creating') && draft.propertyId) {
       await deletePropertyService(draft.propertyId);
       return { success: true };
+    }
+
+    if (draft.status === 'deleting' && draft.propertyId) {
+      await prisma.property.update({
+        where: { id: draft.propertyId },
+        data: { status: 'ACTIVE' },
+      });
     }
 
     await prisma.propertyChange.delete({
       where: { id: draft.id },
     });
 
+    revalidatePath('/manage/properties');
+    if (draft.propertyId) {
+      revalidatePath(`/manage/properties/${draft.propertyId}`);
+    }
     return { success: true };
   } catch (e: any) {
     await logProblem(e, `cancelPropertyChangeDraftAction ${changeId}`);
@@ -780,7 +1052,7 @@ export async function reviewPropertyChangeAction(input: {
         .map((field) => ({ field, value: requestData[field] }))
         .filter((entry) => entry.value !== undefined);
 
-      if (request.status === 'creating') {
+      if (request.status === 'creation_pending' || request.status === 'creating' || request.status === 'creation_draft') {
         const createdPropertyId = request.propertyId
           ? request.propertyId
           : await createPropertyService(requestData as CreatePropertyInput);
@@ -854,6 +1126,15 @@ export async function reviewPropertyChangeAction(input: {
         modifiedOn: new Date(),
       },
     });
+
+    if (request.status === 'deleting' && request.propertyId) {
+      await prisma.property.update({
+        where: { id: request.propertyId },
+        data: { status: 'ACTIVE' },
+      });
+      revalidatePath('/manage/properties');
+      revalidatePath(`/manage/properties/${request.propertyId}`);
+    }
 
     if (input.acceptedFields?.length) {
       const requestPropertyId = request.propertyId;
@@ -962,12 +1243,20 @@ export async function getPropertyCreateDraftAction(propertyId: string): Promise<
 
 export async function createPropertyAction(
   data: CreatePropertyFormValues,
-  postingAgencyId?: string | null
+  postingAgencyId?: string | null,
+  changeId?: string | null,
 ): Promise<{ success: boolean; error?: string | null; propertyId?: string | null; changeId?: string | null }> {
   try {
     await requirePermission(PERMISSIONS.manage.propertySelfCreate);
     const actorId = await requireIdentity();
-    const draft = await createPropertyDraftRequest({ actorId, postingAgencyId, data });
+    const draft = changeId?.trim()
+      ? await editUncreatedPropertyDraftRequest({
+          requestId: changeId.trim(),
+          actorId,
+          postingAgencyId,
+          data,
+        })
+      : await createPropertyDraftRequest({ actorId, postingAgencyId, data });
     revalidatePath('/manage/properties');
     return { success: true, propertyId: null, changeId: draft.requestId, error: null };
   } catch (e: any) {
@@ -1389,6 +1678,41 @@ export async function deletePropertyAction(propertyId: string) {
 export async function requestPropertyDeletionAction(propertyId: string) {
     try {
         await requirePermission(PERMISSIONS.manage.propertySelfDelete);
+        const accountId = await requireIdentity();
+        const existingDraft = await prisma.propertyChange.findFirst({
+            where: {
+                propertyId,
+                accountId,
+                status: 'deleting',
+                isApproved: null,
+            },
+            orderBy: { modifiedOn: 'desc' },
+            select: {
+                id: true,
+                data: true,
+            },
+        });
+
+        const nextData = existingDraft?.data && typeof existingDraft.data === 'object' && !Array.isArray(existingDraft.data)
+            ? normalizePropertyChangeData(existingDraft.data as Record<string, any>)
+            : {};
+
+        await prisma.propertyChange.upsert({
+            where: { id: existingDraft?.id ?? '__new_property_change__' },
+            update: {
+                status: 'deleting',
+                data: nextData,
+                modifiedOn: new Date(),
+            },
+            create: {
+                propertyId,
+                accountId,
+                status: 'deleting',
+                isApproved: null,
+                data: nextData,
+            },
+        });
+
         await prisma.property.update({
             where: { id: propertyId },
             data: { status: 'AWAITING_DELETION' },

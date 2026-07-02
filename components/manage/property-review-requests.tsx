@@ -117,7 +117,7 @@ export function PropertyReviewRequests({
         const selected = selection[request.id] ?? fields;
         const toneClass = request.status === "deleting"
           ? "border-red-200 bg-red-50 text-red-950"
-          : request.status === "creating"
+          : request.status === "creation_pending" || request.status === "creating"
             ? "border-blue-200 bg-blue-50 text-blue-950"
             : "border-slate-200 bg-slate-50 text-slate-950";
 
@@ -126,7 +126,7 @@ export function PropertyReviewRequests({
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="space-y-1">
                 <div className="text-sm font-semibold">
-                  {request.status === "deleting" ? "Deletion request" : request.status === "creating" ? "Creation request" : "Change request"}
+                  {request.status === "deleting" ? "Deletion request" : request.status === "creation_pending" || request.status === "creating" ? "Creation request" : "Change request"}
                 </div>
                 <div className="text-xs text-current/70">
                   Submitted by {request.account?.displayName || request.account?.neupId || request.accountId} on {new Date(request.modifiedOn).toLocaleString()}

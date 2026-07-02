@@ -6,6 +6,8 @@ import type { Property, CreatePropertyInput, PropertyFilters, ExtractedPropertyD
 import { areaValueToSqft } from '@/types';
 import { Prisma, PropertyType, PropertyStatus, PropertyPurpose } from '@prisma/client';
 import { mapPurposeToEnum, mapPurposeFromEnum, mapTypeToEnum, mapTypeFromEnum, mapStatusToEnum, mapStatusFromEnum } from '@/logica/core/adapters/enum-mappers';
+import slugify from 'slugify';
+import { randomBytes } from 'crypto';
 
 export interface SavedPropertyEntry {
   userId: string;
@@ -21,7 +23,7 @@ export interface PropertyDraftSummary {
   title: string;
   location?: string;
   category?: string;
-  status: 'creating' | 'changing' | 'deleting';
+  status: 'creation_draft' | 'creation_pending' | 'changing' | 'deleting';
   modifiedOn: string;
 }
 
@@ -34,6 +36,11 @@ export interface AwaitingReviewItem {
   propertyId?: string;
   status?: string;
   modifiedOn?: string;
+}
+
+function normalizePropertyChangeStatus(status: string | null | undefined): PropertyDraftSummary['status'] | string {
+  if (status === 'creating') return 'creation_draft';
+  return status || 'creation_draft';
 }
 
 export type BridgePropertyField = keyof Property;
@@ -387,9 +394,10 @@ export async function getPropertyDrafts(accountId: string): Promise<PropertyDraf
   try {
     const drafts = await prisma.propertyChange.findMany({
       where: {
+        accountId,
         isApproved: null,
         status: {
-          in: ['creating', 'changing', 'deleting'],
+          in: ['creation_draft', 'creation_pending', 'changing', 'deleting', 'creating'],
         },
       },
       orderBy: { modifiedOn: 'desc' },
@@ -427,7 +435,7 @@ export async function getPropertyDrafts(accountId: string): Promise<PropertyDraf
         title: String(data.title || draft.property?.title || 'Unfinished property draft'),
         location: String(data.location || locationParts.join(', ') || draft.property?.locationText || ''),
         category: String(categories[0] || types[0] || (draft.property?.type ? mapTypeFromEnum(draft.property.type) : '') || purposes[0] || ''),
-        status: draft.status as PropertyDraftSummary['status'],
+        status: normalizePropertyChangeStatus(draft.status) as PropertyDraftSummary['status'],
         modifiedOn: draft.modifiedOn.toISOString(),
       };
     });
@@ -518,7 +526,7 @@ export async function getAwaitingReviewItems(
 
     const reviewChangeWhere = {
       isApproved: null,
-      status: { in: ['creating', 'changing', 'deleting'] },
+      status: { in: ['creation_pending', 'changing', 'deleting', 'creating'] },
       ...(opts.includeAll ? {} : opts.accountId ? { accountId: opts.accountId } : {}),
     };
 
@@ -580,7 +588,7 @@ export async function getAwaitingReviewItems(
         location: String(data.location || locationParts.join(', ') || draft.property?.locationText || ''),
         category: String(categories[0] || types[0] || purposes[0] || ''),
         kind: 'draft' as const,
-        status: draft.status,
+        status: normalizePropertyChangeStatus(draft.status),
         modifiedOn: draft.modifiedOn.toISOString(),
       };
     });
@@ -845,6 +853,60 @@ function buildCoreData(d: Partial<CreatePropertyInput> & Record<string, any>) {
   };
 }
 
+/*
+::neup.documentation::property-write-slug-generation
+
+::private
+
+Generates a non-empty property slug for write operations before the initial
+insert. Prisma requires `property.slug` at create time, so both manual and
+import-based creation paths first use a title slug and then fall back to
+`title` plus a 12-character mixed-case alphanumeric suffix to reduce collision
+risk.
+
+::private end
+::end
+*/
+function buildPropertySlug(input: { slug?: string | null; title?: string | null }, withSuffix = false): string {
+  const explicitSlug = typeof input.slug === 'string' ? input.slug.trim() : '';
+  if (explicitSlug) {
+    return explicitSlug.substring(0, 120);
+  }
+
+  const baseSlug = slugify(input.title ?? 'property', { lower: true, strict: true, trim: true }) || 'property';
+  if (!withSuffix) {
+    return baseSlug.substring(0, 120);
+  }
+
+  const suffix = randomBytes(18)
+    .toString('base64')
+    .replace(/[^a-zA-Z0-9]/g, '')
+    .substring(0, 12);
+  const joined = `${baseSlug}-${suffix || 'propertysuffix'}`;
+  return joined.substring(0, 120);
+}
+
+async function createPropertyRecordWithGeneratedSlug(data: Record<string, any>) {
+  const primarySlug = buildPropertySlug(data);
+
+  try {
+    return await prisma.property.create({
+      data: { ...data, slug: primarySlug } as any,
+    });
+  } catch (error) {
+    const fallbackSlug = buildPropertySlug(data, true);
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === 'P2002'
+    ) {
+      return prisma.property.create({
+        data: { ...data, slug: fallbackSlug } as any,
+      });
+    }
+    throw error;
+  }
+}
+
 function isPlainObject(value: unknown): value is Record<string, any> {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value) && !(value instanceof Date);
 }
@@ -1023,14 +1085,7 @@ async function replacePropertyOwners(propertyId: string, owners: CreatePropertyI
 export async function createProperty(d: CreatePropertyInput & { creatorId?: string }): Promise<string> {
   try {
     const coreData = buildCoreData({ ...d, status: 'approved', isApproved: true });
-    const generatedSlug = (d.title ?? 'property')
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .substring(0, 80);
-    const created = await prisma.property.create({
-      data: { ...coreData, slug: coreData.slug || generatedSlug } as any,
-    });
+    const created = await createPropertyRecordWithGeneratedSlug({ ...coreData, ...d });
     if (!created.slug) await prisma.property.update({ where: { id: created.id }, data: { slug: created.id } });
     await upsertDetailTable(created.id, created.type, d);
     await upsertMedia(created.id, d.images ?? []);
@@ -1045,7 +1100,7 @@ export async function addProperty(d: Omit<ExtractedPropertyData, 'embedding'>): 
   try {
     const { isPropertyPage: _, ...rest } = d as any;
     const coreData = buildCoreData({ ...rest, status: 'pending', isApproved: false });
-    const created = await prisma.property.create({ data: coreData as any });
+    const created = await createPropertyRecordWithGeneratedSlug({ ...coreData, ...rest });
     if (!created.slug) await prisma.property.update({ where: { id: created.id }, data: { slug: created.id } });
     await upsertDetailTable(created.id, created.type, rest);
     await upsertMedia(created.id, rest.images ?? []);

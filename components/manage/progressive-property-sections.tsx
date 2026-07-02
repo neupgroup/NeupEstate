@@ -118,7 +118,18 @@ interface ProgressivePropertySectionsProps {
     submitLabel: string;
     /** Optional agency customization rule — enforced on top of Zod validation */
     agencyRule?: AgencyCustomizationRule | null;
-    onSectionAdvance?: (fromIndex: number, toIndex: number) => Promise<void> | void;
+    /*
+    ::neup.documentation::progressive-property-step-advance-hook
+
+    ::private
+
+    Consumers can persist step state before navigation. Returning `false`
+    blocks the section change so the UI does not move ahead when the save fails.
+
+    ::private end
+    ::end
+    */
+    onSectionAdvance?: (fromIndex: number, toIndex: number) => Promise<boolean | void> | boolean | void;
     fieldChangeNotes?: Partial<Record<string, string>>;
     previousAmenities?: string;
     previousImages?: string[];
@@ -370,7 +381,8 @@ export function ProgressivePropertySections({
                 }
             }
         }
-        await onSectionAdvance?.(activeIndex, i);
+        const canAdvance = await onSectionAdvance?.(activeIndex, i);
+        if (canAdvance === false) return;
         setNextError(null);
         setErrorStepIndex(null);
         setActiveIndex(i);
@@ -412,7 +424,8 @@ export function ProgressivePropertySections({
         setNextError(null);
         setErrorStepIndex(null);
         const next = Math.min(activeIndex + 1, steps.length - 1);
-        await onSectionAdvance?.(activeIndex, next);
+        const canAdvance = await onSectionAdvance?.(activeIndex, next);
+        if (canAdvance === false) return;
         setActiveIndex(next);
         setUnlockedUpTo((prev) => Math.max(prev, next));
         replaceSectionParam(getSectionFromIndex(next));
@@ -422,7 +435,8 @@ export function ProgressivePropertySections({
         setNextError(null);
         setErrorStepIndex(null);
         const prev = Math.max(activeIndex - 1, 0);
-        await onSectionAdvance?.(activeIndex, prev);
+        const canAdvance = await onSectionAdvance?.(activeIndex, prev);
+        if (canAdvance === false) return;
         setActiveIndex(prev);
         setUnlockedUpTo((i) => Math.max(i, prev));
         replaceSectionParam(getSectionFromIndex(prev));

@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTransition, useEffect, useState } from 'react';
 import { CreatePropertySchema, type CreatePropertyFormValues, type User } from '@/types';
-import { createPropertyAction, getCurrentAccountId } from '@/app/actions';
+import { createPropertyAction, getCurrentAccountId, getCurrentPropertyCreateDraftAction, savePropertyCreateDraftAction } from '@/app/actions';
 
 import { Form } from '@/components/ui/form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -22,10 +22,72 @@ import { cn } from '@/logica/core/utils';
 
 import { ProgressivePropertySections } from '@/components/manage/progressive-property-sections';
 
+const DEFAULT_CREATE_PROPERTY_VALUES: CreatePropertyFormValues = {
+    title: '',
+    description: '',
+    purposes: [],
+    categories: [],
+    types: [],
+    area: undefined,
+    bedrooms: 1,
+    bathrooms: 1,
+    areaUnit: 'sqft',
+    kitchens: 1,
+    diningRooms: 0,
+    livingRooms: 1,
+    carParkingSpots: 0,
+    bikeParkingSpots: 0,
+    amenities: '',
+    images: [''],
+    listingAgent: '',
+    isOwnerListing: false,
+    isPrivate: false,
+    showMap: true,
+    showOwnerInformation: true,
+    floors: undefined,
+    roadAccess: undefined,
+    landDetails: {},
+    plots: [],
+    apartmentDetails: {},
+    apartmentUnits: [],
+    structuredLocation: {},
+    pricing: {
+        currency: 'USD',
+        priceDisplayMode: 'show-price',
+        listed: 0,
+        negotiable: false,
+    },
+    roadAccessDetails: {
+        widthUnit: 'ft',
+        distanceToMainRoadUnit: 'km',
+    },
+    distancing: {
+        unit: 'km',
+    },
+    earnings: {
+        currency: 'USD',
+    },
+    owners: [],
+    documents: [],
+};
+
+/*
+::neup.documentation::create-property-page-draft-resume
+
+::private
+
+The create flow keeps an in-progress `property_changes` row keyed by
+`changeId`. After the first completed step, each section advance persists the
+current form state so the page can resume unfinished work from the latest draft.
+
+::private end
+::end
+*/
 export default function CreatePropertyPage() {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
+    const requestedChangeId = searchParams.get('changeId')?.trim() || null;
     const { toast } = useToast();
     const [isPending, startTransition] = useTransition();
     const [users, setUsers] = React.useState<User[]>([]);
@@ -33,13 +95,31 @@ export default function CreatePropertyPage() {
     const [agencyAccounts, setAgencyAccounts] = useState<Account[]>([]);
     const [agencyLinks, setAgencyLinks] = useState<AgencyAgentMap[]>([]);
     const [postingAgencyId, setPostingAgencyId] = useState<string | null>(null);
+    const [draftChangeId, setDraftChangeId] = useState<string | null>(requestedChangeId);
+
+    const form = useForm<CreatePropertyFormValues>({
+        resolver: zodResolver(CreatePropertySchema),
+        defaultValues: DEFAULT_CREATE_PROPERTY_VALUES,
+    });
+
+    function syncDraftChangeId(nextChangeId: string | null) {
+        setDraftChangeId(nextChangeId);
+        const params = new URLSearchParams(searchParams.toString());
+        if (nextChangeId) {
+            params.set('changeId', nextChangeId);
+        } else {
+            params.delete('changeId');
+        }
+        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    }
 
     useEffect(() => {
         async function loadContext() {
-            const [userList, currentId, accountList] = await Promise.all([
+            const [userList, currentId, accountList, draftResult] = await Promise.all([
                 getUsers(),
                 getCurrentAccountId(),
                 getAccounts(),
+                getCurrentPropertyCreateDraftAction(requestedChangeId),
             ]);
 
             setUsers(userList);
@@ -60,14 +140,36 @@ export default function CreatePropertyPage() {
 
             setAgencyLinks(acceptedLinks);
             setAgencyAccounts(agencies);
-            setPostingAgencyId(
-                acceptedLinks[0]?.agencyId ??
-                null,
-            );
+            const resolvedDraftData = draftResult.success && draftResult.data
+                ? ({
+                    ...DEFAULT_CREATE_PROPERTY_VALUES,
+                    ...draftResult.data,
+                } as CreatePropertyFormValues)
+                : null;
+            const resolvedPostingAgencyId = draftResult.success
+                ? (draftResult.postingAgencyId ?? acceptedLinks[0]?.agencyId ?? null)
+                : (acceptedLinks[0]?.agencyId ?? null);
+
+            if (resolvedDraftData) {
+                form.reset(resolvedDraftData);
+            } else {
+                form.reset(DEFAULT_CREATE_PROPERTY_VALUES);
+            }
+
+            setPostingAgencyId(resolvedPostingAgencyId);
+
+            if (draftResult.success && draftResult.changeId) {
+                setDraftChangeId(draftResult.changeId);
+                if (draftResult.changeId !== requestedChangeId) {
+                    const params = new URLSearchParams(searchParams.toString());
+                    params.set('changeId', draftResult.changeId);
+                    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+                }
+            }
         }
 
         loadContext();
-    }, []);
+    }, [form, pathname, requestedChangeId, router, searchParams]);
 
     const { rule: agencyRule } = useAgencyCustomization(accountId, 'property');
 
@@ -138,50 +240,9 @@ export default function CreatePropertyPage() {
         router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     }
 
-    const form = useForm<CreatePropertyFormValues>({
-        resolver: zodResolver(CreatePropertySchema),
-        defaultValues: {
-            title: '',
-            description: '',
-            purposes: [],
-            area: undefined,
-            bedrooms: 1,
-            bathrooms: 1,
-            areaUnit: 'sqft',
-            kitchens: 1,
-            diningRooms: 0,
-            livingRooms: 1,
-            carParkingSpots: 0,
-            bikeParkingSpots: 0,
-            amenities: '',
-            images: [''],
-            listingAgent: '',
-            isOwnerListing: false,
-            isPrivate: false,
-            showMap: true,
-            showOwnerInformation: true,
-            floors: undefined,
-            roadAccess: undefined,
-            landDetails: {},
-            plots: [],
-            apartmentDetails: {},
-            apartmentUnits: [],
-            structuredLocation: {},
-            pricing: {
-                listed: 0,
-                negotiable: false,
-            },
-            roadAccessDetails: {},
-            distancing: {},
-            earnings: {},
-            owners: [],
-            documents: [],
-        },
-    });
-
     async function onSubmit(values: CreatePropertyFormValues) {
         startTransition(async () => {
-            const result = await createPropertyAction(values, postingAgencyId);
+            const result = await createPropertyAction(values, postingAgencyId, draftChangeId);
             if (result.success) {
                 toast({
                     title: 'Review Requested',
@@ -189,6 +250,9 @@ export default function CreatePropertyPage() {
                 });
                 router.push('/manage/properties');
             } else {
+                if (result.changeId && result.changeId !== draftChangeId) {
+                    syncDraftChangeId(result.changeId);
+                }
                 toast({
                     variant: 'destructive',
                     title: 'Error creating property',
@@ -208,8 +272,33 @@ export default function CreatePropertyPage() {
     }
 
     async function handleSectionAdvance(fromIndex: number, toIndex: number) {
-        void fromIndex;
-        void toIndex;
+        if (fromIndex < 0) return true;
+
+        const result = await savePropertyCreateDraftAction({
+            changeId: draftChangeId,
+            postingAgencyId,
+            data: form.getValues(),
+        });
+
+        if (!result.success) {
+            toast({
+                variant: 'destructive',
+                title: 'Could not save draft',
+                description: result.error || 'Please try again before continuing.',
+            });
+            return false;
+        }
+
+        if (result.changeId && result.changeId !== draftChangeId) {
+            syncDraftChangeId(result.changeId);
+        }
+
+        if (fromIndex === 0 && result.propertyId) {
+            router.push(`/manage/properties/${result.propertyId}/edit?section=specifics`);
+            return false;
+        }
+
+        return true;
     }
 
     return (

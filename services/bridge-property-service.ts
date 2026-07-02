@@ -382,7 +382,7 @@ export async function createPropertyDraftRequest(input: {
   const existingDraft = await prisma.propertyChange.findFirst({
     where: {
       accountId: input.actorId,
-      status: 'creating',
+      status: { in: ['creation_draft', 'creation_pending', 'creating'] },
       isApproved: null,
     },
     orderBy: { modifiedOn: 'desc' },
@@ -391,7 +391,7 @@ export async function createPropertyDraftRequest(input: {
   const draftPayload = {
     accountId: input.actorId,
     propertyId: existingDraft?.propertyId ?? null,
-    status: 'creating',
+    status: 'creation_pending',
     isApproved: null,
     data: serviceInput as any,
     modifiedOn: new Date(),
@@ -438,7 +438,7 @@ export async function editUncreatedPropertyDraftRequest(input: {
     },
   });
 
-  if (!request || request.status !== 'creating' || request.isApproved !== null) {
+  if (!request || !['creation_draft', 'creation_pending', 'creating'].includes(request.status) || request.isApproved !== null) {
     throw new Error('Pending create request not found.');
   }
 

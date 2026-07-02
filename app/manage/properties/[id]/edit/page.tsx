@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useTransition, useState, useEffect, useMemo } from 'react';
 import { UpdatePropertySchema, type Property, type User, type UpdatePropertyFormValues } from '@/types';
-import { getCurrentAccountId, savePropertyChangeDraftAction, getPropertyChangeContextAction, getPropertyEditCapabilitiesAction, getListingAgentOptionsAction } from '@/app/actions';
+import { createPropertyAction, getCurrentAccountId, savePropertyChangeDraftAction, getPropertyChangeContextAction, getPropertyEditCapabilitiesAction, getListingAgentOptionsAction, savePropertyCreateDraftAction } from '@/app/actions';
 import { getPropertyById } from "@/services/property-service";
 import { getUsers } from "@/services/user-service";
 import { useAgencyCustomization } from '@/logica/core/hooks/use-agency-customization';
@@ -54,6 +54,9 @@ export default function EditPropertyPage() {
     } | null>(null);
 
     const { rule: agencyRule } = useAgencyCustomization(accountId, 'property');
+    const isCreateDraftFlow = changeContext?.currentUserChange?.status === 'creation_draft'
+        || changeContext?.currentUserChange?.status === 'creation_pending'
+        || changeContext?.currentUserChange?.status === 'creating';
 
     function getSectionForErrorPath(path: string): string {
         if (path.startsWith("pricing.")) return "pricing";
@@ -455,6 +458,31 @@ export default function EditPropertyPage() {
     async function onSubmit(values: UpdatePropertyFormValues) {
         if (!property) return;
         startSaveTransition(async () => {
+            if (isCreateDraftFlow) {
+                const result = await createPropertyAction(
+                    values,
+                    typeof changeContext?.currentUserChange?.data?.postingAgencyId === 'string'
+                        ? changeContext.currentUserChange.data.postingAgencyId
+                        : property.agency?.id ?? null,
+                    changeContext?.currentUserChange?.id ?? null,
+                );
+
+                if (result.success) {
+                    toast({
+                        title: 'Review Requested',
+                        description: `The property "${values.title}" has been saved for approval.`,
+                    });
+                    router.push('/manage/properties');
+                } else {
+                    toast({
+                        variant: 'destructive',
+                        title: 'Could not request review',
+                        description: result.error,
+                    });
+                }
+                return;
+            }
+
             const data = property.isApproved
                 ? pickDirtyValues(values, form.formState.dirtyFields)
                 : values;
@@ -492,17 +520,26 @@ export default function EditPropertyPage() {
 
     async function handleSectionAdvance(fromIndex: number, toIndex: number) {
         if (!property) return;
+        void fromIndex;
+        void toIndex;
 
         const values = form.getValues();
         const data = property.isApproved
             ? pickDirtyValues(values, form.formState.dirtyFields)
             : values;
-
-        const result = await savePropertyChangeDraftAction({
-            propertyId: property.id,
-            status: 'changing',
-            data,
-        });
+        const result = isCreateDraftFlow
+            ? await savePropertyCreateDraftAction({
+                changeId: changeContext?.currentUserChange?.id ?? null,
+                postingAgencyId: typeof changeContext?.currentUserChange?.data?.postingAgencyId === 'string'
+                    ? changeContext.currentUserChange.data.postingAgencyId
+                    : property.agency?.id ?? null,
+                data,
+            })
+            : await savePropertyChangeDraftAction({
+                propertyId: property.id,
+                status: 'changing',
+                data,
+            });
 
         if (!result.success) {
             toast({
@@ -518,10 +555,16 @@ export default function EditPropertyPage() {
                 ...current,
                 currentUserChange: current.currentUserChange ? {
                     ...current.currentUserChange,
+                    id: result.changeId!,
+                    status: isCreateDraftFlow
+                        ? current.currentUserChange.status === 'creation_pending'
+                            ? 'creation_pending'
+                            : 'creation_draft'
+                        : 'changing',
                     data,
                 } : {
                     id: result.changeId!,
-                    status: 'changing',
+                    status: isCreateDraftFlow ? 'creation_draft' : 'changing',
                     isApproved: null,
                     data,
                     modifiedOn: new Date().toISOString(),

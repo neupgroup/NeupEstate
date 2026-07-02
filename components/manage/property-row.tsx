@@ -104,7 +104,7 @@ function getPropertyPriceLine(property: Property) {
 
 // ─── Row ──────────────────────────────────────────────────────────────────────
 
-export function AdminPropertyRow({ property, draftKind }: { property: Property; draftKind?: 'creating' | 'changing' | 'deleting' }) {
+export function AdminPropertyRow({ property, draftKind }: { property: Property; draftKind?: 'creation_draft' | 'creation_pending' | 'changing' | 'deleting' }) {
     const byline = getPropertyByline(property);
     const priceLine = getPropertyPriceLine(property);
 
@@ -148,7 +148,7 @@ export function AdminPropertyDraftRow({
         title: string;
         location?: string;
         category?: string;
-        status: 'creating' | 'changing' | 'deleting';
+        status: 'creation_draft' | 'creation_pending' | 'changing' | 'deleting';
         modifiedOn: string;
     };
 }) {
@@ -157,11 +157,15 @@ export function AdminPropertyDraftRow({
         month: 'short',
         day: 'numeric',
     });
-    const href = draft.propertyId
-        ? `/manage/properties/${draft.propertyId}/edit`
-        : `/manage/properties/create`;
-    const badgeLabel = draft.status === 'creating'
+    const href = draft.status === 'creation_draft'
+        ? `/manage/properties/create?changeId=${draft.id}`
+        : draft.propertyId
+            ? `/manage/properties/${draft.propertyId}/edit`
+            : `/manage/properties/create`;
+    const badgeLabel = draft.status === 'creation_draft'
         ? 'Incomplete'
+        : draft.status === 'creation_pending'
+            ? 'Pending Creation'
         : draft.status === 'deleting'
             ? 'Pending Deletion'
             : 'Pending Changes';
@@ -192,8 +196,10 @@ export function AdminPropertyDraftRow({
     );
 }
 
-export function DraftIndicator({ kind, isActive }: { kind: 'creating' | 'changing' | 'deleting'; isActive?: boolean }) {
-    const label = kind === 'creating'
+export function DraftIndicator({ kind, isActive }: { kind: 'creation_draft' | 'creation_pending' | 'changing' | 'deleting'; isActive?: boolean }) {
+    const label = kind === 'creation_draft'
+        ? 'Drafts'
+        : kind === 'creation_pending'
         ? 'Drafts'
         : isActive
             ? 'Also in Drafts'

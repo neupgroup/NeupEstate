@@ -100,9 +100,9 @@ export default async function ManagePropertiesPage({
         agencyIds: canViewAllProperties ? undefined : agencyIds,
       });
   const properties = paginatedProperties.properties;
-  const draftKindsByPropertyId = new Map<string, 'creating' | 'changing' | 'deleting'>();
+  const draftKindsByPropertyId = new Map<string, 'creation_draft' | 'creation_pending' | 'changing' | 'deleting'>();
   for (const item of awaitingItems) {
-    if (item.propertyId) draftKindsByPropertyId.set(item.propertyId, item.status as 'creating' | 'changing' | 'deleting');
+    if (item.propertyId) draftKindsByPropertyId.set(item.propertyId, item.status as 'creation_draft' | 'creation_pending' | 'changing' | 'deleting');
   }
 
   const filteredProperties = isDraftsView
@@ -164,7 +164,7 @@ export default async function ManagePropertiesPage({
                   title: draft.title,
                   location: draft.location,
                   category: draft.category,
-                  status: (draft.status as 'creating' | 'changing' | 'deleting') ?? 'creating',
+                  status: (draft.status as 'creation_draft' | 'creation_pending' | 'changing' | 'deleting') ?? 'creation_draft',
                   modifiedOn: draft.modifiedOn ?? new Date().toISOString(),
                 }}
               />
