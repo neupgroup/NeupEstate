@@ -77,8 +77,9 @@ const DEFAULT_CREATE_PROPERTY_VALUES: CreatePropertyFormValues = {
 ::private
 
 The create flow keeps an in-progress `property_changes` row keyed by
-`changeId`. After the first completed step, each section advance persists the
-current form state so the page can resume unfinished work from the latest draft.
+`changeId`. Draft rows link here with that `changeId` to resume specific
+unfinished work. Opening `/manage/properties/create` without a `changeId` starts
+a fresh form and keeps draft persistence out of the URL.
 
 ::private end
 ::end
@@ -96,6 +97,7 @@ export default function CreatePropertyPage() {
     const [agencyLinks, setAgencyLinks] = useState<AgencyAgentMap[]>([]);
     const [postingAgencyId, setPostingAgencyId] = useState<string | null>(null);
     const [draftChangeId, setDraftChangeId] = useState<string | null>(requestedChangeId);
+    const shouldPersistDraftChangeIdInUrl = Boolean(requestedChangeId);
 
     const form = useForm<CreatePropertyFormValues>({
         resolver: zodResolver(CreatePropertySchema),
@@ -104,6 +106,9 @@ export default function CreatePropertyPage() {
 
     function syncDraftChangeId(nextChangeId: string | null) {
         setDraftChangeId(nextChangeId);
+        if (!shouldPersistDraftChangeIdInUrl) {
+            return;
+        }
         const params = new URLSearchParams(searchParams.toString());
         if (nextChangeId) {
             params.set('changeId', nextChangeId);
@@ -119,7 +124,9 @@ export default function CreatePropertyPage() {
                 getUsers(),
                 getCurrentAccountId(),
                 getAccounts(),
-                getCurrentPropertyCreateDraftAction(requestedChangeId),
+                requestedChangeId
+                    ? getCurrentPropertyCreateDraftAction(requestedChangeId)
+                    : Promise.resolve({ success: true } as Awaited<ReturnType<typeof getCurrentPropertyCreateDraftAction>>),
             ]);
 
             setUsers(userList);
@@ -160,7 +167,7 @@ export default function CreatePropertyPage() {
 
             if (draftResult.success && draftResult.changeId) {
                 setDraftChangeId(draftResult.changeId);
-                if (draftResult.changeId !== requestedChangeId) {
+                if (shouldPersistDraftChangeIdInUrl && draftResult.changeId !== requestedChangeId) {
                     const params = new URLSearchParams(searchParams.toString());
                     params.set('changeId', draftResult.changeId);
                     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
@@ -169,7 +176,7 @@ export default function CreatePropertyPage() {
         }
 
         loadContext();
-    }, [form, pathname, requestedChangeId, router, searchParams]);
+    }, [form, pathname, requestedChangeId, router, searchParams, shouldPersistDraftChangeIdInUrl]);
 
     const { rule: agencyRule } = useAgencyCustomization(accountId, 'property');
 

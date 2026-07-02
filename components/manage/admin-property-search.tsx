@@ -11,12 +11,12 @@ import { PriceInput } from '@/components/ui/price-input';
 // ─── Quick filter definitions ─────────────────────────────────────────────────
 
 const QUICK_FILTERS: { label: string; params: Record<string, string> }[] = [
-    { label: "Drafts",          params: { status: "drafts" } },
-    { label: "Awaiting Review", params: { status: "pending" } },
-    { label: "Active",          params: { status: "approved" } },
-    { label: "Owner Listings",  params: { owner: "1" } },
-    { label: "For Sale",        params: { purpose: "Sale" } },
-    { label: "For Rent",        params: { purpose: "Rent" } },
+    { label: "Creation Drafts", params: { status: "creation_drafts" } },
+    { label: "Change Drafts",   params: { status: "changes_drafts" } },
+    { label: "Active",          params: { status: "active" } },
+    { label: "For Sale",        params: { purpose: "sale" } },
+    { label: "For Rent",        params: { purpose: "rent" } },
+    { label: "Owner",           params: { sellerType: "owner" } },
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -30,6 +30,19 @@ function isQuickFilterActive(
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
+/*
+::neup.documentation::manage-property-search-filter-params
+
+::private
+
+The manage property filter UI emits URL params that match the management route
+contract directly: `status=creation_drafts|changes_drafts|active`,
+`purpose=sale|rent`, `sellerType=owner|representative`, `fromAgency=0|1`, and
+`propertyType=house|land|apartment`.
+
+::private end
+::end
+*/
 export function AdminPropertySearch() {
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -44,7 +57,9 @@ export function AdminPropertySearch() {
     const [location, setLocation]   = useState(searchParams.get('location') || '');
     const [status, setStatus]       = useState(searchParams.get('status') || '');
     const [purpose, setPurpose]     = useState(searchParams.get('purpose') || '');
-    const [category, setCategory]   = useState(searchParams.get('category') || '');
+    const [sellerType, setSellerType] = useState(searchParams.get('sellerType') || '');
+    const [fromAgency, setFromAgency] = useState(searchParams.get('fromAgency') || '');
+    const [propertyType, setPropertyType] = useState(searchParams.get('propertyType') || '');
     const [bedrooms, setBedrooms]   = useState(searchParams.get('minBedrooms') || '');
     const [bathrooms, setBathrooms] = useState(searchParams.get('minBathrooms') || '');
 
@@ -59,7 +74,9 @@ export function AdminPropertySearch() {
         const loc = overrides.location  !== undefined ? overrides.location  : location;
         const st  = overrides.status    !== undefined ? overrides.status    : status;
         const pu  = overrides.purpose   !== undefined ? overrides.purpose   : purpose;
-        const ca  = overrides.category  !== undefined ? overrides.category  : category;
+        const se  = overrides.sellerType !== undefined ? overrides.sellerType : sellerType;
+        const fa  = overrides.fromAgency !== undefined ? overrides.fromAgency : fromAgency;
+        const pt  = overrides.propertyType !== undefined ? overrides.propertyType : propertyType;
         const bd  = overrides.bedrooms  !== undefined ? overrides.bedrooms  : bedrooms;
         const ba  = overrides.bathrooms !== undefined ? overrides.bathrooms : bathrooms;
         if (mp)  p.set('minPrice', mp);
@@ -67,7 +84,9 @@ export function AdminPropertySearch() {
         if (loc) p.set('location', loc);
         if (st)  p.set('status', st);
         if (pu)  p.set('purpose', pu);
-        if (ca)  p.set('category', ca);
+        if (se)  p.set('sellerType', se);
+        if (fa)  p.set('fromAgency', fa);
+        if (pt)  p.set('propertyType', pt);
         if (bd)  p.set('minBedrooms', bd);
         if (ba)  p.set('minBathrooms', ba);
         return p.toString();
@@ -85,7 +104,7 @@ export function AdminPropertySearch() {
     function handleClear() {
         setQuery('');
         setMinPrice(''); setMaxPrice(''); setLocation('');
-        setStatus(''); setPurpose(''); setCategory('');
+        setStatus(''); setPurpose(''); setSellerType(''); setFromAgency(''); setPropertyType('');
         setBedrooms(''); setBathrooms('');
         navigate('');
     }
@@ -97,6 +116,7 @@ export function AdminPropertySearch() {
         // Sync local state
         if (params.status)  setStatus(params.status);
         if (params.purpose) setPurpose(params.purpose);
+        if (params.sellerType) setSellerType(params.sellerType);
         navigate(p.toString());
     }
 
@@ -106,16 +126,16 @@ export function AdminPropertySearch() {
 
     function clearAdvanced() {
         setMinPrice(''); setMaxPrice(''); setLocation('');
-        setStatus(''); setPurpose(''); setCategory('');
+        setStatus(''); setPurpose(''); setSellerType(''); setFromAgency(''); setPropertyType('');
         setBedrooms(''); setBathrooms('');
         navigate(buildParams({
             minPrice: '', maxPrice: '', location: '',
-            status: '', purpose: '', category: '',
+            status: '', purpose: '', sellerType: '', fromAgency: '', propertyType: '',
             bedrooms: '', bathrooms: '',
         }));
     }
 
-    const hasAdvancedFilters = !!(minPrice || maxPrice || location || status || purpose || category || bedrooms || bathrooms);
+    const hasAdvancedFilters = !!(minPrice || maxPrice || location || status || purpose || sellerType || fromAgency || propertyType || bedrooms || bathrooms);
 
     return (
         <div className="space-y-2">
@@ -209,8 +229,9 @@ export function AdminPropertySearch() {
                                 className="w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                             >
                                 <option value="">Any</option>
-                                <option value="drafts">Drafts</option>
-                                <option value="approved">Active</option>
+                                <option value="creation_drafts">Creation Drafts</option>
+                                <option value="changes_drafts">Change Drafts</option>
+                                <option value="active">Active</option>
                                 <option value="pending">Pending</option>
                             </select>
                         </div>
@@ -225,27 +246,54 @@ export function AdminPropertySearch() {
                                 className="w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                             >
                                 <option value="">Any</option>
-                                <option value="Sale">Sale</option>
-                                <option value="Rent">Rent</option>
-                                <option value="Lease">Lease</option>
+                                <option value="sale">Sale</option>
+                                <option value="rent">Rent</option>
                             </select>
                         </div>
 
-                        {/* Category */}
+                        {/* Seller type */}
                         <div className="space-y-1">
-                            <label className="text-xs font-medium text-muted-foreground">Category</label>
+                            <label className="text-xs font-medium text-muted-foreground">Seller Type</label>
                             <select
-                                title="Filter by category"
-                                value={category}
-                                onChange={e => setCategory(e.target.value)}
+                                title="Filter by seller type"
+                                value={sellerType}
+                                onChange={e => setSellerType(e.target.value)}
                                 className="w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                             >
                                 <option value="">Any</option>
-                                <option value="House">House</option>
-                                <option value="Apartment">Apartment</option>
-                                <option value="Land">Land</option>
-                                <option value="Commercial Space">Commercial</option>
-                                <option value="Flat">Flat</option>
+                                <option value="representative">Representative</option>
+                                <option value="owner">Owner</option>
+                            </select>
+                        </div>
+
+                        {/* From agency */}
+                        <div className="space-y-1">
+                            <label className="text-xs font-medium text-muted-foreground">From Agency</label>
+                            <select
+                                title="Filter by agency source"
+                                value={fromAgency}
+                                onChange={e => setFromAgency(e.target.value)}
+                                className="w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                            >
+                                <option value="">Any</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+
+                        {/* Property type */}
+                        <div className="space-y-1">
+                            <label className="text-xs font-medium text-muted-foreground">Property Type</label>
+                            <select
+                                title="Filter by property type"
+                                value={propertyType}
+                                onChange={e => setPropertyType(e.target.value)}
+                                className="w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                            >
+                                <option value="">Any</option>
+                                <option value="house">House</option>
+                                <option value="land">Land</option>
+                                <option value="apartment">Apartment</option>
                             </select>
                         </div>
 

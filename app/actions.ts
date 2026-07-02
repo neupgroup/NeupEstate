@@ -407,9 +407,9 @@ function normalizePropertyChangeData(data: Record<string, any>): Record<string, 
 ::private
 
 These actions persist the multi-step create form into `property_changes` before
-submission so unfinished work can be resumed. Partial saves keep raw form-shaped
-data; final submission rewrites the same draft row into the review-ready
-property payload.
+submission so unfinished work can be resumed by explicit `changeId`. Partial
+saves keep raw form-shaped data; final submission rewrites the same draft row
+into the review-ready property payload.
 
 ::private end
 ::end
@@ -422,18 +422,21 @@ export async function savePropertyCreateDraftAction(input: {
   try {
     await requirePermission(PERMISSIONS.manage.propertySelfCreate);
     const actorId = await requireIdentity();
-    const draftStatusFilter = input.changeId?.trim()
+    const requestedChangeId = input.changeId?.trim() || null;
+    const draftStatusFilter = requestedChangeId
       ? { in: ['creation_draft', 'creation_pending', 'creating'] }
       : { in: ['creation_draft', 'creating'] };
-    const existingDraft = await prisma.propertyChange.findFirst({
-      where: {
-        accountId: actorId,
-        status: draftStatusFilter,
-        isApproved: null,
-        ...(input.changeId?.trim() ? { id: input.changeId.trim() } : {}),
-      },
-      orderBy: { modifiedOn: 'desc' },
-    });
+    const existingDraft = requestedChangeId
+      ? await prisma.propertyChange.findFirst({
+          where: {
+            id: requestedChangeId,
+            accountId: actorId,
+            status: draftStatusFilter,
+            isApproved: null,
+          },
+          orderBy: { modifiedOn: 'desc' },
+        })
+      : null;
 
     const normalizedExistingData = existingDraft
       ? normalizePropertyChangeData((existingDraft.data ?? {}) as Record<string, any>)
@@ -481,18 +484,21 @@ export async function getCurrentPropertyCreateDraftAction(changeId?: string | nu
   try {
     await requirePermission(PERMISSIONS.manage.propertySelfCreate);
     const actorId = await requireIdentity();
-    const draftStatusFilter = changeId?.trim()
+    const requestedChangeId = changeId?.trim() || null;
+    const draftStatusFilter = requestedChangeId
       ? { in: ['creation_draft', 'creation_pending', 'creating'] }
       : { in: ['creation_draft', 'creating'] };
-    const draft = await prisma.propertyChange.findFirst({
-      where: {
-        accountId: actorId,
-        status: draftStatusFilter,
-        isApproved: null,
-        ...(changeId?.trim() ? { id: changeId.trim() } : {}),
-      },
-      orderBy: { modifiedOn: 'desc' },
-    });
+    const draft = requestedChangeId
+      ? await prisma.propertyChange.findFirst({
+          where: {
+            id: requestedChangeId,
+            accountId: actorId,
+            status: draftStatusFilter,
+            isApproved: null,
+          },
+          orderBy: { modifiedOn: 'desc' },
+        })
+      : null;
 
     if (!draft) {
       return { success: true };
