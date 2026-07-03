@@ -13,6 +13,7 @@
 - [ ] Add a Neup documentation block to [components/manage/progressive-property-sections.tsx](/Users/neupkishor/Code/neup.estate/components/manage/progressive-property-sections.tsx).
 - [ ] Add a Neup documentation block to [components/manage/property-form-sections/title-description-section.tsx](/Users/neupkishor/Code/neup.estate/components/manage/property-form-sections/title-description-section.tsx).
 - [ ] Add a Neup documentation block to [app/manage/properties/[id]/edit/page.tsx](/Users/neupkishor/Code/neup.estate/app/manage/properties/[id]/edit/page.tsx).
+- [ ] Add a Neup documentation block to [app/manage/properties/[id]/page.tsx](/Users/neupkishor/Code/neup.estate/app/manage/properties/[id]/page.tsx).
 - [ ] Add a Neup documentation block to [types/admin.ts](/Users/neupkishor/Code/neup.estate/types/admin.ts).
 - [ ] Add a Neup documentation block to [types/property.ts](/Users/neupkishor/Code/neup.estate/types/property.ts).
 - [ ] Add Neup documentation blocks to [app/not-found.tsx](/Users/neupkishor/Code/neup.estate/app/not-found.tsx) and [app/manage/layout.tsx](/Users/neupkishor/Code/neup.estate/app/manage/layout.tsx).
@@ -22,6 +23,8 @@
 - [ ] Add a Neup documentation block to [services/account-service.ts](/Users/neupkishor/Code/neup.estate/services/account-service.ts).
 - [ ] Add a Neup documentation block to [services/account/lookup.ts](/Users/neupkishor/Code/neup.estate/services/account/lookup.ts).
 - [ ] Add a Neup documentation block to [services/account-type.ts](/Users/neupkishor/Code/neup.estate/services/account-type.ts).
+- [ ] Add a Neup documentation block to [services/property-service.ts](/Users/neupkishor/Code/neup.estate/services/property-service.ts).
+- [ ] Add a Neup documentation block to [services/user-service.ts](/Users/neupkishor/Code/neup.estate/services/user-service.ts).
 - [ ] Add a Neup documentation block to [types/account.ts](/Users/neupkishor/Code/neup.estate/types/account.ts).
 - [ ] Add a Neup documentation block to [types/personnel.ts](/Users/neupkishor/Code/neup.estate/types/personnel.ts).
 - [ ] Add a Neup documentation block to [logica/core/prisma.ts](/Users/neupkishor/Code/neup.estate/logica/core/prisma.ts).

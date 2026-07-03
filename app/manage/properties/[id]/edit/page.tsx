@@ -35,7 +35,7 @@ export default function EditPropertyPage() {
     const [isSaving, startSaveTransition] = useTransition();
     const [accountId, setAccountId] = useState<string | null>(null);
     const [canEditOwnership, setCanEditOwnership] = useState(false);
-    const [listingAgentOptions, setListingAgentOptions] = useState<Array<{ id: string; name: string; agencyId: string | null; agencyName: string | null }>>([]);
+    const [listingAgentOptions, setListingAgentOptions] = useState<Array<{ id: string; name: string; imageUrl: string | null; agencyId: string | null; agencyName: string | null }>>([]);
     const [changeContext, setChangeContext] = useState<{
         currentUserChange?: {
             id: string;
@@ -617,6 +617,9 @@ export default function EditPropertyPage() {
         if (!property) return null;
 
         const listingAgent = property.listingAgent?.trim();
+        const matchedListingAgent = property.listingAgentId
+            ? listingAgentOptions.find((agent) => agent.id === property.listingAgentId)
+            : null;
         const agencyName = property.agency?.name?.trim();
         const primaryOwner = property.owners?.find((owner) => owner.isPrimaryOwner)?.clientName?.trim();
         const fallbackOwner = property.owners?.find((owner) => owner.clientName?.trim())?.clientName?.trim();
@@ -624,8 +627,9 @@ export default function EditPropertyPage() {
 
         if (listingAgent) {
             return {
-                name: listingAgent,
+                name: matchedListingAgent?.name || listingAgent,
                 label: 'Agent',
+                imageUrl: matchedListingAgent?.imageUrl || null,
                 agencyName: agencyName ?? null,
             };
         }
@@ -634,6 +638,7 @@ export default function EditPropertyPage() {
             return {
                 name: ownerName || 'No listing agent/owner found.',
                 label: 'Owner',
+                imageUrl: null,
                 agencyName: null,
             };
         }
@@ -641,9 +646,10 @@ export default function EditPropertyPage() {
         return {
             name: 'No listing agent/owner found.',
             label: 'Listing profile unavailable',
+            imageUrl: null,
             agencyName: null,
         };
-    }, [property]);
+    }, [listingAgentOptions, property]);
 
     const postingProfile = useMemo(() => {
         if (!property) return null;

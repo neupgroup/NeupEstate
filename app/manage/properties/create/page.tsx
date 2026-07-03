@@ -87,10 +87,12 @@ export default function CreatePropertyPage() {
     const [isPending, startTransition] = useTransition();
     const [users, setUsers] = React.useState<User[]>([]);
     const [accountId, setAccountId] = useState<string | null>(null);
-    const [listingAgentOptions, setListingAgentOptions] = useState<Array<{ id: string; name: string; agencyId: string | null; agencyName: string | null }>>([]);
+    const [listingAgentOptions, setListingAgentOptions] = useState<Array<{ id: string; name: string; imageUrl: string | null; agencyId: string | null; agencyName: string | null }>>([]);
     const [postingAgencyId, setPostingAgencyId] = useState<string | null>(null);
     const [effectivePostingProfileId, setEffectivePostingProfileId] = useState<string | null>(null);
     const [postingProfileName, setPostingProfileName] = useState<string | null>(null);
+    const [actorDisplayName, setActorDisplayName] = useState<string | null>(null);
+    const [actorDisplayImage, setActorDisplayImage] = useState<string | null>(null);
     const [isAgencyProfile, setIsAgencyProfile] = useState(false);
     const [draftChangeId, setDraftChangeId] = useState<string | null>(requestedChangeId);
     const shouldPersistDraftChangeIdInUrl = Boolean(requestedChangeId);
@@ -153,6 +155,8 @@ export default function CreatePropertyPage() {
             setPostingAgencyId(resolvedPostingAgencyId);
             setEffectivePostingProfileId(resolvedPostingProfileId);
             setPostingProfileName(postingContextResult.success ? postingContextResult.effectiveProfileName ?? postingContextResult.effectiveProfileId ?? null : null);
+            setActorDisplayName(postingContextResult.success ? postingContextResult.actorDisplayName ?? null : null);
+            setActorDisplayImage(postingContextResult.success ? postingContextResult.actorDisplayImage ?? null : null);
             setIsAgencyProfile(Boolean(postingContextResult.success && postingContextResult.isAgencyProfile));
 
             if (draftResult.success && draftResult.changeId) {
@@ -194,11 +198,12 @@ export default function CreatePropertyPage() {
         if (!accountId) return null;
 
         return {
-            name: currentUser?.name || accountId,
+            name: actorDisplayName || currentUser?.name || accountId,
             label: 'Agent',
+            imageUrl: actorDisplayImage || currentUser?.avatarUrl || null,
             agencyName: isAgencyProfile ? (postingProfileName || null) : null,
         };
-    }, [accountId, currentUser, isAgencyProfile, postingProfileName]);
+    }, [accountId, actorDisplayImage, actorDisplayName, currentUser, isAgencyProfile, postingProfileName]);
 
     function getSectionForErrorPath(path: string): string {
         if (path.startsWith("pricing.")) return "pricing";

@@ -24,10 +24,13 @@ type PostingContextAccount = {
   accountType: string;
   workingProfile: string | null;
   displayName: string | null;
+  displayImage: string | null;
 };
 
 export type PropertyPostingContext = {
   actorAccountId: string;
+  actorDisplayName: string | null;
+  actorDisplayImage: string | null;
   signedInAccountId: string;
   effectiveProfileId: string;
   effectiveProfileName: string | null;
@@ -52,6 +55,7 @@ async function readAccount(accountId: string): Promise<PostingContextAccount | n
       accountType: true,
       workingProfile: true,
       displayName: true,
+      displayImage: true,
     },
   });
 }
@@ -115,6 +119,8 @@ export async function resolvePropertyPostingContext(input: {
 
   return {
     actorAccountId: actor.id,
+    actorDisplayName: actor.displayName ?? null,
+    actorDisplayImage: actor.displayImage ?? null,
     signedInAccountId,
     effectiveProfileId: resolvedProfile.id,
     effectiveProfileName: resolvedProfile.displayName ?? null,

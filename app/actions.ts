@@ -611,7 +611,7 @@ export async function getListingAgentOptionsAction(input: {
   currentAgentId?: string | null;
 }): Promise<{
   success: boolean;
-  agents: Array<{ id: string; name: string; agencyId: string | null; agencyName: string | null }>;
+  agents: Array<{ id: string; name: string; imageUrl: string | null; agencyId: string | null; agencyName: string | null }>;
 }> {
   try {
     await requirePermission(PERMISSIONS.manage.propertySelfUpdate);
@@ -638,6 +638,7 @@ export async function getListingAgentOptionsAction(input: {
 
     const optionMap = new Map<string, {
       name: string;
+      imageUrl: string | null;
       priority: number;
       agencyId: string | null;
       agencyName: string | null;
@@ -649,6 +650,7 @@ export async function getListingAgentOptionsAction(input: {
         const agencyContext = primaryAgencyByAgentId.get(account.id);
         optionMap.set(account.id, {
           name: account.display_name?.trim() || account.id,
+          imageUrl: account.display_image?.trim() || null,
           priority: 0,
           agencyId: agencyContext?.agencyId ?? null,
           agencyName: agencyContext?.agencyName ?? null,
@@ -665,6 +667,7 @@ export async function getListingAgentOptionsAction(input: {
       const agencyContext = primaryAgencyByAgentId.get(account.id);
       optionMap.set(account.id, {
         name: account.display_name?.trim() || account.id,
+        imageUrl: account.display_image?.trim() || null,
         priority: 1,
         agencyId: agencyContext?.agencyId ?? null,
         agencyName: agencyContext?.agencyName ?? null,
@@ -687,6 +690,7 @@ export async function getListingAgentOptionsAction(input: {
         const agencyContext = primaryAgencyByAgentId.get(account.id);
         optionMap.set(account.id, {
           name: account.display_name?.trim() || account.id,
+          imageUrl: account.display_image?.trim() || null,
           priority: 0,
           agencyId: agencyContext?.agencyId ?? null,
           agencyName: agencyContext?.agencyName ?? null,
@@ -700,6 +704,7 @@ export async function getListingAgentOptionsAction(input: {
         .map(([id, meta]) => ({
           id,
           name: meta.name,
+          imageUrl: meta.imageUrl,
           priority: meta.priority,
           agencyId: meta.agencyId,
           agencyName: meta.agencyName,
@@ -708,7 +713,7 @@ export async function getListingAgentOptionsAction(input: {
           if (left.priority !== right.priority) return left.priority - right.priority;
           return left.name.localeCompare(right.name);
         })
-        .map(({ id, name, agencyId, agencyName }) => ({ id, name, agencyId, agencyName })),
+        .map(({ id, name, imageUrl, agencyId, agencyName }) => ({ id, name, imageUrl, agencyId, agencyName })),
     };
   } catch (error) {
     await logProblem(error, 'getListingAgentOptionsAction');
@@ -1192,6 +1197,8 @@ export async function getCurrentPropertyPostingContextAction(input?: {
 }): Promise<{
   success: boolean;
   actorAccountId?: string;
+  actorDisplayName?: string | null;
+  actorDisplayImage?: string | null;
   effectiveProfileId?: string;
   effectiveProfileName?: string | null;
   isAgencyProfile?: boolean;
@@ -1209,6 +1216,8 @@ export async function getCurrentPropertyPostingContextAction(input?: {
     return {
       success: true,
       actorAccountId: context.actorAccountId,
+      actorDisplayName: context.actorDisplayName,
+      actorDisplayImage: context.actorDisplayImage,
       effectiveProfileId: context.effectiveProfileId,
       effectiveProfileName: context.effectiveProfileName,
       isAgencyProfile: context.profileType === 'agency',

@@ -6,6 +6,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { Bold, Building2, Italic, List, ListOrdered, Pilcrow, Underline, UserRound } from "lucide-react";
 import { CreatePropertyFormValues } from "@/types";
 import { ClientLink } from "@/components/client-link";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -19,10 +20,11 @@ interface TitleDescriptionSectionProps {
     listingContext?: {
         name: string;
         label: string;
+        imageUrl?: string | null;
         agencyName?: string | null;
     } | null;
     canEditListingContext?: boolean;
-    listingAgentOptions?: Array<{ id: string; name: string; agencyId?: string | null; agencyName?: string | null }>;
+    listingAgentOptions?: Array<{ id: string; name: string; imageUrl?: string | null; agencyId?: string | null; agencyName?: string | null }>;
     postingProfile?: {
         name: string;
         id: string;
@@ -32,6 +34,16 @@ interface TitleDescriptionSectionProps {
     } | null;
     showListingProfile?: boolean;
     showPublishingCopy?: boolean;
+}
+
+function getInitials(value: string): string {
+    return value
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((part) => part.charAt(0).toUpperCase())
+        .join("") || "A";
 }
 
 function RichTextEditor({
@@ -122,10 +134,8 @@ export function TitleDescriptionSection({
         name: "listingAgentAccountId",
     });
     const selectedListingAgent = listingAgentOptions.find((agent) => agent.id === selectedListingAgentId);
-    const selectedAgencyName = selectedListingAgent
-        ? (selectedListingAgent.agencyName?.trim() || null)
-        : (listingContext?.agencyName?.trim() || null);
     const listingCardName = selectedListingAgent?.name || listingContext?.name || "No listing agent/owner found.";
+    const listingCardImage = selectedListingAgent?.imageUrl || listingContext?.imageUrl || null;
     const listingCardLabel = selectedListingAgent ? "Agent" : (listingContext?.label || "Listing profile unavailable");
     const postingProfileChangeHref = React.useMemo(() => {
         if (!postingProfile?.canChange) return null;
@@ -142,9 +152,12 @@ export function TitleDescriptionSection({
                             {listingContext ? (
                                 <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_2px_10px_rgba(15,23,42,0.05)]">
                                     <div className="flex items-start gap-4">
-                                        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-sky-200 bg-sky-50 text-sky-500">
-                                            <UserRound className="h-7 w-7" />
-                                        </div>
+                                        <Avatar className="h-14 w-14 shrink-0 rounded-2xl border border-sky-200">
+                                            <AvatarImage src={listingCardImage || undefined} alt={listingCardName} />
+                                            <AvatarFallback className="rounded-2xl bg-sky-50 text-sm font-semibold text-sky-600">
+                                                {listingCardImage ? getInitials(listingCardName) : <UserRound className="h-7 w-7" />}
+                                            </AvatarFallback>
+                                        </Avatar>
                                         <div className="min-w-0 flex-1">
                                             <p className="truncate text-[15px] font-semibold text-slate-950">{listingCardName}</p>
                                             <p className="mt-1 text-sm font-medium text-slate-500">{listingCardLabel}</p>

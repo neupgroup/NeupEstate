@@ -136,6 +136,7 @@ interface ProgressivePropertySectionsProps {
     listingContext?: {
         name: string;
         label: string;
+        imageUrl?: string | null;
         agencyName?: string | null;
     } | null;
     postingProfile?: {
@@ -147,7 +148,7 @@ interface ProgressivePropertySectionsProps {
     } | null;
     allowSectionJumping?: boolean;
     canEditOwnership?: boolean;
-    listingAgentOptions?: Array<{ id: string; name: string; agencyId?: string | null; agencyName?: string | null }>;
+    listingAgentOptions?: Array<{ id: string; name: string; imageUrl?: string | null; agencyId?: string | null; agencyName?: string | null }>;
 }
 
 export function ProgressivePropertySections({
