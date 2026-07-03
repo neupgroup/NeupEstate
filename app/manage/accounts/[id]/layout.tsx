@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { getAccountById } from '@/services/account-service';
 import { getRequirementByUserId } from '@/services/requirements-service';
 import { getSavedProperties, getPaginatedProperties } from '@/services/property-service';
+import { isAgencyLikeAccountType } from '@/services/account-type';
 import { prisma } from '@/logica/core/prisma';
 import { requireAuth } from '@/services/auth/account';
 import { logProblem } from '@/services/problem-service';
@@ -11,6 +12,10 @@ import { Badge } from '@/components/ui/badge';
 import { ChevronLeft, User, ShieldAlert, CalendarDays, Clock, BadgeCheck } from 'lucide-react';
 import { requirePagePermission } from '@/logica/auth/page-guard';
 import { PERMISSIONS } from '@/logica/auth/permissions';
+
+function isAgentAccountType(accountType?: string | null): boolean {
+  return accountType?.trim().toLowerCase() === 'individual.agent';
+}
 
 export default async function ManageAccountLayout({
   children,
@@ -36,7 +41,13 @@ export default async function ManageAccountLayout({
   const [requirements, savedProperties, ownedProperties, activityCount] = await Promise.all([
     getRequirementByUserId(accountId),
     account.registered ? getSavedProperties(accountId) : Promise.resolve([]),
-    getPaginatedProperties({ ownerAccountId: accountId, includeInactive: true, limit: 1 }),
+    getPaginatedProperties(
+      isAgencyLikeAccountType(account.account_type)
+        ? { agencyIds: [accountId], includeInactive: true, limit: 1 }
+        : isAgentAccountType(account.account_type)
+          ? { agentAccountId: accountId, includeInactive: true, limit: 1 }
+          : { ownerAccountId: accountId, includeInactive: true, limit: 1 },
+    ),
     prisma.activity.count({ where: { trackerId: accountId } }),
   ]);
 

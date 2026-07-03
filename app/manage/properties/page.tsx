@@ -44,6 +44,11 @@ creation flow from `property_changes`, including partial step-by-step drafts
 that do not yet have a live `property` row. Review queues still use the broader
 awaiting-review source separately. Filtered views count and paginate the same
 result set they render, so status tabs do not report broader property totals.
+The `brand=<accountId>` URL param scopes the feed to listings whose property
+`agency` field matches that brand account. The `account=<accountId>` URL param
+scopes the feed to listings whose property `agent` field matches that agent
+account. Non-root users can only request brands they are mapped to or their own
+account.
 
 ::private end
 ::end
@@ -69,6 +74,8 @@ export default async function ManagePropertiesPage({
   const statusParam   = sp.status   || '';
   const sellerTypeParam = sp.sellerType || '';
   const fromAgencyParam = sp.fromAgency || '';
+  const brandParam    = sp.brand?.trim() || '';
+  const accountParam  = sp.account?.trim() || '';
   const purposeParam  = normalizePurposeFilter(sp.purpose);
   const propertyTypeParam = normalizePropertyTypeFilter(sp.propertyType);
   const locationParam = sp.location || '';
@@ -107,6 +114,21 @@ export default async function ManagePropertiesPage({
 
   const agencyLinks = currentAccountId ? (await getAgencyAgentMapsByAgent(currentAccountId)).filter((link) => link.status === 'accepted') : [];
   const agencyIds = agencyLinks.map((link) => link.agencyId);
+  const hasConflictingScopeParams = Boolean(brandParam && accountParam);
+  const scopedAgencyIds = hasConflictingScopeParams
+    ? ['__no_results__']
+    : canViewAllProperties
+    ? (brandParam ? [brandParam] : undefined)
+    : brandParam
+      ? (agencyIds.includes(brandParam) ? [brandParam] : ['__no_results__'])
+      : agencyIds;
+  const scopedAgentAccountId = hasConflictingScopeParams
+    ? '__no_results__'
+    : canViewAllProperties
+    ? accountParam || undefined
+    : accountParam
+      ? (accountParam === currentAccountId ? accountParam : '__no_results__')
+      : currentAccountId ?? undefined;
   const userDrafts = currentAccountId
     ? await getPropertyDrafts(currentAccountId)
     : [];
@@ -149,8 +171,8 @@ export default async function ManagePropertiesPage({
         filters: hasFilters ? filters : undefined,
         includeInactive: true,
         excludeArchived: true,
-        agentAccountId: canViewAllProperties ? undefined : currentAccountId ?? undefined,
-        agencyIds: canViewAllProperties ? undefined : agencyIds,
+        agentAccountId: hasConflictingScopeParams ? '__no_results__' : brandParam ? undefined : scopedAgentAccountId,
+        agencyIds: hasConflictingScopeParams ? undefined : accountParam ? undefined : scopedAgencyIds,
       });
   const properties = paginatedProperties.properties;
   const draftKindsByPropertyId = new Map<string, 'creation_draft' | 'creation_pending' | 'changing' | 'deleting'>();

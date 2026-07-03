@@ -38,7 +38,9 @@ function isQuickFilterActive(
 The manage property filter UI emits URL params that match the management route
 contract directly: `status=creation_drafts|changes_drafts|active`,
 `purpose=sale|rent`, `sellerType=owner|representative`, `fromAgency=0|1`, and
-`propertyType=house|land|apartment`.
+`propertyType=house|land|apartment`. It preserves `brand=<accountId>` and
+`account=<accountId>` when the page is opened from an account detail "View all"
+link.
 
 ::private end
 ::end
@@ -63,8 +65,16 @@ export function AdminPropertySearch() {
     const [bedrooms, setBedrooms]   = useState(searchParams.get('minBedrooms') || '');
     const [bathrooms, setBathrooms] = useState(searchParams.get('minBathrooms') || '');
 
+    function preserveScopedParams(params: URLSearchParams) {
+        const brand = searchParams.get('brand');
+        const account = searchParams.get('account');
+        if (brand) params.set('brand', brand);
+        if (account) params.set('account', account);
+    }
+
     function buildParams(overrides: Record<string, string | undefined> = {}): string {
         const p = new URLSearchParams();
+        preserveScopedParams(p);
         // Carry over q
         const q = overrides.q !== undefined ? overrides.q : query.trim();
         if (q) p.set('q', q);
@@ -106,11 +116,14 @@ export function AdminPropertySearch() {
         setMinPrice(''); setMaxPrice(''); setLocation('');
         setStatus(''); setPurpose(''); setSellerType(''); setFromAgency(''); setPropertyType('');
         setBedrooms(''); setBathrooms('');
-        navigate('');
+        const p = new URLSearchParams();
+        preserveScopedParams(p);
+        navigate(p.toString());
     }
 
     function applyQuickFilter(params: Record<string, string>) {
         const p = new URLSearchParams();
+        preserveScopedParams(p);
         if (query.trim()) p.set('q', query.trim());
         Object.entries(params).forEach(([k, v]) => p.set(k, v));
         // Sync local state

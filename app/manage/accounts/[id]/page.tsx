@@ -5,7 +5,9 @@ import { prisma } from '@/logica/core/prisma';
 import { getAccountById } from '@/services/account-service';
 import { getRequirementByUserId } from '@/services/requirements-service';
 import { getSavedProperties, getPaginatedProperties } from '@/services/property-service';
+import { isAgencyLikeAccountType } from '@/services/account-type';
 import { AdminPropertyRow } from '@/components/manage/property-row';
+import { ClientLink } from '@/components/client-link';
 import { Activity, Bookmark, Home, Shield, Target } from 'lucide-react';
 import { AccountRefreshButton } from '@/components/manage/account-refresh-button';
 import { DeleteAccountButton } from '@/components/manage/delete-account-button';
@@ -30,10 +32,18 @@ function normalizePermissions(raw: unknown): string[] {
   return [];
 }
 
+function isAgentAccountType(accountType?: string | null): boolean {
+  return accountType?.trim().toLowerCase() === 'individual.agent';
+}
+
 export default async function ManageAccountPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: accountId } = await params;
   const account = await getAccountById(accountId);
   if (!account) notFound();
+  const isBrandAccount = isAgencyLikeAccountType(account.account_type);
+  const propertiesHref = isBrandAccount
+    ? `/manage/properties?brand=${encodeURIComponent(accountId)}`
+    : `/manage/properties?account=${encodeURIComponent(accountId)}`;
   const localAccount = await prisma.account.findUnique({
     where: { id: accountId },
     select: { roleId: true },
@@ -82,7 +92,13 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
   const [requirements, savedProperties, ownedProperties, recentActivity, remoteUsersResult] = await Promise.all([
     getRequirementByUserId(accountId),
     account?.registered ? getSavedProperties(accountId) : Promise.resolve([]),
-    getPaginatedProperties({ ownerAccountId: accountId, includeInactive: true, limit: 50 }),
+    getPaginatedProperties(
+      isBrandAccount
+        ? { agencyIds: [accountId], includeInactive: true, limit: 4 }
+        : isAgentAccountType(account.account_type)
+          ? { agentAccountId: accountId, includeInactive: true, limit: 4 }
+          : { ownerAccountId: accountId, includeInactive: true, limit: 4 },
+    ),
     prisma.activity.findMany({
       where: { trackerId: accountId },
       orderBy: { activityOn: 'desc' },
@@ -234,13 +250,21 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
         </div>
         <Card className="shadow-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-base">
-              <Home className="h-4 w-4" />
-              Properties
-              <span className="ml-auto text-sm font-normal text-muted-foreground">
-                {ownedProperties.totalCount} total
-              </span>
-            </CardTitle>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <CardTitle className="flex items-center gap-2 text-base">
+                <Home className="h-4 w-4" />
+                Properties
+                <span className="text-sm font-normal text-muted-foreground">
+                  {ownedProperties.totalCount} total
+                </span>
+              </CardTitle>
+              <ClientLink
+                href={propertiesHref}
+                className="text-sm font-medium text-primary hover:underline"
+              >
+                View all
+              </ClientLink>
+            </div>
           </CardHeader>
           <CardContent>
             {ownedProperties.properties.length === 0 ? (

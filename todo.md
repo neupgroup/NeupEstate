@@ -7,6 +7,8 @@
 - [ ] Add a Neup documentation block to [app/bridge/api.v1/property/route.ts](/Users/neupkishor/Code/neup.estate/app/bridge/api.v1/property/route.ts).
 - [ ] Add a Neup documentation block to [app/bridge/api.v1/property/list/route.ts](/Users/neupkishor/Code/neup.estate/app/bridge/api.v1/property/list/route.ts).
 - [ ] Add a Neup documentation block to [app/manage/switch/page.tsx](/Users/neupkishor/Code/neup.estate/app/manage/switch/page.tsx).
+- [ ] Add a Neup documentation block to [app/manage/accounts/[id]/layout.tsx](/Users/neupkishor/Code/neup.estate/app/manage/accounts/[id]/layout.tsx).
+- [ ] Add a Neup documentation block to [app/manage/accounts/[id]/page.tsx](/Users/neupkishor/Code/neup.estate/app/manage/accounts/[id]/page.tsx).
 - [ ] Add a Neup documentation block to [app/manage/team/brand-account-card.tsx](/Users/neupkishor/Code/neup.estate/app/manage/team/brand-account-card.tsx).
 - [ ] Add a Neup documentation block to [app/manage/team/account-actions.ts](/Users/neupkishor/Code/neup.estate/app/manage/team/account-actions.ts).
 - [ ] Add a Neup documentation block to [app/manage/team/page.tsx](/Users/neupkishor/Code/neup.estate/app/manage/team/page.tsx).
