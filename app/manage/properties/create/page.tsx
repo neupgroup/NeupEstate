@@ -5,9 +5,9 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useTransition, useEffect, useState } from 'react';
+import { useTransition, useEffect, useMemo, useState } from 'react';
 import { CreatePropertySchema, type CreatePropertyFormValues, type User } from '@/types';
-import { createPropertyAction, getCurrentAccountId, getCurrentPropertyCreateDraftAction, getCurrentPropertyPostingContextAction, savePropertyCreateDraftAction } from '@/app/actions';
+import { createPropertyAction, getCurrentAccountId, getCurrentPropertyCreateDraftAction, getCurrentPropertyPostingContextAction, getListingAgentOptionsAction, savePropertyCreateDraftAction } from '@/app/actions';
 
 import { Form } from '@/components/ui/form';
 import { useToast } from '@/logica/core/hooks/use-toast';
@@ -87,7 +87,9 @@ export default function CreatePropertyPage() {
     const [isPending, startTransition] = useTransition();
     const [users, setUsers] = React.useState<User[]>([]);
     const [accountId, setAccountId] = useState<string | null>(null);
+    const [listingAgentOptions, setListingAgentOptions] = useState<Array<{ id: string; name: string; agencyId: string | null; agencyName: string | null }>>([]);
     const [postingAgencyId, setPostingAgencyId] = useState<string | null>(null);
+    const [effectivePostingProfileId, setEffectivePostingProfileId] = useState<string | null>(null);
     const [postingProfileName, setPostingProfileName] = useState<string | null>(null);
     const [isAgencyProfile, setIsAgencyProfile] = useState(false);
     const [draftChangeId, setDraftChangeId] = useState<string | null>(requestedChangeId);
@@ -135,14 +137,21 @@ export default function CreatePropertyPage() {
             const resolvedPostingAgencyId = postingContextResult.success
                 ? (postingContextResult.postingAgencyId ?? null)
                 : null;
+            const resolvedPostingProfileId = postingContextResult.success
+                ? (postingContextResult.effectiveProfileId ?? null)
+                : null;
 
             if (resolvedDraftData) {
                 form.reset(resolvedDraftData);
             } else {
-                form.reset(DEFAULT_CREATE_PROPERTY_VALUES);
+                form.reset({
+                    ...DEFAULT_CREATE_PROPERTY_VALUES,
+                    listingAgentAccountId: currentId ?? '',
+                });
             }
 
             setPostingAgencyId(resolvedPostingAgencyId);
+            setEffectivePostingProfileId(resolvedPostingProfileId);
             setPostingProfileName(postingContextResult.success ? postingContextResult.effectiveProfileName ?? postingContextResult.effectiveProfileId ?? null : null);
             setIsAgencyProfile(Boolean(postingContextResult.success && postingContextResult.isAgencyProfile));
 
@@ -159,7 +168,37 @@ export default function CreatePropertyPage() {
         loadContext();
     }, [activeWorkingProfileId, form, pathname, requestedChangeId, router, searchParams, shouldPersistDraftChangeIdInUrl]);
 
+    useEffect(() => {
+        if (!accountId || !postingAgencyId || !isAgencyProfile) {
+            setListingAgentOptions([]);
+            return;
+        }
+
+        async function loadListingAgents() {
+            const result = await getListingAgentOptionsAction({
+                agencyId: postingAgencyId,
+                currentAgentId: accountId,
+            });
+
+            if (result.success) {
+                setListingAgentOptions(result.agents);
+            }
+        }
+
+        loadListingAgents();
+    }, [accountId, isAgencyProfile, postingAgencyId]);
+
     const { rule: agencyRule } = useAgencyCustomization(accountId, 'property');
+    const currentUser = useMemo(() => users.find((user) => user.id === accountId) ?? null, [accountId, users]);
+    const listingContext = useMemo(() => {
+        if (!accountId) return null;
+
+        return {
+            name: currentUser?.name || accountId,
+            label: 'Agent',
+            agencyName: isAgencyProfile ? (postingProfileName || null) : null,
+        };
+    }, [accountId, currentUser, isAgencyProfile, postingProfileName]);
 
     function getSectionForErrorPath(path: string): string {
         if (path.startsWith("pricing.")) return "pricing";
@@ -304,11 +343,18 @@ export default function CreatePropertyPage() {
                         agencyRule={agencyRule}
                         onSectionAdvance={handleSectionAdvance}
                         allowSectionJumping={false}
-                        postingProfile={accountId && isAgencyProfile && postingAgencyId ? {
-                            name: postingProfileName || postingAgencyId,
-                            id: postingAgencyId,
-                            description: 'This property will be created for the active agency working profile.',
+                        canEditOwnership={false}
+                        listingContext={listingContext}
+                        postingProfile={accountId && effectivePostingProfileId ? {
+                            name: postingProfileName || effectivePostingProfileId,
+                            id: effectivePostingProfileId,
+                            label: isAgencyProfile ? 'Agency' : 'Individual',
+                            description: isAgencyProfile
+                                ? 'This property will be created for the selected agency working profile.'
+                                : 'This property will be created for the active individual profile.',
+                            canChange: true,
                         } : null}
+                        listingAgentOptions={listingAgentOptions}
                     />
                 </form>
             </Form>

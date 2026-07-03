@@ -2,8 +2,10 @@
 
 import * as React from "react";
 import { Control, useWatch } from "react-hook-form";
+import { usePathname, useSearchParams } from "next/navigation";
 import { Bold, Building2, Italic, List, ListOrdered, Pilcrow, Underline, UserRound } from "lucide-react";
 import { CreatePropertyFormValues } from "@/types";
+import { ClientLink } from "@/components/client-link";
 import { Button } from "@/components/ui/button";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -24,7 +26,9 @@ interface TitleDescriptionSectionProps {
     postingProfile?: {
         name: string;
         id: string;
+        label: string;
         description: string;
+        canChange?: boolean;
     } | null;
     showListingProfile?: boolean;
     showPublishingCopy?: boolean;
@@ -111,6 +115,8 @@ export function TitleDescriptionSection({
     showListingProfile = true,
     showPublishingCopy = true,
 }: TitleDescriptionSectionProps) {
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
     const selectedListingAgentId = useWatch({
         control,
         name: "listingAgentAccountId",
@@ -120,96 +126,92 @@ export function TitleDescriptionSection({
         ? (selectedListingAgent.agencyName?.trim() || null)
         : (listingContext?.agencyName?.trim() || null);
     const listingCardName = selectedListingAgent?.name || listingContext?.name || "No listing agent/owner found.";
-    const listingCardLabel = selectedListingAgent
-        ? (selectedAgencyName ? `Agent, Agent from ${selectedAgencyName}` : "Agent")
-        : (listingContext?.label || "No individual associated with this listing was found.");
+    const listingCardLabel = selectedListingAgent ? "Agent" : (listingContext?.label || "Listing profile unavailable");
+    const postingProfileChangeHref = React.useMemo(() => {
+        if (!postingProfile?.canChange) return null;
+        const currentPath = searchParams.toString() ? `${pathname}?${searchParams.toString()}` : pathname;
+        return `/accounts?workingProfile=${encodeURIComponent(postingProfile.id)}&backs=${encodeURIComponent(`inapp@${encodeURIComponent(currentPath)}`)}`;
+    }, [pathname, postingProfile, searchParams]);
 
     return (
         <section className="space-y-10">
             <div className="space-y-8">
-                {showListingProfile && listingContext ? (
-                    <div className="space-y-4 rounded-lg border bg-muted/20 p-4">
-                        <div className="space-y-1">
-                            <h3 className="text-base font-semibold">Listed by</h3>
-                            <p className="text-sm text-muted-foreground">
-                                Review who is associated with this listing.
-                            </p>
-                        </div>
-
-                        <div className="rounded-lg border bg-background p-4">
-                            <div className="flex items-start gap-3">
-                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-primary/15 bg-primary/10 text-primary">
-                                    <UserRound className="h-5 w-5" />
-                                </div>
-                                <div className="min-w-0">
-                                    <p className="text-sm font-semibold text-foreground">{listingCardName}</p>
-                                    <p className="mt-1 text-sm text-muted-foreground">{listingCardLabel}</p>
-                                    {selectedAgencyName ? (
-                                        <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-border/70 bg-muted/40 px-3 py-1.5 text-xs text-muted-foreground">
-                                            <Building2 className="h-3.5 w-3.5" />
-                                            Connected agency: {selectedAgencyName}
+                {showListingProfile && (listingContext || postingProfile) ? (
+                    <div className="space-y-5">
+                        <div className="grid gap-3 md:grid-cols-2">
+                            {listingContext ? (
+                                <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_2px_10px_rgba(15,23,42,0.05)]">
+                                    <div className="flex items-start gap-4">
+                                        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-sky-200 bg-sky-50 text-sky-500">
+                                            <UserRound className="h-7 w-7" />
                                         </div>
+                                        <div className="min-w-0 flex-1">
+                                            <p className="truncate text-[15px] font-semibold text-slate-950">{listingCardName}</p>
+                                            <p className="mt-1 text-sm font-medium text-slate-500">{listingCardLabel}</p>
+                                        </div>
+                                    </div>
+
+                                    {canEditListingContext && listingAgentOptions.length > 0 ? (
+                                        <FormField
+                                            control={control}
+                                            name="listingAgentAccountId"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <div className="space-y-2">
+                                                        <FormLabel className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                                                            Change Listing Agent
+                                                        </FormLabel>
+                                                        <Select
+                                                            value={field.value?.trim() ? field.value : "__none__"}
+                                                            onValueChange={(value) => field.onChange(value === "__none__" ? "" : value)}
+                                                        >
+                                                            <FormControl>
+                                                                <SelectTrigger className="h-11 rounded-xl border-slate-200">
+                                                                    <SelectValue placeholder="Select a listing agent" />
+                                                                </SelectTrigger>
+                                                            </FormControl>
+                                                            <SelectContent>
+                                                                <SelectItem value="__none__">No listing agent</SelectItem>
+                                                                {listingAgentOptions.map((agent) => (
+                                                                    <SelectItem key={agent.id} value={agent.id}>
+                                                                        {agent.name}
+                                                                    </SelectItem>
+                                                                ))}
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </div>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
                                     ) : null}
                                 </div>
-                            </div>
-                        </div>
+                            ) : null}
 
-                        {canEditListingContext ? (
-                            <FormField
-                                control={control}
-                                name="listingAgentAccountId"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Listing agent</FormLabel>
-                                        <Select
-                                            value={field.value?.trim() ? field.value : "__none__"}
-                                            onValueChange={(value) => field.onChange(value === "__none__" ? "" : value)}
-                                        >
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select a listing agent" />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                <SelectItem value="__none__">No listing agent</SelectItem>
-                                                {listingAgentOptions.map((agent) => (
-                                                    <SelectItem key={agent.id} value={agent.id}>
-                                                        {agent.name}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                        <p className="text-xs text-muted-foreground">
-                                            Only accounts with transfer permission can change the listing agent.
-                                        </p>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        ) : null}
+                            {postingProfile ? (
+                                <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_2px_10px_rgba(15,23,42,0.05)]">
+                                    <div className="flex items-start gap-4">
+                                        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-sky-200 bg-sky-50 text-sky-500">
+                                            <Building2 className="h-7 w-7" />
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                            <p className="truncate text-[15px] font-semibold text-slate-950">{postingProfile.name}</p>
+                                            <p className="mt-1 text-sm font-medium text-slate-500">{postingProfile.label}</p>
+                                        </div>
+                                    </div>
 
-                        {canEditListingContext && selectedAgencyName ? (
-                            <div className="space-y-2">
-                                <FormLabel>Listing agency</FormLabel>
-                                <Input value={selectedAgencyName} readOnly disabled />
-                            </div>
-                        ) : null}
-
-                    </div>
-                ) : null}
-
-                {showListingProfile && postingProfile ? (
-                    <div className="space-y-4 rounded-lg border bg-muted/20 p-4">
-                        <div className="space-y-1">
-                            <h3 className="text-base font-semibold">Posting Profile</h3>
-                            <p className="text-sm text-muted-foreground">
-                                {postingProfile.description}
-                            </p>
-                        </div>
-
-                        <div className="rounded-lg border bg-background p-4">
-                            <p className="font-medium">{postingProfile.name}</p>
-                            <p className="text-sm text-muted-foreground">{postingProfile.id}</p>
+                                    <div className="flex items-center justify-end gap-3">
+                                        {postingProfileChangeHref ? (
+                                            <ClientLink
+                                                href={postingProfileChangeHref}
+                                                className="shrink-0 text-sm font-semibold text-sky-600 hover:text-sky-700"
+                                            >
+                                                Change
+                                            </ClientLink>
+                                        ) : null}
+                                    </div>
+                                </div>
+                            ) : null}
                         </div>
                     </div>
                 ) : null}

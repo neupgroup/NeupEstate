@@ -3,6 +3,7 @@
 - [ ] Reconcile the deployed `PropertyStatus` enum with `prisma/schema.prisma`. Production still rejects `AWAITING_DELETION` even though the schema and migrations now include it.
 - [ ] Add Neup documentation blocks to [app/actions.ts](/Users/neupkishor/Code/neup.estate/app/actions.ts) for the property action flows that are currently undocumented.
 - [ ] Add a Neup documentation block to [app/accounts/page.tsx](/Users/neupkishor/Code/neup.estate/app/accounts/page.tsx).
+- [ ] Add a Neup documentation block to [app/manage/switch/page.tsx](/Users/neupkishor/Code/neup.estate/app/manage/switch/page.tsx).
 - [ ] Add a Neup documentation block to [app/manage/team/brand-account-card.tsx](/Users/neupkishor/Code/neup.estate/app/manage/team/brand-account-card.tsx).
 - [ ] Add a Neup documentation block to [app/manage/team/account-actions.ts](/Users/neupkishor/Code/neup.estate/app/manage/team/account-actions.ts).
 - [ ] Add a Neup documentation block to [app/manage/team/page.tsx](/Users/neupkishor/Code/neup.estate/app/manage/team/page.tsx).
@@ -22,4 +23,5 @@
 - [ ] Add a Neup documentation block to [services/account/lookup.ts](/Users/neupkishor/Code/neup.estate/services/account/lookup.ts).
 - [ ] Add a Neup documentation block to [services/account-type.ts](/Users/neupkishor/Code/neup.estate/services/account-type.ts).
 - [ ] Add a Neup documentation block to [types/account.ts](/Users/neupkishor/Code/neup.estate/types/account.ts).
+- [ ] Add a Neup documentation block to [types/personnel.ts](/Users/neupkishor/Code/neup.estate/types/personnel.ts).
 - [ ] Add a Neup documentation block to [logica/core/prisma.ts](/Users/neupkishor/Code/neup.estate/logica/core/prisma.ts).

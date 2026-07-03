@@ -338,7 +338,7 @@ export async function createPropertyDraftRequest(input: {
     plots: validatedData.plots?.map((plot) => ({ ...plot, area: areaValueToSqft(plot.area) })) as unknown as PlotDetails[],
     apartmentUnits: validatedData.apartmentUnits?.map((unit) => ({ ...unit, area: areaValueToSqft(unit.area) })) as unknown as ApartmentUnit[],
     agency: postingContext.postingAgencyId,
-    agent: postingContext.propertyAgentId,
+    agent: validatedData.listingAgentAccountId?.trim() || postingContext.propertyAgentId,
   };
 
   const existingDraft = await prisma.propertyChange.findFirst({

@@ -625,7 +625,7 @@ export default function EditPropertyPage() {
         if (listingAgent) {
             return {
                 name: listingAgent,
-                label: agencyName ? `Agent, Agent from ${agencyName}` : 'Agent',
+                label: 'Agent',
                 agencyName: agencyName ?? null,
             };
         }
@@ -633,25 +633,44 @@ export default function EditPropertyPage() {
         if (property.isOwnerListing) {
             return {
                 name: ownerName || 'No listing agent/owner found.',
-                label: ownerName ? 'Owner' : 'No individual associated with this listing was found.',
+                label: 'Owner',
                 agencyName: null,
-            };
-        }
-
-        if (agencyName) {
-            return {
-                name: agencyName,
-                label: 'Agency',
-                agencyName,
             };
         }
 
         return {
             name: 'No listing agent/owner found.',
-            label: 'No individual associated with this listing was found.',
+            label: 'Listing profile unavailable',
             agencyName: null,
         };
     }, [property]);
+
+    const postingProfile = useMemo(() => {
+        if (!property) return null;
+
+        const draftPostingAgencyId = typeof changeContext?.currentUserChange?.data?.postingAgencyId === 'string'
+            ? changeContext.currentUserChange.data.postingAgencyId.trim() || null
+            : null;
+        const propertyAgencyId = property.agency?.id && property.agency.id !== 'unknown'
+            ? property.agency.id
+            : null;
+        const propertyAgencyName = property.agency?.name?.trim() || null;
+        const resolvedAgencyId = draftPostingAgencyId || propertyAgencyId;
+
+        if (!resolvedAgencyId) {
+            return null;
+        }
+
+        return {
+            name: resolvedAgencyId === propertyAgencyId && propertyAgencyName ? propertyAgencyName : resolvedAgencyId,
+            id: resolvedAgencyId,
+            label: 'Agency',
+            description: isCreateDraftFlow
+                ? 'This request will be submitted under the selected agency profile.'
+                : 'This property is currently posted under this agency.',
+            canChange: isCreateDraftFlow,
+        };
+    }, [changeContext, isCreateDraftFlow, property]);
 
     if (!property) {
         return (
@@ -705,6 +724,7 @@ export default function EditPropertyPage() {
                         previousAmenities={baseValues?.amenities}
                         previousImages={baseValues?.images}
                         listingContext={listingContext}
+                        postingProfile={postingProfile}
                         canEditOwnership={canEditOwnership}
                         listingAgentOptions={listingAgentOptions}
                     />

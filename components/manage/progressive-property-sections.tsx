@@ -141,7 +141,9 @@ interface ProgressivePropertySectionsProps {
     postingProfile?: {
         name: string;
         id: string;
+        label: string;
         description: string;
+        canChange?: boolean;
     } | null;
     allowSectionJumping?: boolean;
     canEditOwnership?: boolean;
