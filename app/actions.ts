@@ -453,6 +453,9 @@ export async function savePropertyCreateDraftAction(input: {
       createdById: postingContext.createdById,
       createdForId: postingContext.createdForId,
       workingProfileId: postingContext.workingProfileId,
+      transferToId: postingContext.transferToId,
+      created_by: postingContext.createdById,
+      transfer_to: postingContext.transferToId,
       workingProfileType: postingContext.profileType,
     });
     const mergedData = existingDraft
@@ -928,12 +931,36 @@ export async function reviewPropertyChangeAction(input: {
 
     if (input.approve) {
       const requestData = normalizePropertyChangeData(request.data as Record<string, any>);
+      const internalAcceptedFieldBlacklist = new Set([
+        'postingAgencyId',
+        'createdById',
+        'createdForId',
+        'workingProfileId',
+        'workingProfileType',
+        'transferToId',
+        'created_by',
+        'transfer_to',
+      ]);
       const acceptedFields = input.acceptedFields?.length ? input.acceptedFields : Object.keys(requestData);
       const acceptedData = acceptedFields
+        .filter((field) => !internalAcceptedFieldBlacklist.has(field))
         .map((field) => ({ field, value: requestData[field] }))
         .filter((entry) => entry.value !== undefined);
 
       if (request.status === 'creation_pending' || request.status === 'creating' || request.status === 'creation_draft') {
+        const creationLogData = [
+          ...acceptedData,
+          {
+            field: 'created_by',
+            value: request.createdById ?? requestData.createdById ?? request.accountId,
+          },
+          ...(typeof requestData.transfer_to === 'string' && requestData.transfer_to.trim().length > 0
+            ? [{
+                field: 'transfer_to',
+                value: requestData.transfer_to.trim(),
+              }]
+            : []),
+        ];
         const createdPropertyId = request.propertyId
           ? request.propertyId
           : await createPropertyService(requestData as CreatePropertyInput);
@@ -946,7 +973,7 @@ export async function reviewPropertyChangeAction(input: {
           requestedBy: request.accountId,
           approvedBy: accountId,
           approvedOn: new Date(),
-          data: acceptedData,
+          data: creationLogData,
         });
         await prisma.propertyChange.update({
           where: { id: request.id },

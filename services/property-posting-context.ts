@@ -37,6 +37,7 @@ export type PropertyPostingContext = {
   createdById: string;
   createdForId: string;
   workingProfileId: string | null;
+  transferToId: string | null;
 };
 
 function normalizeId(value?: string | null): string | null {
@@ -110,6 +111,7 @@ export async function resolvePropertyPostingContext(input: {
 
   const resolvedProfile = effectiveProfile ?? actor;
   const isAgencyProfile = isAgencyLikeAccountType(resolvedProfile.accountType);
+  const isTransferToIndividual = !isAgencyProfile && resolvedProfile.id !== actor.id;
 
   return {
     actorAccountId: actor.id,
@@ -118,9 +120,10 @@ export async function resolvePropertyPostingContext(input: {
     effectiveProfileName: resolvedProfile.displayName ?? null,
     profileType: isAgencyProfile ? 'agency' : 'individual',
     postingAgencyId: isAgencyProfile ? resolvedProfile.id : null,
-    propertyAgentId: isAgencyProfile ? null : actor.id,
+    propertyAgentId: isAgencyProfile ? null : resolvedProfile.id,
     createdById: signedInAccountId,
     createdForId: resolvedProfile.id,
     workingProfileId: resolvedProfile.id === actor.id ? null : resolvedProfile.id,
+    transferToId: isTransferToIndividual ? resolvedProfile.id : null,
   };
 }
