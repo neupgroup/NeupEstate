@@ -137,30 +137,36 @@ export function TitleDescriptionSection({
     const listingCardName = selectedListingAgent?.name || listingContext?.name || "No listing agent/owner found.";
     const listingCardImage = selectedListingAgent?.imageUrl || listingContext?.imageUrl || null;
     const listingCardLabel = selectedListingAgent ? "Agent" : (listingContext?.label || "Listing profile unavailable");
-    const postingProfileChangeHref = React.useMemo(() => {
-        if (!postingProfile?.canChange) return null;
+    const postingProfileHref = React.useMemo(() => {
+        if (!postingProfile) return "/accounts";
+
+        const params = new URLSearchParams();
         const currentPath = searchParams.toString() ? `${pathname}?${searchParams.toString()}` : pathname;
-        return `/accounts?workingProfile=${encodeURIComponent(postingProfile.id)}&backs=${encodeURIComponent(`inapp@${encodeURIComponent(currentPath)}`)}`;
+
+        params.set("workingProfile", postingProfile.id);
+        params.set("backs", `inapp@${encodeURIComponent(currentPath)}`);
+
+        return `/accounts?${params.toString()}`;
     }, [pathname, postingProfile, searchParams]);
 
     return (
         <section className="space-y-10">
             <div className="space-y-8">
                 {showListingProfile && (listingContext || postingProfile) ? (
-                    <div className="space-y-5">
+                    <div className="space-y-3">
                         <div className="grid gap-3 md:grid-cols-2">
                             {listingContext ? (
-                                <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_2px_10px_rgba(15,23,42,0.05)]">
-                                    <div className="flex items-start gap-4">
-                                        <Avatar className="h-14 w-14 shrink-0 rounded-2xl border border-sky-200">
+                                <div className="space-y-3 rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_10px_rgba(15,23,42,0.05)]">
+                                    <div className="flex items-start gap-3">
+                                        <Avatar className="h-11 w-11 shrink-0 rounded-lg border border-sky-200">
                                             <AvatarImage src={listingCardImage || undefined} alt={listingCardName} />
-                                            <AvatarFallback className="rounded-2xl bg-sky-50 text-sm font-semibold text-sky-600">
-                                                {listingCardImage ? getInitials(listingCardName) : <UserRound className="h-7 w-7" />}
+                                            <AvatarFallback className="rounded-lg bg-sky-50 text-xs font-semibold text-sky-600">
+                                                {listingCardImage ? getInitials(listingCardName) : <UserRound className="h-5 w-5" />}
                                             </AvatarFallback>
                                         </Avatar>
                                         <div className="min-w-0 flex-1">
-                                            <p className="truncate text-[15px] font-semibold text-slate-950">{listingCardName}</p>
-                                            <p className="mt-1 text-sm font-medium text-slate-500">{listingCardLabel}</p>
+                                            <p className="truncate text-sm font-semibold text-slate-950">{listingCardName}</p>
+                                            <p className="mt-0.5 text-xs font-medium text-slate-500">{listingCardLabel}</p>
                                         </div>
                                     </div>
 
@@ -179,7 +185,7 @@ export function TitleDescriptionSection({
                                                             onValueChange={(value) => field.onChange(value === "__none__" ? "" : value)}
                                                         >
                                                             <FormControl>
-                                                                <SelectTrigger className="h-11 rounded-xl border-slate-200">
+                                                                <SelectTrigger className="h-10 rounded-lg border-slate-200">
                                                                     <SelectValue placeholder="Select a listing agent" />
                                                                 </SelectTrigger>
                                                             </FormControl>
@@ -202,28 +208,21 @@ export function TitleDescriptionSection({
                             ) : null}
 
                             {postingProfile ? (
-                                <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_2px_10px_rgba(15,23,42,0.05)]">
-                                    <div className="flex items-start gap-4">
-                                        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-sky-200 bg-sky-50 text-sky-500">
-                                            <Building2 className="h-7 w-7" />
+                                <ClientLink
+                                    href={postingProfileHref}
+                                    aria-label={`Open accounts for ${postingProfile.name}`}
+                                    className="block space-y-3 rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_10px_rgba(15,23,42,0.05)] transition-colors hover:border-sky-200 hover:bg-sky-50/40"
+                                >
+                                    <div className="flex items-start gap-3">
+                                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-sky-200 bg-sky-50 text-sky-500">
+                                            <Building2 className="h-5 w-5" />
                                         </div>
                                         <div className="min-w-0 flex-1">
-                                            <p className="truncate text-[15px] font-semibold text-slate-950">{postingProfile.name}</p>
-                                            <p className="mt-1 text-sm font-medium text-slate-500">{postingProfile.label}</p>
+                                            <p className="truncate text-sm font-semibold text-slate-950">{postingProfile.name}</p>
+                                            <p className="mt-0.5 text-xs font-medium text-slate-500">{postingProfile.label}</p>
                                         </div>
                                     </div>
-
-                                    <div className="flex items-center justify-end gap-3">
-                                        {postingProfileChangeHref ? (
-                                            <ClientLink
-                                                href={postingProfileChangeHref}
-                                                className="shrink-0 text-sm font-semibold text-sky-600 hover:text-sky-700"
-                                            >
-                                                Change
-                                            </ClientLink>
-                                        ) : null}
-                                    </div>
-                                </div>
+                                </ClientLink>
                             ) : null}
                         </div>
                     </div>

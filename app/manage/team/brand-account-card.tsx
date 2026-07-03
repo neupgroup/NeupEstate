@@ -114,7 +114,7 @@ export function BrandAccountCard({
 
     const backHref = backs ? buildBackHref(backs, brandAccount.id) : null;
 
-    if (isSelected && isExisting) {
+    if (isExisting) {
       setIsLoading(true);
       setError(null);
       try {
@@ -123,6 +123,9 @@ export function BrandAccountCard({
           if (backHref) {
             router.replace(backHref);
           } else {
+            const params = new URLSearchParams(searchParams.toString());
+            params.set("workingProfile", brandAccount.id);
+            router.replace(`${pathname}?${params.toString()}`);
             router.refresh();
           }
         } else {

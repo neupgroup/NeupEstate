@@ -6,6 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
 import { BrandAccountCard, type AgencyManagementAccount } from '../manage/team/brand-account-card';
 import { syncBrandAccountsToLocalAccounts } from '../manage/team/account-actions';
+import { isAgencyLikeAccountType } from '@/services/account-type';
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
@@ -107,25 +108,33 @@ export default async function AccountsPage({
       };
     });
 
-  const accessibleAgencies: AgencyManagementAccount[] = [...remoteBrandCards, ...localAgencyCards];
-  const switchableAccounts = accessibleAgencies.filter((agency) => {
+  const accessibleProfiles: AgencyManagementAccount[] = [...remoteBrandCards, ...localAgencyCards];
+  const accountAgentProfiles = accessibleProfiles.filter((profile) => {
+    const existingAccount = existingAccountMap.get(profile.id);
+    const accountType = existingAccount?.accountType ?? profile.accountType;
+    return Boolean(existingAccount) && !isAgencyLikeAccountType(accountType);
+  });
+  const switchableAgencyProfiles = accessibleProfiles.filter((agency) => {
     const existingAccount = existingAccountMap.get(agency.id);
+    const accountType = existingAccount?.accountType ?? agency.accountType;
+    if (!isAgencyLikeAccountType(accountType)) return false;
     return Boolean(existingAccount?.connectionId?.trim());
   });
   const creatableAccounts = remoteBrandCards.filter((agency) => {
     const existingAccount = existingAccountMap.get(agency.id);
     return !existingAccount?.connectionId?.trim() && ['brand', 'subbrand'].includes(agency.accountType.trim().toLowerCase());
   });
-  const switchableAccountIds = new Set(switchableAccounts.map((agency) => agency.id));
+  const switchableProfiles = [...accountAgentProfiles, ...switchableAgencyProfiles];
+  const switchableProfileIds = new Set(switchableProfiles.map((profile) => profile.id));
 
-  const agencyAccountId =
-    selectedAgency && switchableAccountIds.has(selectedAgency)
+  const selectedProfileId =
+    selectedAgency && switchableProfileIds.has(selectedAgency)
       ? selectedAgency
-      : localAccount?.workingProfile && switchableAccountIds.has(localAccount.workingProfile)
+      : localAccount?.workingProfile && switchableProfileIds.has(localAccount.workingProfile)
         ? localAccount.workingProfile
-        : membership?.agencyAccountId && switchableAccountIds.has(membership.agencyAccountId)
+        : membership?.agencyAccountId && switchableProfileIds.has(membership.agencyAccountId)
           ? membership.agencyAccountId
-          : switchableAccounts[0]?.id ?? null;
+          : accountAgentProfiles[0]?.id ?? switchableAgencyProfiles[0]?.id ?? null;
 
   return (
     <div className="container mx-auto space-y-6 px-4 py-8 sm:px-6 lg:px-8">
@@ -154,23 +163,23 @@ export default async function AccountsPage({
         </Alert>
       ) : null}
 
-      {switchableAccounts.length > 0 ? (
+      {accountAgentProfiles.length > 0 ? (
         <section className="mx-auto w-full max-w-3xl space-y-3">
           <div>
-            <h2 className="text-lg font-semibold tracking-tight">Switch account</h2>
+            <h2 className="text-lg font-semibold tracking-tight">Accounts/Agents</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Only accounts that have already been created can be selected here.
+              Choose the personal or agent profile you want to work from.
             </p>
           </div>
           <div className="w-full overflow-hidden rounded-lg border border-border bg-background">
-            {switchableAccounts.map((brandAccount, index) => (
+            {accountAgentProfiles.map((brandAccount, index) => (
               <BrandAccountCard
                 key={brandAccount.id}
                 brandAccount={brandAccount}
                 existingAccount={existingAccountMap.get(brandAccount.id) || null}
-                isSelected={agencyAccountId === brandAccount.id}
+                isSelected={selectedProfileId === brandAccount.id}
                 isDefault={localAccount?.workingProfile === brandAccount.id}
-                isLast={index === switchableAccounts.length - 1}
+                isLast={index === accountAgentProfiles.length - 1}
                 backs={backs}
               />
             ))}
@@ -181,32 +190,35 @@ export default async function AccountsPage({
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>No Switchable Accounts Found</AlertTitle>
           <AlertDescription>
-            No created accounts were found for this login yet.
+            No personal or agent accounts were found for this login yet.
           </AlertDescription>
         </Alert>
       )}
 
-      {creatableAccounts.length > 0 ? (
+      {switchableAgencyProfiles.length > 0 || creatableAccounts.length > 0 ? (
         <section className="mx-auto w-full max-w-3xl space-y-3">
           <div>
-            <h2 className="text-lg font-semibold tracking-tight">Create account</h2>
+            <h2 className="text-lg font-semibold tracking-tight">Agency Profiles</h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              These accounts are available to create before they can be used for switching.
+              Select the agency you want to post from.
             </p>
           </div>
           <div className="w-full overflow-hidden rounded-lg border border-border bg-background">
-            {creatableAccounts.map((brandAccount, index) => (
-              <BrandAccountCard
-                key={brandAccount.id}
-                brandAccount={brandAccount}
-                existingAccount={existingAccountMap.get(brandAccount.id) || null}
-                isSelected={false}
-                isDefault={false}
-                isLast={index === creatableAccounts.length - 1}
-                allowSelection={false}
-                backs={backs}
-              />
-            ))}
+            {[...switchableAgencyProfiles, ...creatableAccounts].map((brandAccount, index, agencyProfiles) => {
+              const isCreatable = creatableAccounts.some((account) => account.id === brandAccount.id);
+              return (
+                <BrandAccountCard
+                  key={brandAccount.id}
+                  brandAccount={brandAccount}
+                  existingAccount={existingAccountMap.get(brandAccount.id) || null}
+                  isSelected={selectedProfileId === brandAccount.id}
+                  isDefault={localAccount?.workingProfile === brandAccount.id}
+                  isLast={index === agencyProfiles.length - 1}
+                  allowSelection={!isCreatable}
+                  backs={backs}
+                />
+              );
+            })}
           </div>
         </section>
       ) : null}

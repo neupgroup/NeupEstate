@@ -12,7 +12,7 @@ import { AreaDisplayToggle } from "@/components/manage/area-display-toggle";
 import { FacingDisplayToggle } from "@/components/manage/facing-display-toggle";
 import { RoadAccessDisplayToggle } from "@/components/manage/road-access-display-toggle";
 import { PropertyMediaGallery } from "@/components/manage/property-media-gallery";
-import { Bath, BedDouble, Bike, Building2, CalendarDays, CarFront, ChefHat, ChevronLeft, ExternalLink, FilePenLine, FileText, Layers3, Link2, PenSquare, Sofa, SquareUserRound, Tag, UserRound, UtensilsCrossed } from "lucide-react";
+import { ArrowLeftRight, Bath, BedDouble, Bike, Building2, CalendarDays, CarFront, ChefHat, ChevronLeft, ExternalLink, FilePenLine, FileText, Layers3, Link2, PenSquare, Sofa, SquareUserRound, Tag, UserRound, UtensilsCrossed } from "lucide-react";
 
 type PageProps = {
     params: Promise<{ id: string }>;
@@ -798,7 +798,11 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
     const mode = normalizeMode(sp.mode);
     const currentAccountId = await getCurrentAccountId();
     const canApproveProperty = await hasPermission(PERMISSIONS.manage.propertyReviewApprove);
-    const canEditOwnership = await hasPermission(PERMISSIONS.manage.propertySelfTransfer);
+    const [canUpdateProperty, canTransferProperty] = await Promise.all([
+        hasPermission(PERMISSIONS.manage.propertySelfUpdate),
+        hasPermission(PERMISSIONS.manage.propertySelfTransfer),
+    ]);
+    const canEditOwnership = canUpdateProperty && canTransferProperty;
     const resolvedProperty = await getPropertyById(id, { includeInactive: true });
     const creationDraft = resolvedProperty
         ? null
@@ -1089,8 +1093,20 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
             )}
 
             <Section title="Listed by" description="The listing source for this property." editHref={`${editUrl}?section=copy`}>
-                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                    <ListedByCard name={listedBy.name} label={listedBy.label} />
+                <div className="space-y-4">
+                    {canEditOwnership && !isCreationDraftView ? (
+                        <div className="flex justify-start">
+                            <Button variant="outline" size="sm" asChild>
+                                <ClientLink href={`/manage/properties/${property.id}/transfer`}>
+                                    <ArrowLeftRight className="mr-2 h-4 w-4" />
+                                    Transfer Listing
+                                </ClientLink>
+                            </Button>
+                        </div>
+                    ) : null}
+                    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                        <ListedByCard name={listedBy.name} label={listedBy.label} />
+                    </div>
                 </div>
             </Section>
 

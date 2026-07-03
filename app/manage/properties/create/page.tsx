@@ -357,7 +357,6 @@ export default function CreatePropertyPage() {
                             description: isAgencyProfile
                                 ? 'This property will be created for the selected agency working profile.'
                                 : 'This property will be created for the active individual profile.',
-                            canChange: true,
                         } : null}
                         listingAgentOptions={listingAgentOptions}
                     />

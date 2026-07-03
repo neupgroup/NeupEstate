@@ -5,7 +5,7 @@ import { ClientLink } from "@/components/client-link";
 
 export function FooterV1({ showManagePanelLink }: { showManagePanelLink: boolean }) {
   return (
-    <footer className="mt-auto bg-secondary/70 text-secondary-foreground">
+    <footer className="mt-auto bg-secondary text-secondary-foreground">
       <div className="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="md:col-span-1">
