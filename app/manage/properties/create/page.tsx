@@ -7,18 +7,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTransition, useEffect, useState } from 'react';
 import { CreatePropertySchema, type CreatePropertyFormValues, type User } from '@/types';
-import { createPropertyAction, getCurrentAccountId, getCurrentPropertyCreateDraftAction, savePropertyCreateDraftAction } from '@/app/actions';
+import { createPropertyAction, getCurrentAccountId, getCurrentPropertyCreateDraftAction, getCurrentPropertyPostingContextAction, savePropertyCreateDraftAction } from '@/app/actions';
 
 import { Form } from '@/components/ui/form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/logica/core/hooks/use-toast';
 import { getUsers } from '@/services/user-service';
-import { getAccounts } from '@/services/account-service';
-import { getAgencyAgentMapsByAgent } from '@/services/agency-agent-map-service';
 import { useAgencyCustomization } from '@/logica/core/hooks/use-agency-customization';
-import type { Account, AgencyAgentMap } from '@/types';
-import { cn } from '@/logica/core/utils';
 
 import { ProgressivePropertySections } from '@/components/manage/progressive-property-sections';
 
@@ -93,11 +88,12 @@ export default function CreatePropertyPage() {
     const [isPending, startTransition] = useTransition();
     const [users, setUsers] = React.useState<User[]>([]);
     const [accountId, setAccountId] = useState<string | null>(null);
-    const [agencyAccounts, setAgencyAccounts] = useState<Account[]>([]);
-    const [agencyLinks, setAgencyLinks] = useState<AgencyAgentMap[]>([]);
     const [postingAgencyId, setPostingAgencyId] = useState<string | null>(null);
+    const [postingProfileName, setPostingProfileName] = useState<string | null>(null);
+    const [isAgencyProfile, setIsAgencyProfile] = useState(false);
     const [draftChangeId, setDraftChangeId] = useState<string | null>(requestedChangeId);
     const shouldPersistDraftChangeIdInUrl = Boolean(requestedChangeId);
+    const activeWorkingProfileId = searchParams.get('workingProfile')?.trim() || null;
 
     const form = useForm<CreatePropertyFormValues>({
         resolver: zodResolver(CreatePropertySchema),
@@ -120,42 +116,26 @@ export default function CreatePropertyPage() {
 
     useEffect(() => {
         async function loadContext() {
-            const [userList, currentId, accountList, draftResult] = await Promise.all([
+            const [userList, currentId, draftResult, postingContextResult] = await Promise.all([
                 getUsers(),
                 getCurrentAccountId(),
-                getAccounts(),
                 requestedChangeId
                     ? getCurrentPropertyCreateDraftAction(requestedChangeId)
                     : Promise.resolve({ success: true } as Awaited<ReturnType<typeof getCurrentPropertyCreateDraftAction>>),
+                getCurrentPropertyPostingContextAction({ workingProfileId: activeWorkingProfileId }),
             ]);
 
             setUsers(userList);
             setAccountId(currentId);
-
-            if (!currentId) {
-                setAgencyAccounts([]);
-                setAgencyLinks([]);
-                setPostingAgencyId(null);
-                return;
-            }
-
-            const links = await getAgencyAgentMapsByAgent(currentId);
-            const acceptedLinks = links.filter((link) => link.status === 'accepted');
-            const agencies = accountList.filter((account) =>
-                ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'].includes(account.account_type)
-            );
-
-            setAgencyLinks(acceptedLinks);
-            setAgencyAccounts(agencies);
             const resolvedDraftData = draftResult.success && draftResult.data
                 ? ({
                     ...DEFAULT_CREATE_PROPERTY_VALUES,
                     ...draftResult.data,
                 } as CreatePropertyFormValues)
                 : null;
-            const resolvedPostingAgencyId = draftResult.success
-                ? (draftResult.postingAgencyId ?? acceptedLinks[0]?.agencyId ?? null)
-                : (acceptedLinks[0]?.agencyId ?? null);
+            const resolvedPostingAgencyId = postingContextResult.success
+                ? (postingContextResult.postingAgencyId ?? null)
+                : null;
 
             if (resolvedDraftData) {
                 form.reset(resolvedDraftData);
@@ -164,6 +144,8 @@ export default function CreatePropertyPage() {
             }
 
             setPostingAgencyId(resolvedPostingAgencyId);
+            setPostingProfileName(postingContextResult.success ? postingContextResult.effectiveProfileName ?? postingContextResult.effectiveProfileId ?? null : null);
+            setIsAgencyProfile(Boolean(postingContextResult.success && postingContextResult.isAgencyProfile));
 
             if (draftResult.success && draftResult.changeId) {
                 setDraftChangeId(draftResult.changeId);
@@ -176,7 +158,7 @@ export default function CreatePropertyPage() {
         }
 
         loadContext();
-    }, [form, pathname, requestedChangeId, router, searchParams, shouldPersistDraftChangeIdInUrl]);
+    }, [activeWorkingProfileId, form, pathname, requestedChangeId, router, searchParams, shouldPersistDraftChangeIdInUrl]);
 
     const { rule: agencyRule } = useAgencyCustomization(accountId, 'property');
 
@@ -249,7 +231,7 @@ export default function CreatePropertyPage() {
 
     async function onSubmit(values: CreatePropertyFormValues) {
         startTransition(async () => {
-            const result = await createPropertyAction(values, postingAgencyId, draftChangeId);
+            const result = await createPropertyAction(values, postingAgencyId, draftChangeId, activeWorkingProfileId);
             if (result.success) {
                 toast({
                     title: 'Review Requested',
@@ -284,6 +266,7 @@ export default function CreatePropertyPage() {
         const result = await savePropertyCreateDraftAction({
             changeId: draftChangeId,
             postingAgencyId,
+            workingProfileId: activeWorkingProfileId,
             data: form.getValues(),
         });
 
@@ -312,46 +295,17 @@ export default function CreatePropertyPage() {
         <div className="max-w-6xl mx-auto">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit, onSubmitInvalid)} className="space-y-6">
-                    {accountId && agencyLinks.length > 0 && (
+                    {accountId && isAgencyProfile && postingAgencyId && (
                         <Card>
                             <CardHeader>
-                                <CardTitle>Post To Agency</CardTitle>
+                                <CardTitle>Posting Profile</CardTitle>
                                 <CardDescription>
-                                    {agencyLinks.length > 1
-                                        ? 'Choose which linked agency should receive this property.'
-                                        : 'This agent has one linked agency. It will be used by default.'}
+                                    This property will be created for the active agency working profile.
                                 </CardDescription>
                             </CardHeader>
-                            <CardContent className="space-y-3">
-                                <div className="grid gap-3 md:grid-cols-2">
-                                    {agencyAccounts
-                                        .filter((account) => agencyLinks.some((link) => link.agencyId === account.id))
-                                        .map((account) => {
-                                            const selected = postingAgencyId === account.id;
-                                            return (
-                                                <button
-                                                    key={account.id}
-                                                    type="button"
-                                                    onClick={() => setPostingAgencyId(account.id)}
-                                                    className={cn(
-                                                        'rounded-lg border px-4 py-3 text-left transition-colors hover:border-primary hover:bg-primary/5',
-                                                        selected ? 'border-primary bg-primary/10' : 'border-border bg-background',
-                                                    )}
-                                                >
-                                                    <div className="flex items-center justify-between gap-3">
-                                                        <div className="min-w-0">
-                                                            <p className="truncate font-medium">{account.display_name || account.id}</p>
-                                                            <p className="truncate text-xs text-muted-foreground">{account.id}</p>
-                                                        </div>
-                                                        {selected && <Badge>Selected</Badge>}
-                                                    </div>
-                                                </button>
-                                            );
-                                        })}
-                                </div>
-                                {agencyLinks.length > 1 && !postingAgencyId && (
-                                    <p className="text-sm text-destructive">Select an agency before creating the property.</p>
-                                )}
+                            <CardContent>
+                                <p className="font-medium">{postingProfileName || postingAgencyId}</p>
+                                <p className="text-sm text-muted-foreground">{postingAgencyId}</p>
                             </CardContent>
                         </Card>
                     )}

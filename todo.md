@@ -2,6 +2,22 @@
 
 - [ ] Reconcile the deployed `PropertyStatus` enum with `prisma/schema.prisma`. Production still rejects `AWAITING_DELETION` even though the schema and migrations now include it.
 - [ ] Add Neup documentation blocks to [app/actions.ts](/Users/neupkishor/Code/neup.estate/app/actions.ts) for the property action flows that are currently undocumented.
+- [ ] Add a Neup documentation block to [app/accounts/page.tsx](/Users/neupkishor/Code/neup.estate/app/accounts/page.tsx).
+- [ ] Add a Neup documentation block to [app/manage/team/brand-account-card.tsx](/Users/neupkishor/Code/neup.estate/app/manage/team/brand-account-card.tsx).
+- [ ] Add a Neup documentation block to [app/manage/team/account-actions.ts](/Users/neupkishor/Code/neup.estate/app/manage/team/account-actions.ts).
+- [ ] Add a Neup documentation block to [app/manage/team/page.tsx](/Users/neupkishor/Code/neup.estate/app/manage/team/page.tsx).
+- [ ] Add a Neup documentation block to [logica/auth/authorization.ts](/Users/neupkishor/Code/neup.estate/logica/auth/authorization.ts).
+- [ ] Add Neup documentation blocks to [prisma/schema.prisma](/Users/neupkishor/Code/neup.estate/prisma/schema.prisma) for account, agency mapping, and authz access tables.
+- [ ] Add a Neup documentation block to [services/neupid/get-brand-accounts.ts](/Users/neupkishor/Code/neup.estate/services/neupid/get-brand-accounts.ts).
 - [ ] Add a Neup documentation block to [app/manage/properties/[id]/edit/page.tsx](/Users/neupkishor/Code/neup.estate/app/manage/properties/[id]/edit/page.tsx).
 - [ ] Add a Neup documentation block to [types/admin.ts](/Users/neupkishor/Code/neup.estate/types/admin.ts).
+- [ ] Add a Neup documentation block to [types/property.ts](/Users/neupkishor/Code/neup.estate/types/property.ts).
 - [ ] Add Neup documentation blocks to [app/not-found.tsx](/Users/neupkishor/Code/neup.estate/app/not-found.tsx) and [app/manage/layout.tsx](/Users/neupkishor/Code/neup.estate/app/manage/layout.tsx).
+- [ ] Add a Neup documentation block to [services/auth/me.ts](/Users/neupkishor/Code/neup.estate/services/auth/me.ts).
+- [ ] Add a Neup documentation block to [services/auth/account.ts](/Users/neupkishor/Code/neup.estate/services/auth/account.ts).
+- [ ] Add a Neup documentation block to [services/auth/index.ts](/Users/neupkishor/Code/neup.estate/services/auth/index.ts).
+- [ ] Add a Neup documentation block to [services/account-service.ts](/Users/neupkishor/Code/neup.estate/services/account-service.ts).
+- [ ] Add a Neup documentation block to [services/account/lookup.ts](/Users/neupkishor/Code/neup.estate/services/account/lookup.ts).
+- [ ] Add a Neup documentation block to [services/account-type.ts](/Users/neupkishor/Code/neup.estate/services/account-type.ts).
+- [ ] Add a Neup documentation block to [types/account.ts](/Users/neupkishor/Code/neup.estate/types/account.ts).
+- [ ] Add a Neup documentation block to [logica/core/prisma.ts](/Users/neupkishor/Code/neup.estate/logica/core/prisma.ts).

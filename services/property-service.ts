@@ -1085,7 +1085,7 @@ async function replacePropertyOwners(propertyId: string, owners: CreatePropertyI
 export async function createProperty(d: CreatePropertyInput & { creatorId?: string }): Promise<string> {
   try {
     const coreData = buildCoreData({ ...d, status: 'approved', isApproved: true });
-    const created = await createPropertyRecordWithGeneratedSlug({ ...coreData, ...d });
+    const created = await createPropertyRecordWithGeneratedSlug(coreData);
     if (!created.slug) await prisma.property.update({ where: { id: created.id }, data: { slug: created.id } });
     await upsertDetailTable(created.id, created.type, d);
     await upsertMedia(created.id, d.images ?? []);
@@ -1100,7 +1100,7 @@ export async function addProperty(d: Omit<ExtractedPropertyData, 'embedding'>): 
   try {
     const { isPropertyPage: _, ...rest } = d as any;
     const coreData = buildCoreData({ ...rest, status: 'pending', isApproved: false });
-    const created = await createPropertyRecordWithGeneratedSlug({ ...coreData, ...rest });
+    const created = await createPropertyRecordWithGeneratedSlug(coreData);
     if (!created.slug) await prisma.property.update({ where: { id: created.id }, data: { slug: created.id } });
     await upsertDetailTable(created.id, created.type, rest);
     await upsertMedia(created.id, rest.images ?? []);

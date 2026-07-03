@@ -22,9 +22,29 @@ function StatusBadge({ property }: { property: Property }) {
     return <Badge variant={property.isApproved ? 'default' : 'secondary'} className="shrink-0 text-[11px]">{property.isApproved ? 'Active' : 'Pending'}</Badge>;
 }
 
+/*
+::neup.documentation::manage-property-row-posting-byline
+
+::private
+
+Manage property rows identify the posting account as `by [posterName]`. When
+the property row has an agency account assigned, the same byline expands to
+`by [posterName] from [agencyName]`; owner or personal postings keep only the
+poster name.
+
+::private end
+::end
+*/
 function getPropertyByline(property: Property): string | null {
-    if (property.listingAgent) return `by ${property.listingAgent}`;
-    return null;
+    const posterName = property.listingAgent?.trim();
+    if (!posterName) return null;
+
+    const agencyId = property.agency?.id?.trim();
+    const agencyName = property.agency?.name?.trim();
+    const hasAssignedAgency = Boolean(agencyId && agencyId !== 'unknown' && agencyName && agencyName !== 'Owner');
+
+    if (hasAssignedAgency) return `by ${posterName} from ${agencyName}`;
+    return `by ${posterName}`;
 }
 
 // ─── Thumbnail ────────────────────────────────────────────────────────────────

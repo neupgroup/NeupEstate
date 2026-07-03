@@ -46,6 +46,7 @@ import { hasPermission, requirePermission } from '@/logica/auth/authorization';
 import { PERMISSIONS } from '@/logica/auth/permissions';
 import { prisma } from '@/logica/core/prisma';
 import { isAgencyLikeAccountType, promoteStoredAccountType } from '@/services/account-type';
+import { resolvePropertyPostingContext } from '@/services/property-posting-context';
 
 // ---------------------------------------------------------------------------
 // Identity guard
@@ -417,11 +418,16 @@ into the review-ready property payload.
 export async function savePropertyCreateDraftAction(input: {
   changeId?: string | null;
   postingAgencyId?: string | null;
+  workingProfileId?: string | null;
   data: Record<string, any>;
 }): Promise<{ success: boolean; changeId?: string; propertyId?: string | null; error?: string }> {
   try {
     await requirePermission(PERMISSIONS.manage.propertySelfCreate);
     const actorId = await requireIdentity();
+    const postingContext = await resolvePropertyPostingContext({
+      actorAccountId: actorId,
+      requestedWorkingProfileId: input.workingProfileId,
+    });
     const requestedChangeId = input.changeId?.trim() || null;
     const draftStatusFilter = requestedChangeId
       ? { in: ['creation_draft', 'creation_pending', 'creating'] }
@@ -443,7 +449,11 @@ export async function savePropertyCreateDraftAction(input: {
       : {};
     const normalizedInputData = normalizePropertyChangeData({
       ...input.data,
-      postingAgencyId: input.postingAgencyId?.trim() || null,
+      postingAgencyId: postingContext.postingAgencyId,
+      createdById: postingContext.createdById,
+      createdForId: postingContext.createdForId,
+      workingProfileId: postingContext.workingProfileId,
+      workingProfileType: postingContext.profileType,
     });
     const mergedData = existingDraft
       ? deepMergeJson(normalizedExistingData, normalizedInputData)
@@ -451,6 +461,9 @@ export async function savePropertyCreateDraftAction(input: {
     const draftPayload = {
       propertyId: existingDraft?.propertyId ?? null,
       accountId: actorId,
+      createdById: postingContext.createdById,
+      createdForId: postingContext.createdForId,
+      workingProfileId: postingContext.workingProfileId,
       status: existingDraft?.status === 'creation_pending'
         ? 'creation_pending' as const
         : 'creation_draft' as const,
@@ -1122,6 +1135,7 @@ export async function createPropertyAction(
   data: CreatePropertyFormValues,
   postingAgencyId?: string | null,
   changeId?: string | null,
+  workingProfileId?: string | null,
 ): Promise<{ success: boolean; error?: string | null; propertyId?: string | null; changeId?: string | null }> {
   try {
     await requirePermission(PERMISSIONS.manage.propertySelfCreate);
@@ -1131,9 +1145,10 @@ export async function createPropertyAction(
           requestId: changeId.trim(),
           actorId,
           postingAgencyId,
+          workingProfileId,
           data,
         })
-      : await createPropertyDraftRequest({ actorId, postingAgencyId, data });
+      : await createPropertyDraftRequest({ actorId, postingAgencyId, workingProfileId, data });
     revalidatePath('/manage/properties');
     return { success: true, propertyId: null, changeId: draft.requestId, error: null };
   } catch (e: any) {
@@ -1142,6 +1157,42 @@ export async function createPropertyAction(
         return { success: false, error: e.message, propertyId: null, changeId: null };
     }
     return { success: false, error: "An unexpected server error occurred.", propertyId: null, changeId: null };
+  }
+}
+
+export async function getCurrentPropertyPostingContextAction(input?: {
+  workingProfileId?: string | null;
+}): Promise<{
+  success: boolean;
+  actorAccountId?: string;
+  effectiveProfileId?: string;
+  effectiveProfileName?: string | null;
+  isAgencyProfile?: boolean;
+  postingAgencyId?: string | null;
+  error?: string;
+}> {
+  try {
+    await requirePermission(PERMISSIONS.manage.propertySelfCreate);
+    const actorId = await requireIdentity();
+    const context = await resolvePropertyPostingContext({
+      actorAccountId: actorId,
+      requestedWorkingProfileId: input?.workingProfileId,
+    });
+
+    return {
+      success: true,
+      actorAccountId: context.actorAccountId,
+      effectiveProfileId: context.effectiveProfileId,
+      effectiveProfileName: context.effectiveProfileName,
+      isAgencyProfile: context.profileType === 'agency',
+      postingAgencyId: context.postingAgencyId,
+    };
+  } catch (error: any) {
+    await logProblem(error, 'getCurrentPropertyPostingContextAction');
+    return {
+      success: false,
+      error: error?.message || 'Failed to resolve property posting context.',
+    };
   }
 }
 

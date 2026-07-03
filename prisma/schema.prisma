@@ -79,6 +79,9 @@ model Account {
   intelligenceMappings IntelligenceMapping[]
   intelligenceAlerts    IntelligenceAlert[]
   propertyChanges       PropertyChange[]
+  createdPropertyChanges       PropertyChange[] @relation("PropertyChangeCreatedBy")
+  propertyChangesForProfile    PropertyChange[] @relation("PropertyChangeCreatedFor")
+  propertyChangesByWorkingProfile PropertyChange[] @relation("PropertyChangeWorkingProfile")
 
   @@index([agency])
   @@index([agent])
@@ -321,20 +324,29 @@ model PropertyDocument {
 }
 
 model PropertyChange {
-  id         String   @id @default(cuid())
-  propertyId String?  @map("property_id")
-  accountId  String   @map("account_id")
-  data       Json
-  status     String
-  isApproved Boolean? @map("is_approved")
-  createdOn  DateTime @default(now())
-  modifiedOn DateTime @default(now())
+  id               String   @id @default(cuid())
+  propertyId       String?  @map("property_id")
+  accountId        String   @map("account_id")
+  createdById      String?  @map("created_by_id")
+  createdForId     String?  @map("created_for_id")
+  workingProfileId String?  @map("working_profile_id")
+  data             Json
+  status           String
+  isApproved       Boolean? @map("is_approved")
+  createdOn        DateTime @default(now())
+  modifiedOn       DateTime @default(now())
 
-  property   Property? @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-  account    Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  property         Property? @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  account          Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  createdBy        Account?  @relation("PropertyChangeCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdFor       Account?  @relation("PropertyChangeCreatedFor", fields: [createdForId], references: [id], onDelete: SetNull)
+  workingProfile   Account?  @relation("PropertyChangeWorkingProfile", fields: [workingProfileId], references: [id], onDelete: SetNull)
 
   @@index([propertyId])
   @@index([accountId])
+  @@index([createdById])
+  @@index([createdForId])
+  @@index([workingProfileId])
   @@index([status])
   @@index([createdOn])
   @@index([modifiedOn])

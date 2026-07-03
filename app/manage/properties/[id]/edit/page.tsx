@@ -3,7 +3,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTransition, useState, useEffect, useMemo } from 'react';
 import { UpdatePropertySchema, type Property, type User, type UpdatePropertyFormValues } from '@/types';
 import { createPropertyAction, getCurrentAccountId, savePropertyChangeDraftAction, getPropertyChangeContextAction, getPropertyEditCapabilitiesAction, getListingAgentOptionsAction, savePropertyCreateDraftAction } from '@/app/actions';
@@ -30,6 +30,7 @@ export default function EditPropertyPage() {
     const propertyId = Array.isArray(params?.id) ? params.id[0] : params?.id;
     const pathname = usePathname();
     const router = useRouter();
+    const searchParams = useSearchParams();
     const { toast } = useToast();
     const [isSaving, startSaveTransition] = useTransition();
     const [accountId, setAccountId] = useState<string | null>(null);
@@ -54,6 +55,7 @@ export default function EditPropertyPage() {
     } | null>(null);
 
     const { rule: agencyRule } = useAgencyCustomization(accountId, 'property');
+    const activeWorkingProfileId = searchParams.get('workingProfile')?.trim() || null;
     const isCreateDraftFlow = changeContext?.currentUserChange?.status === 'creation_draft'
         || changeContext?.currentUserChange?.status === 'creation_pending'
         || changeContext?.currentUserChange?.status === 'creating';
@@ -465,6 +467,7 @@ export default function EditPropertyPage() {
                         ? changeContext.currentUserChange.data.postingAgencyId
                         : property.agency?.id ?? null,
                     changeContext?.currentUserChange?.id ?? null,
+                    activeWorkingProfileId,
                 );
 
                 if (result.success) {
@@ -533,6 +536,7 @@ export default function EditPropertyPage() {
                 postingAgencyId: typeof changeContext?.currentUserChange?.data?.postingAgencyId === 'string'
                     ? changeContext.currentUserChange.data.postingAgencyId
                     : property.agency?.id ?? null,
+                workingProfileId: activeWorkingProfileId,
                 data,
             })
             : await savePropertyChangeDraftAction({

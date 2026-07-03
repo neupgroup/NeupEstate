@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { prisma } from '@/logica/core/prisma';
 import { areaValueToSqft, CreatePropertySchema, type CreatePropertyFormValues, type CreatePropertyInput, type LandDetails, type PlotDetails, type ApartmentUnit, type StructuredLocation } from '@/types';
-import { getAgencyAgentMapsByAgent } from '@/services/agency-agent-map-service';
 import { getBridgePropertiesByAccount } from '@/services/property-service';
+import { resolvePropertyPostingContext } from '@/services/property-posting-context';
 
 function parsePositiveInteger(value: string | null, fallback: number): number {
   if (!value) return fallback;
@@ -285,20 +285,14 @@ materialized before the creation request is accepted.
 export async function createPropertyDraftRequest(input: {
   actorId: string;
   postingAgencyId?: string | null;
+  workingProfileId?: string | null;
   data: CreatePropertyFormValues;
 }): Promise<{ requestId: string }> {
-  const actor = await prisma.account.findUnique({
-    where: { id: input.actorId },
-    select: { id: true },
-  });
-
-  if (!actor) {
-    throw new Error('Account not found.');
-  }
-
   const validatedData = CreatePropertySchema.parse(input.data);
-  const agencyLinks = await getAgencyAgentMapsByAgent(input.actorId);
-  const acceptedAgencyLinks = agencyLinks.filter((link) => link.status === 'accepted');
+  const postingContext = await resolvePropertyPostingContext({
+    actorAccountId: input.actorId,
+    requestedWorkingProfileId: input.workingProfileId,
+  });
 
   const orderedPurposes = validatedData.purposes?.length
     ? validatedData.purposes
@@ -319,29 +313,6 @@ export async function createPropertyDraftRequest(input: {
   }
 
   const locationString = formatLocationString(validatedData.structuredLocation);
-
-  let agencyId: string | null = null;
-  let agentId: string | null = null;
-
-  if (acceptedAgencyLinks.length > 0) {
-    const selectedAgencyId =
-      input.postingAgencyId?.trim() ||
-      acceptedAgencyLinks[0]?.agencyId ||
-      null;
-
-    if (!selectedAgencyId) {
-      throw new Error('Please choose an agency to post this property.');
-    }
-
-    const isLinkedAgency = acceptedAgencyLinks.some((link) => link.agencyId === selectedAgencyId);
-    if (!isLinkedAgency) {
-      throw new Error('The selected agency is not linked to this agent.');
-    }
-
-    agencyId = selectedAgencyId;
-  } else {
-    agentId = input.actorId;
-  }
 
   const serviceInput: CreatePropertyInput = {
     ...validatedData,
@@ -366,8 +337,8 @@ export async function createPropertyDraftRequest(input: {
     } as unknown as LandDetails : undefined,
     plots: validatedData.plots?.map((plot) => ({ ...plot, area: areaValueToSqft(plot.area) })) as unknown as PlotDetails[],
     apartmentUnits: validatedData.apartmentUnits?.map((unit) => ({ ...unit, area: areaValueToSqft(unit.area) })) as unknown as ApartmentUnit[],
-    agency: agencyId,
-    agent: agentId,
+    agency: postingContext.postingAgencyId,
+    agent: postingContext.propertyAgentId,
   };
 
   const existingDraft = await prisma.propertyChange.findFirst({
@@ -384,7 +355,17 @@ export async function createPropertyDraftRequest(input: {
     propertyId: existingDraft?.propertyId ?? null,
     status: 'creation_pending',
     isApproved: null,
-    data: serviceInput as any,
+    createdById: postingContext.createdById,
+    createdForId: postingContext.createdForId,
+    workingProfileId: postingContext.workingProfileId,
+    data: {
+      ...serviceInput,
+      postingAgencyId: postingContext.postingAgencyId,
+      createdById: postingContext.createdById,
+      createdForId: postingContext.createdForId,
+      workingProfileId: postingContext.workingProfileId,
+      workingProfileType: postingContext.profileType,
+    } as any,
     modifiedOn: new Date(),
   };
 
@@ -404,6 +385,7 @@ export async function editUncreatedPropertyDraftRequest(input: {
   requestId: string;
   actorId?: string;
   postingAgencyId?: string | null;
+  workingProfileId?: string | null;
   data: CreatePropertyFormValues;
 }): Promise<{ requestId: string }> {
   const request = await prisma.propertyChange.findUnique({
@@ -428,6 +410,7 @@ export async function editUncreatedPropertyDraftRequest(input: {
   const result = await createPropertyDraftRequest({
     actorId: request.accountId,
     postingAgencyId: input.postingAgencyId,
+    workingProfileId: input.workingProfileId,
     data: input.data,
   });
 
@@ -567,6 +550,13 @@ export async function handleBridgePropertyList(
 
 export async function handleBridgePropertyCreate(req: NextRequest) {
   const body = await req.json().catch(() => ({}));
+  const workingProfileId =
+    typeof body?.workingProfileId === 'string' ? body.workingProfileId.trim() :
+    typeof body?.workingProfile === 'string' ? body.workingProfile.trim() :
+    req.nextUrl.searchParams.get('workingProfile')?.trim() ||
+    req.headers.get('workingProfileId')?.trim() ||
+    req.headers.get('workingProfile')?.trim() ||
+    undefined;
   const accountId =
     typeof body?.accountId === 'string' ? body.accountId.trim() :
     req.headers.get('accountId')?.trim() ||
@@ -603,6 +593,7 @@ export async function handleBridgePropertyCreate(req: NextRequest) {
     const result = await createPropertyDraftRequest({
       actorId: accountId,
       postingAgencyId,
+      workingProfileId,
       data: propertyPayload as CreatePropertyFormValues,
     });
 
@@ -630,6 +621,13 @@ export async function handleBridgePropertyCreate(req: NextRequest) {
 
 export async function handleBridgePropertyEdit(req: NextRequest) {
   const body = await req.json().catch(() => ({}));
+  const workingProfileId =
+    typeof body?.workingProfileId === 'string' ? body.workingProfileId.trim() :
+    typeof body?.workingProfile === 'string' ? body.workingProfile.trim() :
+    req.nextUrl.searchParams.get('workingProfile')?.trim() ||
+    req.headers.get('workingProfileId')?.trim() ||
+    req.headers.get('workingProfile')?.trim() ||
+    undefined;
   const accountId =
     typeof body?.accountId === 'string' ? body.accountId.trim() :
     req.headers.get('accountId')?.trim() ||
@@ -685,6 +683,7 @@ export async function handleBridgePropertyEdit(req: NextRequest) {
         requestId,
         actorId: accountId,
         postingAgencyId,
+        workingProfileId,
         data: propertyPayload as CreatePropertyFormValues,
       });
 
