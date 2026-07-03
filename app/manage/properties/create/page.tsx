@@ -317,6 +317,7 @@ export default function CreatePropertyPage() {
                         submitLabel={isPending ? 'Creating...' : 'Create Property'}
                         agencyRule={agencyRule}
                         onSectionAdvance={handleSectionAdvance}
+                        allowSectionJumping={false}
                     />
                 </form>
             </Form>

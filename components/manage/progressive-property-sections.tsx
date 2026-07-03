@@ -138,6 +138,7 @@ interface ProgressivePropertySectionsProps {
         label: string;
         agencyName?: string | null;
     } | null;
+    allowSectionJumping?: boolean;
     canEditOwnership?: boolean;
     listingAgentOptions?: Array<{ id: string; name: string; agencyId?: string | null; agencyName?: string | null }>;
 }
@@ -154,6 +155,7 @@ export function ProgressivePropertySections({
     previousAmenities,
     previousImages,
     listingContext,
+    allowSectionJumping = true,
     canEditOwnership = true,
     listingAgentOptions = [],
 }: ProgressivePropertySectionsProps) {
@@ -161,7 +163,6 @@ export function ProgressivePropertySections({
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const [activeIndex, setActiveIndex] = useState<number>(0);
-    const [unlockedUpTo, setUnlockedUpTo] = useState<number>(0);
     const [nextError, setNextError] = useState<string | null>(null);
     const [errorStepIndex, setErrorStepIndex] = useState<number | null>(null);
     const categories = (form.watch("categories" as any) as unknown as string[]) || [];
@@ -290,7 +291,6 @@ export function ProgressivePropertySections({
     useEffect(() => {
         const initialIndex = getIndexFromSection(searchParams.get("section"));
         setActiveIndex(initialIndex);
-        setUnlockedUpTo((current) => Math.max(current, initialIndex));
         setNextError(null);
         setErrorStepIndex(null);
         // Keep the URL normalized when the user enters through a step alias.
@@ -386,7 +386,6 @@ export function ProgressivePropertySections({
         setNextError(null);
         setErrorStepIndex(null);
         setActiveIndex(i);
-        setUnlockedUpTo((prev) => Math.max(prev, i));
         replaceSectionParam(getSectionFromIndex(i));
     }
 
@@ -427,7 +426,6 @@ export function ProgressivePropertySections({
         const canAdvance = await onSectionAdvance?.(activeIndex, next);
         if (canAdvance === false) return;
         setActiveIndex(next);
-        setUnlockedUpTo((prev) => Math.max(prev, next));
         replaceSectionParam(getSectionFromIndex(next));
     }
 
@@ -438,7 +436,6 @@ export function ProgressivePropertySections({
         const canAdvance = await onSectionAdvance?.(activeIndex, prev);
         if (canAdvance === false) return;
         setActiveIndex(prev);
-        setUnlockedUpTo((i) => Math.max(i, prev));
         replaceSectionParam(getSectionFromIndex(prev));
     }
 
@@ -446,7 +443,7 @@ export function ProgressivePropertySections({
 
     return (
         <div className="space-y-1">
-            {steps.slice(0, unlockedUpTo + 1).map((step, i) => {
+            {steps.map((step, i) => {
                 const isActive = i === activeIndex;
                 return (
                     <Section
@@ -457,6 +454,7 @@ export function ProgressivePropertySections({
                         isActive={isActive}
                         hasError={errorStepIndex === i}
                         onOpen={() => goTo(i)}
+                        isClickable={allowSectionJumping && !isActive}
                     >
                         {step.render()}
                         {nextError && errorStepIndex === i && (
@@ -498,19 +496,21 @@ interface SectionProps {
     isActive: boolean;
     hasError: boolean;
     onOpen: () => void;
+    isClickable: boolean;
     children: React.ReactNode;
 }
 
-function Section({ index, title, description, isActive, hasError, onOpen, children }: SectionProps) {
+function Section({ index, title, description, isActive, hasError, onOpen, isClickable, children }: SectionProps) {
     return (
         <div className={cn("border-b border-border/40 last:border-b-0")}>
             {/* Header — always visible, clickable when unlocked */}
             <button
                 type="button"
-                onClick={onOpen}
+                onClick={isClickable ? onOpen : undefined}
+                disabled={!isClickable}
                 className={cn(
                     "w-full text-left py-4 px-1 group",
-                    !isActive && "cursor-pointer",
+                    isClickable ? "cursor-pointer" : "cursor-default disabled:opacity-100",
                 )}
             >
                 <div className="flex items-baseline gap-3">

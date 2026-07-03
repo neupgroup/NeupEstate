@@ -9,6 +9,7 @@
 - [ ] Add a Neup documentation block to [logica/auth/authorization.ts](/Users/neupkishor/Code/neup.estate/logica/auth/authorization.ts).
 - [ ] Add Neup documentation blocks to [prisma/schema.prisma](/Users/neupkishor/Code/neup.estate/prisma/schema.prisma) for account, agency mapping, and authz access tables.
 - [ ] Add a Neup documentation block to [services/neupid/get-brand-accounts.ts](/Users/neupkishor/Code/neup.estate/services/neupid/get-brand-accounts.ts).
+- [ ] Add a Neup documentation block to [components/manage/progressive-property-sections.tsx](/Users/neupkishor/Code/neup.estate/components/manage/progressive-property-sections.tsx).
 - [ ] Add a Neup documentation block to [app/manage/properties/[id]/edit/page.tsx](/Users/neupkishor/Code/neup.estate/app/manage/properties/[id]/edit/page.tsx).
 - [ ] Add a Neup documentation block to [types/admin.ts](/Users/neupkishor/Code/neup.estate/types/admin.ts).
 - [ ] Add a Neup documentation block to [types/property.ts](/Users/neupkishor/Code/neup.estate/types/property.ts).
