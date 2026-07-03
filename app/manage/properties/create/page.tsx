@@ -10,7 +10,6 @@ import { CreatePropertySchema, type CreatePropertyFormValues, type User } from '
 import { createPropertyAction, getCurrentAccountId, getCurrentPropertyCreateDraftAction, getCurrentPropertyPostingContextAction, savePropertyCreateDraftAction } from '@/app/actions';
 
 import { Form } from '@/components/ui/form';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/logica/core/hooks/use-toast';
 import { getUsers } from '@/services/user-service';
 import { useAgencyCustomization } from '@/logica/core/hooks/use-agency-customization';
@@ -166,6 +165,7 @@ export default function CreatePropertyPage() {
         if (path.startsWith("pricing.")) return "pricing";
         if (path.startsWith("structuredLocation")) return "location";
         if (path.startsWith("owners")) return "owners";
+        if (path.startsWith("listingAgentAccountId") || path.startsWith("listingAgent")) return "listing-profile";
         if (path.startsWith("images")) return "photos";
         if (path.startsWith("documents")) return "documents";
         if (path === "title" || path === "description") return "copy";
@@ -295,20 +295,6 @@ export default function CreatePropertyPage() {
         <div className="max-w-6xl mx-auto">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit, onSubmitInvalid)} className="space-y-6">
-                    {accountId && isAgencyProfile && postingAgencyId && (
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>Posting Profile</CardTitle>
-                                <CardDescription>
-                                    This property will be created for the active agency working profile.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <p className="font-medium">{postingProfileName || postingAgencyId}</p>
-                                <p className="text-sm text-muted-foreground">{postingAgencyId}</p>
-                            </CardContent>
-                        </Card>
-                    )}
                     <ProgressivePropertySections
                         form={form}
                         users={users}
@@ -318,6 +304,11 @@ export default function CreatePropertyPage() {
                         agencyRule={agencyRule}
                         onSectionAdvance={handleSectionAdvance}
                         allowSectionJumping={false}
+                        postingProfile={accountId && isAgencyProfile && postingAgencyId ? {
+                            name: postingProfileName || postingAgencyId,
+                            id: postingAgencyId,
+                            description: 'This property will be created for the active agency working profile.',
+                        } : null}
                     />
                 </form>
             </Form>

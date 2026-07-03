@@ -64,7 +64,7 @@ export default function EditPropertyPage() {
         if (path.startsWith("pricing.")) return "pricing";
         if (path.startsWith("structuredLocation")) return "location";
         if (path.startsWith("owners")) return "owners";
-        if (path.startsWith("listingAgentAccountId") || path.startsWith("listingAgent")) return "copy";
+        if (path.startsWith("listingAgentAccountId") || path.startsWith("listingAgent")) return "listing-profile";
         if (path.startsWith("images")) return "photos";
         if (path.startsWith("documents")) return "documents";
         if (path === "title" || path === "description") return "copy";

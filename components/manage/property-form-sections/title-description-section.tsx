@@ -21,6 +21,13 @@ interface TitleDescriptionSectionProps {
     } | null;
     canEditListingContext?: boolean;
     listingAgentOptions?: Array<{ id: string; name: string; agencyId?: string | null; agencyName?: string | null }>;
+    postingProfile?: {
+        name: string;
+        id: string;
+        description: string;
+    } | null;
+    showListingProfile?: boolean;
+    showPublishingCopy?: boolean;
 }
 
 function RichTextEditor({
@@ -100,6 +107,9 @@ export function TitleDescriptionSection({
     listingContext,
     canEditListingContext = false,
     listingAgentOptions = [],
+    postingProfile = null,
+    showListingProfile = true,
+    showPublishingCopy = true,
 }: TitleDescriptionSectionProps) {
     const selectedListingAgentId = useWatch({
         control,
@@ -117,7 +127,7 @@ export function TitleDescriptionSection({
     return (
         <section className="space-y-10">
             <div className="space-y-8">
-                {listingContext ? (
+                {showListingProfile && listingContext ? (
                     <div className="space-y-4 rounded-lg border bg-muted/20 p-4">
                         <div className="space-y-1">
                             <h3 className="text-base font-semibold">Listed by</h3>
@@ -188,99 +198,119 @@ export function TitleDescriptionSection({
                     </div>
                 ) : null}
 
-                <FormField
-                    control={control}
-                    name="title"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Title</FormLabel>
-                            <FormControl>
-                                <Input placeholder="e.g., Modern Downtown Loft" {...field} />
-                            </FormControl>
-                            {fieldChangeNotes?.title && <p className="text-xs text-muted-foreground">{fieldChangeNotes.title}</p>}
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                {showListingProfile && postingProfile ? (
+                    <div className="space-y-4 rounded-lg border bg-muted/20 p-4">
+                        <div className="space-y-1">
+                            <h3 className="text-base font-semibold">Posting Profile</h3>
+                            <p className="text-sm text-muted-foreground">
+                                {postingProfile.description}
+                            </p>
+                        </div>
 
-                <FormField
-                    control={control}
-                    name="description"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Description</FormLabel>
-                            <FormControl>
-                                <RichTextEditor
-                                    value={field.value ?? ""}
-                                    onChange={field.onChange}
-                                    placeholder="Describe the property..."
+                        <div className="rounded-lg border bg-background p-4">
+                            <p className="font-medium">{postingProfile.name}</p>
+                            <p className="text-sm text-muted-foreground">{postingProfile.id}</p>
+                        </div>
+                    </div>
+                ) : null}
+
+                {showPublishingCopy ? (
+                    <>
+                        <FormField
+                            control={control}
+                            name="title"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Title</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="e.g., Modern Downtown Loft" {...field} />
+                                    </FormControl>
+                                    {fieldChangeNotes?.title && <p className="text-xs text-muted-foreground">{fieldChangeNotes.title}</p>}
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={control}
+                            name="description"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Description</FormLabel>
+                                    <FormControl>
+                                        <RichTextEditor
+                                            value={field.value ?? ""}
+                                            onChange={field.onChange}
+                                            placeholder="Describe the property..."
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <div className="space-y-4 rounded-lg border bg-muted/20 p-4">
+                            <div className="space-y-1">
+                                <h3 className="text-base font-semibold">Publishing</h3>
+                                <p className="text-sm text-muted-foreground">
+                                    Control how this property appears on the website.
+                                </p>
+                            </div>
+
+                            <FormField
+                                control={control}
+                                name="isPrivate"
+                                render={({ field }) => (
+                                    <FormItem className="flex items-center justify-between rounded-lg border bg-background px-4 py-3">
+                                        <div className="space-y-0.5">
+                                            <FormLabel className="text-sm font-medium">Make private</FormLabel>
+                                            <p className="text-xs text-muted-foreground">
+                                                The description will not show on the public website.
+                                            </p>
+                                        </div>
+                                        <FormControl>
+                                            <Switch checked={Boolean(field.value)} onCheckedChange={(checked) => field.onChange(checked)} />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+
+                            <div className="grid gap-3 sm:grid-cols-2">
+                                <FormField
+                                    control={control}
+                                    name="showMap"
+                                    render={({ field }) => (
+                                        <FormItem className="flex items-center justify-between rounded-lg border bg-background px-4 py-3">
+                                            <div className="space-y-0.5">
+                                                <FormLabel className="text-sm font-medium">Show map</FormLabel>
+                                                <p className="text-xs text-muted-foreground">Display the map on the public listing.</p>
+                                            </div>
+                                            <FormControl>
+                                                <Switch checked={Boolean(field.value)} onCheckedChange={(checked) => field.onChange(checked)} />
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
                                 />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
 
-                <div className="space-y-4 rounded-lg border bg-muted/20 p-4">
-                    <div className="space-y-1">
-                        <h3 className="text-base font-semibold">Publishing</h3>
-                        <p className="text-sm text-muted-foreground">
-                            Control how this property appears on the website.
-                        </p>
-                    </div>
-
-                    <FormField
-                        control={control}
-                        name="isPrivate"
-                        render={({ field }) => (
-                            <FormItem className="flex items-center justify-between rounded-lg border bg-background px-4 py-3">
-                                <div className="space-y-0.5">
-                                    <FormLabel className="text-sm font-medium">Make private</FormLabel>
-                                    <p className="text-xs text-muted-foreground">
-                                        The description will not show on the public website.
-                                    </p>
-                                </div>
-                                <FormControl>
-                                    <Switch checked={Boolean(field.value)} onCheckedChange={(checked) => field.onChange(checked)} />
-                                </FormControl>
-                            </FormItem>
-                        )}
-                    />
-
-                    <div className="grid gap-3 sm:grid-cols-2">
-                        <FormField
-                            control={control}
-                            name="showMap"
-                            render={({ field }) => (
-                                <FormItem className="flex items-center justify-between rounded-lg border bg-background px-4 py-3">
-                                    <div className="space-y-0.5">
-                                        <FormLabel className="text-sm font-medium">Show map</FormLabel>
-                                        <p className="text-xs text-muted-foreground">Display the map on the public listing.</p>
-                                    </div>
-                                    <FormControl>
-                                        <Switch checked={Boolean(field.value)} onCheckedChange={(checked) => field.onChange(checked)} />
-                                    </FormControl>
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={control}
-                            name="showOwnerInformation"
-                            render={({ field }) => (
-                                <FormItem className="flex items-center justify-between rounded-lg border bg-background px-4 py-3">
-                                    <div className="space-y-0.5">
-                                        <FormLabel className="text-sm font-medium">Show owner info</FormLabel>
-                                        <p className="text-xs text-muted-foreground">Display owner details on the public listing.</p>
-                                    </div>
-                                    <FormControl>
-                                        <Switch checked={Boolean(field.value)} onCheckedChange={(checked) => field.onChange(checked)} />
-                                    </FormControl>
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                </div>
+                                <FormField
+                                    control={control}
+                                    name="showOwnerInformation"
+                                    render={({ field }) => (
+                                        <FormItem className="flex items-center justify-between rounded-lg border bg-background px-4 py-3">
+                                            <div className="space-y-0.5">
+                                                <FormLabel className="text-sm font-medium">Show owner info</FormLabel>
+                                                <p className="text-xs text-muted-foreground">Display owner details on the public listing.</p>
+                                            </div>
+                                            <FormControl>
+                                                <Switch checked={Boolean(field.value)} onCheckedChange={(checked) => field.onChange(checked)} />
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                        </div>
+                    </>
+                ) : null}
             </div>
         </section>
     );

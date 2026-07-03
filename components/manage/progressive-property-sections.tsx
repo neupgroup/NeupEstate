@@ -138,6 +138,11 @@ interface ProgressivePropertySectionsProps {
         label: string;
         agencyName?: string | null;
     } | null;
+    postingProfile?: {
+        name: string;
+        id: string;
+        description: string;
+    } | null;
     allowSectionJumping?: boolean;
     canEditOwnership?: boolean;
     listingAgentOptions?: Array<{ id: string; name: string; agencyId?: string | null; agencyName?: string | null }>;
@@ -155,6 +160,7 @@ export function ProgressivePropertySections({
     previousAmenities,
     previousImages,
     listingContext,
+    postingProfile,
     allowSectionJumping = true,
     canEditOwnership = true,
     listingAgentOptions = [],
@@ -242,6 +248,25 @@ export function ProgressivePropertySections({
             render: () => <PropertyDocumentsSection control={form.control} fieldChangeNotes={fieldChangeNotes} />,
         },
         {
+            id: "listing-profile",
+            section: "listing-profile",
+            title: "Listing Profile",
+            description: "Review who this listing is associated with and adjust the listing agent when allowed.",
+            fields: ["listingAgentAccountId"],
+            render: () => (
+                <TitleDescriptionSection
+                    control={form.control}
+                    fieldChangeNotes={fieldChangeNotes}
+                    listingContext={listingContext}
+                    postingProfile={postingProfile}
+                    canEditListingContext={canEditOwnership}
+                    listingAgentOptions={listingAgentOptions}
+                    showListingProfile
+                    showPublishingCopy={false}
+                />
+            ),
+        },
+        {
             id: "copy",
             section: "copy",
             title: "Publishing and Copy",
@@ -258,12 +283,15 @@ export function ProgressivePropertySections({
                     control={form.control}
                     fieldChangeNotes={fieldChangeNotes}
                     listingContext={listingContext}
+                    postingProfile={postingProfile}
                     canEditListingContext={canEditOwnership}
                     listingAgentOptions={listingAgentOptions}
+                    showListingProfile={false}
+                    showPublishingCopy
                 />
             ),
         },
-    ], [canEditOwnership, category, fieldChangeNotes, form.control, isEditForm, listingAgentOptions, listingContext, previousAmenities, previousImages, users]);
+    ], [canEditOwnership, category, fieldChangeNotes, form.control, isEditForm, listingAgentOptions, listingContext, postingProfile, previousAmenities, previousImages, users]);
 
     useEffect(() => {
         if (errorStepIndex === null) return;
@@ -502,28 +530,35 @@ interface SectionProps {
 
 function Section({ index, title, description, isActive, hasError, onOpen, isClickable, children }: SectionProps) {
     return (
-        <div className={cn("border-b border-border/40 last:border-b-0")}>
+        <div
+            className={cn(
+                "group relative border-b border-border/40 transition-colors duration-200 last:border-b-0",
+                "before:pointer-events-none before:absolute before:left-0 before:right-0 before:top-0 before:h-px before:bg-primary/40 before:opacity-0 before:transition-opacity before:duration-200",
+                "after:pointer-events-none after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-primary/40 after:opacity-0 after:transition-opacity after:duration-200",
+                isActive ? "before:opacity-100 after:opacity-100" : "hover:before:opacity-100 hover:after:opacity-100",
+            )}
+        >
             {/* Header — always visible, clickable when unlocked */}
             <button
                 type="button"
                 onClick={isClickable ? onOpen : undefined}
-                disabled={!isClickable}
+                aria-disabled={!isClickable}
                 className={cn(
-                    "w-full text-left py-4 px-1 group",
-                    isClickable ? "cursor-pointer" : "cursor-default disabled:opacity-100",
+                    "w-full text-left py-4 px-1",
+                    isClickable ? "cursor-pointer" : "cursor-default",
                 )}
             >
                 <div className="flex items-baseline gap-3">
                     <span className={cn(
-                        "text-lg font-semibold transition-colors leading-tight shrink-0",
-                        isActive ? "text-primary" : "text-muted-foreground",
+                        "text-lg font-semibold transition-all duration-200 leading-tight shrink-0",
+                        isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary group-hover:scale-105 group-hover:-translate-y-0.5",
                         hasError && "animate-pulse text-destructive [animation-duration:1s]"
                     )}>
                         {String(index + 1).padStart(2, "0")}
                     </span>
                     <div>
                         <h2 className={cn(
-                            "text-lg font-semibold transition-colors leading-tight",
+                            "text-lg font-semibold transition-colors duration-200 leading-tight",
                             isActive ? "text-primary" : "text-foreground group-hover:text-primary",
                             hasError && "animate-pulse text-destructive [animation-duration:1s]"
                         )}>
@@ -536,9 +571,13 @@ function Section({ index, title, description, isActive, hasError, onOpen, isClic
                     "overflow-hidden transition-all duration-300",
                     isActive ? "max-h-10 opacity-100 mt-1" : "max-h-10 opacity-100 mt-1"
                 )}>
-                    <p className="text-sm text-muted-foreground">{description}</p>
+                    <p className={cn(
+                        "text-sm transition-colors duration-200",
+                        isActive ? "text-primary/80" : "text-muted-foreground group-hover:text-primary/80",
+                    )}>
+                        {description}
+                    </p>
                 </div>
-                {isActive && <hr className="mt-3 border-primary" />}
             </button>
 
             {isActive && (
