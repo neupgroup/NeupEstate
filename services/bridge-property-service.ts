@@ -1,9 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { Prisma } from '@prisma/client';
 import { prisma } from '@/logica/core/prisma';
 import { areaValueToSqft, CreatePropertySchema, type CreatePropertyFormValues, type CreatePropertyInput, type LandDetails, type PlotDetails, type ApartmentUnit, type StructuredLocation } from '@/types';
 import { getBridgePropertiesByAccount } from '@/services/property-service';
 import { resolvePropertyPostingContext } from '@/services/property-posting-context';
+
+const PROPERTY_VIEW_INCLUDE = Prisma.validator<Prisma.PropertyInclude>()({
+  media: { where: { isDeleted: false }, orderBy: [{ isPrimary: 'desc' }, { sortOrder: 'asc' }] },
+  houseDetail: true,
+  apartmentDetail: true,
+  landDetail: true,
+  commercialDetail: true,
+  prices: { orderBy: [{ for: 'asc' }, { id: 'asc' }] },
+});
 
 function parsePositiveInteger(value: string | null, fallback: number): number {
   if (!value) return fallback;
@@ -94,6 +104,225 @@ function cleanPricing(pricing?: CreatePropertyFormValues['pricing']) {
     basisFrequencies: cleanStringMap(pricing.basisFrequencies),
     basisUnits: cleanStringMap(pricing.basisUnits),
     options: Array.isArray(pricing.options) ? pricing.options : pricing.options?.split(',').map((option) => option.trim()).filter(Boolean) as any,
+  };
+}
+
+function normalizeStringArray(value: unknown): string[] {
+  if (!value) return [];
+  if (Array.isArray(value)) return value.map(String).map((entry) => entry.trim()).filter(Boolean);
+  if (typeof value === 'string') return value.split(',').map((entry) => entry.trim()).filter(Boolean);
+  return [];
+}
+
+function parseJsonRecord(value: unknown): Record<string, any> | undefined {
+  if (!value) return undefined;
+  if (typeof value === 'string') {
+    try {
+      const parsed = JSON.parse(value);
+      return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed as Record<string, any> : undefined;
+    } catch {
+      return undefined;
+    }
+  }
+
+  return typeof value === 'object' && !Array.isArray(value)
+    ? value as Record<string, any>
+    : undefined;
+}
+
+function toNumber(value: unknown): number | undefined {
+  if (typeof value === 'number') return Number.isFinite(value) ? value : undefined;
+  if (typeof value === 'string') {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : undefined;
+  }
+  if (typeof value === 'bigint') return Number(value);
+  return undefined;
+}
+
+function toUpperToken(value: unknown): string | undefined {
+  if (typeof value !== 'string') return undefined;
+  const token = value.trim();
+  return token ? token.replace(/[\s-]+/g, '_').toUpperCase() : undefined;
+}
+
+function mapVisibility(details: Record<string, any> | undefined): 'PUBLIC' | 'PRIVATE' {
+  return details?.isPrivate ? 'PRIVATE' : 'PUBLIC';
+}
+
+function mapListingType(record: { agent?: string | null; agency?: string | null }): 'AGENT' | 'AGENCY' | 'OWNER' {
+  if (record.agent) return 'AGENT';
+  if (record.agency) return 'AGENCY';
+  return 'OWNER';
+}
+
+function mapPricingType(value: unknown, fallback: string): string {
+  return toUpperToken(value) || fallback;
+}
+
+function mapBasis(value: unknown): string | undefined {
+  return typeof value === 'string' && value.trim().length > 0 ? value : undefined;
+}
+
+type PropertyViewPricingItem = {
+  type: string;
+  askingAmount: number;
+  currency: string;
+  basis?: string;
+  unit?: string;
+};
+
+function buildPropertyPricing(record: any): PropertyViewPricingItem[] {
+  const priceRows = Array.isArray(record.prices) ? record.prices : [];
+  if (priceRows.length > 0) {
+    return priceRows.map((priceRow: any) => ({
+      type: mapPricingType(priceRow.for, toUpperToken(record.purpose) || 'SALE'),
+      askingAmount: toNumber(priceRow.price) ?? 0,
+      currency: priceRow.currency,
+      basis: mapBasis(priceRow.priceUnit),
+      unit: priceRow.unit,
+    }));
+  }
+
+  const pricing = parseJsonRecord(record.pricing);
+  if (!pricing) {
+    return [{
+      type: toUpperToken(record.purpose) || 'SALE',
+      askingAmount: toNumber(record.displayPrice) ?? 0,
+      currency: record.currency,
+      basis: undefined,
+      unit: record.areaUnit ?? undefined,
+    }];
+  }
+
+  const basisPrices = pricing.basisPrices && typeof pricing.basisPrices === 'object' && !Array.isArray(pricing.basisPrices)
+    ? pricing.basisPrices as Record<string, unknown>
+    : undefined;
+
+  const basisEntries: PropertyViewPricingItem[] = [];
+  if (basisPrices) {
+    for (const [basis, amount] of Object.entries(basisPrices)) {
+      const askingAmount = toNumber(amount);
+      if (!askingAmount || askingAmount <= 0) continue;
+      basisEntries.push({
+        type: toUpperToken(record.purpose) || 'SALE',
+        askingAmount,
+        currency: pricing.currency || record.currency,
+        basis,
+        unit: pricing.basisUnits?.[basis],
+      });
+    }
+  }
+
+  if (basisEntries.length > 0) return basisEntries;
+
+  const listedAmount = toNumber(pricing.listed) ?? toNumber(record.displayPrice) ?? 0;
+  return [{
+    type: toUpperToken(record.purpose) || 'SALE',
+    askingAmount: listedAmount,
+    currency: pricing.currency || record.currency,
+    basis: typeof pricing.basis === 'string' ? pricing.basis : undefined,
+    unit: pricing.basis && pricing.basisUnits?.[pricing.basis]
+      ? pricing.basisUnits[pricing.basis]
+      : record.areaUnit ?? undefined,
+  }];
+}
+
+async function mapPropertyViewPayload(record: any) {
+  const accountIds = [record.agent, record.agency].filter((value): value is string => Boolean(value));
+  const accounts = accountIds.length
+    ? await prisma.account.findMany({
+        where: { id: { in: accountIds } },
+        select: { id: true, displayName: true, displayImage: true },
+      })
+    : [];
+  const accountMap = new Map(accounts.map((account) => [account.id, account]));
+
+  const details = parseJsonRecord(record.details);
+  const structuredLocation = parseJsonRecord(record.structuredLocation);
+  const roadAccessDetails = parseJsonRecord(record.roadAccessDetails);
+  const distancing = parseJsonRecord(record.distancing);
+
+  const listedById = record.agent || record.agency || null;
+  const listedByAccount = listedById ? accountMap.get(listedById) : undefined;
+
+  return {
+    id: record.id,
+    customId: record.customId,
+    slug: record.slug,
+    keywords: normalizeStringArray(record.metaTags),
+    tags: normalizeStringArray(record.metaTags),
+    title: record.title,
+    description: record.description,
+    purpose: [String(record.purpose)],
+    category: [String(record.type)],
+    type: [record.type === 'COMMERCIAL' ? 'COMMERCIAL' : 'RESIDENTIAL'],
+    status: String(record.status),
+    visibility: mapVisibility(details),
+    images: (record.media ?? []).map((media: any, index: number) => ({
+      id: media.id,
+      url: media.url,
+      type: toUpperToken(media.type) || 'IMAGE',
+      isCover: Boolean(media.isPrimary),
+      order: typeof media.sortOrder === 'number' ? media.sortOrder : index + 1,
+    })),
+    listedBy: listedById ? {
+      type: mapListingType(record),
+      id: listedById,
+      displayName: listedByAccount?.displayName || listedById,
+      displayImage: listedByAccount?.displayImage || null,
+    } : null,
+    supportingAgents: [],
+    location: {
+      id: `property-location:${record.id}`,
+      text: record.locationText,
+      geo: record.geoLocation,
+      structured: structuredLocation ?? null,
+    },
+    pricing: buildPropertyPricing(record),
+    roadAccess: roadAccessDetails ? {
+      roadWidth: toNumber(roadAccessDetails.widthValue) ?? null,
+      roadWidthUnit: typeof roadAccessDetails.widthUnit === 'string' ? roadAccessDetails.widthUnit.toUpperCase() : null,
+      roadType: toUpperToken(roadAccessDetails.type) ?? null,
+    } : null,
+    distance: distancing
+      ? Object.fromEntries(
+          Object.entries(distancing).filter(([key, value]) => key !== 'unit' && toNumber(value) !== undefined),
+        )
+      : {},
+    amenities: normalizeStringArray(record.amenities),
+    details: {
+      house: record.houseDetail ? {
+        bedrooms: record.houseDetail.bedrooms,
+        bathrooms: record.houseDetail.bathrooms,
+        livingRooms: record.houseDetail.livingRooms,
+        diningRooms: record.houseDetail.diningRooms,
+        kitchens: record.houseDetail.kitchens,
+        floors: record.houseDetail.floors,
+        carParkingSpots: record.houseDetail.carParkingSpots,
+        bikeParkingSpots: record.houseDetail.bikeParkingSpots,
+        builtYear: record.houseDetail.buildYear,
+        furnished: record.houseDetail.furnished,
+        details: [],
+      } : null,
+      apartment: record.apartmentDetail ? {
+        bedrooms: record.apartmentDetail.bedrooms,
+        bathrooms: record.apartmentDetail.bathrooms,
+        onfloor: record.apartmentDetail.onFloor,
+        builtYear: null,
+        furnished: record.apartmentDetail.furnished,
+        details: [],
+      } : null,
+      land: record.landDetail ? {
+        area: toNumber(record.landDetail.area) ?? null,
+        details: [],
+      } : null,
+      flat: null,
+      space: record.commercialDetail ? {
+        area: toNumber(record.commercialDetail.usableArea) ?? null,
+        details: [],
+      } : null,
+    },
   };
 }
 
@@ -548,6 +777,69 @@ export async function handleBridgePropertyList(
     }
 
     throw Object.assign(error, { routeLabel });
+  }
+}
+
+/*
+::neup.documentation::bridge-property-view
+::api GET /bridge/api.v1/property/view
+
+::public
+
+Returns the public bridge payload for one property by `propertyId`.
+
+The payload uses the bridge-specific single-property shape and intentionally
+excludes owner details and negotiable pricing fields.
+
+::public end
+
+::private
+
+This route reads the live `property` row plus detail tables and media, then
+hydrates listing account display data from `account`. Only approved properties
+are exposed.
+
+::private end
+
+::end
+*/
+export async function handleBridgePropertyView(req: NextRequest) {
+  const propertyId =
+    req.nextUrl.searchParams.get('propertyId')?.trim() ||
+    req.headers.get('propertyId')?.trim() ||
+    undefined;
+
+  if (!propertyId) {
+    return NextResponse.json(
+      { success: false, error: 'Provide propertyId.' },
+      { status: 400 },
+    );
+  }
+
+  try {
+    const record = await prisma.property.findUnique({
+      where: { id: propertyId },
+      include: PROPERTY_VIEW_INCLUDE,
+    });
+
+    if (!record || !record.isApproved) {
+      return NextResponse.json(
+        { success: false, error: 'Property not found.' },
+        { status: 404 },
+      );
+    }
+
+    const property = await mapPropertyViewPayload(record);
+
+    return NextResponse.json(
+      { success: true, property },
+      { status: 200 },
+    );
+  } catch (error) {
+    throw Object.assign(
+      error instanceof Error ? error : new Error(String(error)),
+      { routeLabel: 'bridge/api.v1/property/view' },
+    );
   }
 }
 

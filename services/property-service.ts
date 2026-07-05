@@ -103,8 +103,6 @@ const BRIDGE_PROPERTY_FIELDS = [
   'floors',
   'onFloor',
   'roadAccess',
-  'latitude',
-  'longitude',
   'kitchens',
   'diningRooms',
   'livingRooms',
@@ -121,26 +119,11 @@ const BRIDGE_PROPERTY_FIELDS = [
   'roadAccessDetails',
   'distancing',
   'earnings',
-  'owner',
-  'owners',
   'documents',
 ] as const satisfies readonly BridgePropertyField[];
 
 const DEFAULT_BRIDGE_PROPERTY_FIELDS = [
-  'id',
-  'slug',
-  'title',
-  'price',
-  'location',
-  'purpose',
-  'category',
-  'type',
-  'images',
-  'agency',
-  'listingAgent',
-  'status',
-  'createdAt',
-  'updatedAt',
+  ...BRIDGE_PROPERTY_FIELDS,
 ] as const satisfies readonly BridgePropertyField[];
 
 function resolveBridgePropertyFields(fields?: string[]): BridgePropertyField[] {
@@ -157,6 +140,23 @@ function resolveBridgePropertyFields(fields?: string[]): BridgePropertyField[] {
 
 function pickPropertyFields(property: Property, fields: BridgePropertyField[]): Partial<Property> {
   return fields.reduce<Partial<Property>>((picked, field) => {
+    if (field === 'pricing' && property.pricing) {
+      const {
+        negotiable: _negotiable,
+        basisNegotiable: _basisNegotiable,
+        basisNegotiablePrices: _basisNegotiablePrices,
+        ...publicPricing
+      } = property.pricing;
+      picked.pricing = publicPricing as Property['pricing'];
+      return picked;
+    }
+
+    if (field === 'structuredLocation' && property.structuredLocation) {
+      const { coordinates: _coordinates, ...publicLocation } = property.structuredLocation;
+      picked.structuredLocation = publicLocation;
+      return picked;
+    }
+
     if (field in property) picked[field] = property[field] as never;
     return picked;
   }, {});
