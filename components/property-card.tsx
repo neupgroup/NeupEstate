@@ -1,15 +1,23 @@
 
 "use client";
 
+/*
+::neup.documentation::property-card
+
+Reusable public property card used across homepage, search, saved, and collection listings.
+
+::end
+*/
+
 import Link from "next/link";
 import type { Property } from "@/types";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Heart, BedDouble, Bath, SquareGanttChart, Loader2, Star } from "lucide-react";
+import { Heart, Loader2, Star, MapPin } from "lucide-react";
 import { useState, useTransition, useEffect } from "react";
 import { cn } from "@/logica/core/utils";
-import { getHiddenPriceLabel } from "@/logica/core/property-price-display";
+import { getHiddenPriceLabel, getPrimaryCurrency, getPrimaryPrice, getPrimaryPricingSuffix } from "@/logica/core/property-price-display";
 import { SafeImage } from "./safe-image";
 import { toggleSavePropertyAction } from "@/app/actions";
 import { useToast } from "@/logica/core/hooks/use-toast";
@@ -21,10 +29,6 @@ interface PropertyCardProps {
   propertyCount?: number;
   reviewCount?: number;
   rating?: number;
-}
-
-function stripHtml(html: string) {
-  return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 }
 
 const FALLBACK_IMAGES = [
@@ -94,38 +98,54 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
   };
 
   const formatPrice = (price: number) => {
+    const currency = getPrimaryCurrency(property);
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency,
       maximumFractionDigits: 0,
     }).format(price);
   };
   const hiddenPriceLabel = getHiddenPriceLabel(property);
+  const primaryPrice = getPrimaryPrice(property);
+  const primaryPricingSuffix = getPrimaryPricingSuffix(property);
+  const propertyTagItems = [
+    property.bedrooms ? `${property.bedrooms} Beds` : null,
+    property.bathrooms ? `${property.bathrooms} Baths` : null,
+    typeof property.area === "number" && property.area > 0
+      ? `${property.area.toLocaleString()} ${property.areaUnit === "sqft" ? "SqFt" : property.areaUnit || "SqFt"}`
+      : null,
+  ].filter((item): item is string => Boolean(item));
   
   return (
-    <Card className="flex flex-col overflow-hidden rounded-lg card-hover-effect h-full">
-      <CardHeader className="p-0 relative">
-        <Link href={`/properties/${slugOrId}`}>
+    <Card className="group card-hover-effect flex h-full flex-col overflow-hidden rounded-2xl border border-border/80 bg-card shadow-sm">
+      <CardHeader className="relative p-0">
+        <Link href={`/properties/${slugOrId}`} className="block overflow-hidden">
           <SafeImage
             src={imageUrl || fallbackImage || "https://placehold.co/600x400.png"}
             alt={property.title}
             width={600}
             height={400}
-            className="w-full h-48 object-cover"
+            className="h-40 w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
             data-ai-hint="house exterior"
             fallbackSrc={fallbackImage || "https://placehold.co/600x400.png"}
           />
+
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/50 via-black/15 to-transparent" />
         </Link>
-        <Badge
-          className="absolute top-3 left-3"
-          variant={property.purpose === 'Sale' ? 'default' : 'secondary'}
-        >
-          For {property.purpose}
-        </Badge>
+
+        <div className="absolute left-3 top-3 flex flex-wrap gap-2">
+          <Badge
+            className="rounded-full border border-white/20 bg-black/55 px-2.5 py-1 text-[11px] text-white backdrop-blur-sm"
+            variant="secondary"
+          >
+            For {property.purpose}
+          </Badge>
+        </div>
+
         <Button
           variant="ghost"
           size="icon"
-          className="absolute top-2 right-2 bg-white/70 hover:bg-white rounded-full"
+          className="absolute right-3 top-3 h-9 w-9 rounded-full border border-white/25 bg-white/80 text-foreground shadow-sm backdrop-blur-sm hover:bg-white"
           onClick={handleFavoriteToggle}
           disabled={isTogglingFavorite || isCheckingFavorite}
         >
@@ -136,55 +156,56 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
           )}
         </Button>
       </CardHeader>
-      <CardContent className="p-4 flex-grow">
-        <CardTitle className="text-xl font-headline mb-2 truncate">
-          <Link href={`/properties/${slugOrId}`} className="hover:underline">
+      <CardContent className="flex flex-1 flex-col gap-3 p-4">
+        <div className="space-y-2">
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <p className="text-lg font-bold leading-tight text-primary">
+                {hiddenPriceLabel || formatPrice(primaryPrice)}
+              </p>
+              {!hiddenPriceLabel && primaryPricingSuffix ? (
+                <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
+                  {primaryPricingSuffix}
+                </p>
+              ) : null}
+            </div>
+
+            {(rating !== undefined || propertyCount !== undefined) ? (
+              <div className="flex flex-col items-end gap-1">
+                {rating !== undefined ? (
+                  <div className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-1 text-[11px] font-semibold text-amber-700">
+                    <Star className="h-3.5 w-3.5 fill-current" />
+                    <span>{rating.toFixed(1)}</span>
+                    <span className="text-amber-600/80">({reviewCount || 0})</span>
+                  </div>
+                ) : null}
+                {propertyCount !== undefined ? (
+                  <div className="rounded-full bg-muted px-2 py-1 text-[11px] font-medium text-muted-foreground">
+                    {propertyCount} Properties
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+          </div>
+
+          <CardTitle className="line-clamp-2 text-base font-headline leading-snug text-foreground">
+            <Link href={`/properties/${slugOrId}`} className="transition-colors hover:text-primary">
             {property.title}
-          </Link>
-        </CardTitle>
-        <p className="text-muted-foreground text-sm mb-4 truncate">{property.location}</p>
-        <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-            {rating !== undefined && (
-                <div className="flex items-center gap-1">
-                    <Star className="h-4 w-4 text-yellow-400" />
-                    <span className="font-semibold">{rating.toFixed(1)}</span>
-                    <span className="text-xs">({reviewCount || 0})</span>
-                </div>
-            )}
-             {propertyCount !== undefined && (
-                <div className="flex items-center gap-1">
-                    <span className="font-semibold">{propertyCount}</span>
-                    <span className="text-xs">Properties</span>
-                </div>
-            )}
+            </Link>
+          </CardTitle>
+
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <MapPin className="h-4 w-4 shrink-0 text-primary/80" />
+            <p className="truncate">{property.location}</p>
+          </div>
+
+          {propertyTagItems.length > 0 ? (
+            <p className="text-sm text-foreground">
+              {propertyTagItems.join(" • ")}
+            </p>
+          ) : null}
         </div>
-        <p className="text-sm text-gray-700 h-10 overflow-hidden text-ellipsis">
-          {stripHtml(property.description).substring(0, 80)}
-          {stripHtml(property.description).length > 80 && "..."}
-        </p>
       </CardContent>
-      <CardFooter className="p-4 bg-gray-50 flex-col items-start">
-        <div className="w-full flex justify-between items-center mb-4">
-          <p className="text-2xl font-bold text-primary">
-            {hiddenPriceLabel || formatPrice(property.price)}
-            {!hiddenPriceLabel && property.purpose === 'Rent' && <span className="text-sm font-normal text-muted-foreground">/month</span>}
-          </p>
-        </div>
-        <div className="w-full flex justify-between text-sm text-muted-foreground border-t pt-4">
-          <div className="flex items-center gap-2">
-            <BedDouble className="h-4 w-4 text-primary" />
-            <span>{property.bedrooms} Beds</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Bath className="h-4 w-4 text-primary" />
-            <span>{property.bathrooms} Baths</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <SquareGanttChart className="h-4 w-4 text-primary" />
-            <span>{property.area.toLocaleString()} sqft</span>
-          </div>
-        </div>
-      </CardFooter>
     </Card>
   );
 }

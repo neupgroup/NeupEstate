@@ -1,5 +1,11 @@
 
+/*
+::neup.documentation::public-property-detail-page
 
+Renders the public property detail page with gallery, summary, pricing, and supporting sections.
+
+::end
+*/
 import { notFound, redirect } from 'next/navigation';
 import { getPropertyById, getProperties, getPropertyBySlug } from '@/services/property-service';
 import { buildPublicAppUrl } from '@/logica/core/public-url';
@@ -7,7 +13,7 @@ import { logProblem } from '@/services/problem-service';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { BedDouble, Bath, SquareGanttChart, MapPin, Building, Home, Box, Utensils, Hash, Car, Bike, Milestone, School, Briefcase, LandPlot, Sprout, Tag, Mountain, Wallet, Banknote, Calendar, Check, Plane, Link as LinkIcon, Building2, User as UserIcon, FileText } from 'lucide-react';
-import { PropertyImageCarousel, SafeImage, EmiCalculatorChart, PropertyMap, PropertyQA } from '@/components/estate';
+import { SafeImage, EmiCalculatorChart, PropertyMap, PropertyQA } from '@/components/estate';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PropertyDetailRenderNotice } from '@/components/property-detail-render-notice';
@@ -17,6 +23,7 @@ import type { Metadata, ResolvingMetadata } from 'next';
 import { requirePagePermission } from '@/logica/auth/page-guard';
 import { PERMISSIONS } from '@/logica/auth/permissions';
 import { getHiddenPriceLabel } from '@/logica/core/property-price-display';
+import { PropertyMediaGallery } from '@/components/manage/property-media-gallery';
 
 function stripHtml(html: string) {
   return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
@@ -102,6 +109,49 @@ function formatOptionalText(value: unknown): string {
   }
 
   return value == null ? 'N/A' : String(value);
+}
+
+function formatSummaryArea(area: number | null | undefined, areaUnit: string | null | undefined): string {
+  if (typeof area !== 'number' || Number.isNaN(area) || area <= 0) {
+    return 'N/A';
+  }
+
+  const normalizedUnit = typeof areaUnit === 'string' && areaUnit.trim().length > 0 ? areaUnit : 'sqft';
+  return `${area.toLocaleString()} ${normalizedUnit}`;
+}
+
+function hasPositiveValue(value: number | null | undefined): value is number {
+  return typeof value === 'number' && !Number.isNaN(value) && value > 0;
+}
+
+function formatPricingBasisSuffix({
+  basis,
+  frequency,
+  unit,
+}: {
+  basis?: string | null;
+  frequency?: string | null;
+  unit?: string | null;
+}) {
+  const normalizedBasis = basis?.trim()?.toLowerCase() || '';
+  const normalizedFrequency = frequency?.trim();
+  const normalizedUnit = unit?.trim();
+  const hasPerUnitBasis = normalizedBasis.includes('unit') || normalizedBasis.includes('per-aana') || normalizedBasis.includes('per-ropani') || normalizedBasis.includes('per-sqft');
+  const hasFlatBasis = normalizedBasis.includes('flat') || normalizedBasis === 'flat-price';
+
+  if (normalizedFrequency && normalizedUnit) {
+    return `per ${normalizedUnit} per ${normalizedFrequency}`;
+  }
+
+  if (normalizedUnit && hasPerUnitBasis) {
+    return `per ${normalizedUnit}`;
+  }
+
+  if (normalizedFrequency && (!hasFlatBasis || normalizedBasis.includes('rent'))) {
+    return `per ${normalizedFrequency}`;
+  }
+
+  return null;
 }
 
 type Props = {
@@ -370,6 +420,25 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
 
   const schemaJson = generateSchema({ ...property, images: safeImages, amenities: safeAmenities });
   const hiddenPriceLabel = getHiddenPriceLabel(property);
+  const roomSummaryItems = [
+    { label: 'Bedrooms', value: property.bedrooms, singular: 'Bedroom', icon: <BedDouble className="h-4 w-4 text-primary" /> },
+    { label: 'Bathrooms', value: property.bathrooms, singular: 'Bathroom', icon: <Bath className="h-4 w-4 text-primary" /> },
+    { label: 'Kitchens', value: property.kitchens, singular: 'Kitchen', icon: <Utensils className="h-4 w-4 text-primary" /> },
+    { label: 'Dining Rooms', value: property.diningRooms, singular: 'Dining Room', icon: <Hash className="h-4 w-4 text-primary" /> },
+    { label: 'Living Rooms', value: property.livingRooms, singular: 'Living Room', icon: <Home className="h-4 w-4 text-primary" /> },
+    { label: 'Car Parking', value: property.carParkingSpots, singular: 'Car Parking', icon: <Car className="h-4 w-4 text-primary" /> },
+    { label: 'Bike Parking', value: property.bikeParkingSpots, singular: 'Bike Parking', icon: <Bike className="h-4 w-4 text-primary" /> },
+  ].filter((item) => hasPositiveValue(item.value));
+  const primaryPrice = hasPositiveValue(property.pricing?.listed) ? property.pricing.listed : property.price;
+  const primaryCurrency = property.pricing?.currency || 'USD';
+  const pricingBasis = property.pricing?.basis;
+  const pricingFrequency = pricingBasis ? property.pricing?.basisFrequencies?.[pricingBasis] ?? null : null;
+  const pricingUnit = pricingBasis ? property.pricing?.basisUnits?.[pricingBasis] ?? null : null;
+  const primaryPricingSuffix = formatPricingBasisSuffix({
+    basis: pricingBasis,
+    frequency: pricingFrequency,
+    unit: pricingUnit,
+  });
 
   return (
     <>
@@ -378,35 +447,43 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: schemaJson }}
       />
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-8">
-            <PropertyImageCarousel images={safeImages} title={property.title} />
+      <main className="container mx-auto space-y-8 px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+        <PropertyMediaGallery images={safeImages} title={property.title} />
 
-            <div className="mt-8">
-              <h1 className="text-4xl font-headline font-bold">{property.title}</h1>
-              <div className="flex items-center gap-2 mt-2 text-muted-foreground">
-                  <MapPin className="h-5 w-5" />
-                  <span>{property.location}</span>
-              </div>
+        <section className="space-y-3">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-headline font-bold tracking-tight sm:text-4xl">
+              {property.title}
+            </h1>
+
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <MapPin className="h-5 w-5" />
+              <span>{property.location}</span>
             </div>
+          </div>
 
+          {roomSummaryItems.length > 0 ? (
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {roomSummaryItems.map((item) => (
+                <div key={item.label} className="rounded-xl border px-4 py-3">
+                  <div className="mb-2 flex items-center gap-2 text-sm text-muted-foreground">
+                    {item.icon}
+                    <p>{item.label}</p>
+                  </div>
+                  <p className="text-base font-medium">
+                    {item.value} {item.value === 1 ? item.singular : item.label}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : null}
+        </section>
+
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+          <div className="lg:col-span-2 space-y-8">
             <div className="border-t pt-6">
               <h2 className="text-2xl font-headline font-semibold mb-4">About this property</h2>
               <RichTextHtml html={property.description} />
-            </div>
-
-            <div className="border-t pt-6">
-              <h2 className="text-2xl font-headline font-semibold mb-4">Rooms & Spaces</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="flex items-center gap-2"><BedDouble className="h-4 w-4 text-primary" /> {property.bedrooms} Bedrooms</div>
-                  <div className="flex items-center gap-2"><Bath className="h-4 w-4 text-primary" /> {property.bathrooms} Bathrooms</div>
-                  {property.kitchens && <div className="flex items-center gap-2"><Utensils className="h-4 w-4 text-primary" /> {property.kitchens} Kitchens</div>}
-                  {property.diningRooms && <div className="flex items-center gap-2"><Hash className="h-4 w-4 text-primary" /> {property.diningRooms} Dining Rooms</div>}
-                  {property.livingRooms && <div className="flex items-center gap-2"><Home className="h-4 w-4 text-primary" /> {property.livingRooms} Living Rooms</div>}
-                  {property.carParkingSpots && <div className="flex items-center gap-2"><Car className="h-4 w-4 text-primary" /> {property.carParkingSpots} Car Parking</div>}
-                  {property.bikeParkingSpots && <div className="flex items-center gap-2"><Bike className="h-4 w-4 text-primary" /> {property.bikeParkingSpots} Bike Parking</div>}
-              </div>
             </div>
 
             <div className="border-t pt-6">
@@ -611,7 +688,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
               </div>
             ) : null}
 
-            {property.purpose === 'Sale' && <EmiCalculatorChart price={property.price} />}
+            {property.purpose === 'Sale' && hasPositiveValue(primaryPrice) && <EmiCalculatorChart price={primaryPrice} />}
           </div>
 
           <div className="lg:col-span-1">
@@ -619,29 +696,13 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <p className="text-3xl font-bold text-primary">
-                      {hiddenPriceLabel || formatPrice(property.price)}
+                      {hiddenPriceLabel || formatPrice(primaryPrice, primaryCurrency)}
                   </p>
-                  {!hiddenPriceLabel && property.purpose === 'Rent' && <span className="text-sm font-normal text-muted-foreground">/month</span>}
+                  {!hiddenPriceLabel && primaryPricingSuffix && (
+                    <span className="text-sm font-normal text-muted-foreground">{primaryPricingSuffix}</span>
+                  )}
                 </div>
                 <Badge variant={property.purpose === 'Sale' ? 'default' : 'secondary'}>For {property.purpose}</Badge>
-              </div>
-              
-              <div className="grid grid-cols-3 gap-4 text-center border-y py-4 my-4">
-                <div>
-                  <BedDouble className="h-6 w-6 mx-auto text-primary" />
-                  <p className="font-semibold mt-1">{property.bedrooms}</p>
-                  <p className="text-xs text-muted-foreground">Bedrooms</p>
-                </div>
-                <div>
-                  <Bath className="h-6 w-6 mx-auto text-primary" />
-                  <p className="font-semibold mt-1">{property.bathrooms}</p>
-                  <p className="text-xs text-muted-foreground">Bathrooms</p>
-                </div>
-                <div>
-                  <SquareGanttChart className="h-6 w-6 mx-auto text-primary" />
-                  <p className="font-semibold mt-1">{property.area.toLocaleString()}</p>
-                  <p className="text-xs text-muted-foreground">sqft</p>
-                </div>
               </div>
 
               <Button className="w-full text-lg h-12">Contact Agency</Button>

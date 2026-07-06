@@ -1,5 +1,13 @@
 "use client";
 
+/*
+::neup.documentation::property-media-gallery
+
+Renders a collage-style property photo gallery with an optional fullscreen dialog.
+
+::end
+*/
+
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Grid2x2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -302,7 +310,7 @@ export function PropertyMediaGallery({
     <div className="relative h-[320px] min-h-0 overflow-hidden rounded-3xl sm:h-[360px] lg:h-[420px]">
       {renderCollage()}
 
-      {mounted && visibleImages.length > 5 && (
+      {mounted && visibleImages.length > 1 && (
         <DialogTrigger asChild>
           <Button
             variant="secondary"
