@@ -87,6 +87,16 @@ import { cn } from "@/logica/core/utils"
  * - Tertiary: Back, Cancel, Reset, Dismiss
  *
  * ---
+ * Plain
+ * ---
+ * No outline.
+ * No resting background.
+ *
+ * Use only for persistent navigation links such as header links and sidebar
+ * links. Hover may show a light background, and pressed state may show a
+ * slightly darker background than hover.
+ *
+ * ---
  * Priority Order
  * ---
  *
@@ -116,6 +126,8 @@ const buttonVariants = cva(
           "border border-primary/20 bg-primary/10 text-primary hover:bg-primary/25 hover:text-primary active:bg-primary/35",
         tertiary:
           "border border-primary/25 bg-transparent text-primary hover:bg-primary/10 hover:text-primary active:bg-primary/20",
+        plain:
+          "border border-transparent bg-transparent text-foreground hover:bg-primary/10 hover:text-primary active:bg-primary/20 active:text-primary",
         destructiveTertiary:
           "border border-destructive/25 bg-transparent text-destructive hover:bg-destructive/10 hover:text-destructive active:bg-destructive/20",
         ghost: "hover:bg-accent hover:text-accent-foreground active:bg-accent/80",

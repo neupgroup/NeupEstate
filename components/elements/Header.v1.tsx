@@ -111,9 +111,9 @@ export function HeaderV1({
           href={link.href}
           onClick={() => setMenuOpen(false)}
           className={cn(
-            buttonVariants({ variant: isActive ? "secondary" : "ghost", size: "sm" }),
+            buttonVariants({ variant: "plain", size: "sm" }),
             "w-full justify-start text-sm",
-            isActive && "font-semibold"
+            isActive && "bg-primary/15 text-primary hover:bg-primary/20 active:bg-primary/25 font-semibold"
           )}
         >
           {link.label}
@@ -138,9 +138,11 @@ export function HeaderV1({
           href={appendWorkingProfileV1(item.href, selectedProfile)}
           onClick={() => setMenuOpen(false)}
           className={cn(
-            buttonVariants({ variant: "ghost", size: "sm" }),
-            "w-full justify-start transition-[background-color,color] duration-300 ease-in-out hover:bg-primary/5 hover:text-foreground",
-            isActive ? "bg-primary/15 text-primary hover:bg-primary/20 hover:text-primary font-semibold" : "text-foreground/80"
+            buttonVariants({ variant: "plain", size: "sm" }),
+            "w-full justify-start text-sm",
+            isActive
+              ? "bg-primary/15 text-primary hover:bg-primary/20 active:bg-primary/25 font-semibold"
+              : "text-foreground/80"
           )}
         >
           <Icon className="mr-2 h-4 w-4 shrink-0" />

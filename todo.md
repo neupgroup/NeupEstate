@@ -31,8 +31,14 @@
 - [ ] Add a Neup documentation block to [types/property.ts](/Users/neupkishor/Code/neup.estate/types/property.ts).
 - [ ] Add Neup documentation blocks to [app/not-found.tsx](/Users/neupkishor/Code/neup.estate/app/not-found.tsx) and [app/manage/layout.tsx](/Users/neupkishor/Code/neup.estate/app/manage/layout.tsx).
 - [ ] Add a Neup documentation block to [components/elements/Footer.v1.tsx](/Users/neupkishor/Code/neup.estate/components/elements/Footer.v1.tsx).
+- [ ] Add a Neup documentation block to [components/elements/Header.v1.tsx](/Users/neupkishor/Code/neup.estate/components/elements/Header.v1.tsx).
+- [ ] Add a Neup documentation block to [components/elements/Sidebar.t1.tsx](/Users/neupkishor/Code/neup.estate/components/elements/Sidebar.t1.tsx).
 - [ ] Add a Neup documentation block to [components/layout/FooterLayout.v1.tsx](/Users/neupkishor/Code/neup.estate/components/layout/FooterLayout.v1.tsx).
+- [ ] Add a Neup documentation block to [components/layout/HeaderSidebar.t1.tsx](/Users/neupkishor/Code/neup.estate/components/layout/HeaderSidebar.t1.tsx).
+- [ ] Add a Neup documentation block to [components/layout/HeaderLayout.v1.tsx](/Users/neupkishor/Code/neup.estate/components/layout/HeaderLayout.v1.tsx).
 - [ ] Add a Neup documentation block to [components/layout/footer.tsx](/Users/neupkishor/Code/neup.estate/components/layout/footer.tsx).
+- [ ] Add a Neup documentation block to [components/layout/header.tsx](/Users/neupkishor/Code/neup.estate/components/layout/header.tsx).
+- [ ] Add a Neup documentation block to [components/manage/manage-sidebar.tsx](/Users/neupkishor/Code/neup.estate/components/manage/manage-sidebar.tsx).
 - [ ] Add a Neup documentation block to [services/auth/me.ts](/Users/neupkishor/Code/neup.estate/services/auth/me.ts).
 - [ ] Add a Neup documentation block to [services/auth/account.ts](/Users/neupkishor/Code/neup.estate/services/auth/account.ts).
 - [ ] Add a Neup documentation block to [services/auth/index.ts](/Users/neupkishor/Code/neup.estate/services/auth/index.ts).

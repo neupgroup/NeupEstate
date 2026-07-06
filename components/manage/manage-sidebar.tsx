@@ -90,10 +90,10 @@ export function ManageSidebar(props: Props) {
                   key={item.href}
                   href={appendWorkingProfileV1(item.href, workingProfile)}
                   className={cn(
-                    buttonVariants({ variant: "ghost" }),
-                    "group w-full justify-start px-4 py-2 text-left transition-all duration-200 ease-out hover:bg-primary/10 hover:text-primary hover:translate-x-0.5 focus-visible:bg-primary/10 focus-visible:text-primary focus-visible:ring-0",
+                    buttonVariants({ variant: "plain" }),
+                    "group w-full justify-start px-4 py-2 text-left focus-visible:bg-primary/10 focus-visible:text-primary focus-visible:ring-0",
                     isActive
-                      ? "bg-primary/15 text-primary hover:bg-primary/20 hover:text-primary font-semibold"
+                      ? "bg-primary/15 text-primary hover:bg-primary/20 active:bg-primary/25 font-semibold"
                       : "text-foreground/80"
                   )}
                 >
