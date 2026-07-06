@@ -67,17 +67,17 @@ function fromSqm(sqm: number, system: SystemKey): Record<string, number> {
   if (system === "meter") return { sqm: round2(sqm) };
   if (system === "feet") return { sqft: round2(sqm / 0.092903) };
   if (system === "aana") {
-    let rem = sqm;
-    const ropani = Math.floor(rem / 508.72); rem -= ropani * 508.72;
-    const aana = Math.floor(rem / 31.8); rem -= aana * 31.8;
-    const paisa = Math.floor(rem / 7.95); rem -= paisa * 7.95;
-    const daam = Math.floor(rem / 1.9875);
+    let rem = Math.round(sqm / TO_SQM.daam);
+    const ropani = Math.floor(rem / 256); rem -= ropani * 256;
+    const aana = Math.floor(rem / 16); rem -= aana * 16;
+    const paisa = Math.floor(rem / 4); rem -= paisa * 4;
+    const daam = rem;
     return { ropani, aana, paisa, daam };
   }
-  let rem = sqm;
-  const bigha = Math.floor(rem / 6772.63); rem -= bigha * 6772.63;
-  const kattha = Math.floor(rem / 338.63); rem -= kattha * 338.63;
-  const dhur = Math.floor(rem / 16.93);
+  let rem = Math.round(sqm / TO_SQM.dhur);
+  const bigha = Math.floor(rem / 400); rem -= bigha * 400;
+  const kattha = Math.floor(rem / 20); rem -= kattha * 20;
+  const dhur = rem;
   return { bigha, kattha, dhur };
 }
 
@@ -116,30 +116,36 @@ function parseLooseText(text: string): Record<string, number> {
   let pendingNumber: number | null = null;
   let lastUnit: string | null = null;
 
-  const pushCurrent = () => {
-    if (!lastUnit) return;
-    if (pendingNumber == null) {
-      out[lastUnit] = Math.max(0, Number(out[lastUnit] ?? 0));
-    } else {
-      out[lastUnit] = Number(out[lastUnit] ?? 0) + pendingNumber;
-    }
+  const addValue = (unit: string, value: number) => {
+    out[unit] = Number(out[unit] ?? 0) + value;
+  };
+
+  const clearPending = () => {
     pendingNumber = null;
     lastUnit = null;
   };
 
   for (const token of matches) {
     if (/^\d/.test(token)) {
-      pendingNumber = Number(token);
+      const value = Number(token);
+      if (lastUnit) {
+        addValue(lastUnit, value);
+        clearPending();
+      } else {
+        pendingNumber = value;
+      }
       continue;
     }
     const unit = normalizeUnit(token);
     if (!unit) continue;
-    pushCurrent();
-    lastUnit = unit;
-    if (pendingNumber == null) pendingNumber = 0;
+    if (pendingNumber != null) {
+      addValue(unit, pendingNumber);
+      clearPending();
+    } else {
+      lastUnit = unit;
+    }
   }
 
-  pushCurrent();
   return out;
 }
 
@@ -224,6 +230,7 @@ export function AreaInput({ label = "Total Area", name = "area", className, note
   const [isFocused, setIsFocused] = useState(false);
   const canonicalSqm = useRef(0);
   const initialised = useRef(false);
+  const displayedSystem = useRef<SystemKey>("aana");
 
   const get = (unit: string): number => Number(watch(`${name}.${unit}` as any) ?? 0);
 
@@ -235,23 +242,43 @@ export function AreaInput({ label = "Total Area", name = "area", className, note
 
   useEffect(() => {
     const sqm = toSqm(currentVals);
-    if (!initialised.current || sqm !== canonicalSqm.current) {
+    const detected = detectSystem(currentVals);
+    const nextSystem = systemTouched ? activeSystem : detected;
+
+    if (!systemTouched && activeSystem !== detected) {
+      setActiveSystem(detected);
+    }
+
+    if (!initialised.current || sqm !== canonicalSqm.current || displayedSystem.current !== nextSystem) {
       canonicalSqm.current = sqm;
       initialised.current = true;
-      const detected = detectSystem(currentVals);
-      if (!systemTouched) setActiveSystem(detected);
-      const sys = SYSTEMS.find((s) => s.key === (activeSystem ?? detected)) ?? SYSTEMS[0];
+      displayedSystem.current = nextSystem;
+      const sys = SYSTEMS.find((s) => s.key === nextSystem) ?? SYSTEMS[0];
       setText(getDisplayText(currentVals, sys.key, isFocused));
     }
   }, [activeSystem, currentVals, isFocused, systemTouched]);
 
   const system = useMemo(() => SYSTEMS.find((s) => s.key === activeSystem) ?? SYSTEMS[0], [activeSystem]);
+  const visibleVals = useMemo(() => {
+    const parsed = parseTextForSystem(text, system.key);
+    return toSqm(parsed) > 0 ? fromSqm(toSqm(parsed), system.key) : fromSqm(toSqm(currentVals), system.key);
+  }, [text, system.key, currentVals]);
   const visibleUnits = useMemo(() => {
+    const unitOrder = SYSTEM_KEYS[system.key];
+    const hasUnitOrBigger = (unitKey: string, step: number) => {
+      const unitIndex = unitOrder.indexOf(unitKey);
+      if (unitIndex < 0) return false;
+
+      return unitOrder
+        .slice(0, unitIndex + 1)
+        .some((candidate, index) => Number(visibleVals[candidate] ?? 0) >= (index === unitIndex ? step : 1));
+    };
+
     return system.units.map((unit) => ({
       ...unit,
-      visibleSteps: unit.steps.filter((step) => (currentVals[unit.key] ?? 0) >= step),
+      visibleSteps: unit.steps.filter((step) => hasUnitOrBigger(unit.key, step)),
     }));
-  }, [system.key, currentVals]);
+  }, [system.key, system.units, visibleVals]);
   const hint = useMemo(() => {
     switch (system.key) {
       case "aana":
@@ -328,11 +355,11 @@ export function AreaInput({ label = "Total Area", name = "area", className, note
   function nudge(unit: string, delta: number) {
     const parsed = parseTextForSystem(text, activeSystem);
     const basis = toSqm(parsed) > 0 ? parsed : fromSqm(toSqm(currentVals), activeSystem);
-    const next = { ...basis, [unit]: Math.max(0, Number(basis[unit] ?? 0) + delta) };
-    const converted = fromSqm(toSqm(next), activeSystem);
+    const nextSqm = Math.max(0, toSqm(basis) + delta * (TO_SQM[unit] ?? 0));
+    const converted = fromSqm(nextSqm, activeSystem);
     setActiveSystem(activeSystem);
     setSystemTouched(true);
-    canonicalSqm.current = toSqm(next);
+    canonicalSqm.current = nextSqm;
     setText(getDisplayText(converted, activeSystem, isFocused));
     for (const u of ALL_UNITS) setValue(`${name}.${u}` as any, undefined, { shouldDirty: true, shouldValidate: true });
     for (const [u, v] of Object.entries(converted)) setValue(`${name}.${u}` as any, v > 0 ? v : undefined, { shouldDirty: true, shouldValidate: true });
@@ -377,14 +404,14 @@ export function AreaInput({ label = "Total Area", name = "area", className, note
       <div className="flex flex-wrap gap-2">
         {visibleUnits.map((unit) => (
           <div key={unit.key} className="flex flex-wrap items-center gap-2">
-            {unit.visibleSteps.map((step) => (
-              <button key={`-${unit.key}-${step}`} type="button" onClick={() => nudge(unit.key, -step)} className="rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium text-foreground hover:border-foreground hover:text-foreground">
-                - {step} {unit.label}
-              </button>
-            ))}
             {unit.steps.map((step) => (
               <button key={`+${unit.key}-${step}`} type="button" onClick={() => nudge(unit.key, step)} className="rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium text-foreground hover:border-foreground hover:text-foreground">
                 + {step} {unit.label}
+              </button>
+            ))}
+            {unit.visibleSteps.map((step) => (
+              <button key={`-${unit.key}-${step}`} type="button" onClick={() => nudge(unit.key, -step)} className="rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium text-foreground hover:border-foreground hover:text-foreground">
+                - {step} {unit.label}
               </button>
             ))}
           </div>
