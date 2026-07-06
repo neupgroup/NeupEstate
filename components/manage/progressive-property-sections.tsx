@@ -5,7 +5,18 @@ import type { UseFormReturn } from "react-hook-form";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { AgencyCustomizationRule, CreatePropertyFormValues, User } from "@/types";
 import { Button } from "@/components/ui/button";
-import { AlertCircle, CornerDownRight } from "lucide-react";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { AlertCircle, ArrowLeft, CornerDownRight } from "lucide-react";
 import { BasicDetailsSection } from "@/components/manage/property-form-sections/basic-details-section";
 import { PropertySpecificsSection } from "@/components/manage/property-form-sections/property-specifics-section";
 import { RoomsAndSpaceSection } from "@/components/manage/property-form-sections/rooms-and-space-section";
@@ -512,41 +523,56 @@ export function ProgressivePropertySections({
                             <div className="flex items-center gap-2">
                                 {activeIndex > 0 && (
                                     <Button type="button" variant="outline" size="sm" onClick={handlePrev}>
-                                        Previous
+                                        <ArrowLeft className="h-4 w-4" />
+                                        Back
                                     </Button>
                                 )}
                                 {isLastStep ? (
-                                    <Button type="submit" size="sm" disabled={isSubmitting || submitDisabled}>{submitLabel}</Button>
+                                    <Button type="submit" variant="primary" size="sm" disabled={isSubmitting || submitDisabled}>{submitLabel}</Button>
                                 ) : (
                                     <Button
                                         type="button"
                                         size="sm"
-                                        variant={nextError || activeIndex === 0 ? "outline" : "default"}
+                                        variant={nextError ? "tertiary" : "secondary"}
                                         className={cn(
-                                            activeIndex === 0 && "border-primary/20 bg-primary/10 text-primary transition-colors duration-300 hover:bg-primary/25 hover:text-primary active:bg-primary/35",
                                             nextError && "border-destructive text-destructive hover:bg-destructive/10"
                                         )}
                                         onClick={handleNext}
                                     >
-                                        {activeIndex === 0 ? (
-                                            <>
-                                                Continue
-                                                <CornerDownRight className="h-4 w-4" />
-                                            </>
-                                        ) : "Next"}
+                                        Continue
+                                        <CornerDownRight className="h-4 w-4" />
                                     </Button>
                                 )}
                                 {activeIndex === 0 && !isLastStep && (
-                                    <Button
-                                        type="button"
-                                        size="sm"
-                                        variant="outline"
-                                        className="border-destructive/20 bg-destructive/10 text-destructive transition-colors duration-300 hover:bg-destructive/25 hover:text-destructive active:bg-destructive/35"
-                                        onClick={handleCancel}
-                                    >
-                                        <AlertCircle className="h-4 w-4" />
-                                        Cancel
-                                    </Button>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button
+                                                type="button"
+                                                size="sm"
+                                                variant="destructiveTertiary"
+                                            >
+                                                <AlertCircle className="h-4 w-4" />
+                                                Cancel
+                                            </Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>Cancel property changes?</AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    You will leave this form. Any unsaved changes on this section may be lost.
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel>Keep editing</AlertDialogCancel>
+                                                <AlertDialogAction
+                                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                    onClick={handleCancel}
+                                                >
+                                                    Cancel
+                                                </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
                                 )}
                             </div>
                         </div>
@@ -575,7 +601,11 @@ function Section({ index, title, description, isActive, hasError, onOpen, isClic
                 "group relative border-b border-border/40 transition-colors duration-200 hover:border-b-transparent last:border-b-0",
                 "before:pointer-events-none before:absolute before:left-0 before:right-0 before:top-0 before:h-px before:bg-primary/45 before:opacity-0 before:transition-opacity before:duration-200",
                 "after:pointer-events-none after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-primary/45 after:opacity-0 after:transition-opacity after:duration-200",
-                isActive ? "border-b-transparent before:bg-primary/80 after:bg-primary/80 before:opacity-100 after:opacity-100" : "hover:before:opacity-100 hover:after:opacity-100",
+                isActive
+                    ? "border-b-transparent before:bg-primary/80 after:bg-primary/80 before:opacity-100 after:opacity-100"
+                    : isClickable
+                        ? "hover:before:opacity-100 hover:after:opacity-100"
+                        : "hover:border-b-border/40",
             )}
         >
             {/* Header — always visible, clickable when unlocked */}
@@ -584,14 +614,18 @@ function Section({ index, title, description, isActive, hasError, onOpen, isClic
                 onClick={isClickable ? onOpen : undefined}
                 aria-disabled={!isClickable}
                 className={cn(
-                    "w-full text-left py-4 px-1",
-                    isClickable ? "cursor-pointer" : "cursor-default",
+                    "w-full text-left py-4 px-1 transition-colors duration-200",
+                    isClickable ? "cursor-pointer" : "cursor-not-allowed",
                 )}
             >
                 <div className="flex items-baseline gap-3">
                     <span className={cn(
                         "text-lg font-semibold transition-all duration-200 leading-tight shrink-0",
-                        isActive ? "text-primary" : "text-muted-foreground group-hover:text-primary group-hover:scale-105 group-hover:-translate-y-0.5",
+                        isActive
+                            ? "text-primary"
+                            : isClickable
+                                ? "text-muted-foreground group-hover:text-primary group-hover:scale-105 group-hover:-translate-y-0.5"
+                                : "text-muted-foreground group-hover:text-muted-foreground/60",
                         hasError && "animate-pulse text-destructive [animation-duration:1s]"
                     )}>
                         {String(index + 1).padStart(2, "0")}
@@ -599,7 +633,11 @@ function Section({ index, title, description, isActive, hasError, onOpen, isClic
                     <div>
                         <h2 className={cn(
                             "text-lg font-semibold transition-colors duration-200 leading-tight",
-                            isActive ? "text-primary" : "text-foreground group-hover:text-primary",
+                            isActive
+                                ? "text-primary"
+                                : isClickable
+                                    ? "text-foreground group-hover:text-primary"
+                                    : "text-muted-foreground group-hover:text-muted-foreground/60",
                             hasError && "animate-pulse text-destructive [animation-duration:1s]"
                         )}>
                             {title}
@@ -613,7 +651,11 @@ function Section({ index, title, description, isActive, hasError, onOpen, isClic
                 )}>
                     <p className={cn(
                         "text-sm transition-colors duration-200",
-                        isActive ? "text-primary/80" : "text-muted-foreground group-hover:text-primary/80",
+                        isActive
+                            ? "text-primary/80"
+                            : isClickable
+                                ? "text-muted-foreground group-hover:text-primary/80"
+                                : "text-muted-foreground/70 group-hover:text-muted-foreground/50",
                     )}>
                         {description}
                     </p>
