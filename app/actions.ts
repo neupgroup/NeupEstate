@@ -2288,6 +2288,7 @@ export async function createInquiryAction(
     const actorId = await requireIdentity();
     const validatedData = CreateInquirySchema.parse({ ...data, submittedBy: actorId });
     await createInquiryService(validatedData);
+    revalidatePath('/manage/inquiries');
     return { success: true };
   } catch (e: any) {
     if (e instanceof z.ZodError) {

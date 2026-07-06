@@ -6,6 +6,7 @@
 - [ ] Add a Neup documentation block to [app/bridge/api.v1/property/create/route.ts](/Users/neupkishor/Code/neup.estate/app/bridge/api.v1/property/create/route.ts).
 - [ ] Add a Neup documentation block to [app/bridge/api.v1/property/edit/route.ts](/Users/neupkishor/Code/neup.estate/app/bridge/api.v1/property/edit/route.ts).
 - [ ] Add a Neup documentation block to [app/bridge/api.v1/property/list/route.ts](/Users/neupkishor/Code/neup.estate/app/bridge/api.v1/property/list/route.ts).
+- [ ] Add a Neup documentation block to [app/bridge/api.v1/log-activity/route.ts](/Users/neupkishor/Code/neup.estate/app/bridge/api.v1/log-activity/route.ts).
 - [ ] Add a Neup documentation block to [app/manage/switch/page.tsx](/Users/neupkishor/Code/neup.estate/app/manage/switch/page.tsx).
 - [ ] Add a Neup documentation block to [app/manage/accounts/[id]/layout.tsx](/Users/neupkishor/Code/neup.estate/app/manage/accounts/[id]/layout.tsx).
 - [ ] Add a Neup documentation block to [app/manage/accounts/[id]/page.tsx](/Users/neupkishor/Code/neup.estate/app/manage/accounts/[id]/page.tsx).
@@ -43,5 +44,6 @@
 - [ ] Add a Neup documentation block to [services/user-service.ts](/Users/neupkishor/Code/neup.estate/services/user-service.ts).
 - [ ] Add a Neup documentation block to [services/site-dev-log-service.ts](/Users/neupkishor/Code/neup.estate/services/site-dev-log-service.ts).
 - [ ] Add a Neup documentation block to [types/account.ts](/Users/neupkishor/Code/neup.estate/types/account.ts).
+- [ ] Add a Neup documentation block to [types/communications.ts](/Users/neupkishor/Code/neup.estate/types/communications.ts).
 - [ ] Add a Neup documentation block to [types/personnel.ts](/Users/neupkishor/Code/neup.estate/types/personnel.ts).
 - [ ] Add a Neup documentation block to [logica/core/prisma.ts](/Users/neupkishor/Code/neup.estate/logica/core/prisma.ts).
