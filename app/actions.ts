@@ -562,14 +562,33 @@ export async function savePropertyChangeDraftAction(input: {
 
     const normalizedExistingData = existingDraft ? normalizePropertyChangeData((existingDraft.data ?? {}) as Record<string, any>) : {};
     const normalizedInputData = normalizePropertyChangeData(input.data);
+    if (input.status === 'changing' && Object.keys(normalizedInputData).length === 0) {
+      if (existingDraft && Object.keys(normalizedExistingData).length === 0) {
+        await prisma.propertyChange.delete({ where: { id: existingDraft.id } });
+        revalidatePath(`/manage/properties/${input.propertyId}`);
+        return { success: true };
+      }
+
+      return { success: true, changeId: existingDraft?.id };
+    }
+
+    const mergedData = existingDraft
+      ? deepMergeJson(normalizedExistingData, normalizedInputData)
+      : normalizedInputData;
+    if (input.status === 'changing' && Object.keys(mergedData).length === 0) {
+      if (existingDraft) {
+        await prisma.propertyChange.delete({ where: { id: existingDraft.id } });
+        revalidatePath(`/manage/properties/${input.propertyId}`);
+      }
+      return { success: true };
+    }
+
     const data = {
       propertyId: input.propertyId,
       accountId: actorId,
       status: input.status,
       isApproved: input.isApproved ?? existingDraft?.isApproved ?? null,
-      data: existingDraft
-        ? deepMergeJson(normalizedExistingData, normalizedInputData)
-        : normalizedInputData,
+      data: mergedData,
       modifiedOn: new Date(),
     };
 

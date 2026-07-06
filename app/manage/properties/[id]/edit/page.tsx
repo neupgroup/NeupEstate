@@ -33,7 +33,6 @@ export default function EditPropertyPage() {
     const searchParams = useSearchParams();
     const { toast } = useToast();
     const [isSaving, startSaveTransition] = useTransition();
-    const [isAutoSaving, setIsAutoSaving] = useState(false);
     const [accountId, setAccountId] = useState<string | null>(null);
     const [canEditOwnership, setCanEditOwnership] = useState(false);
     const [listingAgentOptions, setListingAgentOptions] = useState<Array<{ id: string; name: string; imageUrl: string | null; agencyId: string | null; agencyName: string | null }>>([]);
@@ -229,6 +228,32 @@ export default function EditPropertyPage() {
             );
         }
         return value;
+    }
+
+    function valuesAreEquivalent(previous: any, current: any): boolean {
+        return formatValue(normalizeComparableValue(previous)) === formatValue(normalizeComparableValue(current));
+    }
+
+    function hasDraftFields(data: Record<string, any>): boolean {
+        return Object.keys(data).length > 0;
+    }
+
+    function getActualChangeDraftValues(values: UpdatePropertyFormValues): Record<string, any> {
+        if (!baseValues) {
+            return normalizeDraftValues(pickDirtyValues(values, form.formState.dirtyFields));
+        }
+
+        const normalizedBaseValues = normalizeDraftValues(baseValues as Record<string, any>);
+        const normalizedCurrentValues = normalizeDraftValues(values as Record<string, any>);
+        const changedValues: Record<string, any> = {};
+
+        for (const key of Object.keys(normalizedCurrentValues)) {
+            if (!valuesAreEquivalent(normalizedBaseValues[key], normalizedCurrentValues[key])) {
+                changedValues[key] = normalizedCurrentValues[key];
+            }
+        }
+
+        return changedValues;
     }
 
     function prettifyPath(path: string): string {
@@ -488,8 +513,16 @@ export default function EditPropertyPage() {
             }
 
             const data = property.isApproved
-                ? pickDirtyValues(values, form.formState.dirtyFields)
+                ? getActualChangeDraftValues(values)
                 : values;
+
+            if (property.isApproved && !hasDraftFields(data)) {
+                toast({
+                    title: 'No changes to review',
+                    description: 'Edit a field before requesting review.',
+                });
+                return;
+            }
 
             const result = await savePropertyChangeDraftAction({
                 propertyId: property.id,
@@ -526,64 +559,66 @@ export default function EditPropertyPage() {
         if (!property) return;
         void fromIndex;
         void toIndex;
-        setIsAutoSaving(true);
-        try {
-            const values = form.getValues();
-            const data = property.isApproved
-                ? pickDirtyValues(values, form.formState.dirtyFields)
-                : values;
-            const result = isCreateDraftFlow
-                ? await savePropertyCreateDraftAction({
-                    changeId: changeContext?.currentUserChange?.id ?? null,
-                    postingAgencyId: typeof changeContext?.currentUserChange?.data?.postingAgencyId === 'string'
-                        ? changeContext.currentUserChange.data.postingAgencyId
-                        : property.agency?.id ?? null,
-                    workingProfileId: activeWorkingProfileId,
-                    data,
-                })
-                : await savePropertyChangeDraftAction({
-                    propertyId: property.id,
-                    status: 'changing',
-                    data,
-                });
+        const values = form.getValues();
+        const data = property.isApproved
+            ? getActualChangeDraftValues(values)
+            : values;
 
-            if (!result.success) {
-                toast({
-                    variant: 'destructive',
-                    title: 'Could not save request',
-                    description: result.error || 'Please try again before continuing.',
-                });
-                return;
-            }
-
-            if (result.changeId) {
-                setChangeContext((current) => current ? ({
-                    ...current,
-                    currentUserChange: current.currentUserChange ? {
-                        ...current.currentUserChange,
-                        id: result.changeId!,
-                        status: isCreateDraftFlow
-                            ? current.currentUserChange.status === 'creation_pending'
-                                ? 'creation_pending'
-                                : 'creation_draft'
-                            : 'changing',
-                        data,
-                    } : {
-                        id: result.changeId!,
-                        status: isCreateDraftFlow ? 'creation_draft' : 'changing',
-                        isApproved: null,
-                        data,
-                        modifiedOn: new Date().toISOString(),
-                        accountId: accountId || '',
-                    },
-                }) : current);
-            }
-
+        if (!isCreateDraftFlow && property.isApproved && !hasDraftFields(data)) {
             form.reset(values);
-            setPendingDraftValues(data);
-        } finally {
-            setIsAutoSaving(false);
+            return true;
         }
+
+        const result = isCreateDraftFlow
+            ? await savePropertyCreateDraftAction({
+                changeId: changeContext?.currentUserChange?.id ?? null,
+                postingAgencyId: typeof changeContext?.currentUserChange?.data?.postingAgencyId === 'string'
+                    ? changeContext.currentUserChange.data.postingAgencyId
+                    : property.agency?.id ?? null,
+                workingProfileId: activeWorkingProfileId,
+                data,
+            })
+            : await savePropertyChangeDraftAction({
+                propertyId: property.id,
+                status: 'changing',
+                data,
+            });
+
+        if (!result.success) {
+            toast({
+                variant: 'destructive',
+                title: 'Could not save request',
+                description: result.error || 'Please try again before continuing.',
+            });
+            return;
+        }
+
+        if (result.changeId) {
+            setChangeContext((current) => current ? ({
+                ...current,
+                currentUserChange: current.currentUserChange ? {
+                    ...current.currentUserChange,
+                    id: result.changeId!,
+                    status: isCreateDraftFlow
+                        ? current.currentUserChange.status === 'creation_pending'
+                            ? 'creation_pending'
+                            : 'creation_draft'
+                        : 'changing',
+                    data,
+                } : {
+                    id: result.changeId!,
+                    status: isCreateDraftFlow ? 'creation_draft' : 'changing',
+                    isApproved: null,
+                    data,
+                    modifiedOn: new Date().toISOString(),
+                    accountId: accountId || '',
+                },
+            }) : current);
+        }
+
+        form.reset(values);
+        setPendingDraftValues(hasDraftFields(data) ? data : null);
+        return true;
     }
 
     const pendingFieldChanges = useMemo(() => {
@@ -731,7 +766,6 @@ export default function EditPropertyPage() {
                         users={users}
                         isEditForm={true}
                         isSubmitting={isSaving}
-                        isAutoSaving={isAutoSaving || form.formState.isDirty}
                         submitLabel={isSaving ? 'Requesting Review...' : 'Request Review'}
                         agencyRule={agencyRule}
                         onSectionAdvance={handleSectionAdvance}

@@ -13,6 +13,7 @@ import { Form } from '@/components/ui/form';
 import { useToast } from '@/logica/core/hooks/use-toast';
 import { getUsers } from '@/services/user-service';
 import { useAgencyCustomization } from '@/logica/core/hooks/use-agency-customization';
+import { evaluateAgencyCustomization } from '@/logica/core/evaluate-agency-customization';
 
 import { ProgressivePropertySections } from '@/components/manage/progressive-property-sections';
 
@@ -85,7 +86,6 @@ export default function CreatePropertyPage() {
     const requestedChangeId = searchParams.get('changeId')?.trim() || null;
     const { toast } = useToast();
     const [isPending, startTransition] = useTransition();
-    const [isAutoSaving, setIsAutoSaving] = useState(false);
     const [users, setUsers] = React.useState<User[]>([]);
     const [accountId, setAccountId] = useState<string | null>(null);
     const [listingAgentOptions, setListingAgentOptions] = useState<Array<{ id: string; name: string; imageUrl: string | null; agencyId: string | null; agencyName: string | null }>>([]);
@@ -103,6 +103,7 @@ export default function CreatePropertyPage() {
         resolver: zodResolver(CreatePropertySchema),
         defaultValues: DEFAULT_CREATE_PROPERTY_VALUES,
     });
+    const watchedValues = form.watch();
 
     function syncDraftChangeId(nextChangeId: string | null) {
         setDraftChangeId(nextChangeId);
@@ -195,6 +196,26 @@ export default function CreatePropertyPage() {
 
     const { rule: agencyRule } = useAgencyCustomization(accountId, 'property');
     const currentUser = useMemo(() => users.find((user) => user.id === accountId) ?? null, [accountId, users]);
+    const isCreateSubmitDisabled = useMemo(() => {
+        const schemaResult = CreatePropertySchema.safeParse(watchedValues);
+        if (!schemaResult.success) return true;
+
+        const pricing = watchedValues.pricing;
+        const priceDisplayMode = pricing?.priceDisplayMode || 'show-price';
+        if (priceDisplayMode === 'show-price') {
+            const selectedBasis = pricing?.basis;
+            const selectedBasisPrice = selectedBasis ? Number(pricing?.basisPrices?.[selectedBasis] ?? 0) : 0;
+            const hasAnyFilledBasisPrice = Object.values(pricing?.basisPrices ?? {}).some((value) => Number(value ?? 0) > 0);
+            if (!selectedBasis || selectedBasisPrice <= 0 || !hasAnyFilledBasisPrice) return true;
+        }
+
+        if (agencyRule) {
+            const agencyErrors = evaluateAgencyCustomization(agencyRule, watchedValues as any);
+            if (Object.keys(agencyErrors).length > 0) return true;
+        }
+
+        return false;
+    }, [agencyRule, watchedValues]);
     const listingContext = useMemo(() => {
         if (!accountId) return null;
 
@@ -307,39 +328,34 @@ export default function CreatePropertyPage() {
 
     async function handleSectionAdvance(fromIndex: number, toIndex: number) {
         if (fromIndex < 0) return true;
-        setIsAutoSaving(true);
-        try {
-            const result = await savePropertyCreateDraftAction({
-                changeId: draftChangeId,
-                postingAgencyId,
-                workingProfileId: activeWorkingProfileId,
-                data: form.getValues(),
+        const result = await savePropertyCreateDraftAction({
+            changeId: draftChangeId,
+            postingAgencyId,
+            workingProfileId: activeWorkingProfileId,
+            data: form.getValues(),
+        });
+
+        if (!result.success) {
+            toast({
+                variant: 'destructive',
+                title: 'Could not save draft',
+                description: result.error || 'Please try again before continuing.',
             });
-
-            if (!result.success) {
-                toast({
-                    variant: 'destructive',
-                    title: 'Could not save draft',
-                    description: result.error || 'Please try again before continuing.',
-                });
-                return false;
-            }
-
-            if (result.changeId && result.changeId !== draftChangeId) {
-                syncDraftChangeId(result.changeId);
-            }
-
-            form.reset(form.getValues());
-
-            if (fromIndex === 0 && result.propertyId) {
-                router.push(`/manage/properties/${result.propertyId}/edit?section=specifics`);
-                return false;
-            }
-
-            return true;
-        } finally {
-            setIsAutoSaving(false);
+            return false;
         }
+
+        if (result.changeId && result.changeId !== draftChangeId) {
+            syncDraftChangeId(result.changeId);
+        }
+
+        form.reset(form.getValues());
+
+        if (fromIndex === 0 && result.propertyId) {
+            router.push(`/manage/properties/${result.propertyId}/edit?section=specifics`);
+            return false;
+        }
+
+        return true;
     }
 
     return (
@@ -351,7 +367,7 @@ export default function CreatePropertyPage() {
                         users={users}
                         isEditForm={false}
                         isSubmitting={isPending}
-                        isAutoSaving={isAutoSaving || form.formState.isDirty}
+                        submitDisabled={isCreateSubmitDisabled}
                         submitLabel={isPending ? 'Creating...' : 'Create Property'}
                         agencyRule={agencyRule}
                         onSectionAdvance={handleSectionAdvance}
