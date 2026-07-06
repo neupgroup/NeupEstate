@@ -5,6 +5,7 @@ import type { UseFormReturn } from "react-hook-form";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { AgencyCustomizationRule, CreatePropertyFormValues, User } from "@/types";
 import { Button } from "@/components/ui/button";
+import { AlertCircle, CornerDownRight } from "lucide-react";
 import { BasicDetailsSection } from "@/components/manage/property-form-sections/basic-details-section";
 import { PropertySpecificsSection } from "@/components/manage/property-form-sections/property-specifics-section";
 import { RoomsAndSpaceSection } from "@/components/manage/property-form-sections/rooms-and-space-section";
@@ -472,10 +473,24 @@ export function ProgressivePropertySections({
         replaceSectionParam(getSectionFromIndex(prev));
     }
 
+    function handleCancel() {
+        if (pathname.endsWith("/create")) {
+            router.push("/manage/properties");
+            return;
+        }
+
+        if (pathname.endsWith("/edit")) {
+            router.push(pathname.replace(/\/edit$/, ""));
+            return;
+        }
+
+        router.push("/manage/properties");
+    }
+
     const isLastStep = activeIndex === steps.length - 1;
 
     return (
-        <div className="space-y-1">
+        <div>
             {steps.map((step, i) => {
                 const isActive = i === activeIndex;
                 return (
@@ -506,11 +521,31 @@ export function ProgressivePropertySections({
                                     <Button
                                         type="button"
                                         size="sm"
-                                        variant={nextError ? "outline" : "default"}
-                                        className={cn(nextError && "border-destructive text-destructive hover:bg-destructive/10")}
+                                        variant={nextError || activeIndex === 0 ? "outline" : "default"}
+                                        className={cn(
+                                            activeIndex === 0 && "border-primary/20 bg-primary/10 text-primary transition-colors duration-300 hover:bg-primary/25 hover:text-primary active:bg-primary/35",
+                                            nextError && "border-destructive text-destructive hover:bg-destructive/10"
+                                        )}
                                         onClick={handleNext}
                                     >
-                                        Next
+                                        {activeIndex === 0 ? (
+                                            <>
+                                                Continue
+                                                <CornerDownRight className="h-4 w-4" />
+                                            </>
+                                        ) : "Next"}
+                                    </Button>
+                                )}
+                                {activeIndex === 0 && !isLastStep && (
+                                    <Button
+                                        type="button"
+                                        size="sm"
+                                        variant="outline"
+                                        className="border-destructive/20 bg-destructive/10 text-destructive transition-colors duration-300 hover:bg-destructive/25 hover:text-destructive active:bg-destructive/35"
+                                        onClick={handleCancel}
+                                    >
+                                        <AlertCircle className="h-4 w-4" />
+                                        Cancel
                                     </Button>
                                 )}
                             </div>
@@ -537,10 +572,10 @@ function Section({ index, title, description, isActive, hasError, onOpen, isClic
     return (
         <div
             className={cn(
-                "group relative border-b border-border/40 transition-colors duration-200 last:border-b-0",
-                "before:pointer-events-none before:absolute before:left-0 before:right-0 before:top-0 before:h-px before:bg-primary/40 before:opacity-0 before:transition-opacity before:duration-200",
-                "after:pointer-events-none after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-primary/40 after:opacity-0 after:transition-opacity after:duration-200",
-                isActive ? "before:opacity-100 after:opacity-100" : "hover:before:opacity-100 hover:after:opacity-100",
+                "group relative border-b border-border/40 transition-colors duration-200 hover:border-b-transparent last:border-b-0",
+                "before:pointer-events-none before:absolute before:left-0 before:right-0 before:top-0 before:h-px before:bg-primary/45 before:opacity-0 before:transition-opacity before:duration-200",
+                "after:pointer-events-none after:absolute after:left-0 after:right-0 after:bottom-0 after:h-px after:bg-primary/45 after:opacity-0 after:transition-opacity after:duration-200",
+                isActive ? "border-b-transparent before:bg-primary/80 after:bg-primary/80 before:opacity-100 after:opacity-100" : "hover:before:opacity-100 hover:after:opacity-100",
             )}
         >
             {/* Header — always visible, clickable when unlocked */}

@@ -835,7 +835,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
     });
     const isCreationDraftView = Boolean(creationDraft && !resolvedProperty);
     const editUrl = isCreationDraftView
-        ? `/manage/properties/create?changeId=${creationDraft!.id}`
+        ? `/manage/properties/${creationDraft!.id}/edit`
         : `/manage/properties/${property.id}/edit`;
     const siteUrl = resolvedProperty?.slug ? `/properties/${resolvedProperty.slug}` : null;
     const hasLocation = hasLocationValue(property.structuredLocation) || hasLocationValue(property.location) || hasLocationValue(property.latitude) || hasLocationValue(property.longitude);

@@ -350,8 +350,8 @@ export default function CreatePropertyPage() {
 
         form.reset(form.getValues());
 
-        if (fromIndex === 0 && result.propertyId) {
-            router.push(`/manage/properties/${result.propertyId}/edit?section=specifics`);
+        if (fromIndex === 0 && result.changeId) {
+            router.push(`/manage/properties/${result.changeId}/edit?section=specifics`);
             return false;
         }
 

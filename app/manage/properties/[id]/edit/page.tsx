@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTransition, useState, useEffect, useMemo } from 'react';
 import { UpdatePropertySchema, type Property, type User, type UpdatePropertyFormValues } from '@/types';
-import { createPropertyAction, getCurrentAccountId, savePropertyChangeDraftAction, getPropertyChangeContextAction, getPropertyEditCapabilitiesAction, getListingAgentOptionsAction, savePropertyCreateDraftAction } from '@/app/actions';
+import { createPropertyAction, getCurrentAccountId, getCurrentPropertyCreateDraftAction, savePropertyChangeDraftAction, getPropertyChangeContextAction, getPropertyEditCapabilitiesAction, getListingAgentOptionsAction, savePropertyCreateDraftAction } from '@/app/actions';
 import { getPropertyById } from "@/services/property-service";
 import { getUsers } from "@/services/user-service";
 import { useAgencyCustomization } from '@/logica/core/hooks/use-agency-customization';
@@ -20,6 +20,140 @@ import { Badge } from '@/components/ui/badge';
 import { ClientLink } from '@/components/client-link';
 import { ProgressivePropertySections } from '@/components/manage/progressive-property-sections';
 import { Skeleton } from '@/components/ui/skeleton';
+
+const DEFAULT_DRAFT_PROPERTY_VALUES: UpdatePropertyFormValues = {
+    title: '',
+    description: '',
+    purposes: [],
+    categories: [],
+    types: [],
+    area: undefined,
+    bedrooms: 1,
+    bathrooms: 1,
+    areaUnit: 'sqft',
+    kitchens: 1,
+    diningRooms: 0,
+    livingRooms: 1,
+    carParkingSpots: 0,
+    bikeParkingSpots: 0,
+    amenities: '',
+    images: [''],
+    listingAgent: '',
+    isOwnerListing: false,
+    isPrivate: false,
+    showMap: true,
+    showOwnerInformation: true,
+    floors: undefined,
+    roadAccess: undefined,
+    landDetails: {},
+    plots: [],
+    apartmentDetails: {},
+    apartmentUnits: [],
+    structuredLocation: {},
+    pricing: {
+        currency: 'USD',
+        priceDisplayMode: 'show-price',
+        listed: 0,
+        negotiable: false,
+    },
+    roadAccessDetails: {
+        widthUnit: 'ft',
+        distanceToMainRoadUnit: 'km',
+    },
+    distancing: {
+        unit: 'km',
+    },
+    earnings: {
+        currency: 'USD',
+    },
+    owners: [],
+    documents: [],
+};
+
+function normalizeDraftStringArray(value: unknown): string[] {
+    if (Array.isArray(value)) {
+        return value.filter((entry): entry is string => typeof entry === 'string' && entry.trim().length > 0);
+    }
+    return typeof value === 'string' && value.trim().length > 0 ? [value.trim()] : [];
+}
+
+function extractDraftNumber(value: unknown): number {
+    if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
+    if (typeof value === 'string') {
+        const parsed = Number(value);
+        return Number.isFinite(parsed) ? parsed : 0;
+    }
+    if (value && typeof value === 'object' && 'sqft' in value) {
+        return extractDraftNumber((value as { sqft?: unknown }).sqft);
+    }
+    return 0;
+}
+
+function mapCreationDraftToEditableProperty(id: string, data: Record<string, any>): Property {
+    const purposes = normalizeDraftStringArray(data.purposes).length
+        ? normalizeDraftStringArray(data.purposes)
+        : normalizeDraftStringArray(data.purpose);
+    const categories = normalizeDraftStringArray(data.categories);
+    const types = normalizeDraftStringArray(data.types);
+    const postingAgencyId = typeof data.postingAgencyId === 'string' && data.postingAgencyId.trim()
+        ? data.postingAgencyId.trim()
+        : 'unknown';
+
+    return {
+        id,
+        title: typeof data.title === 'string' && data.title.trim() ? data.title : 'Untitled draft property',
+        description: typeof data.description === 'string' ? data.description : '',
+        price: extractDraftNumber(data.price ?? data.pricing?.listed),
+        location: typeof data.location === 'string' ? data.location : '',
+        bedrooms: extractDraftNumber(data.bedrooms),
+        bathrooms: extractDraftNumber(data.bathrooms),
+        area: extractDraftNumber(data.area),
+        areaUnit: data.areaUnit,
+        facing: data.facing,
+        buildStart: data.buildStart,
+        buildCompleted: data.buildCompleted,
+        purpose: (purposes[0] || 'Sale') as Property['purpose'],
+        purposes: purposes as Property['purposes'],
+        category: (categories[0] || 'House') as Property['category'],
+        type: (types[0] || 'Residential') as Property['type'],
+        images: normalizeDraftStringArray(data.images),
+        amenities: typeof data.amenities === 'string' ? data.amenities.split(',').map((item) => item.trim()).filter(Boolean) : normalizeDraftStringArray(data.amenities),
+        agency: {
+            id: postingAgencyId,
+            name: postingAgencyId === 'unknown' ? '' : postingAgencyId,
+            logoUrl: '',
+        },
+        listingAgent: typeof data.listingAgent === 'string' ? data.listingAgent : '',
+        listingAgentId: typeof data.listingAgentAccountId === 'string' ? data.listingAgentAccountId : '',
+        isOwnerListing: Boolean(data.isOwnerListing),
+        isApproved: false,
+        status: 'PENDING',
+        floors: data.floors,
+        onFloor: data.onFloor,
+        roadAccess: data.roadAccess,
+        kitchens: data.kitchens,
+        diningRooms: data.diningRooms,
+        livingRooms: data.livingRooms,
+        carParkingSpots: data.carParkingSpots,
+        bikeParkingSpots: data.bikeParkingSpots,
+        landDetails: data.landDetails,
+        plots: Array.isArray(data.plots) ? data.plots : [],
+        apartmentDetails: data.apartmentDetails,
+        apartmentUnits: Array.isArray(data.apartmentUnits) ? data.apartmentUnits : [],
+        structuredLocation: data.structuredLocation,
+        details: {
+            isPrivate: data.isPrivate ?? false,
+            showMap: data.showMap ?? true,
+            showOwnerInformation: data.showOwnerInformation ?? true,
+        },
+        pricing: data.pricing,
+        roadAccessDetails: data.roadAccessDetails,
+        distancing: data.distancing,
+        earnings: data.earnings,
+        owners: Array.isArray(data.owners) ? data.owners : [],
+        documents: Array.isArray(data.documents) ? data.documents : [],
+    };
+}
 
 export default function EditPropertyPage() {
     const [property, setProperty] = useState<Property | null>(null);
@@ -366,22 +500,56 @@ export default function EditPropertyPage() {
         if (!propertyId) return;
 
         async function loadData() {
-            const [propertyData, userData, resolvedAccountId, reviewContext, capabilities] = await Promise.all([
+            const [propertyData, userData, resolvedAccountId, capabilities] = await Promise.all([
                 getPropertyById(propertyId, { includeInactive: true }),
                 getUsers(),
                 getCurrentAccountId(),
-                getPropertyChangeContextAction(propertyId),
                 getPropertyEditCapabilitiesAction(),
             ]);
             if (resolvedAccountId) setAccountId(resolvedAccountId);
             setCanEditOwnership(capabilities.success ? capabilities.canEditOwnership : false);
-            if (reviewContext.success) setChangeContext(reviewContext);
 
             if (!propertyData) {
+                const draftResult = await getCurrentPropertyCreateDraftAction(propertyId);
+                if (draftResult.success && draftResult.changeId && draftResult.data) {
+                    const draftValues = normalizeDraftValues({
+                        ...DEFAULT_DRAFT_PROPERTY_VALUES,
+                        ...draftResult.data,
+                    }) as UpdatePropertyFormValues;
+                    const draftProperty = mapCreationDraftToEditableProperty(draftResult.changeId, draftValues as Record<string, any>);
+
+                    setProperty(draftProperty);
+                    setUsers(userData);
+                    setChangeContext({
+                        currentUserChange: {
+                            id: draftResult.changeId,
+                            status: draftResult.status ?? 'creation_draft',
+                            isApproved: null,
+                            data: draftValues as Record<string, any>,
+                            modifiedOn: draftResult.modifiedOn ?? new Date().toISOString(),
+                            accountId: draftResult.accountId ?? resolvedAccountId ?? '',
+                        },
+                        recentActivity: {
+                            hasCurrentUserChangeInLast7Days: true,
+                            hasOtherUserChangeInLast7Days: false,
+                            latestOutcome: 'pending',
+                            latestOutcomeAt: draftResult.modifiedOn ?? null,
+                            latestOutcomeMessage: 'Your changes are awaiting review.',
+                        },
+                    });
+                    form.reset(draftValues);
+                    setBaseValues(draftValues);
+                    setPendingDraftValues(null);
+                    return;
+                }
+
                 toast({ variant: 'destructive', title: 'Error', description: 'Property not found.' });
                 router.push('/manage/properties');
                 return;
             }
+
+            const reviewContext = await getPropertyChangeContextAction(propertyId);
+            if (reviewContext.success) setChangeContext(reviewContext);
 
             setProperty(propertyData);
             setUsers(userData);

@@ -493,6 +493,9 @@ export async function getCurrentPropertyCreateDraftAction(changeId?: string | nu
   success: boolean;
   changeId?: string;
   data?: Record<string, any>;
+  status?: string;
+  accountId?: string;
+  modifiedOn?: string;
   postingAgencyId?: string | null;
   propertyId?: string | null;
   error?: string;
@@ -525,6 +528,9 @@ export async function getCurrentPropertyCreateDraftAction(changeId?: string | nu
       success: true,
       changeId: draft.id,
       data: normalizedData,
+      status: draft.status,
+      accountId: draft.accountId,
+      modifiedOn: draft.modifiedOn.toISOString(),
       postingAgencyId: typeof normalizedData.postingAgencyId === 'string'
         ? normalizedData.postingAgencyId
         : null,
