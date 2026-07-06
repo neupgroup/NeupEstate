@@ -49,3 +49,4 @@
 - [ ] Add a Neup documentation block to [types/communications.ts](/Users/neupkishor/Code/neup.estate/types/communications.ts).
 - [ ] Add a Neup documentation block to [types/personnel.ts](/Users/neupkishor/Code/neup.estate/types/personnel.ts).
 - [ ] Add a Neup documentation block to [logica/core/prisma.ts](/Users/neupkishor/Code/neup.estate/logica/core/prisma.ts).
+- [ ] Add a Neup documentation block to [logica/core/utils.ts](/Users/neupkishor/Code/neup.estate/logica/core/utils.ts).

@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { AgencyCustomizationRule, CreatePropertyFormValues, User } from "@/types";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -143,6 +143,8 @@ interface ProgressivePropertySectionsProps {
     ::end
     */
     onSectionAdvance?: (fromIndex: number, toIndex: number) => Promise<boolean | void> | boolean | void;
+    canDropCreationDraft?: boolean;
+    onDropCreationDraft?: () => Promise<boolean | void> | boolean | void;
     fieldChangeNotes?: Partial<Record<string, string>>;
     previousAmenities?: string;
     previousImages?: string[];
@@ -173,6 +175,8 @@ export function ProgressivePropertySections({
     submitLabel,
     agencyRule,
     onSectionAdvance,
+    canDropCreationDraft = false,
+    onDropCreationDraft,
     fieldChangeNotes,
     previousAmenities,
     previousImages,
@@ -188,6 +192,7 @@ export function ProgressivePropertySections({
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const [nextError, setNextError] = useState<string | null>(null);
     const [errorStepIndex, setErrorStepIndex] = useState<number | null>(null);
+    const [isDroppingCreationDraft, setIsDroppingCreationDraft] = useState(false);
     const categories = (form.watch("categories" as any) as unknown as string[]) || [];
     const category = categories[0] as string | undefined;
 
@@ -498,6 +503,19 @@ export function ProgressivePropertySections({
         router.push("/manage/properties");
     }
 
+    async function handleDropCreationDraft() {
+        if (!onDropCreationDraft) return;
+        setIsDroppingCreationDraft(true);
+        try {
+            const result = await onDropCreationDraft();
+            if (result === false) {
+                setIsDroppingCreationDraft(false);
+            }
+        } catch {
+            setIsDroppingCreationDraft(false);
+        }
+    }
+
     const isLastStep = activeIndex === steps.length - 1;
 
     return (
@@ -562,14 +580,29 @@ export function ProgressivePropertySections({
                                                     You will leave this form. Any unsaved changes on this section may be lost.
                                                 </AlertDialogDescription>
                                             </AlertDialogHeader>
-                                            <AlertDialogFooter>
-                                                <AlertDialogCancel>Keep editing</AlertDialogCancel>
+                                            <AlertDialogFooter className="flex-col gap-2 sm:flex-row sm:justify-start sm:space-x-0">
+                                                {canDropCreationDraft && onDropCreationDraft && (
+                                                    <AlertDialogAction
+                                                        className={cn(
+                                                            buttonVariants({ variant: "destructive" }),
+                                                            "hover:bg-destructive hover:text-destructive-foreground/80 active:bg-destructive active:text-destructive-foreground/70"
+                                                        )}
+                                                        disabled={isDroppingCreationDraft}
+                                                        onClick={(event) => {
+                                                            event.preventDefault();
+                                                            void handleDropCreationDraft();
+                                                        }}
+                                                    >
+                                                        {isDroppingCreationDraft ? "Dropping..." : "Drop Property"}
+                                                    </AlertDialogAction>
+                                                )}
                                                 <AlertDialogAction
-                                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                                    className="border border-destructive/20 bg-destructive/10 text-destructive hover:bg-destructive/25 hover:text-destructive active:bg-destructive/35"
                                                     onClick={handleCancel}
                                                 >
                                                     Cancel
                                                 </AlertDialogAction>
+                                                <AlertDialogCancel>Keep editing</AlertDialogCancel>
                                             </AlertDialogFooter>
                                         </AlertDialogContent>
                                     </AlertDialog>

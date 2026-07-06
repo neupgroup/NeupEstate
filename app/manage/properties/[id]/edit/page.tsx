@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTransition, useState, useEffect, useMemo } from 'react';
 import { UpdatePropertySchema, type Property, type User, type UpdatePropertyFormValues } from '@/types';
-import { createPropertyAction, getCurrentAccountId, getCurrentPropertyCreateDraftAction, savePropertyChangeDraftAction, getPropertyChangeContextAction, getPropertyEditCapabilitiesAction, getListingAgentOptionsAction, savePropertyCreateDraftAction } from '@/app/actions';
+import { cancelPropertyChangeDraftAction, createPropertyAction, getCurrentAccountId, getCurrentPropertyCreateDraftAction, savePropertyChangeDraftAction, getPropertyChangeContextAction, getPropertyEditCapabilitiesAction, getListingAgentOptionsAction, savePropertyCreateDraftAction } from '@/app/actions';
 import { getPropertyById } from "@/services/property-service";
 import { getUsers } from "@/services/user-service";
 import { useAgencyCustomization } from '@/logica/core/hooks/use-agency-customization';
@@ -789,6 +789,31 @@ export default function EditPropertyPage() {
         return true;
     }
 
+    async function handleDropCreationDraft() {
+        const changeId = changeContext?.currentUserChange?.id;
+        if (!changeId) {
+            router.push('/manage/properties');
+            return true;
+        }
+
+        const result = await cancelPropertyChangeDraftAction(changeId);
+        if (!result.success) {
+            toast({
+                variant: 'destructive',
+                title: 'Could not drop property',
+                description: result.error || 'Please try again.',
+            });
+            return false;
+        }
+
+        toast({
+            title: 'Property dropped',
+            description: 'The unrequested property draft has been removed.',
+        });
+        router.push('/manage/properties');
+        return true;
+    }
+
     const pendingFieldChanges = useMemo(() => {
         const changeData = pendingDraftValues || changeContext?.currentUserChange?.data;
         if (!baseValues || !changeData) return [];
@@ -937,6 +962,8 @@ export default function EditPropertyPage() {
                         submitLabel={isSaving ? 'Requesting Review...' : 'Request Review'}
                         agencyRule={agencyRule}
                         onSectionAdvance={handleSectionAdvance}
+                        canDropCreationDraft={changeContext?.currentUserChange?.status === 'creation_draft'}
+                        onDropCreationDraft={handleDropCreationDraft}
                         fieldChangeNotes={fieldChangeNotes}
                         previousAmenities={baseValues?.amenities}
                         previousImages={baseValues?.images}

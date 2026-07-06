@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTransition, useEffect, useMemo, useState } from 'react';
 import { CreatePropertySchema, type CreatePropertyFormValues, type User } from '@/types';
-import { createPropertyAction, getCurrentAccountId, getCurrentPropertyCreateDraftAction, getCurrentPropertyPostingContextAction, getListingAgentOptionsAction, savePropertyCreateDraftAction } from '@/app/actions';
+import { cancelPropertyChangeDraftAction, createPropertyAction, getCurrentAccountId, getCurrentPropertyCreateDraftAction, getCurrentPropertyPostingContextAction, getListingAgentOptionsAction, savePropertyCreateDraftAction } from '@/app/actions';
 
 import { Form } from '@/components/ui/form';
 import { useToast } from '@/logica/core/hooks/use-toast';
@@ -358,6 +358,30 @@ export default function CreatePropertyPage() {
         return true;
     }
 
+    async function handleDropCreationDraft() {
+        if (!draftChangeId) {
+            router.push('/manage/properties');
+            return true;
+        }
+
+        const result = await cancelPropertyChangeDraftAction(draftChangeId);
+        if (!result.success) {
+            toast({
+                variant: 'destructive',
+                title: 'Could not drop property',
+                description: result.error || 'Please try again.',
+            });
+            return false;
+        }
+
+        toast({
+            title: 'Property dropped',
+            description: 'The unrequested property draft has been removed.',
+        });
+        router.push('/manage/properties');
+        return true;
+    }
+
     return (
         <div className="max-w-6xl mx-auto">
             <Form {...form}>
@@ -371,6 +395,8 @@ export default function CreatePropertyPage() {
                         submitLabel={isPending ? 'Creating...' : 'Create Property'}
                         agencyRule={agencyRule}
                         onSectionAdvance={handleSectionAdvance}
+                        canDropCreationDraft={Boolean(draftChangeId)}
+                        onDropCreationDraft={handleDropCreationDraft}
                         allowSectionJumping={false}
                         canEditOwnership={false}
                         listingContext={listingContext}
