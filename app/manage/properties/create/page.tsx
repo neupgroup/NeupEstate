@@ -85,6 +85,7 @@ export default function CreatePropertyPage() {
     const requestedChangeId = searchParams.get('changeId')?.trim() || null;
     const { toast } = useToast();
     const [isPending, startTransition] = useTransition();
+    const [isAutoSaving, setIsAutoSaving] = useState(false);
     const [users, setUsers] = React.useState<User[]>([]);
     const [accountId, setAccountId] = useState<string | null>(null);
     const [listingAgentOptions, setListingAgentOptions] = useState<Array<{ id: string; name: string; imageUrl: string | null; agencyId: string | null; agencyName: string | null }>>([]);
@@ -306,33 +307,39 @@ export default function CreatePropertyPage() {
 
     async function handleSectionAdvance(fromIndex: number, toIndex: number) {
         if (fromIndex < 0) return true;
-
-        const result = await savePropertyCreateDraftAction({
-            changeId: draftChangeId,
-            postingAgencyId,
-            workingProfileId: activeWorkingProfileId,
-            data: form.getValues(),
-        });
-
-        if (!result.success) {
-            toast({
-                variant: 'destructive',
-                title: 'Could not save draft',
-                description: result.error || 'Please try again before continuing.',
+        setIsAutoSaving(true);
+        try {
+            const result = await savePropertyCreateDraftAction({
+                changeId: draftChangeId,
+                postingAgencyId,
+                workingProfileId: activeWorkingProfileId,
+                data: form.getValues(),
             });
-            return false;
-        }
 
-        if (result.changeId && result.changeId !== draftChangeId) {
-            syncDraftChangeId(result.changeId);
-        }
+            if (!result.success) {
+                toast({
+                    variant: 'destructive',
+                    title: 'Could not save draft',
+                    description: result.error || 'Please try again before continuing.',
+                });
+                return false;
+            }
 
-        if (fromIndex === 0 && result.propertyId) {
-            router.push(`/manage/properties/${result.propertyId}/edit?section=specifics`);
-            return false;
-        }
+            if (result.changeId && result.changeId !== draftChangeId) {
+                syncDraftChangeId(result.changeId);
+            }
 
-        return true;
+            form.reset(form.getValues());
+
+            if (fromIndex === 0 && result.propertyId) {
+                router.push(`/manage/properties/${result.propertyId}/edit?section=specifics`);
+                return false;
+            }
+
+            return true;
+        } finally {
+            setIsAutoSaving(false);
+        }
     }
 
     return (
@@ -344,6 +351,7 @@ export default function CreatePropertyPage() {
                         users={users}
                         isEditForm={false}
                         isSubmitting={isPending}
+                        isAutoSaving={isAutoSaving || form.formState.isDirty}
                         submitLabel={isPending ? 'Creating...' : 'Create Property'}
                         agencyRule={agencyRule}
                         onSectionAdvance={handleSectionAdvance}

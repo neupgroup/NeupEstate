@@ -5,6 +5,7 @@ import type { UseFormReturn } from "react-hook-form";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { AgencyCustomizationRule, CreatePropertyFormValues, User } from "@/types";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 import { BasicDetailsSection } from "@/components/manage/property-form-sections/basic-details-section";
 import { PropertySpecificsSection } from "@/components/manage/property-form-sections/property-specifics-section";
 import { RoomsAndSpaceSection } from "@/components/manage/property-form-sections/rooms-and-space-section";
@@ -115,6 +116,7 @@ interface ProgressivePropertySectionsProps {
     users: User[];
     isEditForm: boolean;
     isSubmitting: boolean;
+    isAutoSaving?: boolean;
     submitLabel: string;
     /** Optional agency customization rule — enforced on top of Zod validation */
     agencyRule?: AgencyCustomizationRule | null;
@@ -156,6 +158,7 @@ export function ProgressivePropertySections({
     users,
     isEditForm,
     isSubmitting,
+    isAutoSaving = false,
     submitLabel,
     agencyRule,
     onSectionAdvance,
@@ -491,7 +494,13 @@ export function ProgressivePropertySections({
                         {nextError && errorStepIndex === i && (
                             <p className="mt-4 whitespace-pre-line text-sm text-destructive">{nextError}</p>
                         )}
-                        <div className="flex flex-col gap-2 mt-4 mb-6">
+                        <div className="flex flex-col gap-2 mt-8 mb-6">
+                            {!isLastStep && (
+                                <p className="mb-1 flex items-center gap-2 text-xs text-muted-foreground">
+                                    <span>Changes auto-save every few seconds.</span>
+                                    {isAutoSaving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null}
+                                </p>
+                            )}
                             <div className="flex items-center gap-2">
                                 {activeIndex > 0 && (
                                     <Button type="button" variant="outline" size="sm" onClick={handlePrev}>
@@ -584,7 +593,7 @@ function Section({ index, title, description, isActive, hasError, onOpen, isClic
             </button>
 
             {isActive && (
-                <div className="px-1 pb-6">
+                <div className="px-1 pt-3 pb-6">
                     <div className="animate-in fade-in-0 duration-200">
                         {children}
                     </div>

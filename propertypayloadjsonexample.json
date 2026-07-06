@@ -1,0 +1,182 @@
+{
+  "id": "cmxxxxxxxxxxxxxxxx",
+  "customId": "H0001",
+  "slug": "modern-house-budhanilkantha",
+  "keywords": ["house","budhanilkantha","sale"],
+  "tags": ["modern", "residential", "family", "spacious"],
+
+  "title": "Modern 2.5 Storey House at Budhanilkantha",
+  "description": "Beautiful residential house suitable for family living. <br> <br> Features: <br> - 4 Bedrooms <br> - 3 Bathrooms <br> - 2 Living Rooms <br> - 1 Dining Room <br> - 2 Kitchens <br> - 2.5 Floors <br> - Car Parking for 2 Vehicles <br> - Bike Parking for 6 Bikes <br> - Built in 2022 <br> - Unfurnished",
+
+  "purpose": ["SALE", "RENT"],
+  "category": ["HOUSE", "LAND"],
+  "type": ["RESIDENTIAL", "COMMERCIAL"],
+
+  "status": "ACTIVE",
+  "visibility": "PUBLIC",
+
+  "images": [
+    {
+      "id": "img_1",
+      "url": "https://cdn.example.com/property/front.jpg",
+      "type": "IMAGE",
+      "isCover": true,
+      "order": 1
+    },
+    {
+      "id": "img_2",
+      "url": "https://cdn.example.com/property/living-room.jpg",
+      "type": "IMAGE",
+      "order": 2
+    }
+  ],
+
+  "owner": [
+    {
+      "type": "PRIMARY_OWNER",
+      "id": "owner_xxxxx",
+      "displayName": "Ram Sharma",
+      "displayImage": "https://...",
+      "isPrimary": true
+    },
+    {
+      "type": "CO_OWNER",
+      "id": "owner_yyyyy",
+      "displayName": "Sita Sharma",
+      "displayImage": "https://..."
+    }
+  ],
+
+  "listedBy": {
+    "type": "AGENT",
+    "id": "agent_xxxxx",
+    "displayName": "John Doe",
+    "displayImage": "https://..."
+  },
+
+  "supportingAgents": [
+    {
+      "type": "AGENCY_AGENT",
+      "id": "agent_yyyyy",
+      "displayName": "Jane Smith",
+      "displayImage": "https://..."
+    }
+  ],
+
+  "location": 
+  {
+    "id": "location_xxx",
+    "text": "Budhanilkantha, Kathmandu",
+    "geo": "27.8052,85.3648",
+    "structured": {
+      "country": "Nepal",
+      "province": "Bagmati",
+      "district": "Kathmandu",
+      "municipality": "Budhanilkantha",
+      "ward": 8,
+      "area": "Golfutar"
+    }
+  },
+
+  "pricing": [
+    {
+      "type": "SALE",
+      "askingAmount": 12000000,
+      "negotiableAmount": 11000000,
+      "currency": "NPR",
+      "basis": "FLAT|PER_UNIT",
+      "unit": "aana/sqm/sqft",
+      "isPrimary": true
+    },
+    {
+      "type": "RENT",
+      "askingAmount": 50000,
+      "negotiableAmount": 45000,
+      "currency": "NPR",
+      "basis": "PER_YEAR|PER_MONTH|PER_MONTH_PER_UNIT|PER_YEAR_PER_UNIT",
+      "unit": "aana/sqm/sqft"
+    }
+  ],
+
+  "roadAccess": {
+    "roadWidth": 13,
+    "roadWidthUnit": "FT",
+    "roadType": "BLACKTOPPED"
+  },
+
+  "distance": {
+    "temple": 400,
+    "atm": 200,
+    "school": 500,
+    "hospital": 1200,
+    "restaurant": 300
+  },
+
+  "amenities": [
+    "24 Hour Water",
+    "Parking",
+    "Garden",
+    "Balcony",
+    "Internet"
+  ],
+
+  "details": {
+    "house": {
+      "bedrooms": 4,
+      "bathrooms": 3,
+      "livingRooms": 2,
+      "diningRooms": 1,
+      "kitchens": 2,
+      "floors": 2.5,
+
+      "carParkingSpots": 2,
+      "bikeParkingSpots": 6,
+
+      "builtYear": 2022,
+      "furnished": false,
+
+      "details" : []
+    },
+
+    "apartment": {
+      "bedrooms": 4,
+      "bathrooms": 3,
+      "livingRooms": 2,
+      "diningRooms": 1,
+      "kitchens": 2,
+
+      "onfloor": 2,
+
+      "builtYear": 2022,
+      "furnished": false,
+
+      "details" : []
+    },
+
+    "land": {
+      "area": 4000.234,
+
+      "details": []
+    },
+
+    "flat": {
+      "bedrooms": 4,
+      "bathrooms": 3,
+      "livingRooms": 2,
+      "diningRooms": 1,
+      "kitchens": 2,
+
+      "onfloor": 2,
+
+      "furnished": false,
+
+      "details" : []
+    },
+
+    "space": {
+      "area": 4000.234,
+
+      "details": []
+    }
+  }
+}

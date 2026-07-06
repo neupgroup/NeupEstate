@@ -606,7 +606,11 @@ export async function getAwaitingReviewItems(
 
     if (!opts.includeAll) {
       const pendingIds = new Set(draftItems.map((item) => item.propertyId).filter((id): id is string => Boolean(id)));
-      if (pendingIds.size === 0) return [];
+      if (pendingIds.size === 0) {
+        return draftItems
+          .sort((a, b) => String(b.modifiedOn || '').localeCompare(String(a.modifiedOn || '')))
+          .slice(0, limit);
+      }
 
       const scopedProperties = await prisma.property.findMany({
         where: {
