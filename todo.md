@@ -13,6 +13,7 @@
 - [ ] Add a Neup documentation block to [app/manage/team/brand-account-card.tsx](/Users/neupkishor/Code/neup.estate/app/manage/team/brand-account-card.tsx).
 - [ ] Add a Neup documentation block to [app/manage/team/account-actions.ts](/Users/neupkishor/Code/neup.estate/app/manage/team/account-actions.ts).
 - [ ] Add a Neup documentation block to [app/manage/team/page.tsx](/Users/neupkishor/Code/neup.estate/app/manage/team/page.tsx).
+- [ ] Add a Neup documentation block to [app/[handle]/properties/page.tsx](/Users/neupkishor/Code/neup.estate/app/[handle]/properties/page.tsx).
 - [ ] Add a Neup documentation block to [logica/auth/authorization.ts](/Users/neupkishor/Code/neup.estate/logica/auth/authorization.ts).
 - [ ] Add Neup documentation blocks to [prisma/schema.prisma](/Users/neupkishor/Code/neup.estate/prisma/schema.prisma) for account, agency mapping, and authz access tables.
 - [ ] Add Neup documentation blocks to [prisma/schema.prisma](/Users/neupkishor/Code/neup.estate/prisma/schema.prisma) for the `base_leads` and `shared_leads` models.

@@ -20,8 +20,6 @@ import { PropertyDetailRenderNotice } from '@/components/property-detail-render-
 import type { Property } from '@/types';
 import { areaValueToSqft } from '@/types';
 import type { Metadata, ResolvingMetadata } from 'next';
-import { requirePagePermission } from '@/logica/auth/page-guard';
-import { PERMISSIONS } from '@/logica/auth/permissions';
 import { getHiddenPriceLabel } from '@/logica/core/property-price-display';
 import { PropertyMediaGallery } from '@/components/manage/property-media-gallery';
 
@@ -321,7 +319,6 @@ function generateSchema(property: Property) {
 }
 
 export default async function PropertyDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-  await requirePagePermission(PERMISSIONS.public.propertyView);
   const { slug } = await params;
   let property;
   
