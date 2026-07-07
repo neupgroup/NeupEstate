@@ -23,6 +23,45 @@ function mapRecord(r: any): Agent {
   };
 }
 
+function mapAccountRecord(record: {
+  id: string;
+  neupId: string | null;
+  displayName: string | null;
+  displayImage: string | null;
+}): Agent {
+  return {
+    id: record.id,
+    name: record.displayName?.trim() || record.neupId?.trim() || record.id,
+    slug: record.neupId?.trim() || record.id,
+    location: '',
+    registered: true,
+    contact: {},
+    userId: record.id,
+    photoUrl: record.displayImage?.trim() || undefined,
+    about: undefined,
+    specializations: [],
+    availability_hours: undefined,
+    time_slot_duration: undefined,
+    unavailability: undefined,
+  };
+}
+
+async function getAccountBackedAgents(): Promise<Agent[]> {
+  const accounts = await prisma.account.findMany({
+    where: { accountType: 'individual.agent' },
+    select: {
+      id: true,
+      neupId: true,
+      displayName: true,
+      displayImage: true,
+      accessedOn: true,
+    },
+    orderBy: [{ accessedOn: 'desc' }, { createdOn: 'desc' }],
+  });
+
+  return accounts.map(mapAccountRecord);
+}
+
 async function uniqueSlug(name: string, excludeId?: string): Promise<string> {
   const base = slugify(name, { lower: true, strict: true, remove: /[*+~.()'\"!:@]/g });
   let slug = base;
@@ -36,13 +75,27 @@ async function uniqueSlug(name: string, excludeId?: string): Promise<string> {
 
 export async function getAgents({ limit = 100, offset = 0 }: { limit?: number; offset?: number } = {}): Promise<Agent[]> {
   try {
-    const records = await prisma.agent.findMany({ orderBy: { createdAt: 'desc' }, take: limit, skip: offset });
-    return records.map(mapRecord);
+    const accountBackedAgents = await getAccountBackedAgents();
+    return accountBackedAgents.slice(offset, offset + limit);
   } catch (e) { await logProblem(e, 'getAgents'); return []; }
 }
 
 export async function getAgentById(id: string): Promise<Agent | null> {
   try {
+    const account = await prisma.account.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        neupId: true,
+        displayName: true,
+        displayImage: true,
+        accountType: true,
+      },
+    });
+    if (account && account.accountType === 'individual.agent') {
+      return mapAccountRecord(account);
+    }
+
     const record = await prisma.agent.findUnique({ where: { id } });
     return record ? mapRecord(record) : null;
   } catch (e) { await logProblem(e, `getAgentById ${id}`); return null; }
@@ -50,6 +103,25 @@ export async function getAgentById(id: string): Promise<Agent | null> {
 
 export async function getAgentBySlug(slug: string): Promise<Agent | null> {
   try {
+    const account = await prisma.account.findFirst({
+      where: {
+        OR: [
+          { neupId: slug },
+          { id: slug },
+        ],
+      },
+      select: {
+        id: true,
+        neupId: true,
+        displayName: true,
+        displayImage: true,
+        accountType: true,
+      },
+    });
+    if (account && account.accountType === 'individual.agent') {
+      return mapAccountRecord(account);
+    }
+
     const record = await prisma.agent.findFirst({ where: { slug } });
     if (record) return mapRecord(record);
     return getAgentById(slug);

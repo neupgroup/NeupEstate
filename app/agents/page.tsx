@@ -1,4 +1,3 @@
-
 import { getAgents } from "@/services/agent-service";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -7,6 +6,8 @@ import { User, MapPin, AlertCircle, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GuestSigninBanner } from "@/components/layout/guest-signin-banner";
 import { getAuthenticatedMeData } from "@/services/auth/me";
+
+export const dynamic = "force-dynamic";
 
 export default async function AgentsPage() {
   const agents = await getAgents({ limit: 100 });
