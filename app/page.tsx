@@ -1,4 +1,10 @@
+/*
+::neup.documentation::home-page
 
+Composes the public homepage with hero, alternating content sections, and calls to action.
+
+::end
+*/
 import { Suspense } from "react";
 import { SearchSection } from "@/components/estate";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -38,32 +44,34 @@ export default async function Home() {
     <main className="flex-1">
       <SearchSection />
       {showGuestBanner && <GuestSigninBanner variant="hero" />}
-      
-      <Suspense fallback={<SectionSkeleton />}>
-        <PopularCategories />
-      </Suspense>
-      
-      <Suspense fallback={<SectionSkeleton />}>
-        <FeaturedProperties />
-      </Suspense>
 
-      <Suspense fallback={<SectionSkeleton />}>
-        <CuratedForYouSection />
-      </Suspense>
-      
-      <PropertyRequirementsCTA />
+      <div className="home-sections">
+        <Suspense fallback={<SectionSkeleton />}>
+          <PopularCategories />
+        </Suspense>
+        
+        <Suspense fallback={<SectionSkeleton />}>
+          <FeaturedProperties />
+        </Suspense>
 
-      <Suspense fallback={<SectionSkeleton />}>
-        <RecentProperties />
-      </Suspense>
-      
-      <PostPropertyCTA />
-      
-      <Suspense fallback={<SectionSkeleton />}>
-        <FeaturedAgencies />
-      </Suspense>
+        <Suspense fallback={<SectionSkeleton />}>
+          <CuratedForYouSection />
+        </Suspense>
+        
+        <PropertyRequirementsCTA />
 
-      <StartWithNeupEstate />
+        <Suspense fallback={<SectionSkeleton />}>
+          <RecentProperties />
+        </Suspense>
+        
+        <PostPropertyCTA />
+        
+        <Suspense fallback={<SectionSkeleton />}>
+          <FeaturedAgencies />
+        </Suspense>
+
+        <StartWithNeupEstate />
+      </div>
       
     </main>
   );

@@ -26,6 +26,8 @@
 - [ ] Add a Neup documentation block to [components/estate/PropertyImageCarousel.v1.tsx](/Users/neupkishor/Code/neup.estate/components/estate/PropertyImageCarousel.v1.tsx).
 - [ ] Add a Neup documentation block to [components/recommended-properties.tsx](/Users/neupkishor/Code/neup.estate/components/recommended-properties.tsx).
 - [ ] Add a Neup documentation block to [components/ui/card.tsx](/Users/neupkishor/Code/neup.estate/components/ui/card.tsx).
+- [ ] Add a Neup documentation block to [components/search-section.tsx](/Users/neupkishor/Code/neup.estate/components/search-section.tsx).
+- [ ] Add a Neup documentation block to [components/home/property-requirements-cta.tsx](/Users/neupkishor/Code/neup.estate/components/home/property-requirements-cta.tsx).
 - [ ] Add a Neup documentation block to [app/page.tsx](/Users/neupkishor/Code/neup.estate/app/page.tsx).
 - [ ] Add a Neup documentation block to [app/manage/properties/[id]/edit/page.tsx](/Users/neupkishor/Code/neup.estate/app/manage/properties/[id]/edit/page.tsx).
 - [ ] Add a Neup documentation block to [app/manage/properties/[id]/page.tsx](/Users/neupkishor/Code/neup.estate/app/manage/properties/[id]/page.tsx).

@@ -1,4 +1,10 @@
+/*
+::neup.documentation::post-property-cta
 
+Homepage call-to-action section that encourages owners to list a property.
+
+::end
+*/
 import { ClientLink } from "@/components/estate";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/logica/core/utils";
@@ -6,7 +12,7 @@ import { Section } from "@/components/home/_components/section";
 
 export function PostPropertyCTA() {
     return (
-        <Section className="bg-secondary/50">
+        <Section>
             <div className="max-w-2xl text-left">
                   <h2 className="text-3xl font-headline font-bold">Have a property to sell or rent?</h2>
                   <p className="mt-2 text-muted-foreground">
