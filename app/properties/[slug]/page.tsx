@@ -22,6 +22,7 @@ import { areaValueToSqft } from '@/types';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { getHiddenPriceLabel } from '@/logica/core/property-price-display';
 import { PropertyMediaGallery } from '@/components/manage/property-media-gallery';
+import { getLocation } from '@/services/property-location-service';
 
 function stripHtml(html: string) {
   return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
@@ -270,6 +271,8 @@ const DetailItem = ({ label, value }: { label: string, value: React.ReactNode })
 function generateSchema(property: Property) {
     const slugOrId = property.slug || property.id;
     const propertyUrl = buildPublicAppUrl(undefined, `/properties/${slugOrId}`);
+    const mapLocation = getLocation(property);
+    const showExactMapLocation = mapLocation?.mode === 'exact';
 
     let schemaType = 'Residence';
     switch (property.category) {
@@ -302,7 +305,7 @@ function generateSchema(property: Property) {
                 addressCountry: property.structuredLocation.country,
             }
         }),
-        ...(property.latitude && property.longitude && {
+        ...(showExactMapLocation && property.latitude && property.longitude && {
             geo: {
                 '@type': 'GeoCoordinates',
                 latitude: property.latitude,
@@ -462,6 +465,8 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
     frequency: pricingFrequency,
     unit: pricingUnit,
   });
+  const mapLocation = getLocation(property);
+  const showExactMapLocation = mapLocation?.mode === 'exact';
 
   return (
     <>
@@ -557,7 +562,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
                   <DetailItem label="Ward" value={property.structuredLocation.ward} />
                   <DetailItem label="Street/Tole" value={property.structuredLocation.street} />
                   <DetailItem label="Landmark" value={property.structuredLocation.landmark} />
-                  <DetailItem label="Coordinates" value={property.structuredLocation.coordinates} />
+                  {showExactMapLocation ? <DetailItem label="Coordinates" value={property.structuredLocation.coordinates} /> : null}
               </DetailCard>
             )}
             
@@ -695,20 +700,13 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
             )}
 
 
-            {(property.latitude && property.longitude) || property.location || property.structuredLocation ? (
+            {mapLocation ? (
               <div className="mt-6 border-t pt-6">
                 <h2 className="text-2xl font-headline font-semibold mb-4">Location on Map</h2>
                 <PropertyMap
-                  center={property.latitude && property.longitude ? { lat: property.latitude, lng: property.longitude } : null}
-                  query={[
-                    property.structuredLocation?.street,
-                    property.structuredLocation?.landmark,
-                    property.structuredLocation?.municipality,
-                    property.structuredLocation?.district,
-                    property.structuredLocation?.province,
-                    property.structuredLocation?.country,
-                    property.location,
-                  ].filter(Boolean).join(", ")}
+                  center={mapLocation.center}
+                  searchTargets={mapLocation.searchTargets}
+                  approximate={mapLocation.approximate}
                 />
               </div>
             ) : null}
