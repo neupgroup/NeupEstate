@@ -843,6 +843,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
         structuredLocation: property.structuredLocation,
         location: property.location,
     });
+    const showOwnerInformation = property.details?.showOwnerInformation ?? true;
     const changeContext = resolvedProperty ? await getPropertyChangeContextAction(resolvedProperty.id) : null;
     const currentChange = resolvedProperty
         ? (changeContext?.success ? changeContext.currentUserChange : null)
@@ -1110,21 +1111,23 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                 </div>
             </Section>
 
-            <Section title="Owner Information" description="Ownership details." editHref={canEditOwnership ? `${editUrl}?section=owners` : undefined}>
-                <div className="space-y-4">
-                    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                        {property.owners?.length ? (
-                            property.owners.map((owner, index) => (
-                                <OwnerCard key={`${owner.ownerClientId || owner.clientName || index}-${index}`} owner={owner} index={index} />
-                            ))
-                        ) : (
-                            <div className="rounded-xl border border-border/70 bg-background p-4 text-sm text-muted-foreground">
-                                No owners recorded.
-                            </div>
-                        )}
+            {showOwnerInformation ? (
+                <Section title="Owner Information" description="Ownership details." editHref={canEditOwnership ? `${editUrl}?section=owners` : undefined}>
+                    <div className="space-y-4">
+                        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                            {property.owners?.length ? (
+                                property.owners.map((owner, index) => (
+                                    <OwnerCard key={`${owner.ownerClientId || owner.clientName || index}-${index}`} owner={owner} index={index} />
+                                ))
+                            ) : (
+                                <div className="rounded-xl border border-border/70 bg-background p-4 text-sm text-muted-foreground">
+                                    No owners recorded.
+                                </div>
+                            )}
+                        </div>
                     </div>
-                </div>
-            </Section>
+                </Section>
+            ) : null}
 
             {visibleDocuments.length > 0 ? (
                 <Section title="Documents" description="Attached files and reference links." editHref={`${editUrl}?section=documents`}>

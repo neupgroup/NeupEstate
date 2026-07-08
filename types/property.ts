@@ -328,6 +328,15 @@ export interface Property {
     kitchens?: number;
     diningRooms?: number;
     livingRooms?: number;
+    attachedBathrooms?: number;
+    homeOffices?: number;
+    libraries?: number;
+    studyRooms?: number;
+    meetingRooms?: number;
+    guestRooms?: number;
+    workersCabins?: number;
+    poojaRooms?: number;
+    storeRooms?: number;
     carParkingSpots?: number;
     bikeParkingSpots?: number;
     slug?: string;
@@ -370,6 +379,15 @@ export const CreatePropertySchema = z.object({
     kitchens: emptyStringToUndefinedInt,
     diningRooms: emptyStringToUndefinedInt,
     livingRooms: emptyStringToUndefinedInt,
+    attachedBathrooms: emptyStringToUndefinedInt,
+    homeOffices: emptyStringToUndefinedInt,
+    libraries: emptyStringToUndefinedInt,
+    studyRooms: emptyStringToUndefinedInt,
+    meetingRooms: emptyStringToUndefinedInt,
+    guestRooms: emptyStringToUndefinedInt,
+    workersCabins: emptyStringToUndefinedInt,
+    poojaRooms: emptyStringToUndefinedInt,
+    storeRooms: emptyStringToUndefinedInt,
     carParkingSpots: emptyStringToUndefinedInt,
     bikeParkingSpots: emptyStringToUndefinedInt,
 

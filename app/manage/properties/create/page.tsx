@@ -30,6 +30,15 @@ const DEFAULT_CREATE_PROPERTY_VALUES: CreatePropertyFormValues = {
     kitchens: 1,
     diningRooms: 0,
     livingRooms: 1,
+    attachedBathrooms: 0,
+    homeOffices: 0,
+    libraries: 0,
+    studyRooms: 0,
+    meetingRooms: 0,
+    guestRooms: 0,
+    workersCabins: 0,
+    poojaRooms: 0,
+    storeRooms: 0,
     carParkingSpots: 0,
     bikeParkingSpots: 0,
     amenities: '',
@@ -237,7 +246,7 @@ export default function CreatePropertyPage() {
         if (path === "title" || path === "description") return "copy";
         if (path.startsWith("amenities")) return "ammenities";
         if (path.startsWith("area") || path.startsWith("landDetails") || path.startsWith("plots") || path.startsWith("apartmentUnits")) return "specifics";
-        if (path === "bedrooms" || path === "bathrooms" || path === "kitchens" || path === "diningRooms" || path === "livingRooms" || path === "carParkingSpots" || path === "bikeParkingSpots") return "space";
+        if (path === "bedrooms" || path === "bathrooms" || path === "kitchens" || path === "diningRooms" || path === "livingRooms" || path === "attachedBathrooms" || path === "homeOffices" || path === "libraries" || path === "studyRooms" || path === "meetingRooms" || path === "guestRooms" || path === "workersCabins" || path === "poojaRooms" || path === "storeRooms" || path === "carParkingSpots" || path === "bikeParkingSpots") return "space";
         if (path === "purposes" || path === "category" || path === "categories" || path === "type" || path === "types") return "basic";
         return "basic";
     }
@@ -259,6 +268,15 @@ export default function CreatePropertyPage() {
             "kitchens",
             "diningRooms",
             "livingRooms",
+            "attachedBathrooms",
+            "homeOffices",
+            "libraries",
+            "studyRooms",
+            "meetingRooms",
+            "guestRooms",
+            "workersCabins",
+            "poojaRooms",
+            "storeRooms",
             "carParkingSpots",
             "bikeParkingSpots",
             "amenities",

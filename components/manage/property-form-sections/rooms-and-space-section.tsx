@@ -18,6 +18,15 @@ type RoomKey =
     | "kitchens"
     | "livingRooms"
     | "diningRooms"
+    | "attachedBathrooms"
+    | "homeOffices"
+    | "libraries"
+    | "studyRooms"
+    | "meetingRooms"
+    | "guestRooms"
+    | "workersCabins"
+    | "poojaRooms"
+    | "storeRooms"
     | "carParkingSpots"
     | "bikeParkingSpots";
 
@@ -30,24 +39,27 @@ type RoomConfig = {
 const ROOMS: RoomConfig[] = [
     { key: "bedrooms",         label: "Bedroom",      emoji: "🛏️" },
     { key: "bathrooms",        label: "Bathroom",     emoji: "🚿" },
+    { key: "attachedBathrooms", label: "Attached Bathroom", emoji: "🛁" },
     { key: "kitchens",         label: "Kitchen",      emoji: "🍳" },
     { key: "livingRooms",      label: "Living Room",  emoji: "🛋️" },
     { key: "diningRooms",      label: "Dining Room",  emoji: "🍽️" },
+    { key: "homeOffices",      label: "Home Office",  emoji: "💼" },
+    { key: "libraries",        label: "Library",      emoji: "📚" },
+    { key: "studyRooms",       label: "Study Room",   emoji: "✍️" },
+    { key: "meetingRooms",     label: "Meeting Room", emoji: "🗂️" },
+    { key: "guestRooms",       label: "Guest Room",   emoji: "🛌" },
+    { key: "workersCabins",    label: "Workers Cabin", emoji: "🧰" },
+    { key: "poojaRooms",       label: "Pooja Room",   emoji: "🪔" },
+    { key: "storeRooms",       label: "Store Room",   emoji: "📦" },
     { key: "carParkingSpots",  label: "Car Parking",  emoji: "🚗" },
     { key: "bikeParkingSpots", label: "Bike Parking", emoji: "🏍️" },
 ];
 
+const ROOM_KEYS = ROOMS.map((room) => room.key);
+
 export function RoomsAndSpaceSection({ category, fieldChangeNotes }: RoomsAndSpaceSectionProps) {
     const { watch, setValue } = useFormContext<CreatePropertyFormValues>();
-    const values = watch([
-        "bedrooms",
-        "bathrooms",
-        "kitchens",
-        "livingRooms",
-        "diningRooms",
-        "carParkingSpots",
-        "bikeParkingSpots",
-    ]) as Array<number | undefined>;
+    const values = watch(ROOM_KEYS) as Array<number | undefined>;
 
     const active = useMemo(() => ROOMS.filter((room, index) => {
         const value = values[index];

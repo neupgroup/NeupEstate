@@ -122,6 +122,29 @@ function hasPositiveValue(value: number | null | undefined): value is number {
   return typeof value === 'number' && !Number.isNaN(value) && value > 0;
 }
 
+function hasSaleObjective(purpose: string | null | undefined): boolean {
+  if (typeof purpose !== 'string') {
+    return false;
+  }
+
+  return purpose
+    .split(',')
+    .map((value) => value.trim().toLowerCase())
+    .includes('sale');
+}
+
+function hasEarningPotentialData(earnings: Property['earnings']): boolean {
+  if (!earnings) {
+    return false;
+  }
+
+  return Boolean(
+    (typeof earnings.type === 'string' && earnings.type.trim().length > 0) ||
+    hasPositiveValue(earnings.monthly) ||
+    hasPositiveValue(earnings.yearly)
+  );
+}
+
 function formatPricingBasisSuffix({
   basis,
   frequency,
@@ -417,6 +440,9 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
 
   const schemaJson = generateSchema({ ...property, images: safeImages, amenities: safeAmenities });
   const hiddenPriceLabel = getHiddenPriceLabel(property);
+  const showOwnerInformation = property.details?.showOwnerInformation ?? true;
+  const hasSalesObjective = hasSaleObjective(property.purpose);
+  const shouldShowEarningPotential = hasSalesObjective && hasEarningPotentialData(property.earnings);
   const roomSummaryItems = [
     { label: 'Bedrooms', value: property.bedrooms, singular: 'Bedroom', icon: <BedDouble className="h-4 w-4 text-primary" /> },
     { label: 'Bathrooms', value: property.bathrooms, singular: 'Bathroom', icon: <Bath className="h-4 w-4 text-primary" /> },
@@ -535,10 +561,12 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
               </DetailCard>
             )}
             
-            <DetailCard title="Owner Information" icon={<UserIcon className="h-5 w-5"/>}>
-              <DetailItem label="Primary Owner" value={primaryOwnerName} />
-              <DetailItem label="All Owners" value={safeOwnerNames.length ? safeOwnerNames.join(', ') : 'N/A'} />
-            </DetailCard>
+            {showOwnerInformation && (
+              <DetailCard title="Owner Information" icon={<UserIcon className="h-5 w-5"/>}>
+                <DetailItem label="Primary Owner" value={primaryOwnerName} />
+                <DetailItem label="All Owners" value={safeOwnerNames.length ? safeOwnerNames.join(', ') : 'N/A'} />
+              </DetailCard>
+            )}
 
             {safeDocuments.length > 0 && (
               <Card>
@@ -578,7 +606,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
               </DetailCard>
             )}
 
-            {property.earnings && (
+            {shouldShowEarningPotential && property.earnings && (
               <DetailCard title="Earning Potential" icon={<Banknote className="h-5 w-5"/>}>
                   <DetailItem label="Type" value={property.earnings.type} />
                   <DetailItem label="Monthly" value={property.earnings.monthly ? formatPrice(property.earnings.monthly, property.earnings.currency) : 'N/A'} />

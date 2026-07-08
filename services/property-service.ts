@@ -266,7 +266,17 @@ function mapRecord(record: any): Property {
     createdAt:        record.createdAt?.toISOString?.() || String(record.createdAt),
     updatedAt:        record.updatedAt?.toISOString?.() || String(record.updatedAt),
     floors, onFloor, roadAccess, latitude, longitude,
-    kitchens, diningRooms, livingRooms, carParkingSpots, bikeParkingSpots,
+    kitchens, diningRooms, livingRooms,
+    attachedBathrooms: typeof record.details?.attachedBathrooms === 'number' ? record.details.attachedBathrooms : undefined,
+    homeOffices: typeof record.details?.homeOffices === 'number' ? record.details.homeOffices : undefined,
+    libraries: typeof record.details?.libraries === 'number' ? record.details.libraries : undefined,
+    studyRooms: typeof record.details?.studyRooms === 'number' ? record.details.studyRooms : undefined,
+    meetingRooms: typeof record.details?.meetingRooms === 'number' ? record.details.meetingRooms : undefined,
+    guestRooms: typeof record.details?.guestRooms === 'number' ? record.details.guestRooms : undefined,
+    workersCabins: typeof record.details?.workersCabins === 'number' ? record.details.workersCabins : undefined,
+    poojaRooms: typeof record.details?.poojaRooms === 'number' ? record.details.poojaRooms : undefined,
+    storeRooms: typeof record.details?.storeRooms === 'number' ? record.details.storeRooms : undefined,
+    carParkingSpots, bikeParkingSpots,
     metaTags:         normalizeStringArray(record.metaTags),
     landDetails:      record.landDetails || undefined,
     plots:            record.plots || undefined,
@@ -820,6 +830,59 @@ export async function getBridgePropertiesByAccount(opts: BridgePropertyQuery): P
 
 // ─── Write ───────────────────────────────────────────────────────────────────
 
+function buildPropertyDetails(d: Partial<CreatePropertyInput> & Record<string, any>) {
+  const baseDetails = isPlainObject(d.details) ? { ...d.details } : {};
+
+  return {
+    ...baseDetails,
+    attachedBathrooms: typeof d.attachedBathrooms === 'number'
+      ? d.attachedBathrooms
+      : typeof baseDetails.attachedBathrooms === 'number'
+        ? baseDetails.attachedBathrooms
+        : 0,
+    homeOffices: typeof d.homeOffices === 'number'
+      ? d.homeOffices
+      : typeof baseDetails.homeOffices === 'number'
+        ? baseDetails.homeOffices
+        : 0,
+    libraries: typeof d.libraries === 'number'
+      ? d.libraries
+      : typeof baseDetails.libraries === 'number'
+        ? baseDetails.libraries
+        : 0,
+    studyRooms: typeof d.studyRooms === 'number'
+      ? d.studyRooms
+      : typeof baseDetails.studyRooms === 'number'
+        ? baseDetails.studyRooms
+        : 0,
+    meetingRooms: typeof d.meetingRooms === 'number'
+      ? d.meetingRooms
+      : typeof baseDetails.meetingRooms === 'number'
+        ? baseDetails.meetingRooms
+        : 0,
+    guestRooms: typeof d.guestRooms === 'number'
+      ? d.guestRooms
+      : typeof baseDetails.guestRooms === 'number'
+        ? baseDetails.guestRooms
+        : 0,
+    workersCabins: typeof d.workersCabins === 'number'
+      ? d.workersCabins
+      : typeof baseDetails.workersCabins === 'number'
+        ? baseDetails.workersCabins
+        : 0,
+    poojaRooms: typeof d.poojaRooms === 'number'
+      ? d.poojaRooms
+      : typeof baseDetails.poojaRooms === 'number'
+        ? baseDetails.poojaRooms
+        : 0,
+    storeRooms: typeof d.storeRooms === 'number'
+      ? d.storeRooms
+      : typeof baseDetails.storeRooms === 'number'
+        ? baseDetails.storeRooms
+        : 0,
+  };
+}
+
 function buildCoreData(d: Partial<CreatePropertyInput> & Record<string, any>) {
   const geo = (d.latitude != null && d.longitude != null) ? `${d.latitude},${d.longitude}` : '';
   const truncate = (s: string | undefined | null, max: number) =>
@@ -846,7 +909,7 @@ function buildCoreData(d: Partial<CreatePropertyInput> & Record<string, any>) {
     amenities:         Array.isArray(d.amenities) ? d.amenities : [],
     metaTags:          Array.isArray(d.metaTags) ? d.metaTags : [],
     pricing:           d.pricing ?? null,
-    details:           d.details ?? null,
+    details:           buildPropertyDetails(d),
     roadAccessDetails: d.roadAccessDetails ?? null,
     distancing:        d.distancing ?? null,
     earnings:          d.earnings ?? null,

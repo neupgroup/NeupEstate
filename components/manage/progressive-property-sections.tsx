@@ -218,7 +218,7 @@ export function ProgressivePropertySections({
             section: "space",
             title: "Rooms & Space",
             description: "Specify the number of rooms, parking, and other spaces.",
-            fields: ["bedrooms", "bathrooms", "kitchens", "diningRooms", "livingRooms", "carParkingSpots", "bikeParkingSpots"],
+            fields: ["bedrooms", "bathrooms", "kitchens", "diningRooms", "livingRooms", "attachedBathrooms", "homeOffices", "libraries", "studyRooms", "meetingRooms", "guestRooms", "workersCabins", "poojaRooms", "storeRooms", "carParkingSpots", "bikeParkingSpots"],
             render: () => <RoomsAndSpaceSection control={form.control} category={category} fieldChangeNotes={fieldChangeNotes} />,
         } satisfies PropertyFormStep]),
         {
