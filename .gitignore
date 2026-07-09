@@ -52,3 +52,7 @@ certificates
 # logs
 /logs
 *.log
+
+# Neup Apps system.
+logica
+core
