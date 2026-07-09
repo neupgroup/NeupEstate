@@ -1,6 +1,6 @@
 'use server';
 
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 import { logProblem } from './problem-service';
 import type { Property, CreatePropertyInput, PropertyFilters, ExtractedPropertyData, UpdatePropertyInput } from '@/types';
 import { areaValueToSqft } from '@/types';

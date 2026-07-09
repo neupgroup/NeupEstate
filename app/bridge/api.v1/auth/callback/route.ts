@@ -42,7 +42,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 import { logProblem } from '@/services/problem-service';
 import { getAuthenticatedAccount } from '@/services/auth';
 import { withRequestDevLog } from '@/services/site-dev-log-service';

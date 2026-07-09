@@ -4,7 +4,7 @@
  * Service for managing team members.
  */
 
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 import type { TeamMember } from '@prisma/client';
 
 // ─── Types ───────────────────────────────────────────────────────────────────

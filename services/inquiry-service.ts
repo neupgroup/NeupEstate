@@ -17,7 +17,7 @@ backward compatible without changing the table shape.
 ::end
 */
 
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 import type { Inquiry, CreateInquiryFormValues, InquiryStatus } from '@/types';
 import { getPropertyById } from './property-service';
 import { logProblem } from './problem-service';

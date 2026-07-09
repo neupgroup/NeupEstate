@@ -19,7 +19,7 @@ import { shouldIndexCrawledUrl } from '@/services/crawl/crawl-rules';
 import { extractIntelligencePage } from '@/services/ai/extract-intelligence-page-flow';
 import { extractCompetitorListing } from '@/services/ai/extract-competitor-listing-flow';
 import { revalidatePath } from 'next/cache';
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 import { upsertCompetitorListing } from '@/services/competitor-service';
 
 function getHttpStatusFromError(error: unknown): string | null {

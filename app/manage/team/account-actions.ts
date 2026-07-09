@@ -1,6 +1,6 @@
 'use server';
 
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 import { logProblem } from '@/services/problem-service';
 import { getIdentity } from '@/services/neupid/get-identity';
 import { createBrandAccountConnection, getBrandAccounts } from '@/services/neupid/get-brand-accounts';

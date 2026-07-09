@@ -1,7 +1,7 @@
 
 'use server';
 
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 import type { Problem } from '@/types';
 import { promises as fsp } from 'fs';
 import path from 'path';

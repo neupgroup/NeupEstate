@@ -1,6 +1,7 @@
 # TODO
 
 - [ ] Reconcile the deployed `PropertyStatus` enum with `prisma/schema.prisma`. Production still rejects `AWAITING_DELETION` even though the schema and migrations now include it.
+- [ ] Fix the current `npx tsc --noEmit` failures, including unresolved legacy `@/logica/*` imports, missing Prisma typing dependencies, and widespread implicit `any` errors.
 - [ ] Add Neup documentation blocks to [app/actions.ts](/Users/neupkishor/Code/neup.estate/app/actions.ts) for the property action flows that are currently undocumented.
 - [ ] Add a Neup documentation block to [app/accounts/page.tsx](/Users/neupkishor/Code/neup.estate/app/accounts/page.tsx).
 - [ ] Add a Neup documentation block to [app/bridge/api.v1/property/create/route.ts](/Users/neupkishor/Code/neup.estate/app/bridge/api.v1/property/create/route.ts).
@@ -70,8 +71,8 @@
 - [ ] Add a Neup documentation block to [components/agent-results.tsx](/Users/neupkishor/Code/neup.estate/components/agent-results.tsx).
 - [ ] Add a Neup documentation block to [services/user-service.ts](/Users/neupkishor/Code/neup.estate/services/user-service.ts).
 - [ ] Add a Neup documentation block to [services/site-dev-log-service.ts](/Users/neupkishor/Code/neup.estate/services/site-dev-log-service.ts).
+- [ ] Add a Neup documentation block to [tsconfig.json](/Users/neupkishor/Code/neup.estate/tsconfig.json).
 - [ ] Add a Neup documentation block to [types/account.ts](/Users/neupkishor/Code/neup.estate/types/account.ts).
 - [ ] Add a Neup documentation block to [types/communications.ts](/Users/neupkishor/Code/neup.estate/types/communications.ts).
 - [ ] Add a Neup documentation block to [types/personnel.ts](/Users/neupkishor/Code/neup.estate/types/personnel.ts).
-- [ ] Add a Neup documentation block to [logica/core/prisma.ts](/Users/neupkishor/Code/neup.estate/logica/core/prisma.ts).
 - [ ] Add a Neup documentation block to [logica/core/utils.ts](/Users/neupkishor/Code/neup.estate/logica/core/utils.ts).

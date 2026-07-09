@@ -2,8 +2,8 @@
 
 import * as React from "react";
 import { Input } from "@/components/ui/input";
-import { formatNepaliComma, toNepaliReadableWords } from "@/logica/core/nepali-price";
-import { cn } from "@/logica/core/utils";
+import { formatNepaliComma, toNepaliReadableWords } from "@/core/nepali-price";
+import { cn } from "@/core/utils";
 
 interface PriceInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "value" | "type"> {
   value: string;

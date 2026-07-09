@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 import { buildHandshakeGrantUrl, getAuthenticatedAccount } from '@/services/auth';
 
 type MeRow = {

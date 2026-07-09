@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Menu, X, BadgeCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { cn } from "@/logica/core/utils";
+import { cn } from "@/core/utils";
 import { getAccountDisplayName, getAccountHandle } from "@/logica/core/account-display";
 import { isActivePublicHrefV1 } from "@/components/logic/PublicNavSelection.v1";
 import { appendWorkingProfileV1, getLongestMatchingManageNavHrefV1 } from "@/components/logic/ManageNavSelection.v1";

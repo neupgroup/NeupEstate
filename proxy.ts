@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { buildPublicAppUrl } from '@/logica/core/public-url';
+import { buildPublicAppUrl } from '@/core/helpers/url';
 
 /**
  * proxy.ts — Next.js Edge Middleware

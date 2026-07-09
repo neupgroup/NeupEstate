@@ -101,7 +101,7 @@ export default async function AdminPage() {
 'use server';
 
 import { requireAuth } from '@/services/auth';
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 
 export async function updateProfile(formData: FormData) {
   const account = await requireAuth();
@@ -208,7 +208,7 @@ async function checkUserType() {
 // app/api/profile/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthenticatedAccount } from '@/services/auth';
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 
 export async function GET(req: NextRequest) {
   // Verify authentication
@@ -251,7 +251,7 @@ export async function GET(req: NextRequest) {
 // app/api/properties/favorite/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { getAccountId } from '@/services/auth';
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 
 export async function POST(req: NextRequest) {
   const accountId = await getAccountId();
@@ -310,7 +310,7 @@ export async function GET(req: NextRequest) {
 // app/dashboard/page.tsx
 import { getAuthenticatedAccount } from '@/services/auth';
 import { redirect } from 'next/navigation';
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 
 export default async function DashboardPage() {
   const result = await getAuthenticatedAccount();
@@ -367,7 +367,7 @@ export default async function PropertyPage({ params }: { params: { id: string } 
 ```typescript
 // components/profile-header.tsx
 import { getAuthenticatedAccount, getAccountInfo } from '@/services/auth';
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 
 export async function ProfileHeader() {
   const result = await getAuthenticatedAccount();
@@ -411,7 +411,7 @@ export async function ProfileHeader() {
 'use server';
 
 import { getAccountId, isAuthenticated } from '@/services/auth';
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 import { revalidatePath } from 'next/cache';
 
 export async function updateProfile(formData: FormData) {
@@ -441,7 +441,7 @@ export async function updateProfile(formData: FormData) {
 'use server';
 
 import { getAccountId } from '@/services/auth';
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 
 export async function saveProperty(propertyId: string) {
   const accountId = await getAccountId();

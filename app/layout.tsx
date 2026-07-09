@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { Outfit } from 'next/font/google';
 import { cookies } from 'next/headers';
 import './globals.css';
-import { cn } from '@/logica/core/utils';
+import { cn } from '@/core/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { Providers } from '@/components/layout/providers';
 import { ActivityTracker } from '@/components/activity-tracker';

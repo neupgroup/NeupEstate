@@ -4,7 +4,7 @@ import { getAccountById } from '@/services/account-service';
 import { getRequirementByUserId } from '@/services/requirements-service';
 import { getSavedProperties, getPaginatedProperties } from '@/services/property-service';
 import { isAgencyLikeAccountType } from '@/services/account-type';
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 import { requireAuth } from '@/services/auth/account';
 import { logProblem } from '@/services/problem-service';
 import { ClientLink } from '@/components/client-link';

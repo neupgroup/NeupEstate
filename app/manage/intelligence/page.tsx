@@ -5,7 +5,7 @@ import { BarChart2, TrendingUp, ListChecks, Swords, FileText, Bell } from 'lucid
 import { TrackChangesButton } from './track-changes-button';
 import { requirePagePermission } from '@/logica/auth/page-guard';
 import { PERMISSIONS } from '@/logica/auth/permissions';
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 import { getCurrentAccountId } from '@/app/actions';
 
 const sections = [

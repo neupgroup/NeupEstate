@@ -43,7 +43,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthenticatedAccount, buildHandshakeGrantUrl } from '@/services/auth';
 import { getSignedAccountInformation } from '@/services/account/lookup';
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 const getHandler = async (request: NextRequest) => {

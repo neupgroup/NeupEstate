@@ -4,7 +4,7 @@ import { getPropertyById, getPropertyReviewRequests } from "@/services/property-
 import { hasPermission } from "@/logica/auth/authorization";
 import { PERMISSIONS } from "@/logica/auth/permissions";
 import { cancelPropertyChangeDraftAction, getCurrentAccountId, getPropertyChangeContextAction, requestPropertyDeletionAction } from "@/app/actions";
-import { prisma } from "@/logica/core/prisma";
+import { prisma } from "@/core/database/prisma";
 import { Button } from "@/components/ui/button";
 import { PropertyReviewRequests } from "@/components/manage/property-review-requests";
 import { ClientLink } from "@/components/client-link";

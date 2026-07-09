@@ -44,7 +44,7 @@ import { createLead as createLeadService, createLeadActivity as createLeadActivi
 import { getIdentity } from '@/services/neupid/get-identity';
 import { hasPermission, requirePermission } from '@/logica/auth/authorization';
 import { PERMISSIONS } from '@/logica/auth/permissions';
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 import { isAgencyLikeAccountType, promoteStoredAccountType } from '@/services/account-type';
 import { resolvePropertyPostingContext } from '@/services/property-posting-context';
 

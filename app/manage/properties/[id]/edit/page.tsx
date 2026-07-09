@@ -975,20 +975,20 @@ export default function EditPropertyPage() {
                             <CardDescription className="mt-1">
                                 Update the details for "{property.title}".
                             </CardDescription>
-                            {property.isApproved && (
-                                <a
-                                    href={`/properties/${property.slug || property.id}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="mt-2 inline-flex items-center gap-2 text-sm text-primary hover:underline"
-                                >
-                                    View on site
-                                    <ExternalLink className="h-4 w-4" />
-                                </a>
-                            )}
                         </div>
                         <div className="flex flex-row sm:flex-col lg:flex-row gap-2 self-start sm:self-end" />
                     </div>
+                    {property.isApproved && (
+                        <a
+                            href={`/properties/${property.slug || property.id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
+                        >
+                            View on site
+                            <ExternalLink className="h-4 w-4" />
+                        </a>
+                    )}
 
                     <ProgressivePropertySections
                         form={form}

@@ -1,4 +1,4 @@
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 import { getAuthenticatedAccount } from '@/services/auth';
 import { isAgencyLikeAccountType } from '@/services/account-type';
 

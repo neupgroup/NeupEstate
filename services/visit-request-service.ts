@@ -1,7 +1,7 @@
 
 'use server';
 
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 import type { VisitRequest, CreateVisitRequestFormValues } from '@/types';
 import { getPropertyById } from './property-service';
 import { getAgentById } from './agent-service';

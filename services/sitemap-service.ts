@@ -1,7 +1,7 @@
 
 'use server';
 
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 import type { Sitemap, SitemapLog } from '@/types';
 import * as cheerio from 'cheerio';
 import { extractAndSaveProperty as extractAndSavePropertyFlow } from '@/services/ai/extract-property-details-flow';

@@ -4,7 +4,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 import { getAgencyMapByAccount, getAgencyMapsByAgency } from '@/services/agency-customization-service';
 import { requireAuth } from '@/services/auth/account';
 import { AlertCircle, ArrowLeft, Building2, CalendarCheck2, Eye, FileQuestion, Heart, TrendingUp, UsersRound } from 'lucide-react';

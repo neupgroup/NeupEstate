@@ -1,4 +1,4 @@
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { logProblem } from './problem-service';
 

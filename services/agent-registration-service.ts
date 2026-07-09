@@ -8,7 +8,7 @@ promotes the local account row to an agent account on success.
 */
 
 import { headers } from "next/headers";
-import { prisma } from "@/logica/core/prisma";
+import { prisma } from "@/core/database/prisma";
 import { getAccountId } from "@/services/auth";
 import { promoteStoredAccountType } from "@/services/account-type";
 import { logApiExchange } from "@/services/api-log-service";

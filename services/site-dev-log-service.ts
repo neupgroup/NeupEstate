@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 import { Prisma } from '@prisma/client';
 import type { NextRequest } from 'next/server';
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 import type { SiteDevLogEntry, SiteDevLogSetting, SiteDevLogSource } from '@/types';
 
 const SETTINGS_CACHE_TTL_MS = 5_000;

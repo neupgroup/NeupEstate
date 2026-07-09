@@ -2,7 +2,7 @@
 
 'use server';
 
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 import type { CreateUserActivityInput } from '@/types';
 import { logProblem } from './problem-service';
 

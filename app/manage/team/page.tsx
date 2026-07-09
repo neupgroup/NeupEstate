@@ -6,7 +6,7 @@ import {
   getAgencyMapsByAgency,
 } from '@/services/agency-customization-service';
 import { getAgencyAgentMapsByAgency } from '@/services/agency-agent-map-service';
-import { prisma } from '@/logica/core/prisma';
+import { prisma } from '@/core/database/prisma';
 import { Badge } from '@/components/ui/badge';
 import {
   Alert,
