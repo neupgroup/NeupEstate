@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 
-import {cn} from '@/logica/core/utils';
+import {cn} from '@/core/utils';
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, React.ComponentProps<'textarea'>>(
   ({className, ...props}, ref) => {

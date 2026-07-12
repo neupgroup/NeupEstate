@@ -4,7 +4,7 @@ import * as React from "react";
 import { reviewPropertyChangeAction } from "@/app/actions";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useToast } from "@/logica/core/hooks/use-toast";
+import { useToast } from "@/core/hooks/use-toast";
 import type { Property } from "@/types";
 import { PropertyImageGrid } from "@/components/manage/property-image-grid";
 import { useRouter } from "next/navigation";

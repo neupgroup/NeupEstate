@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useToast } from "@/logica/core/hooks/use-toast";
+import { useToast } from "@/core/hooks/use-toast";
 
 type PropertyDetailRenderNoticeProps = {
   show: boolean;

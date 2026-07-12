@@ -6,7 +6,7 @@ import { acceptAgencyAgentMapAction } from '@/app/actions';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useToast } from '@/logica/core/hooks/use-toast';
+import { useToast } from '@/core/hooks/use-toast';
 
 export type AgencyInvitationItem = {
   id: string;

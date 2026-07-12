@@ -7,7 +7,7 @@ Homepage call-to-action section that encourages owners to list a property.
 */
 import { ClientLink } from "@/components/estate";
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/logica/core/utils";
+import { cn } from "@/core/utils";
 import { Section } from "@/components/home/_components/section";
 
 export function PostPropertyCTA() {

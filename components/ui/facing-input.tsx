@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { ChevronRight, Triangle } from "lucide-react";
-import { cn } from "@/logica/core/utils";
+import { cn } from "@/core/utils";
 
 export type FacingDirection =
     | "North"

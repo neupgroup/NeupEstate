@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useFormContext, useFormState } from "react-hook-form";
 import { ChevronRight, Triangle } from "lucide-react";
-import { cn } from "@/logica/core/utils";
+import { cn } from "@/core/utils";
 
 type SystemKey = "aana" | "kattha" | "feet" | "meter";
 type SubUnit = { key: string; label: string; steps: number[] };

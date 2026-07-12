@@ -13,7 +13,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { PhoneInput } from '@/components/ui/phone-input';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/logica/core/hooks/use-toast';
+import { useToast } from '@/core/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 

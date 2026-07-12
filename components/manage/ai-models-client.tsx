@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { useToast } from '@/logica/core/hooks/use-toast';
+import { useToast } from '@/core/hooks/use-toast';
 import { createModelAction, updateModelAction, deleteModelAction, setDefaultModelAction } from '@/app/actions';
 import type { AIModel, CreateAIModelFormValues, UpdateAIModelFormValues } from '@/types';
 import { CreateAIModelSchema, UpdateAIModelSchema } from '@/types';

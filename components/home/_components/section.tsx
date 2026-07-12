@@ -7,7 +7,7 @@ Shared homepage section wrapper that provides consistent spacing and container w
 ::end
 */
 
-import { cn } from "@/logica/core/utils";
+import { cn } from "@/core/utils";
 
 export const Section = ({ children, className }: { children: React.ReactNode, className?: string }) => (
   <section className={cn("w-full py-12 transition-colors duration-300", className)}>

@@ -16,11 +16,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Heart, Loader2, Star, MapPin } from "lucide-react";
 import { useState, useTransition, useEffect } from "react";
-import { cn } from "@/logica/core/utils";
+import { cn } from "@/core/utils";
 import { getHiddenPriceLabel, getPrimaryCurrency, getPrimaryPrice, getPrimaryPricingSuffix } from "@/logica/core/property-price-display";
 import { SafeImage } from "./safe-image";
 import { toggleSavePropertyAction } from "@/app/actions";
-import { useToast } from "@/logica/core/hooks/use-toast";
+import { useToast } from "@/core/hooks/use-toast";
 import { isPropertySaved } from "@/services/property-service";
 import { getClientAccountId } from "@/services/account/get-account-id";
 

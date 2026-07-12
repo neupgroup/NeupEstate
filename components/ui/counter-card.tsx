@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { X } from "lucide-react";
-import { cn } from "@/logica/core/utils";
+import { cn } from "@/core/utils";
 
 interface CounterCardProps {
     name: string;

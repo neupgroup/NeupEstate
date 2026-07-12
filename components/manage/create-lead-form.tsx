@@ -13,14 +13,14 @@ import { PhoneInput } from '@/components/ui/phone-input';
 import { Button } from '@/components/ui/button';
 import { SelectionCards } from '@/components/ui/selection-cards';
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/logica/core/utils';
+import { cn } from '@/core/utils';
 import { Search, UserPlus, ChevronRight, UserSearch, X } from 'lucide-react';
 import { PriceInput } from '@/components/ui/price-input';
 import { createLeadAction, getCurrentAccountId } from '@/app/actions';
 import { getAccountById, getAccounts } from '@/services/account-service';
 import { getAgencyAgentMapsByAgency, getAgencyAgentMapsByAgent } from '@/services/agency-agent-map-service';
 import type { Account } from '@/types';
-import { useToast } from '@/logica/core/hooks/use-toast';
+import { useToast } from '@/core/hooks/use-toast';
 
 type SearchedClient = {
     id: string;

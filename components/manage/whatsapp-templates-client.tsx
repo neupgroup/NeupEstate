@@ -20,7 +20,7 @@ import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/logica/core/hooks/use-toast';
+import { useToast } from '@/core/hooks/use-toast';
 import { createWhatsAppTemplateAction, deleteWhatsAppTemplateAction } from '@/app/actions';
 import type { WhatsAppTemplate, CreateWhatsAppTemplateFormValues } from '@/types';
 import { CreateWhatsAppTemplateSchema, WhatsAppTemplateCategorySchema, WhatsAppTemplateLanguageSchema } from '@/types';

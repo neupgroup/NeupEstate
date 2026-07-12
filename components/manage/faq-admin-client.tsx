@@ -18,7 +18,7 @@ import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/logica/core/hooks/use-toast';
+import { useToast } from '@/core/hooks/use-toast';
 import { createFaqAction, updateFaqAction, deleteFaqAction } from '@/app/actions';
 import type { FAQ, CreateFaqFormValues } from '@/types';
 import { CreateFaqSchema, FaqCategorySchema } from '@/types';

@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from '@/components/ui/button';
 import { Trash2, Loader2 } from 'lucide-react';
-import { useToast } from '@/logica/core/hooks/use-toast';
+import { useToast } from '@/core/hooks/use-toast';
 import { deleteConversationAction } from '@/app/actions';
 
 interface DeleteConversationButtonProps {

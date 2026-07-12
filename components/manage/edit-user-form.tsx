@@ -14,7 +14,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { PhoneInput } from '@/components/ui/phone-input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useToast } from '@/logica/core/hooks/use-toast';
+import { useToast } from '@/core/hooks/use-toast';
 import { Loader2, Pencil, Trash2, PlusCircle, Link2, Info, CalendarDays, Clock, UserCircle, Fingerprint, Activity, Hourglass, Bookmark, BarChart, Wifi } from 'lucide-react';
 import type { UpdateUserFormValues, Account, UserPreferences, Property } from '@/types';
 import { UpdateUserSchema } from '@/types';

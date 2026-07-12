@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/logica/core/utils";
+import { cn } from "@/core/utils";
 
 export type CompassDirection =
     | "North" | "South" | "East" | "West"

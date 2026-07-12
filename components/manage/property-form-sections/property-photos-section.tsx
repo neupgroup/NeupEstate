@@ -8,7 +8,7 @@ import { CreatePropertyFormValues } from "@/types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ImagePlus, GripVertical, RotateCcw, Trash2 } from "lucide-react";
-import { useToast } from "@/logica/core/hooks/use-toast";
+import { useToast } from "@/core/hooks/use-toast";
 import { uploadPropertyMediaFile } from "./media-upload";
 
 interface PropertyPhotosSectionProps {

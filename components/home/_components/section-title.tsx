@@ -1,6 +1,6 @@
 import { ClientLink } from "@/components/estate";
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/logica/core/utils";
+import { cn } from "@/core/utils";
 import { ArrowRight, ChevronRight } from "lucide-react";
 
 export const SectionTitle = ({ children, href, showMoreButton = false }: { children: React.ReactNode, href?: string, showMoreButton?: boolean }) => (

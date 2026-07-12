@@ -9,9 +9,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useToast } from '@/logica/core/hooks/use-toast';
+import { useToast } from '@/core/hooks/use-toast';
 import { Loader2, Link2, Search, Users } from 'lucide-react';
-import { cn } from '@/logica/core/utils';
+import { cn } from '@/core/utils';
 
 type Props = {
   agencies: Account[];

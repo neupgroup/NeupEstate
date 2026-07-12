@@ -15,7 +15,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Trash2, Loader2 } from 'lucide-react';
-import { useToast } from '@/logica/core/hooks/use-toast';
+import { useToast } from '@/core/hooks/use-toast';
 import { clearAllProblemsAction } from '@/app/actions';
 
 export function ClearLogsButton() {

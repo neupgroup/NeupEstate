@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Users, MousePointerClick, UserPlus, FileQuestion, Search } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { ChartConfig, ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
-import { useToast } from '@/logica/core/hooks/use-toast';
+import { useToast } from '@/core/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const StatCard = ({ title, value, icon, description, isLoading }: { title: string; value?: string | number; icon: React.ReactNode; description: string; isLoading?: boolean }) => (

@@ -4,10 +4,10 @@
 import { useTransition } from 'react';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { useToast } from '@/logica/core/hooks/use-toast';
+import { useToast } from '@/core/hooks/use-toast';
 import { setAiInterventionAction } from '@/app/actions';
 import { Bot, User } from 'lucide-react';
-import { cn } from '@/logica/core/utils';
+import { cn } from '@/core/utils';
 
 interface AiInterventionToggleProps {
   conversationId: string;

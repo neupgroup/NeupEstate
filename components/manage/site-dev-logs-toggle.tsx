@@ -1,6 +1,6 @@
 import { Activity, PauseCircle } from 'lucide-react';
 import { Label } from '@/components/ui/label';
-import { cn } from '@/logica/core/utils';
+import { cn } from '@/core/utils';
 
 type SiteDevLogsToggleProps = {
   enabled: boolean;

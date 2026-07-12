@@ -8,7 +8,7 @@ import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/for
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, Search, Star, Trash2 } from "lucide-react";
-import { cn } from "@/logica/core/utils";
+import { cn } from "@/core/utils";
 
 type ClientSearchResult = {
     id: string;

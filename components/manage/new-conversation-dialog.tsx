@@ -17,7 +17,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { PhoneInput } from '@/components/ui/phone-input';
 import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/logica/core/hooks/use-toast';
+import { useToast } from '@/core/hooks/use-toast';
 import { Loader2, MessageSquarePlus } from 'lucide-react';
 import { CreateConversationSchema, type CreateConversationFormValues } from '@/types';
 import { createConversationAction } from '@/app/actions';

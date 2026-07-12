@@ -6,7 +6,7 @@ import { updateInquiryStatusAction } from '@/app/actions';
 import type { InquiryStatus } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/logica/core/hooks/use-toast';
+import { useToast } from '@/core/hooks/use-toast';
 import { Check, Mail, Archive, Loader2, RotateCcw } from 'lucide-react';
 
 interface InquiryStatusUpdaterProps {

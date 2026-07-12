@@ -1,4 +1,4 @@
-import { cn } from "@/logica/core/utils"
+import { cn } from "@/core/utils"
 
 function Skeleton({
   className,

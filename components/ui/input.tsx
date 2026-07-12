@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { cn } from "@/logica/core/utils"
+import { cn } from "@/core/utils"
 
 const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
   ({ className, type, ...props }, ref) => {

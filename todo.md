@@ -2,6 +2,8 @@
 
 - [ ] Reconcile the deployed `PropertyStatus` enum with `prisma/schema.prisma`. Production still rejects `AWAITING_DELETION` even though the schema and migrations now include it.
 - [ ] Fix the current `npx tsc --noEmit` failures, including unresolved legacy `@/logica/*` imports, missing Prisma typing dependencies, and widespread implicit `any` errors.
+- [ ] Add a Neup documentation block to [app/api/auth/me/route.ts](/Users/neupkishor/Code/neup.estate/app/api/auth/me/route.ts).
+- [ ] Add a Neup documentation block to [app/api/auth/user/route.ts](/Users/neupkishor/Code/neup.estate/app/api/auth/user/route.ts).
 - [ ] Add Neup documentation blocks to [app/actions.ts](/Users/neupkishor/Code/neup.estate/app/actions.ts) for the property action flows that are currently undocumented.
 - [ ] Add a Neup documentation block to [app/accounts/page.tsx](/Users/neupkishor/Code/neup.estate/app/accounts/page.tsx).
 - [ ] Add a Neup documentation block to [app/bridge/api.v1/property/create/route.ts](/Users/neupkishor/Code/neup.estate/app/bridge/api.v1/property/create/route.ts).
@@ -62,12 +64,15 @@
 - [ ] Add a Neup documentation block to [services/auth/account.ts](/Users/neupkishor/Code/neup.estate/services/auth/account.ts).
 - [ ] Add a Neup documentation block to [services/auth/index.ts](/Users/neupkishor/Code/neup.estate/services/auth/index.ts).
 - [ ] Add a Neup documentation block to [services/account-service.ts](/Users/neupkishor/Code/neup.estate/services/account-service.ts).
+- [ ] Add a Neup documentation block to [services/ai/dev.ts](/Users/neupkishor/Code/neup.estate/services/ai/dev.ts).
+- [ ] Add a Neup documentation block to [services/ai/unified-generation-service.ts](/Users/neupkishor/Code/neup.estate/services/ai/unified-generation-service.ts).
 - [ ] Add a Neup documentation block to [services/account/lookup.ts](/Users/neupkishor/Code/neup.estate/services/account/lookup.ts).
 - [ ] Add a Neup documentation block to [services/account-type.ts](/Users/neupkishor/Code/neup.estate/services/account-type.ts).
 - [ ] Add a Neup documentation block to [services/property-service.ts](/Users/neupkishor/Code/neup.estate/services/property-service.ts).
 - [ ] Add a Neup documentation block to [services/bridge-property-service.ts](/Users/neupkishor/Code/neup.estate/services/bridge-property-service.ts).
 - [ ] Add a Neup documentation block to [services/agency-service.ts](/Users/neupkishor/Code/neup.estate/services/agency-service.ts).
 - [ ] Add a Neup documentation block to [services/agency-agent-map-service.ts](/Users/neupkishor/Code/neup.estate/services/agency-agent-map-service.ts).
+- [ ] Add a Neup documentation block to [services/problem-service.ts](/Users/neupkishor/Code/neup.estate/services/problem-service.ts).
 - [ ] Add a Neup documentation block to [components/agent-results.tsx](/Users/neupkishor/Code/neup.estate/components/agent-results.tsx).
 - [ ] Add a Neup documentation block to [services/user-service.ts](/Users/neupkishor/Code/neup.estate/services/user-service.ts).
 - [ ] Add a Neup documentation block to [services/site-dev-log-service.ts](/Users/neupkishor/Code/neup.estate/services/site-dev-log-service.ts).

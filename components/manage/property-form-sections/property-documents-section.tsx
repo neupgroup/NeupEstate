@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, Trash2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/logica/core/hooks/use-toast";
+import { useToast } from "@/core/hooks/use-toast";
 import { uploadPropertyMediaFile } from "./media-upload";
 
 // Sub-component to handle nested useFieldArray

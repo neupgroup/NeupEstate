@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { BadgeCheck, LogOut } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useNeupUser, getInitials } from '@/logica/core/neup-user-context';
+import { useNeupUser, getInitials } from '@/core/neup-user-context';
 import { Skeleton } from '@/components/ui/skeleton';
 
 /**

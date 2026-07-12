@@ -12,7 +12,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/comp
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { cn } from "@/logica/core/utils";
+import { cn } from "@/core/utils";
 
 interface TitleDescriptionSectionProps {
     control: Control<CreatePropertyFormValues>;

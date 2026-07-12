@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { PriceInput } from "@/components/ui/price-input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { cn } from "@/logica/core/utils";
+import { cn } from "@/core/utils";
 
 interface PricingDetailsSectionProps {
     control: Control<CreatePropertyFormValues>;

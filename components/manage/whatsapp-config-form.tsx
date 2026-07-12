@@ -8,7 +8,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/logica/core/hooks/use-toast';
+import { useToast } from '@/core/hooks/use-toast';
 import { updateWhatsAppConfigAction } from '@/app/actions';
 import type { WhatsAppConfig } from '@/types';
 import { WhatsAppConfigSchema } from '@/types';

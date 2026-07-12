@@ -27,7 +27,7 @@ import { OwnerInfoSection } from "@/components/manage/property-form-sections/own
 import { PropertyPhotosSection } from "@/components/manage/property-form-sections/property-photos-section";
 import { PropertyDocumentsSection } from "@/components/manage/property-form-sections/property-documents-section";
 import { TitleDescriptionSection } from "@/components/manage/property-form-sections/title-description-section";
-import { cn } from "@/logica/core/utils";
+import { cn } from "@/core/utils";
 import { evaluateAgencyCustomization } from "@/logica/core/evaluate-agency-customization";
 
 type PropertyFormStep = {

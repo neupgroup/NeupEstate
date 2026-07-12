@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { cn } from "@/logica/core/utils";
+import { cn } from "@/core/utils";
 
 type RoadAccessUnit = "meter" | "feet" | "haat" | "inch";
 

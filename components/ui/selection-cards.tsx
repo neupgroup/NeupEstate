@@ -1,7 +1,7 @@
 "use client";
 
 import { Check } from "lucide-react";
-import { cn } from "@/logica/core/utils";
+import { cn } from "@/core/utils";
 
 export interface SelectionCardsProps {
     options: readonly string[];
