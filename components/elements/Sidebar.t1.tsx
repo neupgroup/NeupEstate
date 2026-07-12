@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/logica/core/utils";
+import { cn } from "@/core/utils";
 import { manageNav } from "@/logica/core/manage-nav";
 import { appendWorkingProfileV1, getLongestMatchingManageNavHrefV1 } from "@/components/logic/ManageNavSelection.v1";
 

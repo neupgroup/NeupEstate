@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { Sparkles } from 'lucide-react';
-import { useToast } from '@/logica/core/hooks/use-toast';
+import { useToast } from '@/core/hooks/use-toast';
 import { extractCompetitorListingAction } from '../listings/actions';
 
 export function FetchPropertyButton({

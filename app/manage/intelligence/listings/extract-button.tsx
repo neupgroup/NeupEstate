@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react';
 import { Button } from '@/components/ui/button';
 import { Sparkles } from 'lucide-react';
 import { extractCompetitorListingAction } from './actions';
-import { useToast } from '@/logica/core/hooks/use-toast';
+import { useToast } from '@/core/hooks/use-toast';
 
 export function ExtractListingButton({ competitorPageId }: { competitorPageId: string }) {
   const [isPending, startTransition] = useTransition();

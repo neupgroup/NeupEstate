@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Loader2, Radar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/logica/core/hooks/use-toast';
+import { useToast } from '@/core/hooks/use-toast';
 import { crawlCompetitorSourcesAction, getCompetitorsAction } from '../competition/actions';
 
 type CrawlProgress = {

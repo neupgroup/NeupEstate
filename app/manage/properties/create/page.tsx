@@ -10,7 +10,7 @@ import { CreatePropertySchema, type CreatePropertyFormValues, type User } from '
 import { cancelPropertyChangeDraftAction, createPropertyAction, getCurrentAccountId, getCurrentPropertyCreateDraftAction, getCurrentPropertyPostingContextAction, getListingAgentOptionsAction, savePropertyCreateDraftAction } from '@/app/actions';
 
 import { Form } from '@/components/ui/form';
-import { useToast } from '@/logica/core/hooks/use-toast';
+import { useToast } from '@/core/hooks/use-toast';
 import { getUsers } from '@/services/user-service';
 import { useAgencyCustomization } from '@/logica/core/hooks/use-agency-customization';
 import { evaluateAgencyCustomization } from '@/logica/core/evaluate-agency-customization';

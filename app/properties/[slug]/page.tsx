@@ -8,7 +8,7 @@ Renders the public property detail page with gallery, summary, pricing, and supp
 */
 import { notFound, redirect } from 'next/navigation';
 import { getPropertyById, getProperties, getPropertyBySlug } from '@/services/property-service';
-import { buildPublicAppUrl } from '@/logica/core/public-url';
+import { buildPublicAppUrl } from '@/core/helpers/url';
 import { logProblem } from '@/services/problem-service';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -20,7 +20,7 @@ import { PropertyDetailRenderNotice } from '@/components/property-detail-render-
 import type { Property } from '@/types';
 import { areaValueToSqft } from '@/types';
 import type { Metadata, ResolvingMetadata } from 'next';
-import { getHiddenPriceLabel } from '@/logica/core/property-price-display';
+import { getHiddenPriceLabel } from '@/logica/estate/property-price-display';
 import { PropertyMediaGallery } from '@/components/manage/property-media-gallery';
 import { getLocation } from '@/services/property-location-service';
 

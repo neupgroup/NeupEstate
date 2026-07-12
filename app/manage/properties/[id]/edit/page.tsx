@@ -13,7 +13,7 @@ import { useAgencyCustomization } from '@/logica/core/hooks/use-agency-customiza
 
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/logica/core/hooks/use-toast';
+import { useToast } from '@/core/hooks/use-toast';
 import { ExternalLink } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';

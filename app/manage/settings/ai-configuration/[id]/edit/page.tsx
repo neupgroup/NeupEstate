@@ -7,7 +7,7 @@ import { notFound } from 'next/navigation';
 import { ClientLink } from '@/components/client-link';
 import { buttonVariants } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
-import { cn } from '@/logica/core/utils';
+import { cn } from '@/core/utils';
 import { getModels } from '@/services/model-service';
 
 export default async function EditPromptPage({ params }: { params: Promise<{ id: string }> }) {
