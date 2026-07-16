@@ -53,6 +53,8 @@ certificates
 /logs
 *.log
 
-# Neup Apps system.
-logica
+# Neup standard sdk system.
 core
+neup.core
+logica
+neup.logica
