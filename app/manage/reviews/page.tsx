@@ -2,8 +2,8 @@
 import { getReviews } from '@/services/review-service';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Star } from 'lucide-react';
-import { requirePagePermission } from '@/logica/auth/page-guard';
-import { PERMISSIONS } from '@/logica/auth/permissions';
+import { requirePagePermission } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permissions';
 
 function StarRating({ rating }: { rating: number }) {
     return (

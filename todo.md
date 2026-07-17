@@ -2,7 +2,6 @@
 
 - [ ] Reconcile the deployed `PropertyStatus` enum with `prisma/schema.prisma`. Production still rejects `AWAITING_DELETION` even though the schema and migrations now include it.
 - [ ] Fix the current `npx tsc --noEmit` failures, including unresolved legacy `@/logica/*` imports, missing Prisma typing dependencies, and widespread implicit `any` errors.
-- [ ] Move server-action permission checks off missing `@/logica/auth/*` imports and into a service-owned authz API so `services/actions/*` respects the service layer boundary.
 - [ ] Add a Neup documentation block to [app/api/auth/me/route.ts](/Users/neupkishor/Code/neup.estate/app/api/auth/me/route.ts).
 - [ ] Add a Neup documentation block to [app/api/auth/user/route.ts](/Users/neupkishor/Code/neup.estate/app/api/auth/user/route.ts).
 - [ ] Add Neup documentation blocks to [app/actions.ts](/Users/neupkishor/Code/neup.estate/app/actions.ts) for the property action flows that are currently undocumented.

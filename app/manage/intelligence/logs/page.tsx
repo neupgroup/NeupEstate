@@ -41,8 +41,8 @@ import { ClientLink } from '@/components/client-link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ListChecks } from 'lucide-react';
-import { requirePagePermission } from '@/logica/auth/page-guard';
-import { PERMISSIONS } from '@/logica/auth/permissions';
+import { requirePagePermission } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permissions';
 import { Pagination } from '@/components/manage/pagination';
 import { StartCrawlButton } from './start-crawl-button';
 

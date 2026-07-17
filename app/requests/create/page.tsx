@@ -3,8 +3,8 @@
 import { PropertyRequestForm } from '@/components/estate';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { FileSearch } from 'lucide-react';
-import { requirePagePermission } from '@/logica/auth/page-guard';
-import { PERMISSIONS } from '@/logica/auth/permissions';
+import { requirePagePermission } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permissions';
 
 export default async function CreateRequestPage() {
     await requirePagePermission(PERMISSIONS.public.requirementCreate);

@@ -5,8 +5,8 @@ import { AlertCircle, User, ChevronRight } from "lucide-react";
 import { ClientLink } from "@/components/client-link";
 import { RelativeTime } from "@/components/manage/relative-time";
 import { Badge } from "@/components/ui/badge";
-import { requirePagePermission } from "@/logica/auth/page-guard";
-import { PERMISSIONS } from "@/logica/auth/permissions";
+import { requirePagePermission } from "@/services/permissions";
+import { PERMISSIONS } from "@/services/permissions";
 
 export default async function ManageAccountsPage() {
   await requirePagePermission(PERMISSIONS.manage.accountsView);

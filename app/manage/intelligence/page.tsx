@@ -3,8 +3,8 @@ import { Badge } from '@/components/ui/badge';
 import { ClientLink } from '@/components/client-link';
 import { BarChart2, TrendingUp, ListChecks, Swords, FileText, Bell } from 'lucide-react';
 import { TrackChangesButton } from './track-changes-button';
-import { requirePagePermission } from '@/logica/auth/page-guard';
-import { PERMISSIONS } from '@/logica/auth/permissions';
+import { requirePagePermission } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permissions';
 import { prisma } from '@/core/database/prisma';
 import { getCurrentAccountId } from '@/app/actions';
 

@@ -4,8 +4,8 @@ import { ClientLink } from '@/components/client-link';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
-import { requirePagePermission } from '@/logica/auth/page-guard';
-import { PERMISSIONS } from '@/logica/auth/permissions';
+import { requirePagePermission } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permissions';
 
 export default async function MyLeadsPage() {
     await requirePagePermission(PERMISSIONS.manage.selfLeadView);

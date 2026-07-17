@@ -10,8 +10,8 @@ import { logProblem } from '@/services/problem-service';
 import { ClientLink } from '@/components/client-link';
 import { Badge } from '@/components/ui/badge';
 import { ChevronLeft, User, ShieldAlert, CalendarDays, Clock, BadgeCheck } from 'lucide-react';
-import { requirePagePermission } from '@/logica/auth/page-guard';
-import { PERMISSIONS } from '@/logica/auth/permissions';
+import { requirePagePermission } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permissions';
 
 function isAgentAccountType(accountType?: string | null): boolean {
   return accountType?.trim().toLowerCase() === 'individual.agent';

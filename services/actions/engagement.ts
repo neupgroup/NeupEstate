@@ -40,8 +40,8 @@ import { resolveAccount, updateUser, getAccountById, getAccounts } from '@/servi
 import { deleteAccountAndData } from '@/services/account-service';
 import { createLead as createLeadService, createLeadActivity as createLeadActivityService } from '@/services/lead-service';
 import { getIdentity } from '@/services/neupid/get-identity';
-import { hasPermission, requirePermission } from '@/logica/auth/authorization';
-import { PERMISSIONS } from '@/logica/auth/permissions';
+import { hasPermission, requirePermission } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permissions';
 import { prisma } from '@/core/database/prisma';
 import { isAgencyLikeAccountType, promoteStoredAccountType } from '@/services/account-type';
 import { resolvePropertyPostingContext } from '@/services/property-posting-context';

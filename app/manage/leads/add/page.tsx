@@ -1,5 +1,5 @@
-import { requirePagePermission } from '@/logica/auth/page-guard';
-import { PERMISSIONS } from '@/logica/auth/permissions';
+import { requirePagePermission } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permissions';
 import { checkAuthenticationForWeb } from '@/services/neupid/check-auth-web';
 import { CreateLeadForm } from '@/components/manage/create-lead-form';
 import { ClientLink } from '@/components/client-link';

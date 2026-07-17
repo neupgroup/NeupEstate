@@ -1,5 +1,5 @@
-import { requirePagePermission } from '@/logica/auth/page-guard';
-import { PERMISSIONS } from '@/logica/auth/permissions';
+import { requirePagePermission } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permissions';
 import { prisma } from '@/core/database/prisma';
 import { logProblem } from '@/services/problem-service';
 import { ClientLink } from '@/components/client-link';

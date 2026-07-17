@@ -42,9 +42,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/core/database/prisma';
 import { logProblem } from '@/services/problem-service';
-import { getAuthenticatedAccount } from '@/services/auth';
+import { createAccount } from '@/services/account/create';
 import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 function getRedirectTarget(request: NextRequest): string {
@@ -63,29 +62,7 @@ function getRedirectTarget(request: NextRequest): string {
 
 async function handleCallback(request: NextRequest) {
   try {
-    // Get the authenticated account from the cookie
-    // (Neup.Account bridge has already set it)
-    const authResult = await getAuthenticatedAccount();
-
-    // If authentication is successful and we have an aid, upsert the account
-    if (authResult.success && authResult.account.aid) {
-      const { aid, nid, guest } = authResult.account;
-
-      await prisma.account.upsert({
-        where: { id: aid },
-        create: {
-          id: aid,
-          accountType: guest === 1 ? 'guest' : 'individual',
-          displayName: nid ?? aid,
-          createdOn: new Date(),
-          accessedOn: new Date(),
-        },
-        update: {
-          accessedOn: new Date(),
-          displayName: nid ?? aid,
-        },
-      });
-    }
+    await createAccount();
 
     // Always redirect to the requested destination
     const redirectTarget = getRedirectTarget(request);

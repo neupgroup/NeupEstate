@@ -6,8 +6,8 @@ import { getAgencyAgentMapsByAgent } from "@/services/agency-agent-map-service";
 import { getAccountIdFromJWT } from "@/services/neupid/check-auth-web";
 import { Clock, DollarSign, CalendarCheck, Home } from "lucide-react";
 import { DailySchedule } from "@/components/manage/daily-schedule";
-import { requirePagePermission } from "@/logica/auth/page-guard";
-import { PERMISSIONS } from "@/logica/auth/permissions";
+import { requirePagePermission } from "@/services/permissions";
+import { PERMISSIONS } from "@/services/permissions";
 import { AgencyInvitationsCard } from "@/components/manage/agency-invitations-card";
 
 async function getStats() {

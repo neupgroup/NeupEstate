@@ -1,8 +1,8 @@
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Info } from 'lucide-react';
-import { requirePagePermission } from '@/logica/auth/page-guard';
-import { PERMISSIONS } from '@/logica/auth/permissions';
+import { requirePagePermission } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permissions';
 
 export default async function CollectionPage() {
     await requirePagePermission(PERMISSIONS.manage.propertyCollectionSelfView);

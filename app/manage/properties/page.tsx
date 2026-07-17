@@ -8,10 +8,10 @@ import { AdminPropertySearch } from "@/components/manage/admin-property-search";
 import { parseAdminFilter } from "@/services/ai/parse-admin-filter-flow";
 import type { PropertyFilters } from "@/types";
 import { ClientLink } from "@/components/client-link";
-import { PERMISSIONS } from "@/logica/auth/permissions";
+import { PERMISSIONS } from "@/services/permissions";
 import { getIdentity } from "@/services/neupid/get-identity";
 import { getAgencyAgentMapsByAgent } from "@/services/agency-agent-map-service";
-import { hasPermission } from "@/logica/auth/authorization";
+import { hasPermission } from "@/services/permissions";
 import { notFound } from "next/navigation";
 
 const PROPERTIES_PER_PAGE = 10;

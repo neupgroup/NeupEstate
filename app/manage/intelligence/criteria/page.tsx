@@ -1,6 +1,6 @@
 import { prisma } from '@/core/database/prisma';
-import { requirePagePermission } from '@/logica/auth/page-guard';
-import { PERMISSIONS } from '@/logica/auth/permissions';
+import { requirePagePermission } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permissions';
 import { getCurrentAccountId } from '@/app/actions';
 import { IntelligenceCriteriaClient } from './criteria-client';
 

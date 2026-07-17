@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { getPropertyById, getPropertyReviewRequests } from "@/services/property-service";
-import { hasPermission } from "@/logica/auth/authorization";
-import { PERMISSIONS } from "@/logica/auth/permissions";
+import { hasPermission } from "@/services/permissions";
+import { PERMISSIONS } from "@/services/permissions";
 import { cancelPropertyChangeDraftAction, getCurrentAccountId, getPropertyChangeContextAction, requestPropertyDeletionAction } from "@/app/actions";
 import { prisma } from "@/core/database/prisma";
 import { Button } from "@/components/ui/button";
