@@ -21,7 +21,7 @@ The component accepts already-loaded account data and does not fetch authenticat
 
 import Link from "next/link";
 import { BadgeCheck } from "lucide-react";
-import { getAccountDisplayName, getAccountHandle, type AccountDisplayUser } from "@/services/account/me";
+import { getAccountDisplayName, getAccountHandle, type AccountDisplayUser } from "@/core/account-display";
 import { ProfileV1 } from "@/components/elements/Profile.v1";
 import { cn } from "@/core/utils";
 

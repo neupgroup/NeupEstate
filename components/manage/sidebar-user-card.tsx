@@ -1,17 +1,18 @@
 'use client';
 
 import Link from 'next/link';
-import { BadgeCheck, LogOut } from 'lucide-react';
+import { BadgeCheck } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useNeupUser, getInitials } from '@/core/neup-user-context';
+import { getInitials } from '@/core/account-display';
+import { useSession } from '@/core/providers/session';
 import { Skeleton } from '@/components/ui/skeleton';
 
 /**
  * Displays the authenticated user's identity at the bottom of the manage
- * sidebar. Reads from the NeupUserContext (populated via whoami).
+ * sidebar. Reads from the core session provider.
  */
 export function SidebarUserCard() {
-  const user = useNeupUser();
+  const { user } = useSession();
 
   // user === null means either not logged in or still loading.
   // We show a skeleton only briefly — if null after mount it means no session.
@@ -33,7 +34,7 @@ export function SidebarUserCard() {
       className="flex items-center gap-3 p-3 rounded-lg bg-background/60 hover:bg-background transition-colors group"
     >
       <Avatar className="h-9 w-9 flex-shrink-0">
-        <AvatarImage src={user.displayImage || undefined} alt={user.displayName} />
+        <AvatarImage src={user.displayImage || undefined} alt={user.displayName ?? 'User'} />
         <AvatarFallback className="text-xs font-semibold">
           {getInitials(user.displayName ?? '')}
         </AvatarFallback>

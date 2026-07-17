@@ -17,7 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, Loader2, Star, MapPin } from "lucide-react";
 import { useState, useTransition, useEffect } from "react";
 import { cn } from "@/core/utils";
-import { getHiddenPriceLabel, getPrimaryCurrency, getPrimaryPrice, getPrimaryPricingSuffix } from "@/logica/core/property-price-display";
+import { getHiddenPriceLabel, getPrimaryCurrency, getPrimaryPrice, getPrimaryPricingSuffix } from "@/services/property/price-display";
 import { SafeImage } from "./safe-image";
 import { toggleSavePropertyAction } from '@/services/engagement';
 import { useToast } from "@/core/hooks/use-toast";

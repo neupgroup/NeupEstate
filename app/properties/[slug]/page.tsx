@@ -20,7 +20,7 @@ import { PropertyDetailRenderNotice } from '@/components/property-detail-render-
 import type { Property } from '@/types';
 import { areaValueToSqft } from '@/types';
 import type { Metadata, ResolvingMetadata } from 'next';
-import { getHiddenPriceLabel } from '@/logica/estate/property-price-display';
+import { getHiddenPriceLabel } from '@/services/property/price-display';
 import { PropertyMediaGallery } from '@/components/manage/property-media-gallery';
 import { getLocation } from '@/services/property-location-service';
 

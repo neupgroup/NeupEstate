@@ -7,7 +7,7 @@ import {
     Building2, LandPlot, Store, Layers,
 } from "lucide-react";
 import { ClientLink } from '@/components/client-link';
-import { getHiddenPriceLabel } from '@/logica/core/property-price-display';
+import { getHiddenPriceLabel } from '@/services/property/price-display';
 
 // ─── Status badge ─────────────────────────────────────────────────────────────
 

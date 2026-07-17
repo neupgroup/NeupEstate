@@ -7,10 +7,10 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/core/utils";
 import { isActivePublicHrefV1 } from "@/components/logic/PublicNavSelection.v1";
 import { appendWorkingProfileV1, getLongestMatchingManageNavHrefV1 } from "@/components/logic/ManageNavSelection.v1";
-import { manageNav } from "@/logica/core/manage-nav";
+import { manageNav } from "@/core/manage-nav";
 import { ProfileV1 } from "@/components/elements/Profile.v1";
 import { AccountDisplayTabV1 } from "@/components/elements/AccountDisplayTab.v1";
-import type { AccountDisplayUser } from "@/services/account/me";
+import type { SessionUser } from "@/core/providers/session";
 
 const publicNavLinks = [
   { href: "/sell", label: "Sell" },
@@ -32,7 +32,7 @@ export function HeaderV1({
   selectedProfile: string | null;
   menuOpen: boolean;
   setMenuOpen: (open: boolean) => void;
-  user: AccountDisplayUser | null;
+  user: SessionUser | null;
 }) {
   const effectiveUser = user;
   const activeProfileName = user?.workingProfileDisplayName?.trim() || null;
