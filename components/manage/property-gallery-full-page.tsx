@@ -86,6 +86,8 @@ export function PropertyGalleryFullPage({
 
   const selectedImage = visibleImages[selectedIndex] ?? visibleImages[0] ?? "";
   const propertyHref = `/properties/${propertySlug}`;
+  const isFirstImage = selectedIndex === 0;
+  const isLastImage = selectedIndex === visibleImages.length - 1;
 
   const copyPropertyLink = useCallback(async () => {
     const url = new URL(
@@ -110,13 +112,17 @@ export function PropertyGalleryFullPage({
   );
 
   const showPreviousImage = useCallback(() => {
-    const nextIndex = selectedIndex === 0 ? visibleImages.length - 1 : selectedIndex - 1;
+    if (selectedIndex === 0) return;
+
+    const nextIndex = selectedIndex - 1;
     setDirection("previous");
     setSelectedIndex(nextIndex);
-  }, [selectedIndex, visibleImages.length]);
+  }, [selectedIndex]);
 
   const showNextImage = useCallback(() => {
-    const nextIndex = selectedIndex === visibleImages.length - 1 ? 0 : selectedIndex + 1;
+    if (selectedIndex >= visibleImages.length - 1) return;
+
+    const nextIndex = selectedIndex + 1;
     setDirection("next");
     setSelectedIndex(nextIndex);
   }, [selectedIndex, visibleImages.length]);
@@ -220,19 +226,20 @@ export function PropertyGalleryFullPage({
             variant="ghost"
             size="icon"
             onClick={showPreviousImage}
+            disabled={isFirstImage}
             aria-label="Previous image"
-            className="absolute left-2 top-1/2 z-10 h-10 w-12 -translate-y-1/2 rounded-lg bg-black/25 text-white hover:bg-white/15 hover:text-white sm:left-4"
+            className="absolute left-2 top-1/2 z-10 h-10 w-12 -translate-y-1/2 rounded-lg bg-black/25 text-white hover:bg-white/15 hover:text-white disabled:pointer-events-none disabled:opacity-30 sm:left-4"
           >
             <ChevronLeft className="h-6 w-6" />
           </Button>
         )}
 
-        <div className="flex h-full w-full items-center justify-center">
+        <div className="flex h-full w-full max-w-6xl items-center justify-center overflow-hidden rounded-2xl">
           <GalleryImage
             key={`${selectedImage}-${selectedIndex}`}
             src={selectedImage}
             alt={`${title} photo ${selectedIndex + 1}`}
-            className={`max-h-full max-w-full rounded-2xl object-contain shadow-2xl shadow-black/40 ${
+            className={`h-full w-full object-cover shadow-2xl shadow-black/40 ${
               direction === "next"
                 ? "[animation:property-gallery-slide-next_220ms_cubic-bezier(0.22,1,0.36,1)]"
                 : "[animation:property-gallery-slide-previous_220ms_cubic-bezier(0.22,1,0.36,1)]"
@@ -246,8 +253,9 @@ export function PropertyGalleryFullPage({
             variant="ghost"
             size="icon"
             onClick={showNextImage}
+            disabled={isLastImage}
             aria-label="Next image"
-            className="absolute right-2 top-1/2 z-10 h-10 w-12 -translate-y-1/2 rounded-lg bg-black/25 text-white hover:bg-white/15 hover:text-white sm:right-4"
+            className="absolute right-2 top-1/2 z-10 h-10 w-12 -translate-y-1/2 rounded-lg bg-black/25 text-white hover:bg-white/15 hover:text-white disabled:pointer-events-none disabled:opacity-30 sm:right-4"
           >
             <ChevronRight className="h-6 w-6" />
           </Button>
@@ -255,7 +263,13 @@ export function PropertyGalleryFullPage({
       </div>
 
       <div className="absolute inset-x-0 bottom-0 z-20 border-t border-white/10 bg-black/55 px-2 py-2">
-        <div className="mx-auto flex max-w-5xl gap-2 overflow-x-auto">
+        <div className="relative mx-auto h-14 max-w-5xl overflow-hidden sm:h-16 [--thumb-gap:0.5rem] [--thumb-w:5rem] sm:[--thumb-w:6rem]">
+          <div
+            className="absolute left-1/2 top-0 flex gap-[var(--thumb-gap)] transition-transform duration-300 ease-out"
+            style={{
+              transform: `translateX(calc(-1 * (${selectedIndex} * (var(--thumb-w) + var(--thumb-gap)) + (var(--thumb-w) / 2))))`,
+            }}
+          >
           {visibleImages.map((src, index) => {
             const isSelected = index === selectedIndex;
 
@@ -266,7 +280,7 @@ export function PropertyGalleryFullPage({
                 onClick={() => selectImage(index)}
                 aria-label={`Show photo ${index + 1}`}
                 aria-current={isSelected ? "true" : undefined}
-                className={`relative h-14 w-20 shrink-0 overflow-hidden rounded-md border transition sm:h-16 sm:w-24 ${
+                className={`relative h-14 w-[var(--thumb-w)] shrink-0 overflow-hidden rounded-md border transition sm:h-16 ${
                   isSelected
                     ? "border-white opacity-100"
                     : "border-white/20 opacity-65 hover:border-white/60 hover:opacity-100"
@@ -280,6 +294,7 @@ export function PropertyGalleryFullPage({
               </button>
             );
           })}
+          </div>
         </div>
       </div>
     </main>

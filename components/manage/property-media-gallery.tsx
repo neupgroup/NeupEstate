@@ -87,6 +87,7 @@ export function PropertyMediaGallery({
 
   const getGalleryHref = (index: number) =>
     `/properties/${propertySlug}/gallery?mode=fullpage&image=${index + 1}`;
+  const galleryHref = `/properties/${propertySlug}/gallery`;
 
   const first = visibleImages[0];
   const second = visibleImages[1];
@@ -340,7 +341,7 @@ export function PropertyMediaGallery({
           variant="secondary"
           className="absolute bottom-4 right-4 z-20 gap-2 rounded-full border border-border/70 bg-background/95 px-4 shadow-lg backdrop-blur hover:bg-background"
         >
-          <Link href={getGalleryHref(0)}>
+          <Link href={galleryHref}>
             <Grid2x2 className="h-4 w-4" />
             Show all photos
           </Link>
