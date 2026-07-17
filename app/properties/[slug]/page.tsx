@@ -476,7 +476,11 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
         dangerouslySetInnerHTML={{ __html: schemaJson }}
       />
       <main className="container mx-auto space-y-8 px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-        <PropertyMediaGallery images={safeImages} title={property.title} />
+        <PropertyMediaGallery
+          images={safeImages}
+          title={property.title}
+          propertySlug={property.slug || property.id}
+        />
 
         <section className="space-y-3">
           <div className="space-y-2">

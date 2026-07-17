@@ -983,7 +983,11 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
             </div>
 
             <div className="pt-0 pb-4">
-                <PropertyMediaGallery images={property.images ?? []} title={property.title} />
+                <PropertyMediaGallery
+                    images={property.images ?? []}
+                    title={property.title}
+                    propertySlug={property.slug || property.id}
+                />
             </div>
 
             {mode === "review" && canApproveProperty && (

@@ -3,25 +3,20 @@
 /*
 ::neup.documentation::property-media-gallery
 
-Renders a collage-style property photo gallery with an optional fullscreen dialog.
+Renders a collage-style property photo gallery that links to the full-page gallery route.
 
 ::end
 */
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
+import Link from "next/link";
 import { Grid2x2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
 interface PropertyMediaGalleryProps {
   images: string[];
   title: string;
+  propertySlug: string;
 }
 
 function GalleryImage({
@@ -34,6 +29,10 @@ function GalleryImage({
   className?: string;
 }) {
   const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    setFailed(false);
+  }, [src]);
 
   if (!src || failed) {
     return (
@@ -61,8 +60,8 @@ function GalleryImage({
 export function PropertyMediaGallery({
   images,
   title,
+  propertySlug,
 }: PropertyMediaGalleryProps) {
-  const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   const visibleImages = useMemo(
@@ -86,6 +85,9 @@ export function PropertyMediaGallery({
     );
   }
 
+  const getGalleryHref = (index: number) =>
+    `/properties/${propertySlug}/gallery?mode=fullpage&image=${index + 1}`;
+
   const first = visibleImages[0];
   const second = visibleImages[1];
   const third = visibleImages[2];
@@ -96,18 +98,19 @@ export function PropertyMediaGallery({
   function MediaTile({
     src,
     alt,
+    index,
     className,
     overlay,
   }: {
     src: string;
     alt: string;
+    index: number;
     className: string;
     overlay?: ReactNode;
   }) {
     return (
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
+      <Link
+        href={getGalleryHref(index)}
         className={`group relative block h-full w-full min-h-0 min-w-0 overflow-hidden bg-muted ${className}`}
       >
         <GalleryImage
@@ -119,7 +122,7 @@ export function PropertyMediaGallery({
         <div className="pointer-events-none absolute inset-0 bg-black/10 transition-colors duration-300 group-hover:bg-black/45" />
 
         {overlay}
-      </button>
+      </Link>
     );
   }
 
@@ -129,6 +132,7 @@ export function PropertyMediaGallery({
         <MediaTile
           src={first}
           alt={`${title} photo 1`}
+          index={0}
           className="rounded-3xl"
         />
       );
@@ -140,12 +144,14 @@ export function PropertyMediaGallery({
           <MediaTile
             src={first}
             alt={`${title} photo 1`}
+            index={0}
             className="rounded-l-3xl"
           />
 
           <MediaTile
             src={second}
             alt={`${title} photo 2`}
+            index={1}
             className="rounded-r-3xl"
           />
         </div>
@@ -158,6 +164,7 @@ export function PropertyMediaGallery({
           <MediaTile
             src={first}
             alt={`${title} photo 1`}
+            index={0}
             className="rounded-l-3xl"
           />
 
@@ -165,12 +172,14 @@ export function PropertyMediaGallery({
             <MediaTile
               src={second}
               alt={`${title} photo 2`}
+              index={1}
               className="rounded-tr-3xl"
             />
 
             <MediaTile
               src={third}
               alt={`${title} photo 3`}
+              index={2}
               className="rounded-br-3xl"
             />
           </div>
@@ -184,6 +193,7 @@ export function PropertyMediaGallery({
           <MediaTile
             src={first}
             alt={`${title} photo 1`}
+            index={0}
             className="rounded-l-3xl"
           />
 
@@ -191,6 +201,7 @@ export function PropertyMediaGallery({
             <MediaTile
               src={second}
               alt={`${title} photo 2`}
+              index={1}
               className="rounded-tr-3xl"
             />
 
@@ -198,12 +209,14 @@ export function PropertyMediaGallery({
               <MediaTile
                 src={third}
                 alt={`${title} photo 3`}
+                index={2}
                 className=""
               />
 
               <MediaTile
                 src={fourth}
                 alt={`${title} photo 4`}
+                index={3}
                 className="rounded-br-3xl"
               />
             </div>
@@ -218,6 +231,7 @@ export function PropertyMediaGallery({
           <MediaTile
             src={first}
             alt={`${title} photo 1`}
+            index={0}
             className="rounded-l-3xl"
           />
 
@@ -225,24 +239,28 @@ export function PropertyMediaGallery({
             <MediaTile
               src={second}
               alt={`${title} photo 2`}
+              index={1}
               className=""
             />
 
             <MediaTile
               src={third}
               alt={`${title} photo 3`}
+              index={2}
               className="rounded-tr-3xl"
             />
 
             <MediaTile
               src={fourth}
               alt={`${title} photo 4`}
+              index={3}
               className=""
             />
 
             <MediaTile
               src={fifth}
               alt={`${title} photo 5`}
+              index={4}
               className="rounded-br-3xl"
             />
           </div>
@@ -255,6 +273,7 @@ export function PropertyMediaGallery({
         <MediaTile
           src={first}
           alt={`${title} photo 1`}
+          index={0}
           className="rounded-l-3xl"
         />
 
@@ -263,12 +282,14 @@ export function PropertyMediaGallery({
             <MediaTile
               src={second}
               alt={`${title} photo 2`}
+              index={1}
               className=""
             />
 
             <MediaTile
               src={third}
               alt={`${title} photo 3`}
+              index={2}
               className="rounded-tr-3xl"
             />
           </div>
@@ -277,18 +298,21 @@ export function PropertyMediaGallery({
             <MediaTile
               src={fourth}
               alt={`${title} photo 4`}
+              index={3}
               className=""
             />
 
             <MediaTile
               src={fifth}
               alt={`${title} photo 5`}
+              index={4}
               className=""
             />
 
             <MediaTile
               src={visibleImages[5]}
               alt={`${title} photo 6`}
+              index={5}
               className="rounded-br-3xl"
               overlay={
                 extraCount > 0 ? (
@@ -306,70 +330,22 @@ export function PropertyMediaGallery({
     );
   }
 
-  const collage = (
+  return (
     <div className="relative h-[320px] min-h-0 overflow-hidden rounded-3xl sm:h-[360px] lg:h-[420px]">
       {renderCollage()}
 
       {mounted && visibleImages.length > 1 && (
-        <DialogTrigger asChild>
-          <Button
-            variant="secondary"
-            className="absolute bottom-4 right-4 z-20 gap-2 rounded-full border border-border/70 bg-background/95 px-4 shadow-lg backdrop-blur hover:bg-background"
-          >
+        <Button
+          asChild
+          variant="secondary"
+          className="absolute bottom-4 right-4 z-20 gap-2 rounded-full border border-border/70 bg-background/95 px-4 shadow-lg backdrop-blur hover:bg-background"
+        >
+          <Link href={getGalleryHref(0)}>
             <Grid2x2 className="h-4 w-4" />
             Show all photos
-          </Button>
-        </DialogTrigger>
+          </Link>
+        </Button>
       )}
     </div>
-  );
-
-  if (!mounted) {
-    return collage;
-  }
-
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      {collage}
-
-      <DialogContent className="max-w-6xl border-0 p-0 sm:rounded-3xl">
-        <div className="max-h-[90vh] overflow-hidden bg-background">
-          <DialogHeader className="flex-row items-center justify-between border-b px-6 py-4 text-left">
-            <div>
-              <DialogTitle className="text-xl">{title}</DialogTitle>
-
-              <p className="text-sm text-muted-foreground">
-                {visibleImages.length} photo
-                {visibleImages.length === 1 ? "" : "s"}
-              </p>
-            </div>
-          </DialogHeader>
-
-          <div className="max-h-[calc(90vh-5rem)] overflow-y-auto px-6 py-6">
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {visibleImages.map((src, index) => (
-                <a
-                  key={`${src}-${index}`}
-                  href={src}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="group relative overflow-hidden rounded-2xl bg-muted shadow-sm"
-                >
-                  <div className="aspect-square">
-                    <GalleryImage
-                      src={src}
-                      alt={`${title} photo ${index + 1}`}
-                      className="h-full w-full object-cover transition-transform duration-300 hover:scale-[1.04]"
-                    />
-
-                    <div className="pointer-events-none absolute inset-0 bg-black/10 transition-colors duration-300 hover:bg-black/45" />
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
   );
 }
