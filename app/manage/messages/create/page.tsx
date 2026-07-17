@@ -13,7 +13,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/core/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { CreateConversationSchema, type CreateConversationFormValues } from '@/types';
-import { createConversationAction } from '@/app/actions';
+import { createConversationAction } from '@/services/communications';
 
 export default function CreateConversationPage() {
     const router = useRouter();

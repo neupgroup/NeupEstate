@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Loader2, Plus } from 'lucide-react';
 
-import { addLeadActivityAction } from '@/app/actions';
+import { addLeadActivityAction } from '@/services/agency';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {

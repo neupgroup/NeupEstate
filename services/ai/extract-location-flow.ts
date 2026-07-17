@@ -7,7 +7,6 @@
  * - extractCorrectedLocation - A function to handle the location extraction.
  */
 
-import { ai } from '@/logica/core/ai/genkit';
 import { z } from 'zod';
 import { getPrompt } from '@/services/prompt-service';
 import { generateText } from './unified-generation-service';

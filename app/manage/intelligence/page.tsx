@@ -6,7 +6,7 @@ import { TrackChangesButton } from './track-changes-button';
 import { requirePagePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permissions';
 import { prisma } from '@/core/database/prisma';
-import { getCurrentAccountId } from '@/app/actions';
+import { getCurrentAccountId } from '@/services/identity';
 
 const sections = [
   {

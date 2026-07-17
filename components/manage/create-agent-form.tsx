@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { CreateAgentSchema, type CreateAgentFormValues, type User } from '@/types';
-import { createAgentAction } from '@/app/actions';
+import { createAgentAction } from '@/services/agents';
 import { getUsers } from '@/services/user-service';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';

@@ -1,7 +1,7 @@
 'use server';
 
-import { ai, resolveGoogleModel } from '@/logica/core/ai/genkit';
 import { z } from 'zod';
+import { generateText } from '@/services/ai/unified-generation-service';
 
 const IntelligencePageInputSchema = z.object({
   url: z.string().url(),
@@ -64,30 +64,19 @@ HTML:
   `,
 };
 
-const extractIntelligencePagePrompt = ai.definePrompt({
-  name: PROMPT_ID,
-  input: { schema: IntelligencePageInputSchema },
-  output: { schema: IntelligencePageOutputSchema },
-  prompt: defaultPrompt.promptText,
-  model: resolveGoogleModel(),
-});
-
-const flow = ai.defineFlow(
-  {
-    name: 'extractIntelligencePageFlow',
-    inputSchema: IntelligencePageInputSchema,
-    outputSchema: IntelligencePageOutputSchema,
-  },
-  async (input) => {
-    const { output } = await extractIntelligencePagePrompt(input);
-    if (!output) {
-      return { success: false, reason: 'AI did not return a usable JSON response.' };
-    }
-
-    return output;
-  },
-);
+async function extractIntelligencePageFlow(input: IntelligencePageInput): Promise<IntelligencePageOutput> {
+  try {
+    return await generateText<IntelligencePageOutput>({
+      model: 'gemini-2.5-flash-lite',
+      promptText: defaultPrompt.promptText,
+      inputData: input,
+      outputSchema: IntelligencePageOutputSchema,
+    });
+  } catch {
+    return { success: false, reason: 'AI did not return a usable JSON response.' };
+  }
+}
 
 export async function extractIntelligencePage(input: IntelligencePageInput): Promise<IntelligencePageOutput> {
-  return flow(input);
+  return extractIntelligencePageFlow(input);
 }

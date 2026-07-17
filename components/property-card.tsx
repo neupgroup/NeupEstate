@@ -19,7 +19,7 @@ import { useState, useTransition, useEffect } from "react";
 import { cn } from "@/core/utils";
 import { getHiddenPriceLabel, getPrimaryCurrency, getPrimaryPrice, getPrimaryPricingSuffix } from "@/logica/core/property-price-display";
 import { SafeImage } from "./safe-image";
-import { toggleSavePropertyAction } from "@/app/actions";
+import { toggleSavePropertyAction } from '@/services/engagement';
 import { useToast } from "@/core/hooks/use-toast";
 import { isPropertySaved } from "@/services/property-service";
 import { getClientAccountId } from "@/services/account/get-account-id";

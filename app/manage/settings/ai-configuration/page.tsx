@@ -12,7 +12,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useToast } from '@/core/hooks/use-toast';
-import { deletePromptAction } from '@/app/actions';
+import { deletePromptAction } from '@/services/content';
 import { ClientLink } from '@/components/client-link';
 import { cn } from '@/core/utils';
 

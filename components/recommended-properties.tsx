@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import { searchProperties } from "@/app/actions";
+import { searchProperties } from '@/services/property/search';
 import { PropertyCard } from "./property-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Property, PropertyFilters } from "@/types";

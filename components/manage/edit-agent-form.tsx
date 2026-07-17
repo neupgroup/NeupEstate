@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition, useEffect } from 'react';
 import { UpdateAgentSchema, type Agent, type UpdateAgentFormValues, type User } from '@/types';
-import { updateAgentAction, deleteAgentAction } from '@/app/actions';
+import { updateAgentAction, deleteAgentAction } from '@/services/agents';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';

@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Trash2, Loader2 } from 'lucide-react';
 import { useToast } from '@/core/hooks/use-toast';
-import { clearAllProblemsAction } from '@/app/actions';
+import { clearAllProblemsAction } from '@/services/automation';
 
 export function ClearLogsButton() {
     const [isPending, startTransition] = useTransition();

@@ -2,7 +2,7 @@
 
 import { prisma } from '@/core/database/prisma';
 import { revalidatePath } from 'next/cache';
-import { getCurrentAccountId } from '@/app/actions';
+import { getCurrentAccountId } from '@/services/identity';
 
 export async function createIntelligenceCriteriaAction(formData: FormData) {
   const accountId = await getCurrentAccountId();

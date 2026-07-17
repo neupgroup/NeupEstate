@@ -1,15 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, X, BadgeCheck } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/core/utils";
-import { getAccountDisplayName, getAccountHandle } from "@/logica/core/account-display";
 import { isActivePublicHrefV1 } from "@/components/logic/PublicNavSelection.v1";
 import { appendWorkingProfileV1, getLongestMatchingManageNavHrefV1 } from "@/components/logic/ManageNavSelection.v1";
 import { manageNav } from "@/logica/core/manage-nav";
 import { ProfileV1 } from "@/components/elements/Profile.v1";
+import { AccountDisplayTabV1 } from "@/components/elements/AccountDisplayTab.v1";
+import type { AccountDisplayUser } from "@/services/account/me";
 
 const publicNavLinks = [
   { href: "/sell", label: "Sell" },
@@ -31,22 +32,11 @@ export function HeaderV1({
   selectedProfile: string | null;
   menuOpen: boolean;
   setMenuOpen: (open: boolean) => void;
-  user: {
-    accountId?: string | null;
-    displayName?: string | null;
-    displayImage?: string | null;
-    accountType?: string | null;
-    neupId?: string | null;
-    verified?: boolean | null;
-    workingProfile?: string | null;
-    workingProfileDisplayName?: string | null;
-  } | null;
+  user: AccountDisplayUser | null;
 }) {
-  const handleText = getAccountHandle(user?.neupId);
   const effectiveUser = user;
   const activeProfileName = user?.workingProfileDisplayName?.trim() || null;
   const [selectedProfileName, setSelectedProfileName] = useState<string | null>(activeProfileName);
-  const topAccountName = getAccountDisplayName(user?.displayName);
   const logoProfileName = selectedProfileName?.trim() || null;
 
   useEffect(() => {
@@ -173,13 +163,7 @@ export function HeaderV1({
 
           <div className="flex flex-1 items-center justify-end space-x-1.5">
             {effectiveUser && (
-              <Link href="/profile" className="flex items-center gap-2 rounded-md px-1 py-1 transition-colors hover:bg-secondary/60">
-                <div className="mr-1 flex min-w-0 flex-col items-end">
-                  <span className="truncate text-sm font-semibold">{topAccountName}</span>
-                  <span className="text-xs text-muted-foreground">{handleText}</span>
-                </div>
-                <ProfileV1 displayName={topAccountName} imageSrc={effectiveUser.displayImage} />
-              </Link>
+              <AccountDisplayTabV1 user={effectiveUser} />
             )}
 
             {!effectiveUser && (
@@ -202,16 +186,7 @@ export function HeaderV1({
         )}
       >
         {effectiveUser && (
-          <Link href="/profile" onClick={() => setMenuOpen(false)} className="mx-3 mt-3 flex shrink-0 items-center gap-3 rounded-lg bg-secondary p-2.5">
-            <ProfileV1 displayName={topAccountName} imageSrc={effectiveUser.displayImage} />
-            <div className="min-w-0 flex flex-col">
-              <div className="flex items-center gap-1">
-                <span className="truncate text-sm font-semibold">{topAccountName}</span>
-                {effectiveUser.verified && <BadgeCheck className="h-3.5 w-3.5 shrink-0 text-primary" />}
-              </div>
-              <span className="text-xs text-muted-foreground">{handleText}</span>
-            </div>
-          </Link>
+          <AccountDisplayTabV1 user={effectiveUser} mobile onClick={() => setMenuOpen(false)} />
         )}
 
         <nav className="flex flex-col space-y-0.5 px-3 py-3">

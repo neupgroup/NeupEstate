@@ -19,7 +19,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/core/hooks/use-toast';
-import { createFaqAction, updateFaqAction, deleteFaqAction } from '@/app/actions';
+import { createFaqAction, updateFaqAction, deleteFaqAction } from '@/services/content';
 import type { FAQ, CreateFaqFormValues } from '@/types';
 import { CreateFaqSchema, FaqCategorySchema } from '@/types';
 import { Info, PlusCircle, Trash2, Loader2, Pencil } from 'lucide-react';

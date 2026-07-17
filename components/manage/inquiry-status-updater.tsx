@@ -2,7 +2,7 @@
 "use client";
 
 import { useTransition } from 'react';
-import { updateInquiryStatusAction } from '@/app/actions';
+import { updateInquiryStatusAction } from '@/services/content';
 import type { InquiryStatus } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';

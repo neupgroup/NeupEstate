@@ -5,7 +5,7 @@ import { logProblem } from './problem-service';
 import type { Property, CreatePropertyInput, PropertyFilters, ExtractedPropertyData, UpdatePropertyInput } from '@/types';
 import { areaValueToSqft } from '@/types';
 import { Prisma, PropertyType, PropertyStatus, PropertyPurpose } from '@prisma/client';
-import { mapPurposeToEnum, mapPurposeFromEnum, mapTypeToEnum, mapTypeFromEnum, mapStatusToEnum, mapStatusFromEnum } from '@/logica/core/adapters/enum-mappers';
+import { mapPurposeToEnum, mapPurposeFromEnum, mapTypeToEnum, mapTypeFromEnum, mapStatusToEnum, mapStatusFromEnum } from '@/inapp/database/adapters';
 import slugify from 'slugify';
 import { randomBytes } from 'crypto';
 

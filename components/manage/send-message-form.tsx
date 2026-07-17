@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Send, Loader2, MessageSquarePlus } from 'lucide-react';
 import { SendTemplateDialog } from './send-template-dialog';
 import type { WhatsAppTemplate } from '@/types';
-import { sendMessageAction } from '@/app/actions';
+import { sendMessageAction } from '@/services/communications';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 function SubmitButton() {

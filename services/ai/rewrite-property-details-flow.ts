@@ -8,7 +8,6 @@
  * - rewritePropertyDetails - A function that handles the rewriting process.
  */
 
-import { ai } from '@/logica/core/ai/genkit';
 import {
   RewritePropertyDetailsInputSchema,
   type RewritePropertyDetailsInput,

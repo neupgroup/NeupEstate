@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { CreateAgencySchema, type Agency, type CreateAgencyFormValues } from '@/types';
-import { updateAgencyAction, deleteAgencyAction } from '@/app/actions';
+import { updateAgencyAction, deleteAgencyAction } from '@/services/agency';
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';

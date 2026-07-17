@@ -7,7 +7,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTransition, useEffect, useMemo, useState } from 'react';
 import { CreatePropertySchema, type CreatePropertyFormValues, type User } from '@/types';
-import { cancelPropertyChangeDraftAction, createPropertyAction, getCurrentAccountId, getCurrentPropertyCreateDraftAction, getCurrentPropertyPostingContextAction, getListingAgentOptionsAction, savePropertyCreateDraftAction } from '@/app/actions';
+import { cancelPropertyChangeDraftAction, createPropertyAction, getCurrentPropertyCreateDraftAction, getCurrentPropertyPostingContextAction, getListingAgentOptionsAction, savePropertyCreateDraftAction } from '@/services/property/drafts';
+import { getCurrentAccountId } from '@/services/identity';
 
 import { Form } from '@/components/ui/form';
 import { useToast } from '@/core/hooks/use-toast';

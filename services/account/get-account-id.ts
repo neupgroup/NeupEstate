@@ -18,10 +18,10 @@
 
 import { 
   getClientAccountId as getClientAccountIdNew,
-  getAccountId as getServerAccountIdNew,
   isClientAuthenticated as isClientAuthenticatedNew,
   isClientIdentified as isClientIdentifiedNew,
-} from '@/services/auth';
+} from '@/services/auth/client';
+import { getAccountId as getServerAccountIdNew } from '@/services/auth/account';
 
 // ─── Client-side ─────────────────────────────────────────────────────────────
 

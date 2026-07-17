@@ -4,7 +4,7 @@
 import { useEffect, useState, useTransition } from "react";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { suggestPropertyQuestionsAction, createInquiryAction } from "@/app/actions";
+import { suggestPropertyQuestionsAction, createInquiryAction } from '@/services/content';
 import { CreateInquirySchema, type CreateInquiryFormValues } from "@/types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";

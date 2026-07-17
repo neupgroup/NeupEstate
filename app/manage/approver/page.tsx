@@ -2,13 +2,7 @@
 "use client";
 
 import { useState, useTransition } from 'react';
-import { 
-    getPendingPropertiesForAgent, 
-    getApprovedPropertiesForAgent, 
-    runPropertyApproval, 
-    runPropertyAmendment,
-    runPropertyAssurance,
-} from '@/app/actions';
+import { getPendingPropertiesForAgent, getApprovedPropertiesForAgent, runPropertyApproval, runPropertyAmendment, runPropertyAssurance } from '@/services/automation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/core/hooks/use-toast';

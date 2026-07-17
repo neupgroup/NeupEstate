@@ -2,7 +2,7 @@
 
 import { User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getInitials } from "@/logica/core/neup-user-context";
+import { getInitials } from "@/services/account/me";
 
 export function ProfileV1({
   displayName,

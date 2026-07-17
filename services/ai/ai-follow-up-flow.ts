@@ -10,7 +10,6 @@
  * - AiFollowUpOutput - The return type for the function.
  */
 
-import { ai } from '@/core/ai/genkit';
 import { z } from 'zod';
 import { getPrompt } from '@/services/prompt-service';
 import { generateText } from './unified-generation-service';

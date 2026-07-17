@@ -3,7 +3,7 @@
 
 import { useEffect, useState, useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
-import { analyzeMarketAction, type MarketAnalysisState } from '@/app/actions';
+import { analyzeMarketAction, type MarketAnalysisState } from '@/services/automation';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';

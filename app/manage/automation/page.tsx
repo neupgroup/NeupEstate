@@ -4,7 +4,7 @@
 
 import { useFormStatus } from 'react-dom';
 import { useEffect, useState, useActionState } from 'react';
-import { addSitemapAction, getNewUrlsFromSitemapAction, processSitemapUrlAction, updateSitemapCheckedTimeAction } from '@/app/actions';
+import { addSitemapAction, getNewUrlsFromSitemapAction, processSitemapUrlAction, updateSitemapCheckedTimeAction } from '@/services/automation';
 import { getSitemaps } from '@/services/sitemap-service';
 import type { Sitemap, SitemapLog } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';

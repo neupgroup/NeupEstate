@@ -5,7 +5,7 @@ import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { extractAndSaveProperty } from '@/app/actions';
+import { extractAndSaveProperty } from '@/services/property/search';
 import type { ExtractPropertyDetailsOutput } from '@/services/ai/extract-property-details-flow';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';

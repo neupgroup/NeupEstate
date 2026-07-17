@@ -35,7 +35,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/core/hooks/use-toast';
-import { createWhatsAppTemplateAction, deleteWhatsAppTemplateAction, updateWhatsAppConfigAction } from '@/app/actions';
+import { createWhatsAppTemplateAction, deleteWhatsAppTemplateAction, updateWhatsAppConfigAction } from '@/services/communications';
 
 import type { WhatsAppTemplate, CreateWhatsAppTemplateFormValues, WhatsAppConfig } from '@/types';
 import { CreateWhatsAppTemplateSchema, WhatsAppTemplateCategorySchema, WhatsAppTemplateLanguageSchema, WhatsAppConfigSchema } from '@/types';

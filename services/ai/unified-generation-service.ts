@@ -10,7 +10,7 @@
  * to the appropriate provider based on the 'provider' parameter.
  */
 
-import { ai, resolveGoogleModel } from '@/logica/core/ai/genkit';
+import { requestGoogleAiCompletion } from '@/core/ai/direct/googleai';
 import * as Handlebars from 'handlebars';
 import { logProblem } from '@/services/problem-service';
 import { z } from 'zod';
@@ -26,6 +26,29 @@ function compilePrompt(promptText: string, input: Record<string, any>): string {
     return template(input);
 }
 
+function getGoogleAiApiKey(): string {
+    const apiKey =
+        process.env.GEMINI_API_KEY ||
+        process.env.GOOGLE_AI_API_KEY ||
+        process.env.GOOGLE_API_KEY;
+
+    if (!apiKey?.trim()) {
+        throw new Error('Missing Google AI API key.');
+    }
+
+    return apiKey.trim();
+}
+
+function resolveGoogleModel(model?: string | null): string {
+    const normalizedModel = model?.trim();
+    return normalizedModel || 'gemini-2.5-flash-lite';
+}
+
+function withJsonOutputInstruction(prompt: string): string {
+    return `${prompt}
+
+Return only valid JSON that matches the requested output shape. Do not wrap the JSON in Markdown.`;
+}
 
 interface GenerateTextInput {
     model: string; // The model name, e.g., 'gemini-2.5-flash'
@@ -36,7 +59,7 @@ interface GenerateTextInput {
 
 /**
  * Unified function to generate text from a specified AI provider and model.
- * It compiles the prompt and sends the request to the Genkit `generate` API.
+ * It compiles the prompt and sends the request directly to Google AI.
  *
  * @param {GenerateTextInput} options - The options for the text generation.
  * @returns A promise that resolves to the generated text content.
@@ -51,22 +74,21 @@ export async function generateText<T>(options: GenerateTextInput): Promise<T> {
 
     // Step 2: Make the generation call using the model identifier
     try {
-        console.log(`Requesting response from model: ${modelIdentifier}`);
-        
-        const { output } = await ai.generate({
-            model: resolveGoogleModel(modelIdentifier),
-            prompt: compiledPrompt,
-            output: {
-                format: 'json',
-                schema: z.any()
-            }
+        const resolvedModel = resolveGoogleModel(modelIdentifier);
+        console.log(`Requesting response from model: ${resolvedModel}`);
+
+        const result = await requestGoogleAiCompletion({
+            apiKey: getGoogleAiApiKey(),
+            model: resolvedModel,
+            messages: [
+                {
+                    role: 'user',
+                    content: withJsonOutputInstruction(compiledPrompt),
+                },
+            ],
         });
 
-        if (typeof output === 'object') {
-            generatedJsonString = JSON.stringify(output);
-        } else {
-            generatedJsonString = output as string;
-        }
+        generatedJsonString = result.text;
 
     } catch (error: any) {
         // Log the full error object for detailed debugging, including raw API responses.

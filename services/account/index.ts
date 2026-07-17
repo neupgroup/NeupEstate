@@ -40,93 +40,39 @@ import { resolveAccount, updateUser, getAccountById, getAccounts } from '@/servi
 import { deleteAccountAndData } from '@/services/account-service';
 import { createLead as createLeadService, createLeadActivity as createLeadActivityService } from '@/services/lead-service';
 import { getIdentity } from '@/services/neupid/get-identity';
-import { hasPermission, requirePermission } from '@/services/permissions';
-import { PERMISSIONS } from '@/services/permissions';
 import { prisma } from '@/core/database/prisma';
 import { isAgencyLikeAccountType, promoteStoredAccountType } from '@/services/account-type';
 import { resolvePropertyPostingContext } from '@/services/property-posting-context';
-import { requireIdentity, formatLocationString, firstPositivePrice, cleanPricing, deepMergeJson, normalizeOwnerEntries, normalizeOwnerReferenceEntries, normalizePropertyChangeData, mapPropertyToCreateFormValues } from '@/services/actions/helpers';
+import { requireIdentity, formatLocationString, firstPositivePrice, cleanPricing, deepMergeJson, normalizeOwnerEntries, normalizeOwnerReferenceEntries, normalizePropertyChangeData, mapPropertyToCreateFormValues } from '@/services/property/action-helpers';
 
-export async function approvePropertyAction(propertyId: string) {
+export async function resolveAccountAction(
+  aid: string | null,
+): Promise<{ success: boolean; accountId?: string; error?: string }> {
     try {
-        const actorId = await requireIdentity();
-        await approveProperty(propertyId);
-        const property = await getPropertyById(propertyId, { includeInactive: true });
-        if (property) {
-          await createPropertyLog({
-            propertyId,
-            requestedBy: actorId,
-            approvedBy: actorId,
-            approvedOn: new Date(),
-            data: Object.entries(property as Record<string, any>).map(([field, value]) => ({
-              field,
-              value: field === 'owner' ? normalizeOwnerReferenceEntries(value) : value,
-            })),
-          });
+        const accountId = await resolveAccount(aid);
+        return { success: true, accountId };
+    } catch (error: any) {
+        await logProblem(error, 'resolveAccountAction');
+        return { success: false, error: 'Failed to resolve account.' };
+    }
+}
+
+/** @deprecated Use resolveAccountAction(null) instead. */
+export async function getOrCreateTemporaryAccountAction(): Promise<{ success: boolean; accountId?: string; error?: string }> {
+    return resolveAccountAction(null);
+}
+
+export async function updateUserAction(data: UpdateUserFormValues): Promise<{ success: boolean; error?: string }> {
+    try {
+        const validatedData = UpdateUserSchema.parse(data);
+        await updateUser(validatedData.id, validatedData);
+        revalidatePath(`/manage/users/${validatedData.id}`);
+        return { success: true };
+    } catch (e: any) {
+        if (e instanceof z.ZodError) {
+            return { success: false, error: e.message };
         }
-        revalidatePath('/manage/properties');
-        revalidatePath(`/manage/properties/${propertyId}/edit`);
-        return { success: true };
-    } catch (error: any) {
-        await logProblem(error, `approvePropertyAction (ID: ${propertyId})`);
-        return { success: false, error: "Failed to approve property." };
-    }
-}
-
-export async function deletePropertyAction(propertyId: string) {
-    try {
-        await requirePermission(PERMISSIONS.manage.propertySelfDelete);
-        await deletePropertyService(propertyId);
-        revalidatePath('/manage/properties');
-        return { success: true };
-    } catch (error: any) {
-        await logProblem(error, `deletePropertyAction (ID: ${propertyId})`);
-        return { success: false, error: "Failed to delete property." };
-    }
-}
-
-export async function requestPropertyDeletionAction(propertyId: string) {
-    try {
-        await requirePermission(PERMISSIONS.manage.propertySelfDelete);
-        const accountId = await requireIdentity();
-        const existingDraft = await prisma.propertyChange.findFirst({
-            where: {
-                propertyId,
-                accountId,
-                status: 'deleting',
-                isApproved: null,
-            },
-            orderBy: { modifiedOn: 'desc' },
-            select: {
-                id: true,
-                data: true,
-            },
-        });
-
-        const nextData = existingDraft?.data && typeof existingDraft.data === 'object' && !Array.isArray(existingDraft.data)
-            ? normalizePropertyChangeData(existingDraft.data as Record<string, any>)
-            : {};
-
-        await prisma.propertyChange.upsert({
-            where: { id: existingDraft?.id ?? '__new_property_change__' },
-            update: {
-                status: 'deleting',
-                data: nextData,
-                modifiedOn: new Date(),
-            },
-            create: {
-                propertyId,
-                accountId,
-                status: 'deleting',
-                isApproved: null,
-                data: nextData,
-            },
-        });
-        revalidatePath('/manage/properties');
-        revalidatePath(`/manage/properties/${propertyId}`);
-        return { success: true };
-    } catch (error: any) {
-        await logProblem(error, `requestPropertyDeletionAction (ID: ${propertyId})`);
-        return { success: false, error: "Failed to request property deletion." };
+        await logProblem(e, `updateUserAction (ID: ${data.id})`);
+        return { success: false, error: (e as Error).message || "Failed to update user." };
     }
 }

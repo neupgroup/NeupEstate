@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useTransition } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { createAgencyAgentMapAction } from '@/app/actions';
+import { createAgencyAgentMapAction } from '@/services/agency';
 import type { Account, AgencyAgentMap } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';

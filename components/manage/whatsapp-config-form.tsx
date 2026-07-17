@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/core/hooks/use-toast';
-import { updateWhatsAppConfigAction } from '@/app/actions';
+import { updateWhatsAppConfigAction } from '@/services/communications';
 import type { WhatsAppConfig } from '@/types';
 import { WhatsAppConfigSchema } from '@/types';
 import { Loader2, Pencil, KeyRound, Phone, Hash } from 'lucide-react';

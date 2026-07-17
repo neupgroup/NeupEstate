@@ -1,10 +1,10 @@
 'use server';
 
-import { ai } from '@/logica/core/ai/genkit';
 import { z } from 'zod';
 import * as cheerio from 'cheerio';
 import { fetchPageSourceCode } from '@/services/activities/fetch-page-source2';
 import { logProblem } from '@/services/problem-service';
+import { generateText } from '@/services/ai/unified-generation-service';
 
 const ExtractCompetitorListingInputSchema = z.object({
   url: z.string().url(),
@@ -52,19 +52,16 @@ Rules:
 - Keep the response strictly in JSON.
 `;
 
-const extractCompetitorListingPrompt = ai.definePrompt({
-  name: 'extractCompetitorListingPrompt',
-  input: {
-    schema: z.object({
-      prompt: z.string(),
-      context: z.string(),
-      images: z.array(z.string().url()),
-    }),
-  },
-  output: { schema: ExtractCompetitorListingOutputSchema },
-  model: 'googleai/gemini-2.5-flash-lite',
-  prompt: `{{{prompt}}}\n\nContext:\n{{{context}}}\n\nImages:\n{{#each images}}\n- {{{this}}}\n{{/each}}\n`,
-});
+const promptText = `{{{prompt}}}
+
+Context:
+{{{context}}}
+
+Images:
+{{#each images}}
+- {{{this}}}
+{{/each}}
+`;
 
 function buildRenderedContext(html: string, baseUrl: string): { context: string; images: string[] } {
   const $ = cheerio.load(html);
@@ -110,15 +107,16 @@ export async function extractCompetitorListing(input: ExtractCompetitorListingIn
   try {
     const html = await fetchPageSourceCode(input.url);
     const { context, images } = buildRenderedContext(html, input.url);
-    const { output } = await extractCompetitorListingPrompt({
-      prompt: PROMPT_TEXT,
-      context,
-      images,
+    const output = await generateText<ExtractCompetitorListingOutput>({
+      model: 'gemini-2.5-flash-lite',
+      promptText,
+      inputData: {
+        prompt: PROMPT_TEXT,
+        context,
+        images,
+      },
+      outputSchema: ExtractCompetitorListingOutputSchema,
     });
-
-    if (!output) {
-      return { isPropertyPage: false };
-    }
 
     return output;
   } catch (error) {

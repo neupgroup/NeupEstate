@@ -16,7 +16,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Bot, Loader2 } from 'lucide-react';
 import { useToast } from '@/core/hooks/use-toast';
-import { sendAiFollowUpAction } from '@/app/actions';
+import { sendAiFollowUpAction } from '@/services/communications';
 
 interface AiFollowUpButtonProps {
     conversationId: string;

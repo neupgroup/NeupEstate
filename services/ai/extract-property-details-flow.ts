@@ -8,12 +8,12 @@
  * - ExtractPropertyDetailsOutput - The return type for the flow.
  */
 
-import { ai, resolveGoogleModel } from '@/logica/core/ai/genkit';
 import { z } from 'zod';
 import { addProperty, updatePropertyWithExtractedData } from '@/services/property-service';
 import { ExtractedPropertySchema } from '@/types';
 import { fetchPageSourceCode } from '@/services/activities/fetch-page-source2';
 import { getPrompt } from '@/services/prompt-service';
+import { generateText } from '@/services/ai/unified-generation-service';
 
 const ExtractPropertyDetailsInputSchema = z.object({
   url: z.string().url().describe('The URL of the property listing page.'),
@@ -71,14 +71,7 @@ const defaultPrompt = {
     `,
 };
 
-
-const extractPropertyDetailsFlow = ai.defineFlow(
-  {
-    name: 'extractPropertyDetailsFlow',
-    inputSchema: ExtractPropertyDetailsInputSchema,
-    outputSchema: ExtractPropertyDetailsOutputSchema,
-  },
-  async (input) => {
+async function extractPropertyDetailsFlow(input: ExtractPropertyDetailsInput): Promise<ExtractPropertyDetailsOutput> {
     let rawHtml;
     try {
         rawHtml = await fetchPageSourceCode(input.url);
@@ -89,15 +82,12 @@ const extractPropertyDetailsFlow = ai.defineFlow(
     }
 
     const promptConfig = await getPrompt(PROMPT_ID, defaultPrompt);
-    const extractPropertyPrompt = ai.definePrompt({
-        name: PROMPT_ID,
-        input: { schema: z.object({ url: z.string().url(), htmlContent: z.string() }) },
-        output: { schema: ExtractedPropertySchema },
-        prompt: promptConfig.promptText,
-        model: resolveGoogleModel(promptConfig.model),
+    const output = await generateText<z.infer<typeof ExtractedPropertySchema>>({
+        model: promptConfig.model!,
+        promptText: promptConfig.promptText,
+        inputData: { url: input.url, htmlContent: rawHtml },
+        outputSchema: ExtractedPropertySchema,
     });
-
-    const { output } = await extractPropertyPrompt({ url: input.url, htmlContent: rawHtml });
 
     if (!output) {
       return { error: 'Failed to extract property details from the page.', rawHtml };
@@ -126,8 +116,7 @@ const extractPropertyDetailsFlow = ai.defineFlow(
     } catch (error: any) {
       return { error: error.message || 'Failed to save property to database.', extractedData: dataWithSource, rawHtml };
     }
-  }
-);
+}
 
 
 export async function extractAndSaveProperty(input: ExtractPropertyDetailsInput): Promise<ExtractPropertyDetailsOutput> {

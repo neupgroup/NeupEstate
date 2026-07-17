@@ -16,7 +16,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Trash2, Loader2 } from 'lucide-react';
 import { useToast } from '@/core/hooks/use-toast';
-import { deleteAccountAction } from '@/app/actions';
+import { deleteAccountAction } from '@/services/communications';
 
 interface DeleteAccountButtonProps {
   accountId: string;

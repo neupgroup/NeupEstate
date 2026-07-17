@@ -5,7 +5,7 @@
 import { useTransition } from "react";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createPropertyRequestAction } from "@/app/actions";
+import { createPropertyRequestAction } from '@/services/engagement';
 import { CreatePropertyRequestSchema, type CreatePropertyRequestFormValues, PropertyCategorySchema } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";

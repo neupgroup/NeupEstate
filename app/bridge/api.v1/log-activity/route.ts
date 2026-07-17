@@ -1,6 +1,6 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import { logUserActivity } from '@/app/actions';
+import { logUserActivity } from '@/services/communications';
 import type { PropertyActivityEvent } from '@/types';
 import { withRequestDevLog } from '@/services/site-dev-log-service';
 

@@ -17,7 +17,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Trash2, Loader2 } from 'lucide-react';
 import { useToast } from '@/core/hooks/use-toast';
-import { deleteConversationAction } from '@/app/actions';
+import { deleteConversationAction } from '@/services/communications';
 
 interface DeleteConversationButtonProps {
     conversationId: string;

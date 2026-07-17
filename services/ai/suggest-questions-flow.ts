@@ -10,7 +10,6 @@
  * - SuggestQuestionsOutput - The return type for the suggestQuestions function.
  */
 
-import { ai } from '@/logica/core/ai/genkit';
 import { z } from 'zod';
 import { getPrompt } from '@/services/prompt-service';
 import { generateText } from './unified-generation-service';

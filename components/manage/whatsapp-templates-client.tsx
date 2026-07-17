@@ -21,7 +21,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/core/hooks/use-toast';
-import { createWhatsAppTemplateAction, deleteWhatsAppTemplateAction } from '@/app/actions';
+import { createWhatsAppTemplateAction, deleteWhatsAppTemplateAction } from '@/services/communications';
 import type { WhatsAppTemplate, CreateWhatsAppTemplateFormValues } from '@/types';
 import { CreateWhatsAppTemplateSchema, WhatsAppTemplateCategorySchema, WhatsAppTemplateLanguageSchema } from '@/types';
 import { Info, PlusCircle, Trash2, Loader2 } from 'lucide-react';

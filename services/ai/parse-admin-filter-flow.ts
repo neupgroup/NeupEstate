@@ -8,7 +8,6 @@
  * - parseAdminFilter - A function that handles parsing the filter query.
  */
 
-import {ai} from '@/logica/core/ai/genkit';
 import {z} from 'zod';
 import { PropertyFiltersSchema, type PropertyFilters } from '@/types';
 import { getPrompt } from '@/services/prompt-service';

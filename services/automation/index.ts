@@ -43,36 +43,146 @@ import { getIdentity } from '@/services/neupid/get-identity';
 import { prisma } from '@/core/database/prisma';
 import { isAgencyLikeAccountType, promoteStoredAccountType } from '@/services/account-type';
 import { resolvePropertyPostingContext } from '@/services/property-posting-context';
-import { requireIdentity, formatLocationString, firstPositivePrice, cleanPricing, deepMergeJson, normalizeOwnerEntries, normalizeOwnerReferenceEntries, normalizePropertyChangeData, mapPropertyToCreateFormValues } from '@/services/actions/helpers';
+import { requireIdentity, formatLocationString, firstPositivePrice, cleanPricing, deepMergeJson, normalizeOwnerEntries, normalizeOwnerReferenceEntries, normalizePropertyChangeData, mapPropertyToCreateFormValues } from '@/services/property/action-helpers';
 
-export async function resolveAccountAction(
-  aid: string | null,
-): Promise<{ success: boolean; accountId?: string; error?: string }> {
+const SitemapSchema = z.object({
+    url: z.string().url({ message: "Please enter a valid sitemap URL." }),
+});
+
+export async function addSitemapAction(prevState: any, formData: FormData) {
     try {
-        const accountId = await resolveAccount(aid);
-        return { success: true, accountId };
+        const validatedFields = SitemapSchema.safeParse({
+            url: formData.get('sitemapUrl'),
+        });
+
+        if (!validatedFields.success) {
+            return { success: false, error: validatedFields.error.flatten().fieldErrors.url?.[0] };
+        }
+
+        await addSitemap(validatedFields.data.url);
+        revalidatePath('/manage/automation');
+        return { success: true, error: null };
     } catch (error: any) {
-        await logProblem(error, 'resolveAccountAction');
-        return { success: false, error: 'Failed to resolve account.' };
+        await logProblem(error, 'addSitemapAction');
+        return { success: false, error: error.message };
     }
 }
 
-/** @deprecated Use resolveAccountAction(null) instead. */
-export async function getOrCreateTemporaryAccountAction(): Promise<{ success: boolean; accountId?: string; error?: string }> {
-    return resolveAccountAction(null);
+export async function getNewUrlsFromSitemapAction(sitemapId: string) {
+    return getNewUrlsFromSitemap(sitemapId);
 }
 
-export async function updateUserAction(data: UpdateUserFormValues): Promise<{ success: boolean; error?: string }> {
+export async function processSitemapUrlAction(url: string) {
+    const result = await processSitemapUrl(url);
+    if (result.status === 'success') {
+        revalidatePath('/manage/properties');
+        revalidatePath('/properties');
+    }
+    return result;
+}
+
+export async function updateSitemapCheckedTimeAction(sitemapId: string) {
+    await updateSitemapCheckedTime(sitemapId);
+    revalidatePath('/manage/automation'); // Revalidate path to update last checked time
+}
+
+
+export async function runPropertyApproval(propertyId: string): Promise<PropertyApprovalResult> {
+    return runPropertyApprovalFlow(propertyId);
+}
+
+export async function runPropertyAmendment(propertyId: string): Promise<PropertyAmendmentResult> {
+    return runPropertyAmendmentFlow(propertyId);
+}
+
+export async function runPropertyAssurance(propertyId: string): Promise<PropertyAssuranceResult> {
+    return runPropertyAssuranceFlow(propertyId);
+}
+
+export async function getPendingPropertiesForAgent(limit: number): Promise<{ id: string; title: string; kind: 'property' | 'draft'; propertyId?: string; requestId?: string }[]> {
+    const awaitingReviewItems = await getAwaitingReviewItems(limit);
+    return awaitingReviewItems
+      .filter((item) => item.kind === 'property' || item.propertyId)
+      .map((item) => ({
+      id: item.id,
+      title: item.title,
+      kind: item.kind,
+      propertyId: item.propertyId,
+      requestId: item.kind === 'draft' ? item.id : undefined,
+    }));
+}
+
+export async function getApprovedPropertiesForAgent(limit: number): Promise<{ id:string; title: string }[]> {
+    void limit;
+    return [];
+}
+
+export type MarketAnalysisState = {
+    success: boolean;
+    error?: string;
+    result?: {
+        count: number;
+        averagePrice: number;
+        minPrice: number;
+        maxPrice: number;
+        summary: string;
+    };
+};
+
+const MarketAnalysisSchema = z.object({
+  query: z.string().min(3, { message: "Please provide a description of the properties to analyze." }),
+});
+
+export async function analyzeMarketAction(prevState: MarketAnalysisState, formData: FormData): Promise<MarketAnalysisState> {
     try {
-        const validatedData = UpdateUserSchema.parse(data);
-        await updateUser(validatedData.id, validatedData);
-        revalidatePath(`/manage/users/${validatedData.id}`);
-        return { success: true };
-    } catch (e: any) {
-        if (e instanceof z.ZodError) {
-            return { success: false, error: e.message };
+        const validatedFields = MarketAnalysisSchema.safeParse({
+            query: formData.get('query'),
+        });
+
+        if (!validatedFields.success) {
+            return { success: false, error: validatedFields.error.flatten().fieldErrors.query?.[0] };
         }
-        await logProblem(e, `updateUserAction (ID: ${data.id})`);
-        return { success: false, error: (e as Error).message || "Failed to update user." };
+        
+        const { query } = validatedFields.data;
+
+        const filters = await parseAdminFilter({ query });
+        filters.status = 'approved';
+
+        const { properties } = await getPaginatedProperties({ filters, limit: 10000 });
+
+        if (properties.length === 0) {
+            return { success: true, result: { count: 0, averagePrice: 0, minPrice: 0, maxPrice: 0, summary: `No matching properties found for "${query}". Try a different description.` } };
+        }
+
+        const prices = properties.map(p => p.price).filter(p => p > 0);
+        if (prices.length === 0) {
+            return { success: true, result: { count: properties.length, averagePrice: 0, minPrice: 0, maxPrice: 0, summary: "Found matching properties, but none have a listed price to analyze." } };
+        }
+
+        const totalCount = properties.length;
+        const averagePrice = prices.reduce((sum, price) => sum + price, 0) / prices.length;
+        const minPrice = Math.min(...prices);
+        const maxPrice = Math.max(...prices);
+        
+        const formatCurrency = (value: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
+
+        const summary = `Based on ${totalCount} properties matching your description, the estimated market rate is between ${formatCurrency(minPrice)} and ${formatCurrency(maxPrice)}, with an average of ${formatCurrency(averagePrice)}.`;
+
+        return { success: true, result: { count: totalCount, averagePrice, minPrice, maxPrice, summary }};
+    } catch(e: any) {
+        await logProblem(e, 'analyzeMarketAction');
+        return { success: false, error: "An unexpected error occurred during analysis." };
+    }
+}
+
+
+export async function clearAllProblemsAction(): Promise<{ success: boolean; error?: string }> {
+    try {
+        const result = await clearAllProblems();
+        revalidatePath('/manage/problems');
+        return result;
+    } catch (e: any) {
+        // This is a last resort, should not happen if clearAllProblems is correct
+        return { success: false, error: "An unexpected error occurred." };
     }
 }

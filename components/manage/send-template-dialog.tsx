@@ -15,7 +15,7 @@ import { MessageSquarePlus, Send, AlertCircle, Loader2 } from 'lucide-react';
 import { useToast } from '@/core/hooks/use-toast';
 import type { WhatsAppTemplate } from '@/types';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
-import { sendTemplateMessageAction } from '@/app/actions';
+import { sendTemplateMessageAction } from '@/services/communications';
 
 interface SendTemplateDialogProps {
   conversationId: string;

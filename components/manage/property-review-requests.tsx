@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { reviewPropertyChangeAction } from "@/app/actions";
+import { reviewPropertyChangeAction } from '@/services/property/drafts';
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/core/hooks/use-toast";

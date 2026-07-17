@@ -3,7 +3,7 @@
 
 import { useEffect, useRef, useCallback, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { logUserActivity } from '@/app/actions';
+import { logUserActivity } from '@/services/communications';
 import type { PropertyActivityEvent } from '@/types';
 import { getClientAccountId } from '@/services/account/get-account-id';
 

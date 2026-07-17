@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { naturalLanguagePropertySearch } from '@/app/actions';
+import { naturalLanguagePropertySearch } from '@/services/property/search';
 import type { NaturalLanguageSearchOutput } from '@/types';
 
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';

@@ -15,7 +15,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { useToast } from '@/core/hooks/use-toast';
-import { clearSiteDevLogsAction } from '@/app/actions';
+import { clearSiteDevLogsAction } from '@/services/communications';
 
 export function ClearSiteDevLogsButton() {
   const [isPending, startTransition] = useTransition();

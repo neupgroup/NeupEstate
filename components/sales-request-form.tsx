@@ -4,7 +4,7 @@
 import { useTransition } from "react";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createSalesRequestAction } from "@/app/actions";
+import { createSalesRequestAction } from '@/services/engagement';
 import { CreateSalesRequestSchema, type CreateSalesRequestFormValues } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
