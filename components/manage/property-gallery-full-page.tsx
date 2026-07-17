@@ -32,10 +32,12 @@ function GalleryImage({
   src,
   alt,
   className,
+  onLoad,
 }: {
   src: string;
   alt: string;
   className?: string;
+  onLoad?: () => void;
 }) {
   const [failed, setFailed] = useState(false);
 
@@ -56,6 +58,7 @@ function GalleryImage({
       src={src}
       alt={alt}
       className={className}
+      onLoad={onLoad}
       onError={() => setFailed(true)}
     />
   );
@@ -74,6 +77,7 @@ export function PropertyGalleryFullPage({
   const [direction, setDirection] = useState<GalleryDirection>("next");
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [copied, setCopied] = useState(false);
+  const [loadedImageKey, setLoadedImageKey] = useState("");
 
   const visibleImages = useMemo(
     () =>
@@ -85,9 +89,26 @@ export function PropertyGalleryFullPage({
   );
 
   const selectedImage = visibleImages[selectedIndex] ?? visibleImages[0] ?? "";
+  const selectedImageKey = `${selectedImage}-${selectedIndex}`;
   const propertyHref = `/properties/${propertySlug}`;
   const isFirstImage = selectedIndex === 0;
   const isLastImage = selectedIndex === visibleImages.length - 1;
+
+  useEffect(() => {
+    if (loadedImageKey !== selectedImageKey) return;
+
+    const timeoutId = window.setTimeout(() => {
+      const nextPath = `/properties/${propertySlug}/gallery?mode=fullpage&image=${selectedIndex + 1}`;
+
+      if (`${window.location.pathname}${window.location.search}` !== nextPath) {
+        window.history.replaceState(window.history.state, "", nextPath);
+      }
+    }, 5000);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [loadedImageKey, propertySlug, selectedImageKey, selectedIndex]);
 
   const copyPropertyLink = useCallback(async () => {
     const url = new URL(
@@ -234,12 +255,13 @@ export function PropertyGalleryFullPage({
           </Button>
         )}
 
-        <div className="flex h-full w-full max-w-6xl items-center justify-center overflow-hidden rounded-2xl">
+        <div className="flex h-full w-full max-w-6xl items-center justify-center overflow-hidden">
           <GalleryImage
-            key={`${selectedImage}-${selectedIndex}`}
+            key={selectedImageKey}
             src={selectedImage}
             alt={`${title} photo ${selectedIndex + 1}`}
-            className={`h-full w-full object-cover shadow-2xl shadow-black/40 ${
+            onLoad={() => setLoadedImageKey(selectedImageKey)}
+            className={`max-h-full max-w-full rounded-2xl object-contain shadow-2xl shadow-black/40 ${
               direction === "next"
                 ? "[animation:property-gallery-slide-next_220ms_cubic-bezier(0.22,1,0.36,1)]"
                 : "[animation:property-gallery-slide-previous_220ms_cubic-bezier(0.22,1,0.36,1)]"
