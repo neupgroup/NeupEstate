@@ -108,7 +108,7 @@ export function PropertyMediaGallery({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className={`group relative block h-full min-h-0 min-w-0 overflow-hidden bg-muted ${className}`}
+        className={`group relative block h-full w-full min-h-0 min-w-0 overflow-hidden bg-muted ${className}`}
       >
         <GalleryImage
           src={src}
