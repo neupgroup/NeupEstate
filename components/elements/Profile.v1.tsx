@@ -2,7 +2,7 @@
 
 import { User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getInitials } from "@/core/account-display";
+import { getInitials } from "@/components/account-display";
 
 export function ProfileV1({
   displayName,

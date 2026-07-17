@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Camera } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { getAccountDisplayName, getAccountHandle } from '@/services/account/me';
+import { getAccountDisplayName, getAccountHandle } from '@/components/account-display';
 type ProfileHeaderProps = {
   displayName: string;
   displayImage: string | null;

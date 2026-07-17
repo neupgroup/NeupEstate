@@ -7,7 +7,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/core/utils";
 import { isActivePublicHrefV1 } from "@/components/logic/PublicNavSelection.v1";
 import { appendWorkingProfileV1, getLongestMatchingManageNavHrefV1 } from "@/components/logic/ManageNavSelection.v1";
-import { manageNav } from "@/core/manage-nav";
+import { manageNav } from "@/components/manage-nav";
 import { ProfileV1 } from "@/components/elements/Profile.v1";
 import { AccountDisplayTabV1 } from "@/components/elements/AccountDisplayTab.v1";
 import type { SessionUser } from "@/core/providers/session";

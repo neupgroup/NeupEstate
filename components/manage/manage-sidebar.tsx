@@ -5,7 +5,7 @@ import { useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/core/utils";
-import { manageNav } from "@/core/manage-nav";
+import { manageNav } from "@/components/manage-nav";
 import { appendWorkingProfileV1, getLongestMatchingManageNavHrefV1 } from "@/components/logic/ManageNavSelection.v1";
 
 type Props = {

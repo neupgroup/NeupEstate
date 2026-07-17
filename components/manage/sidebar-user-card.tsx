@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { BadgeCheck } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { getInitials } from '@/core/account-display';
+import { getInitials } from '@/components/account-display';
 import { useSession } from '@/core/providers/session';
 import { Skeleton } from '@/components/ui/skeleton';
 
