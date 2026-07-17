@@ -1,196 +1,216 @@
-
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Users, MousePointerClick, UserPlus, FileQuestion, Search } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import type { ReactNode } from 'react';
+import { Building2, FileQuestion, Globe2, MousePointerClick, Network, ShieldCheck, User, UserPlus, Users } from 'lucide-react';
+import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
+import type { AnalyticsDashboardData, AnalyticsLevelSummary, AnalyticsScopeSummary } from '@/core/analytics/types';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ChartConfig, ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
-import { useToast } from '@/core/hooks/use-toast';
-import { Skeleton } from '@/components/ui/skeleton';
-
-const StatCard = ({ title, value, icon, description, isLoading }: { title: string; value?: string | number; icon: React.ReactNode; description: string; isLoading?: boolean }) => (
-    <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{title}</CardTitle>
-            {icon}
-        </CardHeader>
-        <CardContent>
-            {isLoading ? <Skeleton className="h-8 w-24" /> : <div className="text-2xl font-bold">{value}</div>}
-            <p className="text-xs text-muted-foreground">{description}</p>
-        </CardContent>
-    </Card>
-);
 
 const chartConfig = {
-  Reach: { label: "Reach", color: "hsl(var(--primary))" },
-  Interactions: { label: "Interactions", color: "hsl(var(--accent))" },
-  Leads: { label: "Leads", color: "hsl(var(--destructive))" },
+  Reach: { label: 'Reach', color: 'hsl(var(--primary))' },
+  Interactions: { label: 'Interactions', color: 'hsl(var(--accent))' },
+  Leads: { label: 'Leads', color: 'hsl(var(--destructive))' },
+  Inquiries: { label: 'Inquiries', color: 'hsl(var(--chart-4))' },
 } satisfies ChartConfig;
 
+const levelIcons: Record<AnalyticsLevelSummary['level'], ReactNode> = {
+  root: <ShieldCheck className="h-4 w-4" />,
+  agency: <Building2 className="h-4 w-4" />,
+  user: <User className="h-4 w-4" />,
+};
 
-export function AnalyticsDashboard() {
-    const [query, setQuery] = useState('Last 30 days');
-    const { toast } = useToast();
-    const [isLoading, setIsLoading] = useState(true);
-    const [analyticsData, setAnalyticsData] = useState<{
-        dailyData: { date: string; Reach: number; Interactions: number; Leads: number; Inquiries: number }[];
-        totals: { reach: number; interactions: number; leads: number; inquiries: number };
-    }>({ dailyData: [], totals: { reach: 0, interactions: 0, leads: 0, inquiries: 0 } });
+function formatNumber(value: number): string {
+  return new Intl.NumberFormat('en-US').format(Math.round(value));
+}
 
-    useEffect(() => {
-        // Generate mock data on the client side to prevent hydration errors from Math.random()
-        const dailyData = Array.from({ length: 30 }, (_, i) => {
-            const date = new Date();
-            date.setDate(date.getDate() - (29 - i));
-            return {
-                date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-                Reach: Math.floor(Math.random() * 500) + 200,
-                Interactions: Math.floor(Math.random() * 300) + 100,
-                Leads: Math.floor(Math.random() * 10) + 1,
-                Inquiries: Math.floor(Math.random() * 5) + 0,
-            };
-        });
+function StatCard({
+  title,
+  value,
+  icon,
+  description,
+}: {
+  title: string;
+  value: number;
+  icon: ReactNode;
+  description: string;
+}) {
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-sm font-medium">{title}</CardTitle>
+        <div className="text-muted-foreground">{icon}</div>
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">{formatNumber(value)}</div>
+        <p className="text-xs text-muted-foreground">{description}</p>
+      </CardContent>
+    </Card>
+  );
+}
 
-        const totals = dailyData.reduce((acc, day) => {
-            acc.reach += day.Reach;
-            acc.interactions += day.Interactions;
-            acc.leads += day.Leads;
-            acc.inquiries += day.Inquiries;
-            return acc;
-        }, { reach: 0, interactions: 0, leads: 0, inquiries: 0 });
-
-        setAnalyticsData({ dailyData, totals });
-        setIsLoading(false);
-    }, []);
-
-    const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        // In a real implementation, this would trigger an AI flow to parse the date
-        // and fetch real data. For now, we show a toast message.
-        toast({
-            title: "Live Data Coming Soon",
-            description: "The chart below is showing sample data for the last 30 days. Real-time analytics are in development.",
-        });
-    };
-    
-    return (
-        <div className="space-y-6">
-            <div>
-                <h2 className="text-2xl font-semibold leading-none tracking-tight">Analytics Dashboard</h2>
-                <p className="text-sm text-muted-foreground">Review your platform's performance metrics.</p>
-            </div>
-            
-            <div className="space-y-6">
-                <form onSubmit={handleSearch} className="flex items-center gap-2">
-                    <Input
-                        placeholder="Enter a date range (e.g., 'last week', 'January 2024')"
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                    />
-                    <Button type="submit">
-                        <Search className="mr-2 h-4 w-4" />
-                        Generate Report
-                    </Button>
-                </form>
-
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                    <StatCard 
-                        title="Total Reach"
-                        value={analyticsData.totals.reach.toLocaleString()}
-                        icon={<Users className="h-4 w-4 text-muted-foreground" />}
-                        description="Total unique users reached in the period."
-                        isLoading={isLoading}
-                    />
-                    <StatCard 
-                        title="Total Interactions"
-                        value={analyticsData.totals.interactions.toLocaleString()}
-                        icon={<MousePointerClick className="h-4 w-4 text-muted-foreground" />}
-                        description="Total clicks, saves, and shares."
-                            isLoading={isLoading}
-                    />
-                    <StatCard 
-                        title="Total Leads"
-                        value={analyticsData.totals.leads.toLocaleString()}
-                        icon={<UserPlus className="h-4 w-4 text-muted-foreground" />}
-                        description="New contacts generated in the period."
-                            isLoading={isLoading}
-                    />
-                    <StatCard 
-                        title="Total Inquiries"
-                        value={analyticsData.totals.inquiries.toLocaleString()}
-                        icon={<FileQuestion className="h-4 w-4 text-muted-foreground" />}
-                        description="Property questions submitted."
-                            isLoading={isLoading}
-                    />
-                </div>
-                
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Performance Over Time</CardTitle>
-                        <CardDescription>
-                            Displaying mock data for "{query}"
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="h-[300px]">
-                            {isLoading ? (
-                                <Skeleton className="h-full w-full" />
-                            ) : (
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-                                        <LineChart
-                                            accessibilityLayer
-                                            data={analyticsData.dailyData}
-                                            margin={{
-                                            left: 12,
-                                            right: 12,
-                                            }}
-                                        >
-                                            <CartesianGrid vertical={false} />
-                                            <XAxis
-                                                dataKey="date"
-                                                tickLine={false}
-                                                axisLine={false}
-                                                tickMargin={8}
-                                                tickFormatter={(value) => value.slice(0, 6)}
-                                            />
-                                            <Tooltip
-                                                cursor={false}
-                                                content={<ChartTooltipContent indicator="dot" />}
-                                            />
-                                            <Legend />
-                                            <Line
-                                                dataKey="Reach"
-                                                type="natural"
-                                                stroke="var(--color-Reach)"
-                                                strokeWidth={2}
-                                                dot={false}
-                                            />
-                                            <Line
-                                                dataKey="Interactions"
-                                                type="natural"
-                                                stroke="var(--color-Interactions)"
-                                                strokeWidth={2}
-                                                dot={false}
-                                            />
-                                            <Line
-                                                dataKey="Leads"
-                                                type="natural"
-                                                stroke="var(--color-Leads)"
-                                                strokeWidth={2}
-                                                dot={false}
-                                            />
-                                        </LineChart>
-                                    </ChartContainer>
-                                </ResponsiveContainer>
-                            )}
-                        </div>
-                    </CardContent>
-                </Card>
-            </div>
+function ScopeCard({ summary }: { summary: AnalyticsScopeSummary }) {
+  return (
+    <Card>
+      <CardHeader className="space-y-3">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <CardTitle className="flex items-center gap-2 text-base">
+              {summary.scope.includes('custom') ? <Network className="h-4 w-4" /> : <Globe2 className="h-4 w-4" />}
+              {summary.label}
+            </CardTitle>
+            <CardDescription>{summary.description}</CardDescription>
+          </div>
+          <Badge variant="secondary">{formatNumber(summary.totals.reach + summary.totals.interactions)} events</Badge>
         </div>
-    );
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="grid gap-3 sm:grid-cols-4">
+          <div>
+            <p className="text-xs text-muted-foreground">Reach</p>
+            <p className="font-semibold">{formatNumber(summary.totals.reach)}</p>
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground">Interactions</p>
+            <p className="font-semibold">{formatNumber(summary.totals.interactions)}</p>
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground">Leads</p>
+            <p className="font-semibold">{formatNumber(summary.totals.leads)}</p>
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground">Inquiries</p>
+            <p className="font-semibold">{formatNumber(summary.totals.inquiries)}</p>
+          </div>
+        </div>
+
+        <div className="h-[260px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <ChartContainer config={chartConfig} className="min-h-[220px] w-full">
+              <LineChart
+                accessibilityLayer
+                data={summary.dailyData}
+                margin={{ left: 12, right: 12, top: 8, bottom: 0 }}
+              >
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey="date"
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                  tickFormatter={(value) => String(value).slice(0, 6)}
+                />
+                <Tooltip cursor={false} content={<ChartTooltipContent indicator="dot" />} />
+                <Legend />
+                <Line dataKey="Reach" type="natural" stroke="var(--color-Reach)" strokeWidth={2} dot={false} />
+                <Line dataKey="Interactions" type="natural" stroke="var(--color-Interactions)" strokeWidth={2} dot={false} />
+                <Line dataKey="Leads" type="natural" stroke="var(--color-Leads)" strokeWidth={2} dot={false} />
+                <Line dataKey="Inquiries" type="natural" stroke="var(--color-Inquiries)" strokeWidth={2} dot={false} />
+              </LineChart>
+            </ChartContainer>
+          </ResponsiveContainer>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function LevelPanel({ level }: { level: AnalyticsLevelSummary }) {
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h3 className="flex items-center gap-2 text-lg font-semibold">
+            {levelIcons[level.level]}
+            {level.label}
+          </h3>
+          <p className="text-sm text-muted-foreground">{level.contextLabel}</p>
+        </div>
+        <Badge variant="outline">{formatNumber(level.totals.reach + level.totals.interactions + level.totals.leads + level.totals.inquiries)} total signals</Badge>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <StatCard
+          title="Total Reach"
+          value={level.totals.reach}
+          icon={<Users className="h-4 w-4" />}
+          description="Tracked visits and API reach in this period."
+        />
+        <StatCard
+          title="Total Interactions"
+          value={level.totals.interactions}
+          icon={<MousePointerClick className="h-4 w-4" />}
+          description="Saves, visits, app work, API success, and time spent."
+        />
+        <StatCard
+          title="Total Leads"
+          value={level.totals.leads}
+          icon={<UserPlus className="h-4 w-4" />}
+          description="CRM leads, shared leads, and API-created listing signals."
+        />
+        <StatCard
+          title="Total Inquiries"
+          value={level.totals.inquiries}
+          icon={<FileQuestion className="h-4 w-4" />}
+          description="Property inquiries tied to this level."
+        />
+      </div>
+
+      <div className="grid gap-4 2xl:grid-cols-2">
+        {level.scopeSummaries.map((summary) => (
+          <ScopeCard key={summary.scope} summary={summary} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const emptyAnalyticsData: AnalyticsDashboardData = {
+  periodLabel: 'Last 30 days',
+  generatedAt: '',
+  levels: [],
+};
+
+export function AnalyticsDashboard({ data = emptyAnalyticsData }: { data?: AnalyticsDashboardData }) {
+  const defaultLevel = data.levels[0]?.level;
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h2 className="text-2xl font-semibold leading-none tracking-tight">Analytics</h2>
+          <p className="text-sm text-muted-foreground">Real data across root, agency, and user levels.</p>
+        </div>
+        <div className="text-sm text-muted-foreground">{data.periodLabel}</div>
+      </div>
+
+      {defaultLevel ? (
+        <Tabs defaultValue={defaultLevel} className="space-y-4">
+          <TabsList className="grid h-auto w-full grid-cols-1 sm:grid-cols-3">
+            {data.levels.map((level) => (
+              <TabsTrigger key={level.level} value={level.level} className="gap-2">
+                {levelIcons[level.level]}
+                {level.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+
+          {data.levels.map((level) => (
+            <TabsContent key={level.level} value={level.level} className="mt-0">
+              <LevelPanel level={level} />
+            </TabsContent>
+          ))}
+        </Tabs>
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>No analytics available</CardTitle>
+            <CardDescription>Sign in with an account that can view manage analytics.</CardDescription>
+          </CardHeader>
+        </Card>
+      )}
+    </div>
+  );
 }
