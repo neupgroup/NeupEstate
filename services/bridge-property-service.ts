@@ -15,10 +15,21 @@ const PROPERTY_VIEW_INCLUDE = Prisma.validator<Prisma.PropertyInclude>()({
   prices: { orderBy: [{ for: 'asc' }, { id: 'asc' }] },
 });
 
+const BRIDGE_PROPERTY_LIST_DEFAULT_LIMIT = 10;
+const BRIDGE_PROPERTY_LIST_MAX_LIMIT = 15;
+const BRIDGE_PROPERTY_LIST_DEFAULT_OFFSET = 0;
+
 function parsePositiveInteger(value: string | null, fallback: number): number {
   if (!value) return fallback;
   const parsed = Number(value);
   return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+function parseBridgePropertyListLimit(value: string | null): number {
+  return Math.min(
+    parsePositiveInteger(value, BRIDGE_PROPERTY_LIST_DEFAULT_LIMIT),
+    BRIDGE_PROPERTY_LIST_MAX_LIMIT,
+  );
 }
 
 function parseOffset(value: string | null): number {
@@ -30,6 +41,55 @@ function parseOffset(value: string | null): number {
 function parseFields(value: string | null): string[] | undefined {
   if (!value) return undefined;
   return value.split(',').map((field) => field.trim()).filter(Boolean);
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
+function getNestedValue(source: Record<string, unknown>, path: string[]): unknown {
+  return path.reduce<unknown>((current, segment) => (
+    isRecord(current) ? current[segment] : undefined
+  ), source);
+}
+
+function setNestedValue(target: Record<string, unknown>, path: string[], value: unknown) {
+  let cursor = target;
+
+  for (const [index, segment] of path.entries()) {
+    if (!segment) return;
+    if (index === path.length - 1) {
+      cursor[segment] = value;
+      return;
+    }
+
+    const next = cursor[segment];
+    if (!isRecord(next)) {
+      cursor[segment] = {};
+    }
+    cursor = cursor[segment] as Record<string, unknown>;
+  }
+}
+
+function normalizeJsonFieldPath(field: string): string[] {
+  const path = field.split('.').map((part) => part.trim()).filter(Boolean);
+  return path[0] === 'property' ? path.slice(1) : path;
+}
+
+function pickJsonFields(source: Record<string, unknown>, fields?: string[]): Record<string, unknown> {
+  if (!fields?.length) return source;
+
+  return fields.reduce<Record<string, unknown>>((picked, field) => {
+    const path = normalizeJsonFieldPath(field);
+    if (!path.length) return picked;
+
+    const value = getNestedValue(source, path);
+    if (value !== undefined) {
+      setNestedValue(picked, path, value);
+    }
+
+    return picked;
+  }, {});
 }
 
 function parseStringArray(value: string | null): string[] | undefined {
@@ -751,17 +811,19 @@ export async function handleBridgePropertyList(
   try {
     const agencyId = readQueryValue(searchParams, 'agency_id', allowLegacyAliases ? 'agency' : undefined);
     const accountId = readQueryValue(searchParams, 'account_id', allowLegacyAliases ? 'agent' : undefined);
+    const limit = parseBridgePropertyListLimit(searchParams.get('limit'));
+    const offset = parseOffset(searchParams.get('offset'));
 
     if (!agencyId && !accountId) {
       return NextResponse.json(
-        { success: false, error: 'Provide either agency_id or account_id.' },
+        { success: false, limit, offset, properties: [], error: 'Provide either agency_id or account_id.' },
         { status: 400 },
       );
     }
 
     if (agencyId && accountId) {
       return NextResponse.json(
-        { success: false, error: 'Provide only one of agency_id or account_id.' },
+        { success: false, limit, offset, properties: [], error: 'Provide only one of agency_id or account_id.' },
         { status: 400 },
       );
     }
@@ -770,22 +832,27 @@ export async function handleBridgePropertyList(
       agencyId,
       agentId: accountId,
       fields: parseFields(searchParams.get('fields')),
-      limit: parsePositiveInteger(searchParams.get('limit'), 20),
-      offset: parseOffset(searchParams.get('offset')),
+      limit,
+      offset,
     });
 
     return NextResponse.json({
       success: true,
-      filter: agencyId
-        ? { type: 'agency', accountId: agencyId }
-        : { type: options?.filterTypeLabel ?? 'account', accountId },
-      ...result,
+      limit: result.limit,
+      offset: result.offset,
+      properties: result.properties,
     });
   } catch (err) {
     const error = err instanceof Error ? err : new Error(String(err));
     if (error.message.startsWith('Provide only one of ')) {
       return NextResponse.json(
-        { success: false, error: error.message },
+        {
+          success: false,
+          limit: BRIDGE_PROPERTY_LIST_DEFAULT_LIMIT,
+          offset: BRIDGE_PROPERTY_LIST_DEFAULT_OFFSET,
+          properties: [],
+          error: error.message,
+        },
         { status: 400 },
       );
     }
@@ -913,6 +980,9 @@ export async function handleBridgePropertySearch(req: NextRequest) {
 
 Returns the public bridge payload for one property by `propertyId`.
 
+Pass `fields` as a comma-separated list to limit the returned `property` object,
+for example `fields=title,id,property.details`.
+
 The payload uses the bridge-specific single-property shape and intentionally
 excludes owner details and negotiable pricing fields.
 
@@ -933,6 +1003,7 @@ export async function handleBridgePropertyView(req: NextRequest) {
     req.nextUrl.searchParams.get('propertyId')?.trim() ||
     req.headers.get('propertyId')?.trim() ||
     undefined;
+  const fields = parseFields(req.nextUrl.searchParams.get('fields'));
 
   if (!propertyId) {
     return NextResponse.json(
@@ -954,7 +1025,7 @@ export async function handleBridgePropertyView(req: NextRequest) {
       );
     }
 
-    const property = await mapPropertyViewPayload(record);
+    const property = pickJsonFields(await mapPropertyViewPayload(record), fields);
 
     return NextResponse.json(
       { success: true, property },

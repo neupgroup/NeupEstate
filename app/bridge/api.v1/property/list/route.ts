@@ -2,10 +2,11 @@
  * GET /bridge/api.v1/property/list
  *
  * Returns active properties linked to an agency or account id.
+ * Defaults to limit=10 and offset=0. Limit is capped at 15.
  *
  * Query params (exactly one required):
- *   ?agency_id=<accountId>&fields=id,title,price&limit=20&offset=0
- *   ?account_id=<accountId>&fields=id,title,price&limit=20&offset=0
+ *   ?agency_id=<accountId>&fields=title,id,property.details&limit=10&offset=0
+ *   ?account_id=<accountId>&fields=title,id,property.details&limit=10&offset=0
  *
  * Legacy aliases are also accepted:
  *   ?agency=<accountId>
@@ -28,7 +29,10 @@ const getHandler = async (req: NextRequest) => {
     });
   } catch (err) {
     await logProblem(err, 'bridge/api.v1/property/list');
-    return Response.json({ success: false, error: 'Internal server error.' }, { status: 500 });
+    return Response.json(
+      { success: false, limit: 10, offset: 0, properties: [], error: 'Internal server error.' },
+      { status: 500 },
+    );
   }
 };
 

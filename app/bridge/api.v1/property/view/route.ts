@@ -6,6 +6,9 @@
 
 Fetches one property's public bridge payload by `propertyId`.
 
+Use `fields=title,id,property.details` to limit the returned `property` object
+to selected top-level fields and detail data.
+
 ::public end
 
 ::private

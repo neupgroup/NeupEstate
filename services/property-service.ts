@@ -43,7 +43,7 @@ function normalizePropertyChangeStatus(status: string | null | undefined): Prope
   return status || 'creation_draft';
 }
 
-export type BridgePropertyField = keyof Property;
+export type BridgePropertyField = string;
 
 export interface BridgePropertyQuery {
   agencyId?: string;
@@ -55,11 +55,10 @@ export interface BridgePropertyQuery {
 }
 
 export interface BridgePropertyResult {
-  properties: Partial<Property>[];
+  properties: Array<Partial<Property> & Record<string, unknown>>;
   totalCount: number;
   limit: number;
   offset: number;
-  fields: BridgePropertyField[];
 }
 
 const PROPERTY_INCLUDE = Prisma.validator<Prisma.PropertyInclude>()({
@@ -126,38 +125,159 @@ const DEFAULT_BRIDGE_PROPERTY_FIELDS = [
   ...BRIDGE_PROPERTY_FIELDS,
 ] as const satisfies readonly BridgePropertyField[];
 
+const BRIDGE_PROPERTY_DEFAULT_LIMIT = 10;
+const BRIDGE_PROPERTY_MAX_LIMIT = 15;
+
 function resolveBridgePropertyFields(fields?: string[]): BridgePropertyField[] {
   if (!fields?.length) return [...DEFAULT_BRIDGE_PROPERTY_FIELDS];
 
-  const allowed = new Set<BridgePropertyField>(BRIDGE_PROPERTY_FIELDS);
-  const requested = fields
+  return fields
     .map((field) => field.trim())
     .filter(Boolean)
-    .filter((field): field is BridgePropertyField => allowed.has(field as BridgePropertyField));
-
-  return requested.length ? Array.from(new Set(requested)) : [...DEFAULT_BRIDGE_PROPERTY_FIELDS];
+    .filter((field, index, list) => list.indexOf(field) === index);
 }
 
-function pickPropertyFields(property: Property, fields: BridgePropertyField[]): Partial<Property> {
-  return fields.reduce<Partial<Property>>((picked, field) => {
-    if (field === 'pricing' && property.pricing) {
-      const {
-        negotiable: _negotiable,
-        basisNegotiable: _basisNegotiable,
-        basisNegotiablePrices: _basisNegotiablePrices,
-        ...publicPricing
-      } = property.pricing;
-      picked.pricing = publicPricing as Property['pricing'];
-      return picked;
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
+function setNestedValue(target: Record<string, unknown>, path: string[], value: unknown) {
+  let cursor = target;
+
+  for (const [index, segment] of path.entries()) {
+    if (!segment) return;
+    if (index === path.length - 1) {
+      cursor[segment] = value;
+      return;
     }
 
-    if (field === 'structuredLocation' && property.structuredLocation) {
-      const { coordinates: _coordinates, ...publicLocation } = property.structuredLocation;
-      picked.structuredLocation = publicLocation;
-      return picked;
+    const next = cursor[segment];
+    if (!isRecord(next)) {
+      cursor[segment] = {};
+    }
+    cursor = cursor[segment] as Record<string, unknown>;
+  }
+}
+
+function normalizeBridgeFieldPath(field: BridgePropertyField): string[] {
+  const path = field.split('.').map((part) => part.trim()).filter(Boolean);
+  return path[0] === 'property' ? path.slice(1) : path;
+}
+
+function getSpecificsValue(property: Property, path: string[]): unknown {
+  if (path.length === 0) {
+    return {
+      rooms: getSpecificsValue(property, ['rooms']),
+      space: getSpecificsValue(property, ['space']),
+    };
+  }
+
+  const [segment, ...rest] = path;
+  const groups: Record<string, Record<string, unknown>> = {
+    rooms: {
+      bedrooms: property.bedrooms,
+      bathrooms: property.bathrooms,
+      kitchens: property.kitchens,
+      diningRooms: property.diningRooms,
+      livingRooms: property.livingRooms,
+      attachedBathrooms: property.attachedBathrooms,
+      homeOffices: property.homeOffices,
+      libraries: property.libraries,
+      studyRooms: property.studyRooms,
+      meetingRooms: property.meetingRooms,
+      guestRooms: property.guestRooms,
+      workersCabins: property.workersCabins,
+      poojaRooms: property.poojaRooms,
+      storeRooms: property.storeRooms,
+    },
+    space: {
+      area: property.area,
+      areaUnit: property.areaUnit,
+      floors: property.floors,
+      onFloor: property.onFloor,
+      roadAccess: property.roadAccess,
+      facing: property.facing,
+      carParkingSpots: property.carParkingSpots,
+      bikeParkingSpots: property.bikeParkingSpots,
+    },
+  };
+
+  const value = groups[segment];
+  if (!value) return undefined;
+  if (rest.length === 0) return value;
+  return rest.reduce<unknown>((current, key) => (isRecord(current) ? current[key] : undefined), value);
+}
+
+function getPropertyDetailsValue(property: Property): Record<string, unknown> {
+  return {
+    landDetails: property.landDetails,
+    plots: property.plots,
+    apartmentDetails: property.apartmentDetails,
+    apartmentUnits: property.apartmentUnits,
+    details: property.details,
+    roadAccessDetails: property.roadAccessDetails,
+    distancing: property.distancing,
+    earnings: property.earnings,
+    specifics: {
+      rooms: getSpecificsValue(property, ['rooms']),
+      space: {
+        area: property.area,
+        areaUnit: property.areaUnit,
+      },
+    },
+  };
+}
+
+function getPropertySpacingValue(property: Property): Record<string, unknown> {
+  return {
+    bedrooms: property.bedrooms,
+    bathrooms: property.bathrooms,
+    floors: property.floors,
+    onFloor: property.onFloor,
+    kitchens: property.kitchens,
+    diningRooms: property.diningRooms,
+    livingRooms: property.livingRooms,
+    carParkingSpots: property.carParkingSpots,
+    bikeParkingSpots: property.bikeParkingSpots,
+  };
+}
+
+function getBridgePropertyFieldValue(property: Property, path: string[]): unknown {
+  const [root, ...rest] = path;
+  if (!root) return undefined;
+
+  if (root === 'specifics') return getSpecificsValue(property, rest);
+  if (root === 'details' && rest.length === 0) return getPropertyDetailsValue(property);
+  if (root === 'spacing' && rest.length === 0) return getPropertySpacingValue(property);
+
+  if (root === 'pricing' && property.pricing) {
+    const publicPricing = { ...(property.pricing as Record<string, unknown>) };
+    delete publicPricing.negotiable;
+    delete publicPricing.basisNegotiable;
+    delete publicPricing.basisNegotiablePrices;
+    return rest.reduce<unknown>((current, key) => (isRecord(current) ? current[key] : undefined), publicPricing);
+  }
+
+  if (root === 'structuredLocation' && property.structuredLocation) {
+    const publicLocation = { ...(property.structuredLocation as Record<string, unknown>) };
+    delete publicLocation.coordinates;
+    return rest.reduce<unknown>((current, key) => (isRecord(current) ? current[key] : undefined), publicLocation);
+  }
+
+  const value = (property as unknown as Record<string, unknown>)[root];
+  if (rest.length === 0) return value;
+  return rest.reduce<unknown>((current, key) => (isRecord(current) ? current[key] : undefined), value);
+}
+
+function pickPropertyFields(property: Property, fields: BridgePropertyField[]): Partial<Property> & Record<string, unknown> {
+  return fields.reduce<Partial<Property> & Record<string, unknown>>((picked, field) => {
+    const path = normalizeBridgeFieldPath(field);
+    const value = getBridgePropertyFieldValue(property, path);
+
+    if (value !== undefined) {
+      setNestedValue(picked, path, value);
     }
 
-    if (field in property) picked[field] = property[field] as never;
     return picked;
   }, {});
 }
@@ -800,7 +920,7 @@ export async function getPropertiesByAgent(agentId: string, opts: { includeInact
 
 export async function getBridgePropertiesByAccount(opts: BridgePropertyQuery): Promise<BridgePropertyResult> {
   try {
-    const limit = Math.min(Math.max(1, opts.limit ?? 20), 100);
+    const limit = Math.min(Math.max(1, opts.limit ?? BRIDGE_PROPERTY_DEFAULT_LIMIT), BRIDGE_PROPERTY_MAX_LIMIT);
     const offset = Math.max(0, opts.offset ?? 0);
     const fields = resolveBridgePropertyFields(opts.fields);
     const where: any = {};
@@ -824,15 +944,14 @@ export async function getBridgePropertiesByAccount(opts: BridgePropertyQuery): P
       .map(mapRecord)
       .map((property) => pickPropertyFields(property, fields));
 
-    return { properties, totalCount, limit, offset, fields };
+    return { properties, totalCount, limit, offset };
   } catch (e) {
     await logProblem(e, `getBridgePropertiesByAccount ${opts.agencyId || opts.agentId || 'unknown'}`);
     return {
       properties: [],
       totalCount: 0,
-      limit: Math.min(Math.max(1, opts.limit ?? 20), 100),
+      limit: Math.min(Math.max(1, opts.limit ?? BRIDGE_PROPERTY_DEFAULT_LIMIT), BRIDGE_PROPERTY_MAX_LIMIT),
       offset: Math.max(0, opts.offset ?? 0),
-      fields: resolveBridgePropertyFields(opts.fields),
     };
   }
 }
