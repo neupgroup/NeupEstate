@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { Prisma } from '@prisma/client';
 import { prisma } from '@/core/database/prisma';
-import { areaValueToSqft, CreatePropertySchema, type CreatePropertyFormValues, type CreatePropertyInput, type LandDetails, type PlotDetails, type ApartmentUnit, type StructuredLocation } from '@/types';
-import { getBridgePropertiesByAccount } from '@/services/property-service';
+import { areaValueToSqft, CreatePropertySchema, PropertyFiltersSchema, type CreatePropertyFormValues, type CreatePropertyInput, type LandDetails, type PlotDetails, type ApartmentUnit, type StructuredLocation } from '@/types';
+import { getBridgePropertiesByAccount, getPaginatedProperties } from '@/services/property-service';
 import { resolvePropertyPostingContext } from '@/services/property-posting-context';
 
 const PROPERTY_VIEW_INCLUDE = Prisma.validator<Prisma.PropertyInclude>()({
@@ -30,6 +30,20 @@ function parseOffset(value: string | null): number {
 function parseFields(value: string | null): string[] | undefined {
   if (!value) return undefined;
   return value.split(',').map((field) => field.trim()).filter(Boolean);
+}
+
+function parseStringArray(value: string | null): string[] | undefined {
+  if (!value) return undefined;
+  const entries = value.split(',').map((entry) => entry.trim()).filter(Boolean);
+  return entries.length ? entries : undefined;
+}
+
+function parseBoolean(value: string | null): boolean | undefined {
+  if (!value) return undefined;
+  const normalized = value.trim().toLowerCase();
+  if (['1', 'true', 'yes'].includes(normalized)) return true;
+  if (['0', 'false', 'no'].includes(normalized)) return false;
+  return undefined;
 }
 
 function readQueryValue(
@@ -777,6 +791,117 @@ export async function handleBridgePropertyList(
     }
 
     throw Object.assign(error, { routeLabel });
+  }
+}
+
+/*
+::neup.documentation::bridge-property-search
+::api GET /bridge/api.v1/property/search
+
+::public
+
+Searches active properties from query parameters.
+
+Supported query params include `q`, `page`, `limit`, `minPrice`, `maxPrice`,
+`location`, `purpose`, `category`, `type`, `bedrooms`, `bathrooms`,
+`minBedrooms`, `maxBedrooms`, `minBathrooms`, `maxBathrooms`, `agencyName`,
+`listingAgent`, and `isOwnerListing`.
+
+::public end
+
+::private
+
+This handler keeps bridge request parsing in services and delegates the actual
+search to `getPaginatedProperties()`.
+
+::private end
+
+::end
+*/
+export async function handleBridgePropertySearch(req: NextRequest) {
+  const { searchParams } = req.nextUrl;
+  const page = parsePositiveInteger(searchParams.get('page'), 1);
+  const limit = Math.min(parsePositiveInteger(searchParams.get('limit'), 18), 100);
+  const q = searchParams.get('q')?.trim() || searchParams.get('query')?.trim() || undefined;
+
+  const rawFilters = {
+    searchTerm: q || searchParams.get('searchTerm')?.trim() || undefined,
+    id: searchParams.get('id')?.trim() || undefined,
+    ids: parseStringArray(searchParams.get('ids')),
+    minPrice: searchParams.get('minPrice') ?? undefined,
+    maxPrice: searchParams.get('maxPrice') ?? undefined,
+    location: searchParams.get('location')?.trim() || undefined,
+    purpose: parseStringArray(searchParams.get('purpose')),
+    category: parseStringArray(searchParams.get('category')),
+    type: parseStringArray(searchParams.get('type')),
+    minArea: searchParams.get('minArea') ?? undefined,
+    maxArea: searchParams.get('maxArea') ?? undefined,
+    agencyName: searchParams.get('agencyName')?.trim() || undefined,
+    listingAgent: searchParams.get('listingAgent')?.trim() || undefined,
+    isOwnerListing: parseBoolean(searchParams.get('isOwnerListing')),
+    postedAfter: searchParams.get('postedAfter')?.trim() || undefined,
+    postedBefore: searchParams.get('postedBefore')?.trim() || undefined,
+    minFloors: searchParams.get('minFloors') ?? undefined,
+    maxFloors: searchParams.get('maxFloors') ?? undefined,
+    minRoadAccess: searchParams.get('minRoadAccess') ?? undefined,
+    maxRoadAccess: searchParams.get('maxRoadAccess') ?? undefined,
+    bedrooms: searchParams.get('bedrooms') ?? undefined,
+    bathrooms: searchParams.get('bathrooms') ?? undefined,
+    listingBy: parseStringArray(searchParams.get('listingBy')),
+    kitchens: searchParams.get('kitchens') ?? undefined,
+    diningRooms: searchParams.get('diningRooms') ?? undefined,
+    livingRooms: searchParams.get('livingRooms') ?? undefined,
+    carParkingSpots: searchParams.get('carParkingSpots') ?? undefined,
+    bikeParkingSpots: searchParams.get('bikeParkingSpots') ?? undefined,
+    tags: parseStringArray(searchParams.get('tags')),
+    minBedrooms: searchParams.get('minBedrooms') ?? undefined,
+    maxBedrooms: searchParams.get('maxBedrooms') ?? undefined,
+    minBathrooms: searchParams.get('minBathrooms') ?? undefined,
+    maxBathrooms: searchParams.get('maxBathrooms') ?? undefined,
+    minKitchens: searchParams.get('minKitchens') ?? undefined,
+    maxKitchens: searchParams.get('maxKitchens') ?? undefined,
+    minDiningRooms: searchParams.get('minDiningRooms') ?? undefined,
+    maxDiningRooms: searchParams.get('maxDiningRooms') ?? undefined,
+    minLivingRooms: searchParams.get('minLivingRooms') ?? undefined,
+    maxLivingRooms: searchParams.get('maxLivingRooms') ?? undefined,
+    minCarParkingSpots: searchParams.get('minCarParkingSpots') ?? undefined,
+    maxCarParkingSpots: searchParams.get('maxCarParkingSpots') ?? undefined,
+    minBikeParkingSpots: searchParams.get('minBikeParkingSpots') ?? undefined,
+    maxBikeParkingSpots: searchParams.get('maxBikeParkingSpots') ?? undefined,
+  };
+
+  const parsedFilters = PropertyFiltersSchema.omit({ status: true }).safeParse(rawFilters);
+  if (!parsedFilters.success) {
+    return NextResponse.json(
+      { success: false, error: 'Invalid search filters.', details: parsedFilters.error.flatten().fieldErrors },
+      { status: 400 },
+    );
+  }
+
+  try {
+    const { properties, totalCount } = await getPaginatedProperties({
+      page,
+      limit,
+      filters: parsedFilters.data,
+    });
+
+    return NextResponse.json(
+      {
+        success: true,
+        properties,
+        totalCount,
+        page,
+        limit,
+        totalPages: Math.ceil(totalCount / limit),
+        appliedFilters: parsedFilters.data,
+      },
+      { status: 200 },
+    );
+  } catch (error) {
+    throw Object.assign(
+      error instanceof Error ? error : new Error(String(error)),
+      { routeLabel: 'bridge/api.v1/property/search' },
+    );
   }
 }
 

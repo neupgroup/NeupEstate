@@ -13,8 +13,8 @@ import { getCurrentAccountId } from '@/services/identity';
 import { Form } from '@/components/ui/form';
 import { useToast } from '@/core/hooks/use-toast';
 import { getUsers } from '@/services/user-service';
-import { useAgencyCustomization } from '@/logica/core/hooks/use-agency-customization';
-import { evaluateAgencyCustomization } from '@/logica/core/evaluate-agency-customization';
+import { useAgencyCustomization } from '@/inapp/agency-customization/use-agency-customization';
+import { evaluateAgencyCustomization } from '@/inapp/agency-customization/evaluate-agency-customization';
 
 import { ProgressivePropertySections } from '@/components/manage/progressive-property-sections';
 

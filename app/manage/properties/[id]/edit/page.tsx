@@ -10,7 +10,7 @@ import { cancelPropertyChangeDraftAction, createPropertyAction, getCurrentProper
 import { getCurrentAccountId } from '@/services/identity';
 import { getPropertyById } from "@/services/property-service";
 import { getUsers } from "@/services/user-service";
-import { useAgencyCustomization } from '@/logica/core/hooks/use-agency-customization';
+import { useAgencyCustomization } from '@/inapp/agency-customization/use-agency-customization';
 
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';

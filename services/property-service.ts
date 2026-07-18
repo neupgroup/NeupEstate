@@ -385,6 +385,15 @@ export async function getPaginatedProperties(opts: {
         OR: [
           { title: { contains: filters.searchTerm, mode: 'insensitive' } },
           { description: { contains: filters.searchTerm, mode: 'insensitive' } },
+          { locationText: { contains: filters.searchTerm, mode: 'insensitive' } },
+        ],
+      });
+    }
+    if (filters.location) {
+      andClauses.push({
+        OR: [
+          { locationText: { contains: filters.location, mode: 'insensitive' } },
+          { structuredLocation: { contains: filters.location, mode: 'insensitive' } },
         ],
       });
     }
