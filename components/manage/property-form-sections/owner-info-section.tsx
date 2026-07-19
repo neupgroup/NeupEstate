@@ -3,7 +3,7 @@
 import { useEffect, useState, useTransition } from "react";
 import { Control, UseFormSetValue, useFieldArray, useWatch } from "react-hook-form";
 import { CreatePropertyFormValues, User } from "@/types";
-import { searchClients } from "@/services/lead-service";
+import { searchClients } from "@/services/leads/search";
 import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";

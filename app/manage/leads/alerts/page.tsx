@@ -1,4 +1,4 @@
-import { getSharedLeads } from '@/services/lead-service';
+import { getSharedLeads } from '@/services/leads/search';
 import { checkAuthenticationForWeb } from '@/services/neupid/check-auth-web';
 import { ClientLink } from '@/components/client-link';
 import { Badge } from '@/components/ui/badge';

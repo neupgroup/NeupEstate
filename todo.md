@@ -50,7 +50,6 @@
 - [ ] Add a Neup documentation block to [app/manage/properties/[id]/page.tsx](/Users/neupkishor/Code/neup.estate/app/manage/properties/[id]/page.tsx).
 - [ ] Add a Neup documentation block to [app/manage/properties/[id]/logs/page.tsx](/Users/neupkishor/Code/neup.estate/app/manage/properties/[id]/logs/page.tsx).
 - [ ] Add a Neup documentation block to [components/manage/property-form-sections/owner-info-section.tsx](/Users/neupkishor/Code/neup.estate/components/manage/property-form-sections/owner-info-section.tsx).
-- [ ] Add a Neup documentation block to [services/lead-service.ts](/Users/neupkishor/Code/neup.estate/services/lead-service.ts).
 - [ ] Add a Neup documentation block to [logica/auth/permissions.ts](/Users/neupkishor/Code/neup.estate/logica/auth/permissions.ts).
 - [ ] Add a Neup documentation block to [types/admin.ts](/Users/neupkishor/Code/neup.estate/types/admin.ts).
 - [ ] Add a Neup documentation block to [types/property.ts](/Users/neupkishor/Code/neup.estate/types/property.ts).

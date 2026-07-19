@@ -1,4 +1,4 @@
-import { getBaseLeads, getMyLeads, getSharedLeads } from '@/services/lead-service';
+import { getBaseLeads, getMyLeads, getSharedLeads } from '@/services/leads/search';
 import { checkAuthenticationForWeb, getAccountIdFromJWT } from '@/services/neupid/check-auth-web';
 import { ClientLink } from '@/components/client-link';
 import { Button } from '@/components/ui/button';

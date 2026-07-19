@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getBaseClientById } from '@/services/lead-service';
+import { getBaseClientById } from '@/services/leads/search';
 import { ClientLink } from '@/components/client-link';
 import { Badge } from '@/components/ui/badge';
 import { ChevronLeft, Plus } from 'lucide-react';
