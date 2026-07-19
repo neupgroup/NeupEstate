@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Save, Trash2, AlertCircle } from 'lucide-react';
-import type { TeamMember } from '@prisma/client';
+import type { TeamMember } from '@/core/database/prisma';
 import {
   createTeamMemberAction,
   updateTeamMemberAction,

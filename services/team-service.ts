@@ -5,7 +5,7 @@
  */
 
 import { prisma } from '@/core/database/prisma';
-import type { TeamMember } from '@prisma/client';
+import type { TeamMember } from '@/core/database/prisma';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 

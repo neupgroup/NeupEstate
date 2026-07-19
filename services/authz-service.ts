@@ -1,5 +1,5 @@
 import { prisma } from '@/core/database/prisma';
-import { Prisma, PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@/core/database/prisma';
 import { logProblem } from './problem-service';
 
 // ============================================================================

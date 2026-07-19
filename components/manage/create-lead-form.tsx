@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { LeadType, LeadPriority } from '@prisma/client';
+import type { LeadPriority, LeadType } from '@/core/database/prisma';
 import { searchClients, saveClient } from '@/services/lead-service';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -31,6 +31,20 @@ type SearchedClient = {
     source: string | null;
 };
 
+const LeadTypeValues = {
+    BUYER: 'BUYER',
+    SELLER: 'SELLER',
+    TENANT: 'TENANT',
+    LANDLORD: 'LANDLORD',
+} as const satisfies Record<string, LeadType>;
+
+const LeadPriorityValues = {
+    LOW: 'LOW',
+    MEDIUM: 'MEDIUM',
+    HIGH: 'HIGH',
+    URGENT: 'URGENT',
+} as const satisfies Record<string, LeadPriority>;
+
 const clientSchema = z.object({
     firstName: z.string().min(1, 'First name is required'),
     lastName:  z.string().min(1, 'Last name is required'),
@@ -40,8 +54,8 @@ const clientSchema = z.object({
 });
 
 const requirementSchema = z.object({
-    type:      z.nativeEnum(LeadType),
-    priority:  z.nativeEnum(LeadPriority),
+    type:      z.nativeEnum(LeadTypeValues),
+    priority:  z.nativeEnum(LeadPriorityValues),
     assignedTo: z.string().optional(),
     minBudget: z.coerce.number().optional(),
     maxBudget: z.coerce.number().optional(),
@@ -144,7 +158,7 @@ export function CreateLeadForm() {
 
     const reqForm = useForm<RequirementValues>({
         resolver: zodResolver(requirementSchema),
-        defaultValues: { type: LeadType.BUYER, priority: LeadPriority.MEDIUM },
+        defaultValues: { type: LeadTypeValues.BUYER, priority: LeadPriorityValues.MEDIUM },
     });
 
     const selectedType     = reqForm.watch('type');
@@ -440,14 +454,14 @@ export function CreateLeadForm() {
                                 <FormField control={reqForm.control} name="type" render={() => (
                                     <FormItem>
                                         <FormLabel>Lead Type</FormLabel>
-                                        <SelectionCards options={Object.values(LeadType)} selected={[selectedType]} onToggle={(v) => reqForm.setValue('type', v as LeadType, { shouldValidate: true })} />
+                                        <SelectionCards options={Object.values(LeadTypeValues)} selected={[selectedType]} onToggle={(v) => reqForm.setValue('type', v as LeadType, { shouldValidate: true })} />
                                         <FormMessage />
                                     </FormItem>
                                 )} />
                                 <FormField control={reqForm.control} name="priority" render={() => (
                                     <FormItem>
                                         <FormLabel>Priority</FormLabel>
-                                        <SelectionCards options={Object.values(LeadPriority)} selected={[selectedPriority]} onToggle={(v) => reqForm.setValue('priority', v as LeadPriority, { shouldValidate: true })} />
+                                        <SelectionCards options={Object.values(LeadPriorityValues)} selected={[selectedPriority]} onToggle={(v) => reqForm.setValue('priority', v as LeadPriority, { shouldValidate: true })} />
                                         <FormMessage />
                                     </FormItem>
                                 )} />

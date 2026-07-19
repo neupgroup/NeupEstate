@@ -4,7 +4,7 @@ import { prisma } from '@/core/database/prisma';
 import { logProblem } from './problem-service';
 import type { Property, CreatePropertyInput, PropertyFilters, ExtractedPropertyData, UpdatePropertyInput } from '@/types';
 import { areaValueToSqft } from '@/types';
-import { Prisma, PropertyType, PropertyStatus, PropertyPurpose } from '@prisma/client';
+import { Prisma, PropertyType, PropertyStatus, PropertyPurpose } from '@/core/database/prisma';
 import { mapPurposeToEnum, mapPurposeFromEnum, mapTypeToEnum, mapTypeFromEnum, mapStatusToEnum, mapStatusFromEnum } from '@/inapp/database/adapters';
 import slugify from 'slugify';
 import { randomBytes } from 'crypto';

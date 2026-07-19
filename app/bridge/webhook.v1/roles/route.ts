@@ -1,7 +1,6 @@
 import { createDecipheriv, createHash, createHmac, timingSafeEqual } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
-import { Prisma } from "@prisma/client";
-import { prisma } from "@/core/database/prisma";
+import { Prisma, prisma } from "@/core/database/prisma";
 import { logProblem } from "@/services/problem-service";
 import { withRequestDevLog } from "@/services/site-dev-log-service";
 

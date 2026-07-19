@@ -2,7 +2,7 @@
 
 import { prisma } from '@/core/database/prisma';
 import { logProblem } from './problem-service';
-import { LeadType, LeadPriority, Prisma } from '@prisma/client';
+import { LeadType, LeadPriority, Prisma } from '@/core/database/prisma';
 
 const CLIENT_INCLUDE = {
     contacts: true,

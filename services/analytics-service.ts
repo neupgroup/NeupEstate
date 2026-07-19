@@ -1,6 +1,6 @@
 'use server';
 
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@/core/database/prisma';
 import { prisma } from '@/core/database/prisma';
 import type {
   AnalyticsDailyPoint,

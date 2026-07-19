@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@/core/database/prisma';
 import type { NextRequest } from 'next/server';
 import { prisma } from '@/core/database/prisma';
 import type { SiteDevLogEntry, SiteDevLogSetting, SiteDevLogSource } from '@/types';

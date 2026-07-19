@@ -2,7 +2,7 @@
 
 'use server';
 
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@/core/database/prisma';
 import { prisma } from '@/core/database/prisma';
 import { logProblem } from './problem-service';
 import { getAccountInformation, getSignedAccountInformation } from '@/services/account/lookup';
