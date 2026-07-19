@@ -819,33 +819,6 @@ model SitemapEntry {
   @@map("sitemaps")
 }
 
-model AIModel {
-  id                         String   @id @default(cuid())
-  modelId                    String
-  name                       String
-  description                String?
-  costPerMillionInputTokens  Float    @default(0)
-  costPerMillionOutputTokens Float    @default(0)
-  isDefault                  Boolean  @default(false)
-  createdAt                  DateTime @default(now())
-  updatedAt                  DateTime @updatedAt
-
-  @@map("ai_models")
-}
-
-model Prompt {
-  id           String   @id
-  promptText   String
-  description  String
-  name         String
-  placeholders String[] @default([])
-  model        String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  @@map("prompts")
-}
-
 model SiteDevLogSetting {
   id        String   @id
   enabled   Boolean  @default(false)

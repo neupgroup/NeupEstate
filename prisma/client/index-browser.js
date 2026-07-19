@@ -591,38 +591,6 @@ exports.Prisma.SitemapEntryScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.AIModelScalarFieldEnum = {
-  id: 'id',
-  modelId: 'modelId',
-  name: 'name',
-  description: 'description',
-  costPerMillionInputTokens: 'costPerMillionInputTokens',
-  costPerMillionOutputTokens: 'costPerMillionOutputTokens',
-  isDefault: 'isDefault',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.PromptScalarFieldEnum = {
-  id: 'id',
-  promptText: 'promptText',
-  description: 'description',
-  name: 'name',
-  placeholders: 'placeholders',
-  model: 'model',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.WhatsAppConfigScalarFieldEnum = {
-  id: 'id',
-  apiToken: 'apiToken',
-  phoneNumberId: 'phoneNumberId',
-  accountId: 'accountId',
-  webhookVerifyToken: 'webhookVerifyToken',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.SiteDevLogSettingScalarFieldEnum = {
   id: 'id',
   enabled: 'enabled',
@@ -640,17 +608,6 @@ exports.Prisma.SiteDevLogEntryScalarFieldEnum = {
   durationMs: 'durationMs',
   summary: 'summary',
   details: 'details',
-  createdAt: 'createdAt'
-};
-
-exports.Prisma.WhatsAppTemplateScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  category: 'category',
-  language: 'language',
-  body: 'body',
-  status: 'status',
-  isPreapproved: 'isPreapproved',
   createdAt: 'createdAt'
 };
 
@@ -961,12 +918,8 @@ exports.Prisma.ModelName = {
   VisitRequest: 'VisitRequest',
   Problem: 'Problem',
   SitemapEntry: 'SitemapEntry',
-  AIModel: 'AIModel',
-  Prompt: 'Prompt',
-  WhatsAppConfig: 'WhatsAppConfig',
   SiteDevLogSetting: 'SiteDevLogSetting',
   SiteDevLogEntry: 'SiteDevLogEntry',
-  WhatsAppTemplate: 'WhatsAppTemplate',
   ContactSubmission: 'ContactSubmission',
   Inquiry: 'Inquiry',
   TeamMember: 'TeamMember',

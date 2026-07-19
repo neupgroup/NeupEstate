@@ -5,7 +5,7 @@
 import { prisma } from '@/core/database/prisma';
 import { logProblem } from './problem-service';
 import type { CreatePromptFormValues } from '@/types';
-import { getDefaultModel } from './model-service';
+import { resolveModelIdentifier } from './model-service';
 
 export interface Prompt {
     id: string;
@@ -18,96 +18,95 @@ export interface Prompt {
     updatedAt?: string;
 }
 
-/**
- * Gets a prompt from the database. If it doesn't exist, it creates it with the default value.
- * It also resolves the final model name, using the system default if no specific model is set.
- * @param promptId The unique identifier for the prompt.
- * @param defaultPrompt The default prompt object to seed if it doesn't exist.
- * @returns The full prompt configuration object, including the Genkit-ready model name.
- */
-export async function getPrompt(promptId: string, defaultPrompt: Omit<Prompt, 'id'>): Promise<Prompt> {
+const FALLBACK_MODEL_ID = 'gemini-2.5-flash-lite';
+const PROMPT_CONFIG_SECTION = 'ai_prompts';
+const PROMPT_CONFIG_KEY_PREFIX = 'ai.prompt.';
+
+function promptConfigKey(id: string): string {
+    return `${PROMPT_CONFIG_KEY_PREFIX}${id}`;
+}
+
+function parsePromptConfig(value: string): Prompt | null {
     try {
-        let promptData: Prompt;
-        const existing = await prisma.prompt.findUnique({ where: { id: promptId } });
-
-        if (existing) {
-            promptData = {
-                id: existing.id,
-                promptText: existing.promptText,
-                description: existing.description,
-                name: existing.name,
-                model: existing.model || undefined,
-                placeholders: existing.placeholders || [],
-            };
-        } else {
-            const created = await prisma.prompt.create({
-                data: {
-                    id: promptId,
-                    promptText: defaultPrompt.promptText,
-                    description: defaultPrompt.description,
-                    name: defaultPrompt.name,
-                    placeholders: defaultPrompt.placeholders || [],
-                    model: defaultPrompt.model || null,
-                },
-            });
-            promptData = {
-                id: created.id,
-                promptText: created.promptText,
-                description: created.description,
-                name: created.name,
-                model: created.model || undefined,
-                placeholders: created.placeholders || [],
-            };
+        const prompt = JSON.parse(value) as Prompt;
+        if (!prompt.id || !prompt.name || !prompt.description || !prompt.promptText) {
+            return null;
         }
-        
-        let modelIdentifier = promptData.model || '';
-
-        // Check for invalid model identifiers (null, undefined, empty, whitespace, or containing slashes/spaces)
-        const isInvalidModelId = !modelIdentifier || modelIdentifier.trim() === '' || modelIdentifier.includes('/') || modelIdentifier.includes(' ');
-
-        if (isInvalidModelId) {
-            const defaultModel = await getDefaultModel();
-            if (defaultModel) {
-                 modelIdentifier = defaultModel.modelId;
-            } else {
-                // Final fallback if no default is set in the DB
-                modelIdentifier = 'gemini-2.5-flash-lite';
-            }
-        }
-        
-        promptData.model = modelIdentifier;
-
-        return promptData;
-
-    } catch (error) {
-        await logProblem(error, `getPrompt (ID: ${promptId})`);
-        const defaultModel = await getDefaultModel();
-        return { 
-            id: promptId, 
-            ...defaultPrompt,
-            model: defaultModel?.modelId || 'gemini-2.5-flash-lite'
+        return {
+            ...prompt,
+            placeholders: prompt.placeholders || [],
+            model: prompt.model || undefined,
         };
+    } catch {
+        return null;
     }
 }
 
+function serializePromptConfig(prompt: Prompt): string {
+    return JSON.stringify(prompt);
+}
+
+async function resolveModelId(model?: string): Promise<string> {
+    const modelIdentifier = model || '';
+    const isInvalidModelId = !modelIdentifier || modelIdentifier.trim() === '' || modelIdentifier.includes('/') || modelIdentifier.includes(' ');
+
+    if (isInvalidModelId) {
+        return resolveModelIdentifier();
+    }
+
+    return resolveModelIdentifier(modelIdentifier) || FALLBACK_MODEL_ID;
+}
+
 /**
- * Retrieves all prompts from the database for the admin page.
+ * Gets a prompt from the built-in flow defaults.
+ * It also resolves the final model name, using the system default if no specific model is set.
+ * @param promptId The unique identifier for the prompt.
+ * @param defaultPrompt The default prompt object supplied by the AI flow.
+ * @returns The full prompt configuration object, including the Genkit-ready model name.
+ */
+export async function getPrompt(promptId: string, defaultPrompt: Omit<Prompt, 'id'>): Promise<Prompt> {
+    let promptData: Prompt = {
+        id: promptId,
+        ...defaultPrompt,
+        placeholders: defaultPrompt.placeholders || [],
+    };
+
+    try {
+        const row = await prisma.siteContent.findUnique({
+            where: { key: promptConfigKey(promptId) },
+        });
+        const configuredPrompt = row ? parsePromptConfig(row.value) : null;
+        if (configuredPrompt) {
+            promptData = configuredPrompt;
+        }
+    } catch (error) {
+        await logProblem(error, `getPrompt (ID: ${promptId})`);
+    }
+
+    return {
+        ...promptData,
+        model: await resolveModelId(promptData.model),
+    };
+}
+
+/**
+ * Retrieves configurable prompts for the admin page.
  */
 export async function getPrompts(): Promise<Prompt[]> {
     try {
-        const prompts = await prisma.prompt.findMany({
+        const rows = await prisma.siteContent.findMany({
+            where: { section: PROMPT_CONFIG_SECTION },
             orderBy: { updatedAt: 'desc' },
         });
-        return prompts.map((prompt) => ({
-            id: prompt.id,
-            promptText: prompt.promptText,
-            description: prompt.description,
-            name: prompt.name,
-            placeholders: prompt.placeholders || [],
-            model: prompt.model || undefined,
-            createdAt: prompt.createdAt.toISOString(),
-            updatedAt: prompt.updatedAt.toISOString(),
-        }));
+        return rows.flatMap((row) => {
+            const prompt = parsePromptConfig(row.value);
+            if (!prompt) return [];
+            return [{
+                ...prompt,
+                createdAt: row.createdAt.toISOString(),
+                updatedAt: row.updatedAt.toISOString(),
+            }];
+        });
     } catch (error) {
         await logProblem(error, 'getPrompts');
         return [];
@@ -119,17 +118,16 @@ export async function getPrompts(): Promise<Prompt[]> {
  */
 export async function getPromptById(id: string): Promise<Prompt | null> {
     try {
-        const prompt = await prisma.prompt.findUnique({ where: { id } });
+        const row = await prisma.siteContent.findUnique({
+            where: { key: promptConfigKey(id) },
+        });
+        if (!row) return null;
+        const prompt = parsePromptConfig(row.value);
         if (!prompt) return null;
         return {
-            id: prompt.id,
-            promptText: prompt.promptText,
-            description: prompt.description,
-            name: prompt.name,
-            placeholders: prompt.placeholders || [],
-            model: prompt.model || undefined,
-            createdAt: prompt.createdAt.toISOString(),
-            updatedAt: prompt.updatedAt.toISOString(),
+            ...prompt,
+            createdAt: row.createdAt.toISOString(),
+            updatedAt: row.updatedAt.toISOString(),
         };
     } catch (error) {
         await logProblem(error, `getPromptById (ID: ${id})`);
@@ -139,48 +137,59 @@ export async function getPromptById(id: string): Promise<Prompt | null> {
 
 
 /**
- * Creates a new prompt in the database.
+ * Creates a new prompt configuration.
  * @param data The prompt data including the ID.
  */
 export async function createPrompt(data: CreatePromptFormValues): Promise<void> {
     try {
-        const existing = await prisma.prompt.findUnique({ where: { id: data.id } });
-        if (existing) {
-            throw new Error(`A prompt with the ID "${data.id}" already exists.`);
-        }
+        const prompt: Prompt = {
+            id: data.id,
+            promptText: data.promptText,
+            description: data.description,
+            name: data.name,
+            placeholders: data.placeholders?.split(',').map((p) => p.trim()).filter(Boolean) || [],
+            model: data.model || undefined,
+        };
 
-        await prisma.prompt.create({
+        await prisma.siteContent.create({
             data: {
-                id: data.id,
-                promptText: data.promptText,
-                description: data.description,
-                name: data.name,
-                placeholders: data.placeholders?.split(',').map((p) => p.trim()).filter(Boolean) || [],
-                model: data.model || null,
+                key: promptConfigKey(data.id),
+                section: PROMPT_CONFIG_SECTION,
+                value: serializePromptConfig(prompt),
             },
         });
     } catch (error: any) {
         await logProblem(error, `createPrompt (ID: ${data.id})`);
-        throw error; // Re-throw to be handled by the action
+        throw error;
     }
 }
 
 
 /**
- * Updates an existing prompt in the database.
+ * Updates an existing prompt configuration.
  * @param id The ID of the prompt to update.
  * @param data The partial prompt data to update.
  */
 export async function updatePrompt(id: string, data: Omit<CreatePromptFormValues, 'id'>): Promise<void> {
     try {
-        await prisma.prompt.update({
-            where: { id },
+        const existing = await getPromptById(id);
+        if (!existing) {
+            throw new Error(`Prompt "${id}" was not found.`);
+        }
+
+        const prompt: Prompt = {
+            id,
+            promptText: data.promptText,
+            description: data.description,
+            name: data.name,
+            placeholders: data.placeholders?.split(',').map((p) => p.trim()).filter(Boolean) || [],
+            model: data.model || undefined,
+        };
+
+        await prisma.siteContent.update({
+            where: { key: promptConfigKey(id) },
             data: {
-                promptText: data.promptText,
-                description: data.description,
-                name: data.name,
-                placeholders: data.placeholders?.split(',').map((p) => p.trim()).filter(Boolean) || [],
-                model: data.model || null,
+                value: serializePromptConfig(prompt),
             },
         });
     } catch (error: any) {
@@ -190,14 +199,14 @@ export async function updatePrompt(id: string, data: Omit<CreatePromptFormValues
 }
 
 /**
- * Deletes a prompt from the database.
+ * Deletes a prompt configuration.
  * @param promptId The ID of the prompt to delete.
  */
 export async function deletePrompt(promptId: string): Promise<void> {
     try {
-        await prisma.prompt.delete({ where: { id: promptId } });
+        await prisma.siteContent.delete({ where: { key: promptConfigKey(promptId) } });
     } catch (error: any) {
         await logProblem(error, `deletePrompt (ID: ${promptId})`);
-        throw new Error('Failed to delete prompt from database.');
+        throw new Error('Failed to delete prompt.');
     }
 }
