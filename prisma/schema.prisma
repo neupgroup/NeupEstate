@@ -74,9 +74,8 @@ model Account {
   workingProfileOf Account[] @relation("AccountWorkingProfile")
   agencyAgentMapAsAgency AgencyAgentMap[] @relation("AgencyAgentMapAgency")
   agencyAgentMapAsAgent  AgencyAgentMap[] @relation("AgencyAgentMapAgent")
-  ownedSharedLeads       SharedLead[]     @relation("SharedLeadOwnerAccount")
-  leadOwnerSharedLeads    SharedLead[]     @relation("SharedLeadOwner")
-  leadOwnerLeadShares     LeadShare[]      @relation("LeadShareOwner")
+  baseLeadsBelongingTo    BaseLead[]      @relation("BaseLeadBelongsTo")
+  ownedSharedLeads        SharedLeads[]   @relation("SharedLeadsOwner")
   intelligenceMappings IntelligenceMapping[]
   intelligenceAlerts    IntelligenceAlert[]
   propertyChanges       PropertyChange[]
@@ -558,6 +557,7 @@ enum LeadPriority {
 
 model BaseLead {
   id        String   @id @default(cuid())
+  belongsTo String
   firstName String
   lastName  String
   contact   Json
@@ -566,11 +566,12 @@ model BaseLead {
   updatedAt DateTime @updatedAt
 
   links     ClientLink[]
-  sharedLeads SharedLead[]
-  leadShares  LeadShare[]
+  sharedLeads SharedLeads[]
   contacts  ClientContact[]
   propertyOwners PropertyOwner[]
+  belongsToAccount Account @relation("BaseLeadBelongsTo", fields: [belongsTo], references: [id], onDelete: Restrict)
 
+  @@index([belongsTo])
   @@index([lastName])
   @@map("client")
 }
@@ -600,46 +601,24 @@ model ClientLink {
   @@map("client_link")
 }
 
-model SharedLead {
+model SharedLeads {
   id          String       @id @default(cuid())
-  baseLead_id String
-  ownerId     String
+  baseLeadId  String
   type        LeadType
   requirements Json?
   priority    LeadPriority @default(MEDIUM)
-  leadOwner   String?
+  owner       String
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
-  baseLead   BaseLead @relation(fields: [baseLead_id], references: [id], onDelete: Cascade)
-  owner      Account @relation("SharedLeadOwnerAccount", fields: [ownerId], references: [id], onDelete: Restrict)
-  leadOwnerAccount Account? @relation("SharedLeadOwner", fields: [leadOwner], references: [id], onDelete: SetNull)
-
-  @@index([baseLead_id])
-  @@index([ownerId])
-  @@index([type])
-  @@index([priority])
-  @@index([leadOwner])
-}
-
-model LeadShare {
-  id          String       @id @default(cuid())
-  clientId    String
-  type        LeadType
-  requirement Json?
-  priority    LeadPriority @default(MEDIUM)
-  leadOwner   String?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-
-  client      BaseLead     @relation(fields: [clientId], references: [id], onDelete: Cascade)
-  leadOwnerAccount Account? @relation("LeadShareOwner", fields: [leadOwner], references: [id], onDelete: SetNull)
+  baseLead    BaseLead     @relation(fields: [baseLeadId], references: [id], onDelete: Cascade)
+  ownerAccount Account     @relation("SharedLeadsOwner", fields: [owner], references: [id], onDelete: Restrict)
   activities  LeadActivity[]
 
-  @@index([clientId])
+  @@index([baseLeadId])
   @@index([type])
   @@index([priority])
-  @@index([leadOwner])
+  @@index([owner])
   @@map("shared_leads")
 }
 
@@ -650,7 +629,7 @@ model LeadActivity {
   activityOn DateTime   @default(now())
   activityBy String
 
-  lead       LeadShare @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  lead       SharedLeads @relation(fields: [leadId], references: [id], onDelete: Cascade)
 
   @@index([leadId])
   @@index([activityOn])

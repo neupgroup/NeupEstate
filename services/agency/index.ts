@@ -221,6 +221,7 @@ export async function createLeadAction(
 
     const leadId = await createLeadService({
       existingClientId: data.existingClientId,
+      belongsTo: actorId,
       firstName: data.firstName,
       lastName: data.lastName,
       email: data.email,

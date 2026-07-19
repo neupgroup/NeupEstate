@@ -18,7 +18,7 @@ export default async function LeadsHomePage() {
     ]);
 
     const cards = [
-        { href: '/manage/leads/base', title: 'Base Leads', description: 'All leads grouped from SharedLead records.', count: baseLeads.length, icon: Flame },
+        { href: '/manage/leads/base', title: 'Base Leads', description: 'All leads grouped from shared lead records.', count: baseLeads.length, icon: Flame },
         { href: '/manage/leads/my', title: 'My Leads', description: 'Shared leads assigned to your account.', count: myLeads.length, icon: Users },
         { href: '/manage/leads/shared', title: 'Shared Leads', description: 'Lead activity and shared_leads records.', count: sharedLeads.length, icon: Users },
         { href: '/manage/leads/alerts', title: 'Alerts', description: 'Priority shared leads and follow-ups that need attention.', count: sharedLeads.filter((lead) => ['HIGH', 'URGENT'].includes(String(lead.priority))).length, icon: Bell },

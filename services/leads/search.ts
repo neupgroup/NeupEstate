@@ -74,7 +74,7 @@ export async function searchClients(query: string) {
 
 export async function getBaseLeads() {
     try {
-        const leads = await prisma.sharedLead.findMany({
+        const leads = await prisma.sharedLeads.findMany({
             include: { baseLead: { include: CLIENT_INCLUDE } },
             orderBy: { createdAt: 'desc' },
         });
@@ -87,8 +87,8 @@ export async function getBaseLeads() {
 
 export async function getSharedLeads() {
     try {
-        const leads = await prisma.leadShare.findMany({
-            include: { client: { include: CLIENT_INCLUDE } },
+        const leads = await prisma.sharedLeads.findMany({
+            include: { baseLead: { include: CLIENT_INCLUDE } },
             orderBy: { createdAt: 'desc' },
         });
         return leads.map(normalizeLead);
@@ -100,9 +100,9 @@ export async function getSharedLeads() {
 
 export async function getMyLeads(accountId: string) {
     try {
-        const leads = await prisma.leadShare.findMany({
-            where: { leadOwner: accountId },
-            include: { client: { include: CLIENT_INCLUDE } },
+        const leads = await prisma.sharedLeads.findMany({
+            where: { owner: accountId },
+            include: { baseLead: { include: CLIENT_INCLUDE } },
             orderBy: { createdAt: 'desc' },
         });
         return leads.map(normalizeLead);
@@ -132,9 +132,9 @@ export async function getBaseClientById(id: string) {
 
 export async function getLeadById(id: string) {
     try {
-        const lead = await prisma.leadShare.findUnique({
+        const lead = await prisma.sharedLeads.findUnique({
             where: { id },
-            include: { client: { include: CLIENT_INCLUDE }, activities: { orderBy: { activityOn: 'desc' } } },
+            include: { baseLead: { include: CLIENT_INCLUDE }, activities: { orderBy: { activityOn: 'desc' } } },
         });
         return lead ? normalizeLead(lead) : null;
     } catch (e) {

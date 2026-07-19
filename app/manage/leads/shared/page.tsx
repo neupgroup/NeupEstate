@@ -19,7 +19,7 @@ export default async function SharedLeadsPage() {
     const leads = await getSharedLeads();
     const visibleLeads = canViewAllLeads || !accountId
         ? leads
-        : leads.filter((lead) => lead.leadOwner === accountId);
+        : leads.filter((lead) => lead.owner === accountId);
 
     return (
         <div className="space-y-6">
@@ -44,7 +44,7 @@ export default async function SharedLeadsPage() {
                 <div className="space-y-3">
                     {visibleLeads.map((lead) => {
                         const contact = lead.client.contact as any;
-                        const req = lead.requirement as Record<string, any> | null;
+                        const req = lead.requirements as Record<string, any> | null;
 
                         return (
                             <ClientLink
@@ -56,9 +56,9 @@ export default async function SharedLeadsPage() {
                                     <div className="space-y-1 min-w-0">
                                         <p className="font-semibold">{lead.client.firstName} {lead.client.lastName}</p>
                                         <div className="flex items-center gap-3 flex-wrap">
-                                            {lead.leadOwner && (
+                                            {lead.owner && (
                                                 <span className="text-xs text-muted-foreground border border-border rounded-full px-2 py-0.5">
-                                                    Owner: {lead.leadOwner}
+                                                    Owner: {lead.owner}
                                                 </span>
                                             )}
                                             {lead.client.source && (

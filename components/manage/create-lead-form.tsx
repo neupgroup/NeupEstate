@@ -270,7 +270,8 @@ export function CreateLeadForm() {
         if (isNewClient && !savedClientId) {
             startTransition(async () => {
                 try {
-                    const id = await saveClient(data);
+                    if (!currentAccountId) throw new Error('Missing current account.');
+                    const id = await saveClient({ ...data, accountId: currentAccountId });
                     setSavedClientId(id);
                 } catch { /* createLead will handle it */ }
                 advance(3);

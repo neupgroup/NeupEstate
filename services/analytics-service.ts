@@ -305,7 +305,7 @@ async function buildNativeScopeSummary(
     propertyFilter ? { propertyId: propertyFilter } : null,
     accountFilter ? { agentId: accountFilter } : null,
   ].filter((filter): filter is NonNullable<typeof filter> => Boolean(filter));
-  const [activities, propertyViews, savedProperties, clientLinks, leads, sharedLeads, inquiries, visits, properties] = await Promise.all([
+  const [activities, propertyViews, savedProperties, clientLinks, leads, inquiries, visits, properties] = await Promise.all([
     getActivities(context, from, to),
     prisma.propertyView.findMany({
       where: {
@@ -327,16 +327,9 @@ async function buildNativeScopeSummary(
       where: { trackerId: accountFilter },
       select: { id: true },
     }),
-    prisma.sharedLead.findMany({
+    prisma.sharedLeads.findMany({
       where: {
-        leadOwner: accountFilter,
-        createdAt: { gte: from, lt: to },
-      },
-      select: { createdAt: true },
-    }),
-    prisma.leadShare.findMany({
-      where: {
-        leadOwner: accountFilter,
+        owner: accountFilter,
         createdAt: { gte: from, lt: to },
       },
       select: { createdAt: true },
@@ -392,10 +385,6 @@ async function buildNativeScopeSummary(
     }
   } else {
     for (const lead of leads) {
-      totals.leads += 1;
-      addDailyValue(dailyData, from, lead.createdAt, 'Leads');
-    }
-    for (const lead of sharedLeads) {
       totals.leads += 1;
       addDailyValue(dailyData, from, lead.createdAt, 'Leads');
     }

@@ -37,6 +37,7 @@ async function replaceClientContacts(tx: Prisma.TransactionClient, clientId: str
 
 export interface CreateLeadInput {
     existingClientId?: string;
+    belongsTo: string;
     firstName?: string;
     lastName?: string;
     email?: string;
@@ -49,7 +50,7 @@ export interface CreateLeadInput {
 }
 
 export async function saveClient(data: {
-    accountId?: string;
+    accountId: string;
     firstName: string;
     lastName: string;
     email?: string;
@@ -60,6 +61,7 @@ export async function saveClient(data: {
         const c = await prisma.$transaction(async (tx) => {
             const created = await tx.baseLead.create({
                 data: {
+                    belongsTo: data.accountId,
                     firstName: data.firstName,
                     lastName:  data.lastName,
                     source:    data.source || null,
@@ -100,6 +102,7 @@ export async function createLead(data: CreateLeadInput): Promise<string> {
                     data: {
                         firstName: data.firstName!,
                         lastName:  data.lastName!,
+                        belongsTo: data.belongsTo,
                         source:    data.source || null,
                         contact: {},
                     },
@@ -115,13 +118,13 @@ export async function createLead(data: CreateLeadInput): Promise<string> {
             clientId = c.id;
         }
 
-        const lead = await prisma.leadShare.create({
+        const lead = await prisma.sharedLeads.create({
             data: {
-                clientId,
+                baseLeadId: clientId,
                 type:        data.type,
                 priority:    data.priority,
-                leadOwner:   data.assignedTo || null,
-                requirement: data.requirement ?? {},
+                owner:       data.assignedTo || data.belongsTo,
+                requirements: data.requirement ?? {},
             },
         });
 

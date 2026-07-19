@@ -19,7 +19,7 @@ export default async function BaseLeadsPage() {
     const leads = await getBaseLeads();
     const visibleLeads = canViewAllLeads || !accountId
         ? leads
-        : leads.filter((lead) => lead.leadOwner === accountId);
+        : leads.filter((lead) => lead.owner === accountId);
 
     return (
         <div className="space-y-6">
@@ -58,9 +58,9 @@ export default async function BaseLeadsPage() {
                                             <p className="font-semibold">
                                                 {lead.client.firstName} {lead.client.lastName}
                                             </p>
-                                            {lead.leadOwner && (
+                                            {lead.owner && (
                                                 <span className="text-xs text-muted-foreground border border-border rounded-full px-2 py-0.5">
-                                                    Owner: {lead.leadOwner}
+                                                    Owner: {lead.owner}
                                                 </span>
                                             )}
                                             {lead.client.source && (

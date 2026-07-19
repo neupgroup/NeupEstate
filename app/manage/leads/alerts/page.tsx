@@ -11,7 +11,7 @@ export default async function LeadAlertsPage() {
     await requirePagePermission(PERMISSIONS.manage.selfLeadView);
     await checkAuthenticationForWeb();
     const leads = await getSharedLeads();
-    const alerts = leads.filter((lead) => ['HIGH', 'URGENT'].includes(String(lead.priority)) || !lead.leadOwner);
+    const alerts = leads.filter((lead) => ['HIGH', 'URGENT'].includes(String(lead.priority)));
 
     return (
         <div className="space-y-6">
@@ -48,7 +48,6 @@ export default async function LeadAlertsPage() {
                                             <p className="font-semibold">{lead.client.firstName} {lead.client.lastName}</p>
                                             <Badge variant="outline">{lead.type}</Badge>
                                             <Badge variant="outline" className="capitalize">{lead.priority.toLowerCase()}</Badge>
-                                            {!lead.leadOwner && <Badge variant="outline">Unassigned</Badge>}
                                         </div>
                                         <div className="flex items-center gap-3 flex-wrap">
                                             {contact?.phone && <span className="text-sm text-muted-foreground">{contact.phone}</span>}

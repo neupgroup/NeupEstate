@@ -39,19 +39,20 @@ function normalizeClient<T extends { contact?: any; contacts?: Array<{ type: str
     };
 }
 
-function normalizeLead<T extends { client: any }>(lead: T) {
+function normalizeLead<T extends { client?: any; baseLead?: any }>(lead: T) {
+    const client = lead.client ?? lead.baseLead;
     return {
         ...lead,
-        client: normalizeClient(lead.client),
+        client: normalizeClient(client),
     };
 }
 
 export async function getLeadActivity(leadId: string) {
     try {
         const [lead, activities] = await Promise.all([
-            prisma.leadShare.findUnique({
+            prisma.sharedLeads.findUnique({
                 where: { id: leadId },
-                include: { client: { include: CLIENT_INCLUDE } },
+                include: { baseLead: { include: CLIENT_INCLUDE } },
             }),
             prisma.leadActivity.findMany({
                 where: { leadId },

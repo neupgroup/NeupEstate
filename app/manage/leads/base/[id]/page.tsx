@@ -55,9 +55,9 @@ export default async function BaseLeadClientPage({ params }: { params: Promise<{
                                 <div className="space-y-1 min-w-0">
                                     <div className="flex items-center gap-2 flex-wrap">
                                         <p className="font-semibold">Lead</p>
-                                        {lead.leadOwner && (
+                                        {lead.owner && (
                                             <span className="text-xs text-muted-foreground border border-border rounded-full px-2 py-0.5">
-                                                Owner: {lead.leadOwner}
+                                                Owner: {lead.owner}
                                             </span>
                                         )}
                                     </div>
