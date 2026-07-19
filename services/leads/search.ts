@@ -142,25 +142,6 @@ export async function getLeadById(id: string) {
     }
 }
 
-export async function getLeadActivity(leadId: string) {
-    try {
-        const [lead, activities] = await Promise.all([
-            prisma.sharedLead.findUnique({
-                where: { id: leadId },
-                include: { client: { include: CLIENT_INCLUDE } },
-            }),
-            prisma.leadActivity.findMany({
-                where: { leadId },
-                orderBy: { activityOn: 'desc' },
-            }),
-        ]);
-        return { lead: lead ? normalizeLead(lead) : null, activities };
-    } catch (e) {
-        await logProblem(e, `getLeadActivity ${leadId}`);
-        return { lead: null, activities: [] };
-    }
-}
-
 export async function getUnifiedLeads() {
     return getBaseLeads();
 }

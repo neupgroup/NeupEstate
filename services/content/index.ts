@@ -38,7 +38,8 @@ import { createRequirement as createRequirementService, updateRequirement as upd
 import { createPropertyDraftRequest, editUncreatedPropertyDraftRequest } from '@/services/bridge-property-service';
 import { resolveAccount, updateUser, getAccountById, getAccounts } from '@/services/account-service';
 import { deleteAccountAndData } from '@/services/account-service';
-import { createLead as createLeadService, createLeadActivity as createLeadActivityService } from '@/services/leads/create';
+import { createLead as createLeadService } from '@/services/leads/create';
+import { createLeadActivity as createLeadActivityService } from '@/services/leads/activity/create';
 import { getIdentity } from '@/services/neupid/get-identity';
 import { hasPermission, requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permissions';

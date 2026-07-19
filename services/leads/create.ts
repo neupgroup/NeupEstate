@@ -7,7 +7,7 @@ import { logProblem } from '@/services/problem-service';
 // ::neup.documentation::lead-create-service
 // ::private
 //
-// Creates CRM clients, shared lead records, and lead activity events.
+// Creates CRM clients and shared lead records.
 //
 // ::private end
 // ::end
@@ -129,48 +129,5 @@ export async function createLead(data: CreateLeadInput): Promise<string> {
     } catch (e) {
         await logProblem(e, 'createLead');
         throw new Error('Failed to create lead.');
-    }
-}
-
-export type LeadActivityType = 'follow_up' | 'visit' | 'meeting' | 'remarks';
-
-export interface CreateLeadActivityInput {
-    leadId: string;
-    activityType: LeadActivityType;
-    activityOn?: string;
-    followUpMethod?: 'phone call' | 'whatsapp' | 'email';
-    propertyId?: string;
-    remarks: string;
-    activityBy: string;
-}
-
-export async function createLeadActivity(input: CreateLeadActivityInput): Promise<string> {
-    try {
-        const propertyTitle = input.propertyId
-            ? await prisma.property.findUnique({
-                where: { id: input.propertyId },
-                select: { title: true },
-            })
-            : null;
-
-        const activity = await prisma.leadActivity.create({
-            data: {
-                leadId: input.leadId,
-                activityBy: input.activityBy,
-                activityOn: input.activityOn ? new Date(input.activityOn) : new Date(),
-                data: {
-                    activityType: input.activityType,
-                    followUpMethod: input.followUpMethod ?? null,
-                    propertyId: input.propertyId ?? null,
-                    propertyTitle: propertyTitle?.title ?? null,
-                    remarks: input.remarks.trim(),
-                },
-            },
-        });
-
-        return activity.id;
-    } catch (e) {
-        await logProblem(e, `createLeadActivity ${input.leadId}`);
-        throw new Error('Failed to create lead activity.');
     }
 }

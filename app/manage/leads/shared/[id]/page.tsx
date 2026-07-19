@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getLeadActivity } from '@/services/leads/search';
+import { getLeadActivity } from '@/services/leads/activity/view';
 import { getProperties } from '@/services/property-service';
 import { ClientLink } from '@/components/client-link';
 import { ChevronLeft } from 'lucide-react';
