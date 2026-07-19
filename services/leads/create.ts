@@ -115,7 +115,7 @@ export async function createLead(data: CreateLeadInput): Promise<string> {
             clientId = c.id;
         }
 
-        const lead = await prisma.sharedLead.create({
+        const lead = await prisma.leadShare.create({
             data: {
                 clientId,
                 type:        data.type,

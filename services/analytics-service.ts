@@ -327,14 +327,14 @@ async function buildNativeScopeSummary(
       where: { trackerId: accountFilter },
       select: { id: true },
     }),
-    prisma.clientLead.findMany({
+    prisma.sharedLead.findMany({
       where: {
         leadOwner: accountFilter,
         createdAt: { gte: from, lt: to },
       },
       select: { createdAt: true },
     }),
-    prisma.sharedLead.findMany({
+    prisma.leadShare.findMany({
       where: {
         leadOwner: accountFilter,
         createdAt: { gte: from, lt: to },

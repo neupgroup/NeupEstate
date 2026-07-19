@@ -44,7 +44,7 @@ export default async function BaseLeadsPage() {
                 <div className="space-y-3">
                     {visibleLeads.map((lead) => {
                         const contact = lead.client.contact as any;
-                        const req = lead.requirement as Record<string, any> | null;
+                        const req = lead.requirements as Record<string, any> | null;
 
                         return (
                             <ClientLink

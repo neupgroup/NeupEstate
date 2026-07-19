@@ -45,7 +45,7 @@ export default async function BaseLeadClientPage({ params }: { params: Promise<{
 
             <div className="space-y-3">
                 {client.leads.map((lead) => {
-                    const req = lead.requirement as Record<string, any> | null;
+                    const req = lead.requirements as Record<string, any> | null;
                     return (
                         <div
                             key={lead.id}

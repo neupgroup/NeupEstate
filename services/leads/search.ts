@@ -39,10 +39,11 @@ function normalizeClient<T extends { contact?: any; contacts?: Array<{ type: str
     };
 }
 
-function normalizeLead<T extends { client: any }>(lead: T) {
+function normalizeLead<T extends { client?: any; baseLead?: any }>(lead: T) {
+    const client = lead.client ?? lead.baseLead;
     return {
         ...lead,
-        client: normalizeClient(lead.client),
+        client: normalizeClient(client),
     };
 }
 
@@ -73,8 +74,8 @@ export async function searchClients(query: string) {
 
 export async function getBaseLeads() {
     try {
-        const leads = await prisma.clientLead.findMany({
-            include: { client: { include: CLIENT_INCLUDE } },
+        const leads = await prisma.sharedLead.findMany({
+            include: { baseLead: { include: CLIENT_INCLUDE } },
             orderBy: { createdAt: 'desc' },
         });
         return leads.map(normalizeLead);
@@ -86,7 +87,7 @@ export async function getBaseLeads() {
 
 export async function getSharedLeads() {
     try {
-        const leads = await prisma.sharedLead.findMany({
+        const leads = await prisma.leadShare.findMany({
             include: { client: { include: CLIENT_INCLUDE } },
             orderBy: { createdAt: 'desc' },
         });
@@ -99,7 +100,7 @@ export async function getSharedLeads() {
 
 export async function getMyLeads(accountId: string) {
     try {
-        const leads = await prisma.sharedLead.findMany({
+        const leads = await prisma.leadShare.findMany({
             where: { leadOwner: accountId },
             include: { client: { include: CLIENT_INCLUDE } },
             orderBy: { createdAt: 'desc' },
@@ -117,12 +118,12 @@ export async function getBaseClientById(id: string) {
             where: { id },
             include: {
                 contacts: true,
-                leads: {
+                sharedLeads: {
                     orderBy: { createdAt: 'desc' },
                 },
             },
         });
-        return client ? { ...normalizeClient(client), leads: client.leads } : null;
+        return client ? { ...normalizeClient(client), leads: client.sharedLeads } : null;
     } catch (e) {
         await logProblem(e, `getBaseClientById ${id}`);
         return null;
@@ -131,7 +132,7 @@ export async function getBaseClientById(id: string) {
 
 export async function getLeadById(id: string) {
     try {
-        const lead = await prisma.sharedLead.findUnique({
+        const lead = await prisma.leadShare.findUnique({
             where: { id },
             include: { client: { include: CLIENT_INCLUDE }, activities: { orderBy: { activityOn: 'desc' } } },
         });

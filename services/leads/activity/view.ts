@@ -49,7 +49,7 @@ function normalizeLead<T extends { client: any }>(lead: T) {
 export async function getLeadActivity(leadId: string) {
     try {
         const [lead, activities] = await Promise.all([
-            prisma.sharedLead.findUnique({
+            prisma.leadShare.findUnique({
                 where: { id: leadId },
                 include: { client: { include: CLIENT_INCLUDE } },
             }),

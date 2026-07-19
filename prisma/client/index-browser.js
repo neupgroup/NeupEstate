@@ -439,18 +439,18 @@ exports.Prisma.ClientLinkScalarFieldEnum = {
   clientId: 'clientId'
 };
 
-exports.Prisma.ClientLeadScalarFieldEnum = {
+exports.Prisma.SharedLeadScalarFieldEnum = {
   id: 'id',
-  clientId: 'clientId',
+  baseLead_id: 'baseLead_id',
   type: 'type',
-  requirement: 'requirement',
+  requirements: 'requirements',
   priority: 'priority',
   leadOwner: 'leadOwner',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.SharedLeadScalarFieldEnum = {
+exports.Prisma.LeadShareScalarFieldEnum = {
   id: 'id',
   clientId: 'clientId',
   type: 'type',
@@ -959,8 +959,8 @@ exports.Prisma.ModelName = {
   BaseLead: 'BaseLead',
   ClientContact: 'ClientContact',
   ClientLink: 'ClientLink',
-  ClientLead: 'ClientLead',
   SharedLead: 'SharedLead',
+  LeadShare: 'LeadShare',
   LeadActivity: 'LeadActivity',
   Conversation: 'Conversation',
   Message: 'Message',
