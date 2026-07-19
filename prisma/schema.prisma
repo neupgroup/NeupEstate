@@ -74,7 +74,7 @@ model Account {
   workingProfileOf Account[] @relation("AccountWorkingProfile")
   agencyAgentMapAsAgency AgencyAgentMap[] @relation("AgencyAgentMapAgency")
   agencyAgentMapAsAgent  AgencyAgentMap[] @relation("AgencyAgentMapAgent")
-  leadOwnerClientLeads    ClientLead[]     @relation("ClientLeadOwner")
+  leadOwnerBaseLeadRows   ClientLead[]     @relation("ClientLeadOwner")
   leadOwnerSharedLeads    SharedLead[]     @relation("SharedLeadOwner")
   intelligenceMappings IntelligenceMapping[]
   intelligenceAlerts    IntelligenceAlert[]
@@ -302,7 +302,7 @@ model PropertyOwner {
   isPrimaryOwner Boolean   @default(false) @map("is_primary_owner")
 
   property       Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-  ownerClient    CrmClient @relation(fields: [ownerClientId], references: [id], onDelete: Cascade)
+  ownerClient    BaseLead  @relation(fields: [ownerClientId], references: [id], onDelete: Cascade)
 
   @@index([propertyId])
   @@index([ownerClientId])
@@ -538,7 +538,7 @@ model PropertyView {
 }
 
 // ============================================================================
-// CRM — Client & Leads
+// Base Leads
 // ============================================================================
 
 enum LeadType {
@@ -555,7 +555,7 @@ enum LeadPriority {
   URGENT
 }
 
-model CrmClient {
+model BaseLead {
   id        String   @id @default(cuid())
   firstName String
   lastName  String
@@ -580,7 +580,7 @@ model ClientContact {
   type     String
   value    String
 
-  client   CrmClient @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  client   BaseLead @relation(fields: [clientId], references: [id], onDelete: Cascade)
 
   @@index([clientId])
   @@index([type])
@@ -592,7 +592,7 @@ model ClientLink {
   trackerId String
   clientId  String
 
-  client    CrmClient @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  client    BaseLead @relation(fields: [clientId], references: [id], onDelete: Cascade)
 
   @@index([trackerId])
   @@index([clientId])
@@ -609,7 +609,7 @@ model ClientLead {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
-  client      CrmClient      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  client      BaseLead       @relation(fields: [clientId], references: [id], onDelete: Cascade)
   leadOwnerAccount Account?   @relation("ClientLeadOwner", fields: [leadOwner], references: [id], onDelete: SetNull)
 
   @@index([clientId])
@@ -629,7 +629,7 @@ model SharedLead {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
-  client      CrmClient    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  client      BaseLead     @relation(fields: [clientId], references: [id], onDelete: Cascade)
   leadOwnerAccount Account? @relation("SharedLeadOwner", fields: [leadOwner], references: [id], onDelete: SetNull)
   activities  LeadActivity[]
 

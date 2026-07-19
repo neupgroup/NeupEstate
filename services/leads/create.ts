@@ -7,7 +7,7 @@ import { logProblem } from '@/services/problem-service';
 // ::neup.documentation::lead-create-service
 // ::private
 //
-// Creates CRM clients and shared lead records.
+// Creates base lead contacts and shared lead records.
 //
 // ::private end
 // ::end
@@ -58,7 +58,7 @@ export async function saveClient(data: {
 }): Promise<string> {
     try {
         const c = await prisma.$transaction(async (tx) => {
-            const created = await tx.crmClient.create({
+            const created = await tx.baseLead.create({
                 data: {
                     firstName: data.firstName,
                     lastName:  data.lastName,
@@ -96,7 +96,7 @@ export async function createLead(data: CreateLeadInput): Promise<string> {
 
         if (!clientId) {
             const c = await prisma.$transaction(async (tx) => {
-                const created = await tx.crmClient.create({
+                const created = await tx.baseLead.create({
                     data: {
                         firstName: data.firstName!,
                         lastName:  data.lastName!,

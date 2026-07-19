@@ -416,7 +416,7 @@ exports.Prisma.PropertyViewScalarFieldEnum = {
   viewedOn: 'viewedOn'
 };
 
-exports.Prisma.CrmClientScalarFieldEnum = {
+exports.Prisma.BaseLeadScalarFieldEnum = {
   id: 'id',
   firstName: 'firstName',
   lastName: 'lastName',
@@ -956,7 +956,7 @@ exports.Prisma.ModelName = {
   SavedProperty: 'SavedProperty',
   ReactedProperty: 'ReactedProperty',
   PropertyView: 'PropertyView',
-  CrmClient: 'CrmClient',
+  BaseLead: 'BaseLead',
   ClientContact: 'ClientContact',
   ClientLink: 'ClientLink',
   ClientLead: 'ClientLead',

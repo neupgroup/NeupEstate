@@ -6,7 +6,7 @@ import { logProblem } from '@/services/problem-service';
 // ::neup.documentation::lead-search-service
 // ::private
 //
-// Reads base leads, shared leads, lead activity, and CRM client search results.
+// Reads base leads, shared leads, lead activity, and base lead contact search results.
 //
 // ::private end
 // ::end
@@ -50,7 +50,7 @@ export async function searchClients(query: string) {
     try {
         const q = query.trim();
         if (!q) return [];
-        const clients = await prisma.crmClient.findMany({
+        const clients = await prisma.baseLead.findMany({
             where: {
                 OR: [
                     { firstName: { contains: q, mode: 'insensitive' } },
@@ -113,7 +113,7 @@ export async function getMyLeads(accountId: string) {
 
 export async function getBaseClientById(id: string) {
     try {
-        const client = await prisma.crmClient.findUnique({
+        const client = await prisma.baseLead.findUnique({
             where: { id },
             include: {
                 contacts: true,
