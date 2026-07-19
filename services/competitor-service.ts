@@ -67,7 +67,7 @@ export async function getCompetitors(): Promise<Competitor[]> {
         json_agg(cs ORDER BY cs."createdAt") FILTER (WHERE cs.id IS NOT NULL),
         '[]'::json
       ) AS sources
-      FROM "competitors" c
+      FROM "competitor" c
       LEFT JOIN "competitor_sources" cs ON cs."competitorId" = c.id
       GROUP BY c.id
       ORDER BY c."createdAt" DESC
@@ -86,7 +86,7 @@ export async function getCompetitorById(id: string): Promise<Competitor | null> 
         json_agg(cs ORDER BY cs."createdAt") FILTER (WHERE cs.id IS NOT NULL),
         '[]'::json
       ) AS sources
-      FROM "competitors" c
+      FROM "competitor" c
       LEFT JOIN "competitor_sources" cs ON cs."competitorId" = c.id
       WHERE c.id = ${id}
       GROUP BY c.id

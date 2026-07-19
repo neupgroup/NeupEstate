@@ -1009,7 +1009,7 @@ model Competitor {
   intelligenceMappings IntelligenceMapping[]
   intelligenceAlerts   IntelligenceAlert[]
 
-  @@map("competitors")
+  @@map("competitor")
 }
 
 model CompetitorSource {

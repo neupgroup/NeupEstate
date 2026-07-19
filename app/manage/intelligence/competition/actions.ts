@@ -76,7 +76,7 @@ export async function updateCompetitorCrawlRulesAction(
 ): Promise<{ success: boolean; error?: string }> {
   try {
     await prisma.$executeRaw`
-      UPDATE "competitors"
+      UPDATE "competitor"
       SET "crawlRules" = ${JSON.stringify(rules)}::jsonb, "updatedAt" = NOW()
       WHERE "id" = ${competitorId}
     `;
