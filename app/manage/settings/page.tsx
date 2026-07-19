@@ -73,13 +73,7 @@ export default function SettingsPage() {
           Connect third-party services to your application.
         </p>
         <div className="border rounded-lg overflow-hidden">
-            <ClientLink href="/manage/settings/integration/whatsapp" className="block px-4 py-3 hover:bg-muted/50 transition-colors font-medium">
-                WhatsApp Configuration
-            </ClientLink>
-            <ClientLink href="/manage/settings/integration/whatsapp-template" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
-                WhatsApp Message Templates
-            </ClientLink>
-            <div className="block px-4 py-3 border-t font-medium opacity-50 cursor-not-allowed">
+            <div className="block px-4 py-3 font-medium opacity-50 cursor-not-allowed">
                 Messaging (SMS) Integration (Coming Soon)
             </div>
             <div className="block px-4 py-3 border-t font-medium opacity-50 cursor-not-allowed">

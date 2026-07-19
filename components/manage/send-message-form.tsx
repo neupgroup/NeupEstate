@@ -5,11 +5,8 @@ import { useRef } from 'react';
 import { useFormStatus } from 'react-dom';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { Send, Loader2, MessageSquarePlus } from 'lucide-react';
-import { SendTemplateDialog } from './send-template-dialog';
-import type { WhatsAppTemplate } from '@/types';
+import { Send, Loader2 } from 'lucide-react';
 import { sendMessageAction } from '@/services/communications';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 function SubmitButton() {
     const { pending } = useFormStatus();
@@ -23,11 +20,10 @@ function SubmitButton() {
 
 interface SendMessageFormProps {
     conversationId: string;
-    templates: WhatsAppTemplate[];
     isNewConversation: boolean;
 }
 
-export function SendMessageForm({ conversationId, templates, isNewConversation }: SendMessageFormProps) {
+export function SendMessageForm({ conversationId, isNewConversation }: SendMessageFormProps) {
     const formRef = useRef<HTMLFormElement>(null);
 
     const handleAction = async (formData: FormData) => {
@@ -40,39 +36,15 @@ export function SendMessageForm({ conversationId, templates, isNewConversation }
         formRef.current?.reset();
     };
 
-    if (isNewConversation) {
-        return (
-            <div className="p-4 flex-shrink-0 bg-background/95 rounded-b-lg">
-                <Alert>
-                    <MessageSquarePlus className="h-4 w-4" />
-                    <AlertTitle>Start the Conversation</AlertTitle>
-                    <AlertDescription>
-                        You must start a new conversation by sending an approved WhatsApp template.
-                    </AlertDescription>
-                </Alert>
-                <div className="mt-4 flex justify-center">
-                    <SendTemplateDialog 
-                        conversationId={conversationId} 
-                        templates={templates} 
-                        triggerButton={
-                            <Button>
-                                <MessageSquarePlus className="mr-2 h-4 w-4" />
-                                Send Template
-                            </Button>
-                        }
-                    />
-                </div>
-            </div>
-        )
-    }
-
-
     return (
         <form ref={formRef} action={handleAction} className="p-4 flex-shrink-0 bg-background/95 rounded-b-lg">
             <div className="relative">
-                <Textarea placeholder="Type your message..." className="pr-24 min-h-[50px]" name="messageText" />
+                <Textarea
+                    placeholder={isNewConversation ? "Start the conversation..." : "Type your message..."}
+                    className="pr-14 min-h-[50px]"
+                    name="messageText"
+                />
                 <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                    <SendTemplateDialog conversationId={conversationId} templates={templates} />
                     <SubmitButton />
                 </div>
             </div>

@@ -5,7 +5,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { User, Phone, Star } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/core/utils';
-import { getWhatsAppTemplates } from '@/services/whatsapp-service';
 import { getConversationById, getMessagesByConversationId } from '@/services/conversation-service';
 import { SendMessageForm } from '@/components/manage/send-message-form';
 import { DeleteConversationButton } from '@/components/manage/delete-conversation-button';
@@ -17,7 +16,6 @@ export default async function MessageDetailPage({ params }: { params: Promise<{ 
     const { id } = await params;
     const conversation = await getConversationById(id);
     const messages = await getMessagesByConversationId(id);
-    const templates = await getWhatsAppTemplates();
 
     if (!conversation) {
         notFound();
@@ -96,7 +94,7 @@ export default async function MessageDetailPage({ params }: { params: Promise<{ 
                 {isNewConversation && (
                     <div className="text-center text-muted-foreground p-8">
                         <p>This is a new conversation.</p>
-                        <p className="text-sm">Start by sending an approved template message.</p>
+                        <p className="text-sm">Start by sending a message.</p>
                     </div>
                 )}
             </CardContent>
@@ -106,7 +104,6 @@ export default async function MessageDetailPage({ params }: { params: Promise<{ 
             {/* Input Form */}
             <SendMessageForm
                 conversationId={conversation.id}
-                templates={templates}
                 isNewConversation={isNewConversation}
             />
         </div>

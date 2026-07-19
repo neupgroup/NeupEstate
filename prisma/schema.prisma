@@ -573,7 +573,7 @@ model BaseLead {
 
   @@index([belongsTo])
   @@index([lastName])
-  @@map("client")
+  @@map("base_lead")
 }
 
 model ClientContact {
@@ -846,17 +846,6 @@ model Prompt {
   @@map("prompts")
 }
 
-model WhatsAppConfig {
-  id                 String   @id
-  apiToken           String?
-  phoneNumberId      String?
-  accountId          String?
-  webhookVerifyToken String?
-  updatedAt          DateTime @updatedAt
-
-  @@map("whatsapp_config")
-}
-
 model SiteDevLogSetting {
   id        String   @id
   enabled   Boolean  @default(false)
@@ -882,19 +871,6 @@ model SiteDevLogEntry {
   @@index([source, createdAt])
   @@index([path, createdAt])
   @@map("site_dev_log_entries")
-}
-
-model WhatsAppTemplate {
-  id            String   @id @default(cuid())
-  name          String
-  category      String
-  language      String
-  body          String
-  status        String
-  isPreapproved Boolean  @default(false)
-  createdAt     DateTime @default(now())
-
-  @@map("whatsapp_templates")
 }
 
 model ContactSubmission {

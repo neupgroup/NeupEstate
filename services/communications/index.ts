@@ -11,8 +11,8 @@ import { addSitemap, getNewUrlsFromSitemap, processSitemapUrl, updateSitemapChec
 import { clearAllProblems } from "@/services/problem-service";
 import { logProblem } from "@/services/problem-service";
 import { clearSiteDevLogs } from "@/services/site-dev-log-service";
-import type { NaturalLanguageSearchOutput, Property, CreatePropertyInput, UpdatePropertyInput, CreateAgencyInput, UpdateAgencyInput, PropertyApprovalResult, CreatePropertyFormValues, UpdatePropertyFormValues, CreateAgencyFormValues, UpdateAgencyFormValues, PropertyFilters, ExtractedPropertyData, SitemapLog, PropertyAmendmentResult, RewritePropertyDetailsOutput, PropertyAssuranceResult, Agent, CreateAgentFormValues, UpdateAgentFormValues, StructuredLocation, CreateWhatsAppTemplateFormValues, WhatsAppConfig, WhatsAppTemplate, CreateConversationFormValues, CreateUserActivityInput, PropertyImageUpdateResult, CreateFaqFormValues, UpdateFaqFormValues, CreateInquiryFormValues, InquiryStatus, UpdatePromptFormValues, CreatePromptFormValues, User, CreatePropertyRequestFormValues, CreateSalesRequestFormValues, CreateVisitRequestFormValues, CreateMortgageRequestFormValues, CreateContactSubmissionFormValues, PropertyActivityEvent, UserPreferences, AIModel, CreateAIModelFormValues, UpdateAIModelFormValues, CreateRequirementFormValues, Requirement, UpdateUserFormValues, LandDetails, PlotDetails, ApartmentUnit } from "@/types";
-import { CreatePropertySchema, UpdatePropertySchema, CreateAgencySchema, UpdateAgencySchema, PropertyPurposeSchema, PropertyCategorySchema, PropertyUsageTypeSchema, CreateAgentSchema, UpdateAgentSchema, CreateWhatsAppTemplateSchema, WhatsAppConfigSchema, CreateConversationSchema, CreateFaqSchema, UpdateFaqSchema, CreateInquirySchema, UpdatePromptSchema, CreatePromptSchema, CreatePropertyRequestSchema, CreateSalesRequestSchema, CreateVisitRequestSchema, CreateMortgageRequestSchema, CreateContactSubmissionSchema, CreateAIModelSchema, UpdateAIModelSchema, CreateRequirementSchema, UpdateUserSchema, areaValueToSqft } from "@/types";
+import type { NaturalLanguageSearchOutput, Property, CreatePropertyInput, UpdatePropertyInput, CreateAgencyInput, UpdateAgencyInput, PropertyApprovalResult, CreatePropertyFormValues, UpdatePropertyFormValues, CreateAgencyFormValues, UpdateAgencyFormValues, PropertyFilters, ExtractedPropertyData, SitemapLog, PropertyAmendmentResult, RewritePropertyDetailsOutput, PropertyAssuranceResult, Agent, CreateAgentFormValues, UpdateAgentFormValues, StructuredLocation, CreateConversationFormValues, CreateUserActivityInput, PropertyImageUpdateResult, CreateFaqFormValues, UpdateFaqFormValues, CreateInquiryFormValues, InquiryStatus, UpdatePromptFormValues, CreatePromptFormValues, User, CreatePropertyRequestFormValues, CreateSalesRequestFormValues, CreateVisitRequestFormValues, CreateMortgageRequestFormValues, CreateContactSubmissionFormValues, PropertyActivityEvent, UserPreferences, AIModel, CreateAIModelFormValues, UpdateAIModelFormValues, CreateRequirementFormValues, Requirement, UpdateUserFormValues, LandDetails, PlotDetails, ApartmentUnit } from "@/types";
+import { CreatePropertySchema, UpdatePropertySchema, CreateAgencySchema, UpdateAgencySchema, PropertyPurposeSchema, PropertyCategorySchema, PropertyUsageTypeSchema, CreateAgentSchema, UpdateAgentSchema, CreateConversationSchema, CreateFaqSchema, UpdateFaqSchema, CreateInquirySchema, UpdatePromptSchema, CreatePromptSchema, CreatePropertyRequestSchema, CreateSalesRequestSchema, CreateVisitRequestSchema, CreateMortgageRequestSchema, CreateContactSubmissionSchema, CreateAIModelSchema, UpdateAIModelSchema, CreateRequirementSchema, UpdateUserSchema, areaValueToSqft } from "@/types";
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
 import { z } from "zod";
 import { runPropertyApproval as runPropertyApprovalFlow } from "@/services/ai/property-approval-flow";
@@ -20,7 +20,6 @@ import { runPropertyAmendment as runPropertyAmendmentFlow } from "@/services/ai/
 import { runPropertyAssurance as runPropertyAssuranceFlow } from "@/services/ai/property-assurance-flow";
 import { rewritePropertyDetails } from "@/services/ai/rewrite-property-details-flow";
 import { parseAdminFilter } from "@/services/ai/parse-admin-filter-flow";
-import { getWhatsAppConfig, createWhatsAppTemplate, deleteWhatsAppTemplate, updateWhatsAppConfig, sendWhatsAppMessage as sendWhatsAppMessageService } from '@/services/whatsapp-service';
 import { createMessage as createMessageService, createConversation as createConversationService, deleteConversation as deleteConversationService, getConversationById, getMessagesByConversationId, setAiIntervention as setAiInterventionService } from '@/services/conversation-service';
 import { generateFollowUpMessages } from '@/services/ai/ai-follow-up-flow';
 import { suggestQuestions as suggestQuestionsFlow } from '@/services/ai/suggest-questions-flow';
@@ -46,23 +45,6 @@ import { isAgencyLikeAccountType, promoteStoredAccountType } from '@/services/ac
 import { resolvePropertyPostingContext } from '@/services/property-posting-context';
 import { requireIdentity, formatLocationString, firstPositivePrice, cleanPricing, deepMergeJson, normalizeOwnerEntries, normalizeOwnerReferenceEntries, normalizePropertyChangeData, mapPropertyToCreateFormValues } from '@/services/property/action-helpers';
 
-export async function updateWhatsAppConfigAction(
-  data: WhatsAppConfig
-): Promise<{ success: boolean; error?: string | null }> {
-  try {
-    const validatedData = WhatsAppConfigSchema.parse(data);
-    await updateWhatsAppConfig(validatedData);
-    revalidatePath('/manage/settings/integration/whatsapp');
-    return { success: true, error: null };
-  } catch (e: any) {
-    await logProblem(e, 'updateWhatsAppConfigAction');
-    if (e instanceof z.ZodError) {
-      return { success: false, error: e.message };
-    }
-    return { success: false, error: 'An unexpected server error occurred.' };
-  }
-}
-
 export async function clearSiteDevLogsAction(): Promise<{ success: boolean; error?: string }> {
   try {
     await clearSiteDevLogs();
@@ -73,35 +55,6 @@ export async function clearSiteDevLogsAction(): Promise<{ success: boolean; erro
     await logProblem(error, 'clearSiteDevLogsAction');
     return { success: false, error: 'Failed to clear dev logs.' };
   }
-}
-
-
-export async function createWhatsAppTemplateAction(
-  data: CreateWhatsAppTemplateFormValues
-): Promise<{ success: boolean; error?: string | null; templateId?: string | null }> {
-  try {
-    const validatedData = CreateWhatsAppTemplateSchema.parse(data);
-    const templateId = await createWhatsAppTemplate(validatedData);
-    revalidatePath('/manage/settings/integration/whatsapp-template');
-    return { success: true, templateId, error: null };
-  } catch (e: any) {
-    await logProblem(e, 'createWhatsAppTemplateAction');
-    if (e instanceof z.ZodError) {
-        return { success: false, error: e.message, templateId: null };
-    }
-    return { success: false, error: "An unexpected server error occurred.", templateId: null };
-  }
-}
-
-export async function deleteWhatsAppTemplateAction(templateId: string) {
-    try {
-        await deleteWhatsAppTemplate(templateId);
-        revalidatePath('/manage/settings/integration/whatsapp-template');
-        return { success: true };
-    } catch (error: any) {
-        await logProblem(error, `deleteWhatsAppTemplateAction (ID: ${templateId})`);
-        return { success: false, error: "Failed to delete template." };
-    }
 }
 
 // Message Actions
@@ -118,83 +71,11 @@ export async function sendMessageAction(conversationId: string, formData: FormDa
     if (!conversation) {
       return { success: false, error: "Conversation not found." };
     }
-    if (!conversation.customerPhone) {
-      return { success: false, error: "Customer phone number is missing." };
-    }
-
-    // 2. Prepare the data for the WhatsApp API and send it
-    await sendWhatsAppMessageService(conversation.customerPhone, messageText);
-    
-    // 3. If the API call was successful, then save the message to our own database
     await createMessageService(conversationId, messageText, 'agent');
     revalidatePath(`/manage/messages/${conversationId}`);
     return { success: true };
   } catch (e: any) {
-    // The underlying sendWhatsAppMessageService will now do the detailed logging,
-    // so we only need to catch it to return a failure state to the UI.
     return { success: false, error: e.message || "Failed to send message." };
-  }
-}
-
-export async function sendTemplateMessageAction(conversationId: string, template: WhatsAppTemplate) {
-  try {
-    const config = await getWhatsAppConfig();
-    const conversation = await getConversationById(conversationId);
-
-    if (!config.apiToken || !config.phoneNumberId) {
-      return { success: false, error: "WhatsApp integration is not fully configured. Please set API Token and Phone Number ID." };
-    }
-    if (!conversation || !conversation.customerPhone) {
-      return { success: false, error: "Conversation or customer phone number not found." };
-    }
-
-    const apiData = {
-      messaging_product: "whatsapp",
-      to: conversation.customerPhone,
-      type: "template",
-      template: {
-        name: template.name,
-        language: {
-          code: template.language
-        }
-      }
-    };
-
-    console.log("--- WhatsApp Template API Request Body ---");
-    console.log(JSON.stringify(apiData, null, 2));
-
-    const response = await fetch(
-      `https://graph.facebook.com/v22.0/${config.phoneNumberId}/messages`,
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${config.apiToken}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(apiData)
-      }
-    );
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      const errorMessage = errorData.error?.message || 'Unknown WhatsApp API Error';
-      
-      // Log the detailed error
-      await logProblem(new Error(`WhatsApp API Error: ${errorMessage}`), `sendTemplateMessageAction (WhatsApp API)`, {
-          method: 'POST',
-          requestBody: apiData,
-          responseBody: errorData,
-      });
-
-      return { success: false, error: `WhatsApp API Error: ${errorMessage}` };
-    }
-
-    await createMessageService(conversationId, template.body, 'agent');
-    revalidatePath(`/manage/messages/${conversationId}`);
-    return { success: true };
-  } catch (e: any) {
-    await logProblem(e, `sendTemplateMessageAction (Conversation ID: ${conversationId})`);
-    return { success: false, error: e.message || "Failed to send template message." };
   }
 }
 
@@ -285,14 +166,9 @@ export async function sendAiFollowUpAction(conversationId: string): Promise<{ su
       return { success: false, error: 'AI failed to generate follow-up messages.' };
     }
 
-    // Send the messages one by one
     for (const messageText of aiResult.messages) {
-      // 1. Send via WhatsApp API
-      await sendWhatsAppMessageService(conversation.customerPhone, messageText);
-      // 2. Save to our database
       await createMessageService(conversationId, messageText, 'agent');
-      // 3. Wait a bit to seem more natural
-      await delay(1500); // 1.5 second delay
+      await delay(1500);
     }
     
     revalidatePath(`/manage/messages/${conversationId}`);

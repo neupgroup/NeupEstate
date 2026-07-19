@@ -77,39 +77,6 @@ export type CreateConversationInput = CreateConversationFormValues & {
   userId?: string;
 };
 
-// WhatsApp
-export const WhatsAppTemplateCategorySchema = z.enum(["MARKETING", "UTILITY", "AUTHENTICATION"]);
-export const WhatsAppTemplateLanguageSchema = z.enum(["af","sq","ar","ar_EG","ar_AE","ar_LB","ar_MA","ar_QA","az","be_BY","bn","bn_IN","bg","ca","zh_CN","zh_HK","zh_TW","hr","cs","da","prs_AF","nl","nl_BE","en","en_GB","en_US","en_AE","en_AU","en_CA","en_GH","en_IE","en_IN","en_JM","en_MY","en_NZ","en_QA","en_SG","en_UG","en_ZA","et","fil","fi","fr","fr_BE","fr_CA","fr_CH","fr_CI","fr_MA","ka","de","de_AT","de_CH","el","gu","ha","he","hi","hu","id","ga","it","ja","kn","kk","rw_RW","ko","ky_KG","lo","lv","lt","mk","ms","ml","mr","nb","ps_AF","fa","pl","pt_BR","pt_PT","pa","ro","ru","sr","si_LK","sk","sl","es","es_AR","es_CL","es_CO","es_CR","es_DO","es_EC","es_HN","es_MX","es_PA","es_PE","es_ES","es_UY","sw","sv","ta","te","th","tr","uk","ur","uz","vi","zu"]);
-
-export const WhatsAppConfigSchema = z.object({
-    apiToken: z.string().optional(),
-    phoneNumberId: z.string().optional(),
-    accountId: z.string().optional(),
-    webhookVerifyToken: z.string().optional(),
-});
-export type WhatsAppConfig = z.infer<typeof WhatsAppConfigSchema>;
-
-export const CreateWhatsAppTemplateSchema = z.object({
-  name: z.string().min(3, "Template name is required.").regex(/^[a-z0-9_]+$/, "Name can only contain lowercase letters, numbers, and underscores."),
-  category: WhatsAppTemplateCategorySchema,
-  language: WhatsAppTemplateLanguageSchema,
-  body: z.string().min(1, "Template body is required."),
-  isPreapproved: z.boolean().default(false),
-});
-export type CreateWhatsAppTemplateFormValues = z.infer<typeof CreateWhatsAppTemplateSchema>;
-export type CreateWhatsAppTemplateInput = CreateWhatsAppTemplateFormValues;
-
-export interface WhatsAppTemplate {
-  id: string;
-  name: string;
-  category: z.infer<typeof WhatsAppTemplateCategorySchema>;
-  language: z.infer<typeof WhatsAppTemplateLanguageSchema>;
-  body: string;
-  status: 'PENDING' | 'APPROVED' | 'REJECTED';
-  createdAt: string;
-  isPreapproved: boolean;
-}
-
 // Contact Submission
 export const ContactSubmissionStatusSchema = z.enum(['new', 'read', 'archived']);
 
@@ -134,4 +101,3 @@ export interface ContactSubmission {
   status: z.infer<typeof ContactSubmissionStatusSchema>;
   createdAt: string; // ISO string
 }
-
