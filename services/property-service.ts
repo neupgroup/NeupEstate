@@ -4,7 +4,6 @@ import { prisma } from '@/core/database/prisma';
 import { logProblem } from './problem-service';
 import type { Property, CreatePropertyInput, PropertyFilters, ExtractedPropertyData, UpdatePropertyInput } from '@/types';
 import { areaValueToSqft } from '@/types';
-import { Prisma, PropertyType, PropertyStatus, PropertyPurpose } from '@/core/database/prisma';
 import { mapPurposeToEnum, mapPurposeFromEnum, mapTypeToEnum, mapTypeFromEnum, mapStatusToEnum, mapStatusFromEnum } from '@/inapp/database/adapters';
 import slugify from 'slugify';
 import { randomBytes } from 'crypto';
@@ -61,16 +60,32 @@ export interface BridgePropertyResult {
   offset: number;
 }
 
-const PROPERTY_INCLUDE = Prisma.validator<Prisma.PropertyInclude>()({
+const PROPERTY_TYPE = {
+  HOUSE: 'HOUSE',
+  APARTMENT: 'APARTMENT',
+  LAND: 'LAND',
+  COMMERCIAL: 'COMMERCIAL',
+} as const;
+
+type PropertyTypeValue = typeof PROPERTY_TYPE[keyof typeof PROPERTY_TYPE];
+
+const PROPERTY_STATUS = {
+  PENDING: 'PENDING',
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED',
+  AWAITING_CREATION: 'AWAITING_CREATION',
+} as const;
+
+const PROPERTY_INCLUDE = {
   media:           { where: { isDeleted: false }, orderBy: { sortOrder: 'asc' as const } },
   houseDetail:     true,
   apartmentDetail: true,
   landDetail:      true,
   commercialDetail: true,
   prices:          true,
-  owners:          { include: { ownerClient: { include: { contacts: true } } }, orderBy: [{ isPrimaryOwner: 'desc' }, { id: 'asc' }] },
+  owners:          { include: { ownerClient: { include: { contacts: true } } }, orderBy: [{ isPrimaryOwner: 'desc' as const }, { id: 'asc' as const }] },
   documents:       true,
-});
+};
 
 const BRIDGE_PROPERTY_FIELDS = [
   'id',
@@ -325,22 +340,22 @@ function mapRecord(record: any): Property {
   let bikeParkingSpots: number | undefined, roadAccess: number | undefined;
   let facing: string | undefined;
 
-  if (record.type === PropertyType.HOUSE && house) {
+  if (record.type === PROPERTY_TYPE.HOUSE && house) {
     bedrooms = house.bedrooms; bathrooms = house.bathrooms;
     floors = house.floors; kitchens = house.kitchens;
     livingRooms = house.livingRooms; diningRooms = house.diningRooms;
     carParkingSpots = house.carParkingSpots; bikeParkingSpots = house.bikeParkingSpots;
     area = Number(house.area); facing = house.facing || undefined;
     roadAccess = Number(house.roadAccess) || undefined;
-  } else if (record.type === PropertyType.APARTMENT && apartment) {
+  } else if (record.type === PROPERTY_TYPE.APARTMENT && apartment) {
     bedrooms = apartment.bedrooms; bathrooms = apartment.bathrooms;
     onFloor = apartment.onFloor; floors = apartment.totalFloors;
     carParkingSpots = apartment.carParkingSpots; bikeParkingSpots = apartment.bikeParkingSpots;
     area = Number(apartment.superArea);
-  } else if (record.type === PropertyType.LAND && land) {
+  } else if (record.type === PROPERTY_TYPE.LAND && land) {
     area = Number(land.area); facing = land.facing || undefined;
     roadAccess = Number(land.roadAccess) || undefined;
-  } else if (record.type === PropertyType.COMMERCIAL && commercial) {
+  } else if (record.type === PROPERTY_TYPE.COMMERCIAL && commercial) {
     floors = commercial.floor; area = Number(commercial.usableArea);
   }
 
@@ -373,7 +388,7 @@ function mapRecord(record: any): Property {
     purpose,
     purposes:         [purpose],
     category,
-    type:             record.type === PropertyType.COMMERCIAL ? 'Commercial' : 'Residential',
+    type:             record.type === PROPERTY_TYPE.COMMERCIAL ? 'Commercial' : 'Residential',
     images,
     amenities:        normalizeStringArray(record.amenities),
     agency:           { id: record.agency || 'unknown', name: record.agency || 'Owner', logoUrl: 'https://placehold.co/200x80.png' },
@@ -473,9 +488,9 @@ export async function getPaginatedProperties(opts: {
     const andClauses: any[] = [];
     const ownershipClauses: any[] = [];
 
-    if (!opts.includeInactive) where.status = PropertyStatus.ACTIVE;
+    if (!opts.includeInactive) where.status = PROPERTY_STATUS.ACTIVE;
     if (opts.excludeArchived && !filters.status) {
-      where.status = { not: PropertyStatus.ARCHIVED };
+      where.status = { not: PROPERTY_STATUS.ARCHIVED };
     }
     if (filters.id) where.id = filters.id;
     if (filters.ids?.length) where.id = { in: filters.ids };
@@ -606,23 +621,23 @@ export async function getPropertyBySlug(slug: string, opts: { includeInactive?: 
 
 export async function getFeaturedProperties(limit = 4): Promise<Property[]> {
   try {
-    const records = await prisma.property.findMany({ where: { isFeatured: true, status: PropertyStatus.ACTIVE }, orderBy: { updatedAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
+    const records = await prisma.property.findMany({ where: { isFeatured: true, status: PROPERTY_STATUS.ACTIVE }, orderBy: { updatedAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
     if (records.length > 0) return hydratePropertyAccountLabels(records.map(mapRecord));
-    const fallback = await prisma.property.findMany({ where: { status: PropertyStatus.ACTIVE }, orderBy: { updatedAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
+    const fallback = await prisma.property.findMany({ where: { status: PROPERTY_STATUS.ACTIVE }, orderBy: { updatedAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
     return hydratePropertyAccountLabels(fallback.map(mapRecord));
   } catch (e) { await logProblem(e, 'getFeaturedProperties'); return []; }
 }
 
 export async function getRecentProperties(limit = 4): Promise<Property[]> {
   try {
-    const records = await prisma.property.findMany({ where: { status: PropertyStatus.ACTIVE }, orderBy: { createdAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
+    const records = await prisma.property.findMany({ where: { status: PROPERTY_STATUS.ACTIVE }, orderBy: { createdAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
     return hydratePropertyAccountLabels(records.map(mapRecord));
   } catch (e) { await logProblem(e, 'getRecentProperties'); return []; }
 }
 
 export async function getPropertiesByPurpose(purpose: 'Sale' | 'Rent' | 'Lease', limit = 4): Promise<Property[]> {
   try {
-    const records = await prisma.property.findMany({ where: { purpose: mapPurposeToEnum(purpose), status: PropertyStatus.ACTIVE }, orderBy: { updatedAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
+    const records = await prisma.property.findMany({ where: { purpose: mapPurposeToEnum(purpose), status: PROPERTY_STATUS.ACTIVE }, orderBy: { updatedAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
     return hydratePropertyAccountLabels(records.map(mapRecord));
   } catch (e) { await logProblem(e, 'getPropertiesByPurpose'); return []; }
 }
@@ -633,7 +648,7 @@ export async function getFeaturedProjects(limit = 4): Promise<Property[]> {
 
 export async function getPremiumProperties(limit = 4): Promise<Property[]> {
   try {
-    const records = await prisma.property.findMany({ where: { status: PropertyStatus.ACTIVE, displayPrice: { gt: 0 } }, orderBy: { displayPrice: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
+    const records = await prisma.property.findMany({ where: { status: PROPERTY_STATUS.ACTIVE, displayPrice: { gt: 0 } }, orderBy: { displayPrice: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
     return hydratePropertyAccountLabels(records.map(mapRecord));
   } catch (e) { await logProblem(e, 'getPremiumProperties'); return []; }
 }
@@ -645,7 +660,7 @@ export async function getLuxuriousProperties(limit = 4): Promise<Property[]> {
 export async function getPendingProperties(limit = 50): Promise<Property[]> {
   try {
     const records = await prisma.property.findMany({
-      where: { status: { in: [PropertyStatus.AWAITING_CREATION, PropertyStatus.PENDING] } },
+      where: { status: { in: [PROPERTY_STATUS.AWAITING_CREATION, PROPERTY_STATUS.PENDING] } },
       orderBy: { updatedAt: 'desc' },
       take: limit,
       include: PROPERTY_INCLUDE,
@@ -912,7 +927,7 @@ export async function getPropertyLogs(propertyId: string): Promise<Array<{
 export async function getPropertiesByAgent(agentId: string, opts: { includeInactive?: boolean } = {}): Promise<Property[]> {
   try {
     const where: any = { agent: agentId };
-    if (!opts.includeInactive) where.status = PropertyStatus.ACTIVE;
+    if (!opts.includeInactive) where.status = PROPERTY_STATUS.ACTIVE;
     const records = await prisma.property.findMany({ where, orderBy: { updatedAt: 'desc' }, include: PROPERTY_INCLUDE });
     return hydratePropertyAccountLabels(records.map(mapRecord));
   } catch (e) { await logProblem(e, `getPropertiesByAgent ${agentId}`); return []; }
@@ -927,7 +942,7 @@ export async function getBridgePropertiesByAccount(opts: BridgePropertyQuery): P
 
     if (opts.agencyId) where.agency = opts.agencyId;
     if (opts.agentId) where.agent = opts.agentId;
-    if (!opts.includeInactive) where.status = PropertyStatus.ACTIVE;
+    if (!opts.includeInactive) where.status = PROPERTY_STATUS.ACTIVE;
 
     const [totalCount, records] = await Promise.all([
       prisma.property.count({ where }),
@@ -1081,6 +1096,10 @@ function buildPropertySlug(input: { slug?: string | null; title?: string | null 
   return joined.substring(0, 120);
 }
 
+function isUniqueConstraintError(error: unknown): error is { code: 'P2002' } {
+  return Boolean(error && typeof error === 'object' && 'code' in error && error.code === 'P2002');
+}
+
 async function createPropertyRecordWithGeneratedSlug(data: Record<string, any>) {
   const primarySlug = buildPropertySlug(data);
 
@@ -1090,10 +1109,7 @@ async function createPropertyRecordWithGeneratedSlug(data: Record<string, any>) 
     });
   } catch (error) {
     const fallbackSlug = buildPropertySlug(data, true);
-    if (
-      error instanceof Prisma.PrismaClientKnownRequestError &&
-      error.code === 'P2002'
-    ) {
+    if (isUniqueConstraintError(error)) {
       return prisma.property.create({
         data: { ...data, slug: fallbackSlug } as any,
       });
@@ -1170,27 +1186,27 @@ async function resolveMergedPropertyData(id: string, patch: Partial<CreateProper
   return merged;
 }
 
-async function upsertDetailTable(propertyId: string, type: PropertyType, d: any) {
+async function upsertDetailTable(propertyId: string, type: PropertyTypeValue, d: any) {
   const area = areaValueToSqft(d.area);
-  if (type === PropertyType.HOUSE) {
+  if (type === PROPERTY_TYPE.HOUSE) {
     await prisma.propertyHouseDetail.upsert({
       where: { propertyId },
       create: { propertyId, bedrooms: d.bedrooms ?? 0, bathrooms: d.bathrooms ?? 0, floors: d.floors ?? 0, kitchens: d.kitchens ?? 0, livingRooms: d.livingRooms ?? 0, diningRooms: d.diningRooms ?? 0, carParkingSpots: d.carParkingSpots ?? 0, bikeParkingSpots: d.bikeParkingSpots ?? 0, furnished: false, buildYear: 0, area, facing: d.facing ?? '', roadAccess: d.roadAccess ?? 0 },
       update: { bedrooms: d.bedrooms ?? 0, bathrooms: d.bathrooms ?? 0, floors: d.floors ?? 0, kitchens: d.kitchens ?? 0, livingRooms: d.livingRooms ?? 0, diningRooms: d.diningRooms ?? 0, carParkingSpots: d.carParkingSpots ?? 0, bikeParkingSpots: d.bikeParkingSpots ?? 0, area, facing: d.facing ?? '', roadAccess: d.roadAccess ?? 0 },
     });
-  } else if (type === PropertyType.APARTMENT) {
+  } else if (type === PROPERTY_TYPE.APARTMENT) {
     await prisma.propertyApartmentDetail.upsert({
       where: { propertyId },
       create: { propertyId, bedrooms: d.bedrooms ?? 0, bathrooms: d.bathrooms ?? 0, onFloor: d.onFloor ?? 0, totalFloors: d.floors ?? 0, balconies: 0, lifts: 0, carParkingSpots: d.carParkingSpots ?? 0, bikeParkingSpots: d.bikeParkingSpots ?? 0, furnished: false, blockName: '', unitNumber: '', superArea: area, builtUpArea: area, maintenanceFee: 0 },
       update: { bedrooms: d.bedrooms ?? 0, bathrooms: d.bathrooms ?? 0, onFloor: d.onFloor ?? 0, totalFloors: d.floors ?? 0, carParkingSpots: d.carParkingSpots ?? 0, bikeParkingSpots: d.bikeParkingSpots ?? 0, superArea: area, builtUpArea: area },
     });
-  } else if (type === PropertyType.LAND) {
+  } else if (type === PROPERTY_TYPE.LAND) {
     await prisma.propertyLandDetail.upsert({
       where: { propertyId },
       create: { propertyId, area, facing: d.facing ?? '', roadAccess: d.roadAccess ?? 0, plotShape: '', cornerPlot: false, waterAvailable: false, electricityAvailable: false, boundaryWall: false },
       update: { area, facing: d.facing ?? '', roadAccess: d.roadAccess ?? 0 },
     });
-  } else if (type === PropertyType.COMMERCIAL) {
+  } else if (type === PROPERTY_TYPE.COMMERCIAL) {
     await prisma.propertyCommercialDetail.upsert({
       where: { propertyId },
       create: { propertyId, floor: d.floors ?? 0, washrooms: d.bathrooms ?? 0, parkingSpots: d.carParkingSpots ?? 0, frontage: 0, usableArea: area, buildingType: '' },
@@ -1331,7 +1347,7 @@ export async function updatePropertyImages(id: string, images: string[]): Promis
 
 export async function approveProperty(propertyId: string): Promise<void> {
   try {
-    await prisma.property.update({ where: { id: propertyId }, data: { status: PropertyStatus.ACTIVE, isApproved: true } });
+    await prisma.property.update({ where: { id: propertyId }, data: { status: PROPERTY_STATUS.ACTIVE, isApproved: true } });
   } catch (e) { await logProblem(e, `approveProperty ${propertyId}`); throw new Error('Failed to approve property.'); }
 }
 
