@@ -25,5 +25,22 @@ export function appendWorkingProfileV1(href: string, workingProfile?: string | n
 
   const url = new URL(href, "http://local");
   url.searchParams.set("workingProfile", workingProfile);
-  return `${url.pathname}${url.search}`;
+  return url.origin === "http://local" ? `${url.pathname}${url.search}` : url.toString();
+}
+
+export function appendManageProfileParamV1(
+  href: string,
+  params: { selectedProfile?: string | null; workingProfile?: string | null },
+) {
+  const selectedProfile = params.selectedProfile?.trim();
+  const workingProfile = params.workingProfile?.trim();
+  const url = new URL(href, "http://local");
+
+  if (selectedProfile) {
+    url.searchParams.set("selectedProfile", selectedProfile);
+  } else if (workingProfile) {
+    url.searchParams.set("workingProfile", workingProfile);
+  }
+
+  return url.origin === "http://local" ? `${url.pathname}${url.search}` : url.toString();
 }

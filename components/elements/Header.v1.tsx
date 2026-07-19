@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { ExternalLink, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/core/utils";
 import { isActivePublicHrefV1 } from "@/components/logic/PublicNavSelection.v1";
-import { appendWorkingProfileV1, getLongestMatchingManageNavHrefV1 } from "@/components/logic/ManageNavSelection.v1";
+import { appendManageProfileParamV1, getLongestMatchingManageNavHrefV1 } from "@/components/logic/ManageNavSelection.v1";
 import { manageNav } from "@/components/manage-nav";
 import { ProfileV1 } from "@/components/elements/Profile.v1";
 import { AccountDisplayTabV1 } from "@/components/elements/AccountDisplayTab.v1";
@@ -23,6 +23,7 @@ export function HeaderV1({
   pathname,
   isManage,
   selectedProfile,
+  workingProfile,
   menuOpen,
   setMenuOpen,
   user,
@@ -30,6 +31,7 @@ export function HeaderV1({
   pathname: string;
   isManage: boolean;
   selectedProfile: string | null;
+  workingProfile: string | null;
   menuOpen: boolean;
   setMenuOpen: (open: boolean) => void;
   user: SessionUser | null;
@@ -41,8 +43,9 @@ export function HeaderV1({
 
   useEffect(() => {
     const normalizedSelectedProfile = selectedProfile?.trim() || null;
+    const normalizedWorkingProfile = workingProfile?.trim() || null;
     const normalizedDefaultProfile = user?.workingProfile?.trim() || null;
-    const profileIdToShow = normalizedSelectedProfile ?? normalizedDefaultProfile;
+    const profileIdToShow = normalizedSelectedProfile ?? normalizedWorkingProfile ?? normalizedDefaultProfile;
 
     if (!profileIdToShow || profileIdToShow === user?.accountId) {
       setSelectedProfileName(null);
@@ -90,7 +93,7 @@ export function HeaderV1({
     void resolveSelectedProfile();
 
     return () => controller.abort();
-  }, [activeProfileName, selectedProfile, user?.accountId, user?.workingProfile]);
+  }, [activeProfileName, selectedProfile, user?.accountId, user?.workingProfile, workingProfile]);
 
   const renderPublicNav = () =>
     publicNavLinks.map((link) => {
@@ -125,7 +128,7 @@ export function HeaderV1({
       return (
         <Link
           key={item.href}
-          href={appendWorkingProfileV1(item.href, selectedProfile)}
+          href={appendManageProfileParamV1(item.href, { selectedProfile, workingProfile })}
           onClick={() => setMenuOpen(false)}
           className={cn(
             buttonVariants({ variant: "plain", size: "sm" }),
@@ -136,7 +139,8 @@ export function HeaderV1({
           )}
         >
           <Icon className="mr-2 h-4 w-4 shrink-0" />
-          {item.label}
+          <span className="min-w-0 truncate">{item.label}</span>
+          {item.external && <ExternalLink className="ml-auto h-3.5 w-3.5 shrink-0" />}
         </Link>
       );
     });

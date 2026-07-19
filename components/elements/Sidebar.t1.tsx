@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
+import { ExternalLink } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/core/utils";
 import { manageNav } from "@/components/manage-nav";
-import { appendWorkingProfileV1, getLongestMatchingManageNavHrefV1 } from "@/components/logic/ManageNavSelection.v1";
+import { appendManageProfileParamV1, getLongestMatchingManageNavHrefV1 } from "@/components/logic/ManageNavSelection.v1";
 
 type SidebarProps = {
   canDashboard?: boolean;
@@ -32,6 +33,7 @@ export function SidebarT1(props: SidebarProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const activeHref = getLongestMatchingManageNavHrefV1(pathname, manageNav);
+  const selectedProfile = searchParams.get("selectedProfile");
   const workingProfile = searchParams.get("workingProfile");
 
   const permissionMap: Record<string, boolean> = {
@@ -89,7 +91,7 @@ export function SidebarT1(props: SidebarProps) {
             return (
               <Link
                 key={item.href}
-                href={appendWorkingProfileV1(item.href, workingProfile)}
+                href={appendManageProfileParamV1(item.href, { selectedProfile, workingProfile })}
                 className={cn(
                   buttonVariants({ variant: "plain" }),
                   "group w-full justify-start px-4 py-2 text-left focus-visible:bg-primary/10 focus-visible:text-primary focus-visible:ring-0",
@@ -99,7 +101,8 @@ export function SidebarT1(props: SidebarProps) {
                 )}
               >
                 <Icon className="mr-2 h-4 w-4" />
-                {item.label}
+                <span className="min-w-0 truncate">{item.label}</span>
+                {item.external && <ExternalLink className="ml-auto h-3.5 w-3.5 shrink-0" />}
               </Link>
             );
           })}

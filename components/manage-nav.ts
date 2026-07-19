@@ -30,7 +30,7 @@ import {
 } from "lucide-react";
 
 export type ManageNavItem =
-  | { type: "link"; href: string; label: string; icon: ComponentType<{ className?: string }> }
+  | { type: "link"; href: string; label: string; icon: ComponentType<{ className?: string }>; external?: boolean }
   | { type: "heading"; label: string };
 
 export const manageNav: ManageNavItem[] = [
@@ -49,7 +49,7 @@ export const manageNav: ManageNavItem[] = [
   { type: "link", href: "/manage/leads/shared", label: "Shared Leads", icon: Users },
   { type: "link", href: "/manage/leads/alerts", label: "Alerts", icon: Bell },
   { type: "heading", label: "CRM" },
-  { type: "link", href: "/manage/messages", label: "Messages", icon: MessageSquareHeart },
+  { type: "link", href: "https://neupgroup.com/messages", label: "Messages", icon: MessageSquareHeart, external: true },
   { type: "link", href: "/manage/inquiries", label: "Inquiries", icon: FileQuestion },
   { type: "link", href: "/manage/saved", label: "Saved Properties", icon: Bookmark },
   { type: "link", href: "/manage/requests", label: "Property Requests", icon: FileSearch },
@@ -99,5 +99,5 @@ export function appendWorkingProfile(href: string, workingProfile?: string | nul
 
   const url = new URL(href, "http://local");
   url.searchParams.set("workingProfile", workingProfile);
-  return `${url.pathname}${url.search}`;
+  return url.origin === "http://local" ? `${url.pathname}${url.search}` : url.toString();
 }
