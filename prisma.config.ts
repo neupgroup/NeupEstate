@@ -1,9 +1,15 @@
-// @ts-ignore
-import { defineConfig } from 'prisma'
+import "dotenv/config";
+import { defineConfig, env } from "@prisma/config";
+
+// Define the output, the prisma generation at the schema.prisma file.
+
 export default defineConfig({
-  datasources: {
-    db: {
-      url: process.env.DATABASE_URL || 'postgresql://user:password@localhost:5432/neupestate',
-    },
+  schema: "prisma/schema.prisma",
+  datasource: {
+    url: env("DATABASE_URL"),
+    shadowDatabaseUrl: process.env.SHADOW_DATABASE_URL,
   },
-})
+  migrations: {
+    path: "prisma/migrations",
+  },
+});

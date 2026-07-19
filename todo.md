@@ -1,5 +1,6 @@
 # TODO
 
+- [ ] Reconcile Prisma CLI/client versions and datasource configuration. `npx prisma generate` currently runs `prisma@5.22.0` while `@prisma/client` resolves to `7.8.0`, so the CLI still requires `datasource db.url` in `prisma/schema.prisma` instead of honoring the newer `prisma.config.ts` datasource configuration.
 - [ ] Reconcile the deployed `PropertyStatus` enum with `prisma/schema.prisma`. Production still rejects `AWAITING_DELETION` even though the schema and migrations now include it.
 - [ ] Fix the current `npx tsc --noEmit` failures, including unresolved legacy `@/logica/*` imports, missing Prisma typing dependencies, and widespread implicit `any` errors.
 - [ ] Fix the current `services/bridge-property-service.ts` lint baseline: existing explicit `any` usages and unused destructured control fields make `npx eslint services/bridge-property-service.ts` fail.

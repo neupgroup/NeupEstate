@@ -1,0 +1,1212 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+  output          = "./client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================================================
+// Enums
+// ============================================================================
+
+enum PropertyType {
+  HOUSE
+  APARTMENT
+  LAND
+  COMMERCIAL
+}
+
+enum PropertyPurpose {
+  SALE
+  RENT
+  LEASE
+}
+
+enum PropertyStatus {
+  AWAITING_CREATION
+  AWAITING_DELETION
+  PENDING
+  ACTIVE
+  SOLD
+  RENTED
+  ARCHIVED
+}
+
+enum Reaction {
+  Liked
+  Disliked
+  Reported
+}
+
+enum PropertyCompetitionStatus {
+  VERIFIED
+  UNVERIFIED
+  DECLINED
+}
+
+// ============================================================================
+// Account & Activity
+// ============================================================================
+
+model Account {
+  id                              String                @id // ssid from NeupID Silent SSO
+  neupId                          String?               @unique @map("neup_id")
+  accountType                     String
+  createdOn                       DateTime              @default(now()) @map("created_on")
+  accessedOn                      DateTime              @default(now()) @map("accessed_on")
+  displayName                     String? // denormalized from NeupID — set on first create
+  displayImage                    String? // denormalized from NeupID — set on first create
+  connectionId                    String?
+  roleId                          String?               @map("role_id")
+  agency                          String?
+  agent                           String?
+  workingProfile                  String?               @map("working_profile")
+  role                            AuthzRole?            @relation("AccountPrimaryRole", fields: [roleId], references: [id], onDelete: SetNull)
+  accessRows                      AccountAccess[]
+  agencyAccount                   Account?              @relation("AccountAgency", fields: [agency], references: [id], onDelete: SetNull)
+  agentAccount                    Account?              @relation("AccountAgent", fields: [agent], references: [id], onDelete: SetNull)
+  workingProfileAccount           Account?              @relation("AccountWorkingProfile", fields: [workingProfile], references: [id], onDelete: SetNull)
+  agencyOf                        Account[]             @relation("AccountAgency")
+  agentOf                         Account[]             @relation("AccountAgent")
+  workingProfileOf                Account[]             @relation("AccountWorkingProfile")
+  agencyAgentMapAsAgency          AgencyAgentMap[]      @relation("AgencyAgentMapAgency")
+  agencyAgentMapAsAgent           AgencyAgentMap[]      @relation("AgencyAgentMapAgent")
+  leadOwnerClientLeads            ClientLead[]          @relation("ClientLeadOwner")
+  leadOwnerSharedLeads            SharedLead[]          @relation("SharedLeadOwner")
+  intelligenceMappings            IntelligenceMapping[]
+  intelligenceAlerts              IntelligenceAlert[]
+  propertyChanges                 PropertyChange[]
+  createdPropertyChanges          PropertyChange[]      @relation("PropertyChangeCreatedBy")
+  propertyChangesForProfile       PropertyChange[]      @relation("PropertyChangeCreatedFor")
+  propertyChangesByWorkingProfile PropertyChange[]      @relation("PropertyChangeWorkingProfile")
+
+  @@index([agency])
+  @@index([agent])
+  @@index([workingProfile])
+  @@map("account")
+}
+
+model Activity {
+  id         String   @id @default(cuid())
+  trackerId  String
+  title      String
+  details    Json
+  activityOn DateTime @default(now())
+  ipAddress  String
+
+  @@index([trackerId])
+  @@map("activity")
+}
+
+// ============================================================================
+// Property
+// ============================================================================
+
+model Property {
+  id                 String          @id @default(cuid())
+  slug               String          @unique
+  title              String          @db.VarChar(255)
+  description        String
+  coverImage         String          @db.VarChar(255)
+  type               PropertyType
+  purpose            PropertyPurpose
+  status             PropertyStatus  @default(PENDING)
+  currency           String          @db.VarChar(10)
+  displayPrice       Decimal         @db.Decimal(18, 2)
+  displayPriceUnit   String          @db.VarChar(24)
+  areaUnit           String          @db.VarChar(64)
+  locationText       String          @db.VarChar(255)
+  geoLocation        String          @db.VarChar(63)
+  structuredLocation String
+  agency             String?
+  agent              String?
+  details            Json?
+  pricing            Json?
+  roadAccessDetails  Json?
+  distancing         Json?
+  earnings           Json?
+  landDetails        Json?
+  plots              Json?
+  apartmentDetails   Json?
+  metaTags           String[]        @default([])
+  amenities          String[]        @default([])
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  isFeatured         Boolean         @default(false)
+  isApproved         Boolean         @default(false)
+  isDeleted          Boolean         @default(false)
+  customId           String?
+
+  media            PropertyMedia[]
+  houseDetail      PropertyHouseDetail?
+  apartmentDetail  PropertyApartmentDetail?
+  landDetail       PropertyLandDetail?
+  commercialDetail PropertyCommercialDetail?
+  prices           PropertyPrice[]
+  owners           PropertyOwner[]
+  documents        PropertyDocument[]
+  changes          PropertyChange[]
+  links            PropertyLink[]            @relation("PrimaryLinks")
+  linkedBy         PropertyLink[]            @relation("SecondaryLinks")
+  savedBy          SavedProperty[]
+  reactions        ReactedProperty[]
+  views            PropertyView[]
+  competitionMaps  PropertyCompetitionMap[]
+
+  @@index([type])
+  @@index([purpose])
+  @@index([status])
+  @@index([agency])
+  @@index([agent])
+  @@map("property")
+}
+
+model PropertyLog {
+  id          String    @id @default(cuid())
+  propertyId  String    @map("property_id")
+  requestedBy String    @map("requested_by")
+  approvedBy  String?   @map("approved_by")
+  data        Json[]    @default([])
+  requestedOn DateTime  @default(now()) @map("requested_on")
+  approvedOn  DateTime? @map("approved_on")
+
+  @@index([propertyId])
+  @@index([requestedBy])
+  @@index([approvedBy])
+  @@map("property_log")
+}
+
+model PropertyLink {
+  id          String @id @default(cuid())
+  primaryId   String
+  secondaryId String
+
+  primary   Property @relation("PrimaryLinks", fields: [primaryId], references: [id], onDelete: Cascade)
+  secondary Property @relation("SecondaryLinks", fields: [secondaryId], references: [id], onDelete: Cascade)
+
+  @@map("property_link")
+}
+
+model PropertyMedia {
+  id         String   @id @default(cuid())
+  propertyId String
+  type       String
+  url        String   @db.VarChar(500)
+  alt        String   @db.VarChar(255)
+  sortOrder  Int      @default(0)
+  isPrimary  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  isDeleted  Boolean  @default(false)
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@index([propertyId])
+  @@map("property_media")
+}
+
+model PropertyHouseDetail {
+  propertyId       String  @id @unique
+  bedrooms         Int
+  bathrooms        Int
+  floors           Int
+  kitchens         Int
+  livingRooms      Int
+  diningRooms      Int
+  carParkingSpots  Int
+  bikeParkingSpots Int
+  furnished        Boolean
+  buildYear        Int
+  area             Decimal @db.Decimal(18, 8)
+  facing           String  @db.VarChar(50)
+  roadAccess       Decimal @db.Decimal(18, 8)
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("property_house_detail")
+}
+
+model PropertyApartmentDetail {
+  propertyId       String  @id @unique
+  bedrooms         Int
+  bathrooms        Int
+  onFloor          Int
+  totalFloors      Int
+  balconies        Int
+  lifts            Int
+  carParkingSpots  Int
+  bikeParkingSpots Int
+  furnished        Boolean
+  blockName        String  @db.VarChar(100)
+  unitNumber       String  @db.VarChar(100)
+  superArea        Decimal @db.Decimal(18, 8)
+  builtUpArea      Decimal @db.Decimal(18, 8)
+  maintenanceFee   Decimal @db.Decimal(18, 8)
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("property_apartment_detail")
+}
+
+model PropertyLandDetail {
+  propertyId           String  @id @unique
+  area                 Decimal @db.Decimal(18, 8)
+  facing               String  @db.VarChar(50)
+  roadAccess           Decimal @db.Decimal(18, 8)
+  plotShape            String  @db.VarChar(100)
+  cornerPlot           Boolean
+  waterAvailable       Boolean
+  electricityAvailable Boolean
+  boundaryWall         Boolean
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("property_land_detail")
+}
+
+model PropertyCommercialDetail {
+  propertyId   String  @id @unique
+  floor        Int
+  washrooms    Int
+  parkingSpots Int
+  frontage     Decimal @db.Decimal(18, 8)
+  usableArea   Decimal @db.Decimal(18, 8)
+  buildingType String  @db.VarChar(100)
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@map("property_commercial_detail")
+}
+
+model PropertyPrice {
+  id         String  @id @default(cuid())
+  propertyId String
+  for        String
+  currency   String  @db.VarChar(10)
+  unit       String
+  price      Decimal @db.Decimal(18, 2)
+  priceUnit  String  @db.VarChar(24)
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@index([propertyId])
+  @@map("property_price")
+}
+
+model PropertyOwner {
+  id             String  @id @default(cuid())
+  propertyId     String  @map("property_id")
+  ownerClientId  String  @map("owner_client_id")
+  isPrimaryOwner Boolean @default(false) @map("is_primary_owner")
+
+  property    Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  ownerClient CrmClient @relation(fields: [ownerClientId], references: [id], onDelete: Cascade)
+
+  @@unique([propertyId, ownerClientId])
+  @@index([propertyId])
+  @@index([ownerClientId])
+  @@map("property_owner")
+}
+
+model PropertyDocument {
+  id         String @id @default(cuid())
+  propertyId String
+  name       String
+  urls       Json
+  sortOrder  Int    @default(0)
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@index([propertyId])
+  @@map("property_document")
+}
+
+model PropertyChange {
+  id               String   @id @default(cuid())
+  propertyId       String?  @map("property_id")
+  accountId        String   @map("account_id")
+  createdById      String?  @map("created_by_id")
+  createdForId     String?  @map("created_for_id")
+  workingProfileId String?  @map("working_profile_id")
+  data             Json
+  status           String
+  isApproved       Boolean? @map("is_approved")
+  createdOn        DateTime @default(now())
+  modifiedOn       DateTime @default(now())
+
+  property       Property? @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  account        Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  createdBy      Account?  @relation("PropertyChangeCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdFor     Account?  @relation("PropertyChangeCreatedFor", fields: [createdForId], references: [id], onDelete: SetNull)
+  workingProfile Account?  @relation("PropertyChangeWorkingProfile", fields: [workingProfileId], references: [id], onDelete: SetNull)
+
+  @@index([propertyId])
+  @@index([accountId])
+  @@index([createdById])
+  @@index([createdForId])
+  @@index([workingProfileId])
+  @@index([status])
+  @@index([createdOn])
+  @@index([modifiedOn])
+  @@map("property_changes")
+}
+
+// ============================================================================
+// Agency & Agent
+// ============================================================================
+
+model Agency {
+  id             String   @id @default(cuid())
+  name           String
+  logoUrl        String?
+  registeredName String?
+  contactEmail   String?
+  contactPhone   String?
+  mainLocation   String?
+  branches       String[] @default([])
+  description    String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  maps           AgencyMap[]
+  customizations AgencyCustomization[]
+
+  @@index([name])
+  @@map("agencies")
+}
+
+model AgencyMap {
+  id              String  @id @default(cuid())
+  agencyAccountId String // references Account.id — the agency's own account
+  accountId       String // references Account.id — the member account
+  role            String // e.g. "admin" | "agent" | "viewer"
+  lockIn          Boolean @default(false)
+
+  agency Agency @relation(fields: [agencyAccountId], references: [id], onDelete: Cascade)
+
+  @@index([agencyAccountId])
+  @@index([accountId])
+  @@map("agency_map")
+}
+
+model AgencyAgentMap {
+  id       String  @id @default(cuid())
+  agencyId String  @map("agency_id")
+  agentId  String  @map("agent_id")
+  status   String  @default("invited")
+  isAdmin  Boolean @default(false) @map("is_admin")
+
+  agency Account @relation("AgencyAgentMapAgency", fields: [agencyId], references: [id], onDelete: Cascade)
+  agent  Account @relation("AgencyAgentMapAgent", fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@unique([agencyId, agentId])
+  @@index([agencyId])
+  @@index([agentId])
+  @@index([status])
+  @@index([isAdmin])
+  @@map("agency_agent_map")
+}
+
+model AgencyCustomization {
+  id            String   @id @default(cuid())
+  agencyId      String // references Agency.id (the agency's account id)
+  customizeFor  String // "lead" | "property"
+  customization Json // { required: string[], optional: string[] }
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  agency Agency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+
+  @@unique([agencyId, customizeFor])
+  @@index([agencyId])
+  @@map("agency_customization")
+}
+
+model Agent {
+  id                String   @id @default(cuid())
+  name              String
+  slug              String?  @unique
+  location          String?
+  registered        Boolean  @default(false)
+  userId            String?
+  email             String?
+  phone             String?
+  about             String?
+  photoUrl          String?
+  specializations   String[] @default([])
+  availabilityHours String?
+  timeSlotDuration  Int?
+  unavailability    Json?
+  agencyId          String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([agencyId])
+  @@index([slug])
+  @@map("agents")
+}
+
+// ============================================================================
+// Reviews
+// ============================================================================
+
+model Review {
+  id         String    @id @default(cuid())
+  reviewedBy String
+  rating     Int
+  review     String    @db.VarChar(255)
+  reviewedOn DateTime
+  response   String?   @db.VarChar(255)
+  responseBy String?
+  responseOn DateTime?
+
+  @@index([reviewedBy])
+  @@map("review")
+}
+
+// ============================================================================
+// Requirements
+// ============================================================================
+
+model Requirement {
+  id            String   @id @default(cuid())
+  userId        String
+  minBudget     Int?
+  maxBudget     Int?
+  location      String?
+  propertyType  String[] @default([])
+  purpose       String?
+  urgency       String?
+  requiredTime  String?
+  paymentMethod String[] @default([])
+  loan          Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId])
+  @@map("requirements")
+}
+
+// ============================================================================
+// Saved, Reacted, Views
+// ============================================================================
+
+model SavedProperty {
+  id         String   @id @default(cuid())
+  accountId  String
+  propertyId String
+  savedAt    DateTime @default(now())
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@index([accountId])
+  @@index([propertyId])
+  @@map("saved_property")
+}
+
+model ReactedProperty {
+  id         String   @id @default(cuid())
+  trackedId  String
+  propertyId String
+  onType     String
+  reaction   Reaction
+  reactedAt  DateTime @default(now())
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@index([trackedId])
+  @@index([propertyId])
+  @@map("reacted_properties")
+}
+
+model PropertyView {
+  id         String   @id @default(cuid())
+  accountId  String
+  propertyId String
+  onType     String
+  viewedAt   DateTime @default(now())
+  timeViewed Int
+  viewedOn   String
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@index([accountId])
+  @@index([propertyId])
+  @@map("property_views")
+}
+
+// ============================================================================
+// CRM — Client & Leads
+// ============================================================================
+
+enum LeadType {
+  BUYER
+  SELLER
+  TENANT
+  LANDLORD
+}
+
+enum LeadPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model CrmClient {
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  contact   Json
+  source    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  links          ClientLink[]
+  leads          ClientLead[]
+  sharedLeads    SharedLead[]
+  contacts       ClientContact[]
+  propertyOwners PropertyOwner[]
+
+  @@index([lastName])
+  @@map("client")
+}
+
+model ClientContact {
+  id       String @id @default(cuid())
+  clientId String @map("client_id")
+  type     String
+  value    String
+
+  client CrmClient @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@index([clientId])
+  @@index([type])
+  @@map("client_contact")
+}
+
+model ClientLink {
+  id        String @id @default(cuid())
+  trackerId String
+  clientId  String
+
+  client CrmClient @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  @@index([trackerId])
+  @@index([clientId])
+  @@map("client_link")
+}
+
+model ClientLead {
+  id          String       @id @default(cuid())
+  clientId    String
+  type        LeadType
+  requirement Json?
+  priority    LeadPriority @default(MEDIUM)
+  leadOwner   String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  client           CrmClient @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  leadOwnerAccount Account?  @relation("ClientLeadOwner", fields: [leadOwner], references: [id], onDelete: SetNull)
+
+  @@index([clientId])
+  @@index([type])
+  @@index([priority])
+  @@index([leadOwner])
+  @@map("base_leads")
+}
+
+model SharedLead {
+  id          String       @id @default(cuid())
+  clientId    String
+  type        LeadType
+  requirement Json?
+  priority    LeadPriority @default(MEDIUM)
+  leadOwner   String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  client           CrmClient      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  leadOwnerAccount Account?       @relation("SharedLeadOwner", fields: [leadOwner], references: [id], onDelete: SetNull)
+  activities       LeadActivity[]
+
+  @@index([clientId])
+  @@index([type])
+  @@index([priority])
+  @@index([leadOwner])
+  @@map("shared_leads")
+}
+
+model LeadActivity {
+  id         String   @id @default(cuid())
+  leadId     String
+  data       Json
+  activityOn DateTime @default(now())
+  activityBy String
+
+  lead SharedLead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@index([leadId])
+  @@index([activityOn])
+  @@index([activityBy])
+  @@map("lead_activity")
+}
+
+// ============================================================================
+// Conversations & Messages
+// ============================================================================
+
+model Conversation {
+  id                   String   @id @default(cuid())
+  accountId            String?
+  customerName         String
+  customerPhone        String
+  customerEmail        String?
+  customerAvatarUrl    String?
+  notes                String?
+  assignedTo           String   @default("AI Assistant")
+  subject              String
+  lastMessageAt        DateTime @default(now())
+  lastMessageSnippet   String?
+  lastMessageSender    String   @default("agent")
+  isRead               Boolean  @default(true)
+  leadCategory         String   @default("New Inquiry")
+  leadScore            Int      @default(5)
+  aiInterventionActive Boolean  @default(true)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  messages Message[]
+
+  @@index([accountId])
+  @@index([lastMessageAt])
+  @@map("conversations")
+}
+
+model Message {
+  id             String   @id @default(cuid())
+  conversationId String
+  sender         String
+  text           String
+  timestamp      DateTime @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
+  @@map("messages")
+}
+
+// ============================================================================
+// Site Content
+// ============================================================================
+
+model SiteContent {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  section   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([section])
+  @@map("site_content")
+}
+
+// ============================================================================
+// User Preferences
+// ============================================================================
+
+model UserPreference {
+  id                      String   @id @default(cuid())
+  accountId               String   @unique
+  updatedAt               DateTime @updatedAt
+  preferences             Json     @default("{}")
+  totalViews              Int      @default(0)
+  totalSaves              Int      @default(0)
+  totalCalls              Int      @default(0)
+  totalInquiries          Int      @default(0)
+  totalVisitRequests      Int      @default(0)
+  totalMortgageRequests   Int      @default(0)
+  totalShares             Int      @default(0)
+  totalTimeSpentInSeconds Int      @default(0)
+
+  @@map("user_preferences")
+}
+
+// ============================================================================
+// Requests
+// ============================================================================
+
+model PropertyRequest {
+  id           String   @id @default(cuid())
+  name         String
+  email        String
+  phone        String?
+  location     String?
+  propertyType String?
+  bedrooms     Int?
+  bathrooms    Int?
+  budget       Int?
+  remarks      String?
+  status       String   @default("new")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("property_requests")
+}
+
+model MortgageRequest {
+  id             String   @id @default(cuid())
+  name           String
+  email          String
+  phone          String
+  address        String
+  age            Int
+  income         Int
+  moreDetails    String?
+  contactMethods String[] @default([])
+  status         String   @default("new")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("mortgage_requests")
+}
+
+model SalesRequest {
+  id               String   @id @default(cuid())
+  name             String
+  email            String
+  phone            String
+  propertyLocation String
+  propertyType     String
+  remarks          String?
+  status           String   @default("new")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("sales_requests")
+}
+
+model VisitRequest {
+  id            String   @id @default(cuid())
+  propertyId    String
+  propertyTitle String
+  agentId       String
+  agentName     String
+  name          String
+  email         String
+  phone         String?
+  preferredDate String
+  preferredTime String?
+  status        String   @default("new")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([propertyId])
+  @@index([agentId])
+  @@map("visit_requests")
+}
+
+// ============================================================================
+// System / Misc (retained from existing DB)
+// ============================================================================
+
+model Problem {
+  id        String   @id @default(cuid())
+  context   String
+  message   String
+  stack     String?
+  details   Json?
+  createdAt DateTime @default(now())
+
+  @@map("problems")
+}
+
+model SitemapEntry {
+  id        String    @id @default(cuid())
+  url       String    @unique
+  priority  Float     @default(0.5)
+  frequency String    @default("weekly")
+  lastmod   DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("sitemaps")
+}
+
+model AIModel {
+  id                         String   @id @default(cuid())
+  modelId                    String
+  name                       String
+  description                String?
+  costPerMillionInputTokens  Float    @default(0)
+  costPerMillionOutputTokens Float    @default(0)
+  isDefault                  Boolean  @default(false)
+  createdAt                  DateTime @default(now())
+  updatedAt                  DateTime @updatedAt
+
+  @@map("ai_models")
+}
+
+model Prompt {
+  id           String   @id
+  promptText   String
+  description  String
+  name         String
+  placeholders String[] @default([])
+  model        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("prompts")
+}
+
+model WhatsAppConfig {
+  id                 String   @id
+  apiToken           String?
+  phoneNumberId      String?
+  accountId          String?
+  webhookVerifyToken String?
+  updatedAt          DateTime @updatedAt
+
+  @@map("whatsapp_config")
+}
+
+model SiteDevLogSetting {
+  id        String   @id
+  enabled   Boolean  @default(false)
+  updatedAt DateTime @updatedAt
+
+  @@map("site_dev_log_settings")
+}
+
+model SiteDevLogEntry {
+  id         String   @id @default(cuid())
+  requestId  String?
+  source     String
+  method     String?
+  path       String
+  statusCode Int?
+  outcome    String?
+  durationMs Int?
+  summary    String?
+  details    Json?
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([source, createdAt])
+  @@index([path, createdAt])
+  @@map("site_dev_log_entries")
+}
+
+model WhatsAppTemplate {
+  id            String   @id @default(cuid())
+  name          String
+  category      String
+  language      String
+  body          String
+  status        String
+  isPreapproved Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  @@map("whatsapp_templates")
+}
+
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  body      String
+  status    String   @default("new")
+  createdAt DateTime @default(now())
+
+  @@map("contact_submissions")
+}
+
+model Inquiry {
+  id            String   @id @default(cuid())
+  propertyId    String
+  propertyTitle String
+  agentName     String?
+  name          String
+  email         String
+  phone         String?
+  question      String
+  status        String   @default("new")
+  createdAt     DateTime @default(now())
+
+  @@index([propertyId])
+  @@map("inquiries")
+}
+
+model TeamMember {
+  id          String   @id @default(cuid())
+  orgId       String?
+  userId      String?
+  name        String
+  slug        String?  @unique
+  position    String
+  socialMedia Json?
+  about       String
+  moreDetails String?
+  photoUrl    String?
+  registered  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("team_members")
+}
+
+model NewsletterSubscription {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  @@map("newsletter_subscriptions")
+}
+
+model FAQ {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String
+  category  String   @default("General")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("faqs")
+}
+
+// ============================================================================
+// Authorization
+// ============================================================================
+
+model AuthzRole {
+  id              String   @id @default(uuid())
+  name            String
+  description     String?
+  appId           String   @map("app_id")
+  scope           String?
+  acquisitionType String?  @map("acquisition_type")
+  approvalPolicy  String?  @map("approval_policy")
+  applicableFor   Json?    @map("applicable_for")
+  permissions     Json?
+  updatedOn       DateTime @updatedAt
+
+  accounts   Account[]       @relation("AccountPrimaryRole")
+  accessRows AccountAccess[]
+
+  @@map("authz_role")
+}
+
+model AccountAccess {
+  accountId String   @map("account_id")
+  appId     String   @map("app_id")
+  roleId    String   @map("role_id")
+  updatedOn DateTime @updatedAt @map("updated_on")
+
+  account Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  role    AuthzRole @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([accountId, appId, roleId])
+  @@index([appId], map: "account_access_app_id_idx")
+  @@index([roleId], map: "account_access_role_id_idx")
+  @@map("account_access")
+}
+
+model RoleCapability {
+  id                     String  @id @default(uuid())
+  roleId                 String  @map("role_id")
+  capabilityId           String  @map("capability_id")
+  scope                  String?
+  denormalizedCapability Json?   @map("denormalized_capability")
+  roleName               String? @map("role_name")
+
+  @@index([roleId])
+  @@index([capabilityId])
+  @@map("authz_role_capability")
+}
+
+model AuthzAccountAccessGrant {
+  id              String  @id @default(uuid())
+  ownerAccountId  String  @map("owner_account_id")
+  targetAccountId String  @map("target_account_id")
+  roleId          String  @map("role_id")
+  portfolioId     String? @map("portfolio_id")
+
+  @@index([ownerAccountId], map: "authz_account_access_grant_owner_account_id_idx")
+  @@index([targetAccountId], map: "authz_account_access_grant_target_account_id_idx")
+  @@index([roleId], map: "authz_account_access_grant_role_id_idx")
+  @@map("authz_account_access_grant")
+}
+
+model AuthzAssetsAccessGrant {
+  id          String  @id @default(uuid())
+  assetId     String  @map("asset_id")
+  accountId   String  @map("account_id")
+  roleId      String  @map("role_id")
+  portfolioId String? @map("portfolio_id")
+  assetType   String? @map("asset_type")
+
+  @@index([assetId], map: "authz_assets_access_grant_asset_id_idx")
+  @@index([accountId], map: "authz_assets_access_grant_account_id_idx")
+  @@index([roleId], map: "authz_assets_access_grant_role_id_idx")
+  @@index([portfolioId], map: "authz_assets_access_grant_portfolio_id_idx")
+  @@index([assetType], map: "authz_assets_access_grant_asset_type_idx")
+  @@map("authz_assets_access_grant")
+}
+
+// ============================================================================
+// Competitor Intelligence
+// ============================================================================
+
+model Competitor {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  crawlRules  Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sources              CompetitorSource[]
+  pages                CompetitorPage[]
+  listings             CompetitorListing[]
+  intelligenceMappings IntelligenceMapping[]
+  intelligenceAlerts   IntelligenceAlert[]
+
+  @@map("competitors")
+}
+
+model CompetitorSource {
+  id           String   @id @default(cuid())
+  competitorId String
+  type         String // sitemap | link | manual
+  value        String
+  createdAt    DateTime @default(now())
+
+  competitor Competitor @relation(fields: [competitorId], references: [id], onDelete: Cascade)
+
+  @@index([competitorId])
+  @@map("competitor_sources")
+}
+
+model CompetitorPage {
+  id               String    @id @default(cuid())
+  competitorId     String
+  title            String
+  description      String?
+  source           String // URL the property was found at
+  visibleHtml      String?   @db.Text
+  lastLoggedStatus String?
+  lastLoggedOn     DateTime?
+  details          Json?
+  listedOn         DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  competitor Competitor           @relation(fields: [competitorId], references: [id], onDelete: Cascade)
+  tracking   CompetitorTracking[]
+  listing    CompetitorListing?
+
+  @@index([competitorId])
+  @@index([source])
+  @@map("competitor_pages")
+}
+
+model CompetitorListing {
+  id               String   @id @default(cuid())
+  competitorId     String
+  competitorPageId String   @unique
+  title            String
+  description      String?
+  purpose          String
+  agentName        String?
+  price            Json?
+  priceBasis       String?
+  isSold           Boolean  @default(false)
+  details          Json?
+  loggedOn         DateTime @default(now())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  competitor     Competitor               @relation(fields: [competitorId], references: [id], onDelete: Cascade)
+  competitorPage CompetitorPage           @relation(fields: [competitorPageId], references: [id], onDelete: Cascade)
+  propertyMaps   PropertyCompetitionMap[]
+
+  @@index([competitorId])
+  @@index([loggedOn])
+  @@map("competitor_listings")
+}
+
+model PropertyCompetitionMap {
+  id                   String                    @id @default(cuid())
+  propertyId           String                    @map("property_id")
+  competitorPropertyId String                    @map("competitor_property_id")
+  status               PropertyCompetitionStatus @default(UNVERIFIED)
+  createdAt            DateTime                  @default(now())
+  updatedAt            DateTime                  @updatedAt
+
+  property          Property          @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  competitorListing CompetitorListing @relation(fields: [competitorPropertyId], references: [id], onDelete: Cascade)
+
+  @@index([propertyId], map: "property_competition_map_property_id_idx")
+  @@index([competitorPropertyId], map: "property_competition_map_competitor_property_id_idx")
+  @@map("property_competition_map")
+}
+
+model CompetitorTracking {
+  id               String   @id @default(cuid())
+  competitorPageId String
+  ourPropertyId    String?
+  createdAt        DateTime @default(now())
+
+  competitorPage CompetitorPage @relation(fields: [competitorPageId], references: [id], onDelete: Cascade)
+
+  @@index([competitorPageId])
+  @@index([ourPropertyId])
+  @@map("competitor_tracking")
+}
+
+model IntelligenceMapping {
+  id            String   @id @default(cuid())
+  accountId     String   @map("account_id")
+  cLocation     String?  @map("c_location")
+  cMinBudget    Int?     @map("c_min_budget")
+  cMaxBudget    Int?     @map("c_max_budget")
+  cCompetitorId String?  @map("c_competitor")
+  cType         String?  @map("c_type")
+  cPurpose      String   @map("c_purpose")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  account    Account             @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  competitor Competitor?         @relation(fields: [cCompetitorId], references: [id], onDelete: SetNull)
+  alerts     IntelligenceAlert[]
+
+  @@index([accountId], map: "intelligence_mapping_account_id_idx")
+  @@index([cCompetitorId], map: "intelligence_mapping_competitor_id_idx")
+  @@map("intelligence_mapping")
+}
+
+model IntelligenceAlert {
+  id        String   @id @default(cuid())
+  mapId     String   @map("map_id")
+  accountId String   @map("account_id")
+  listingId String   @map("listing_id")
+  status    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  mapping    IntelligenceMapping @relation(fields: [mapId], references: [id], onDelete: Cascade)
+  account    Account             @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  competitor Competitor          @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@index([mapId], map: "intelligence_alerts_map_id_idx")
+  @@index([accountId], map: "intelligence_alerts_account_id_idx")
+  @@index([listingId], map: "intelligence_alerts_listing_id_idx")
+  @@map("intelligence_alerts")
+}
