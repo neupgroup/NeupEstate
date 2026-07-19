@@ -17,28 +17,55 @@ These adapters keep database enum conversion out of the Prisma client module.
 ::end
 */
 
-import { PropertyPurpose, PropertyStatus, PropertyType } from '@prisma/client';
+export const PROPERTY_PURPOSE = {
+  SALE: 'SALE',
+  RENT: 'RENT',
+  LEASE: 'LEASE',
+} as const;
+
+export type PropertyPurpose = typeof PROPERTY_PURPOSE[keyof typeof PROPERTY_PURPOSE];
+
+export const PROPERTY_TYPE = {
+  HOUSE: 'HOUSE',
+  APARTMENT: 'APARTMENT',
+  LAND: 'LAND',
+  COMMERCIAL: 'COMMERCIAL',
+} as const;
+
+export type PropertyType = typeof PROPERTY_TYPE[keyof typeof PROPERTY_TYPE];
+
+export const PROPERTY_STATUS = {
+  AWAITING_CREATION: 'AWAITING_CREATION',
+  AWAITING_DELETION: 'AWAITING_DELETION',
+  PENDING: 'PENDING',
+  ACTIVE: 'ACTIVE',
+  SOLD: 'SOLD',
+  RENTED: 'RENTED',
+  ARCHIVED: 'ARCHIVED',
+} as const;
+
+export type PropertyStatus = typeof PROPERTY_STATUS[keyof typeof PROPERTY_STATUS];
 
 export function mapPurposeToEnum(value?: string | null): PropertyPurpose {
   switch (value?.trim().toLowerCase()) {
     case 'rent':
-      return PropertyPurpose.RENT;
+      return PROPERTY_PURPOSE.RENT;
     case 'lease':
-      return PropertyPurpose.LEASE;
+      return PROPERTY_PURPOSE.LEASE;
     case 'sale':
     case 'sell':
     default:
-      return PropertyPurpose.SALE;
+      return PROPERTY_PURPOSE.SALE;
   }
 }
 
 export function mapPurposeFromEnum(value?: PropertyPurpose | string | null): string {
   switch (value) {
-    case PropertyPurpose.RENT:
+    case PROPERTY_PURPOSE.RENT:
       return 'Rent';
-    case PropertyPurpose.LEASE:
+    case PROPERTY_PURPOSE.LEASE:
       return 'Lease';
-    case PropertyPurpose.SALE:
+    case PROPERTY_PURPOSE.SALE:
     default:
       return 'Sale';
   }
@@ -49,31 +76,31 @@ export function mapTypeToEnum(value?: string | null): PropertyType {
     case 'apartment':
     case 'flat':
     case 'penthouse':
-      return PropertyType.APARTMENT;
+      return PROPERTY_TYPE.APARTMENT;
     case 'land':
-      return PropertyType.LAND;
+      return PROPERTY_TYPE.LAND;
     case 'commercial':
     case 'commercial space':
     case 'shop space':
-      return PropertyType.COMMERCIAL;
+      return PROPERTY_TYPE.COMMERCIAL;
     case 'house':
     case 'bungalow':
     case 'villa':
     case 'multiplex':
     default:
-      return PropertyType.HOUSE;
+      return PROPERTY_TYPE.HOUSE;
   }
 }
 
 export function mapTypeFromEnum(value?: PropertyType | string | null): string {
   switch (value) {
-    case PropertyType.APARTMENT:
+    case PROPERTY_TYPE.APARTMENT:
       return 'Apartment';
-    case PropertyType.LAND:
+    case PROPERTY_TYPE.LAND:
       return 'Land';
-    case PropertyType.COMMERCIAL:
+    case PROPERTY_TYPE.COMMERCIAL:
       return 'Commercial Space';
-    case PropertyType.HOUSE:
+    case PROPERTY_TYPE.HOUSE:
     default:
       return 'House';
   }
@@ -82,38 +109,38 @@ export function mapTypeFromEnum(value?: PropertyType | string | null): string {
 export function mapStatusToEnum(value?: string | null): PropertyStatus {
   switch (value?.trim().toLowerCase().replace(/[\s-]+/g, '_')) {
     case 'awaiting_creation':
-      return PropertyStatus.AWAITING_CREATION;
+      return PROPERTY_STATUS.AWAITING_CREATION;
     case 'awaiting_deletion':
-      return PropertyStatus.AWAITING_DELETION;
+      return PROPERTY_STATUS.AWAITING_DELETION;
     case 'active':
-      return PropertyStatus.ACTIVE;
+      return PROPERTY_STATUS.ACTIVE;
     case 'sold':
-      return PropertyStatus.SOLD;
+      return PROPERTY_STATUS.SOLD;
     case 'rented':
-      return PropertyStatus.RENTED;
+      return PROPERTY_STATUS.RENTED;
     case 'archived':
-      return PropertyStatus.ARCHIVED;
+      return PROPERTY_STATUS.ARCHIVED;
     case 'pending':
     default:
-      return PropertyStatus.PENDING;
+      return PROPERTY_STATUS.PENDING;
   }
 }
 
 export function mapStatusFromEnum(value?: PropertyStatus | string | null): string {
   switch (value) {
-    case PropertyStatus.AWAITING_CREATION:
+    case PROPERTY_STATUS.AWAITING_CREATION:
       return 'Awaiting Creation';
-    case PropertyStatus.AWAITING_DELETION:
+    case PROPERTY_STATUS.AWAITING_DELETION:
       return 'Awaiting Deletion';
-    case PropertyStatus.ACTIVE:
+    case PROPERTY_STATUS.ACTIVE:
       return 'Active';
-    case PropertyStatus.SOLD:
+    case PROPERTY_STATUS.SOLD:
       return 'Sold';
-    case PropertyStatus.RENTED:
+    case PROPERTY_STATUS.RENTED:
       return 'Rented';
-    case PropertyStatus.ARCHIVED:
+    case PROPERTY_STATUS.ARCHIVED:
       return 'Archived';
-    case PropertyStatus.PENDING:
+    case PROPERTY_STATUS.PENDING:
     default:
       return 'Pending';
   }
