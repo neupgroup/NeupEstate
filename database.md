@@ -345,23 +345,6 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - divergence: model CompetitorTracking maps to table competitor_tracking
 - divergence based on fields: database has 4 fields; Prisma model has 4 persisted scalar fields; difference 0
 
-### public.contact_submissions (ContactSubmission)
-
-- purpose: Stores general contact form submissions.
-- usage: Used by contact-service create/list workflows and admin contact review.
-
-- id text PK, NOT NULL
-- name text NOT NULL
-- email text NOT NULL
-- phone text
-- subject text NOT NULL
-- body text NOT NULL
-- status text NOT NULL, default 'new'::text
-- createdAt timestamp(3) NOT NULL, default CURRENT_TIMESTAMP
-
-- divergence: model ContactSubmission maps to table contact_submissions
-- divergence based on fields: database has 8 fields; Prisma model has 8 persisted scalar fields; difference 0
-
 ### public.conversations (Conversation)
 
 - purpose: Stores customer conversation thread metadata, assignment, read state, AI intervention status, and lead scoring.

@@ -76,28 +76,3 @@ export type CreateConversationInput = CreateConversationFormValues & {
   customerAvatarUrl?: string;
   userId?: string;
 };
-
-// Contact Submission
-export const ContactSubmissionStatusSchema = z.enum(['new', 'read', 'archived']);
-
-export const CreateContactSubmissionSchema = z.object({
-  name: z.string().min(2, "Name is required."),
-  email: z.string().email("A valid email is required."),
-  phone: z.string().optional(),
-  subject: z.string().min(3, "Subject is required."),
-  body: z.string().min(10, "Message must be at least 10 characters long."),
-  submittedBy: z.string().optional(), // Verified accountId from gRPC session
-});
-export type CreateContactSubmissionFormValues = z.infer<typeof CreateContactSubmissionSchema>;
-
-export interface ContactSubmission {
-  id: string;
-  name: string;
-  email: string;
-  phone?: string;
-  subject: string;
-  body: string;
-  submittedBy?: string; // Verified accountId
-  status: z.infer<typeof ContactSubmissionStatusSchema>;
-  createdAt: string; // ISO string
-}

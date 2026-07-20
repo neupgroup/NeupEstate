@@ -30,7 +30,6 @@ import { getAuthenticatedAccount } from '@/services/auth';
 
 export const PERMISSIONS = {
   public: {
-    contactPost: 'public.contact.post',
     createAgency: 'public.create_agency',
     mortgageRequest: 'public.mortgage.request',
     propertyInquire: 'public.property.inquire',

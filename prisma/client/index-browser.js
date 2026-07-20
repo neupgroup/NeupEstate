@@ -608,17 +608,6 @@ exports.Prisma.SiteDevLogEntryScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
-exports.Prisma.ContactSubmissionScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  email: 'email',
-  phone: 'phone',
-  subject: 'subject',
-  body: 'body',
-  status: 'status',
-  createdAt: 'createdAt'
-};
-
 exports.Prisma.InquiryScalarFieldEnum = {
   id: 'id',
   propertyId: 'propertyId',
@@ -917,7 +906,6 @@ exports.Prisma.ModelName = {
   SitemapEntry: 'SitemapEntry',
   SiteDevLogSetting: 'SiteDevLogSetting',
   SiteDevLogEntry: 'SiteDevLogEntry',
-  ContactSubmission: 'ContactSubmission',
   Inquiry: 'Inquiry',
   TeamMember: 'TeamMember',
   NewsletterSubscription: 'NewsletterSubscription',

@@ -836,19 +836,6 @@ model SiteDevLogEntry {
   @@map("site_dev_log_entries")
 }
 
-model ContactSubmission {
-  id        String   @id @default(cuid())
-  name      String
-  email     String
-  phone     String?
-  subject   String
-  body      String
-  status    String   @default("new")
-  createdAt DateTime @default(now())
-
-  @@map("contact_submissions")
-}
-
 model Inquiry {
   id            String   @id @default(cuid())
   propertyId    String

@@ -42,7 +42,7 @@ export function FooterV1({ showManagePanelLink }: { showManagePanelLink: boolean
               <li>Email: contact.estate@neupgroup.com</li>
               <li>Phone: (977) 984-0710507</li>
               <li>Address: Maitidevi, Kathmandu</li>
-              <li><ClientLink href="/contact" className="text-muted-foreground transition-colors hover:text-primary">Contact Form</ClientLink></li>
+              <li><a href="https://neupgroup.com/sites/contact" className="text-muted-foreground transition-colors hover:text-primary">Contact</a></li>
             </ul>
           </div>
 

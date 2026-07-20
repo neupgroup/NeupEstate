@@ -35,7 +35,7 @@ export default function NotFound() {
               <Link className="hover:text-foreground" href="/agents">
                 Meet agents
               </Link>
-              <Link className="hover:text-foreground" href="/contact">
+              <Link className="hover:text-foreground" href="https://neupgroup.com/sites/contact">
                 Contact support
               </Link>
             </div>

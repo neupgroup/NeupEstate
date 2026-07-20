@@ -10,10 +10,8 @@ export { PropertyMap } from "./PropertyMap.v1";
 export { PropertyQA } from "./PropertyQA.v1";
 export { RecommendedProperties } from "./RecommendedProperties.v1";
 export { AgentResults } from "./AgentResults.v1";
-export { ContactForm } from "./ContactForm.v1";
 export { MortgageRequestForm } from "./MortgageRequestForm.v1";
 export { SalesRequestForm } from "./SalesRequestForm.v1";
 export { PropertyRequestForm } from "./PropertyRequestForm.v1";
 export { NaturalLanguageSearchForm } from "./NaturalLanguageSearchForm.v1";
 export { EmiCalculatorChart } from "./EmiCalculatorChart.v1";
-
