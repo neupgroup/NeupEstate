@@ -113,6 +113,9 @@ export function mapStatusToEnum(value?: string | null): PropertyStatus {
     case 'awaiting_deletion':
       return PROPERTY_STATUS.AWAITING_DELETION;
     case 'active':
+    case 'approved':
+    case 'live':
+    case 'published':
       return PROPERTY_STATUS.ACTIVE;
     case 'sold':
       return PROPERTY_STATUS.SOLD;

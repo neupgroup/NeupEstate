@@ -85,7 +85,20 @@ export const PROPERTY_INCLUDE = {
   landDetail:      true,
   commercialDetail: true,
   prices:          true,
-  owners:          { include: { ownerClient: { include: { contacts: true } } }, orderBy: [{ isPrimaryOwner: 'desc' as const }, { id: 'asc' as const }] },
+  owners:          {
+    include: {
+      ownerClient: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          contact: true,
+          contacts: true,
+        },
+      },
+    },
+    orderBy: [{ isPrimaryOwner: 'desc' as const }, { id: 'asc' as const }],
+  },
   documents:       true,
 };
 
