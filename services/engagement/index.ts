@@ -164,7 +164,6 @@ export async function createContactSubmissionAction(data: CreateContactSubmissio
         const actorId = await requireIdentity();
         const validatedData = CreateContactSubmissionSchema.parse({ ...data, submittedBy: actorId });
         await createContactSubmissionService(validatedData);
-        revalidatePath('/manage/contact');
         return { success: true };
     } catch (e: any) {
         if (e instanceof z.ZodError) {

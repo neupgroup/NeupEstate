@@ -128,7 +128,7 @@ export function HeaderV1({
       return (
         <Link
           key={item.href}
-          href={appendManageProfileParamV1(item.href, { selectedProfile, workingProfile })}
+          href={item.external ? item.href : appendManageProfileParamV1(item.href, { selectedProfile, workingProfile })}
           onClick={() => setMenuOpen(false)}
           className={cn(
             buttonVariants({ variant: "plain", size: "sm" }),

@@ -90,7 +90,7 @@ export function ManageSidebar(props: Props) {
             return (
                 <Link
                   key={item.href}
-                  href={appendManageProfileParamV1(item.href, { selectedProfile, workingProfile })}
+                  href={item.external ? item.href : appendManageProfileParamV1(item.href, { selectedProfile, workingProfile })}
                   className={cn(
                     buttonVariants({ variant: "plain" }),
                     "group w-full justify-start px-4 py-2 text-left focus-visible:bg-primary/10 focus-visible:text-primary focus-visible:ring-0",

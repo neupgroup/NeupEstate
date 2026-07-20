@@ -56,7 +56,7 @@ export const manageNav: ManageNavItem[] = [
   { type: "link", href: "/manage/sales-requests", label: "Sales Request", icon: Landmark },
   { type: "link", href: "/manage/visit-requests", label: "Visit Request", icon: CalendarCheck },
   { type: "link", href: "/manage/mortgage-requests", label: "Mortgage Request", icon: Banknote },
-  { type: "link", href: "/manage/contact", label: "Contact", icon: Contact },
+  { type: "link", href: "https://neupgroup.com/sites/contact", label: "Contact", icon: Contact, external: true },
   { type: "heading", label: "About" },
   { type: "link", href: "/manage/reviews", label: "Reviews", icon: Star },
   { type: "link", href: "/manage/faq", label: "FAQs", icon: HelpCircle },
