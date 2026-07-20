@@ -6248,8 +6248,6 @@ export namespace Prisma {
 
   export type AccountCountOutputType = {
     accessRows: number
-    agencyOf: number
-    agentOf: number
     workingProfileOf: number
     agencyAgentMapAsAgency: number
     agencyAgentMapAsAgent: number
@@ -6265,8 +6263,6 @@ export namespace Prisma {
 
   export type AccountCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accessRows?: boolean | AccountCountOutputTypeCountAccessRowsArgs
-    agencyOf?: boolean | AccountCountOutputTypeCountAgencyOfArgs
-    agentOf?: boolean | AccountCountOutputTypeCountAgentOfArgs
     workingProfileOf?: boolean | AccountCountOutputTypeCountWorkingProfileOfArgs
     agencyAgentMapAsAgency?: boolean | AccountCountOutputTypeCountAgencyAgentMapAsAgencyArgs
     agencyAgentMapAsAgent?: boolean | AccountCountOutputTypeCountAgencyAgentMapAsAgentArgs
@@ -6296,20 +6292,6 @@ export namespace Prisma {
    */
   export type AccountCountOutputTypeCountAccessRowsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AccountAccessWhereInput
-  }
-
-  /**
-   * AccountCountOutputType without action
-   */
-  export type AccountCountOutputTypeCountAgencyOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AccountWhereInput
-  }
-
-  /**
-   * AccountCountOutputType without action
-   */
-  export type AccountCountOutputTypeCountAgentOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AccountWhereInput
   }
 
   /**
@@ -6676,12 +6658,10 @@ export namespace Prisma {
    */
 
   export type AuthzRoleCountOutputType = {
-    accounts: number
     accessRows: number
   }
 
   export type AuthzRoleCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    accounts?: boolean | AuthzRoleCountOutputTypeCountAccountsArgs
     accessRows?: boolean | AuthzRoleCountOutputTypeCountAccessRowsArgs
   }
 
@@ -6694,13 +6674,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the AuthzRoleCountOutputType
      */
     select?: AuthzRoleCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * AuthzRoleCountOutputType without action
-   */
-  export type AuthzRoleCountOutputTypeCountAccountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AccountWhereInput
   }
 
   /**
@@ -6894,9 +6867,6 @@ export namespace Prisma {
     displayName: string | null
     displayImage: string | null
     connectionId: string | null
-    roleId: string | null
-    agency: string | null
-    agent: string | null
     workingProfile: string | null
   }
 
@@ -6909,9 +6879,6 @@ export namespace Prisma {
     displayName: string | null
     displayImage: string | null
     connectionId: string | null
-    roleId: string | null
-    agency: string | null
-    agent: string | null
     workingProfile: string | null
   }
 
@@ -6924,9 +6891,6 @@ export namespace Prisma {
     displayName: number
     displayImage: number
     connectionId: number
-    roleId: number
-    agency: number
-    agent: number
     workingProfile: number
     _all: number
   }
@@ -6941,9 +6905,6 @@ export namespace Prisma {
     displayName?: true
     displayImage?: true
     connectionId?: true
-    roleId?: true
-    agency?: true
-    agent?: true
     workingProfile?: true
   }
 
@@ -6956,9 +6917,6 @@ export namespace Prisma {
     displayName?: true
     displayImage?: true
     connectionId?: true
-    roleId?: true
-    agency?: true
-    agent?: true
     workingProfile?: true
   }
 
@@ -6971,9 +6929,6 @@ export namespace Prisma {
     displayName?: true
     displayImage?: true
     connectionId?: true
-    roleId?: true
-    agency?: true
-    agent?: true
     workingProfile?: true
     _all?: true
   }
@@ -7059,9 +7014,6 @@ export namespace Prisma {
     displayName: string | null
     displayImage: string | null
     connectionId: string | null
-    roleId: string | null
-    agency: string | null
-    agent: string | null
     workingProfile: string | null
     _count: AccountCountAggregateOutputType | null
     _min: AccountMinAggregateOutputType | null
@@ -7091,17 +7043,9 @@ export namespace Prisma {
     displayName?: boolean
     displayImage?: boolean
     connectionId?: boolean
-    roleId?: boolean
-    agency?: boolean
-    agent?: boolean
     workingProfile?: boolean
-    role?: boolean | Account$roleArgs<ExtArgs>
     accessRows?: boolean | Account$accessRowsArgs<ExtArgs>
-    agencyAccount?: boolean | Account$agencyAccountArgs<ExtArgs>
-    agentAccount?: boolean | Account$agentAccountArgs<ExtArgs>
     workingProfileAccount?: boolean | Account$workingProfileAccountArgs<ExtArgs>
-    agencyOf?: boolean | Account$agencyOfArgs<ExtArgs>
-    agentOf?: boolean | Account$agentOfArgs<ExtArgs>
     workingProfileOf?: boolean | Account$workingProfileOfArgs<ExtArgs>
     agencyAgentMapAsAgency?: boolean | Account$agencyAgentMapAsAgencyArgs<ExtArgs>
     agencyAgentMapAsAgent?: boolean | Account$agencyAgentMapAsAgentArgs<ExtArgs>
@@ -7125,13 +7069,7 @@ export namespace Prisma {
     displayName?: boolean
     displayImage?: boolean
     connectionId?: boolean
-    roleId?: boolean
-    agency?: boolean
-    agent?: boolean
     workingProfile?: boolean
-    role?: boolean | Account$roleArgs<ExtArgs>
-    agencyAccount?: boolean | Account$agencyAccountArgs<ExtArgs>
-    agentAccount?: boolean | Account$agentAccountArgs<ExtArgs>
     workingProfileAccount?: boolean | Account$workingProfileAccountArgs<ExtArgs>
   }, ExtArgs["result"]["account"]>
 
@@ -7144,13 +7082,7 @@ export namespace Prisma {
     displayName?: boolean
     displayImage?: boolean
     connectionId?: boolean
-    roleId?: boolean
-    agency?: boolean
-    agent?: boolean
     workingProfile?: boolean
-    role?: boolean | Account$roleArgs<ExtArgs>
-    agencyAccount?: boolean | Account$agencyAccountArgs<ExtArgs>
-    agentAccount?: boolean | Account$agentAccountArgs<ExtArgs>
     workingProfileAccount?: boolean | Account$workingProfileAccountArgs<ExtArgs>
   }, ExtArgs["result"]["account"]>
 
@@ -7163,21 +7095,13 @@ export namespace Prisma {
     displayName?: boolean
     displayImage?: boolean
     connectionId?: boolean
-    roleId?: boolean
-    agency?: boolean
-    agent?: boolean
     workingProfile?: boolean
   }
 
-  export type AccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "neupId" | "accountType" | "createdOn" | "accessedOn" | "displayName" | "displayImage" | "connectionId" | "roleId" | "agency" | "agent" | "workingProfile", ExtArgs["result"]["account"]>
+  export type AccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "neupId" | "accountType" | "createdOn" | "accessedOn" | "displayName" | "displayImage" | "connectionId" | "workingProfile", ExtArgs["result"]["account"]>
   export type AccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    role?: boolean | Account$roleArgs<ExtArgs>
     accessRows?: boolean | Account$accessRowsArgs<ExtArgs>
-    agencyAccount?: boolean | Account$agencyAccountArgs<ExtArgs>
-    agentAccount?: boolean | Account$agentAccountArgs<ExtArgs>
     workingProfileAccount?: boolean | Account$workingProfileAccountArgs<ExtArgs>
-    agencyOf?: boolean | Account$agencyOfArgs<ExtArgs>
-    agentOf?: boolean | Account$agentOfArgs<ExtArgs>
     workingProfileOf?: boolean | Account$workingProfileOfArgs<ExtArgs>
     agencyAgentMapAsAgency?: boolean | Account$agencyAgentMapAsAgencyArgs<ExtArgs>
     agencyAgentMapAsAgent?: boolean | Account$agencyAgentMapAsAgentArgs<ExtArgs>
@@ -7192,28 +7116,17 @@ export namespace Prisma {
     _count?: boolean | AccountCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type AccountIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    role?: boolean | Account$roleArgs<ExtArgs>
-    agencyAccount?: boolean | Account$agencyAccountArgs<ExtArgs>
-    agentAccount?: boolean | Account$agentAccountArgs<ExtArgs>
     workingProfileAccount?: boolean | Account$workingProfileAccountArgs<ExtArgs>
   }
   export type AccountIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    role?: boolean | Account$roleArgs<ExtArgs>
-    agencyAccount?: boolean | Account$agencyAccountArgs<ExtArgs>
-    agentAccount?: boolean | Account$agentAccountArgs<ExtArgs>
     workingProfileAccount?: boolean | Account$workingProfileAccountArgs<ExtArgs>
   }
 
   export type $AccountPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Account"
     objects: {
-      role: Prisma.$AuthzRolePayload<ExtArgs> | null
       accessRows: Prisma.$AccountAccessPayload<ExtArgs>[]
-      agencyAccount: Prisma.$AccountPayload<ExtArgs> | null
-      agentAccount: Prisma.$AccountPayload<ExtArgs> | null
       workingProfileAccount: Prisma.$AccountPayload<ExtArgs> | null
-      agencyOf: Prisma.$AccountPayload<ExtArgs>[]
-      agentOf: Prisma.$AccountPayload<ExtArgs>[]
       workingProfileOf: Prisma.$AccountPayload<ExtArgs>[]
       agencyAgentMapAsAgency: Prisma.$AgencyAgentMapPayload<ExtArgs>[]
       agencyAgentMapAsAgent: Prisma.$AgencyAgentMapPayload<ExtArgs>[]
@@ -7235,9 +7148,6 @@ export namespace Prisma {
       displayName: string | null
       displayImage: string | null
       connectionId: string | null
-      roleId: string | null
-      agency: string | null
-      agent: string | null
       workingProfile: string | null
     }, ExtArgs["result"]["account"]>
     composites: {}
@@ -7633,13 +7543,8 @@ export namespace Prisma {
    */
   export interface Prisma__AccountClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    role<T extends Account$roleArgs<ExtArgs> = {}>(args?: Subset<T, Account$roleArgs<ExtArgs>>): Prisma__AuthzRoleClient<$Result.GetResult<Prisma.$AuthzRolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     accessRows<T extends Account$accessRowsArgs<ExtArgs> = {}>(args?: Subset<T, Account$accessRowsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    agencyAccount<T extends Account$agencyAccountArgs<ExtArgs> = {}>(args?: Subset<T, Account$agencyAccountArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    agentAccount<T extends Account$agentAccountArgs<ExtArgs> = {}>(args?: Subset<T, Account$agentAccountArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     workingProfileAccount<T extends Account$workingProfileAccountArgs<ExtArgs> = {}>(args?: Subset<T, Account$workingProfileAccountArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    agencyOf<T extends Account$agencyOfArgs<ExtArgs> = {}>(args?: Subset<T, Account$agencyOfArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    agentOf<T extends Account$agentOfArgs<ExtArgs> = {}>(args?: Subset<T, Account$agentOfArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     workingProfileOf<T extends Account$workingProfileOfArgs<ExtArgs> = {}>(args?: Subset<T, Account$workingProfileOfArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     agencyAgentMapAsAgency<T extends Account$agencyAgentMapAsAgencyArgs<ExtArgs> = {}>(args?: Subset<T, Account$agencyAgentMapAsAgencyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgencyAgentMapPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     agencyAgentMapAsAgent<T extends Account$agencyAgentMapAsAgentArgs<ExtArgs> = {}>(args?: Subset<T, Account$agencyAgentMapAsAgentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgencyAgentMapPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -7688,9 +7593,6 @@ export namespace Prisma {
     readonly displayName: FieldRef<"Account", 'String'>
     readonly displayImage: FieldRef<"Account", 'String'>
     readonly connectionId: FieldRef<"Account", 'String'>
-    readonly roleId: FieldRef<"Account", 'String'>
-    readonly agency: FieldRef<"Account", 'String'>
-    readonly agent: FieldRef<"Account", 'String'>
     readonly workingProfile: FieldRef<"Account", 'String'>
   }
     
@@ -8093,25 +7995,6 @@ export namespace Prisma {
   }
 
   /**
-   * Account.role
-   */
-  export type Account$roleArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AuthzRole
-     */
-    select?: AuthzRoleSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AuthzRole
-     */
-    omit?: AuthzRoleOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AuthzRoleInclude<ExtArgs> | null
-    where?: AuthzRoleWhereInput
-  }
-
-  /**
    * Account.accessRows
    */
   export type Account$accessRowsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8136,44 +8019,6 @@ export namespace Prisma {
   }
 
   /**
-   * Account.agencyAccount
-   */
-  export type Account$agencyAccountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Account
-     */
-    select?: AccountSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Account
-     */
-    omit?: AccountOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AccountInclude<ExtArgs> | null
-    where?: AccountWhereInput
-  }
-
-  /**
-   * Account.agentAccount
-   */
-  export type Account$agentAccountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Account
-     */
-    select?: AccountSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Account
-     */
-    omit?: AccountOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AccountInclude<ExtArgs> | null
-    where?: AccountWhereInput
-  }
-
-  /**
    * Account.workingProfileAccount
    */
   export type Account$workingProfileAccountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8190,54 +8035,6 @@ export namespace Prisma {
      */
     include?: AccountInclude<ExtArgs> | null
     where?: AccountWhereInput
-  }
-
-  /**
-   * Account.agencyOf
-   */
-  export type Account$agencyOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Account
-     */
-    select?: AccountSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Account
-     */
-    omit?: AccountOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AccountInclude<ExtArgs> | null
-    where?: AccountWhereInput
-    orderBy?: AccountOrderByWithRelationInput | AccountOrderByWithRelationInput[]
-    cursor?: AccountWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: AccountScalarFieldEnum | AccountScalarFieldEnum[]
-  }
-
-  /**
-   * Account.agentOf
-   */
-  export type Account$agentOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Account
-     */
-    select?: AccountSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Account
-     */
-    omit?: AccountOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AccountInclude<ExtArgs> | null
-    where?: AccountWhereInput
-    orderBy?: AccountOrderByWithRelationInput | AccountOrderByWithRelationInput[]
-    cursor?: AccountWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: AccountScalarFieldEnum | AccountScalarFieldEnum[]
   }
 
   /**
@@ -8535,7 +8332,7 @@ export namespace Prisma {
 
   export type ActivityMinAggregateOutputType = {
     id: string | null
-    trackerId: string | null
+    accountId: string | null
     title: string | null
     activityOn: Date | null
     ipAddress: string | null
@@ -8543,7 +8340,7 @@ export namespace Prisma {
 
   export type ActivityMaxAggregateOutputType = {
     id: string | null
-    trackerId: string | null
+    accountId: string | null
     title: string | null
     activityOn: Date | null
     ipAddress: string | null
@@ -8551,7 +8348,7 @@ export namespace Prisma {
 
   export type ActivityCountAggregateOutputType = {
     id: number
-    trackerId: number
+    accountId: number
     title: number
     details: number
     activityOn: number
@@ -8562,7 +8359,7 @@ export namespace Prisma {
 
   export type ActivityMinAggregateInputType = {
     id?: true
-    trackerId?: true
+    accountId?: true
     title?: true
     activityOn?: true
     ipAddress?: true
@@ -8570,7 +8367,7 @@ export namespace Prisma {
 
   export type ActivityMaxAggregateInputType = {
     id?: true
-    trackerId?: true
+    accountId?: true
     title?: true
     activityOn?: true
     ipAddress?: true
@@ -8578,7 +8375,7 @@ export namespace Prisma {
 
   export type ActivityCountAggregateInputType = {
     id?: true
-    trackerId?: true
+    accountId?: true
     title?: true
     details?: true
     activityOn?: true
@@ -8660,7 +8457,7 @@ export namespace Prisma {
 
   export type ActivityGroupByOutputType = {
     id: string
-    trackerId: string
+    accountId: string
     title: string
     details: JsonValue
     activityOn: Date
@@ -8686,7 +8483,7 @@ export namespace Prisma {
 
   export type ActivitySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    trackerId?: boolean
+    accountId?: boolean
     title?: boolean
     details?: boolean
     activityOn?: boolean
@@ -8695,7 +8492,7 @@ export namespace Prisma {
 
   export type ActivitySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    trackerId?: boolean
+    accountId?: boolean
     title?: boolean
     details?: boolean
     activityOn?: boolean
@@ -8704,7 +8501,7 @@ export namespace Prisma {
 
   export type ActivitySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    trackerId?: boolean
+    accountId?: boolean
     title?: boolean
     details?: boolean
     activityOn?: boolean
@@ -8713,21 +8510,21 @@ export namespace Prisma {
 
   export type ActivitySelectScalar = {
     id?: boolean
-    trackerId?: boolean
+    accountId?: boolean
     title?: boolean
     details?: boolean
     activityOn?: boolean
     ipAddress?: boolean
   }
 
-  export type ActivityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "trackerId" | "title" | "details" | "activityOn" | "ipAddress", ExtArgs["result"]["activity"]>
+  export type ActivityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "accountId" | "title" | "details" | "activityOn" | "ipAddress", ExtArgs["result"]["activity"]>
 
   export type $ActivityPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Activity"
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      trackerId: string
+      accountId: string
       title: string
       details: Prisma.JsonValue
       activityOn: Date
@@ -9156,7 +8953,7 @@ export namespace Prisma {
    */
   interface ActivityFieldRefs {
     readonly id: FieldRef<"Activity", 'String'>
-    readonly trackerId: FieldRef<"Activity", 'String'>
+    readonly accountId: FieldRef<"Activity", 'String'>
     readonly title: FieldRef<"Activity", 'String'>
     readonly details: FieldRef<"Activity", 'Json'>
     readonly activityOn: FieldRef<"Activity", 'DateTime'>
@@ -58885,7 +58682,6 @@ export namespace Prisma {
     applicableFor?: boolean
     permissions?: boolean
     updatedOn?: boolean
-    accounts?: boolean | AuthzRole$accountsArgs<ExtArgs>
     accessRows?: boolean | AuthzRole$accessRowsArgs<ExtArgs>
     _count?: boolean | AuthzRoleCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["authzRole"]>
@@ -58931,7 +58727,6 @@ export namespace Prisma {
 
   export type AuthzRoleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "appId" | "scope" | "acquisitionType" | "approvalPolicy" | "applicableFor" | "permissions" | "updatedOn", ExtArgs["result"]["authzRole"]>
   export type AuthzRoleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    accounts?: boolean | AuthzRole$accountsArgs<ExtArgs>
     accessRows?: boolean | AuthzRole$accessRowsArgs<ExtArgs>
     _count?: boolean | AuthzRoleCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -58941,7 +58736,6 @@ export namespace Prisma {
   export type $AuthzRolePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "AuthzRole"
     objects: {
-      accounts: Prisma.$AccountPayload<ExtArgs>[]
       accessRows: Prisma.$AccountAccessPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -59349,7 +59143,6 @@ export namespace Prisma {
    */
   export interface Prisma__AuthzRoleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    accounts<T extends AuthzRole$accountsArgs<ExtArgs> = {}>(args?: Subset<T, AuthzRole$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     accessRows<T extends AuthzRole$accessRowsArgs<ExtArgs> = {}>(args?: Subset<T, AuthzRole$accessRowsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -59780,30 +59573,6 @@ export namespace Prisma {
      * Limit how many AuthzRoles to delete.
      */
     limit?: number
-  }
-
-  /**
-   * AuthzRole.accounts
-   */
-  export type AuthzRole$accountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Account
-     */
-    select?: AccountSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Account
-     */
-    omit?: AccountOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AccountInclude<ExtArgs> | null
-    where?: AccountWhereInput
-    orderBy?: AccountOrderByWithRelationInput | AccountOrderByWithRelationInput[]
-    cursor?: AccountWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: AccountScalarFieldEnum | AccountScalarFieldEnum[]
   }
 
   /**
@@ -73086,9 +72855,6 @@ export namespace Prisma {
     displayName: 'displayName',
     displayImage: 'displayImage',
     connectionId: 'connectionId',
-    roleId: 'roleId',
-    agency: 'agency',
-    agent: 'agent',
     workingProfile: 'workingProfile'
   };
 
@@ -73097,7 +72863,7 @@ export namespace Prisma {
 
   export const ActivityScalarFieldEnum: {
     id: 'id',
-    trackerId: 'trackerId',
+    accountId: 'accountId',
     title: 'title',
     details: 'details',
     activityOn: 'activityOn',
@@ -74198,17 +73964,9 @@ export namespace Prisma {
     displayName?: StringNullableFilter<"Account"> | string | null
     displayImage?: StringNullableFilter<"Account"> | string | null
     connectionId?: StringNullableFilter<"Account"> | string | null
-    roleId?: StringNullableFilter<"Account"> | string | null
-    agency?: StringNullableFilter<"Account"> | string | null
-    agent?: StringNullableFilter<"Account"> | string | null
     workingProfile?: StringNullableFilter<"Account"> | string | null
-    role?: XOR<AuthzRoleNullableScalarRelationFilter, AuthzRoleWhereInput> | null
     accessRows?: AccountAccessListRelationFilter
-    agencyAccount?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
-    agentAccount?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
     workingProfileAccount?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
-    agencyOf?: AccountListRelationFilter
-    agentOf?: AccountListRelationFilter
     workingProfileOf?: AccountListRelationFilter
     agencyAgentMapAsAgency?: AgencyAgentMapListRelationFilter
     agencyAgentMapAsAgent?: AgencyAgentMapListRelationFilter
@@ -74231,17 +73989,9 @@ export namespace Prisma {
     displayName?: SortOrderInput | SortOrder
     displayImage?: SortOrderInput | SortOrder
     connectionId?: SortOrderInput | SortOrder
-    roleId?: SortOrderInput | SortOrder
-    agency?: SortOrderInput | SortOrder
-    agent?: SortOrderInput | SortOrder
     workingProfile?: SortOrderInput | SortOrder
-    role?: AuthzRoleOrderByWithRelationInput
     accessRows?: AccountAccessOrderByRelationAggregateInput
-    agencyAccount?: AccountOrderByWithRelationInput
-    agentAccount?: AccountOrderByWithRelationInput
     workingProfileAccount?: AccountOrderByWithRelationInput
-    agencyOf?: AccountOrderByRelationAggregateInput
-    agentOf?: AccountOrderByRelationAggregateInput
     workingProfileOf?: AccountOrderByRelationAggregateInput
     agencyAgentMapAsAgency?: AgencyAgentMapOrderByRelationAggregateInput
     agencyAgentMapAsAgent?: AgencyAgentMapOrderByRelationAggregateInput
@@ -74267,17 +74017,9 @@ export namespace Prisma {
     displayName?: StringNullableFilter<"Account"> | string | null
     displayImage?: StringNullableFilter<"Account"> | string | null
     connectionId?: StringNullableFilter<"Account"> | string | null
-    roleId?: StringNullableFilter<"Account"> | string | null
-    agency?: StringNullableFilter<"Account"> | string | null
-    agent?: StringNullableFilter<"Account"> | string | null
     workingProfile?: StringNullableFilter<"Account"> | string | null
-    role?: XOR<AuthzRoleNullableScalarRelationFilter, AuthzRoleWhereInput> | null
     accessRows?: AccountAccessListRelationFilter
-    agencyAccount?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
-    agentAccount?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
     workingProfileAccount?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
-    agencyOf?: AccountListRelationFilter
-    agentOf?: AccountListRelationFilter
     workingProfileOf?: AccountListRelationFilter
     agencyAgentMapAsAgency?: AgencyAgentMapListRelationFilter
     agencyAgentMapAsAgent?: AgencyAgentMapListRelationFilter
@@ -74300,9 +74042,6 @@ export namespace Prisma {
     displayName?: SortOrderInput | SortOrder
     displayImage?: SortOrderInput | SortOrder
     connectionId?: SortOrderInput | SortOrder
-    roleId?: SortOrderInput | SortOrder
-    agency?: SortOrderInput | SortOrder
-    agent?: SortOrderInput | SortOrder
     workingProfile?: SortOrderInput | SortOrder
     _count?: AccountCountOrderByAggregateInput
     _max?: AccountMaxOrderByAggregateInput
@@ -74321,9 +74060,6 @@ export namespace Prisma {
     displayName?: StringNullableWithAggregatesFilter<"Account"> | string | null
     displayImage?: StringNullableWithAggregatesFilter<"Account"> | string | null
     connectionId?: StringNullableWithAggregatesFilter<"Account"> | string | null
-    roleId?: StringNullableWithAggregatesFilter<"Account"> | string | null
-    agency?: StringNullableWithAggregatesFilter<"Account"> | string | null
-    agent?: StringNullableWithAggregatesFilter<"Account"> | string | null
     workingProfile?: StringNullableWithAggregatesFilter<"Account"> | string | null
   }
 
@@ -74332,7 +74068,7 @@ export namespace Prisma {
     OR?: ActivityWhereInput[]
     NOT?: ActivityWhereInput | ActivityWhereInput[]
     id?: StringFilter<"Activity"> | string
-    trackerId?: StringFilter<"Activity"> | string
+    accountId?: StringFilter<"Activity"> | string
     title?: StringFilter<"Activity"> | string
     details?: JsonFilter<"Activity">
     activityOn?: DateTimeFilter<"Activity"> | Date | string
@@ -74341,7 +74077,7 @@ export namespace Prisma {
 
   export type ActivityOrderByWithRelationInput = {
     id?: SortOrder
-    trackerId?: SortOrder
+    accountId?: SortOrder
     title?: SortOrder
     details?: SortOrder
     activityOn?: SortOrder
@@ -74353,7 +74089,7 @@ export namespace Prisma {
     AND?: ActivityWhereInput | ActivityWhereInput[]
     OR?: ActivityWhereInput[]
     NOT?: ActivityWhereInput | ActivityWhereInput[]
-    trackerId?: StringFilter<"Activity"> | string
+    accountId?: StringFilter<"Activity"> | string
     title?: StringFilter<"Activity"> | string
     details?: JsonFilter<"Activity">
     activityOn?: DateTimeFilter<"Activity"> | Date | string
@@ -74362,7 +74098,7 @@ export namespace Prisma {
 
   export type ActivityOrderByWithAggregationInput = {
     id?: SortOrder
-    trackerId?: SortOrder
+    accountId?: SortOrder
     title?: SortOrder
     details?: SortOrder
     activityOn?: SortOrder
@@ -74377,7 +74113,7 @@ export namespace Prisma {
     OR?: ActivityScalarWhereWithAggregatesInput[]
     NOT?: ActivityScalarWhereWithAggregatesInput | ActivityScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Activity"> | string
-    trackerId?: StringWithAggregatesFilter<"Activity"> | string
+    accountId?: StringWithAggregatesFilter<"Activity"> | string
     title?: StringWithAggregatesFilter<"Activity"> | string
     details?: JsonWithAggregatesFilter<"Activity">
     activityOn?: DateTimeWithAggregatesFilter<"Activity"> | Date | string
@@ -77734,7 +77470,6 @@ export namespace Prisma {
     applicableFor?: JsonNullableFilter<"AuthzRole">
     permissions?: JsonNullableFilter<"AuthzRole">
     updatedOn?: DateTimeFilter<"AuthzRole"> | Date | string
-    accounts?: AccountListRelationFilter
     accessRows?: AccountAccessListRelationFilter
   }
 
@@ -77749,7 +77484,6 @@ export namespace Prisma {
     applicableFor?: SortOrderInput | SortOrder
     permissions?: SortOrderInput | SortOrder
     updatedOn?: SortOrder
-    accounts?: AccountOrderByRelationAggregateInput
     accessRows?: AccountAccessOrderByRelationAggregateInput
   }
 
@@ -77767,7 +77501,6 @@ export namespace Prisma {
     applicableFor?: JsonNullableFilter<"AuthzRole">
     permissions?: JsonNullableFilter<"AuthzRole">
     updatedOn?: DateTimeFilter<"AuthzRole"> | Date | string
-    accounts?: AccountListRelationFilter
     accessRows?: AccountAccessListRelationFilter
   }, "id">
 
@@ -78633,13 +78366,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    role?: AuthzRoleCreateNestedOneWithoutAccountsInput
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
-    agencyAccount?: AccountCreateNestedOneWithoutAgencyOfInput
-    agentAccount?: AccountCreateNestedOneWithoutAgentOfInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
-    agencyOf?: AccountCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
@@ -78662,13 +78390,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    roleId?: string | null
-    agency?: string | null
-    agent?: string | null
     workingProfile?: string | null
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
-    agencyOf?: AccountUncheckedCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountUncheckedCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
@@ -78691,13 +78414,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: AuthzRoleUpdateOneWithoutAccountsNestedInput
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
-    agencyAccount?: AccountUpdateOneWithoutAgencyOfNestedInput
-    agentAccount?: AccountUpdateOneWithoutAgentOfNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
-    agencyOf?: AccountUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
@@ -78720,13 +78438,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: NullableStringFieldUpdateOperationsInput | string | null
-    agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
-    agencyOf?: AccountUncheckedUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUncheckedUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
@@ -78749,9 +78462,6 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    roleId?: string | null
-    agency?: string | null
-    agent?: string | null
     workingProfile?: string | null
   }
 
@@ -78775,15 +78485,12 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: NullableStringFieldUpdateOperationsInput | string | null
-    agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ActivityCreateInput = {
     id?: string
-    trackerId: string
+    accountId: string
     title: string
     details: JsonNullValueInput | InputJsonValue
     activityOn?: Date | string
@@ -78792,7 +78499,7 @@ export namespace Prisma {
 
   export type ActivityUncheckedCreateInput = {
     id?: string
-    trackerId: string
+    accountId: string
     title: string
     details: JsonNullValueInput | InputJsonValue
     activityOn?: Date | string
@@ -78801,7 +78508,7 @@ export namespace Prisma {
 
   export type ActivityUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    trackerId?: StringFieldUpdateOperationsInput | string
+    accountId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     details?: JsonNullValueInput | InputJsonValue
     activityOn?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -78810,7 +78517,7 @@ export namespace Prisma {
 
   export type ActivityUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    trackerId?: StringFieldUpdateOperationsInput | string
+    accountId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     details?: JsonNullValueInput | InputJsonValue
     activityOn?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -78819,7 +78526,7 @@ export namespace Prisma {
 
   export type ActivityCreateManyInput = {
     id?: string
-    trackerId: string
+    accountId: string
     title: string
     details: JsonNullValueInput | InputJsonValue
     activityOn?: Date | string
@@ -78828,7 +78535,7 @@ export namespace Prisma {
 
   export type ActivityUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    trackerId?: StringFieldUpdateOperationsInput | string
+    accountId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     details?: JsonNullValueInput | InputJsonValue
     activityOn?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -78837,7 +78544,7 @@ export namespace Prisma {
 
   export type ActivityUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    trackerId?: StringFieldUpdateOperationsInput | string
+    accountId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     details?: JsonNullValueInput | InputJsonValue
     activityOn?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -82571,7 +82278,6 @@ export namespace Prisma {
     applicableFor?: NullableJsonNullValueInput | InputJsonValue
     permissions?: NullableJsonNullValueInput | InputJsonValue
     updatedOn?: Date | string
-    accounts?: AccountCreateNestedManyWithoutRoleInput
     accessRows?: AccountAccessCreateNestedManyWithoutRoleInput
   }
 
@@ -82586,7 +82292,6 @@ export namespace Prisma {
     applicableFor?: NullableJsonNullValueInput | InputJsonValue
     permissions?: NullableJsonNullValueInput | InputJsonValue
     updatedOn?: Date | string
-    accounts?: AccountUncheckedCreateNestedManyWithoutRoleInput
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutRoleInput
   }
 
@@ -82601,7 +82306,6 @@ export namespace Prisma {
     applicableFor?: NullableJsonNullValueInput | InputJsonValue
     permissions?: NullableJsonNullValueInput | InputJsonValue
     updatedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accounts?: AccountUpdateManyWithoutRoleNestedInput
     accessRows?: AccountAccessUpdateManyWithoutRoleNestedInput
   }
 
@@ -82616,7 +82320,6 @@ export namespace Prisma {
     applicableFor?: NullableJsonNullValueInput | InputJsonValue
     permissions?: NullableJsonNullValueInput | InputJsonValue
     updatedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accounts?: AccountUncheckedUpdateManyWithoutRoleNestedInput
     accessRows?: AccountAccessUncheckedUpdateManyWithoutRoleNestedInput
   }
 
@@ -83569,11 +83272,6 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type AuthzRoleNullableScalarRelationFilter = {
-    is?: AuthzRoleWhereInput | null
-    isNot?: AuthzRoleWhereInput | null
-  }
-
   export type AccountAccessListRelationFilter = {
     every?: AccountAccessWhereInput
     some?: AccountAccessWhereInput
@@ -83673,9 +83371,6 @@ export namespace Prisma {
     displayName?: SortOrder
     displayImage?: SortOrder
     connectionId?: SortOrder
-    roleId?: SortOrder
-    agency?: SortOrder
-    agent?: SortOrder
     workingProfile?: SortOrder
   }
 
@@ -83688,9 +83383,6 @@ export namespace Prisma {
     displayName?: SortOrder
     displayImage?: SortOrder
     connectionId?: SortOrder
-    roleId?: SortOrder
-    agency?: SortOrder
-    agent?: SortOrder
     workingProfile?: SortOrder
   }
 
@@ -83703,9 +83395,6 @@ export namespace Prisma {
     displayName?: SortOrder
     displayImage?: SortOrder
     connectionId?: SortOrder
-    roleId?: SortOrder
-    agency?: SortOrder
-    agent?: SortOrder
     workingProfile?: SortOrder
   }
 
@@ -83784,7 +83473,7 @@ export namespace Prisma {
 
   export type ActivityCountOrderByAggregateInput = {
     id?: SortOrder
-    trackerId?: SortOrder
+    accountId?: SortOrder
     title?: SortOrder
     details?: SortOrder
     activityOn?: SortOrder
@@ -83793,7 +83482,7 @@ export namespace Prisma {
 
   export type ActivityMaxOrderByAggregateInput = {
     id?: SortOrder
-    trackerId?: SortOrder
+    accountId?: SortOrder
     title?: SortOrder
     activityOn?: SortOrder
     ipAddress?: SortOrder
@@ -83801,7 +83490,7 @@ export namespace Prisma {
 
   export type ActivityMinOrderByAggregateInput = {
     id?: SortOrder
-    trackerId?: SortOrder
+    accountId?: SortOrder
     title?: SortOrder
     activityOn?: SortOrder
     ipAddress?: SortOrder
@@ -86611,12 +86300,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type AuthzRoleCreateNestedOneWithoutAccountsInput = {
-    create?: XOR<AuthzRoleCreateWithoutAccountsInput, AuthzRoleUncheckedCreateWithoutAccountsInput>
-    connectOrCreate?: AuthzRoleCreateOrConnectWithoutAccountsInput
-    connect?: AuthzRoleWhereUniqueInput
-  }
-
   export type AccountAccessCreateNestedManyWithoutAccountInput = {
     create?: XOR<AccountAccessCreateWithoutAccountInput, AccountAccessUncheckedCreateWithoutAccountInput> | AccountAccessCreateWithoutAccountInput[] | AccountAccessUncheckedCreateWithoutAccountInput[]
     connectOrCreate?: AccountAccessCreateOrConnectWithoutAccountInput | AccountAccessCreateOrConnectWithoutAccountInput[]
@@ -86624,36 +86307,10 @@ export namespace Prisma {
     connect?: AccountAccessWhereUniqueInput | AccountAccessWhereUniqueInput[]
   }
 
-  export type AccountCreateNestedOneWithoutAgencyOfInput = {
-    create?: XOR<AccountCreateWithoutAgencyOfInput, AccountUncheckedCreateWithoutAgencyOfInput>
-    connectOrCreate?: AccountCreateOrConnectWithoutAgencyOfInput
-    connect?: AccountWhereUniqueInput
-  }
-
-  export type AccountCreateNestedOneWithoutAgentOfInput = {
-    create?: XOR<AccountCreateWithoutAgentOfInput, AccountUncheckedCreateWithoutAgentOfInput>
-    connectOrCreate?: AccountCreateOrConnectWithoutAgentOfInput
-    connect?: AccountWhereUniqueInput
-  }
-
   export type AccountCreateNestedOneWithoutWorkingProfileOfInput = {
     create?: XOR<AccountCreateWithoutWorkingProfileOfInput, AccountUncheckedCreateWithoutWorkingProfileOfInput>
     connectOrCreate?: AccountCreateOrConnectWithoutWorkingProfileOfInput
     connect?: AccountWhereUniqueInput
-  }
-
-  export type AccountCreateNestedManyWithoutAgencyAccountInput = {
-    create?: XOR<AccountCreateWithoutAgencyAccountInput, AccountUncheckedCreateWithoutAgencyAccountInput> | AccountCreateWithoutAgencyAccountInput[] | AccountUncheckedCreateWithoutAgencyAccountInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutAgencyAccountInput | AccountCreateOrConnectWithoutAgencyAccountInput[]
-    createMany?: AccountCreateManyAgencyAccountInputEnvelope
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-  }
-
-  export type AccountCreateNestedManyWithoutAgentAccountInput = {
-    create?: XOR<AccountCreateWithoutAgentAccountInput, AccountUncheckedCreateWithoutAgentAccountInput> | AccountCreateWithoutAgentAccountInput[] | AccountUncheckedCreateWithoutAgentAccountInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutAgentAccountInput | AccountCreateOrConnectWithoutAgentAccountInput[]
-    createMany?: AccountCreateManyAgentAccountInputEnvelope
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
   }
 
   export type AccountCreateNestedManyWithoutWorkingProfileAccountInput = {
@@ -86738,20 +86395,6 @@ export namespace Prisma {
     connectOrCreate?: AccountAccessCreateOrConnectWithoutAccountInput | AccountAccessCreateOrConnectWithoutAccountInput[]
     createMany?: AccountAccessCreateManyAccountInputEnvelope
     connect?: AccountAccessWhereUniqueInput | AccountAccessWhereUniqueInput[]
-  }
-
-  export type AccountUncheckedCreateNestedManyWithoutAgencyAccountInput = {
-    create?: XOR<AccountCreateWithoutAgencyAccountInput, AccountUncheckedCreateWithoutAgencyAccountInput> | AccountCreateWithoutAgencyAccountInput[] | AccountUncheckedCreateWithoutAgencyAccountInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutAgencyAccountInput | AccountCreateOrConnectWithoutAgencyAccountInput[]
-    createMany?: AccountCreateManyAgencyAccountInputEnvelope
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-  }
-
-  export type AccountUncheckedCreateNestedManyWithoutAgentAccountInput = {
-    create?: XOR<AccountCreateWithoutAgentAccountInput, AccountUncheckedCreateWithoutAgentAccountInput> | AccountCreateWithoutAgentAccountInput[] | AccountUncheckedCreateWithoutAgentAccountInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutAgentAccountInput | AccountCreateOrConnectWithoutAgentAccountInput[]
-    createMany?: AccountCreateManyAgentAccountInputEnvelope
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
   }
 
   export type AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput = {
@@ -86843,16 +86486,6 @@ export namespace Prisma {
     set?: Date | string
   }
 
-  export type AuthzRoleUpdateOneWithoutAccountsNestedInput = {
-    create?: XOR<AuthzRoleCreateWithoutAccountsInput, AuthzRoleUncheckedCreateWithoutAccountsInput>
-    connectOrCreate?: AuthzRoleCreateOrConnectWithoutAccountsInput
-    upsert?: AuthzRoleUpsertWithoutAccountsInput
-    disconnect?: AuthzRoleWhereInput | boolean
-    delete?: AuthzRoleWhereInput | boolean
-    connect?: AuthzRoleWhereUniqueInput
-    update?: XOR<XOR<AuthzRoleUpdateToOneWithWhereWithoutAccountsInput, AuthzRoleUpdateWithoutAccountsInput>, AuthzRoleUncheckedUpdateWithoutAccountsInput>
-  }
-
   export type AccountAccessUpdateManyWithoutAccountNestedInput = {
     create?: XOR<AccountAccessCreateWithoutAccountInput, AccountAccessUncheckedCreateWithoutAccountInput> | AccountAccessCreateWithoutAccountInput[] | AccountAccessUncheckedCreateWithoutAccountInput[]
     connectOrCreate?: AccountAccessCreateOrConnectWithoutAccountInput | AccountAccessCreateOrConnectWithoutAccountInput[]
@@ -86867,26 +86500,6 @@ export namespace Prisma {
     deleteMany?: AccountAccessScalarWhereInput | AccountAccessScalarWhereInput[]
   }
 
-  export type AccountUpdateOneWithoutAgencyOfNestedInput = {
-    create?: XOR<AccountCreateWithoutAgencyOfInput, AccountUncheckedCreateWithoutAgencyOfInput>
-    connectOrCreate?: AccountCreateOrConnectWithoutAgencyOfInput
-    upsert?: AccountUpsertWithoutAgencyOfInput
-    disconnect?: AccountWhereInput | boolean
-    delete?: AccountWhereInput | boolean
-    connect?: AccountWhereUniqueInput
-    update?: XOR<XOR<AccountUpdateToOneWithWhereWithoutAgencyOfInput, AccountUpdateWithoutAgencyOfInput>, AccountUncheckedUpdateWithoutAgencyOfInput>
-  }
-
-  export type AccountUpdateOneWithoutAgentOfNestedInput = {
-    create?: XOR<AccountCreateWithoutAgentOfInput, AccountUncheckedCreateWithoutAgentOfInput>
-    connectOrCreate?: AccountCreateOrConnectWithoutAgentOfInput
-    upsert?: AccountUpsertWithoutAgentOfInput
-    disconnect?: AccountWhereInput | boolean
-    delete?: AccountWhereInput | boolean
-    connect?: AccountWhereUniqueInput
-    update?: XOR<XOR<AccountUpdateToOneWithWhereWithoutAgentOfInput, AccountUpdateWithoutAgentOfInput>, AccountUncheckedUpdateWithoutAgentOfInput>
-  }
-
   export type AccountUpdateOneWithoutWorkingProfileOfNestedInput = {
     create?: XOR<AccountCreateWithoutWorkingProfileOfInput, AccountUncheckedCreateWithoutWorkingProfileOfInput>
     connectOrCreate?: AccountCreateOrConnectWithoutWorkingProfileOfInput
@@ -86895,34 +86508,6 @@ export namespace Prisma {
     delete?: AccountWhereInput | boolean
     connect?: AccountWhereUniqueInput
     update?: XOR<XOR<AccountUpdateToOneWithWhereWithoutWorkingProfileOfInput, AccountUpdateWithoutWorkingProfileOfInput>, AccountUncheckedUpdateWithoutWorkingProfileOfInput>
-  }
-
-  export type AccountUpdateManyWithoutAgencyAccountNestedInput = {
-    create?: XOR<AccountCreateWithoutAgencyAccountInput, AccountUncheckedCreateWithoutAgencyAccountInput> | AccountCreateWithoutAgencyAccountInput[] | AccountUncheckedCreateWithoutAgencyAccountInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutAgencyAccountInput | AccountCreateOrConnectWithoutAgencyAccountInput[]
-    upsert?: AccountUpsertWithWhereUniqueWithoutAgencyAccountInput | AccountUpsertWithWhereUniqueWithoutAgencyAccountInput[]
-    createMany?: AccountCreateManyAgencyAccountInputEnvelope
-    set?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    disconnect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    delete?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    update?: AccountUpdateWithWhereUniqueWithoutAgencyAccountInput | AccountUpdateWithWhereUniqueWithoutAgencyAccountInput[]
-    updateMany?: AccountUpdateManyWithWhereWithoutAgencyAccountInput | AccountUpdateManyWithWhereWithoutAgencyAccountInput[]
-    deleteMany?: AccountScalarWhereInput | AccountScalarWhereInput[]
-  }
-
-  export type AccountUpdateManyWithoutAgentAccountNestedInput = {
-    create?: XOR<AccountCreateWithoutAgentAccountInput, AccountUncheckedCreateWithoutAgentAccountInput> | AccountCreateWithoutAgentAccountInput[] | AccountUncheckedCreateWithoutAgentAccountInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutAgentAccountInput | AccountCreateOrConnectWithoutAgentAccountInput[]
-    upsert?: AccountUpsertWithWhereUniqueWithoutAgentAccountInput | AccountUpsertWithWhereUniqueWithoutAgentAccountInput[]
-    createMany?: AccountCreateManyAgentAccountInputEnvelope
-    set?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    disconnect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    delete?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    update?: AccountUpdateWithWhereUniqueWithoutAgentAccountInput | AccountUpdateWithWhereUniqueWithoutAgentAccountInput[]
-    updateMany?: AccountUpdateManyWithWhereWithoutAgentAccountInput | AccountUpdateManyWithWhereWithoutAgentAccountInput[]
-    deleteMany?: AccountScalarWhereInput | AccountScalarWhereInput[]
   }
 
   export type AccountUpdateManyWithoutWorkingProfileAccountNestedInput = {
@@ -87091,34 +86676,6 @@ export namespace Prisma {
     update?: AccountAccessUpdateWithWhereUniqueWithoutAccountInput | AccountAccessUpdateWithWhereUniqueWithoutAccountInput[]
     updateMany?: AccountAccessUpdateManyWithWhereWithoutAccountInput | AccountAccessUpdateManyWithWhereWithoutAccountInput[]
     deleteMany?: AccountAccessScalarWhereInput | AccountAccessScalarWhereInput[]
-  }
-
-  export type AccountUncheckedUpdateManyWithoutAgencyAccountNestedInput = {
-    create?: XOR<AccountCreateWithoutAgencyAccountInput, AccountUncheckedCreateWithoutAgencyAccountInput> | AccountCreateWithoutAgencyAccountInput[] | AccountUncheckedCreateWithoutAgencyAccountInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutAgencyAccountInput | AccountCreateOrConnectWithoutAgencyAccountInput[]
-    upsert?: AccountUpsertWithWhereUniqueWithoutAgencyAccountInput | AccountUpsertWithWhereUniqueWithoutAgencyAccountInput[]
-    createMany?: AccountCreateManyAgencyAccountInputEnvelope
-    set?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    disconnect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    delete?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    update?: AccountUpdateWithWhereUniqueWithoutAgencyAccountInput | AccountUpdateWithWhereUniqueWithoutAgencyAccountInput[]
-    updateMany?: AccountUpdateManyWithWhereWithoutAgencyAccountInput | AccountUpdateManyWithWhereWithoutAgencyAccountInput[]
-    deleteMany?: AccountScalarWhereInput | AccountScalarWhereInput[]
-  }
-
-  export type AccountUncheckedUpdateManyWithoutAgentAccountNestedInput = {
-    create?: XOR<AccountCreateWithoutAgentAccountInput, AccountUncheckedCreateWithoutAgentAccountInput> | AccountCreateWithoutAgentAccountInput[] | AccountUncheckedCreateWithoutAgentAccountInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutAgentAccountInput | AccountCreateOrConnectWithoutAgentAccountInput[]
-    upsert?: AccountUpsertWithWhereUniqueWithoutAgentAccountInput | AccountUpsertWithWhereUniqueWithoutAgentAccountInput[]
-    createMany?: AccountCreateManyAgentAccountInputEnvelope
-    set?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    disconnect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    delete?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    update?: AccountUpdateWithWhereUniqueWithoutAgentAccountInput | AccountUpdateWithWhereUniqueWithoutAgentAccountInput[]
-    updateMany?: AccountUpdateManyWithWhereWithoutAgentAccountInput | AccountUpdateManyWithWhereWithoutAgentAccountInput[]
-    deleteMany?: AccountScalarWhereInput | AccountScalarWhereInput[]
   }
 
   export type AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput = {
@@ -88769,13 +88326,6 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type AccountCreateNestedManyWithoutRoleInput = {
-    create?: XOR<AccountCreateWithoutRoleInput, AccountUncheckedCreateWithoutRoleInput> | AccountCreateWithoutRoleInput[] | AccountUncheckedCreateWithoutRoleInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutRoleInput | AccountCreateOrConnectWithoutRoleInput[]
-    createMany?: AccountCreateManyRoleInputEnvelope
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-  }
-
   export type AccountAccessCreateNestedManyWithoutRoleInput = {
     create?: XOR<AccountAccessCreateWithoutRoleInput, AccountAccessUncheckedCreateWithoutRoleInput> | AccountAccessCreateWithoutRoleInput[] | AccountAccessUncheckedCreateWithoutRoleInput[]
     connectOrCreate?: AccountAccessCreateOrConnectWithoutRoleInput | AccountAccessCreateOrConnectWithoutRoleInput[]
@@ -88783,32 +88333,11 @@ export namespace Prisma {
     connect?: AccountAccessWhereUniqueInput | AccountAccessWhereUniqueInput[]
   }
 
-  export type AccountUncheckedCreateNestedManyWithoutRoleInput = {
-    create?: XOR<AccountCreateWithoutRoleInput, AccountUncheckedCreateWithoutRoleInput> | AccountCreateWithoutRoleInput[] | AccountUncheckedCreateWithoutRoleInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutRoleInput | AccountCreateOrConnectWithoutRoleInput[]
-    createMany?: AccountCreateManyRoleInputEnvelope
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-  }
-
   export type AccountAccessUncheckedCreateNestedManyWithoutRoleInput = {
     create?: XOR<AccountAccessCreateWithoutRoleInput, AccountAccessUncheckedCreateWithoutRoleInput> | AccountAccessCreateWithoutRoleInput[] | AccountAccessUncheckedCreateWithoutRoleInput[]
     connectOrCreate?: AccountAccessCreateOrConnectWithoutRoleInput | AccountAccessCreateOrConnectWithoutRoleInput[]
     createMany?: AccountAccessCreateManyRoleInputEnvelope
     connect?: AccountAccessWhereUniqueInput | AccountAccessWhereUniqueInput[]
-  }
-
-  export type AccountUpdateManyWithoutRoleNestedInput = {
-    create?: XOR<AccountCreateWithoutRoleInput, AccountUncheckedCreateWithoutRoleInput> | AccountCreateWithoutRoleInput[] | AccountUncheckedCreateWithoutRoleInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutRoleInput | AccountCreateOrConnectWithoutRoleInput[]
-    upsert?: AccountUpsertWithWhereUniqueWithoutRoleInput | AccountUpsertWithWhereUniqueWithoutRoleInput[]
-    createMany?: AccountCreateManyRoleInputEnvelope
-    set?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    disconnect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    delete?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    update?: AccountUpdateWithWhereUniqueWithoutRoleInput | AccountUpdateWithWhereUniqueWithoutRoleInput[]
-    updateMany?: AccountUpdateManyWithWhereWithoutRoleInput | AccountUpdateManyWithWhereWithoutRoleInput[]
-    deleteMany?: AccountScalarWhereInput | AccountScalarWhereInput[]
   }
 
   export type AccountAccessUpdateManyWithoutRoleNestedInput = {
@@ -88823,20 +88352,6 @@ export namespace Prisma {
     update?: AccountAccessUpdateWithWhereUniqueWithoutRoleInput | AccountAccessUpdateWithWhereUniqueWithoutRoleInput[]
     updateMany?: AccountAccessUpdateManyWithWhereWithoutRoleInput | AccountAccessUpdateManyWithWhereWithoutRoleInput[]
     deleteMany?: AccountAccessScalarWhereInput | AccountAccessScalarWhereInput[]
-  }
-
-  export type AccountUncheckedUpdateManyWithoutRoleNestedInput = {
-    create?: XOR<AccountCreateWithoutRoleInput, AccountUncheckedCreateWithoutRoleInput> | AccountCreateWithoutRoleInput[] | AccountUncheckedCreateWithoutRoleInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutRoleInput | AccountCreateOrConnectWithoutRoleInput[]
-    upsert?: AccountUpsertWithWhereUniqueWithoutRoleInput | AccountUpsertWithWhereUniqueWithoutRoleInput[]
-    createMany?: AccountCreateManyRoleInputEnvelope
-    set?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    disconnect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    delete?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    update?: AccountUpdateWithWhereUniqueWithoutRoleInput | AccountUpdateWithWhereUniqueWithoutRoleInput[]
-    updateMany?: AccountUpdateManyWithWhereWithoutRoleInput | AccountUpdateManyWithWhereWithoutRoleInput[]
-    deleteMany?: AccountScalarWhereInput | AccountScalarWhereInput[]
   }
 
   export type AccountAccessUncheckedUpdateManyWithoutRoleNestedInput = {
@@ -89845,39 +89360,6 @@ export namespace Prisma {
     _max?: NestedEnumPropertyCompetitionStatusFilter<$PrismaModel>
   }
 
-  export type AuthzRoleCreateWithoutAccountsInput = {
-    id?: string
-    name: string
-    description?: string | null
-    appId: string
-    scope?: string | null
-    acquisitionType?: string | null
-    approvalPolicy?: string | null
-    applicableFor?: NullableJsonNullValueInput | InputJsonValue
-    permissions?: NullableJsonNullValueInput | InputJsonValue
-    updatedOn?: Date | string
-    accessRows?: AccountAccessCreateNestedManyWithoutRoleInput
-  }
-
-  export type AuthzRoleUncheckedCreateWithoutAccountsInput = {
-    id?: string
-    name: string
-    description?: string | null
-    appId: string
-    scope?: string | null
-    acquisitionType?: string | null
-    approvalPolicy?: string | null
-    applicableFor?: NullableJsonNullValueInput | InputJsonValue
-    permissions?: NullableJsonNullValueInput | InputJsonValue
-    updatedOn?: Date | string
-    accessRows?: AccountAccessUncheckedCreateNestedManyWithoutRoleInput
-  }
-
-  export type AuthzRoleCreateOrConnectWithoutAccountsInput = {
-    where: AuthzRoleWhereUniqueInput
-    create: XOR<AuthzRoleCreateWithoutAccountsInput, AuthzRoleUncheckedCreateWithoutAccountsInput>
-  }
-
   export type AccountAccessCreateWithoutAccountInput = {
     appId: string
     updatedOn?: Date | string
@@ -89900,128 +89382,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type AccountCreateWithoutAgencyOfInput = {
-    id: string
-    neupId?: string | null
-    accountType: string
-    createdOn?: Date | string
-    accessedOn?: Date | string
-    displayName?: string | null
-    displayImage?: string | null
-    connectionId?: string | null
-    role?: AuthzRoleCreateNestedOneWithoutAccountsInput
-    accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
-    agencyAccount?: AccountCreateNestedOneWithoutAgencyOfInput
-    agentAccount?: AccountCreateNestedOneWithoutAgentOfInput
-    workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
-    agentOf?: AccountCreateNestedManyWithoutAgentAccountInput
-    workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
-    agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
-    agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
-    intelligenceMappings?: IntelligenceMappingCreateNestedManyWithoutAccountInput
-    intelligenceAlerts?: IntelligenceAlertCreateNestedManyWithoutAccountInput
-    propertyChanges?: PropertyChangeCreateNestedManyWithoutAccountInput
-    createdPropertyChanges?: PropertyChangeCreateNestedManyWithoutCreatedByInput
-    propertyChangesForProfile?: PropertyChangeCreateNestedManyWithoutCreatedForInput
-    propertyChangesByWorkingProfile?: PropertyChangeCreateNestedManyWithoutWorkingProfileInput
-  }
-
-  export type AccountUncheckedCreateWithoutAgencyOfInput = {
-    id: string
-    neupId?: string | null
-    accountType: string
-    createdOn?: Date | string
-    accessedOn?: Date | string
-    displayName?: string | null
-    displayImage?: string | null
-    connectionId?: string | null
-    roleId?: string | null
-    agency?: string | null
-    agent?: string | null
-    workingProfile?: string | null
-    accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
-    agentOf?: AccountUncheckedCreateNestedManyWithoutAgentAccountInput
-    workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
-    agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
-    agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
-    intelligenceMappings?: IntelligenceMappingUncheckedCreateNestedManyWithoutAccountInput
-    intelligenceAlerts?: IntelligenceAlertUncheckedCreateNestedManyWithoutAccountInput
-    propertyChanges?: PropertyChangeUncheckedCreateNestedManyWithoutAccountInput
-    createdPropertyChanges?: PropertyChangeUncheckedCreateNestedManyWithoutCreatedByInput
-    propertyChangesForProfile?: PropertyChangeUncheckedCreateNestedManyWithoutCreatedForInput
-    propertyChangesByWorkingProfile?: PropertyChangeUncheckedCreateNestedManyWithoutWorkingProfileInput
-  }
-
-  export type AccountCreateOrConnectWithoutAgencyOfInput = {
-    where: AccountWhereUniqueInput
-    create: XOR<AccountCreateWithoutAgencyOfInput, AccountUncheckedCreateWithoutAgencyOfInput>
-  }
-
-  export type AccountCreateWithoutAgentOfInput = {
-    id: string
-    neupId?: string | null
-    accountType: string
-    createdOn?: Date | string
-    accessedOn?: Date | string
-    displayName?: string | null
-    displayImage?: string | null
-    connectionId?: string | null
-    role?: AuthzRoleCreateNestedOneWithoutAccountsInput
-    accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
-    agencyAccount?: AccountCreateNestedOneWithoutAgencyOfInput
-    agentAccount?: AccountCreateNestedOneWithoutAgentOfInput
-    workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
-    agencyOf?: AccountCreateNestedManyWithoutAgencyAccountInput
-    workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
-    agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
-    agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
-    intelligenceMappings?: IntelligenceMappingCreateNestedManyWithoutAccountInput
-    intelligenceAlerts?: IntelligenceAlertCreateNestedManyWithoutAccountInput
-    propertyChanges?: PropertyChangeCreateNestedManyWithoutAccountInput
-    createdPropertyChanges?: PropertyChangeCreateNestedManyWithoutCreatedByInput
-    propertyChangesForProfile?: PropertyChangeCreateNestedManyWithoutCreatedForInput
-    propertyChangesByWorkingProfile?: PropertyChangeCreateNestedManyWithoutWorkingProfileInput
-  }
-
-  export type AccountUncheckedCreateWithoutAgentOfInput = {
-    id: string
-    neupId?: string | null
-    accountType: string
-    createdOn?: Date | string
-    accessedOn?: Date | string
-    displayName?: string | null
-    displayImage?: string | null
-    connectionId?: string | null
-    roleId?: string | null
-    agency?: string | null
-    agent?: string | null
-    workingProfile?: string | null
-    accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
-    agencyOf?: AccountUncheckedCreateNestedManyWithoutAgencyAccountInput
-    workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
-    agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
-    agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
-    intelligenceMappings?: IntelligenceMappingUncheckedCreateNestedManyWithoutAccountInput
-    intelligenceAlerts?: IntelligenceAlertUncheckedCreateNestedManyWithoutAccountInput
-    propertyChanges?: PropertyChangeUncheckedCreateNestedManyWithoutAccountInput
-    createdPropertyChanges?: PropertyChangeUncheckedCreateNestedManyWithoutCreatedByInput
-    propertyChangesForProfile?: PropertyChangeUncheckedCreateNestedManyWithoutCreatedForInput
-    propertyChangesByWorkingProfile?: PropertyChangeUncheckedCreateNestedManyWithoutWorkingProfileInput
-  }
-
-  export type AccountCreateOrConnectWithoutAgentOfInput = {
-    where: AccountWhereUniqueInput
-    create: XOR<AccountCreateWithoutAgentOfInput, AccountUncheckedCreateWithoutAgentOfInput>
-  }
-
   export type AccountCreateWithoutWorkingProfileOfInput = {
     id: string
     neupId?: string | null
@@ -90031,13 +89391,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    role?: AuthzRoleCreateNestedOneWithoutAccountsInput
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
-    agencyAccount?: AccountCreateNestedOneWithoutAgencyOfInput
-    agentAccount?: AccountCreateNestedOneWithoutAgentOfInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
-    agencyOf?: AccountCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountCreateNestedManyWithoutAgentAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
@@ -90059,13 +89414,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    roleId?: string | null
-    agency?: string | null
-    agent?: string | null
     workingProfile?: string | null
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
-    agencyOf?: AccountUncheckedCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountUncheckedCreateNestedManyWithoutAgentAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
@@ -90083,138 +89433,6 @@ export namespace Prisma {
     create: XOR<AccountCreateWithoutWorkingProfileOfInput, AccountUncheckedCreateWithoutWorkingProfileOfInput>
   }
 
-  export type AccountCreateWithoutAgencyAccountInput = {
-    id: string
-    neupId?: string | null
-    accountType: string
-    createdOn?: Date | string
-    accessedOn?: Date | string
-    displayName?: string | null
-    displayImage?: string | null
-    connectionId?: string | null
-    role?: AuthzRoleCreateNestedOneWithoutAccountsInput
-    accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
-    agentAccount?: AccountCreateNestedOneWithoutAgentOfInput
-    workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
-    agencyOf?: AccountCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountCreateNestedManyWithoutAgentAccountInput
-    workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
-    agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
-    agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
-    intelligenceMappings?: IntelligenceMappingCreateNestedManyWithoutAccountInput
-    intelligenceAlerts?: IntelligenceAlertCreateNestedManyWithoutAccountInput
-    propertyChanges?: PropertyChangeCreateNestedManyWithoutAccountInput
-    createdPropertyChanges?: PropertyChangeCreateNestedManyWithoutCreatedByInput
-    propertyChangesForProfile?: PropertyChangeCreateNestedManyWithoutCreatedForInput
-    propertyChangesByWorkingProfile?: PropertyChangeCreateNestedManyWithoutWorkingProfileInput
-  }
-
-  export type AccountUncheckedCreateWithoutAgencyAccountInput = {
-    id: string
-    neupId?: string | null
-    accountType: string
-    createdOn?: Date | string
-    accessedOn?: Date | string
-    displayName?: string | null
-    displayImage?: string | null
-    connectionId?: string | null
-    roleId?: string | null
-    agent?: string | null
-    workingProfile?: string | null
-    accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
-    agencyOf?: AccountUncheckedCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountUncheckedCreateNestedManyWithoutAgentAccountInput
-    workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
-    agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
-    agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
-    intelligenceMappings?: IntelligenceMappingUncheckedCreateNestedManyWithoutAccountInput
-    intelligenceAlerts?: IntelligenceAlertUncheckedCreateNestedManyWithoutAccountInput
-    propertyChanges?: PropertyChangeUncheckedCreateNestedManyWithoutAccountInput
-    createdPropertyChanges?: PropertyChangeUncheckedCreateNestedManyWithoutCreatedByInput
-    propertyChangesForProfile?: PropertyChangeUncheckedCreateNestedManyWithoutCreatedForInput
-    propertyChangesByWorkingProfile?: PropertyChangeUncheckedCreateNestedManyWithoutWorkingProfileInput
-  }
-
-  export type AccountCreateOrConnectWithoutAgencyAccountInput = {
-    where: AccountWhereUniqueInput
-    create: XOR<AccountCreateWithoutAgencyAccountInput, AccountUncheckedCreateWithoutAgencyAccountInput>
-  }
-
-  export type AccountCreateManyAgencyAccountInputEnvelope = {
-    data: AccountCreateManyAgencyAccountInput | AccountCreateManyAgencyAccountInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type AccountCreateWithoutAgentAccountInput = {
-    id: string
-    neupId?: string | null
-    accountType: string
-    createdOn?: Date | string
-    accessedOn?: Date | string
-    displayName?: string | null
-    displayImage?: string | null
-    connectionId?: string | null
-    role?: AuthzRoleCreateNestedOneWithoutAccountsInput
-    accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
-    agencyAccount?: AccountCreateNestedOneWithoutAgencyOfInput
-    workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
-    agencyOf?: AccountCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountCreateNestedManyWithoutAgentAccountInput
-    workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
-    agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
-    agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
-    intelligenceMappings?: IntelligenceMappingCreateNestedManyWithoutAccountInput
-    intelligenceAlerts?: IntelligenceAlertCreateNestedManyWithoutAccountInput
-    propertyChanges?: PropertyChangeCreateNestedManyWithoutAccountInput
-    createdPropertyChanges?: PropertyChangeCreateNestedManyWithoutCreatedByInput
-    propertyChangesForProfile?: PropertyChangeCreateNestedManyWithoutCreatedForInput
-    propertyChangesByWorkingProfile?: PropertyChangeCreateNestedManyWithoutWorkingProfileInput
-  }
-
-  export type AccountUncheckedCreateWithoutAgentAccountInput = {
-    id: string
-    neupId?: string | null
-    accountType: string
-    createdOn?: Date | string
-    accessedOn?: Date | string
-    displayName?: string | null
-    displayImage?: string | null
-    connectionId?: string | null
-    roleId?: string | null
-    agency?: string | null
-    workingProfile?: string | null
-    accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
-    agencyOf?: AccountUncheckedCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountUncheckedCreateNestedManyWithoutAgentAccountInput
-    workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
-    agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
-    agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
-    intelligenceMappings?: IntelligenceMappingUncheckedCreateNestedManyWithoutAccountInput
-    intelligenceAlerts?: IntelligenceAlertUncheckedCreateNestedManyWithoutAccountInput
-    propertyChanges?: PropertyChangeUncheckedCreateNestedManyWithoutAccountInput
-    createdPropertyChanges?: PropertyChangeUncheckedCreateNestedManyWithoutCreatedByInput
-    propertyChangesForProfile?: PropertyChangeUncheckedCreateNestedManyWithoutCreatedForInput
-    propertyChangesByWorkingProfile?: PropertyChangeUncheckedCreateNestedManyWithoutWorkingProfileInput
-  }
-
-  export type AccountCreateOrConnectWithoutAgentAccountInput = {
-    where: AccountWhereUniqueInput
-    create: XOR<AccountCreateWithoutAgentAccountInput, AccountUncheckedCreateWithoutAgentAccountInput>
-  }
-
-  export type AccountCreateManyAgentAccountInputEnvelope = {
-    data: AccountCreateManyAgentAccountInput | AccountCreateManyAgentAccountInput[]
-    skipDuplicates?: boolean
-  }
-
   export type AccountCreateWithoutWorkingProfileAccountInput = {
     id: string
     neupId?: string | null
@@ -90224,12 +89442,7 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    role?: AuthzRoleCreateNestedOneWithoutAccountsInput
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
-    agencyAccount?: AccountCreateNestedOneWithoutAgencyOfInput
-    agentAccount?: AccountCreateNestedOneWithoutAgentOfInput
-    agencyOf?: AccountCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
@@ -90252,12 +89465,7 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    roleId?: string | null
-    agency?: string | null
-    agent?: string | null
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
-    agencyOf?: AccountUncheckedCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountUncheckedCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
@@ -90607,45 +89815,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type AuthzRoleUpsertWithoutAccountsInput = {
-    update: XOR<AuthzRoleUpdateWithoutAccountsInput, AuthzRoleUncheckedUpdateWithoutAccountsInput>
-    create: XOR<AuthzRoleCreateWithoutAccountsInput, AuthzRoleUncheckedCreateWithoutAccountsInput>
-    where?: AuthzRoleWhereInput
-  }
-
-  export type AuthzRoleUpdateToOneWithWhereWithoutAccountsInput = {
-    where?: AuthzRoleWhereInput
-    data: XOR<AuthzRoleUpdateWithoutAccountsInput, AuthzRoleUncheckedUpdateWithoutAccountsInput>
-  }
-
-  export type AuthzRoleUpdateWithoutAccountsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    appId?: StringFieldUpdateOperationsInput | string
-    scope?: NullableStringFieldUpdateOperationsInput | string | null
-    acquisitionType?: NullableStringFieldUpdateOperationsInput | string | null
-    approvalPolicy?: NullableStringFieldUpdateOperationsInput | string | null
-    applicableFor?: NullableJsonNullValueInput | InputJsonValue
-    permissions?: NullableJsonNullValueInput | InputJsonValue
-    updatedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accessRows?: AccountAccessUpdateManyWithoutRoleNestedInput
-  }
-
-  export type AuthzRoleUncheckedUpdateWithoutAccountsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    appId?: StringFieldUpdateOperationsInput | string
-    scope?: NullableStringFieldUpdateOperationsInput | string | null
-    acquisitionType?: NullableStringFieldUpdateOperationsInput | string | null
-    approvalPolicy?: NullableStringFieldUpdateOperationsInput | string | null
-    applicableFor?: NullableJsonNullValueInput | InputJsonValue
-    permissions?: NullableJsonNullValueInput | InputJsonValue
-    updatedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accessRows?: AccountAccessUncheckedUpdateManyWithoutRoleNestedInput
-  }
-
   export type AccountAccessUpsertWithWhereUniqueWithoutAccountInput = {
     where: AccountAccessWhereUniqueInput
     update: XOR<AccountAccessUpdateWithoutAccountInput, AccountAccessUncheckedUpdateWithoutAccountInput>
@@ -90672,140 +89841,6 @@ export namespace Prisma {
     updatedOn?: DateTimeFilter<"AccountAccess"> | Date | string
   }
 
-  export type AccountUpsertWithoutAgencyOfInput = {
-    update: XOR<AccountUpdateWithoutAgencyOfInput, AccountUncheckedUpdateWithoutAgencyOfInput>
-    create: XOR<AccountCreateWithoutAgencyOfInput, AccountUncheckedCreateWithoutAgencyOfInput>
-    where?: AccountWhereInput
-  }
-
-  export type AccountUpdateToOneWithWhereWithoutAgencyOfInput = {
-    where?: AccountWhereInput
-    data: XOR<AccountUpdateWithoutAgencyOfInput, AccountUncheckedUpdateWithoutAgencyOfInput>
-  }
-
-  export type AccountUpdateWithoutAgencyOfInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    neupId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountType?: StringFieldUpdateOperationsInput | string
-    createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accessedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    displayName?: NullableStringFieldUpdateOperationsInput | string | null
-    displayImage?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: AuthzRoleUpdateOneWithoutAccountsNestedInput
-    accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
-    agencyAccount?: AccountUpdateOneWithoutAgencyOfNestedInput
-    agentAccount?: AccountUpdateOneWithoutAgentOfNestedInput
-    workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
-    agentOf?: AccountUpdateManyWithoutAgentAccountNestedInput
-    workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
-    agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
-    agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
-    intelligenceMappings?: IntelligenceMappingUpdateManyWithoutAccountNestedInput
-    intelligenceAlerts?: IntelligenceAlertUpdateManyWithoutAccountNestedInput
-    propertyChanges?: PropertyChangeUpdateManyWithoutAccountNestedInput
-    createdPropertyChanges?: PropertyChangeUpdateManyWithoutCreatedByNestedInput
-    propertyChangesForProfile?: PropertyChangeUpdateManyWithoutCreatedForNestedInput
-    propertyChangesByWorkingProfile?: PropertyChangeUpdateManyWithoutWorkingProfileNestedInput
-  }
-
-  export type AccountUncheckedUpdateWithoutAgencyOfInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    neupId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountType?: StringFieldUpdateOperationsInput | string
-    createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accessedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    displayName?: NullableStringFieldUpdateOperationsInput | string | null
-    displayImage?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: NullableStringFieldUpdateOperationsInput | string | null
-    agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
-    workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
-    accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
-    agentOf?: AccountUncheckedUpdateManyWithoutAgentAccountNestedInput
-    workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
-    agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
-    agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
-    intelligenceMappings?: IntelligenceMappingUncheckedUpdateManyWithoutAccountNestedInput
-    intelligenceAlerts?: IntelligenceAlertUncheckedUpdateManyWithoutAccountNestedInput
-    propertyChanges?: PropertyChangeUncheckedUpdateManyWithoutAccountNestedInput
-    createdPropertyChanges?: PropertyChangeUncheckedUpdateManyWithoutCreatedByNestedInput
-    propertyChangesForProfile?: PropertyChangeUncheckedUpdateManyWithoutCreatedForNestedInput
-    propertyChangesByWorkingProfile?: PropertyChangeUncheckedUpdateManyWithoutWorkingProfileNestedInput
-  }
-
-  export type AccountUpsertWithoutAgentOfInput = {
-    update: XOR<AccountUpdateWithoutAgentOfInput, AccountUncheckedUpdateWithoutAgentOfInput>
-    create: XOR<AccountCreateWithoutAgentOfInput, AccountUncheckedCreateWithoutAgentOfInput>
-    where?: AccountWhereInput
-  }
-
-  export type AccountUpdateToOneWithWhereWithoutAgentOfInput = {
-    where?: AccountWhereInput
-    data: XOR<AccountUpdateWithoutAgentOfInput, AccountUncheckedUpdateWithoutAgentOfInput>
-  }
-
-  export type AccountUpdateWithoutAgentOfInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    neupId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountType?: StringFieldUpdateOperationsInput | string
-    createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accessedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    displayName?: NullableStringFieldUpdateOperationsInput | string | null
-    displayImage?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: AuthzRoleUpdateOneWithoutAccountsNestedInput
-    accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
-    agencyAccount?: AccountUpdateOneWithoutAgencyOfNestedInput
-    agentAccount?: AccountUpdateOneWithoutAgentOfNestedInput
-    workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
-    agencyOf?: AccountUpdateManyWithoutAgencyAccountNestedInput
-    workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
-    agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
-    agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
-    intelligenceMappings?: IntelligenceMappingUpdateManyWithoutAccountNestedInput
-    intelligenceAlerts?: IntelligenceAlertUpdateManyWithoutAccountNestedInput
-    propertyChanges?: PropertyChangeUpdateManyWithoutAccountNestedInput
-    createdPropertyChanges?: PropertyChangeUpdateManyWithoutCreatedByNestedInput
-    propertyChangesForProfile?: PropertyChangeUpdateManyWithoutCreatedForNestedInput
-    propertyChangesByWorkingProfile?: PropertyChangeUpdateManyWithoutWorkingProfileNestedInput
-  }
-
-  export type AccountUncheckedUpdateWithoutAgentOfInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    neupId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountType?: StringFieldUpdateOperationsInput | string
-    createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accessedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    displayName?: NullableStringFieldUpdateOperationsInput | string | null
-    displayImage?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: NullableStringFieldUpdateOperationsInput | string | null
-    agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
-    workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
-    accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
-    agencyOf?: AccountUncheckedUpdateManyWithoutAgencyAccountNestedInput
-    workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
-    agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
-    agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
-    intelligenceMappings?: IntelligenceMappingUncheckedUpdateManyWithoutAccountNestedInput
-    intelligenceAlerts?: IntelligenceAlertUncheckedUpdateManyWithoutAccountNestedInput
-    propertyChanges?: PropertyChangeUncheckedUpdateManyWithoutAccountNestedInput
-    createdPropertyChanges?: PropertyChangeUncheckedUpdateManyWithoutCreatedByNestedInput
-    propertyChangesForProfile?: PropertyChangeUncheckedUpdateManyWithoutCreatedForNestedInput
-    propertyChangesByWorkingProfile?: PropertyChangeUncheckedUpdateManyWithoutWorkingProfileNestedInput
-  }
-
   export type AccountUpsertWithoutWorkingProfileOfInput = {
     update: XOR<AccountUpdateWithoutWorkingProfileOfInput, AccountUncheckedUpdateWithoutWorkingProfileOfInput>
     create: XOR<AccountCreateWithoutWorkingProfileOfInput, AccountUncheckedCreateWithoutWorkingProfileOfInput>
@@ -90826,13 +89861,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: AuthzRoleUpdateOneWithoutAccountsNestedInput
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
-    agencyAccount?: AccountUpdateOneWithoutAgencyOfNestedInput
-    agentAccount?: AccountUpdateOneWithoutAgentOfNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
-    agencyOf?: AccountUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUpdateManyWithoutAgentAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
@@ -90854,13 +89884,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: NullableStringFieldUpdateOperationsInput | string | null
-    agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
-    agencyOf?: AccountUncheckedUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUncheckedUpdateManyWithoutAgentAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
@@ -90871,56 +89896,6 @@ export namespace Prisma {
     createdPropertyChanges?: PropertyChangeUncheckedUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: PropertyChangeUncheckedUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: PropertyChangeUncheckedUpdateManyWithoutWorkingProfileNestedInput
-  }
-
-  export type AccountUpsertWithWhereUniqueWithoutAgencyAccountInput = {
-    where: AccountWhereUniqueInput
-    update: XOR<AccountUpdateWithoutAgencyAccountInput, AccountUncheckedUpdateWithoutAgencyAccountInput>
-    create: XOR<AccountCreateWithoutAgencyAccountInput, AccountUncheckedCreateWithoutAgencyAccountInput>
-  }
-
-  export type AccountUpdateWithWhereUniqueWithoutAgencyAccountInput = {
-    where: AccountWhereUniqueInput
-    data: XOR<AccountUpdateWithoutAgencyAccountInput, AccountUncheckedUpdateWithoutAgencyAccountInput>
-  }
-
-  export type AccountUpdateManyWithWhereWithoutAgencyAccountInput = {
-    where: AccountScalarWhereInput
-    data: XOR<AccountUpdateManyMutationInput, AccountUncheckedUpdateManyWithoutAgencyAccountInput>
-  }
-
-  export type AccountScalarWhereInput = {
-    AND?: AccountScalarWhereInput | AccountScalarWhereInput[]
-    OR?: AccountScalarWhereInput[]
-    NOT?: AccountScalarWhereInput | AccountScalarWhereInput[]
-    id?: StringFilter<"Account"> | string
-    neupId?: StringNullableFilter<"Account"> | string | null
-    accountType?: StringFilter<"Account"> | string
-    createdOn?: DateTimeFilter<"Account"> | Date | string
-    accessedOn?: DateTimeFilter<"Account"> | Date | string
-    displayName?: StringNullableFilter<"Account"> | string | null
-    displayImage?: StringNullableFilter<"Account"> | string | null
-    connectionId?: StringNullableFilter<"Account"> | string | null
-    roleId?: StringNullableFilter<"Account"> | string | null
-    agency?: StringNullableFilter<"Account"> | string | null
-    agent?: StringNullableFilter<"Account"> | string | null
-    workingProfile?: StringNullableFilter<"Account"> | string | null
-  }
-
-  export type AccountUpsertWithWhereUniqueWithoutAgentAccountInput = {
-    where: AccountWhereUniqueInput
-    update: XOR<AccountUpdateWithoutAgentAccountInput, AccountUncheckedUpdateWithoutAgentAccountInput>
-    create: XOR<AccountCreateWithoutAgentAccountInput, AccountUncheckedCreateWithoutAgentAccountInput>
-  }
-
-  export type AccountUpdateWithWhereUniqueWithoutAgentAccountInput = {
-    where: AccountWhereUniqueInput
-    data: XOR<AccountUpdateWithoutAgentAccountInput, AccountUncheckedUpdateWithoutAgentAccountInput>
-  }
-
-  export type AccountUpdateManyWithWhereWithoutAgentAccountInput = {
-    where: AccountScalarWhereInput
-    data: XOR<AccountUpdateManyMutationInput, AccountUncheckedUpdateManyWithoutAgentAccountInput>
   }
 
   export type AccountUpsertWithWhereUniqueWithoutWorkingProfileAccountInput = {
@@ -90937,6 +89912,21 @@ export namespace Prisma {
   export type AccountUpdateManyWithWhereWithoutWorkingProfileAccountInput = {
     where: AccountScalarWhereInput
     data: XOR<AccountUpdateManyMutationInput, AccountUncheckedUpdateManyWithoutWorkingProfileAccountInput>
+  }
+
+  export type AccountScalarWhereInput = {
+    AND?: AccountScalarWhereInput | AccountScalarWhereInput[]
+    OR?: AccountScalarWhereInput[]
+    NOT?: AccountScalarWhereInput | AccountScalarWhereInput[]
+    id?: StringFilter<"Account"> | string
+    neupId?: StringNullableFilter<"Account"> | string | null
+    accountType?: StringFilter<"Account"> | string
+    createdOn?: DateTimeFilter<"Account"> | Date | string
+    accessedOn?: DateTimeFilter<"Account"> | Date | string
+    displayName?: StringNullableFilter<"Account"> | string | null
+    displayImage?: StringNullableFilter<"Account"> | string | null
+    connectionId?: StringNullableFilter<"Account"> | string | null
+    workingProfile?: StringNullableFilter<"Account"> | string | null
   }
 
   export type AgencyAgentMapUpsertWithWhereUniqueWithoutAgencyInput = {
@@ -94371,13 +93361,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    role?: AuthzRoleCreateNestedOneWithoutAccountsInput
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
-    agencyAccount?: AccountCreateNestedOneWithoutAgencyOfInput
-    agentAccount?: AccountCreateNestedOneWithoutAgentOfInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
-    agencyOf?: AccountCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
@@ -94399,13 +93384,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    roleId?: string | null
-    agency?: string | null
-    agent?: string | null
     workingProfile?: string | null
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
-    agencyOf?: AccountUncheckedCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountUncheckedCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
@@ -94432,13 +93412,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    role?: AuthzRoleCreateNestedOneWithoutAccountsInput
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
-    agencyAccount?: AccountCreateNestedOneWithoutAgencyOfInput
-    agentAccount?: AccountCreateNestedOneWithoutAgentOfInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
-    agencyOf?: AccountCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
@@ -94460,13 +93435,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    roleId?: string | null
-    agency?: string | null
-    agent?: string | null
     workingProfile?: string | null
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
-    agencyOf?: AccountUncheckedCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountUncheckedCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
@@ -94493,13 +93463,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    role?: AuthzRoleCreateNestedOneWithoutAccountsInput
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
-    agencyAccount?: AccountCreateNestedOneWithoutAgencyOfInput
-    agentAccount?: AccountCreateNestedOneWithoutAgentOfInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
-    agencyOf?: AccountCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
@@ -94521,13 +93486,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    roleId?: string | null
-    agency?: string | null
-    agent?: string | null
     workingProfile?: string | null
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
-    agencyOf?: AccountUncheckedCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountUncheckedCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
@@ -94554,13 +93514,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    role?: AuthzRoleCreateNestedOneWithoutAccountsInput
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
-    agencyAccount?: AccountCreateNestedOneWithoutAgencyOfInput
-    agentAccount?: AccountCreateNestedOneWithoutAgentOfInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
-    agencyOf?: AccountCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
@@ -94582,13 +93537,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    roleId?: string | null
-    agency?: string | null
-    agent?: string | null
     workingProfile?: string | null
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
-    agencyOf?: AccountUncheckedCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountUncheckedCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
@@ -94737,13 +93687,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: AuthzRoleUpdateOneWithoutAccountsNestedInput
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
-    agencyAccount?: AccountUpdateOneWithoutAgencyOfNestedInput
-    agentAccount?: AccountUpdateOneWithoutAgentOfNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
-    agencyOf?: AccountUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
@@ -94765,13 +93710,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: NullableStringFieldUpdateOperationsInput | string | null
-    agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
-    agencyOf?: AccountUncheckedUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUncheckedUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
@@ -94804,13 +93744,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: AuthzRoleUpdateOneWithoutAccountsNestedInput
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
-    agencyAccount?: AccountUpdateOneWithoutAgencyOfNestedInput
-    agentAccount?: AccountUpdateOneWithoutAgentOfNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
-    agencyOf?: AccountUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
@@ -94832,13 +93767,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: NullableStringFieldUpdateOperationsInput | string | null
-    agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
-    agencyOf?: AccountUncheckedUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUncheckedUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
@@ -94871,13 +93801,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: AuthzRoleUpdateOneWithoutAccountsNestedInput
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
-    agencyAccount?: AccountUpdateOneWithoutAgencyOfNestedInput
-    agentAccount?: AccountUpdateOneWithoutAgentOfNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
-    agencyOf?: AccountUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
@@ -94899,13 +93824,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: NullableStringFieldUpdateOperationsInput | string | null
-    agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
-    agencyOf?: AccountUncheckedUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUncheckedUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
@@ -94938,13 +93858,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: AuthzRoleUpdateOneWithoutAccountsNestedInput
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
-    agencyAccount?: AccountUpdateOneWithoutAgencyOfNestedInput
-    agentAccount?: AccountUpdateOneWithoutAgentOfNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
-    agencyOf?: AccountUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
@@ -94966,13 +93881,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: NullableStringFieldUpdateOperationsInput | string | null
-    agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
-    agencyOf?: AccountUncheckedUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUncheckedUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
@@ -95175,13 +94085,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    role?: AuthzRoleCreateNestedOneWithoutAccountsInput
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
-    agencyAccount?: AccountCreateNestedOneWithoutAgencyOfInput
-    agentAccount?: AccountCreateNestedOneWithoutAgentOfInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
-    agencyOf?: AccountCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
@@ -95203,13 +94108,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    roleId?: string | null
-    agency?: string | null
-    agent?: string | null
     workingProfile?: string | null
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
-    agencyOf?: AccountUncheckedCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountUncheckedCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
@@ -95236,13 +94136,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    role?: AuthzRoleCreateNestedOneWithoutAccountsInput
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
-    agencyAccount?: AccountCreateNestedOneWithoutAgencyOfInput
-    agentAccount?: AccountCreateNestedOneWithoutAgentOfInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
-    agencyOf?: AccountCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
@@ -95264,13 +94159,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    roleId?: string | null
-    agency?: string | null
-    agent?: string | null
     workingProfile?: string | null
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
-    agencyOf?: AccountUncheckedCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountUncheckedCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
@@ -95308,13 +94198,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: AuthzRoleUpdateOneWithoutAccountsNestedInput
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
-    agencyAccount?: AccountUpdateOneWithoutAgencyOfNestedInput
-    agentAccount?: AccountUpdateOneWithoutAgentOfNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
-    agencyOf?: AccountUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
@@ -95336,13 +94221,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: NullableStringFieldUpdateOperationsInput | string | null
-    agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
-    agencyOf?: AccountUncheckedUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUncheckedUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
@@ -95375,13 +94255,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: AuthzRoleUpdateOneWithoutAccountsNestedInput
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
-    agencyAccount?: AccountUpdateOneWithoutAgencyOfNestedInput
-    agentAccount?: AccountUpdateOneWithoutAgentOfNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
-    agencyOf?: AccountUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
@@ -95403,13 +94278,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: NullableStringFieldUpdateOperationsInput | string | null
-    agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
-    agencyOf?: AccountUncheckedUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUncheckedUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
@@ -96251,13 +95121,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    role?: AuthzRoleCreateNestedOneWithoutAccountsInput
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
-    agencyAccount?: AccountCreateNestedOneWithoutAgencyOfInput
-    agentAccount?: AccountCreateNestedOneWithoutAgentOfInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
-    agencyOf?: AccountCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
@@ -96279,13 +95144,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    roleId?: string | null
-    agency?: string | null
-    agent?: string | null
     workingProfile?: string | null
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
-    agencyOf?: AccountUncheckedCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountUncheckedCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
@@ -96406,13 +95266,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: AuthzRoleUpdateOneWithoutAccountsNestedInput
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
-    agencyAccount?: AccountUpdateOneWithoutAgencyOfNestedInput
-    agentAccount?: AccountUpdateOneWithoutAgentOfNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
-    agencyOf?: AccountUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
@@ -96434,13 +95289,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: NullableStringFieldUpdateOperationsInput | string | null
-    agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
-    agencyOf?: AccountUncheckedUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUncheckedUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
@@ -96639,13 +95489,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    role?: AuthzRoleCreateNestedOneWithoutAccountsInput
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
-    agencyAccount?: AccountCreateNestedOneWithoutAgencyOfInput
-    agentAccount?: AccountCreateNestedOneWithoutAgentOfInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
-    agencyOf?: AccountCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
@@ -96667,13 +95512,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    roleId?: string | null
-    agency?: string | null
-    agent?: string | null
     workingProfile?: string | null
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
-    agencyOf?: AccountUncheckedCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountUncheckedCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
@@ -96774,13 +95614,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: AuthzRoleUpdateOneWithoutAccountsNestedInput
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
-    agencyAccount?: AccountUpdateOneWithoutAgencyOfNestedInput
-    agentAccount?: AccountUpdateOneWithoutAgentOfNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
-    agencyOf?: AccountUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
@@ -96802,13 +95637,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: NullableStringFieldUpdateOperationsInput | string | null
-    agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
-    agencyOf?: AccountUncheckedUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUncheckedUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
@@ -97059,72 +95889,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AccountCreateWithoutRoleInput = {
-    id: string
-    neupId?: string | null
-    accountType: string
-    createdOn?: Date | string
-    accessedOn?: Date | string
-    displayName?: string | null
-    displayImage?: string | null
-    connectionId?: string | null
-    accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
-    agencyAccount?: AccountCreateNestedOneWithoutAgencyOfInput
-    agentAccount?: AccountCreateNestedOneWithoutAgentOfInput
-    workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
-    agencyOf?: AccountCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountCreateNestedManyWithoutAgentAccountInput
-    workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
-    agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
-    agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
-    intelligenceMappings?: IntelligenceMappingCreateNestedManyWithoutAccountInput
-    intelligenceAlerts?: IntelligenceAlertCreateNestedManyWithoutAccountInput
-    propertyChanges?: PropertyChangeCreateNestedManyWithoutAccountInput
-    createdPropertyChanges?: PropertyChangeCreateNestedManyWithoutCreatedByInput
-    propertyChangesForProfile?: PropertyChangeCreateNestedManyWithoutCreatedForInput
-    propertyChangesByWorkingProfile?: PropertyChangeCreateNestedManyWithoutWorkingProfileInput
-  }
-
-  export type AccountUncheckedCreateWithoutRoleInput = {
-    id: string
-    neupId?: string | null
-    accountType: string
-    createdOn?: Date | string
-    accessedOn?: Date | string
-    displayName?: string | null
-    displayImage?: string | null
-    connectionId?: string | null
-    agency?: string | null
-    agent?: string | null
-    workingProfile?: string | null
-    accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
-    agencyOf?: AccountUncheckedCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountUncheckedCreateNestedManyWithoutAgentAccountInput
-    workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
-    agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
-    agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
-    intelligenceMappings?: IntelligenceMappingUncheckedCreateNestedManyWithoutAccountInput
-    intelligenceAlerts?: IntelligenceAlertUncheckedCreateNestedManyWithoutAccountInput
-    propertyChanges?: PropertyChangeUncheckedCreateNestedManyWithoutAccountInput
-    createdPropertyChanges?: PropertyChangeUncheckedCreateNestedManyWithoutCreatedByInput
-    propertyChangesForProfile?: PropertyChangeUncheckedCreateNestedManyWithoutCreatedForInput
-    propertyChangesByWorkingProfile?: PropertyChangeUncheckedCreateNestedManyWithoutWorkingProfileInput
-  }
-
-  export type AccountCreateOrConnectWithoutRoleInput = {
-    where: AccountWhereUniqueInput
-    create: XOR<AccountCreateWithoutRoleInput, AccountUncheckedCreateWithoutRoleInput>
-  }
-
-  export type AccountCreateManyRoleInputEnvelope = {
-    data: AccountCreateManyRoleInput | AccountCreateManyRoleInput[]
-    skipDuplicates?: boolean
-  }
-
   export type AccountAccessCreateWithoutRoleInput = {
     appId: string
     updatedOn?: Date | string
@@ -97145,22 +95909,6 @@ export namespace Prisma {
   export type AccountAccessCreateManyRoleInputEnvelope = {
     data: AccountAccessCreateManyRoleInput | AccountAccessCreateManyRoleInput[]
     skipDuplicates?: boolean
-  }
-
-  export type AccountUpsertWithWhereUniqueWithoutRoleInput = {
-    where: AccountWhereUniqueInput
-    update: XOR<AccountUpdateWithoutRoleInput, AccountUncheckedUpdateWithoutRoleInput>
-    create: XOR<AccountCreateWithoutRoleInput, AccountUncheckedCreateWithoutRoleInput>
-  }
-
-  export type AccountUpdateWithWhereUniqueWithoutRoleInput = {
-    where: AccountWhereUniqueInput
-    data: XOR<AccountUpdateWithoutRoleInput, AccountUncheckedUpdateWithoutRoleInput>
-  }
-
-  export type AccountUpdateManyWithWhereWithoutRoleInput = {
-    where: AccountScalarWhereInput
-    data: XOR<AccountUpdateManyMutationInput, AccountUncheckedUpdateManyWithoutRoleInput>
   }
 
   export type AccountAccessUpsertWithWhereUniqueWithoutRoleInput = {
@@ -97188,12 +95936,7 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    role?: AuthzRoleCreateNestedOneWithoutAccountsInput
-    agencyAccount?: AccountCreateNestedOneWithoutAgencyOfInput
-    agentAccount?: AccountCreateNestedOneWithoutAgentOfInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
-    agencyOf?: AccountCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
@@ -97216,12 +95959,7 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    roleId?: string | null
-    agency?: string | null
-    agent?: string | null
     workingProfile?: string | null
-    agencyOf?: AccountUncheckedCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountUncheckedCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
@@ -97251,7 +95989,6 @@ export namespace Prisma {
     applicableFor?: NullableJsonNullValueInput | InputJsonValue
     permissions?: NullableJsonNullValueInput | InputJsonValue
     updatedOn?: Date | string
-    accounts?: AccountCreateNestedManyWithoutRoleInput
   }
 
   export type AuthzRoleUncheckedCreateWithoutAccessRowsInput = {
@@ -97265,7 +96002,6 @@ export namespace Prisma {
     applicableFor?: NullableJsonNullValueInput | InputJsonValue
     permissions?: NullableJsonNullValueInput | InputJsonValue
     updatedOn?: Date | string
-    accounts?: AccountUncheckedCreateNestedManyWithoutRoleInput
   }
 
   export type AuthzRoleCreateOrConnectWithoutAccessRowsInput = {
@@ -97293,12 +96029,7 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: AuthzRoleUpdateOneWithoutAccountsNestedInput
-    agencyAccount?: AccountUpdateOneWithoutAgencyOfNestedInput
-    agentAccount?: AccountUpdateOneWithoutAgentOfNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
-    agencyOf?: AccountUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
@@ -97321,12 +96052,7 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: NullableStringFieldUpdateOperationsInput | string | null
-    agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
-    agencyOf?: AccountUncheckedUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUncheckedUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
@@ -97362,7 +96088,6 @@ export namespace Prisma {
     applicableFor?: NullableJsonNullValueInput | InputJsonValue
     permissions?: NullableJsonNullValueInput | InputJsonValue
     updatedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accounts?: AccountUpdateManyWithoutRoleNestedInput
   }
 
   export type AuthzRoleUncheckedUpdateWithoutAccessRowsInput = {
@@ -97376,7 +96101,6 @@ export namespace Prisma {
     applicableFor?: NullableJsonNullValueInput | InputJsonValue
     permissions?: NullableJsonNullValueInput | InputJsonValue
     updatedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accounts?: AccountUncheckedUpdateManyWithoutRoleNestedInput
   }
 
   export type CompetitorSourceCreateWithoutCompetitorInput = {
@@ -98529,13 +97253,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    role?: AuthzRoleCreateNestedOneWithoutAccountsInput
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
-    agencyAccount?: AccountCreateNestedOneWithoutAgencyOfInput
-    agentAccount?: AccountCreateNestedOneWithoutAgentOfInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
-    agencyOf?: AccountCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
@@ -98557,13 +97276,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    roleId?: string | null
-    agency?: string | null
-    agent?: string | null
     workingProfile?: string | null
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
-    agencyOf?: AccountUncheckedCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountUncheckedCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
@@ -98660,13 +97374,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: AuthzRoleUpdateOneWithoutAccountsNestedInput
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
-    agencyAccount?: AccountUpdateOneWithoutAgencyOfNestedInput
-    agentAccount?: AccountUpdateOneWithoutAgentOfNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
-    agencyOf?: AccountUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
@@ -98688,13 +97397,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: NullableStringFieldUpdateOperationsInput | string | null
-    agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
-    agencyOf?: AccountUncheckedUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUncheckedUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
@@ -98800,13 +97504,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    role?: AuthzRoleCreateNestedOneWithoutAccountsInput
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
-    agencyAccount?: AccountCreateNestedOneWithoutAgencyOfInput
-    agentAccount?: AccountCreateNestedOneWithoutAgentOfInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
-    agencyOf?: AccountCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
@@ -98828,13 +97527,8 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    roleId?: string | null
-    agency?: string | null
-    agent?: string | null
     workingProfile?: string | null
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
-    agencyOf?: AccountUncheckedCreateNestedManyWithoutAgencyAccountInput
-    agentOf?: AccountUncheckedCreateNestedManyWithoutAgentAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
@@ -98940,13 +97634,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: AuthzRoleUpdateOneWithoutAccountsNestedInput
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
-    agencyAccount?: AccountUpdateOneWithoutAgencyOfNestedInput
-    agentAccount?: AccountUpdateOneWithoutAgentOfNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
-    agencyOf?: AccountUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
@@ -98968,13 +97657,8 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: NullableStringFieldUpdateOperationsInput | string | null
-    agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
-    agencyOf?: AccountUncheckedUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUncheckedUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
@@ -99030,34 +97714,6 @@ export namespace Prisma {
     updatedOn?: Date | string
   }
 
-  export type AccountCreateManyAgencyAccountInput = {
-    id: string
-    neupId?: string | null
-    accountType: string
-    createdOn?: Date | string
-    accessedOn?: Date | string
-    displayName?: string | null
-    displayImage?: string | null
-    connectionId?: string | null
-    roleId?: string | null
-    agent?: string | null
-    workingProfile?: string | null
-  }
-
-  export type AccountCreateManyAgentAccountInput = {
-    id: string
-    neupId?: string | null
-    accountType: string
-    createdOn?: Date | string
-    accessedOn?: Date | string
-    displayName?: string | null
-    displayImage?: string | null
-    connectionId?: string | null
-    roleId?: string | null
-    agency?: string | null
-    workingProfile?: string | null
-  }
-
   export type AccountCreateManyWorkingProfileAccountInput = {
     id: string
     neupId?: string | null
@@ -99067,9 +97723,6 @@ export namespace Prisma {
     displayName?: string | null
     displayImage?: string | null
     connectionId?: string | null
-    roleId?: string | null
-    agency?: string | null
-    agent?: string | null
   }
 
   export type AgencyAgentMapCreateManyAgencyInput = {
@@ -99197,146 +97850,6 @@ export namespace Prisma {
     updatedOn?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AccountUpdateWithoutAgencyAccountInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    neupId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountType?: StringFieldUpdateOperationsInput | string
-    createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accessedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    displayName?: NullableStringFieldUpdateOperationsInput | string | null
-    displayImage?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: AuthzRoleUpdateOneWithoutAccountsNestedInput
-    accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
-    agentAccount?: AccountUpdateOneWithoutAgentOfNestedInput
-    workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
-    agencyOf?: AccountUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUpdateManyWithoutAgentAccountNestedInput
-    workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
-    agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
-    agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
-    intelligenceMappings?: IntelligenceMappingUpdateManyWithoutAccountNestedInput
-    intelligenceAlerts?: IntelligenceAlertUpdateManyWithoutAccountNestedInput
-    propertyChanges?: PropertyChangeUpdateManyWithoutAccountNestedInput
-    createdPropertyChanges?: PropertyChangeUpdateManyWithoutCreatedByNestedInput
-    propertyChangesForProfile?: PropertyChangeUpdateManyWithoutCreatedForNestedInput
-    propertyChangesByWorkingProfile?: PropertyChangeUpdateManyWithoutWorkingProfileNestedInput
-  }
-
-  export type AccountUncheckedUpdateWithoutAgencyAccountInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    neupId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountType?: StringFieldUpdateOperationsInput | string
-    createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accessedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    displayName?: NullableStringFieldUpdateOperationsInput | string | null
-    displayImage?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
-    workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
-    accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
-    agencyOf?: AccountUncheckedUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUncheckedUpdateManyWithoutAgentAccountNestedInput
-    workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
-    agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
-    agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
-    intelligenceMappings?: IntelligenceMappingUncheckedUpdateManyWithoutAccountNestedInput
-    intelligenceAlerts?: IntelligenceAlertUncheckedUpdateManyWithoutAccountNestedInput
-    propertyChanges?: PropertyChangeUncheckedUpdateManyWithoutAccountNestedInput
-    createdPropertyChanges?: PropertyChangeUncheckedUpdateManyWithoutCreatedByNestedInput
-    propertyChangesForProfile?: PropertyChangeUncheckedUpdateManyWithoutCreatedForNestedInput
-    propertyChangesByWorkingProfile?: PropertyChangeUncheckedUpdateManyWithoutWorkingProfileNestedInput
-  }
-
-  export type AccountUncheckedUpdateManyWithoutAgencyAccountInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    neupId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountType?: StringFieldUpdateOperationsInput | string
-    createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accessedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    displayName?: NullableStringFieldUpdateOperationsInput | string | null
-    displayImage?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
-    workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type AccountUpdateWithoutAgentAccountInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    neupId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountType?: StringFieldUpdateOperationsInput | string
-    createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accessedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    displayName?: NullableStringFieldUpdateOperationsInput | string | null
-    displayImage?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: AuthzRoleUpdateOneWithoutAccountsNestedInput
-    accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
-    agencyAccount?: AccountUpdateOneWithoutAgencyOfNestedInput
-    workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
-    agencyOf?: AccountUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUpdateManyWithoutAgentAccountNestedInput
-    workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
-    agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
-    agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
-    intelligenceMappings?: IntelligenceMappingUpdateManyWithoutAccountNestedInput
-    intelligenceAlerts?: IntelligenceAlertUpdateManyWithoutAccountNestedInput
-    propertyChanges?: PropertyChangeUpdateManyWithoutAccountNestedInput
-    createdPropertyChanges?: PropertyChangeUpdateManyWithoutCreatedByNestedInput
-    propertyChangesForProfile?: PropertyChangeUpdateManyWithoutCreatedForNestedInput
-    propertyChangesByWorkingProfile?: PropertyChangeUpdateManyWithoutWorkingProfileNestedInput
-  }
-
-  export type AccountUncheckedUpdateWithoutAgentAccountInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    neupId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountType?: StringFieldUpdateOperationsInput | string
-    createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accessedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    displayName?: NullableStringFieldUpdateOperationsInput | string | null
-    displayImage?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: NullableStringFieldUpdateOperationsInput | string | null
-    agency?: NullableStringFieldUpdateOperationsInput | string | null
-    workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
-    accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
-    agencyOf?: AccountUncheckedUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUncheckedUpdateManyWithoutAgentAccountNestedInput
-    workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
-    agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
-    agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
-    intelligenceMappings?: IntelligenceMappingUncheckedUpdateManyWithoutAccountNestedInput
-    intelligenceAlerts?: IntelligenceAlertUncheckedUpdateManyWithoutAccountNestedInput
-    propertyChanges?: PropertyChangeUncheckedUpdateManyWithoutAccountNestedInput
-    createdPropertyChanges?: PropertyChangeUncheckedUpdateManyWithoutCreatedByNestedInput
-    propertyChangesForProfile?: PropertyChangeUncheckedUpdateManyWithoutCreatedForNestedInput
-    propertyChangesByWorkingProfile?: PropertyChangeUncheckedUpdateManyWithoutWorkingProfileNestedInput
-  }
-
-  export type AccountUncheckedUpdateManyWithoutAgentAccountInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    neupId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountType?: StringFieldUpdateOperationsInput | string
-    createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accessedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    displayName?: NullableStringFieldUpdateOperationsInput | string | null
-    displayImage?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: NullableStringFieldUpdateOperationsInput | string | null
-    agency?: NullableStringFieldUpdateOperationsInput | string | null
-    workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
   export type AccountUpdateWithoutWorkingProfileAccountInput = {
     id?: StringFieldUpdateOperationsInput | string
     neupId?: NullableStringFieldUpdateOperationsInput | string | null
@@ -99346,12 +97859,7 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: AuthzRoleUpdateOneWithoutAccountsNestedInput
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
-    agencyAccount?: AccountUpdateOneWithoutAgencyOfNestedInput
-    agentAccount?: AccountUpdateOneWithoutAgentOfNestedInput
-    agencyOf?: AccountUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
@@ -99374,12 +97882,7 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: NullableStringFieldUpdateOperationsInput | string | null
-    agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
-    agencyOf?: AccountUncheckedUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUncheckedUpdateManyWithoutAgentAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
@@ -99402,9 +97905,6 @@ export namespace Prisma {
     displayName?: NullableStringFieldUpdateOperationsInput | string | null
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    roleId?: NullableStringFieldUpdateOperationsInput | string | null
-    agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AgencyAgentMapUpdateWithoutAgencyInput = {
@@ -100314,94 +98814,10 @@ export namespace Prisma {
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AccountCreateManyRoleInput = {
-    id: string
-    neupId?: string | null
-    accountType: string
-    createdOn?: Date | string
-    accessedOn?: Date | string
-    displayName?: string | null
-    displayImage?: string | null
-    connectionId?: string | null
-    agency?: string | null
-    agent?: string | null
-    workingProfile?: string | null
-  }
-
   export type AccountAccessCreateManyRoleInput = {
     accountId: string
     appId: string
     updatedOn?: Date | string
-  }
-
-  export type AccountUpdateWithoutRoleInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    neupId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountType?: StringFieldUpdateOperationsInput | string
-    createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accessedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    displayName?: NullableStringFieldUpdateOperationsInput | string | null
-    displayImage?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
-    agencyAccount?: AccountUpdateOneWithoutAgencyOfNestedInput
-    agentAccount?: AccountUpdateOneWithoutAgentOfNestedInput
-    workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
-    agencyOf?: AccountUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUpdateManyWithoutAgentAccountNestedInput
-    workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
-    agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
-    agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
-    intelligenceMappings?: IntelligenceMappingUpdateManyWithoutAccountNestedInput
-    intelligenceAlerts?: IntelligenceAlertUpdateManyWithoutAccountNestedInput
-    propertyChanges?: PropertyChangeUpdateManyWithoutAccountNestedInput
-    createdPropertyChanges?: PropertyChangeUpdateManyWithoutCreatedByNestedInput
-    propertyChangesForProfile?: PropertyChangeUpdateManyWithoutCreatedForNestedInput
-    propertyChangesByWorkingProfile?: PropertyChangeUpdateManyWithoutWorkingProfileNestedInput
-  }
-
-  export type AccountUncheckedUpdateWithoutRoleInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    neupId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountType?: StringFieldUpdateOperationsInput | string
-    createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accessedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    displayName?: NullableStringFieldUpdateOperationsInput | string | null
-    displayImage?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
-    workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
-    accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
-    agencyOf?: AccountUncheckedUpdateManyWithoutAgencyAccountNestedInput
-    agentOf?: AccountUncheckedUpdateManyWithoutAgentAccountNestedInput
-    workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
-    agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
-    agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
-    intelligenceMappings?: IntelligenceMappingUncheckedUpdateManyWithoutAccountNestedInput
-    intelligenceAlerts?: IntelligenceAlertUncheckedUpdateManyWithoutAccountNestedInput
-    propertyChanges?: PropertyChangeUncheckedUpdateManyWithoutAccountNestedInput
-    createdPropertyChanges?: PropertyChangeUncheckedUpdateManyWithoutCreatedByNestedInput
-    propertyChangesForProfile?: PropertyChangeUncheckedUpdateManyWithoutCreatedForNestedInput
-    propertyChangesByWorkingProfile?: PropertyChangeUncheckedUpdateManyWithoutWorkingProfileNestedInput
-  }
-
-  export type AccountUncheckedUpdateManyWithoutRoleInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    neupId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountType?: StringFieldUpdateOperationsInput | string
-    createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accessedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    displayName?: NullableStringFieldUpdateOperationsInput | string | null
-    displayImage?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
-    agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
-    workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AccountAccessUpdateWithoutRoleInput = {

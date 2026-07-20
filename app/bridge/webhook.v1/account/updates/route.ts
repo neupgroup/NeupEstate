@@ -296,7 +296,6 @@ async function persistAccountUpdate(
       ? { accountType: payload.account.accountType }
       : {}),
     connectionId,
-    ...(rolesWereProvided ? { roleId: primaryRoleId } : {}),
     accessedOn: new Date(),
   };
 
@@ -323,7 +322,6 @@ async function persistAccountUpdate(
           ? payload.profile.displayImage
           : null,
       connectionId,
-      roleId: rolesWereProvided ? primaryRoleId : null,
       createdOn: new Date(),
       accessedOn: new Date(),
     },

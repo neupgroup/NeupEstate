@@ -44,11 +44,6 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
   const propertiesHref = isBrandAccount
     ? `/manage/properties?brand=${encodeURIComponent(accountId)}`
     : `/manage/properties?account=${encodeURIComponent(accountId)}`;
-  const localAccount = await prisma.account.findUnique({
-    where: { id: accountId },
-    select: { roleId: true },
-  });
-
   const accountRoles = await prisma.accountAccess.findMany({
     where: { accountId },
     select: {
@@ -66,25 +61,10 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
     },
     orderBy: { roleId: 'asc' },
   });
-  const fallbackPrimaryRole = !accountRoles.length && localAccount?.roleId
-    ? await prisma.authzRole.findUnique({
-        where: { id: localAccount.roleId },
-        select: {
-          id: true,
-          name: true,
-          description: true,
-          scope: true,
-          permissions: true,
-          updatedOn: true,
-        },
-      })
-    : null;
   const roles = (
     accountRoles.length > 0
       ? accountRoles.map((entry) => entry.role)
-      : fallbackPrimaryRole
-        ? [fallbackPrimaryRole]
-        : []
+      : []
   ).filter((role): role is NonNullable<(typeof accountRoles)[number]['role']> => Boolean(role));
   const permissions = [...new Set(roles.flatMap((role) => normalizePermissions(role.permissions)))];
   const roleIds = roles.map((role) => role.id);
@@ -100,7 +80,7 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
           : { ownerAccountId: accountId, includeInactive: true, limit: 4 },
     ),
     prisma.activity.findMany({
-      where: { trackerId: accountId },
+      where: { accountId },
       orderBy: { activityOn: 'desc' },
       take: 20,
     }),

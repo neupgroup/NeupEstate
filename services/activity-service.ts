@@ -14,7 +14,7 @@ export async function logActivity(activityData: CreateUserActivityInput): Promis
 
         const activity = await prisma.activity.create({
             data: {
-                trackerId: activityData.userId,
+                accountId: activityData.userId,
                 title: activityData.activity,
                 details: {
                     page: activityData.page ?? null,

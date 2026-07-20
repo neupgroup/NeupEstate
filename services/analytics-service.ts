@@ -45,7 +45,7 @@ type AccountContext = {
 };
 
 type ActivityRow = {
-  trackerId: string;
+  accountId: string;
   title: string;
   details: Prisma.JsonValue;
   activityOn: Date;
@@ -279,11 +279,11 @@ function buildPropertyFilter(context: AccountContext): Prisma.StringFilter | und
 async function getActivities(context: AccountContext, from: Date, to: Date): Promise<ActivityRow[]> {
   return prisma.activity.findMany({
     where: {
-      trackerId: buildAccountFilter(context),
+      accountId: buildAccountFilter(context),
       activityOn: { gte: from, lt: to },
     },
     select: {
-      trackerId: true,
+      accountId: true,
       title: true,
       details: true,
       activityOn: true,

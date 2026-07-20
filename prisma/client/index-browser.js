@@ -129,15 +129,12 @@ exports.Prisma.AccountScalarFieldEnum = {
   displayName: 'displayName',
   displayImage: 'displayImage',
   connectionId: 'connectionId',
-  roleId: 'roleId',
-  agency: 'agency',
-  agent: 'agent',
   workingProfile: 'workingProfile'
 };
 
 exports.Prisma.ActivityScalarFieldEnum = {
   id: 'id',
-  trackerId: 'trackerId',
+  accountId: 'accountId',
   title: 'title',
   details: 'details',
   activityOn: 'activityOn',

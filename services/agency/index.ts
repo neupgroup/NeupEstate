@@ -194,8 +194,7 @@ export async function createLeadAction(
     const currentAccount = await getAccountById(actorId);
     const fallbackAgencyId = currentAccount && ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'].includes(currentAccount.account_type)
       ? actorId
-      : currentAccount?.agency ??
-        (await getAgencyAgentMapsByAgentService(actorId)).find((link) => link.status === 'accepted')?.agencyId ??
+      : (await getAgencyAgentMapsByAgentService(actorId)).find((link) => link.status === 'accepted')?.agencyId ??
         null;
 
     const assignedTo = data.assignedTo?.trim() || actorId;

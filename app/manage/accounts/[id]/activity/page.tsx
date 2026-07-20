@@ -5,7 +5,7 @@ import { Activity } from 'lucide-react';
 export default async function AccountActivityPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: accountId } = await params;
   const recentActivity = await prisma.activity.findMany({
-    where: { trackerId: accountId },
+    where: { accountId },
     orderBy: { activityOn: 'desc' },
     take: 20,
   });

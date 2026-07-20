@@ -122,8 +122,8 @@ function mapRecord(account: any): Account {
     accessed_on: account.accessedOn?.toISOString() ?? new Date().toISOString(),
     display_name:  account.displayName  ?? undefined,
     display_image: account.displayImage ?? undefined,
-    agency: account.agency ?? null,
-    agent: account.agent ?? null,
+    agency: null,
+    agent: null,
   };
 
   if (account.accountType !== 'guest') {
@@ -197,7 +197,6 @@ export async function refreshAccountDisplayInfo(
     const remoteRoles = extractRemoteRoles(info.meta.response?.body);
     const displayName  = info.account.displayName  || null;
     const displayImage = info.account.displayImage || null;
-    const primaryRoleId = remoteRoles[0]?.id ?? null;
     const appId = process.env.NEUP_APP_ID ?? 'neup.estate';
 
     await prisma.$transaction(async (tx) => {
@@ -233,7 +232,6 @@ export async function refreshAccountDisplayInfo(
         data: {
           displayName,
           displayImage,
-          roleId: primaryRoleId,
         },
       });
 
@@ -417,7 +415,7 @@ export async function deleteAccountAndData(id: string): Promise<void> {
       prisma.propertyView.deleteMany({ where: { accountId: id } }),
       prisma.reactedProperty.deleteMany({ where: { trackedId: id } }),
       prisma.userPreference.deleteMany({ where: { accountId: id } }),
-      prisma.activity.deleteMany({ where: { trackerId: id } }),
+      prisma.activity.deleteMany({ where: { accountId: id } }),
       prisma.clientLink.deleteMany({ where: { trackerId: id } }),
       prisma.account.delete({ where: { id } }),
     ]);

@@ -60,17 +60,9 @@ model Account {
   displayName  String?   // denormalized from NeupID — set on first create
   displayImage String?   // denormalized from NeupID — set on first create
   connectionId String?
-  roleId       String?   @map("role_id")
-  agency       String?
-  agent        String?
   workingProfile String? @map("working_profile")
-  role         AuthzRole? @relation("AccountPrimaryRole", fields: [roleId], references: [id], onDelete: SetNull)
   accessRows   AccountAccess[]
-  agencyAccount Account?   @relation("AccountAgency", fields: [agency], references: [id], onDelete: SetNull)
-  agentAccount  Account?   @relation("AccountAgent", fields: [agent], references: [id], onDelete: SetNull)
   workingProfileAccount Account? @relation("AccountWorkingProfile", fields: [workingProfile], references: [id], onDelete: SetNull)
-  agencyOf      Account[]  @relation("AccountAgency")
-  agentOf       Account[]  @relation("AccountAgent")
   workingProfileOf Account[] @relation("AccountWorkingProfile")
   agencyAgentMapAsAgency AgencyAgentMap[] @relation("AgencyAgentMapAgency")
   agencyAgentMapAsAgent  AgencyAgentMap[] @relation("AgencyAgentMapAgent")
@@ -83,21 +75,19 @@ model Account {
   propertyChangesForProfile    PropertyChange[] @relation("PropertyChangeCreatedFor")
   propertyChangesByWorkingProfile PropertyChange[] @relation("PropertyChangeWorkingProfile")
 
-  @@index([agency])
-  @@index([agent])
   @@index([workingProfile])
   @@map("account")
 }
 
 model Activity {
   id         String   @id @default(cuid())
-  trackerId  String
+  accountId  String
   title      String
   details    Json
   activityOn DateTime @default(now())
   ipAddress  String
 
-  @@index([trackerId])
+  @@index([accountId])
   @@map("activity")
 }
 
@@ -928,7 +918,6 @@ model AuthzRole {
   permissions Json?
   updatedOn   DateTime @updatedAt
 
-  accounts    Account[] @relation("AccountPrimaryRole")
   accessRows  AccountAccess[]
 
   @@map("authz_role")

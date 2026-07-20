@@ -48,7 +48,7 @@ export default async function ManageAccountLayout({
           ? { agentAccountId: accountId, includeInactive: true, limit: 1 }
           : { ownerAccountId: accountId, includeInactive: true, limit: 1 },
     ),
-    prisma.activity.count({ where: { trackerId: accountId } }),
+    prisma.activity.count({ where: { accountId } }),
   ]);
 
   const isRegistered = account.registered;
