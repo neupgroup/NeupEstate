@@ -1,7 +1,6 @@
 # TODO
 
 - [ ] Reconcile Prisma CLI/client versions and datasource configuration. `npx prisma generate` currently runs `prisma@5.22.0` while `@prisma/client` resolves to `7.8.0`, so the CLI still requires `datasource db.url` in `prisma/schema.prisma` instead of honoring the newer `prisma.config.ts` datasource configuration.
-- [ ] Review and migrate or remove the legacy quoted `"SharedLead"` table. It is no longer in `prisma/schema.prisma`, but the live database still has rows in it.
 - [ ] Reconcile `BaseLead.belongsTo` with the live `base_lead` table. `prisma/schema.prisma` defines the persisted field, but the current database table does not have the column.
 - [ ] Reconcile the deployed `PropertyStatus` enum with `prisma/schema.prisma`. Production still rejects `AWAITING_DELETION` even though the schema and migrations now include it.
 - [ ] Fix the current `npx tsc --noEmit` failures, including unresolved legacy `@/logica/*` imports, missing Prisma typing dependencies, and widespread implicit `any` errors.
