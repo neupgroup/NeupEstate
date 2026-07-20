@@ -101,7 +101,7 @@ export function ManageSidebar(props: Props) {
                 >
                 <Icon className="mr-2 h-4 w-4" />
                 <span className="min-w-0 truncate">{item.label}</span>
-                {item.external && <ExternalLink className="ml-auto h-3.5 w-3.5 shrink-0" />}
+                {item.external && <ExternalLink className="ml-1 h-3.5 w-3.5 shrink-0" />}
               </Link>
             );
           })}
