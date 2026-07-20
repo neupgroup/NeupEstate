@@ -1,8 +1,8 @@
 
 
-import { getLatestSavedProperties } from '@/services/property-service';
+import { getLatestSavedProperties } from '@/services/property';
 import { SavedPropertiesDashboard } from '@/components/manage/saved-properties-dashboard';
-import type { SavedPropertyEntry } from '@/services/property-service';
+import type { SavedPropertyEntry } from '@/services/property';
 
 export default async function ManageSavedPropertiesPage() {
     let latestSaved: SavedPropertyEntry[] = [];

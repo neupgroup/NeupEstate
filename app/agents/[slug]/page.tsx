@@ -1,7 +1,7 @@
 
 import { notFound } from 'next/navigation';
 import { getAgentBySlug } from '@/services/agent-service';
-import { getPropertiesByAgent } from '@/services/property-service';
+import { getPropertiesByAgent } from '@/services/property';
 import { getReviewsByAgent } from '@/services/review-service';
 import { SafeImage, PropertyCard, ClientLink } from '@/components/estate';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

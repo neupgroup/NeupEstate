@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { prisma } from '@/core/database/prisma';
 import { getAccountById } from '@/services/account-service';
 import { getRequirementByUserId } from '@/services/requirements-service';
-import { getSavedProperties, getPaginatedProperties } from '@/services/property-service';
+import { getSavedProperties, getPaginatedProperties } from '@/services/property';
 import { isAgencyLikeAccountType } from '@/services/account-type';
 import { AdminPropertyRow } from '@/components/manage/property-row';
 import { ClientLink } from '@/components/client-link';

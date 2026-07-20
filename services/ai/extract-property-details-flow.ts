@@ -9,7 +9,7 @@
  */
 
 import { z } from 'zod';
-import { addProperty, updatePropertyWithExtractedData } from '@/services/property-service';
+import { addProperty, updatePropertyWithExtractedData } from '@/services/property';
 import { ExtractedPropertySchema } from '@/types';
 import { fetchPageSourceCode } from '@/services/activities/fetch-page-source2';
 import { getPrompt } from '@/services/prompt-service';

@@ -8,7 +8,7 @@
 
 import { runPropertyAmendment } from '@/services/ai/property-amendment-flow';
 import { runPropertyApproval } from '@/services/ai/property-approval-flow';
-import { getPropertyById } from '@/services/property-service';
+import { getPropertyById } from '@/services/property';
 import type { PropertyAssuranceResult } from '@/types';
 
 export async function runPropertyAssurance(propertyId: string): Promise<PropertyAssuranceResult> {

@@ -19,7 +19,7 @@ backward compatible without changing the table shape.
 
 import { prisma } from '@/core/database/prisma';
 import type { Inquiry, CreateInquiryFormValues, InquiryStatus } from '@/types';
-import { getPropertyById } from './property-service';
+import { getPropertyById } from './property';
 import { logProblem } from './problem-service';
 
 export class InquiryServiceError extends Error {

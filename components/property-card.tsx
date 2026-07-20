@@ -21,7 +21,7 @@ import { getHiddenPriceLabel, getPrimaryCurrency, getPrimaryPrice, getPrimaryPri
 import { SafeImage } from "./safe-image";
 import { toggleSavePropertyAction } from '@/services/engagement';
 import { useToast } from "@/core/hooks/use-toast";
-import { isPropertySaved } from "@/services/property-service";
+import { isPropertySaved } from "@/services/property/view";
 import { getClientAccountId } from "@/services/account/get-account-id";
 
 interface PropertyCardProps {

@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { Prisma } from '@/core/database/prisma';
 import { prisma } from '@/core/database/prisma';
 import { areaValueToSqft, CreatePropertySchema, PropertyFiltersSchema, type CreatePropertyFormValues, type CreatePropertyInput, type LandDetails, type PlotDetails, type ApartmentUnit, type StructuredLocation } from '@/types';
-import { getBridgePropertiesByAccount, getPaginatedProperties } from '@/services/property-service';
+import { getBridgePropertiesByAccount, getPaginatedProperties } from '@/services/property';
 import { resolvePropertyPostingContext } from '@/services/property-posting-context';
 
 const PROPERTY_VIEW_INCLUDE = Prisma.validator<Prisma.PropertyInclude>()({

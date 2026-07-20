@@ -1,5 +1,5 @@
 import { getAccountById } from '@/services/account-service';
-import { getSavedProperties } from '@/services/property-service';
+import { getSavedProperties } from '@/services/property';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Bookmark } from 'lucide-react';
 import { AdminPropertyRow } from '@/components/manage/property-row';

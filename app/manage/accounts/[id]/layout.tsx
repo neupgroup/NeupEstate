@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getAccountById } from '@/services/account-service';
 import { getRequirementByUserId } from '@/services/requirements-service';
-import { getSavedProperties, getPaginatedProperties } from '@/services/property-service';
+import { getSavedProperties, getPaginatedProperties } from '@/services/property';
 import { isAgencyLikeAccountType } from '@/services/account-type';
 import { prisma } from '@/core/database/prisma';
 import { requireAuth } from '@/services/auth/account';

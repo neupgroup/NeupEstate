@@ -9,7 +9,7 @@ import { hasPermission } from "@/services/permissions";
 import { PERMISSIONS } from "@/services/permissions";
 import { getPublicAgencyAccounts } from "@/services/agency-service";
 import { requireAuth } from "@/services/auth/account";
-import { getPropertyById } from "@/services/property-service";
+import { getPropertyById } from "@/services/property";
 
 type PageProps = {
   params: Promise<{ id: string }>;

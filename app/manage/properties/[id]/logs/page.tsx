@@ -7,7 +7,7 @@ import { PERMISSIONS } from "@/services/permissions";
 import { PropertyReviewRequests } from "@/components/manage/property-review-requests";
 import { PropertyImageGrid } from "@/components/manage/property-image-grid";
 import { PropertyImageDiffGrid } from "@/components/manage/property-image-diff-grid";
-import { getPropertyById, getPropertyLogs, getPropertyReviewRequests } from "@/services/property-service";
+import { getPropertyById, getPropertyLogs, getPropertyReviewRequests } from "@/services/property";
 import { ArrowLeft, Mail, Phone } from "lucide-react";
 
 type PageProps = {

@@ -1,6 +1,6 @@
 
 
-import { getSavedProperties } from "@/services/property-service";
+import { getSavedProperties } from "@/services/property";
 import { PropertyCard } from "@/components/property-card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Heart, AlertCircle } from "lucide-react";

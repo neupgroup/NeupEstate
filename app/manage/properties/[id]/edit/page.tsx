@@ -8,7 +8,7 @@ import { useTransition, useState, useEffect, useMemo } from 'react';
 import { UpdatePropertySchema, type Property, type User, type UpdatePropertyFormValues } from '@/types';
 import { cancelPropertyChangeDraftAction, createPropertyAction, getCurrentPropertyCreateDraftAction, savePropertyChangeDraftAction, getPropertyChangeContextAction, getPropertyEditCapabilitiesAction, getListingAgentOptionsAction, savePropertyCreateDraftAction } from '@/services/property/drafts';
 import { getCurrentAccountId } from '@/services/identity';
-import { getPropertyById } from "@/services/property-service";
+import { getPropertyById } from "@/services/property/view";
 import { getUsers } from "@/services/user-service";
 import { useAgencyCustomization } from '@/inapp/agency-customization/use-agency-customization';
 

@@ -14,7 +14,7 @@ import { Property, User as UserType } from '@/types';
 import { getSavedPropertiesForUser, getUsersBySavedProperty } from '@/services/engagement';
 import { ClientLink } from '@/components/client-link';
 import { RelativeTime } from './relative-time';
-import { type SavedPropertyEntry } from '@/services/property-service';
+import { type SavedPropertyEntry } from '@/services/property';
 import { Label } from '@/components/ui/label';
 
 const SearchResultDisplay = ({ title, children }: { title: string, children: React.ReactNode }) => (

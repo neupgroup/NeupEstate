@@ -3,7 +3,7 @@
 
 import { prisma } from '@/core/database/prisma';
 import type { VisitRequest, CreateVisitRequestFormValues } from '@/types';
-import { getPropertyById } from './property-service';
+import { getPropertyById } from './property';
 import { getAgentById } from './agent-service';
 import { logProblem } from './problem-service';
 

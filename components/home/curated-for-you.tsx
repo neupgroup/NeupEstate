@@ -4,7 +4,7 @@ import { RecommendedProperties } from "@/components/estate";
 import { Section } from "@/components/home/_components/section";
 import { SectionTitle } from "@/components/home/_components/section-title";
 import type { RequirementsFormValues } from "@/components/profile/user-requirements-form";
-import { getRecentProperties } from "@/services/property-service";
+import { getRecentProperties } from "@/services/property";
 import { PropertyCard } from "@/components/property-card";
 
 // In a real app, you would get this from the user's session.
