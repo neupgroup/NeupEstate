@@ -1,5 +1,6 @@
 # TODO
 
+- [ ] Fix `logica/navigation.ts` imports from `@/core/helpers/navigation`; the current typecheck reports missing exports for `CORE_NAVIGATION_BACK_TARGETS`, `resolveBackNavigationHref`, `resolvePreviousRawPath`, `NavigationBackTargets`, and `NavigationBackTargetConfig`.
 - [ ] Reconcile Prisma CLI/client versions and datasource configuration. `npx prisma generate` currently runs `prisma@5.22.0` while `@prisma/client` resolves to `7.8.0`, so the CLI still requires `datasource db.url` in `prisma/schema.prisma` instead of honoring the newer `prisma.config.ts` datasource configuration.
 - [ ] Reconcile `BaseLead.belongsTo` with the live `base_lead` table. `prisma/schema.prisma` defines the persisted field, but the current database table does not have the column.
 - [ ] Reconcile the deployed `PropertyStatus` enum with `prisma/schema.prisma`. Production still rejects `AWAITING_DELETION` even though the schema and migrations now include it.

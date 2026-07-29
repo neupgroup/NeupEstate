@@ -64,6 +64,7 @@ model Account {
   accessRows                      AccountAccess[]
   workingProfileAccount           Account?              @relation("AccountWorkingProfile", fields: [workingProfile], references: [id], onDelete: SetNull)
   workingProfileOf                Account[]             @relation("AccountWorkingProfile")
+  developedApplications           Application[]         @relation("ApplicationDeveloper")
   agencyAgentMapAsAgency          AgencyAgentMap[]      @relation("AgencyAgentMapAgency")
   agencyAgentMapAsAgent           AgencyAgentMap[]      @relation("AgencyAgentMapAgent")
   baseLeadsBelongingTo            BaseLead[]            @relation("BaseLeadBelongsTo")
@@ -905,9 +906,41 @@ model AuthzRole {
   permissions     Json?
   updatedOn       DateTime @updatedAt
 
-  accessRows AccountAccess[]
+  accessRows             AccountAccess[]
+  defaultForApplications Application[]   @relation("ApplicationDefaultRole")
 
   @@map("authz_role")
+}
+
+model Application {
+  id                  String   @id
+  name                String
+  description         String?
+  icon                String?
+  website             String?
+  appSecret           String?
+  createdAt           DateTime @default(now())
+  endpoints           Json?
+  status              String   @default("development")
+  responseFields      String[] @default([])
+  tokenFields         String[] @default([])
+  details             Json?
+  party               Int      @default(1)
+  permissionType      String
+  developerAccountId  String
+  parentApplicationId String
+  defaultRoleId       String?
+
+  developerAccount  Account       @relation("ApplicationDeveloper", fields: [developerAccountId], references: [id], onDelete: Restrict)
+  parentApplication Application   @relation("ApplicationParent", fields: [parentApplicationId], references: [id], onDelete: Restrict)
+  childApplications Application[] @relation("ApplicationParent")
+  defaultRole       AuthzRole?    @relation("ApplicationDefaultRole", fields: [defaultRoleId], references: [id], onDelete: SetNull)
+
+  @@index([developerAccountId], map: "application_developerAccountId_idx")
+  @@index([parentApplicationId], map: "application_parentApplicationId_idx")
+  @@index([defaultRoleId], map: "application_defaultRoleId_idx")
+  @@index([status], map: "application_status_idx")
+  @@map("application")
 }
 
 model AccountAccess {
