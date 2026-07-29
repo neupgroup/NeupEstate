@@ -204,60 +204,6 @@ export type CreateAgentFormValues = z.infer<typeof CreateAgentSchema>;
 export const UpdateAgentSchema = CreateAgentSchema;
 export type UpdateAgentFormValues = z.infer<typeof CreateAgentSchema>;
 
-// Team Member
-export const SocialMediaLinksSchema = z.object({
-  linkedin: z.string().url().optional().or(z.literal('')),
-  twitter: z.string().url().optional().or(z.literal('')),
-  facebook: z.string().url().optional().or(z.literal('')),
-  instagram: z.string().url().optional().or(z.literal('')),
-});
-export type SocialMediaLinks = z.infer<typeof SocialMediaLinksSchema>;
-
-export interface TeamMember {
-  id: string;
-  orgId?: string; // Not using orgs yet, but good to have
-  userId?: string;
-  name: string;
-  slug: string;
-  position: string;
-  socialMedia: SocialMediaLinks;
-  about: string;
-  moreDetails?: string;
-  photoUrl?: string;
-  registered: boolean;
-}
-
-const registeredTeamMemberSchema = z.object({
-    registered: z.literal(true),
-    userId: z.string({ required_error: "Please select a registered user." }).min(1, "Please select a user."),
-    position: z.string().min(2, "Position is required."),
-    about: z.string().min(10, "About text must be at least 10 characters long."),
-    moreDetails: z.string().optional(),
-    socialMedia: SocialMediaLinksSchema.optional(),
-    name: z.string().optional(),
-    photoUrl: z.string().optional(),
-});
-
-const manualTeamMemberSchema = z.object({
-    registered: z.literal(false),
-    userId: z.string().optional(),
-    name: z.string().min(2, "Name is required for manual entry."),
-    position: z.string().min(2, "Position is required."),
-    photoUrl: z.string().url({ message: "Please enter a valid photo URL." }).optional().or(z.literal('')),
-    about: z.string().min(10, "About text must be at least 10 characters long."),
-    moreDetails: z.string().optional(),
-    socialMedia: SocialMediaLinksSchema.optional(),
-});
-
-export const CreateTeamMemberSchema = z.discriminatedUnion("registered", [
-    registeredTeamMemberSchema,
-    manualTeamMemberSchema,
-]);
-
-export type CreateTeamMemberFormValues = z.infer<typeof CreateTeamMemberSchema>;
-export const UpdateTeamMemberSchema = CreateTeamMemberSchema;
-export type UpdateTeamMemberFormValues = z.infer<typeof CreateTeamMemberSchema>;
-
 // Review
 export interface Review {
   id: string;

@@ -621,22 +621,6 @@ exports.Prisma.InquiryScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
-exports.Prisma.TeamMemberScalarFieldEnum = {
-  id: 'id',
-  orgId: 'orgId',
-  userId: 'userId',
-  name: 'name',
-  slug: 'slug',
-  position: 'position',
-  socialMedia: 'socialMedia',
-  about: 'about',
-  moreDetails: 'moreDetails',
-  photoUrl: 'photoUrl',
-  registered: 'registered',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.NewsletterSubscriptionScalarFieldEnum = {
   id: 'id',
   email: 'email',
@@ -927,7 +911,6 @@ exports.Prisma.ModelName = {
   SiteDevLogSetting: 'SiteDevLogSetting',
   SiteDevLogEntry: 'SiteDevLogEntry',
   Inquiry: 'Inquiry',
-  TeamMember: 'TeamMember',
   NewsletterSubscription: 'NewsletterSubscription',
   FAQ: 'FAQ',
   AuthzRole: 'AuthzRole',
