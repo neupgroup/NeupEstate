@@ -1,18 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/core/database/prisma';
+import { getNeupBridgeEnvironment } from '@/logica/neupid/api';
+import { getAccountInfo as getLogicaAccountInfo } from '@/logica/neupid/accounts/getInfo';
 import { buildHandshakeGrantUrl, getAuthenticatedAccount } from '@/services/auth';
-
-type MeRow = {
-  neupId?: string | null;
-  accountType?: string | null;
-  displayName?: string | null;
-  displayImage?: string | null;
-  workingProfile?: string | null;
-  workingProfileAccount?: {
-    id: string;
-    displayName: string | null;
-  } | null;
-};
 
 export type AuthenticatedMe = {
   accountId: string;
@@ -26,79 +15,47 @@ export type AuthenticatedMe = {
   workingProfileDisplayName: string | null;
 };
 
-function readAccountRow(accountId: string) {
-  return prisma.account.findUnique({
-    where: { id: accountId },
-    select: {
-      neupId: true,
-      accountType: true,
-      displayName: true,
-      displayImage: true,
-      workingProfile: true,
-      workingProfileAccount: {
-        select: {
-          id: true,
-          displayName: true,
-        },
-      },
-    },
-  }) as Promise<MeRow | null>;
-}
-
-async function readAccountRowFallback(accountId: string) {
-  return prisma.account.findUnique({
-    where: { id: accountId },
-    select: {
-      accountType: true,
-      displayName: true,
-      displayImage: true,
-      workingProfile: true,
-      workingProfileAccount: {
-        select: {
-          id: true,
-          displayName: true,
-        },
-      },
-    },
-  }) as Promise<MeRow | null>;
+function isGuestClaim(value: unknown): boolean {
+  return value === 1 || value === true;
 }
 
 export async function getAuthenticatedMeData(): Promise<AuthenticatedMe | null> {
   const result = await getAuthenticatedAccount();
-  if (!result.success) return null;
+  if (!result.success) {
+    return null;
+  }
 
   const account = result.account;
+  const guest = isGuestClaim(account.guest);
+  const accountType = guest ? 'guest' : 'individual';
 
   try {
-    let row: MeRow | null = null;
-
-    try {
-      row = await readAccountRow(account.aid);
-    } catch {
-      row = await readAccountRowFallback(account.aid);
-    }
+    const environment = getNeupBridgeEnvironment();
+    const profile = await getLogicaAccountInfo({
+      appId: environment.appId,
+      appSecret: environment.appSecret,
+      accountId: account.aid,
+    });
+    const profileBody = profile.ok && profile.body.success ? profile.body : null;
 
     return {
       accountId: account.aid,
-      neupId: row?.neupId ?? account.nid ?? null,
-      guest: account.guest === 1,
-      accountType: row?.accountType ?? (account.guest === 1 ? 'guest' : 'individual'),
-      registered: (row?.accountType ?? (account.guest === 1 ? 'guest' : 'individual')) !== 'guest',
-      displayName: row?.displayName ?? null,
-      displayImage: row?.displayImage ?? null,
-      workingProfile: row?.workingProfile ?? null,
-      workingProfileDisplayName:
-        row?.workingProfile && row.workingProfile !== account.aid
-          ? row.workingProfileAccount?.displayName ?? row.workingProfileAccount?.id ?? row.workingProfile
-          : null,
+      neupId: account.nid ?? null,
+      guest,
+      accountType,
+      registered: !guest,
+      displayName: profileBody?.displayName ?? null,
+      displayImage: profileBody?.displayImage ?? null,
+      workingProfile: null,
+      workingProfileDisplayName: null,
     };
   } catch {
     return {
       accountId: account.aid,
       neupId: account.nid ?? null,
-      guest: account.guest === 1,
-      accountType: account.guest === 1 ? 'guest' : 'individual',
-      registered: account.guest !== 1,
+      guest,
+      accountType,
+      registered: !guest,
       displayName: null,
       displayImage: null,
       workingProfile: null,

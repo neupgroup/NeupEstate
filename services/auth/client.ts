@@ -21,7 +21,12 @@
  * ::end
  */
 
-import type { AuthAccountPayload } from './jwt';
+import { decodeNeupIdToken, type NeupIdTokenPayload } from '@/logica/neupid/token/verify';
+
+type AuthAccountPayload = NeupIdTokenPayload & {
+  aid: string;
+  guest?: boolean | number;
+};
 
 const COOKIE_NAME = 'auth_account';
 
@@ -39,23 +44,12 @@ function readCookieClient(name: string): string | null {
   return null;
 }
 
-function decodeBase64Url(value: string): string {
-  const base64 = value.replace(/-/g, '+').replace(/_/g, '/');
-  const padded = base64.length % 4 ? base64 + '='.repeat(4 - (base64.length % 4)) : base64;
-  return atob(padded);
-}
-
 export function getClientAccount(): AuthAccountPayload | null {
   const token = readCookieClient(COOKIE_NAME);
   if (!token) return null;
 
-  try {
-    const parts = token.trim().split('.');
-    if (parts.length !== 3) return null;
-    return JSON.parse(decodeBase64Url(parts[1])) as AuthAccountPayload;
-  } catch {
-    return null;
-  }
+  const payload = decodeNeupIdToken(token);
+  return payload?.aid ? payload as AuthAccountPayload : null;
 }
 
 export function getClientAccountId(): string | null {
@@ -64,7 +58,7 @@ export function getClientAccountId(): string | null {
 
 export function isClientAuthenticated(): boolean {
   const account = getClientAccount();
-  return !!account?.aid && !!account.nid && account.guest !== 1;
+  return !!account?.aid && !!account.nid && account.guest !== 1 && account.guest !== true;
 }
 
 export function isClientIdentified(): boolean {

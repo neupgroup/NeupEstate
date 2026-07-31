@@ -25,7 +25,8 @@
  *   }
  */
 
-import { getAuthenticatedAccount, getAuthCookieServer, decodeAuthJWT } from '@/services/auth';
+import { decodeNeupIdToken } from '@/logica/neupid/token/verify';
+import { getAuthenticatedAccount } from '@/services/auth';
 
 export type IdentityResult =
   | { authenticated: true;  guest: false; account: { accountId: string; nid: string } }
@@ -42,13 +43,13 @@ export async function getIdentity(cookieValue?: string): Promise<IdentityResult>
   // If a specific cookie value is provided, decode it (for backward compatibility)
   // Otherwise use the centralized auth service
   if (cookieValue !== undefined) {
-    const account = decodeAuthJWT(cookieValue);
+    const account = decodeNeupIdToken(cookieValue);
     
-    if (!account) {
+    if (!account?.aid) {
       return { authenticated: false, reason: 'no_active_session' };
     }
 
-    if (account.guest === 1) {
+    if (account.guest === 1 || account.guest === true) {
       return { authenticated: true, guest: true, account: { accountId: account.aid } };
     }
 
@@ -72,7 +73,7 @@ export async function getIdentity(cookieValue?: string): Promise<IdentityResult>
 
   const account = result.account;
 
-  if (account.guest === 1) {
+  if (account.guest === 1 || account.guest === true) {
     return { authenticated: true, guest: true, account: { accountId: account.aid } };
   }
 

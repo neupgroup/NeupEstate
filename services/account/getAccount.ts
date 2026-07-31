@@ -21,20 +21,20 @@
  *       For verified authentication, use @/services/auth instead.
  */
 
-import { decodeAuthJWT, type AuthAccountPayload } from '@/services/auth';
+import { decodeNeupIdToken } from '@/logica/neupid/token/verify';
 
 export type JwtPayload = {
   aid?: string;
   sid?: string;
   skey?: string;
   nid?: string;
-  guest?: number;
+  guest?: boolean | number;
 };
 
 export type ActiveAccount = {
   aid: string;
   nid?: string;
-  guest?: number;
+  guest?: boolean | number;
 };
 
 // ---------------------------------------------------------------------------
@@ -44,10 +44,10 @@ export type ActiveAccount = {
 /**
  * Decode a JWT payload without verifying the signature.
  * 
- * @deprecated Use decodeAuthJWT from @/services/auth instead
+ * @deprecated Use decodeNeupIdToken from @/logica/neupid/token/verify instead
  */
 export function decodeJwtPayload(token: string): JwtPayload | null {
-  return decodeAuthJWT(token);
+  return decodeNeupIdToken(token);
 }
 
 /**
@@ -58,7 +58,7 @@ export function decodeJwtPayload(token: string): JwtPayload | null {
  */
 export function getActiveAccount(cookieValue: string | null | undefined): ActiveAccount | null {
   if (!cookieValue) return null;
-  const payload = decodeAuthJWT(cookieValue.trim());
+  const payload = decodeNeupIdToken(cookieValue.trim());
   if (!payload?.aid) return null;
   return {
     aid:   payload.aid,

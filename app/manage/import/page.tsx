@@ -1,148 +1,278 @@
-
 "use client";
 
-import { useState, useTransition } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useMemo, useState, useTransition } from 'react';
 import { z } from 'zod';
-import { extractAndSaveProperty } from '@/services/property/search';
-import type { ExtractPropertyDetailsOutput } from '@/services/ai/extract-property-details-flow';
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/core/hooks/use-toast';
+import { AlertCircle, CheckCircle2, Database, Eye, Loader2 } from 'lucide-react';
+import { importJsonPropertiesAction } from './actions';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/core/hooks/use-toast';
 
-const formSchema = z.object({
-  urls: z.string().min(10, {
-    message: "Please enter at least one URL.",
-  }),
+/*
+::neup.documentation::manage-property-json-import-page
+
+::private
+
+Client workflow for property JSON imports. Operators provide source JSON and a
+property structure definition, preview the mapped rows, then import pending
+property records through the server action.
+
+::private end
+::end
+*/
+
+type ImportRowResult = {
+  index: number;
+  title?: string;
+  propertyId?: string;
+  importedData?: Record<string, unknown>;
+  error?: string;
+};
+
+type ImportResult = {
+  success: boolean;
+  importedCount: number;
+  failedCount: number;
+  dryRun: boolean;
+  results: ImportRowResult[];
+  error?: string;
+};
+
+const importFormSchema = z.object({
+  dataJson: z.string().min(2),
+  structureJson: z.string().min(2),
 });
 
-type Result = {
-  url: string;
-} & ExtractPropertyDetailsOutput;
+const exampleData = {
+  properties: [
+    {
+      id: 'PIN-1001',
+      name: 'House for sale in Lalitpur',
+      summary: 'A south-facing family home with parking, garden, and quick access to the ring road.',
+      askingPrice: '32500000',
+      purpose: 'Sale',
+      category: 'House',
+      areaSqft: 2800,
+      beds: 4,
+      baths: 3,
+      districtId: 'lalitpur',
+      agentId: 'agent-1',
+      amenityIds: ['parking', 'garden'],
+      agency: {
+        name: 'Demo Realty',
+        email: 'imports@example.com',
+      },
+      media: [
+        { url: 'https://placehold.co/900x600.png' },
+        { url: 'https://placehold.co/900x601.png' },
+      ],
+    },
+  ],
+  districts: [
+    { id: 'lalitpur', label: 'Lalitpur, Bagmati' },
+  ],
+  agents: [
+    { id: 'agent-1', name: 'Ramesh Shrestha' },
+  ],
+  amenities: [
+    { id: 'parking', name: 'Parking' },
+    { id: 'garden', name: 'Garden' },
+  ],
+};
+
+const exampleStructure = {
+  collection: 'properties',
+  dryRun: true,
+  defaults: {
+    type: 'Residential',
+    bathrooms: 0,
+    bedrooms: 0,
+  },
+  fields: {
+    title: 'name',
+    description: 'summary',
+    price: { path: 'askingPrice', coerce: 'number' },
+    purpose: 'purpose',
+    category: 'category',
+    area: { path: 'areaSqft', coerce: 'number' },
+    bedrooms: { path: 'beds', coerce: 'number' },
+    bathrooms: { path: 'baths', coerce: 'number' },
+    sourceUrl: { path: 'id', coerce: 'string' },
+  },
+  relationships: {
+    details: {
+      type: '1-to-1',
+      source: 'agency',
+      select: {
+        importAgencyName: 'name',
+        importAgencyEmail: 'email',
+      },
+    },
+    images: {
+      type: '1-to-n',
+      source: 'media',
+      select: 'url',
+    },
+    location: {
+      type: 'n-to-1',
+      source: '$.districts',
+      localPath: 'districtId',
+      foreignPath: 'id',
+      select: 'label',
+    },
+    listingAgent: {
+      type: 'n-to-1',
+      source: '$.agents',
+      localPath: 'agentId',
+      foreignPath: 'id',
+      select: 'name',
+    },
+    amenities: {
+      type: 'n-to-n',
+      source: '$.amenities',
+      localPath: 'amenityIds',
+      foreignPath: 'id',
+      select: 'name',
+    },
+  },
+};
+
+function formatJson(value: unknown): string {
+  return JSON.stringify(value, null, 2);
+}
+
+function setDryRun(structureJson: string, dryRun: boolean): string {
+  const parsed = JSON.parse(structureJson) as Record<string, unknown>;
+  return formatJson({ ...parsed, dryRun });
+}
 
 export default function ImportPropertiesPage() {
+  const [dataJson, setDataJson] = useState(formatJson(exampleData));
+  const [structureJson, setStructureJson] = useState(formatJson(exampleStructure));
+  const [result, setResult] = useState<ImportResult | null>(null);
   const [isPending, startTransition] = useTransition();
-  const [results, setResults] = useState<Result[]>([]);
   const { toast } = useToast();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      urls: "",
-    },
-  });
+  const summary = useMemo(() => {
+    if (!result) return null;
+    const action = result.dryRun ? 'previewed' : 'imported';
+    return `${result.importedCount} ${action}, ${result.failedCount} failed`;
+  }, [result]);
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setResults([]);
-    const urls = values.urls
-      .split(/\r?\n/)
-      .map((url) => url.trim())
-      .filter((url) => url !== '');
-    if (urls.length === 0) {
+  function runImport(dryRun: boolean) {
+    setResult(null);
+
+    let nextStructureJson = structureJson;
+    try {
+      nextStructureJson = setDryRun(structureJson, dryRun);
+      importFormSchema.parse({ dataJson, structureJson: nextStructureJson });
+    } catch (error) {
       toast({
         variant: 'destructive',
-        title: 'No URLs provided',
-        description: 'Please enter at least one valid URL.',
+        title: 'Invalid import input',
+        description: error instanceof Error ? error.message : 'Check the JSON data and structure.',
       });
       return;
     }
 
+    setStructureJson(nextStructureJson);
+
     startTransition(async () => {
-      const response = await extractAndSaveProperty(urls);
-      if (response.success) {
-        setResults(response.results);
-        toast({
-          title: 'Import process finished',
-          description: 'See results below.',
-        });
-      } else {
-        toast({
-          variant: 'destructive',
-          title: 'An unexpected error occurred',
-          description: 'Please try again.',
-        });
-      }
+      const response = await importJsonPropertiesAction({
+        dataJson,
+        structureJson: nextStructureJson,
+      });
+
+      setResult(response);
+      toast({
+        variant: response.error ? 'destructive' : 'default',
+        title: response.error ? 'Import failed' : dryRun ? 'Preview complete' : 'Import complete',
+        description: response.error ?? `${response.importedCount} rows processed.`,
+      });
     });
   }
 
   return (
-    <div className="space-y-6 max-w-6xl mx-auto">
-      <Card>
-        <CardHeader>
-          <CardTitle>Import Properties</CardTitle>
-          <CardDescription>
-            Enter one or more property URLs below (one per line) to scrape and save them to the database.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="urls"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Property URLs</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="https://example.com/property/123\\nhttps://another.com/listing/456"
-                        className="min-h-[150px]"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" disabled={isPending}>
-                {isPending ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Importing...
-                  </>
-                ) : (
-                  'Start Import'
-                )}
-              </Button>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+    <div className="mx-auto max-w-7xl space-y-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-normal">Import Properties</h1>
+          <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
+            Import property records from JSON by mapping source fields and relationships into the property structure.
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <Button type="button" variant="outline" onClick={() => runImport(true)} disabled={isPending}>
+            {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Eye className="mr-2 h-4 w-4" />}
+            Preview
+          </Button>
+          <Button type="button" onClick={() => runImport(false)} disabled={isPending}>
+            {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Database className="mr-2 h-4 w-4" />}
+            Import
+          </Button>
+        </div>
+      </div>
 
-      {results.length > 0 && (
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Property JSON</CardTitle>
+            <CardDescription>Source data can be an array or an object with a collection path.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Label htmlFor="property-json">JSON data</Label>
+            <Textarea
+              id="property-json"
+              value={dataJson}
+              onChange={(event) => setDataJson(event.target.value)}
+              spellCheck={false}
+              className="mt-2 min-h-[520px] font-mono text-xs"
+            />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Property Structure</CardTitle>
+            <CardDescription>Define fields, defaults, and relationship joins for the import.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Label htmlFor="property-structure">Structure definition</Label>
+            <Textarea
+              id="property-structure"
+              value={structureJson}
+              onChange={(event) => setStructureJson(event.target.value)}
+              spellCheck={false}
+              className="mt-2 min-h-[520px] font-mono text-xs"
+            />
+          </CardContent>
+        </Card>
+      </div>
+
+      {result && (
         <Card>
           <CardHeader>
             <CardTitle>Import Results</CardTitle>
+            <CardDescription>{result.error ?? summary}</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {results.map((result, index) => (
-              <Alert key={index} variant={result.error ? 'destructive' : 'default'}>
-                {result.error ? <AlertCircle className="h-4 w-4" /> : <CheckCircle className="h-4 w-4" />}
-                <AlertTitle>{result.error ? 'Failed' : 'Success'}</AlertTitle>
-                <AlertDescription className="break-all">
-                  <p className="font-semibold">{result.url}</p>
-                  {result.error ? <p>Message: {result.error}</p> : <p>Successfully imported with ID: {result.propertyId}</p>}
-                  
-                  {result.extractedData && (
-                    <details className="mt-2 text-left">
-                        <summary className="cursor-pointer text-sm font-medium text-muted-foreground hover:text-foreground">View Extracted Data</summary>
-                        <pre className="mt-1 p-2 bg-muted rounded-md text-xs whitespace-pre-wrap">
-                            {JSON.stringify(result.extractedData, null, 2)}
-                        </pre>
-                    </details>
-                  )}
-                   {result.rawHtml && (
-                    <details className="mt-2 text-left">
-                        <summary className="cursor-pointer text-sm font-medium text-muted-foreground hover:text-foreground">View Fetched HTML</summary>
-                        <pre className="mt-1 p-2 bg-muted rounded-md text-xs whitespace-pre-wrap max-h-60 overflow-y-auto">
-                            {result.rawHtml}
-                        </pre>
+          <CardContent className="space-y-3">
+            {result.results.map((row) => (
+              <Alert key={row.index} variant={row.error ? 'destructive' : 'default'}>
+                {row.error ? <AlertCircle className="h-4 w-4" /> : <CheckCircle2 className="h-4 w-4" />}
+                <AlertTitle>
+                  Row {row.index + 1}: {row.title || 'Untitled property'}
+                </AlertTitle>
+                <AlertDescription className="space-y-2">
+                  <div>{row.error ?? (result.dryRun ? 'Ready to import.' : `Imported with ID: ${row.propertyId}`)}</div>
+                  {row.importedData && (
+                    <details>
+                      <summary className="cursor-pointer text-sm font-medium text-muted-foreground">Mapped data</summary>
+                      <pre className="mt-2 max-h-80 overflow-auto rounded-md bg-muted p-3 text-xs">
+                        {formatJson(row.importedData)}
+                      </pre>
                     </details>
                   )}
                 </AlertDescription>

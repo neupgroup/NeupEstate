@@ -42,13 +42,6 @@ export {
   fetchAccessInfo,
 } from './bridge';
 
-// JWT operations (if needed separately)
-export {
-  verifyAuthJWT,
-  decodeAuthJWT,
-  type JWTVerifyResult,
-} from './jwt';
-
 // Logging functions
 export {
   logAuthError,

@@ -21,13 +21,20 @@
 
 import { redirect } from 'next/navigation';
 import { getAuthCookieClient, getAuthCookieServer } from './cookie';
-import { verifyAuthJWT, decodeAuthJWT, type AuthAccountPayload } from './jwt';
+import { decodeNeupIdToken, verifyNeupIdToken, type NeupIdTokenPayload } from '@/logica/neupid/token/verify';
 import { buildHandshakeGrantUrl } from './bridge';
 import { buildPublicAppUrl } from '@/core/helpers/url';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-export type { AuthAccountPayload } from './jwt';
+export type AuthAccountPayload = NeupIdTokenPayload & {
+  aid: string;
+  guest?: boolean | number;
+};
+
+export type AuthTokenVerifyResult =
+  | { valid: true; payload: AuthAccountPayload }
+  | { valid: false; reason: string; payload?: Partial<AuthAccountPayload> };
 
 export type AuthResult =
   | { success: true; account: AuthAccountPayload }
@@ -74,6 +81,56 @@ async function getRedirectPath(request?: { url?: string; nextUrl?: { href?: stri
   return buildPublicAppUrl(undefined, DEFAULT_REDIRECT_PATH);
 }
 
+function isGuestClaim(value: AuthAccountPayload['guest']): boolean {
+  return value === 1 || value === true;
+}
+
+async function getVerifiedProxyAccount(): Promise<AuthAccountPayload | null> {
+  try {
+    const { headers } = await import('next/headers');
+    const headerStore = await headers();
+    const accountId = headerStore.get('x-account-id')?.trim();
+    if (!accountId) return null;
+
+    const nid = headerStore.get('x-account-nid')?.trim() || undefined;
+    const guestHeader = headerStore.get('x-account-guest')?.trim();
+    const guest = guestHeader === '1' || guestHeader === 'true';
+
+    return {
+      aid: accountId,
+      ...(nid ? { nid } : {}),
+      ...(guest ? { guest: 1 } : {}),
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function verifyAuthToken(token: string | null | undefined): Promise<AuthTokenVerifyResult> {
+  if (!token) {
+    return { valid: false, reason: 'missing_token' };
+  }
+
+  const verification = await verifyNeupIdToken(token);
+  if (!verification.valid) {
+    return {
+      valid: false,
+      reason: verification.reason,
+      payload: verification.payload as Partial<AuthAccountPayload> | undefined,
+    };
+  }
+
+  if (!verification.payload.aid) {
+    return {
+      valid: false,
+      reason: 'missing_aid',
+      payload: verification.payload as Partial<AuthAccountPayload>,
+    };
+  }
+
+  return { valid: true, payload: verification.payload as AuthAccountPayload };
+}
+
 // ─── Server-side (verified) ──────────────────────────────────────────────────
 
 /**
@@ -82,8 +139,8 @@ async function getRedirectPath(request?: { url?: string; nextUrl?: { href?: stri
  *
  * Flow:
  *  1. Reads the auth_account cookie from Next.js server context
- *  2. Verifies the JWT signature using AUTH_PUBLIC_KEY
- *  3. Checks expiry and required fields (aid, sid, skey)
+ *  2. Verifies the token through logica NeupID helpers
+ *  3. Checks required app fields (aid)
  *  4. Returns success: true with verified account, or success: false with reason
  *
  * @returns AuthResult with verified account data or error reason
@@ -92,12 +149,28 @@ export async function getAuthenticatedAccount(): Promise<AuthResult> {
   const token = await getAuthCookieServer();
 
   if (!token) {
+    const proxyAccount = await getVerifiedProxyAccount();
+    if (proxyAccount) {
+      return {
+        success: true,
+        account: proxyAccount,
+      };
+    }
+
     return { success: false, reason: 'no_cookie' };
   }
 
-  const verification = await verifyAuthJWT(token);
+  const verification = await verifyAuthToken(token);
 
   if (!verification.valid) {
+    const proxyAccount = await getVerifiedProxyAccount();
+    if (proxyAccount) {
+      return {
+        success: true,
+        account: proxyAccount,
+      };
+    }
+
     return {
       success: false,
       reason: verification.reason,
@@ -153,7 +226,7 @@ export async function isAuthenticated(): Promise<boolean> {
   if (!result.success) return false;
 
   const { aid, nid, guest } = result.account;
-  return !!aid && !!nid && guest !== 1;
+  return !!aid && !!nid && !isGuestClaim(guest);
 }
 
 /**
@@ -174,7 +247,7 @@ export async function isIdentified(): Promise<boolean> {
  */
 export async function isGuest(): Promise<boolean> {
   const result = await getAuthenticatedAccount();
-  return result.success && result.account.guest === 1;
+  return result.success && isGuestClaim(result.account.guest);
 }
 
 /**
@@ -193,7 +266,7 @@ export async function getAccountInfo(): Promise<AccountInfo | null> {
     sid,
     skey,
     nid,
-    guest: guest === 1,
+    guest: isGuestClaim(guest),
   };
 }
 
@@ -240,7 +313,7 @@ export async function requireAuth(request?: { url?: string; nextUrl?: { href?: s
 export async function requireRegisteredAuth(request?: { url?: string; nextUrl?: { href?: string } }): Promise<AuthAccountPayload> {
   const result = await getAuthenticatedAccount();
 
-  if (!result.success || result.account.guest === 1 || !result.account.nid) {
+  if (!result.success || isGuestClaim(result.account.guest) || !result.account.nid) {
     const redirectPath = await getRedirectPath(request);
     redirect(buildHandshakeGrantUrl(request, redirectPath));
   }
@@ -261,7 +334,8 @@ export async function requireRegisteredAuth(request?: { url?: string; nextUrl?: 
  */
 export function getClientAccount(): AuthAccountPayload | null {
   const token = getAuthCookieClient();
-  return decodeAuthJWT(token);
+  const payload = decodeNeupIdToken(token);
+  return payload?.aid ? payload as AuthAccountPayload : null;
 }
 
 /**
@@ -285,7 +359,7 @@ export function getClientAccountId(): string | null {
  */
 export function isClientAuthenticated(): boolean {
   const account = getClientAccount();
-  return !!account?.aid && !!account.nid && account.guest !== 1;
+  return !!account?.aid && !!account.nid && !isGuestClaim(account.guest);
 }
 
 /**

@@ -17,10 +17,9 @@
 
 import { 
   getAuthenticatedAccount,
-  verifyAuthJWT,
   type AuthAccountPayload,
-  type JWTVerifyResult,
 } from '@/services/auth';
+import { verifyNeupIdToken } from '@/logica/neupid/token/verify';
 
 // ---------------------------------------------------------------------------
 // Types (re-exported for backward compatibility)
@@ -28,7 +27,9 @@ import {
 
 export type CookieAccountPayload = AuthAccountPayload;
 
-export type { JWTVerifyResult };
+export type JWTVerifyResult =
+  | { valid: true; payload: CookieAccountPayload }
+  | { valid: false; reason: string; payload?: Partial<CookieAccountPayload> };
 
 export type AccountFromCookieResult =
   | { success: true;  account: CookieAccountPayload }
@@ -39,15 +40,31 @@ export type AccountFromCookieResult =
 // ---------------------------------------------------------------------------
 
 /**
- * Verifies the JWT signature of the auth_account cookie value using the
- * RSA public key from AUTH_PUBLIC_KEY (RS256).
+ * Verifies the auth_account cookie value through logica's NeupID token helper.
  *
  * Also checks that the token is not expired.
  * 
- * @deprecated Use verifyAuthJWT from @/services/auth instead
+ * @deprecated Use getAuthenticatedAccount from @/services/auth instead
  */
 export async function verifyAccountJWT(token: string | null | undefined): Promise<JWTVerifyResult> {
-  return await verifyAuthJWT(token);
+  const verification = await verifyNeupIdToken(token);
+  if (!verification.valid) {
+    return {
+      valid: false,
+      reason: verification.reason,
+      payload: verification.payload as Partial<CookieAccountPayload> | undefined,
+    };
+  }
+
+  if (!verification.payload.aid) {
+    return {
+      valid: false,
+      reason: 'missing_aid',
+      payload: verification.payload as Partial<CookieAccountPayload>,
+    };
+  }
+
+  return { valid: true, payload: verification.payload as CookieAccountPayload };
 }
 
 /**
@@ -65,7 +82,7 @@ export async function getAccountFromCookie(
 ): Promise<AccountFromCookieResult> {
   // If token is provided, verify it directly
   if (token !== undefined && token !== null) {
-    const verification = await verifyAuthJWT(token);
+    const verification = await verifyAccountJWT(token);
     
     if (!verification.valid) {
       return {

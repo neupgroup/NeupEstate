@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { buildPublicAppUrl } from '@/core/helpers/url';
+import { verifyNeupIdToken } from '@/logica/neupid/token/verify';
 
 /**
  * proxy.ts — Next.js Edge Middleware
  *
- * auth_account cookie is a JWT signed with NEUP_AUTH_PUBLIC_KEY (RS256).
+ * auth_account cookie is verified through the shared NeupID token helper.
  *
  * Rules:
  *   1. /bridge/*       → always pass through
@@ -26,94 +27,18 @@ type JwtPayload = {
   sid?: string;
   skey?: string;
   nid?: string;
-  guest?: number;
+  guest?: boolean | number;
 };
-
-// ---------------------------------------------------------------------------
-// Web Crypto key import — Edge runtime compatible
-// ---------------------------------------------------------------------------
-
-let _cachedKey: CryptoKey | null | undefined = undefined;
-
-async function getPublicKey(): Promise<CryptoKey | null> {
-  if (_cachedKey !== undefined) return _cachedKey;
-
-  const pem = process.env.NEUP_AUTH_PUBLIC_KEY;
-  if (!pem) {
-    _cachedKey = null;
-    return null;
-  }
-
-  try {
-    const pemBody = pem
-      .replace(/-----BEGIN PUBLIC KEY-----/g, '')
-      .replace(/-----END PUBLIC KEY-----/g, '')
-      .replace(/\\n/g, '')
-      .replace(/\s/g, '');
-
-    const keyBuffer = Uint8Array.from(atob(pemBody), c => c.charCodeAt(0));
-
-    _cachedKey = await crypto.subtle.importKey(
-      'spki',
-      keyBuffer,
-      { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
-      false,
-      ['verify']
-    );
-    return _cachedKey;
-  } catch {
-    _cachedKey = null;
-    return null;
-  }
-}
 
 // ---------------------------------------------------------------------------
 // JWT verification
 // ---------------------------------------------------------------------------
 
-function b64urlDecode(str: string): string {
-  const s = str.replace(/-/g, '+').replace(/_/g, '/');
-  const pad = s.length % 4;
-  return atob(pad ? s + '='.repeat(4 - pad) : s);
-}
-
-async function verifyJwt(token: string): Promise<JwtPayload | null> {
-  const parts = token.split('.');
-  if (parts.length !== 3) return null;
-
-  const [header, body, sig] = parts;
-
-  // Dev fallback: unsigned token
-  if (header === 'unsigned' && sig === 'nosig') {
-    try { return JSON.parse(b64urlDecode(body)); } catch { return null; }
-  }
-
-  const publicKey = await getPublicKey();
-
-  // No public key → cannot verify → treat as unauthenticated
-  if (!publicKey) return null;
-
-  try {
-    const signingInput = `${header}.${body}`;
-    const sigPadded = sig.replace(/-/g, '+').replace(/_/g, '/');
-    const pad = sigPadded.length % 4;
-    const sigBuffer = Uint8Array.from(
-      atob(pad ? sigPadded + '='.repeat(4 - pad) : sigPadded),
-      c => c.charCodeAt(0)
-    );
-
-    const valid = await crypto.subtle.verify(
-      'RSASSA-PKCS1-v1_5',
-      publicKey,
-      sigBuffer,
-      new TextEncoder().encode(signingInput)
-    );
-
-    if (!valid) return null;
-    return JSON.parse(b64urlDecode(body));
-  } catch {
-    return null;
-  }
+async function verifyJwt(token: string): Promise<{ payload: JwtPayload | null; reason?: string }> {
+  const verification = await verifyNeupIdToken(token);
+  return verification.valid
+    ? { payload: verification.payload }
+    : { payload: null, reason: verification.reason };
 }
 
 // ---------------------------------------------------------------------------
@@ -178,18 +103,23 @@ export default async function proxy(request: NextRequest) {
 
   // ── Read and verify the auth_account JWT ─────────────────────────────────
   const raw = request.cookies.get('auth_account')?.value;
-  const payload = raw ? await verifyJwt(raw.trim()) : null;
+  const verification = raw ? await verifyJwt(raw.trim()) : { payload: null, reason: 'missing_token' };
+  const payload = verification.payload;
 
   // Forward the verified account ID downstream so server components can use
   // it without re-parsing the JWT (signature already verified here).
   if (payload?.aid) {
     requestHeaders.set('x-account-id', payload.aid);
+    if (payload.nid) {
+      requestHeaders.set('x-account-nid', payload.nid);
+    }
+    requestHeaders.set('x-account-guest', payload.guest === 1 || payload.guest === true ? '1' : '0');
   }
 
   // ── 5. /manage/* — full auth required ────────────────────────────────────
   //    Must have: valid JWT, aid, nid, no guest flag
   if (pathname.startsWith('/manage')) {
-    if (!payload || !payload.aid || !payload.nid || payload.guest === 1) {
+    if (!payload || !payload.aid || !payload.nid || payload.guest === 1 || payload.guest === true) {
       return redirectToNeupStart(request, pathname);
     }
     return pass();

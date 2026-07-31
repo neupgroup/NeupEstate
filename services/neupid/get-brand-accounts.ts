@@ -8,6 +8,9 @@
 
 import { getAuthCookieServer } from '@/services/auth';
 import { logAuthError } from '@/services/auth';
+import { getNeupBridgeEnvironment } from '@/logica/neupid/api';
+import { getBrandAccounts as getLogicaBrandAccounts } from '@/logica/neupid/accounts/getAccounts';
+import { createBrandConnection } from '@/logica/neupid/connections/create';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -40,99 +43,6 @@ export type CreateBrandAccountConnectionResult =
       error: string;
     };
 
-function pickString(record: Record<string, unknown>, keys: string[]): string | null {
-  for (const key of keys) {
-    const value = record[key];
-    if (typeof value === 'string' && value.trim()) {
-      return value.trim();
-    }
-  }
-  return null;
-}
-
-function pickStringArray(record: Record<string, unknown>, keys: string[]): string[] {
-  for (const key of keys) {
-    const value = record[key];
-    if (Array.isArray(value)) {
-      return value
-        .filter((item): item is string => typeof item === 'string')
-        .map((item) => item.trim())
-        .filter(Boolean);
-    }
-  }
-  return [];
-}
-
-function pickBoolean(record: Record<string, unknown>, keys: string[], fallback = false): boolean {
-  for (const key of keys) {
-    const value = record[key];
-    if (typeof value === 'boolean') {
-      return value;
-    }
-  }
-  return fallback;
-}
-
-function normalizeBrandAccount(value: unknown): BrandAccount | null {
-  if (!value || typeof value !== 'object') return null;
-
-  const record = value as Record<string, unknown>;
-  const id = pickString(record, ['id', 'accountId', 'account_id']);
-  if (!id) return null;
-
-  return {
-    id,
-    displayName: pickString(record, ['displayName', 'display_name', 'name']) ?? id,
-    displayImage: pickString(record, ['displayImage', 'display_image', 'image', 'logoUrl']),
-    status: pickString(record, ['status']) ?? 'active',
-    isVerified: pickBoolean(record, ['isVerified', 'is_verified']),
-    accountType: pickString(record, ['accountType', 'account_type', 'type']) ?? 'brand',
-    permissions: pickStringArray(record, ['permissions', 'capabilities']),
-    lastActivityAt: pickString(record, ['lastActivityAt', 'last_activity_at']),
-    neupId: pickString(record, ['neupId', 'neup_id', 'neupid', 'nid', 'handle']),
-  };
-}
-
-// ─── API Configuration ───────────────────────────────────────────────────────
-
-const ACCOUNTS_ENDPOINT_PATH = '/bridge/api.v1/accounts';
-const BRAND_CONNECTIONS_ENDPOINT_PATH = '/bridge/api.v1/accounts/brands';
-
-function getNeupAuthUrl(): string | null {
-  const base = process.env.NEUP_AUTH_URL?.trim();
-  return base || null;
-}
-
-function buildNeupAccountUrl(base: string, endpointPath: string): string {
-  const normalizedBase = base.endsWith('/') ? base : `${base}/`;
-  const normalizedPath = endpointPath.replace(/^\/+/, '');
-  return new URL(normalizedPath, normalizedBase).toString();
-}
-
-function getAppId(): string {
-  return process.env.NEUP_APP_ID?.trim() || '';
-}
-
-function getAppSecret(): string {
-  return process.env.NEUP_APP_SECRET?.trim() || '';
-}
-
-function buildRequestDebugContext(args: {
-  url: string;
-  method: 'GET' | 'POST';
-  cookiePresent: boolean;
-  query?: Record<string, string>;
-  body?: Record<string, unknown>;
-}) {
-  return {
-    requestUrl: args.url,
-    requestMethod: args.method,
-    requestCookiePresent: args.cookiePresent,
-    requestQuery: args.query ?? {},
-    requestBody: args.body,
-  };
-}
-
 // ─── Public API ──────────────────────────────────────────────────────────────
 
 /**
@@ -143,24 +53,7 @@ function buildRequestDebugContext(args: {
  */
 export async function getBrandAccounts(): Promise<BrandAccountsResponse> {
   try {
-    const authBaseUrl = getNeupAuthUrl();
-    if (!authBaseUrl) {
-      await logAuthError('The NEUP_AUTH_URL has not been set.', {
-        reason: 'missing_auth_base_url',
-        level: 'error',
-        operation: 'get_brand_accounts',
-      });
-
-      return {
-        success: false,
-        accounts: [],
-        error: 'Something in server went wrong.',
-      };
-    }
-
-    // Get the auth_account cookie
     const authCookie = await getAuthCookieServer();
-
     if (!authCookie) {
       await logAuthError('No auth cookie found when fetching accessible accounts', {
         reason: 'missing_auth_cookie',
@@ -174,76 +67,41 @@ export async function getBrandAccounts(): Promise<BrandAccountsResponse> {
       };
     }
 
-    const brandsEndpoint = buildNeupAccountUrl(authBaseUrl, ACCOUNTS_ENDPOINT_PATH);
-    const requestContext = buildRequestDebugContext({
-      url: brandsEndpoint,
-      method: 'GET',
-      cookiePresent: Boolean(authCookie),
-    });
-
-    // Make request to NeupID API with auth cookie
-    const response = await fetch(brandsEndpoint, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Cookie': `auth_account=${authCookie}`,
-      },
-      credentials: 'include',
-      cache: 'no-store',
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => 'Unknown error');
-
-      await logAuthError(`Failed to fetch accessible accounts: ${response.status}`, {
-        reason: 'api_error',
-        level: 'error',
-        statusCode: response.status,
-        errorText,
-        ...requestContext,
-      });
-
-      return {
-        success: false,
-        accounts: [],
-        error: `Failed to fetch accounts: ${response.statusText}`,
-      };
-    }
-
-    const data = await response.json();
-
-    if (!data.success) {
+    const response = await getLogicaBrandAccounts({ authAccountToken: authCookie });
+    if (!response.ok || !response.body.success) {
       await logAuthError('Accounts API returned success: false', {
         reason: 'api_failure',
         level: 'error',
-        response: data,
-        ...requestContext,
+        response: response.body,
+        statusCode: response.status,
       });
 
       return {
         success: false,
         accounts: [],
-        error: data.error || 'Failed to fetch accounts',
+        error: response.body.error || 'Failed to fetch accounts',
       };
     }
 
-    const rawAccounts: unknown[] = Array.isArray(data.accounts) ? data.accounts : [];
-    const accounts = rawAccounts
-      .map(normalizeBrandAccount)
-      .filter((account): account is BrandAccount => Boolean(account));
-
     return {
       success: true,
-      accounts,
+      accounts: (response.body.accounts ?? []).map((account) => ({
+        id: account.id,
+        displayName: account.displayName ?? account.id,
+        displayImage: account.displayImage,
+        status: account.status ?? 'active',
+        isVerified: account.isVerified,
+        accountType: account.accountType,
+        permissions: account.permissions,
+        lastActivityAt: account.lastActivityAt,
+        neupId: account.neupId,
+      })),
     };
   } catch (error) {
     await logAuthError(error as Error, {
       reason: 'fetch_error',
       level: 'error',
       operation: 'get_brand_accounts',
-      requestUrl: getNeupAuthUrl()
-        ? buildNeupAccountUrl(getNeupAuthUrl() as string, ACCOUNTS_ENDPOINT_PATH)
-        : undefined,
       requestMethod: 'GET',
     });
 
@@ -288,19 +146,6 @@ export async function brandAccountExists(brandId: string): Promise<boolean> {
  */
 export async function createBrandAccountConnection(accountId: string): Promise<CreateBrandAccountConnectionResult> {
   try {
-    const authBaseUrl = getNeupAuthUrl();
-    if (!authBaseUrl) {
-      await logAuthError('The NEUP_AUTH_URL has not been set.', {
-        reason: 'missing_auth_base_url',
-        level: 'error',
-        operation: 'create_brand_account_connection',
-      });
-      return {
-        success: false,
-        error: 'Something in server went wrong.',
-      };
-    }
-
     const authCookie = await getAuthCookieServer();
     if (!authCookie) {
       await logAuthError('No auth cookie found when creating brand account connection', {
@@ -313,19 +158,6 @@ export async function createBrandAccountConnection(accountId: string): Promise<C
       };
     }
 
-    const appId = getAppId();
-    const appSecret = getAppSecret();
-    if (!appId || !appSecret) {
-      await logAuthError('Missing NEUP_APP_ID or NEUP_APP_SECRET when creating brand account connection', {
-        reason: 'missing_app_credentials',
-        level: 'error',
-      });
-      return {
-        success: false,
-        error: 'Missing application credentials for brand account connection.',
-      };
-    }
-
     const normalizedAccountId = accountId.trim();
     if (!normalizedAccountId) {
       return {
@@ -334,45 +166,26 @@ export async function createBrandAccountConnection(accountId: string): Promise<C
       };
     }
 
-    const brandsEndpoint = buildNeupAccountUrl(authBaseUrl, BRAND_CONNECTIONS_ENDPOINT_PATH);
-    const requestContext = buildRequestDebugContext({
-      url: brandsEndpoint,
-      method: 'POST',
-      cookiePresent: Boolean(authCookie),
-      body: {
-        appId,
-        appSecretPresent: Boolean(appSecret),
-        accountId: normalizedAccountId,
-      },
-    });
-    const response = await fetch(brandsEndpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Cookie': `auth_account=${authCookie}`,
-      },
-      credentials: 'include',
-      cache: 'no-store',
-      body: JSON.stringify({
-        appId,
-        appSecret,
-        accountId: normalizedAccountId,
-      }),
+    const environment = getNeupBridgeEnvironment();
+    const response = await createBrandConnection({
+      accountId: normalizedAccountId,
+      authAccountToken: authCookie,
+      appId: environment.appId,
+      appSecret: environment.appSecret,
     });
 
-    const payload = await response.json().catch(() => null) as Record<string, unknown> | null;
+    const payload = response.body;
     if (!response.ok || !payload?.success) {
       const errorMessage =
         (typeof payload?.error_description === 'string' && payload.error_description.trim()) ||
         (typeof payload?.error === 'string' && payload.error.trim()) ||
-        `Failed to create brand account connection: ${response.statusText}`;
+        `Failed to create brand account connection: HTTP ${response.status}`;
 
       await logAuthError(`Failed to create brand account connection: ${response.status}`, {
         reason: 'api_error',
         level: 'error',
         statusCode: response.status,
         response: payload,
-        ...requestContext,
       });
 
       return {
@@ -383,17 +196,14 @@ export async function createBrandAccountConnection(accountId: string): Promise<C
 
     return {
       success: true,
-      connectionId: pickString(payload, ['connectionId', 'connection_id']) ?? normalizedAccountId,
-      status: pickString(payload, ['status']) ?? 'active',
+      connectionId: payload.connectionId ?? normalizedAccountId,
+      status: payload.status ?? 'active',
     };
   } catch (error) {
     await logAuthError(error as Error, {
       reason: 'fetch_error',
       level: 'error',
       operation: 'create_brand_account_connection',
-      requestUrl: getNeupAuthUrl()
-        ? buildNeupAccountUrl(getNeupAuthUrl() as string, BRAND_CONNECTIONS_ENDPOINT_PATH)
-        : undefined,
       requestMethod: 'POST',
       requestBody: {
         accountId: accountId.trim(),
