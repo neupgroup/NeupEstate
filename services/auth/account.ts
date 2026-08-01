@@ -23,7 +23,7 @@ import { redirect } from 'next/navigation';
 import { getAuthCookieClient, getAuthCookieServer } from './cookie';
 import { decodeNeupIdToken, verifyNeupIdToken, type NeupIdTokenPayload } from '@/logica/neupid/token/verify';
 import { buildHandshakeGrantUrl } from './bridge';
-import { buildPublicAppUrl } from '@/core/helpers/url';
+import { buildPublicAppUrl } from '@/core/helpers/link/url';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 

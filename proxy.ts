@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { buildPublicAppUrl } from '@/core/helpers/url';
+import { buildPublicAppUrl } from '@/core/helpers/link/url';
 import { verifyNeupIdToken } from '@/logica/neupid/token/verify';
 
 /**

@@ -216,7 +216,7 @@ export default function ImportPropertiesPage() {
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Property JSON</CardTitle>

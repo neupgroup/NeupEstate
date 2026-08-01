@@ -33,8 +33,9 @@ It keeps transport logic out of `app/api/*` route files.
 
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
+import type { DirectAiMessage, DirectAiRequest } from '@/core/ai/direct/types';
 import { requestAnthropicCompletion } from '@/core/ai/direct/anthropic';
-import { requestGoogleAiCompletion, type DirectAiMessage, type DirectAiRequest } from '@/core/ai/direct/googleai';
+import { requestGoogleAiCompletion } from '@/core/ai/direct/googleai';
 import { requestOpenAiCompletion } from '@/core/ai/direct/openai';
 import { requestOpenRouterCompletion } from '@/core/ai/relying/openrouter';
 import { logProblem } from '@/services/problem-service';

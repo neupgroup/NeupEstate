@@ -1,6 +1,4 @@
-import { getNeupBridgeEnvironment } from '@/logica/neupid/api';
-import { getProfile } from '@/logica/neupid/connections/getInfo';
-import { getNeupConnectionAccountInfo } from '@/logica/neupid/connection';
+import { lookup, type LookupResponseBody } from '@/logica/neupid/lookup';
 import { getAuthCookieServer } from '@/services/auth/cookie';
 
 // ---------------------------------------------------------------------------
@@ -78,6 +76,23 @@ function headersToObject(headers: Headers): Record<string, string> {
   return out;
 }
 
+const ACCOUNT_LOOKUP_FIELDS = [
+  'neupid',
+  'displayName',
+  'accountId',
+  'displayImage',
+  'isMinor',
+  'connectionId',
+  'accountType',
+] as const;
+
+function logAccountLookupStatus(stage: string, details: Record<string, unknown>) {
+  console.log('[account.lookup]', {
+    stage,
+    ...details,
+  });
+}
+
 // ---------------------------------------------------------------------------
 // Service function
 // ---------------------------------------------------------------------------
@@ -116,7 +131,6 @@ export async function getAccountInformation(
     };
   }
 
-  const environment = getNeupBridgeEnvironment();
   const meta: AccountLookupMeta = {
     request: {
       method: 'POST',
@@ -124,16 +138,27 @@ export async function getAccountInformation(
       headers: { 'Content-Type': 'application/json' },
       body: {
         accountId,
-        appId: environment.appId,
-        appSecret: '***REDACTED***',
+        fields: ACCOUNT_LOOKUP_FIELDS.join(','),
       },
     },
   };
 
-  const response = await getProfile({
-    appId: environment.appId,
-    appSecret: environment.appSecret,
+  const response = await lookup({
     accountId,
+    fields: ACCOUNT_LOOKUP_FIELDS,
+  });
+  logAccountLookupStatus('account_id_response', {
+    accountId,
+    ok: response.ok,
+    status: response.status,
+    success: response.body.success,
+    error: response.body.error,
+    reason: response.body.reason,
+    responseAccountId: response.body.accountId,
+    neupid: response.body.neupid,
+    displayName: response.body.displayName,
+    hasDisplayImage: Boolean(response.body.displayImage),
+    accountType: response.body.accountType,
   });
   meta.response = {
     status: response.status,
@@ -142,6 +167,10 @@ export async function getAccountInformation(
   };
 
   if (!response.ok || !response.body.success || !response.body.accountId) {
+    logAccountLookupStatus('account_id_not_found', {
+      accountId,
+      error: getLookupError(response.body),
+    });
     return { found: false, error: 'not_found', meta };
   }
 
@@ -151,7 +180,7 @@ export async function getAccountInformation(
       accountId: response.body.accountId,
       displayName: response.body.displayName ?? '',
       displayImage: response.body.displayImage ?? '',
-      accountType: 'individual',
+      accountType: response.body.accountType ?? 'individual',
       neupId: response.body.neupid ?? '',
     },
     meta,
@@ -186,26 +215,67 @@ export async function getSignedAccountInformation(): Promise<SignedAccountLookup
   };
 
   try {
-    const info = await getNeupConnectionAccountInfo(authAccountCookie);
+    const response = await lookup({
+      authAccountToken: authAccountCookie,
+      fields: ACCOUNT_LOOKUP_FIELDS,
+    });
+    logAccountLookupStatus('signed_response', {
+      ok: response.ok,
+      status: response.status,
+      success: response.body.success,
+      error: response.body.error,
+      reason: response.body.reason,
+      responseAccountId: response.body.accountId,
+      neupid: response.body.neupid,
+      displayName: response.body.displayName,
+      hasDisplayImage: Boolean(response.body.displayImage),
+      accountType: response.body.accountType,
+      connectionId: response.body.connectionId,
+      isMinor: response.body.isMinor,
+    });
+    meta.response = {
+      status: response.status,
+      headers: headersToObject(response.headers),
+      body: response.body,
+    };
+
+    if (!response.ok || !response.body.success || !response.body.accountId) {
+      logAccountLookupStatus('signed_not_found', {
+        error: getLookupError(response.body),
+      });
+      return {
+        found: false,
+        error: getLookupError(response.body),
+        meta,
+      };
+    }
+
     return {
       found: true,
       account: {
-        accountId: info.accountId,
-        connectionId: info.connectionId,
-        displayName: info.displayName,
-        displayImage: info.displayImage,
-        neupId: null,
+        accountId: response.body.accountId,
+        connectionId: response.body.connectionId ?? null,
+        displayName: response.body.displayName ?? null,
+        displayImage: response.body.displayImage ?? null,
+        neupId: response.body.neupid ?? null,
         role: null,
         token: null,
-        isMinor: null,
+        isMinor: response.body.isMinor ?? null,
       },
       meta,
     };
   } catch (error) {
+    logAccountLookupStatus('signed_error', {
+      message: error instanceof Error ? error.message : 'unknown_error',
+    });
     return {
       found: false,
       error: error instanceof Error ? error.message : 'not_found',
       meta,
     };
   }
+}
+
+function getLookupError(body: LookupResponseBody): string {
+  return body.error ?? body.reason ?? 'not_found';
 }

@@ -8,7 +8,7 @@ Renders the public property detail page with gallery, summary, pricing, and supp
 */
 import { notFound, redirect } from 'next/navigation';
 import { getPropertyById, getProperties, getPropertyBySlug } from '@/services/property';
-import { buildPublicAppUrl } from '@/core/helpers/url';
+import { buildPublicAppUrl } from '@/core/helpers/link/url';
 import { logProblem } from '@/services/problem-service';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';

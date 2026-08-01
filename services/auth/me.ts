@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getNeupBridgeEnvironment } from '@/logica/neupid/api';
-import { getAccountInfo as getLogicaAccountInfo } from '@/logica/neupid/accounts/getInfo';
+import { lookup } from '@/logica/neupid/lookup';
 import { buildHandshakeGrantUrl, getAuthenticatedAccount } from '@/services/auth';
 
 export type AuthenticatedMe = {
@@ -19,9 +18,20 @@ function isGuestClaim(value: unknown): boolean {
   return value === 1 || value === true;
 }
 
+function logMeLookupStatus(
+  stage: string,
+  details: Record<string, unknown>,
+) {
+  console.log('[auth.me.lookup]', {
+    stage,
+    ...details,
+  });
+}
+
 export async function getAuthenticatedMeData(): Promise<AuthenticatedMe | null> {
   const result = await getAuthenticatedAccount();
   if (!result.success) {
+    logMeLookupStatus('auth_failed', { reason: result.reason });
     return null;
   }
 
@@ -30,27 +40,52 @@ export async function getAuthenticatedMeData(): Promise<AuthenticatedMe | null> 
   const accountType = guest ? 'guest' : 'individual';
 
   try {
-    const environment = getNeupBridgeEnvironment();
-    const profile = await getLogicaAccountInfo({
-      appId: environment.appId,
-      appSecret: environment.appSecret,
+    const profile = await lookup({
       accountId: account.aid,
+      fields: ['displayName', 'displayImage', 'accountType', 'neupid'],
     });
     const profileBody = profile.ok && profile.body.success ? profile.body : null;
-
-    return {
+    logMeLookupStatus('lookup_response', {
       accountId: account.aid,
-      neupId: account.nid ?? null,
+      ok: profile.ok,
+      status: profile.status,
+      success: profile.body.success,
+      error: profile.body.error,
+      reason: profile.body.reason,
+      responseAccountId: profile.body.accountId,
+      neupid: profile.body.neupid,
+      displayName: profile.body.displayName,
+      hasDisplayImage: Boolean(profile.body.displayImage),
+      accountType: profile.body.accountType,
+    });
+
+    const me = {
+      accountId: account.aid,
+      neupId: profileBody?.neupid ?? account.nid ?? null,
       guest,
-      accountType,
+      accountType: profileBody?.accountType ?? accountType,
       registered: !guest,
       displayName: profileBody?.displayName ?? null,
       displayImage: profileBody?.displayImage ?? null,
       workingProfile: null,
       workingProfileDisplayName: null,
     };
-  } catch {
-    return {
+    logMeLookupStatus('normalized_me', {
+      accountId: me.accountId,
+      neupId: me.neupId,
+      displayName: me.displayName,
+      hasDisplayImage: Boolean(me.displayImage),
+      accountType: me.accountType,
+      guest: me.guest,
+    });
+
+    return me;
+  } catch (error) {
+    logMeLookupStatus('lookup_error', {
+      accountId: account.aid,
+      message: error instanceof Error ? error.message : 'unknown_error',
+    });
+    const me = {
       accountId: account.aid,
       neupId: account.nid ?? null,
       guest,
@@ -61,6 +96,15 @@ export async function getAuthenticatedMeData(): Promise<AuthenticatedMe | null> 
       workingProfile: null,
       workingProfileDisplayName: null,
     };
+    logMeLookupStatus('normalized_me_fallback', {
+      accountId: me.accountId,
+      neupId: me.neupId,
+      displayName: me.displayName,
+      hasDisplayImage: Boolean(me.displayImage),
+      accountType: me.accountType,
+      guest: me.guest,
+    });
+    return me;
   }
 }
 

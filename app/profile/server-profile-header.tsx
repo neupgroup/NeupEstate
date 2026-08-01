@@ -3,6 +3,14 @@ import { getAuthenticatedMeData } from '@/services/auth/me';
 
 export async function ServerProfileHeader() {
   const me = await getAuthenticatedMeData();
+  console.log('[profile.header.me]', {
+    hasMe: Boolean(me),
+    accountId: me?.accountId,
+    neupId: me?.neupId,
+    displayName: me?.displayName,
+    hasDisplayImage: Boolean(me?.displayImage),
+    registered: me?.registered,
+  });
 
   return (
     <ProfileHeader

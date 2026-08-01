@@ -48,6 +48,16 @@ export default async function RootLayout({
         workingProfileDisplayName: me.workingProfileDisplayName ?? undefined,
       }
     : null;
+  console.log('[auth.layout.initial_user]', {
+    hasMe: Boolean(me),
+    accountId: me?.accountId,
+    neupId: me?.neupId,
+    displayName: me?.displayName,
+    hasDisplayImage: Boolean(me?.displayImage),
+    accountType: me?.accountType,
+    initialDisplayName: initialUser?.displayName,
+    initialHasDisplayImage: Boolean(initialUser?.displayImage),
+  });
 
   return (
     <html lang="en" suppressHydrationWarning>
