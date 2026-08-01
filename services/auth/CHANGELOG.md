@@ -13,7 +13,7 @@
   - `verifyAuthJWT()` - Verify JWT signature using RSA public key (RS256)
   - `decodeAuthJWT()` - Decode JWT without verification (for client-side)
   - Checks token expiry, format, and required fields
-  - Uses `AUTH_PUBLIC_KEY` environment variable
+  - Uses the bundled NeupID public key
 
 - **`services/auth/account.ts`** - High-level authentication functions
   - `getAuthenticatedAccount()` - Main auth function (cookie + verification)
@@ -124,13 +124,6 @@ const result = await getAuthenticatedAccount();
 ```typescript
 import { getAccountFromCookie } from '@/services/account/cookie-account';
 // Still works, delegates to new service
-```
-
-### Environment Variables
-
-Required:
-```bash
-AUTH_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----\n...\n-----END PUBLIC KEY-----"
 ```
 
 ### Testing

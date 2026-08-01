@@ -190,7 +190,7 @@ const payload = decodeAuthJWT(token);
 1. **Cookie Reading**: Reads `auth_account` cookie from Next.js server context
 2. **Token Validation**: Checks token format and required fields
 3. **Expiry Check**: Verifies token hasn't expired
-4. **Signature Verification**: Uses RSA public key from `AUTH_PUBLIC_KEY` env var
+4. **Signature Verification**: Uses the bundled NeupID public key at `logica/neupid/public.key`
 5. **Result**: Returns verified account data or error reason
 
 ## Error Reasons
@@ -203,14 +203,6 @@ const payload = decodeAuthJWT(token);
 - `token_expired` - Token has expired
 - `invalid_signature` - Signature verification failed
 - `verification_error` - Other verification error
-
-## Environment Variables
-
-```bash
-# RSA public key for JWT verification (RS256, SPKI PEM format)
-# Newlines must be escaped as \n
-AUTH_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----\n...\n-----END PUBLIC KEY-----"
-```
 
 ## Migration from Old Services
 

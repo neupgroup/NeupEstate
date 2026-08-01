@@ -73,7 +73,7 @@ All authentication errors are automatically logged to:
 | `verification_error` | Other verification error |
 | `jwt_decode_failed` | Failed to decode JWT |
 | `cookie_read_failed` | Failed to read cookie |
-| `missing_public_key` | AUTH_PUBLIC_KEY not set |
+| `missing_public_key` | Bundled NeupID public key file is missing or unreadable |
 | `public_key_import_failed` | Failed to import RSA public key |
 
 ## Console Output

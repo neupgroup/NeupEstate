@@ -262,14 +262,6 @@ export default async function Page() {
 
 **5 lines → 1 line!** 🎉
 
-## Environment Variables
-
-Required in `.env`:
-
-```bash
-AUTH_PUBLIC_KEY="-----BEGIN PUBLIC KEY-----\n...\n-----END PUBLIC KEY-----"
-```
-
 ## What Happens Behind the Scenes
 
 When you call `requireAuth()`:

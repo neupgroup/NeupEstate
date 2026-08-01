@@ -86,13 +86,6 @@ const ACCOUNT_LOOKUP_FIELDS = [
   'accountType',
 ] as const;
 
-function logAccountLookupStatus(stage: string, details: Record<string, unknown>) {
-  console.log('[account.lookup]', {
-    stage,
-    ...details,
-  });
-}
-
 // ---------------------------------------------------------------------------
 // Service function
 // ---------------------------------------------------------------------------
@@ -147,19 +140,6 @@ export async function getAccountInformation(
     accountId,
     fields: ACCOUNT_LOOKUP_FIELDS,
   });
-  logAccountLookupStatus('account_id_response', {
-    accountId,
-    ok: response.ok,
-    status: response.status,
-    success: response.body.success,
-    error: response.body.error,
-    reason: response.body.reason,
-    responseAccountId: response.body.accountId,
-    neupid: response.body.neupid,
-    displayName: response.body.displayName,
-    hasDisplayImage: Boolean(response.body.displayImage),
-    accountType: response.body.accountType,
-  });
   meta.response = {
     status: response.status,
     headers: headersToObject(response.headers),
@@ -167,10 +147,6 @@ export async function getAccountInformation(
   };
 
   if (!response.ok || !response.body.success || !response.body.accountId) {
-    logAccountLookupStatus('account_id_not_found', {
-      accountId,
-      error: getLookupError(response.body),
-    });
     return { found: false, error: 'not_found', meta };
   }
 
@@ -219,20 +195,6 @@ export async function getSignedAccountInformation(): Promise<SignedAccountLookup
       authAccountToken: authAccountCookie,
       fields: ACCOUNT_LOOKUP_FIELDS,
     });
-    logAccountLookupStatus('signed_response', {
-      ok: response.ok,
-      status: response.status,
-      success: response.body.success,
-      error: response.body.error,
-      reason: response.body.reason,
-      responseAccountId: response.body.accountId,
-      neupid: response.body.neupid,
-      displayName: response.body.displayName,
-      hasDisplayImage: Boolean(response.body.displayImage),
-      accountType: response.body.accountType,
-      connectionId: response.body.connectionId,
-      isMinor: response.body.isMinor,
-    });
     meta.response = {
       status: response.status,
       headers: headersToObject(response.headers),
@@ -240,9 +202,6 @@ export async function getSignedAccountInformation(): Promise<SignedAccountLookup
     };
 
     if (!response.ok || !response.body.success || !response.body.accountId) {
-      logAccountLookupStatus('signed_not_found', {
-        error: getLookupError(response.body),
-      });
       return {
         found: false,
         error: getLookupError(response.body),
@@ -265,9 +224,6 @@ export async function getSignedAccountInformation(): Promise<SignedAccountLookup
       meta,
     };
   } catch (error) {
-    logAccountLookupStatus('signed_error', {
-      message: error instanceof Error ? error.message : 'unknown_error',
-    });
     return {
       found: false,
       error: error instanceof Error ? error.message : 'not_found',
