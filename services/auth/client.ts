@@ -21,7 +21,7 @@
  * ::end
  */
 
-import { logica } from '@/logica';
+import { accountAuthToken } from '@/services/auth/token';
 
 type AuthAccountPayload = {
   aid: string;
@@ -54,7 +54,7 @@ export function getClientAccount(): AuthAccountPayload | null {
   const token = readCookieClient(COOKIE_NAME);
   if (!token) return null;
 
-  const payload = logica.account.auth.token(token).decode();
+  const payload = accountAuthToken(token).decode();
   return payload?.aid ? payload as AuthAccountPayload : null;
 }
 

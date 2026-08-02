@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { buildPublicAppUrl } from '@/core/helpers/link/url';
-import { logica } from '@/logica';
+import { accountAuthToken } from '@/services/auth/token';
 
 /**
  * proxy.ts — Next.js Edge Middleware
@@ -35,7 +35,7 @@ type JwtPayload = {
 // ---------------------------------------------------------------------------
 
 async function verifyJwt(token: string): Promise<{ payload: JwtPayload | null; reason?: string }> {
-  const verification = await logica.account.auth.token(token).validate();
+  const verification = await accountAuthToken(token).validate();
   return verification.valid
     ? { payload: verification.payload }
     : { payload: null, reason: verification.reason };

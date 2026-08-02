@@ -184,7 +184,7 @@ export async function getAccountInformation(
     },
   };
 
-  const response = await logica.account(accountId).lookup.get(ACCOUNT_LOOKUP_FIELDS);
+  const response = await logica.account(accountId).get(ACCOUNT_LOOKUP_FIELDS);
   meta.response = {
     status: response.status,
     headers: headersToObject(response.headers),

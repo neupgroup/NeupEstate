@@ -19,7 +19,7 @@ import {
   getAuthenticatedAccount,
   type AuthAccountPayload,
 } from '@/services/auth';
-import { logica } from '@/logica';
+import { accountAuthToken } from '@/services/auth/token';
 
 // ---------------------------------------------------------------------------
 // Types (re-exported for backward compatibility)
@@ -47,7 +47,7 @@ export type AccountFromCookieResult =
  * @deprecated Use getAuthenticatedAccount from @/services/auth instead
  */
 export async function verifyAccountJWT(token: string | null | undefined): Promise<JWTVerifyResult> {
-  const verification = await logica.account.auth.token(token).validate();
+  const verification = await accountAuthToken(token).validate();
   if (!verification.valid) {
     return {
       valid: false,

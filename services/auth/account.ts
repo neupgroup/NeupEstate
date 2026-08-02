@@ -21,7 +21,7 @@
 
 import { redirect } from 'next/navigation';
 import { getAuthCookieClient, getAuthCookieServer } from './cookie';
-import { logica } from '@/logica';
+import { accountAuthToken } from '@/services/auth/token';
 import { buildHandshakeGrantUrl } from './bridge';
 import { buildPublicAppUrl } from '@/core/helpers/link/url';
 
@@ -117,7 +117,7 @@ async function verifyAuthToken(token: string | null | undefined): Promise<AuthTo
     return { valid: false, reason: 'missing_token' };
   }
 
-  const verification = await logica.account.auth.token(token).validate();
+  const verification = await accountAuthToken(token).validate();
   if (!verification.valid) {
     return {
       valid: false,
@@ -340,7 +340,7 @@ export async function requireRegisteredAuth(request?: { url?: string; nextUrl?: 
  */
 export function getClientAccount(): AuthAccountPayload | null {
   const token = getAuthCookieClient();
-  const payload = logica.account.auth.token(token).decode();
+  const payload = accountAuthToken(token).decode();
   return payload?.aid ? payload as AuthAccountPayload : null;
 }
 
