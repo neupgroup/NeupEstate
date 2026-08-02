@@ -70,7 +70,7 @@ export function SidebarT1(props: SidebarProps) {
           }
         }}
       >
-        <div className="flex min-h-full flex-1 flex-col gap-1 py-4 pr-3">
+        <div className="flex min-h-full flex-1 flex-col gap-1 pb-12 pt-4 pr-3">
           {manageNav.map((item, index) => {
             if (item.type === "heading") {
               return (

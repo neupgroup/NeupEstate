@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logica } from '@/logica';
+import { prisma } from '@/core/database/prisma';
 import { buildHandshakeGrantUrl, getAuthenticatedAccount } from '@/services/auth';
+import { resolveStoredAccountType } from '@/services/account-type';
 
 export type AuthenticatedMe = {
   accountId: string;
@@ -27,16 +29,24 @@ export async function getAuthenticatedMeData(): Promise<AuthenticatedMe | null> 
   const account = result.account;
   const guest = isGuestClaim(account.guest);
   const accountType = guest ? 'guest' : 'individual';
+  const storedAccount = await prisma.account.findUnique({
+    where: { id: account.aid },
+    select: { accountType: true },
+  });
 
   try {
     const profile = await logica.account(account.aid).get(['displayName', 'displayImage', 'accountType', 'neupid']);
     const profileBody = profile.ok && profile.body.success ? profile.body : null;
+    const resolvedAccountType = resolveStoredAccountType({
+      remoteAccountType: profileBody?.accountType ?? accountType,
+      existingAccountType: storedAccount?.accountType ?? null,
+    });
 
     const me = {
       accountId: account.aid,
       neupId: profileBody?.neupid ?? account.nid ?? null,
       guest,
-      accountType: profileBody?.accountType ?? accountType,
+      accountType: guest ? 'guest' : resolvedAccountType,
       registered: !guest,
       displayName: profileBody?.displayName ?? null,
       displayImage: profileBody?.displayImage ?? null,
@@ -46,11 +56,15 @@ export async function getAuthenticatedMeData(): Promise<AuthenticatedMe | null> 
 
     return me;
   } catch {
+    const resolvedAccountType = resolveStoredAccountType({
+      remoteAccountType: accountType,
+      existingAccountType: storedAccount?.accountType ?? null,
+    });
     const me = {
       accountId: account.aid,
       neupId: account.nid ?? null,
       guest,
-      accountType,
+      accountType: guest ? 'guest' : resolvedAccountType,
       registered: !guest,
       displayName: null,
       displayImage: null,

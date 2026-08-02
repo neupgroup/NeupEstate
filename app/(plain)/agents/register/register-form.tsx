@@ -8,7 +8,8 @@ Client form for confirming agent terms before submitting the enrollment action.
 ::end
 */
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Loader2, ShieldCheck } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -22,8 +23,15 @@ const initialState: AgentRegisterActionState = {
 };
 
 export function AgentRegisterForm() {
+  const router = useRouter();
   const [agreed, setAgreed] = useState(false);
   const [state, formAction, isPending] = useActionState(registerAsAgentAction, initialState);
+
+  useEffect(() => {
+    if (state.success) {
+      router.refresh();
+    }
+  }, [router, state]);
 
   return (
     <form action={formAction} className="space-y-6">

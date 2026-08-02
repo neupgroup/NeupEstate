@@ -13,6 +13,7 @@ import { ClientLink } from "@/components/client-link";
 
 export default async function AgentRegisterPage() {
   const me = await getAuthenticatedMeData();
+  const isAgent = me?.accountType === "individual.agent";
 
   return (
     <main className="flex-1 bg-secondary/35">
@@ -23,9 +24,13 @@ export default async function AgentRegisterPage() {
               <UserCheck className="h-7 w-7" />
             </div>
             <div className="space-y-2">
-              <h1 className="text-3xl font-headline font-bold tracking-tight">Register As An Agent</h1>
+              <h1 className="text-3xl font-headline font-bold tracking-tight">
+                {isAgent ? "You're already an Agent!" : "Register As An Agent"}
+              </h1>
               <p className="text-muted-foreground">
-                Confirm the required legal agreement before enabling agent access for your account.
+                {isAgent
+                  ? "Continue your work as an agent."
+                  : "Confirm the required legal agreement before enabling agent access for your account."}
               </p>
             </div>
           </div>
@@ -38,15 +43,8 @@ export default async function AgentRegisterPage() {
             <div className="rounded-2xl border border-border bg-background p-5 text-sm text-foreground">
               Guest accounts cannot register as agents.
             </div>
-          ) : me.accountType === "individual.agent" ? (
-            <div className="space-y-5 rounded-2xl border border-primary/20 bg-primary/5 p-5 text-sm text-foreground">
-              <div className="space-y-1">
-                <p className="font-medium">You're already an agent.</p>
-                <p className="text-muted-foreground">
-                  You can continue your journey on the Neup.Estate platform.
-                </p>
-              </div>
-
+          ) : isAgent ? (
+            <div className="space-y-5 text-sm text-foreground">
               <div className="grid gap-3 sm:grid-cols-2">
                 <ClientLink
                   href="/manage/properties"

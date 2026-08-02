@@ -39,6 +39,7 @@ const SectionSkeleton = () => (
 export default async function Home() {
   const me = await getAuthenticatedMeData();
   const showGuestBanner = me?.accountType === 'guest';
+  const showAgentCard = me?.accountType !== 'individual.agent';
 
   return (
     <main className="flex-1">
@@ -70,7 +71,7 @@ export default async function Home() {
           <FeaturedAgencies />
         </Suspense>
 
-        <StartWithNeupEstate />
+        <StartWithNeupEstate showAgentCard={showAgentCard} />
       </div>
       
     </main>
