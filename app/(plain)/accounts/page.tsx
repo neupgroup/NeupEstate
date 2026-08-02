@@ -4,8 +4,8 @@ import { prisma } from '@/core/database/prisma';
 import { ClientLink } from '@/components/client-link';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
-import { BrandAccountCard, type AgencyManagementAccount } from '../manage/team/brand-account-card';
-import { syncBrandAccountsToLocalAccounts } from '../manage/team/account-actions';
+import { BrandAccountCard, type AgencyManagementAccount } from '@/app/(manage)/manage/team/brand-account-card';
+import { syncBrandAccountsToLocalAccounts } from '@/app/(manage)/manage/team/account-actions';
 import { isAgencyLikeAccountType } from '@/services/account-type';
 
 type SearchParams = Record<string, string | string[] | undefined>;

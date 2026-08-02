@@ -20,6 +20,7 @@ export function ProvidersV1({
 }) {
   const pathname = usePathname();
   const isAdminPage = pathname.startsWith("/manage");
+  const shouldShowFooter = !isAdminPage;
   const isHomePage = pathname === "/";
   const isCustomBannerPage = pathname === "/profile" || pathname === "/agents" || pathname.startsWith("/mortgage");
 
@@ -28,7 +29,7 @@ export function ProvidersV1({
       <HeaderLayoutV1 />
       {showGuestBanner && !isAdminPage && !isHomePage && !isCustomBannerPage && <GuestSigninBanner variant="inline" />}
       {children}
-      <FooterLayoutV1 showManagePanelLink={showManagePanelLink ?? false} />
+      {shouldShowFooter && <FooterLayoutV1 showManagePanelLink={showManagePanelLink ?? false} />}
     </SessionProvider>
   );
 }
