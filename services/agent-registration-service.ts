@@ -14,7 +14,8 @@ import { promoteStoredAccountType } from "@/services/account-type";
 import { logApiExchange } from "@/services/api-log-service";
 
 const ENROLL_AGENT_ROLE_URL = "https://neupgroup.com/account/bridge/api.v1/roles/enroll";
-const AGENT_ROLE_ID = "NeupEstate.660724c77.individual-beagent";
+const AGENT_APP_ID = "neupestate";
+const AGENT_ROLE_ID = "neupestate.660724c77.individual-beagent";
 
 type AgentEnrollmentResult =
   | { success: true }
@@ -50,7 +51,7 @@ function extractErrorMessage(body: unknown, fallback: string): string {
 
 export async function enrollCurrentAccountAsAgent(): Promise<AgentEnrollmentResult> {
   const accountId = await getAccountId();
-  const appId = process.env.NEUP_APP_ID ?? "";
+  const appId = AGENT_APP_ID;
   const appSecret = process.env.NEUP_APP_SECRET ?? "";
 
   if (!accountId) {
