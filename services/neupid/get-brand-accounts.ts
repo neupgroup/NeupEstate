@@ -10,7 +10,7 @@ import { getAuthCookieServer } from '@/services/auth';
 import { logAuthError } from '@/services/auth';
 import { getNeupBridgeEnvironment } from '@/logica/neupid/api';
 import { getBrandAccounts as getLogicaBrandAccounts } from '@/logica/neupid/accounts/getAccounts';
-import { createBrandConnection } from '@/logica/neupid/connections/create';
+import { connectBrandAccount } from '@/logica/neupid/connections/create';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -167,7 +167,7 @@ export async function createBrandAccountConnection(accountId: string): Promise<C
     }
 
     const environment = getNeupBridgeEnvironment();
-    const response = await createBrandConnection({
+    const response = await connectBrandAccount({
       accountId: normalizedAccountId,
       authAccountToken: authCookie,
       appId: environment.appId,

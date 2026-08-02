@@ -1,4 +1,4 @@
-import { lookup, type LookupResponseBody } from '@/logica/neupid/lookup';
+import { getAccountBasics, type LookupResponseBody } from '@/logica/neupid/lookup';
 import { getAuthCookieServer } from '@/services/auth/cookie';
 
 // ---------------------------------------------------------------------------
@@ -136,7 +136,7 @@ export async function getAccountInformation(
     },
   };
 
-  const response = await lookup({
+  const response = await getAccountBasics({
     accountId,
     fields: ACCOUNT_LOOKUP_FIELDS,
   });
@@ -191,7 +191,7 @@ export async function getSignedAccountInformation(): Promise<SignedAccountLookup
   };
 
   try {
-    const response = await lookup({
+    const response = await getAccountBasics({
       authAccountToken: authAccountCookie,
       fields: ACCOUNT_LOOKUP_FIELDS,
     });

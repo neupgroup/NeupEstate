@@ -1,5 +1,5 @@
 import { getNeupBridgeEnvironment } from '@/logica/neupid/api';
-import { getConnections } from '@/logica/neupid/connections/getConnections';
+import { getApplicationConnections } from '@/logica/neupid/connections/getConnections';
 import { logProblem } from '@/services/problem-service';
 
 type ApplicationUser = {
@@ -33,7 +33,7 @@ export async function fetchApplicationUsers(input?: {
 
   try {
     const environment = getNeupBridgeEnvironment();
-    const response = await getConnections({
+    const response = await getApplicationConnections({
       appId: environment.appId,
       appSecret: environment.appSecret,
       offset,
