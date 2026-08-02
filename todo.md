@@ -11,6 +11,7 @@
 - [ ] Fix the current `npx tsc --noEmit` failures, including unresolved legacy `@/logica/*` imports, missing Prisma typing dependencies, and widespread implicit `any` errors.
 - [ ] Fix the current `services/bridge-property-service.ts` lint baseline: existing explicit `any` usages and unused destructured control fields make `npx eslint services/bridge-property-service.ts` fail.
 - [ ] Fix the current `services/property-service.ts` lint baseline: existing explicit `any` usages and unused variables make `npx eslint services/property-service.ts` fail.
+- [ ] Add estate API route/service support for the new `logica.estate` object methods that do not have backing endpoints yet: property publish/archive, agent get/list/assign, agency get/listAgents, inquiry list/assign, lead create/updateStatus, favorite save/remove/list, viewing schedule/reschedule/cancel, and offer create/accept/reject.
 - [ ] Fix the current touched-file lint failures in [app/properties/[slug]/page.tsx](/Users/neupkishor/Code/neup.estate/app/properties/[slug]/page.tsx) and [components/property-card.tsx](/Users/neupkishor/Code/neup.estate/components/property-card.tsx), including explicit `any`, unused values, and `react-hooks/set-state-in-effect`.
 - [ ] Add a Neup documentation block to [app/api/auth/me/route.ts](/Users/neupkishor/Code/neup.estate/app/api/auth/me/route.ts).
 - [ ] Add a Neup documentation block to [app/api/auth/user/route.ts](/Users/neupkishor/Code/neup.estate/app/api/auth/user/route.ts).

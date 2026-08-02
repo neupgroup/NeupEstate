@@ -978,7 +978,8 @@ export async function handleBridgePropertySearch(req: NextRequest) {
 
 ::public
 
-Returns the public bridge payload for one property by `propertyId`.
+Returns the public bridge payload for one property by `propertyId` or
+`propertyCode`.
 
 Pass `fields` as a comma-separated list to limit the returned `property` object,
 for example `fields=title,id,property.details`.
@@ -1003,18 +1004,30 @@ export async function handleBridgePropertyView(req: NextRequest) {
     req.nextUrl.searchParams.get('propertyId')?.trim() ||
     req.headers.get('propertyId')?.trim() ||
     undefined;
+  const propertyCode =
+    req.nextUrl.searchParams.get('propertyCode')?.trim() ||
+    req.nextUrl.searchParams.get('property_code')?.trim() ||
+    req.nextUrl.searchParams.get('customId')?.trim() ||
+    req.nextUrl.searchParams.get('code')?.trim() ||
+    req.headers.get('propertyCode')?.trim() ||
+    req.headers.get('property_code')?.trim() ||
+    req.headers.get('customId')?.trim() ||
+    req.headers.get('code')?.trim() ||
+    undefined;
   const fields = parseFields(req.nextUrl.searchParams.get('fields'));
 
-  if (!propertyId) {
+  if (!propertyId && !propertyCode) {
     return NextResponse.json(
-      { success: false, error: 'Provide propertyId.' },
+      { success: false, error: 'Provide propertyId or propertyCode.' },
       { status: 400 },
     );
   }
 
   try {
-    const record = await prisma.property.findUnique({
-      where: { id: propertyId },
+    const record = await prisma.property.findFirst({
+      where: propertyId
+        ? { id: propertyId }
+        : { customId: propertyCode },
       include: PROPERTY_VIEW_INCLUDE,
     });
 
