@@ -1,4 +1,4 @@
-import { getAccountBasics, type LookupResponseBody } from '@/logica/neupid/lookup';
+import { logica } from '@/logica';
 import { getAuthCookieServer } from '@/services/auth/cookie';
 
 // ---------------------------------------------------------------------------
@@ -60,6 +60,11 @@ export type SignedAccountLookupResult =
   | { found: true; account: SignedAccountInfo; meta: SignedAccountLookupMeta }
   | { found: false; error: string; meta: SignedAccountLookupMeta };
 
+type LookupErrorBody = {
+  error?: string;
+  reason?: string;
+};
+
 export type AccountLookupInput =
   | { accountId: string; neupId?: never }
   | { neupId: string; accountId?: never };
@@ -86,6 +91,22 @@ const ACCOUNT_LOOKUP_FIELDS = [
   'accountType',
 ] as const;
 
+function asRecord(value: unknown): Record<string, unknown> | null {
+  return typeof value === 'object' && value !== null ? value as Record<string, unknown> : null;
+}
+
+function readString(value: unknown): string | null {
+  return typeof value === 'string' && value.trim() ? value.trim() : null;
+}
+
+function readProfileValue(profile: Record<string, unknown>, ...keys: string[]): string | null {
+  for (const key of keys) {
+    const value = readString(profile[key]);
+    if (value) return value;
+  }
+  return null;
+}
+
 // ---------------------------------------------------------------------------
 // Service function
 // ---------------------------------------------------------------------------
@@ -94,17 +115,44 @@ export async function getAccountInformation(
   input: AccountLookupInput,
 ): Promise<AccountLookupResult> {
   if (input.neupId) {
-    return {
-      found: false,
-      error: 'neupid_lookup_requires_logica_support',
-      meta: {
-        request: {
-          method: 'POST',
-          url: '/bridge/api.v1/accounts/lookup',
-          headers: { 'Content-Type': 'application/json' },
-          body: { neupId: input.neupId },
-        },
+    const meta: AccountLookupMeta = {
+      request: {
+        method: 'POST',
+        url: '/bridge/api.v1/profile',
+        headers: { 'Content-Type': 'application/json' },
+        body: { neupId: input.neupId },
       },
+    };
+
+    const response = await logica.account.lookup.byNeupId(input.neupId).get();
+    meta.response = {
+      status: response.status,
+      headers: headersToObject(response.headers),
+      body: response.body,
+    };
+
+    const responseBody = asRecord(response.body);
+    const profile = asRecord(responseBody?.profile) ?? responseBody;
+
+    if (!response.ok || !profile) {
+      return { found: false, error: 'not_found', meta };
+    }
+
+    const accountId = readProfileValue(profile, 'accountId', 'aid', 'id');
+    if (!accountId) {
+      return { found: false, error: 'not_found', meta };
+    }
+
+    return {
+      found: true,
+      account: {
+        accountId,
+        displayName: readProfileValue(profile, 'displayName', 'name') ?? '',
+        displayImage: readProfileValue(profile, 'displayImage', 'image', 'photoUrl') ?? '',
+        accountType: readProfileValue(profile, 'accountType', 'type') ?? 'individual',
+        neupId: readProfileValue(profile, 'neupid', 'neupId', 'nid') ?? input.neupId,
+      },
+      meta,
     };
   }
 
@@ -136,10 +184,7 @@ export async function getAccountInformation(
     },
   };
 
-  const response = await getAccountBasics({
-    accountId,
-    fields: ACCOUNT_LOOKUP_FIELDS,
-  });
+  const response = await logica.account(accountId).lookup.get(ACCOUNT_LOOKUP_FIELDS);
   meta.response = {
     status: response.status,
     headers: headersToObject(response.headers),
@@ -191,10 +236,7 @@ export async function getSignedAccountInformation(): Promise<SignedAccountLookup
   };
 
   try {
-    const response = await getAccountBasics({
-      authAccountToken: authAccountCookie,
-      fields: ACCOUNT_LOOKUP_FIELDS,
-    });
+    const response = await logica.account.lookup.current.get(authAccountCookie, ACCOUNT_LOOKUP_FIELDS);
     meta.response = {
       status: response.status,
       headers: headersToObject(response.headers),
@@ -232,6 +274,6 @@ export async function getSignedAccountInformation(): Promise<SignedAccountLookup
   }
 }
 
-function getLookupError(body: LookupResponseBody): string {
+function getLookupError(body: LookupErrorBody): string {
   return body.error ?? body.reason ?? 'not_found';
 }

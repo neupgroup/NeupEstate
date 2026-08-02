@@ -8,9 +8,7 @@
 
 import { getAuthCookieServer } from '@/services/auth';
 import { logAuthError } from '@/services/auth';
-import { getNeupBridgeEnvironment } from '@/logica/neupid/api';
-import { getBrandAccounts as getLogicaBrandAccounts } from '@/logica/neupid/accounts/getAccounts';
-import { connectBrandAccount } from '@/logica/neupid/connections/create';
+import { logica } from '@/logica';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -43,6 +41,14 @@ export type CreateBrandAccountConnectionResult =
       error: string;
     };
 
+function getRequiredEnv(name: 'NEUP_APP_ID' | 'NEUP_APP_SECRET'): string {
+  const value = process.env[name]?.trim();
+  if (!value) {
+    throw new Error(`${name} is required.`);
+  }
+  return value;
+}
+
 // ─── Public API ──────────────────────────────────────────────────────────────
 
 /**
@@ -67,7 +73,7 @@ export async function getBrandAccounts(): Promise<BrandAccountsResponse> {
       };
     }
 
-    const response = await getLogicaBrandAccounts({ authAccountToken: authCookie });
+    const response = await logica.account.brand.list({ authAccountToken: authCookie });
     if (!response.ok || !response.body.success) {
       await logAuthError('Accounts API returned success: false', {
         reason: 'api_failure',
@@ -166,12 +172,10 @@ export async function createBrandAccountConnection(accountId: string): Promise<C
       };
     }
 
-    const environment = getNeupBridgeEnvironment();
-    const response = await connectBrandAccount({
-      accountId: normalizedAccountId,
+    const response = await logica.account(normalizedAccountId).connection.create({
       authAccountToken: authCookie,
-      appId: environment.appId,
-      appSecret: environment.appSecret,
+      appId: getRequiredEnv('NEUP_APP_ID'),
+      appSecret: getRequiredEnv('NEUP_APP_SECRET'),
     });
 
     const payload = response.body;

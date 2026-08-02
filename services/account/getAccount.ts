@@ -21,7 +21,7 @@
  *       For verified authentication, use @/services/auth instead.
  */
 
-import { decodeNeupIdToken } from '@/logica/neupid/token/verify';
+import { logica } from '@/logica';
 
 export type JwtPayload = {
   aid?: string;
@@ -44,10 +44,10 @@ export type ActiveAccount = {
 /**
  * Decode a JWT payload without verifying the signature.
  * 
- * @deprecated Use decodeNeupIdToken from @/logica/neupid/token/verify instead
+ * @deprecated Use logica.account.auth.token(token).decode() instead
  */
 export function decodeJwtPayload(token: string): JwtPayload | null {
-  return decodeNeupIdToken(token);
+  return logica.account.auth.token(token).decode();
 }
 
 /**
@@ -58,7 +58,7 @@ export function decodeJwtPayload(token: string): JwtPayload | null {
  */
 export function getActiveAccount(cookieValue: string | null | undefined): ActiveAccount | null {
   if (!cookieValue) return null;
-  const payload = decodeNeupIdToken(cookieValue.trim());
+  const payload = logica.account.auth.token(cookieValue.trim()).decode();
   if (!payload?.aid) return null;
   return {
     aid:   payload.aid,

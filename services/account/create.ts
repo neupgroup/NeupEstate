@@ -23,7 +23,7 @@
  */
 
 import { prisma } from '@/core/database/prisma';
-import { connectIndividualAccount } from '@/logica/neupid/connections/create';
+import { logica } from '@/logica';
 import { resolveStoredAccountType } from '@/services/account-type';
 import { getAccountInformation } from '@/services/account/lookup';
 import { getAuthenticatedAccount } from '@/services/auth';
@@ -73,8 +73,7 @@ export async function createAccount(): Promise<void> {
       return;
     }
 
-    const connectionResponse = await connectIndividualAccount({
-      accountId: authResult.account.aid,
+    const connectionResponse = await logica.account(authResult.account.aid).connection.create({
       authAccountToken: authCookie,
       appId: getRequiredEnv('NEUP_APP_ID'),
       appSecret: getRequiredEnv('NEUP_APP_SECRET'),

@@ -1,5 +1,4 @@
-import { getNeupBridgeEnvironment } from '@/logica/neupid/api';
-import { getApplicationConnections } from '@/logica/neupid/connections/getConnections';
+import { logica } from '@/logica';
 import { logProblem } from '@/services/problem-service';
 
 type ApplicationUser = {
@@ -24,6 +23,14 @@ type FetchApplicationUsersResult =
       error: string;
     };
 
+function getRequiredEnv(name: 'NEUP_APP_ID' | 'NEUP_APP_SECRET'): string {
+  const value = process.env[name]?.trim();
+  if (!value) {
+    throw new Error(`${name} is required.`);
+  }
+  return value;
+}
+
 export async function fetchApplicationUsers(input?: {
   offset?: number;
   limit?: number;
@@ -32,10 +39,9 @@ export async function fetchApplicationUsers(input?: {
   const limit = Math.max(1, Math.min(500, input?.limit ?? 100));
 
   try {
-    const environment = getNeupBridgeEnvironment();
-    const response = await getApplicationConnections({
-      appId: environment.appId,
-      appSecret: environment.appSecret,
+    const response = await logica.account.connection.list({
+      appId: getRequiredEnv('NEUP_APP_ID'),
+      appSecret: getRequiredEnv('NEUP_APP_SECRET'),
       offset,
       limit,
     });

@@ -21,11 +21,17 @@
  * ::end
  */
 
-import { decodeNeupIdToken, type NeupIdTokenPayload } from '@/logica/neupid/token/verify';
+import { logica } from '@/logica';
 
-type AuthAccountPayload = NeupIdTokenPayload & {
+type AuthAccountPayload = {
   aid: string;
+  sid?: string;
+  skey?: string;
+  nid?: string;
   guest?: boolean | number;
+  iat?: number;
+  exp?: number;
+  [claim: string]: unknown;
 };
 
 const COOKIE_NAME = 'auth_account';
@@ -48,7 +54,7 @@ export function getClientAccount(): AuthAccountPayload | null {
   const token = readCookieClient(COOKIE_NAME);
   if (!token) return null;
 
-  const payload = decodeNeupIdToken(token);
+  const payload = logica.account.auth.token(token).decode();
   return payload?.aid ? payload as AuthAccountPayload : null;
 }
 

@@ -25,7 +25,7 @@
  *   }
  */
 
-import { decodeNeupIdToken } from '@/logica/neupid/token/verify';
+import { logica } from '@/logica';
 import { getAuthenticatedAccount } from '@/services/auth';
 
 export type IdentityResult =
@@ -43,7 +43,7 @@ export async function getIdentity(cookieValue?: string): Promise<IdentityResult>
   // If a specific cookie value is provided, decode it (for backward compatibility)
   // Otherwise use the centralized auth service
   if (cookieValue !== undefined) {
-    const account = decodeNeupIdToken(cookieValue);
+    const account = logica.account.auth.token(cookieValue).decode();
     
     if (!account?.aid) {
       return { authenticated: false, reason: 'no_active_session' };

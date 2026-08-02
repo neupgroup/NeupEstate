@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAccountBasics } from '@/logica/neupid/lookup';
+import { logica } from '@/logica';
 import { buildHandshakeGrantUrl, getAuthenticatedAccount } from '@/services/auth';
 
 export type AuthenticatedMe = {
@@ -29,10 +29,7 @@ export async function getAuthenticatedMeData(): Promise<AuthenticatedMe | null> 
   const accountType = guest ? 'guest' : 'individual';
 
   try {
-    const profile = await getAccountBasics({
-      accountId: account.aid,
-      fields: ['displayName', 'displayImage', 'accountType', 'neupid'],
-    });
+    const profile = await logica.account(account.aid).get(['displayName', 'displayImage', 'accountType', 'neupid']);
     const profileBody = profile.ok && profile.body.success ? profile.body : null;
 
     const me = {

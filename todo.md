@@ -1,6 +1,7 @@
 # TODO
 
 - [ ] Ask the logica team to add helpers for full signed account info (`neupId`, `role`, `token`, `isMinor`), NeupID lookup by handle, auth handshake/whoami/access routes, and role enrollment so services do not call Neup Account endpoints directly.
+- [ ] Upstream the `logica.account.auth.token(token).validate()`, scoped `logica.account(accountId).lookup`, and `logica.account(accountId).token(token).validate()` object helpers into `neup.logica`; this repo ignores and refreshes `logica/`, so local SDK edits are not persistent.
 - [ ] Fix authenticated profile display data resolution so `services/auth/me.ts` falls back to the local `account` row or signed account lookup when remote account lookup returns null `displayName`/`displayImage`.
 - [ ] Fix `app/bridge/api.v1/auth/user/route.ts` so signed account lookup fills missing `displayImage`, not only missing `displayName`.
 - [ ] Fix `services/ai/provider-endpoint-service.ts` imports from `@/core/ai/direct/googleai`; the current typecheck reports missing exports for `DirectAiMessage` and `DirectAiRequest`.
