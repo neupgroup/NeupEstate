@@ -28,7 +28,7 @@ export function ProvidersV1({
       <HeaderLayoutV1 />
       {showGuestBanner && !isAdminPage && !isHomePage && !isCustomBannerPage && <GuestSigninBanner variant="inline" />}
       {children}
-      {!isAdminPage && <FooterLayoutV1 showManagePanelLink={showManagePanelLink ?? false} />}
+      <FooterLayoutV1 showManagePanelLink={showManagePanelLink ?? false} />
     </SessionProvider>
   );
 }
