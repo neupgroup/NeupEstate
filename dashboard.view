@@ -1,0 +1,86 @@
+dashboard.view
+analytics.view
+
+account.view
+account.update
+
+team.view
+
+property.view
+property.update
+property.review
+property.drop
+
+propertyReview.view
+propertyReview.approve
+propertyReview.drop
+
+propertyCollection.view
+propertyCollection.create
+propertyCollection.update
+propertyCollection.drop
+
+intelligence.view -> view all the intelligence like view the sales intelligence and listing intelligence.
+
+intelligenceCriteria.view
+intelligenceCriteria.update
+
+schedule.view
+schedule.update
+
+
+
+
+
+
+
+
+update the permission to use these strings.
+and we need to use the 
+
+
+
+
+table: role
+==--==--==-->
+
+id
+member_id
+account_id
+connection_id
+asset_id
+asset_type
+asset_id_denorm -> drop the column
+role_id
+role_name
+permissions
+status
+details
+
+table: permission
+==--==--==-->
+
+id
+name
+description
+app_id
+tag
+rules
+scope_for,
+approval_policy
+
+
+table: authz_role
+==--==--==-->
+
+id
+name
+description
+app_id
+pushed
+permissions
+applicable_for
+acquisition_type
+approval_policy
+scope_for
+scope_level
