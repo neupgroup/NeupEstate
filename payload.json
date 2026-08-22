@@ -1,0 +1,205 @@
+{
+  "success": true,
+  "property": {
+    "id": "a1986013-c74e-4406-87c7-2a99e79a4bf3",
+    "customId": "13133",
+    "slug": "luxury-house-on-sale-at-imadol-13133",
+    "keywords": [
+      "house",
+      "sale",
+      "buddha party palace",
+      "38"
+    ],
+    "tags": [
+      "house",
+      "sale",
+      "buddha party palace",
+      "38"
+    ],
+    "title": "Luxury House on Sale at Imadol",
+    "description": "description field",
+    "purpose": [
+      "SALE"
+    ],
+    "category": [
+      "HOUSE"
+    ],
+    "type": [
+      "RESIDENTIAL"
+    ],
+    "status": "ACTIVE",
+    "visibility": "PUBLIC",
+    "images": [
+      {
+        "id": "cmsfqwe7m05avnm9k31eleohs",
+        "url": "https://api.propertyinnepal.com.np/storage/6419/6ZSdTNMEKU2AnFxAVzGv8IwYhW1O08-metaUEhPVE8tMjAyNS0xMS0zMC0xNi00OS01Mi5qcGc=-.jpg",
+        "type": "PHOTO",
+        "isCover": true,
+        "order": 0
+      },
+      {
+        "id": "cmsfqwe7m05awnm9kcn7e3mis",
+        "url": "https://api.propertyinnepal.com.np/storage/7537/EoxIaSK9bGk0OTzl9vHwOx7Sx1tq2Q-metaV2hhdHNBcHAgSW1hZ2UgMjAyNi0wNy0yMyBhdCAxMy4yMy4yNy5qcGVn-.jpg",
+        "type": "PHOTO",
+        "isCover": false,
+        "order": 1
+      },
+      {
+        "id": "cmsfqwe7m05axnm9k7vu869h7",
+        "url": "https://api.propertyinnepal.com.np/storage/7538/H19CwMrXPIPSqpnTX8YaHZ9oAOPLSC-metaV2hhdHNBcHAgSW1hZ2UgMjAyNi0wNy0yMyBhdCAxMy4yMy4xOS5qcGVn-.jpg",
+        "type": "PHOTO",
+        "isCover": false,
+        "order": 2
+      },
+      {
+        "id": "cmsfqwe7m05aynm9kr9gou7pe",
+        "url": "https://api.propertyinnepal.com.np/storage/7539/1uTc5QO5MEpHJgqWem0DskKKSL32hJ-metaV2hhdHNBcHAgSW1hZ2UgMjAyNi0wNy0yMyBhdCAxMy4yMy4xOSAoMSkuanBlZw==-.jpg",
+        "type": "PHOTO",
+        "isCover": false,
+        "order": 3
+      },
+      {
+        "id": "cmsfqwe7m05aznm9kjmwc48jm",
+        "url": "https://api.propertyinnepal.com.np/storage/7540/xtsMnhLfYQyDOoJhwW3R1yQXaaJFBN-metaV2hhdHNBcHAgSW1hZ2UgMjAyNi0wNy0yMyBhdCAxMy4yMy4yMC5qcGVn-.jpg",
+        "type": "PHOTO",
+        "isCover": false,
+        "order": 4
+      },
+      {
+        "id": "cmsfqwe7m05b0nm9kg1bb03cy",
+        "url": "https://api.propertyinnepal.com.np/storage/7541/B5uTwP2vKBnLVF6yjnsjlxilaWFHZy-metaV2hhdHNBcHAgSW1hZ2UgMjAyNi0wNy0yMyBhdCAxMy4yMy4yMCAoMSkuanBlZw==-.jpg",
+        "type": "PHOTO",
+        "isCover": false,
+        "order": 5
+      },
+      {
+        "id": "cmsfqwe7m05b1nm9knr45xc4w",
+        "url": "https://api.propertyinnepal.com.np/storage/7542/UKRHj64ze9lyG4k8mtzAaCTDG4XUCv-metaV2hhdHNBcHAgSW1hZ2UgMjAyNi0wNy0yMyBhdCAxMy4yMy4yMS5qcGVn-.jpg",
+        "type": "PHOTO",
+        "isCover": false,
+        "order": 6
+      },
+      {
+        "id": "cmsfqwe7m05b2nm9kmuxtg49h",
+        "url": "https://api.propertyinnepal.com.np/storage/7543/epxOh010gm4vFzQyysJQyebtSSlOJc-metaV2hhdHNBcHAgSW1hZ2UgMjAyNi0wNy0yMyBhdCAxMy4yMy4yMSAoMSkuanBlZw==-.jpg",
+        "type": "PHOTO",
+        "isCover": false,
+        "order": 7
+      },
+      {
+        "id": "cmsfqwe7m05b3nm9kxs66s0vt",
+        "url": "https://api.propertyinnepal.com.np/storage/7544/99Y8DRjr2VcDouihiveTSf3jQGj2QJ-metaV2hhdHNBcHAgSW1hZ2UgMjAyNi0wNy0yMyBhdCAxMy4yMy4yMi5qcGVn-.jpg",
+        "type": "PHOTO",
+        "isCover": false,
+        "order": 8
+      },
+      {
+        "id": "cmsfqwe7m05b4nm9kjgb6rkzq",
+        "url": "https://api.propertyinnepal.com.np/storage/7545/zcpQalny29tMQNArPbjBFi3rkNx5qo-metaV2hhdHNBcHAgSW1hZ2UgMjAyNi0wNy0yMyBhdCAxMy4yMy4yMiAoMSkuanBlZw==-.jpg",
+        "type": "PHOTO",
+        "isCover": false,
+        "order": 9
+      },
+      {
+        "id": "cmsfqwe7m05b5nm9kuptu6pio",
+        "url": "https://api.propertyinnepal.com.np/storage/7546/4yCWeo09DqqluG4o5jVObREcOemIOT-metaV2hhdHNBcHAgSW1hZ2UgMjAyNi0wNy0yMyBhdCAxMy4yMy4yNSAoMSkuanBlZw==-.jpg",
+        "type": "PHOTO",
+        "isCover": false,
+        "order": 10
+      },
+      {
+        "id": "cmsfqwe7m05b6nm9kvktbi6i6",
+        "url": "https://api.propertyinnepal.com.np/storage/7547/Q2enUY1aHrTj9bKqY8NPlrMT7zoyCO-metaV2hhdHNBcHAgSW1hZ2UgMjAyNi0wNy0yMyBhdCAxMy4yMy4yMy5qcGVn-.jpg",
+        "type": "PHOTO",
+        "isCover": false,
+        "order": 11
+      },
+      {
+        "id": "cmsfqwe7m05b7nm9kdu1k34nk",
+        "url": "https://api.propertyinnepal.com.np/storage/7548/2zJXQyx1rBK9LknPulbxwlKQmsRbFq-metaV2hhdHNBcHAgSW1hZ2UgMjAyNi0wNy0yMyBhdCAxMy4yMy4yNi5qcGVn-.jpg",
+        "type": "PHOTO",
+        "isCover": false,
+        "order": 12
+      },
+      {
+        "id": "cmsfqwe7m05b8nm9kwnwd1273",
+        "url": "https://api.propertyinnepal.com.np/storage/7549/ugsi9DGz9PbSsY7IUMJn1ycz8h0TTL-metaV2hhdHNBcHAgSW1hZ2UgMjAyNi0wNy0yMyBhdCAxMy4yMy4yNiAoMSkuanBlZw==-.jpg",
+        "type": "PHOTO",
+        "isCover": false,
+        "order": 13
+      },
+      {
+        "id": "cmsfqwe7m05b9nm9k8zyzha59",
+        "url": "https://api.propertyinnepal.com.np/storage/7550/0VUg3RmtbhRCWI8hiRIlrbP6O9NUb2-metaV2hhdHNBcHAgSW1hZ2UgMjAyNi0wNy0yMyBhdCAxMy4yMy4yNy5qcGVn-.jpg",
+        "type": "PHOTO",
+        "isCover": false,
+        "order": 14
+      }
+    ],
+    "listedBy": {
+      "type": "AGENT",
+      "id": "8a8a5764-860b-452a-b963-d0f4b9d2a54c",
+      "displayName": "Ramesh Barudi",
+      "displayImage": "https://cdn.neupgroup.com/neupaccount/8a8a5764-860b-452a-b963-d0f4b9d2a54c/profile-photo-8a8a5764-860b-452a-b963-d0f4b9d2a54c-1783796297025/1736507963075jpeg-f_6a52924aa05da9.41137840.jpeg"
+    },
+    "supportingAgents": [],
+    "location": {
+      "id": "property-location:a1986013-c74e-4406-87c7-2a99e79a4bf3",
+      "text": "buddha party palace, 38",
+      "geo": "",
+      "structured": {
+        "locality": "buddha party palace",
+        "city": "38",
+        "source": "propertyinnepal_prod"
+      }
+    },
+    "pricing": [
+      {
+        "type": "SALE",
+        "askingAmount": 95000000,
+        "currency": "NPR",
+        "basis": "9 CRORE 50 LAKH",
+        "unit": "total"
+      }
+    ],
+    "roadAccess": null,
+    "distance": {},
+    "amenities": [
+      "road access",
+      "bedroom",
+      "faced",
+      "attached bathroom",
+      "furnishing",
+      "kitchen",
+      "living room",
+      "bathroom",
+      "floor",
+      "house type",
+      "parking",
+      "build year",
+      "pooja room",
+      "store room",
+      "study room",
+      "land size"
+    ],
+    "details": {
+      "house": {
+        "bedrooms": 8,
+        "bathrooms": 6,
+        "livingRooms": 2,
+        "diningRooms": 0,
+        "kitchens": 2,
+        "floors": 3,
+        "carParkingSpots": 4,
+        "bikeParkingSpots": 0,
+        "builtYear": 0,
+        "furnished": true,
+        "details": []
+      },
+      "apartment": null,
+      "land": null,
+      "flat": null,
+      "space": null
+    }
+  }
+}
