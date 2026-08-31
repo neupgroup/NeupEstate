@@ -139,7 +139,7 @@ function activityBelongsToScope(activity: ActivityRow, scope: AnalyticsSourceSco
   }
 
   if (scope === 'site.custom.via.api') {
-    return page.startsWith('/bridge/api.v1/property') || page.startsWith('/bridge/api.v1/inquiry');
+    return page.startsWith('/bridge/api.v1/properties') || page.startsWith('/bridge/api.v1/inquiry');
   }
 
   return page.startsWith('/bridge') || page.startsWith('/api');
@@ -409,8 +409,8 @@ async function buildApiScopeSummary(
   const propertyFilter = buildPropertyFilter(context);
   const routePrefix =
     scope === 'site.custom.via.api'
-      ? ['bridge/api.v1/property/list', 'bridge/api.v1/property/view', 'bridge/api.v1/inquiry']
-      : ['bridge/api.v1/property/create', 'bridge/api.v1/property/edit', 'bridge/api.v1/accounts', 'bridge/api.v1/auth'];
+      ? ['bridge/api.v1/properties', 'bridge/api.v1/inquiry']
+      : ['bridge/api.v1/properties', 'bridge/api.v1/accounts', 'bridge/api.v1/auth'];
 
   const [logs, inquiries, createdProperties] = await Promise.all([
     prisma.siteDevLogEntry.findMany({

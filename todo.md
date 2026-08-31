@@ -18,8 +18,6 @@
 - [ ] Add a Neup documentation block to [app/api/auth/user/route.ts](/Users/neupkishor/Code/neup.estate/app/api/auth/user/route.ts).
 - [ ] Add Neup documentation blocks to [app/actions.ts](/Users/neupkishor/Code/neup.estate/app/actions.ts) for the property action flows that are currently undocumented.
 - [ ] Add a Neup documentation block to [app/accounts/page.tsx](/Users/neupkishor/Code/neup.estate/app/accounts/page.tsx).
-- [ ] Add a Neup documentation block to [app/bridge/api.v1/property/create/route.ts](/Users/neupkishor/Code/neup.estate/app/bridge/api.v1/property/create/route.ts).
-- [ ] Add a Neup documentation block to [app/bridge/api.v1/property/edit/route.ts](/Users/neupkishor/Code/neup.estate/app/bridge/api.v1/property/edit/route.ts).
 - [ ] Add a Neup documentation block to [app/bridge/api.v1/property/list/route.ts](/Users/neupkishor/Code/neup.estate/app/bridge/api.v1/property/list/route.ts).
 - [ ] Add a Neup documentation block to [app/bridge/api.v1/log-activity/route.ts](/Users/neupkishor/Code/neup.estate/app/bridge/api.v1/log-activity/route.ts).
 - [ ] Add a Neup documentation block to [app/manage/switch/page.tsx](/Users/neupkishor/Code/neup.estate/app/manage/switch/page.tsx).

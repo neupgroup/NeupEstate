@@ -806,7 +806,7 @@ export async function handleBridgePropertyList(
 ) {
   const { searchParams } = req.nextUrl;
   const allowLegacyAliases = options?.allowLegacyAliases ?? true;
-  const routeLabel = options?.routeLabel ?? 'bridge/api.v1/property/list';
+  const routeLabel = options?.routeLabel ?? 'bridge/api.v1/properties/list';
 
   try {
     const agencyId = readQueryValue(searchParams, 'agency_id', allowLegacyAliases ? 'agency' : undefined);
@@ -863,7 +863,7 @@ export async function handleBridgePropertyList(
 
 /*
 ::neup.documentation::bridge-property-search
-::api GET /bridge/api.v1/property/search
+::api GET /bridge/api.v1/properties/search
 
 ::public
 
@@ -889,7 +889,10 @@ export async function handleBridgePropertySearch(req: NextRequest) {
   const { searchParams } = req.nextUrl;
   const page = parsePositiveInteger(searchParams.get('page'), 1);
   const limit = Math.min(parsePositiveInteger(searchParams.get('limit'), 18), 100);
-  const q = searchParams.get('q')?.trim() || searchParams.get('query')?.trim() || undefined;
+  const q = searchParams.get('search')?.trim() || searchParams.get('q')?.trim() || searchParams.get('query')?.trim() || undefined;
+  const agency = searchParams.get('agency')?.trim() || undefined;
+  const agent = searchParams.get('agent')?.trim() || undefined;
+  const orderBy = searchParams.get('orderBy') === 'oldestFirst' ? 'oldestFirst' : 'newestFirst';
 
   const rawFilters = {
     searchTerm: q || searchParams.get('searchTerm')?.trim() || undefined,
@@ -950,6 +953,9 @@ export async function handleBridgePropertySearch(req: NextRequest) {
       page,
       limit,
       filters: parsedFilters.data,
+      agencyIds: agency ? [agency] : undefined,
+      agentAccountId: agent,
+      orderBy,
     });
 
     return NextResponse.json(
@@ -967,14 +973,14 @@ export async function handleBridgePropertySearch(req: NextRequest) {
   } catch (error) {
     throw Object.assign(
       error instanceof Error ? error : new Error(String(error)),
-      { routeLabel: 'bridge/api.v1/property/search' },
+      { routeLabel: 'bridge/api.v1/properties/search' },
     );
   }
 }
 
 /*
 ::neup.documentation::bridge-property-view
-::api GET /bridge/api.v1/property/view
+::api GET /bridge/api.v1/properties/[id]
 
 ::public
 
@@ -999,9 +1005,9 @@ are exposed.
 
 ::end
 */
-export async function handleBridgePropertyView(req: NextRequest) {
+export async function handleBridgePropertyView(req: NextRequest, routePropertyId?: string) {
   const propertyId =
-    req.nextUrl.searchParams.get('propertyId')?.trim() ||
+    routePropertyId?.trim() || req.nextUrl.searchParams.get('propertyId')?.trim() ||
     req.headers.get('propertyId')?.trim() ||
     undefined;
   const propertyCode =
@@ -1047,7 +1053,7 @@ export async function handleBridgePropertyView(req: NextRequest) {
   } catch (error) {
     throw Object.assign(
       error instanceof Error ? error : new Error(String(error)),
-      { routeLabel: 'bridge/api.v1/property/view' },
+      { routeLabel: 'bridge/api.v1/properties/[id]' },
     );
   }
 }
@@ -1123,7 +1129,7 @@ export async function handleBridgePropertyCreate(req: NextRequest) {
   }
 }
 
-export async function handleBridgePropertyEdit(req: NextRequest) {
+export async function handleBridgePropertyEdit(req: NextRequest, routePropertyId?: string) {
   const body = await req.json().catch(() => ({}));
   const workingProfileId =
     typeof body?.workingProfileId === 'string' ? body.workingProfileId.trim() :
@@ -1146,9 +1152,9 @@ export async function handleBridgePropertyEdit(req: NextRequest) {
     req.headers.get('requestId')?.trim() ||
     undefined;
   const propertyId =
-    typeof body?.propertyId === 'string' ? body.propertyId.trim() :
+    routePropertyId?.trim() || (typeof body?.propertyId === 'string' ? body.propertyId.trim() :
     req.headers.get('propertyId')?.trim() ||
-    undefined;
+    undefined);
   const propertyPayload = body?.property && typeof body.property === 'object'
     ? body.property
     : body?.data && typeof body.data === 'object'

@@ -46,6 +46,7 @@ export async function getPaginatedProperties(opts: {
   agentAccountId?: string;
   agencyIds?: string[];
   excludeArchived?: boolean;
+  orderBy?: 'newestFirst' | 'oldestFirst';
 } = {}): Promise<{ properties: Property[]; totalCount: number }> {
   try {
     const page = Math.max(1, opts.page ?? 1);
@@ -105,7 +106,7 @@ export async function getPaginatedProperties(opts: {
 
     const [totalCount, records] = await Promise.all([
       prisma.property.count({ where }),
-      prisma.property.findMany({ where, orderBy: { updatedAt: 'desc' }, take: limit, skip: (page - 1) * limit, include: PROPERTY_INCLUDE }),
+      prisma.property.findMany({ where, orderBy: { createdAt: opts.orderBy === 'oldestFirst' ? 'asc' : 'desc' }, take: limit, skip: (page - 1) * limit, include: PROPERTY_INCLUDE }),
     ]);
     return { properties: await hydratePropertyAccountLabels(records.map(mapRecord)), totalCount };
   } catch (e) { await logProblem(e, 'getPaginatedProperties'); return { properties: [], totalCount: 0 }; }
