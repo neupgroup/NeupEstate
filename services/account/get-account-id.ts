@@ -21,7 +21,6 @@ import {
   isClientAuthenticated as isClientAuthenticatedNew,
   isClientIdentified as isClientIdentifiedNew,
 } from '@/services/auth/client';
-import { getAccountId as getServerAccountIdNew } from '@/services/auth/account';
 
 // ─── Client-side ─────────────────────────────────────────────────────────────
 
@@ -65,6 +64,3 @@ export function isClientIdentified(): boolean {
  * 
  * @deprecated Use getAccountId from @/services/auth instead
  */
-export async function getServerAccountId(): Promise<string | null> {
-  return await getServerAccountIdNew();
-}

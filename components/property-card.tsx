@@ -19,9 +19,8 @@ import { useState, useTransition, useEffect } from "react";
 import { cn } from "#/core/utils";
 import { getHiddenPriceLabel, getPrimaryCurrency, getPrimaryPrice, getPrimaryPricingSuffix } from "@/services/property/price-display";
 import { SafeImage } from "./safe-image";
-import { toggleSavePropertyAction } from '@/services/engagement';
+import { isPropertySavedAction, toggleSavePropertyAction } from '@/services/property/saved-actions';
 import { useToast } from "#/core/hooks/useToast";
-import { isPropertySaved } from "@/services/property/view";
 import { getClientAccountId } from "@/services/account/get-account-id";
 
 interface PropertyCardProps {
@@ -63,7 +62,7 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
         return;
       }
       setIsCheckingFavorite(true);
-      const saved = await isPropertySaved(currentUserId, property.id);
+      const saved = await isPropertySavedAction(currentUserId, property.id);
       setIsFavorited(saved);
       setIsCheckingFavorite(false);
     }

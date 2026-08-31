@@ -21,8 +21,6 @@
  * ::end
  */
 
-import { accountAuthToken } from '@/services/auth/token';
-
 type AuthAccountPayload = {
   aid: string;
   sid?: string;
@@ -35,6 +33,18 @@ type AuthAccountPayload = {
 };
 
 const COOKIE_NAME = 'auth_account';
+
+function decodeClientToken(token: string): AuthAccountPayload | null {
+  const parts = token.trim().split('.');
+  if (parts.length !== 3) return null;
+  try {
+    const encoded = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    const padded = encoded + '='.repeat((4 - encoded.length % 4) % 4);
+    return JSON.parse(atob(padded)) as AuthAccountPayload;
+  } catch {
+    return null;
+  }
+}
 
 function readCookieClient(name: string): string | null {
   if (typeof document === 'undefined') return null;
@@ -54,7 +64,7 @@ export function getClientAccount(): AuthAccountPayload | null {
   const token = readCookieClient(COOKIE_NAME);
   if (!token) return null;
 
-  const payload = accountAuthToken(token).decode();
+  const payload = decodeClientToken(token);
   return payload?.aid ? payload as AuthAccountPayload : null;
 }
 

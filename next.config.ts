@@ -29,6 +29,10 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'api.propertyinnepal.com.np',
+      },
+      {
+        protocol: 'https',
         hostname: '**.**',
       }
     ],
