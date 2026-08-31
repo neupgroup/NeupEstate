@@ -4,8 +4,8 @@
 
 ::public
 
-GET returns active properties in a paginated response. It accepts `page` and
-`limit`, plus `search` for term search, `agency` or `agent` for ownership
+GET returns active properties in a paginated response. It accepts `limit` and
+`offset`, plus `search` for term search, `agency` or `agent` for ownership
 filtering, and `orderBy=newestFirst|oldestFirst` for creation/update order.
 Additional property filters such as `location`, `purpose`, `category`,
 `minPrice`, `maxPrice`, `minBedrooms`, and `maxBedrooms` are supported.

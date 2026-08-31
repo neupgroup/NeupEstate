@@ -887,8 +887,8 @@ search to `getPaginatedProperties()`.
 */
 export async function handleBridgePropertySearch(req: NextRequest) {
   const { searchParams } = req.nextUrl;
-  const page = parsePositiveInteger(searchParams.get('page'), 1);
-  const limit = Math.min(parsePositiveInteger(searchParams.get('limit'), 18), 100);
+  const limit = 25;
+  const offset = parseOffset(searchParams.get('offset'));
   const q = searchParams.get('search')?.trim() || searchParams.get('q')?.trim() || searchParams.get('query')?.trim() || undefined;
   const agency = searchParams.get('agency')?.trim() || undefined;
   const agent = searchParams.get('agent')?.trim() || undefined;
@@ -950,8 +950,8 @@ export async function handleBridgePropertySearch(req: NextRequest) {
 
   try {
     const { properties, totalCount } = await getPaginatedProperties({
-      page,
       limit,
+      offset,
       filters: parsedFilters.data,
       agencyIds: agency ? [agency] : undefined,
       agentAccountId: agent,
@@ -963,9 +963,8 @@ export async function handleBridgePropertySearch(req: NextRequest) {
         success: true,
         properties,
         totalCount,
-        page,
         limit,
-        totalPages: Math.ceil(totalCount / limit),
+        offset,
         appliedFilters: parsedFilters.data,
       },
       { status: 200 },
