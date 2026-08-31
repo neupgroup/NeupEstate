@@ -25,7 +25,7 @@ names used by the app.
 */
 
 import { notFound } from 'next/navigation';
-import { prisma } from '@/core/database/prisma';
+import { prisma } from '#/core/database/prisma';
 import { getAuthenticatedAccount } from '@/services/auth';
 
 export const PERMISSIONS = {

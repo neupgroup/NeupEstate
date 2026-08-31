@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { buildPublicAppUrl } from '@/core/helpers/link/url';
+import { buildPublicAppUrl } from '#/core/helpers/link/url';
 import { accountAuthToken } from '@/services/auth/token';
 
 /**

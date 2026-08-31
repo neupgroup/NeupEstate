@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent } from '#/components/ui/card';
 import { SafeImage } from '@/components/safe-image';
 import { Building, Home, Users } from 'lucide-react';
 import { getPublicAccountProfileByNeupId } from '@/services/agency-service';

@@ -1,9 +1,9 @@
 import { Info } from 'lucide-react';
 import { ClearSiteDevLogsButton } from '@/components/manage/clear-site-dev-logs-button';
 import { Pagination } from '@/components/manage/pagination';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
+import { Badge } from '#/components/ui/badge';
+import { Card, CardContent } from '#/components/ui/card';
 import { getSiteDevLogs, getSiteDevLogSetting } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';

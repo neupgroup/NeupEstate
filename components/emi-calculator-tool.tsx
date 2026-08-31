@@ -4,12 +4,12 @@ import { useMemo, useState } from 'react'
 import { Pie, PieChart, Cell, ResponsiveContainer, Tooltip as RechartsTooltip } from 'recharts'
 import { Calculator, Landmark, Percent, Wallet } from 'lucide-react'
 
-import { cn } from '@/core/utils'
+import { cn } from '#/core/utils'
 import { calculateEmiBreakdown } from '@/components/logic/EmiCalculator.v1'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Button } from '#/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card'
+import { Input } from '#/components/ui/input'
+import { Label } from '#/components/ui/label'
 import { Slider } from '@/components/ui/slider'
 import {
   Table,
@@ -18,7 +18,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
+} from '#/components/ui/table'
 import { ClientLink } from '@/components/client-link'
 
 const currencyFormatter = new Intl.NumberFormat('en-NP', {

@@ -8,7 +8,7 @@ Property create and mutation services that persist core property fields, details
 ::end
 */
 
-import { prisma } from '@/core/database/prisma';
+import { prisma } from '#/core/database/prisma';
 import { logProblem } from '@/services/problem-service';
 import type { CreatePropertyInput, ExtractedPropertyData, UpdatePropertyInput } from '@/types';
 import { areaValueToSqft } from '@/types';

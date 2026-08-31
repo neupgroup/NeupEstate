@@ -10,7 +10,7 @@ fallback geocoding search from street/tole to municipality to district.
 
 import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "#/components/ui/skeleton";
 
 const LEAFLET_STYLESHEET_ID = "leaflet-stylesheet";
 const LEAFLET_STYLESHEET_HREF = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";

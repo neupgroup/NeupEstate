@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { searchProperties } from '@/services/property/search';
 import { PropertyCard } from "@/components/estate";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "#/components/ui/skeleton";
 import type { Property, PropertyFilters } from "@/types";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "#/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
 // Mock function to get user requirements. In a real app, this would come from a service/DB.

@@ -6,11 +6,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createSalesRequestAction } from '@/services/engagement';
 import { CreateSalesRequestSchema, type CreateSalesRequestFormValues } from "@/types";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
+import { Button } from "#/components/ui/button";
+import { Textarea } from "#/components/ui/textarea";
+import { Input } from "#/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { useToast } from "@/core/hooks/use-toast";
+import { useToast } from "#/core/hooks/useToast";
 import { Loader2, Send } from "lucide-react";
 
 export function SalesRequestForm() {
@@ -33,14 +33,14 @@ export function SalesRequestForm() {
         startSubmitting(async () => {
             const result = await createSalesRequestAction(values);
             if (result.success) {
-                toast({
+                toast({ name: "default",
                     title: "Request Submitted",
                     description: "Thank you! An agent will review your sales request and get in touch.",
                 });
                 form.reset();
             } else {
-                toast({
-                    variant: "destructive",
+                toast({ name: "default",
+                    type: "solid", convey: "danger",
                     title: "Submission Failed",
                     description: result.error,
                 });
@@ -59,7 +59,7 @@ export function SalesRequestForm() {
                 <FormField control={form.control} name="propertyLocation" render={({ field }) => (<FormItem><FormLabel>Property Location</FormLabel><FormControl><Input placeholder="e.g., 123 Main St, Anytown USA" {...field} /></FormControl><FormMessage /></FormItem>)}/>
                 <FormField control={form.control} name="propertyType" render={({ field }) => (<FormItem><FormLabel>Property Type</FormLabel><FormControl><Input placeholder="e.g., 3-Bedroom House, Commercial Space" {...field} /></FormControl><FormMessage /></FormItem>)}/>
                 <FormField control={form.control} name="remarks" render={({ field }) => (<FormItem><FormLabel>Remarks / More Details (Optional)</FormLabel><FormControl><Textarea rows={5} placeholder="Tell us more about your property. e.g., 'Renovated in 2022, has a large backyard...'" {...field} /></FormControl><FormMessage /></FormItem>)}/>
-                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                <Button htmlType="submit" className="w-full" disabled={isSubmitting}>
                     {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
                     Submit Sales Request
                 </Button>

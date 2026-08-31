@@ -4,18 +4,18 @@
 
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Input } from '#/components/ui/input';
+import { Button } from '#/components/ui/button';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "#/components/ui/table";
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
 import { Loader2, Search, Bookmark, AlertCircle, ExternalLink, User } from 'lucide-react';
 import { Property, User as UserType } from '@/types';
 import { getSavedPropertiesForUser, getUsersBySavedProperty } from '@/services/engagement';
 import { ClientLink } from '@/components/client-link';
 import { RelativeTime } from './relative-time';
 import { type SavedPropertyEntry } from '@/services/property';
-import { Label } from '@/components/ui/label';
+import { Label } from '#/components/ui/label';
 
 const SearchResultDisplay = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <Card className="mt-6">
@@ -68,7 +68,7 @@ export function SavedPropertiesDashboard({ initialSavedProperties }: { initialSa
                         <Label htmlFor="userId">Find properties saved by user</Label>
                         <div className="flex gap-2">
                             <Input id="userId" placeholder="Enter User ID" {...userForm.register("userId")} />
-                            <Button type="submit" disabled={isSearchingUser}>
+                            <Button htmlType="submit" disabled={isSearchingUser}>
                                 {isSearchingUser ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
                             </Button>
                         </div>
@@ -77,7 +77,7 @@ export function SavedPropertiesDashboard({ initialSavedProperties }: { initialSa
                         <Label htmlFor="propertyId">Find users who saved property</Label>
                         <div className="flex gap-2">
                             <Input id="propertyId" placeholder="Enter Property ID" {...propertyForm.register("propertyId")} />
-                            <Button type="submit" disabled={isSearchingProperty}>
+                            <Button htmlType="submit" disabled={isSearchingProperty}>
                                  {isSearchingProperty ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
                             </Button>
                         </div>

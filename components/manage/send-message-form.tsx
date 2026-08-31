@@ -3,15 +3,15 @@
 
 import { useRef } from 'react';
 import { useFormStatus } from 'react-dom';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
+import { Textarea } from '#/components/ui/textarea';
+import { Button } from '#/components/ui/button';
 import { Send, Loader2 } from 'lucide-react';
 import { sendMessageAction } from '@/services/communications';
 
 function SubmitButton() {
     const { pending } = useFormStatus();
     return (
-         <Button size="icon" className="h-10 w-10" type="submit" disabled={pending}>
+         <Button size="icon" className="h-10 w-10" htmlType="submit" disabled={pending}>
             {pending ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
             <span className="sr-only">Send message</span>
         </Button>

@@ -22,8 +22,8 @@
  * ::end
  */
 
-import { prisma } from '@/core/database/prisma';
-import { logica } from '@/logica';
+import { prisma } from '#/core/database/prisma';
+import { logica } from '#/logica';
 import { resolveStoredAccountType } from '@/services/account-type';
 import { getAccountInformation } from '@/services/account/lookup';
 import { getAuthenticatedAccount } from '@/services/auth';

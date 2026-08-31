@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '#/components/ui/button';
 import { Sparkles } from 'lucide-react';
 import { extractCompetitorListingAction } from './actions';
-import { useToast } from '@/core/hooks/use-toast';
+import { useToast } from '#/core/hooks/useToast';
 
 export function ExtractListingButton({ competitorPageId }: { competitorPageId: string }) {
   const [isPending, startTransition] = useTransition();
@@ -15,8 +15,8 @@ export function ExtractListingButton({ competitorPageId }: { competitorPageId: s
     startTransition(async () => {
       const result = await extractCompetitorListingAction(competitorPageId);
       if (!result.success) {
-        toast({
-          variant: 'destructive',
+        toast({ name: "default",
+          convey: 'danger',
           title: 'Extraction failed',
           description: result.error || 'Could not extract this page.',
         });
@@ -24,7 +24,7 @@ export function ExtractListingButton({ competitorPageId }: { competitorPageId: s
       }
 
       setDone(true);
-      toast({
+      toast({ name: "default",
         title: 'Listing saved',
         description: 'The page was converted into a competitor listing.',
       });
@@ -32,7 +32,7 @@ export function ExtractListingButton({ competitorPageId }: { competitorPageId: s
   };
 
   return (
-    <Button onClick={handleExtract} disabled={isPending || done} size="sm" variant={done ? 'secondary' : 'default'}>
+    <Button onClick={handleExtract} disabled={isPending || done} size="sm" type={done ? 'tinted' : 'solid'}>
       <Sparkles className="mr-2 h-4 w-4" />
       {done ? 'Saved' : isPending ? 'Extracting...' : 'Extract Listing'}
     </Button>

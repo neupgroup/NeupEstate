@@ -2,10 +2,10 @@
 "use client";
 
 import type { Agent } from "@/types";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "#/components/ui/card";
+import { Badge } from "#/components/ui/badge";
 import { Mail, Phone } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "#/components/ui/avatar";
 
 function getInitials(name: string) {
     if (!name) return '?';

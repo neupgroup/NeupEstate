@@ -1,4 +1,4 @@
-import { logica } from '@/logica';
+import { logica } from '#/logica';
 import { getAuthCookieServer } from '@/services/auth/cookie';
 
 // ---------------------------------------------------------------------------

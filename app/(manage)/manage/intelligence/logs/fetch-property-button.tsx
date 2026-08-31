@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { Sparkles } from 'lucide-react';
-import { useToast } from '@/core/hooks/use-toast';
+import { useToast } from '#/core/hooks/useToast';
 import { extractCompetitorListingAction } from '../listings/actions';
 
 export function FetchPropertyButton({
@@ -23,15 +23,15 @@ export function FetchPropertyButton({
       const result = await extractCompetitorListingAction(competitorPageId);
 
       if (!result.success) {
-        toast({
-          variant: 'destructive',
+        toast({ name: "default",
+          convey: 'danger',
           title: 'Fetch failed',
           description: result.error || 'Could not fetch this page.',
         });
         return;
       }
 
-      toast({
+      toast({ name: "default",
         title: 'Property fetched',
         description: 'The page was converted into a competitor listing.',
       });

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { logica } from '@/logica';
-import { prisma } from '@/core/database/prisma';
+import { logica } from '#/logica';
+import { prisma } from '#/core/database/prisma';
 import { buildHandshakeGrantUrl, getAuthenticatedAccount } from '@/services/auth';
 import { resolveStoredAccountType } from '@/services/account-type';
 

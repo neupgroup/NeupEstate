@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from '@/core/database/prisma';
+import { prisma } from '#/core/database/prisma';
 import { revalidatePath } from 'next/cache';
 import { getCurrentAccountId } from '@/services/identity';
 

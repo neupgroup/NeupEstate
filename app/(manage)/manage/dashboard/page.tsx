@@ -1,5 +1,5 @@
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "#/components/ui/card";
 import { getProperties } from "@/services/property";
 import { getAccounts } from "@/services/account-service";
 import { getAgencyAgentMapsByAgent } from "@/services/agency-agent-map-service";

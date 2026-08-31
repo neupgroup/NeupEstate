@@ -2,11 +2,11 @@
 "use client";
 
 import { useState } from 'react';
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "#/components/ui/button";
+import { Checkbox } from "#/components/ui/checkbox";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Pencil, User, Phone } from 'lucide-react';
-import { useToast } from '@/core/hooks/use-toast';
+import { useToast } from '#/core/hooks/useToast';
 
 const initialSchedule = [
     { id: 'task1', title: 'Meeting', details: 'Discuss property options', time: '12:00 PM', completed: false, clientName: 'John Doe', clientPhone: '(123) 456-7890' },
@@ -27,7 +27,7 @@ export function DailySchedule() {
     };
 
     const handleEdit = () => {
-        toast({
+        toast({ name: "default",
             title: "Coming Soon!",
             description: "Editing schedule items will be available in a future update.",
         });
@@ -54,7 +54,7 @@ export function DailySchedule() {
                             </DialogTrigger>
                         </div>
                         <div className="flex items-center gap-2">
-                            <Button variant="ghost" size="icon" onClick={handleEdit}>
+                            <Button type="plain" size="icon" onClick={handleEdit}>
                                 <Pencil className="h-4 w-4" />
                             </Button>
                         </div>

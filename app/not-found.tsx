@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "#/components/ui/button";
 
 export default function NotFound() {
   return (
@@ -24,7 +24,7 @@ export default function NotFound() {
               <Button asChild>
                 <Link href="/">Back to home</Link>
               </Button>
-              <Button variant="outline" asChild>
+              <Button type="outlined" asChild>
                 <Link href="/properties">Browse properties</Link>
               </Button>
             </div>

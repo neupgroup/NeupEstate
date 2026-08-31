@@ -1,5 +1,5 @@
 
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
 import { Info } from 'lucide-react';
 import { requirePagePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permissions';

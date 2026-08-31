@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Button } from '#/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Badge } from '#/components/ui/badge';
 import { Loader2, Building2, CheckCircle, AlertCircle } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
 import { SafeImage } from '@/components/safe-image';
 // import { fetchBrandAccountsAction } from '@/app/manage/agencies/actions';
 
@@ -60,7 +60,7 @@ export function ApiRequestButton() {
         <Button 
           onClick={handleFetchBrandAccounts} 
           disabled={loading}
-          variant="outline"
+          type="outlined"
         >
           {loading ? (
             <>

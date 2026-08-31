@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "#/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ClientLink } from "@/components/client-link";
 import { hasPermission } from "@/services/permissions";

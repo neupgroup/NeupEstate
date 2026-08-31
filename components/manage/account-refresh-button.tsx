@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
+import { Button } from '#/components/ui/button';
 import { RefreshCw, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import { refreshAccountDisplayInfo } from '@/services/account-service';
 
@@ -76,7 +76,7 @@ export function AccountRefreshButton({
   return (
     <div className="flex items-center gap-2">
       <Button
-        variant="outline"
+        type="outlined"
         size="sm"
         onClick={handleClick}
         disabled={status === 'loading'}

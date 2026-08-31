@@ -10,15 +10,15 @@ import {
 } from "@/components/ui/dialog";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+} from "#/components/ui/alert-dialog";
+import { Button } from '#/components/ui/button';
+import { Input } from '#/components/ui/input';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Alert, AlertTitle, AlertDescription } from '#/components/ui/alert';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/core/hooks/use-toast';
+import { Textarea } from '#/components/ui/textarea';
+import { useToast } from '#/core/hooks/useToast';
 import { createFaqAction, updateFaqAction, deleteFaqAction } from '@/services/content';
 import type { FAQ, CreateFaqFormValues } from '@/types';
 import { CreateFaqSchema, FaqCategorySchema } from '@/types';
@@ -28,7 +28,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
+} from "#/components/ui/accordion";
 
 
 function FaqForm({
@@ -81,8 +81,8 @@ function FaqForm({
                     </FormItem>
                 )}/>
                 <DialogFooter>
-                    <Button type="button" variant="outline" onClick={onClose} disabled={isPending}>Cancel</Button>
-                    <Button type="submit" disabled={isPending}>
+                    <Button htmlType="button" type="outlined" onClick={onClose} disabled={isPending}>Cancel</Button>
+                    <Button htmlType="submit" disabled={isPending}>
                         {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : (mode === 'create' ? 'Create FAQ' : 'Save Changes')}
                     </Button>
                 </DialogFooter>
@@ -120,11 +120,11 @@ export function FaqAdminClient({ initialFaqs }: { initialFaqs: Record<string, FA
             const result = await action;
 
             if (result.success) {
-                toast({ title: `FAQ ${dialogMode === 'create' ? 'Created' : 'Updated'}` });
+                toast({ name: "default", title: `FAQ ${dialogMode === 'create' ? 'Created' : 'Updated'}` });
                 handleCloseDialog();
                 router.refresh();
             } else {
-                toast({ variant: 'destructive', title: `Error ${dialogMode === 'create' ? 'creating' : 'updating'} FAQ`, description: result.error });
+                toast({ name: "default", convey: 'danger', title: `Error ${dialogMode === 'create' ? 'creating' : 'updating'} FAQ`, description: result.error });
             }
         });
     };
@@ -133,10 +133,10 @@ export function FaqAdminClient({ initialFaqs }: { initialFaqs: Record<string, FA
         startTransition(async () => {
             const result = await deleteFaqAction(faqId);
             if(result.success) {
-                toast({ title: "FAQ Deleted" });
+                toast({ name: "default", title: "FAQ Deleted" });
                 router.refresh();
             } else {
-                 toast({ variant: 'destructive', title: 'Error deleting FAQ', description: result.error });
+                 toast({ name: "default", convey: 'danger', title: 'Error deleting FAQ', description: result.error });
             }
         });
     }
@@ -191,10 +191,10 @@ export function FaqAdminClient({ initialFaqs }: { initialFaqs: Record<string, FA
                                         <div className="flex items-center justify-between w-full">
                                             <AccordionTrigger className="flex-1 text-left hover:no-underline">{faq.question}</AccordionTrigger>
                                             <div className="flex items-center gap-2 ml-4">
-                                                <Button variant="ghost" size="icon" onClick={() => handleEdit(faq)}><Pencil className="h-4 w-4"/></Button>
+                                                <Button type="plain" size="icon" onClick={() => handleEdit(faq)}><Pencil className="h-4 w-4"/></Button>
                                                 <AlertDialog>
                                                     <AlertDialogTrigger asChild>
-                                                        <Button variant="ghost" size="icon"><Trash2 className="h-4 w-4 text-destructive"/></Button>
+                                                        <Button type="plain" size="icon"><Trash2 className="h-4 w-4 text-destructive"/></Button>
                                                     </AlertDialogTrigger>
                                                     <AlertDialogContent>
                                                         <AlertDialogHeader>

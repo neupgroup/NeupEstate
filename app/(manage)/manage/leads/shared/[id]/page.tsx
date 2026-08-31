@@ -3,7 +3,7 @@ import { getLeadActivity } from '@/services/leads/activity/view';
 import { getProperties } from '@/services/property';
 import { ClientLink } from '@/components/client-link';
 import { ChevronLeft } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '#/components/ui/badge';
 import { ActivityList } from '@/components/manage/activity-list';
 
 export default async function SharedLeadPage({ params }: { params: Promise<{ id: string }> }) {

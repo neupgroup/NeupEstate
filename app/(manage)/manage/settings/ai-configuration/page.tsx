@@ -4,17 +4,17 @@
 import { useEffect, useState, useTransition } from 'react';
 import { getPrompts } from '@/services/prompt-service';
 import type { Prompt } from '@/services/prompt-service';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "#/components/ui/accordion";
+import { Button, buttonVariants } from '#/components/ui/button';
 import { Pencil, Info, Bot, PlusCircle, Trash2, Loader2 } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Skeleton } from '@/components/ui/skeleton';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { useToast } from '@/core/hooks/use-toast';
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
+import { Skeleton } from '#/components/ui/skeleton';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "#/components/ui/alert-dialog";
+import { useToast } from '#/core/hooks/useToast';
 import { deletePromptAction } from '@/services/content';
 import { ClientLink } from '@/components/client-link';
-import { cn } from '@/core/utils';
+import { cn } from '#/core/utils';
 
 export default function AiConfigurationPage() {
     const { toast } = useToast();
@@ -38,10 +38,10 @@ export default function AiConfigurationPage() {
         startDeleteTransition(async () => {
             const result = await deletePromptAction(prompt.id);
             if(result.success) {
-                toast({ title: "Prompt Deleted", description: `The prompt "${prompt.name}" has been deleted.` });
+                toast({ name: "default", title: "Prompt Deleted", description: `The prompt "${prompt.name}" has been deleted.` });
                 fetchPrompts();
             } else {
-                toast({ variant: 'destructive', title: 'Error deleting prompt', description: result.error });
+                toast({ name: "default", type: 'solid', convey: 'danger', title: 'Error deleting prompt', description: result.error });
             }
         });
     }
@@ -79,12 +79,12 @@ export default function AiConfigurationPage() {
                                             </div>
                                         </AccordionTrigger>
                                         <div className="flex items-center gap-1">
-                                            <ClientLink href={`/manage/settings/ai-configuration/${prompt.id}/edit`} className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'h-8 w-8')}>
+                                            <ClientLink href={`/manage/settings/ai-configuration/${prompt.id}/edit`} className={cn(buttonVariants({ type: 'plain', size: 'icon' }), 'h-8 w-8')}>
                                                 <Pencil className="h-4 w-4" />
                                             </ClientLink>
                                             <AlertDialog>
                                                 <AlertDialogTrigger asChild>
-                                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive">
+                                                    <Button type="plain" size="icon" className="h-8 w-8 text-destructive hover:text-destructive">
                                                         <Trash2 className="h-4 w-4" />
                                                     </Button>
                                                 </AlertDialogTrigger>

@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Input } from '#/components/ui/input';
+import { Button } from '#/components/ui/button';
 import { Search, X, SlidersHorizontal } from 'lucide-react';
-import { cn } from '@/core/utils';
+import { cn } from '#/core/utils';
 import { PriceInput } from '@/components/ui/price-input';
 
 // ─── Quick filter definitions ─────────────────────────────────────────────────
@@ -169,8 +169,8 @@ export function AdminPropertySearch() {
                     <div className="absolute right-1 flex items-center gap-0.5">
                         {query && (
                             <Button
-                                type="button"
-                                variant="ghost"
+                                htmlType="button"
+                                type="plain"
                                 size="icon"
                                 className="h-8 w-8"
                                 onClick={handleClear}
@@ -180,8 +180,8 @@ export function AdminPropertySearch() {
                             </Button>
                         )}
                         <Button
-                            type="button"
-                            variant="ghost"
+                            htmlType="button"
+                            type="plain"
                             size="icon"
                             onClick={() => setAdvanced(v => !v)}
                             className={cn(
@@ -370,11 +370,11 @@ export function AdminPropertySearch() {
 
                     {/* Actions */}
                     <div className="flex items-center gap-2 pt-1">
-                        <Button type="button" size="sm" onClick={applyAdvanced}>
+                        <Button htmlType="button" size="sm" onClick={applyAdvanced}>
                             Apply Filters
                         </Button>
                         {hasAdvancedFilters && (
-                            <Button type="button" size="sm" variant="ghost" onClick={clearAdvanced}>
+                            <Button htmlType="button" size="sm" type="plain" onClick={clearAdvanced}>
                                 Clear
                             </Button>
                         )}

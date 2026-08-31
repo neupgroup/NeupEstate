@@ -1,10 +1,10 @@
 
 import { getMortgageRequests } from '@/services/mortgage-request-service';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "#/components/ui/table";
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
 import { AlertCircle, User, MapPin, BadgePercent, Phone, Mail, Contact } from 'lucide-react';
 import { RelativeTime } from '@/components/manage/relative-time';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '#/components/ui/badge';
 import { WhatsAppIcon } from '@/components/icons';
 
 export default async function MortgageRequestsPage() {

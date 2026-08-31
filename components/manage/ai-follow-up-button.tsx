@@ -12,10 +12,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Button } from '@/components/ui/button';
+} from "#/components/ui/alert-dialog"
+import { Button } from '#/components/ui/button';
 import { Bot, Loader2 } from 'lucide-react';
-import { useToast } from '@/core/hooks/use-toast';
+import { useToast } from '#/core/hooks/useToast';
 import { sendAiFollowUpAction } from '@/services/communications';
 
 interface AiFollowUpButtonProps {
@@ -30,19 +30,19 @@ export function AiFollowUpButton({ conversationId, lastMessageSender, isNewConve
 
     const handleFollowUp = () => {
         startTransition(async () => {
-            toast({
+            toast({ name: "default",
                 title: "AI is thinking...",
                 description: "Generating and sending follow-up messages.",
             });
             const result = await sendAiFollowUpAction(conversationId);
             if (result.success) {
-                toast({
+                toast({ name: "default",
                     title: "Follow-up Sent",
                     description: `The AI sent ${result.messagesSent} follow-up messages.`,
                 });
             } else {
-                toast({
-                    variant: 'destructive',
+                toast({ name: "default",
+                    convey: 'danger',
                     title: "Follow-up Failed",
                     description: result.error,
                 });
@@ -55,7 +55,7 @@ export function AiFollowUpButton({ conversationId, lastMessageSender, isNewConve
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button variant="outline" disabled={isDisabled} >
+                <Button type="outlined" disabled={isDisabled} >
                     <Bot className="mr-2 h-4 w-4" />
                     AI Follow-up
                 </Button>

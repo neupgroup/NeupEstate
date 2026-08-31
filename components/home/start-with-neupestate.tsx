@@ -1,6 +1,6 @@
 import { ClientLink } from "@/components/estate";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/core/utils";
+import { buttonVariants } from "#/components/ui/button";
+import { cn } from "#/core/utils";
 import { Section } from "@/components/home/_components/section";
 import { UserCheck, Building2 } from "lucide-react";
 
@@ -35,7 +35,7 @@ export function StartWithNeupEstate({ showAgentCard = true, showCards = true }: 
                     </div>
                     <ClientLink
                         href="/agents/register"
-                        className={cn(buttonVariants({ variant: "default", size: "sm" }), "mt-auto")}
+                        className={cn(buttonVariants({ type: "solid", size: "sm" }), "mt-auto")}
                     >
                         Get Started
                     </ClientLink>
@@ -55,7 +55,7 @@ export function StartWithNeupEstate({ showAgentCard = true, showCards = true }: 
                     </div>
                     <ClientLink
                         href="/agencies/register"
-                        className={cn(buttonVariants({ variant: "outline", size: "sm" }), "mt-auto")}
+                        className={cn(buttonVariants({ type: "outlined", size: "sm" }), "mt-auto")}
                     >
                         Create Profile
                     </ClientLink>

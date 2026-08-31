@@ -8,7 +8,7 @@
 
 import { getAuthCookieServer } from '@/services/auth';
 import { logAuthError } from '@/services/auth';
-import { logica } from '@/logica';
+import { logica } from '#/logica';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 

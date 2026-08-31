@@ -12,10 +12,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from '@/components/ui/button';
+} from "#/components/ui/alert-dialog";
+import { Button } from '#/components/ui/button';
 import { Trash2, Loader2 } from 'lucide-react';
-import { useToast } from '@/core/hooks/use-toast';
+import { useToast } from '#/core/hooks/useToast';
 import { deleteAccountAction } from '@/services/communications';
 
 interface DeleteAccountButtonProps {
@@ -32,10 +32,10 @@ export function DeleteAccountButton({ accountId, displayName }: DeleteAccountBut
     startTransition(async () => {
       const result = await deleteAccountAction(accountId);
       if (result.success) {
-        toast({ title: 'Account Deleted', description: `Account ${displayName ?? accountId} removed.` });
+        toast({ name: "default", title: 'Account Deleted', description: `Account ${displayName ?? accountId} removed.` });
         router.push('/manage/accounts');
       } else {
-        toast({ variant: 'destructive', title: 'Deletion Failed', description: result.error });
+        toast({ name: "default", convey: 'danger', title: 'Deletion Failed', description: result.error });
       }
     });
   };
@@ -43,7 +43,7 @@ export function DeleteAccountButton({ accountId, displayName }: DeleteAccountBut
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" size="sm">
+        <Button type="solid" convey="danger" size="sm">
           <Trash2 className="mr-2 h-4 w-4" />
           Delete
         </Button>

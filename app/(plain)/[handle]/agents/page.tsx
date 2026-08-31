@@ -1,8 +1,8 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar';
+import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
 import { getPublicAgencyAccountByNeupId } from '@/services/agency-service';
 import { getAgencyAgentAccountsByAgency } from '@/services/agency-agent-map-service';
 import { AlertCircle, Users } from 'lucide-react';

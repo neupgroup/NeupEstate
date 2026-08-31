@@ -5,11 +5,11 @@ import { Control, useFormContext } from "react-hook-form";
 import { Check, X } from "lucide-react";
 import { CreatePropertyFormValues, CurrencySchema } from "@/types";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Input } from "#/components/ui/input";
 import { PriceInput } from "@/components/ui/price-input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { cn } from "@/core/utils";
+import { cn } from "#/core/utils";
 
 interface PricingDetailsSectionProps {
     control: Control<CreatePropertyFormValues>;

@@ -6,8 +6,8 @@ import { PERMISSIONS } from "@/services/permissions";
 import { cancelPropertyChangeDraftAction, getPropertyChangeContextAction } from '@/services/property/drafts';
 import { getCurrentAccountId } from '@/services/identity';
 import { requestPropertyDeletionAction } from '@/services/property/review';
-import { prisma } from "@/core/database/prisma";
-import { Button } from "@/components/ui/button";
+import { prisma } from "#/core/database/prisma";
+import { Button } from "#/components/ui/button";
 import { PropertyReviewRequests } from "@/components/manage/property-review-requests";
 import { ClientLink } from "@/components/client-link";
 import { AreaDisplayToggle } from "@/components/manage/area-display-toggle";
@@ -969,8 +969,8 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                                     }}
                                 >
                                     <Button
-                                        type="submit"
-                                        variant="link"
+                                        htmlType="submit"
+                                        type="text"
                                         className="h-auto p-0 align-baseline underline font-medium text-inherit"
                                     >
                                         Don&apos;t want to delete, cancel it!
@@ -1103,7 +1103,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                 <div className="space-y-4">
                     {canEditOwnership && !isCreationDraftView ? (
                         <div className="flex justify-start">
-                            <Button variant="outline" size="sm" asChild>
+                            <Button type="outlined" size="sm" asChild>
                                 <ClientLink href={`/manage/properties/${property.id}/transfer`}>
                                     <ArrowLeftRight className="mr-2 h-4 w-4" />
                                     Transfer Listing
@@ -1159,7 +1159,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                         </ClientLink>
                     </Button>
                     {resolvedProperty && canViewPropertyLogs ? (
-                        <Button asChild variant="outline">
+                        <Button asChild type="outlined">
                             <ClientLink href={`/manage/properties/${resolvedProperty.id}/logs`}>
                                 View Logs
                             </ClientLink>
@@ -1172,7 +1172,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                                 await requestPropertyDeletionAction(resolvedProperty.id);
                             }}
                         >
-                            <Button type="submit" variant="outline" className="text-destructive hover:text-destructive">
+                            <Button htmlType="submit" type="outlined" className="text-destructive hover:text-destructive">
                                 Request Deletion
                             </Button>
                         </form>

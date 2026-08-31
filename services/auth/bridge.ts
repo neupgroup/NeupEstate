@@ -15,7 +15,7 @@ type RequestLike = {
   headers?: { get(name: string): string | null };
 };
 
-import { buildPublicAppUrl } from '@/core/helpers/link/url';
+import { buildPublicAppUrl } from '#/core/helpers/link/url';
 
 function getAppId(): string {
   return process.env.NEUP_APP_ID ?? '';

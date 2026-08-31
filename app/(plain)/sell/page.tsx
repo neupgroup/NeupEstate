@@ -1,6 +1,6 @@
 
 import { SalesRequestForm } from '@/components/estate';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
 import { Landmark } from 'lucide-react';
 
 export default function SellPage() {

@@ -6,18 +6,18 @@ import {
   getAgencyMapsByAgency,
 } from '@/services/agency-customization-service';
 import { getAgencyAgentMapsByAgency } from '@/services/agency-agent-map-service';
-import { prisma } from '@/core/database/prisma';
-import { Badge } from '@/components/ui/badge';
+import { prisma } from '#/core/database/prisma';
+import { Badge } from '#/components/ui/badge';
 import {
   Alert,
   AlertDescription,
   AlertTitle,
-} from '@/components/ui/alert';
+} from '#/components/ui/alert';
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from '@/components/ui/avatar';
+} from '#/components/ui/avatar';
 import { ClientLink } from '@/components/client-link';
 import {
   AlertCircle,

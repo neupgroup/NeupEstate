@@ -6,11 +6,11 @@ import { ArrowLeft, Send } from "lucide-react";
 
 import { savePropertyChangeDraftAction } from '@/services/property/drafts';
 import { ClientLink } from "@/components/client-link";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription, AlertTitle } from "#/components/ui/alert";
+import { Button } from "#/components/ui/button";
+import { Label } from "#/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useToast } from "@/core/hooks/use-toast";
+import { useToast } from "#/core/hooks/useToast";
 
 type ListingAgentOption = {
   id: string;
@@ -98,15 +98,15 @@ export function PropertyTransferForm({
       if (!result.success) {
         const message = result.error || "Failed to request listing transfer.";
         setError(message);
-        toast({
+        toast({ name: "default",
           title: "Transfer request failed",
           description: message,
-          variant: "destructive",
+          type: "solid", convey: "danger",
         });
         return;
       }
 
-      toast({
+      toast({ name: "default",
         title: "Transfer requested",
         description: "Listing agency and agent changes were saved for review.",
       });
@@ -167,13 +167,13 @@ export function PropertyTransferForm({
       </div>
 
       <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Button type="button" variant="outline" asChild>
+        <Button htmlType="button" type="outlined" asChild>
           <ClientLink href={`/manage/properties/${propertyId}`}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to property
           </ClientLink>
         </Button>
-        <Button type="button" onClick={submitTransfer} disabled={isPending}>
+        <Button htmlType="button" onClick={submitTransfer} disabled={isPending}>
           <Send className="mr-2 h-4 w-4" />
           {isPending ? "Requesting..." : "Request Transfer"}
         </Button>

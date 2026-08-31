@@ -1,4 +1,4 @@
-import { logica } from '@/logica';
+import { logica } from '#/logica';
 import { logProblem } from '@/services/problem-service';
 
 type ApplicationUser = {

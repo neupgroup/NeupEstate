@@ -5,10 +5,10 @@ import { Control, useFieldArray, useFormContext, useWatch } from "react-hook-for
 import { useEffect, useRef, useState } from "react";
 import Link from 'next/link';
 import { CreatePropertyFormValues } from "@/types";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "#/components/ui/input";
+import { Button } from "#/components/ui/button";
 import { ImagePlus, GripVertical, RotateCcw, Trash2 } from "lucide-react";
-import { useToast } from "@/core/hooks/use-toast";
+import { useToast } from "#/core/hooks/useToast";
 import { uploadPropertyMediaFile } from "./media-upload";
 
 interface PropertyPhotosSectionProps {
@@ -133,26 +133,26 @@ export function PropertyPhotosSection({ control, fieldChangeNotes, previousImage
             }
 
             if (uploadedCount > 0 && !firstErrorMessage) {
-                toast({
+                toast({ name: "default",
                     title: "Photos uploaded",
                     description: `${uploadedCount} photo${uploadedCount === 1 ? "" : "s"} saved to the CDN.`,
                 });
             } else if (uploadedCount > 0 && firstErrorMessage) {
-                toast({
-                    variant: "destructive",
+                toast({ name: "default",
+                    type: "solid", convey: "danger",
                     title: "Some photos failed to upload",
                     description: firstErrorMessage,
                 });
             } else if (firstErrorMessage) {
-                toast({
-                    variant: "destructive",
+                toast({ name: "default",
+                    type: "solid", convey: "danger",
                     title: "Photo upload failed",
                     description: firstErrorMessage,
                 });
             }
         } catch (error) {
-            toast({
-                variant: "destructive",
+            toast({ name: "default",
+                type: "solid", convey: "danger",
                 title: "Photo upload failed",
                 description: error instanceof Error ? error.message : "Unable to upload the selected photos.",
             });
@@ -205,8 +205,8 @@ export function PropertyPhotosSection({ control, fieldChangeNotes, previousImage
                                         {index + 1}
                                     </div>
                                     <Button
-                                        type="button"
-                                        variant="secondary"
+                                        htmlType="button"
+                                        type="tinted"
                                         size="icon"
                                         className="absolute right-2 top-2 h-7 w-7 rounded-full bg-white/90 text-foreground shadow-md hover:bg-white"
                                         onClick={() => remove(index)}

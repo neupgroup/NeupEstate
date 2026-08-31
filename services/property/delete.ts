@@ -8,7 +8,7 @@ Deletes a property record by id.
 ::end
 */
 
-import { prisma } from '@/core/database/prisma';
+import { prisma } from '#/core/database/prisma';
 import { logProblem } from '@/services/problem-service';
 
 export async function deleteProperty(propertyId: string): Promise<void> {

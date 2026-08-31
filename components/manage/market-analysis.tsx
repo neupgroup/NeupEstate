@@ -5,13 +5,13 @@ import { useEffect, useState, useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { analyzeMarketAction, type MarketAnalysisState } from '@/services/automation';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Button } from '#/components/ui/button';
+import { Label } from '#/components/ui/label';
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
 import { Loader2, Calculator, BarChartBig, AlertCircle } from 'lucide-react';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Textarea } from '@/components/ui/textarea';
+import { Skeleton } from '#/components/ui/skeleton';
+import { Textarea } from '#/components/ui/textarea';
 
 const initialState: MarketAnalysisState = {
     success: false,
@@ -20,7 +20,7 @@ const initialState: MarketAnalysisState = {
 function AnalyzeSubmitButton() {
     const { pending } = useFormStatus();
     return (
-        <Button type="submit" disabled={pending} className="w-full">
+        <Button htmlType="submit" disabled={pending} className="w-full">
             {pending ? (
                 <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -78,7 +78,7 @@ export function MarketAnalysis() {
                         </Alert>
                     )}
                     {state.success && state.result && (
-                         <Alert variant="default">
+                         <Alert>
                             <BarChartBig className="h-4 w-4" />
                             <AlertTitle>Market Analysis Result</AlertTitle>
                             <AlertDescription>

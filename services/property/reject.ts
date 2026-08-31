@@ -8,7 +8,7 @@ Rejects a property by keeping it out of the active approved listing set.
 ::end
 */
 
-import { prisma } from '@/core/database/prisma';
+import { prisma } from '#/core/database/prisma';
 import { logProblem } from '@/services/problem-service';
 import { PROPERTY_STATUS } from './shared';
 

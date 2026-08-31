@@ -1,8 +1,8 @@
 import { requireAuth } from '@/services/auth/account';
 import { getBrandAccounts } from '@/services/neupid/get-brand-accounts';
-import { prisma } from '@/core/database/prisma';
+import { prisma } from '#/core/database/prisma';
 import { ClientLink } from '@/components/client-link';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
 import { BrandAccountCard, type AgencyManagementAccount } from '@/app/(manage)/manage/team/brand-account-card';
 import { syncBrandAccountsToLocalAccounts } from '@/app/(manage)/manage/team/account-actions';

@@ -4,9 +4,11 @@
   "private": true,
   
   "scripts": {
-    "setup": "rm -rf core && rm -rf neup.core && git clone https://github.com/neupgroup/neup.core && mv neup.core core && rm -rf logica && rm -rf neup.logica && git clone https://github.com/neupgroup/neup.logica && mv neup.logica logica",
+    "setup": "chmod +x ./setup.sh && ./setup.sh",
+    
     "predev": "npm run setup",
     "prebuild": "npm run setup",
+
     "dev": "next dev --experimental-https --port 37828",
     "build": "npx prisma generate && next build",
     "start": "next start --port 37828",

@@ -2,12 +2,12 @@
 
 import { getPromptById } from '@/services/prompt-service';
 import { PromptEditForm } from '@/components/manage/prompt-edit-form';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
 import { notFound } from 'next/navigation';
 import { ClientLink } from '@/components/client-link';
-import { buttonVariants } from '@/components/ui/button';
+import { buttonVariants } from '#/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
-import { cn } from '@/core/utils';
+import { cn } from '#/core/utils';
 import { getModels } from '@/services/model-service';
 
 export default async function EditPromptPage({ params }: { params: Promise<{ id: string }> }) {
@@ -21,7 +21,7 @@ export default async function EditPromptPage({ params }: { params: Promise<{ id:
 
     return (
         <div className="max-w-3xl mx-auto">
-             <ClientLink href="/manage/settings/ai-configuration" className={cn(buttonVariants({ variant: 'ghost' }), 'mb-4')}>
+             <ClientLink href="/manage/settings/ai-configuration" className={cn(buttonVariants({ type: 'plain' }), 'mb-4')}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to AI Configuration
             </ClientLink>

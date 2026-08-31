@@ -2,7 +2,7 @@
 
 import { Search } from 'lucide-react';
 import { ClientLink } from '@/components/client-link';
-import { Input } from '@/components/ui/input';
+import { Input } from '#/components/ui/input';
 
 export default function SettingsPage() {
   return (

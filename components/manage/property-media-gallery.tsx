@@ -11,7 +11,7 @@ Renders a collage-style property photo gallery that links to the full-page galle
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { Grid2x2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "#/components/ui/button";
 
 interface PropertyMediaGalleryProps {
   images: string[];
@@ -338,7 +338,7 @@ export function PropertyMediaGallery({
       {mounted && visibleImages.length > 1 && (
         <Button
           asChild
-          variant="secondary"
+          type="tinted"
           className="absolute bottom-4 right-4 z-20 gap-2 rounded-full border border-border/70 bg-background/95 px-4 shadow-lg backdrop-blur hover:bg-background"
         >
           <Link href={galleryHref}>

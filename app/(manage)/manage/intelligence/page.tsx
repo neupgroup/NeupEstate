@@ -1,11 +1,11 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Badge } from '#/components/ui/badge';
 import { ClientLink } from '@/components/client-link';
 import { BarChart2, TrendingUp, ListChecks, Swords, FileText, Bell } from 'lucide-react';
 import { TrackChangesButton } from './track-changes-button';
 import { requirePagePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permissions';
-import { prisma } from '@/core/database/prisma';
+import { prisma } from '#/core/database/prisma';
 import { getCurrentAccountId } from '@/services/identity';
 
 const sections = [

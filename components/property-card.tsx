@@ -11,16 +11,16 @@ Reusable public property card used across homepage, search, saved, and collectio
 
 import Link from "next/link";
 import type { Property } from "@/types";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "#/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "#/components/ui/card";
+import { Badge } from "#/components/ui/badge";
 import { Heart, Loader2, Star, MapPin } from "lucide-react";
 import { useState, useTransition, useEffect } from "react";
-import { cn } from "@/core/utils";
+import { cn } from "#/core/utils";
 import { getHiddenPriceLabel, getPrimaryCurrency, getPrimaryPrice, getPrimaryPricingSuffix } from "@/services/property/price-display";
 import { SafeImage } from "./safe-image";
 import { toggleSavePropertyAction } from '@/services/engagement';
-import { useToast } from "@/core/hooks/use-toast";
+import { useToast } from "#/core/hooks/useToast";
 import { isPropertySaved } from "@/services/property/view";
 import { getClientAccountId } from "@/services/account/get-account-id";
 
@@ -72,8 +72,8 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
 
   const handleFavoriteToggle = () => {
     if (!userId) {
-        toast({
-            variant: "destructive",
+        toast({ name: "default",
+            type: "solid", convey: "danger",
             title: "Could not save property",
             description: "No user session found. Please refresh the page.",
         });
@@ -83,13 +83,13 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
       try {
         const result = await toggleSavePropertyAction(userId, property.id);
         setIsFavorited(result.saved);
-        toast({
+        toast({ name: "default",
           title: result.saved ? "Property Saved" : "Property Unsaved",
           description: `"${property.title}" has been ${result.saved ? 'added to' : 'removed from'} your saved properties.`,
         });
       } catch (error) {
-        toast({
-          variant: "destructive",
+        toast({ name: "default",
+          type: "solid", convey: "danger",
           title: "Error",
           description: "Could not update saved status. Please try again.",
         });
@@ -143,7 +143,7 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
         </div>
 
         <Button
-          variant="ghost"
+          type="plain"
           size="icon"
           className="absolute right-3 top-3 h-9 w-9 rounded-full border border-white/25 bg-white/80 text-foreground shadow-sm backdrop-blur-sm hover:bg-white"
           onClick={handleFavoriteToggle}

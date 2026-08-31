@@ -7,7 +7,7 @@ Composes the public homepage with hero, alternating content sections, and calls 
 */
 import { Suspense } from "react";
 import { SearchSection } from "@/components/estate";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "#/components/ui/skeleton";
 import { PopularCategories } from "@/components/home/popular-categories";
 import { FeaturedProperties } from "@/components/home/featured-properties";
 import { PropertyRequirementsCTA } from "@/components/home/property-requirements-cta";

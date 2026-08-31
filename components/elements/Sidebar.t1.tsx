@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ExternalLink } from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/core/utils";
+import { buttonVariants } from "#/components/ui/button";
+import { cn } from "#/core/utils";
 import { manageNav } from "@/components/manage-nav";
 import { appendManageProfileParamV1, getLongestMatchingManageNavHrefV1 } from "@/components/logic/ManageNavSelection.v1";
 
@@ -93,7 +93,7 @@ export function SidebarT1(props: SidebarProps) {
                 key={item.href}
                 href={item.external ? item.href : appendManageProfileParamV1(item.href, { selectedProfile, workingProfile })}
                 className={cn(
-                  buttonVariants({ variant: "plain" }),
+                  buttonVariants({ type: "plain" }),
                   "group w-full justify-start px-4 py-2 text-left focus-visible:bg-primary/10 focus-visible:text-primary focus-visible:ring-0",
                   isActive
                     ? "bg-primary/15 text-primary hover:bg-primary/20 active:bg-primary/25 font-semibold"

@@ -3,7 +3,7 @@
 'use server';
 
 import { randomUUID } from 'crypto';
-import { prisma } from '@/core/database/prisma';
+import { prisma } from '#/core/database/prisma';
 import { logProblem } from './problem-service';
 import type { AIModel, CreateAIModelFormValues, UpdateAIModelFormValues } from '@/types';
 

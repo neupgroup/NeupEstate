@@ -2,7 +2,7 @@
 "use client";
 
 import { useTransition } from 'react';
-import { Button } from "@/components/ui/button";
+import { Button } from "#/components/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,9 +13,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "#/components/ui/alert-dialog"
 import { Trash2, Loader2 } from 'lucide-react';
-import { useToast } from '@/core/hooks/use-toast';
+import { useToast } from '#/core/hooks/useToast';
 import { clearAllProblemsAction } from '@/services/automation';
 
 export function ClearLogsButton() {
@@ -26,13 +26,13 @@ export function ClearLogsButton() {
         startTransition(async () => {
             const result = await clearAllProblemsAction();
             if (result.success) {
-                toast({
+                toast({ name: "default",
                     title: "Logs Cleared",
                     description: "All error logs have been deleted.",
                 });
             } else {
-                toast({
-                    variant: 'destructive',
+                toast({ name: "default",
+                    convey: 'danger',
                     title: "Failed to Clear Logs",
                     description: result.error,
                 });
@@ -43,7 +43,7 @@ export function ClearLogsButton() {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button variant="destructive" disabled={isPending}>
+                <Button type="solid" convey="danger" disabled={isPending}>
                     {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
                     Clear Logs
                 </Button>

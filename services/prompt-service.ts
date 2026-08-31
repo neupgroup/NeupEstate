@@ -2,7 +2,7 @@
 
 'use server';
 
-import { prisma } from '@/core/database/prisma';
+import { prisma } from '#/core/database/prisma';
 import { logProblem } from './problem-service';
 import type { CreatePromptFormValues } from '@/types';
 import { resolveModelIdentifier } from './model-service';

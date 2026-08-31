@@ -4,14 +4,14 @@ import { useMemo, useState, useTransition } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { createAgencyAgentMapAction } from '@/services/agency';
 import type { Account, AgencyAgentMap } from '@/types';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Checkbox } from '@/components/ui/checkbox';
-import { useToast } from '@/core/hooks/use-toast';
+import { Button } from '#/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Input } from '#/components/ui/input';
+import { Badge } from '#/components/ui/badge';
+import { Checkbox } from '#/components/ui/checkbox';
+import { useToast } from '#/core/hooks/useToast';
 import { Loader2, Link2, Search, Users } from 'lucide-react';
-import { cn } from '@/core/utils';
+import { cn } from '#/core/utils';
 
 type Props = {
   agencies: Account[];
@@ -76,8 +76,8 @@ export function AgentMapManager({
 
   async function handleInvite(agentId: string) {
     if (!selectedAgencyId) {
-      toast({
-        variant: 'destructive',
+      toast({ name: "default",
+        convey: 'danger',
         title: 'Select an agency',
         description: 'Choose the agency before inviting an agent.',
       });
@@ -92,7 +92,7 @@ export function AgentMapManager({
       });
 
       if (result.success) {
-        toast({
+        toast({ name: "default",
           title: 'Invitation sent',
           description: 'The agent will see the invitation on their dashboard.',
         });
@@ -103,8 +103,8 @@ export function AgentMapManager({
         return;
       }
 
-      toast({
-        variant: 'destructive',
+      toast({ name: "default",
+        convey: 'danger',
         title: 'Unable to invite agent',
         description: result.error || 'Failed to send the invitation.',
       });
@@ -216,7 +216,7 @@ export function AgentMapManager({
                 <Checkbox checked={isAdmin} onCheckedChange={(checked) => setIsAdmin(Boolean(checked))} disabled={!selectedAgencyId} />
                 Grant admin
               </label>
-              <Button type="button" variant="secondary" onClick={() => setShowSearch((value) => !value)} disabled={!selectedAgencyId}>
+              <Button htmlType="button" type="tinted" onClick={() => setShowSearch((value) => !value)} disabled={!selectedAgencyId}>
                 <Link2 className="mr-2 h-4 w-4" />
                 {showSearch ? 'Hide search' : 'Add agent'}
               </Button>
@@ -246,7 +246,7 @@ export function AgentMapManager({
                         <p className="font-medium">{getAccountLabel(agent)}</p>
                         <p className="truncate text-xs text-muted-foreground">{agent.id}</p>
                       </div>
-                      <Button type="button" onClick={() => handleInvite(agent.id)} disabled={isPending}>
+                      <Button htmlType="button" onClick={() => handleInvite(agent.id)} disabled={isPending}>
                         {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Users className="mr-2 h-4 w-4" />}
                         Invite
                       </Button>

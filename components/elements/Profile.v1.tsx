@@ -1,7 +1,7 @@
 "use client";
 
 import { User } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "#/components/ui/avatar";
 import { getInitials } from "@/components/account-display";
 
 export function ProfileV1({

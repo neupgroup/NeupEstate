@@ -1,10 +1,10 @@
 
 import { getSalesRequests } from '@/services/sales-request-service';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "#/components/ui/table";
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
 import { AlertCircle, User, MapPin, Home } from 'lucide-react';
 import { RelativeTime } from '@/components/manage/relative-time';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '#/components/ui/badge';
 
 export default async function SalesRequestsPage() {
     const requests = await getSalesRequests();

@@ -2,9 +2,9 @@
 'use client';
 
 import { useSearchParams, usePathname } from 'next/navigation';
-import { buttonVariants } from '@/components/ui/button';
+import { buttonVariants } from '#/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { cn } from '@/core/utils';
+import { cn } from '#/core/utils';
 import { ClientLink } from './client-link';
 
 interface PaginationProps {
@@ -39,7 +39,7 @@ export function Pagination({ totalPages, currentPage }: PaginationProps) {
     
     if (startPage > 1) {
       pageNumbers.push(
-        <ClientLink href={createPageURL(1)} key="1" className={buttonVariants({ variant: 'ghost', size: 'icon' })}>
+        <ClientLink href={createPageURL(1)} key="1" className={buttonVariants({ type: 'plain', size: 'icon' })}>
           1
         </ClientLink>
       );
@@ -55,7 +55,7 @@ export function Pagination({ totalPages, currentPage }: PaginationProps) {
           key={i}
           className={cn(
             buttonVariants({
-              variant: currentPage === i ? 'outline' : 'ghost',
+              type: currentPage === i ? 'outlined' : 'plain',
               size: 'icon',
             }),
             currentPage === i && 'pointer-events-none bg-accent'
@@ -72,7 +72,7 @@ export function Pagination({ totalPages, currentPage }: PaginationProps) {
             pageNumbers.push(<span key="end-ellipsis" className="px-2">...</span>);
         }
         pageNumbers.push(
-          <ClientLink href={createPageURL(totalPages)} key={totalPages} className={buttonVariants({ variant: 'ghost', size: 'icon' })}>
+          <ClientLink href={createPageURL(totalPages)} key={totalPages} className={buttonVariants({ type: 'plain', size: 'icon' })}>
             {totalPages}
           </ClientLink>
         );
@@ -86,7 +86,7 @@ export function Pagination({ totalPages, currentPage }: PaginationProps) {
       <ClientLink
         href={createPageURL(currentPage - 1)}
         className={cn(
-          buttonVariants({ variant: 'outline', size: 'icon' }),
+          buttonVariants({ type: 'outlined', size: 'icon' }),
           currentPage <= 1 && 'pointer-events-none opacity-50'
         )}
         aria-disabled={currentPage <= 1}
@@ -98,7 +98,7 @@ export function Pagination({ totalPages, currentPage }: PaginationProps) {
       <ClientLink
         href={createPageURL(currentPage + 1)}
         className={cn(
-          buttonVariants({ variant: 'outline', size: 'icon' }),
+          buttonVariants({ type: 'outlined', size: 'icon' }),
           currentPage >= totalPages && 'pointer-events-none opacity-50'
         )}
         aria-disabled={currentPage >= totalPages}

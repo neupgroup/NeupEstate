@@ -8,12 +8,12 @@ import { useState, useTransition, useEffect } from 'react';
 import { UpdateAgentSchema, type Agent, type UpdateAgentFormValues, type User } from '@/types';
 import { updateAgentAction, deleteAgentAction } from '@/services/agents';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { PhoneInput } from '@/components/ui/phone-input';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/core/hooks/use-toast';
+import { Input } from '#/components/ui/input';
+import { PhoneInput } from '#/components/ui/phone-input';
+import { Button } from '#/components/ui/button';
+import { useToast } from '#/core/hooks/useToast';
 import { Loader2, Trash2, Pencil } from 'lucide-react';
 import {
   AlertDialog,
@@ -25,11 +25,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from "#/components/ui/alert-dialog";
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
-import { Badge } from "@/components/ui/badge";
-import { Textarea } from '@/components/ui/textarea';
+import { Badge } from "#/components/ui/badge";
+import { Textarea } from '#/components/ui/textarea';
 
 interface EditAgentFormProps {
     agent: Agent;
@@ -80,15 +80,15 @@ export function EditAgentForm({ agent, users }: EditAgentFormProps) {
         startSaveTransition(async () => {
             const result = await updateAgentAction(agent.id, values);
             if (result.success) {
-                toast({
+                toast({ name: "default",
                     title: 'Agent Updated',
                     description: `The agent has been successfully updated.`,
                 });
                 setIsEditing(false);
                 router.refresh();
             } else {
-                toast({
-                    variant: 'destructive',
+                toast({ name: "default",
+                    convey: 'danger',
                     title: 'Error updating agent',
                     description: result.error,
                 });
@@ -100,14 +100,14 @@ export function EditAgentForm({ agent, users }: EditAgentFormProps) {
         startDeleteTransition(async () => {
             const result = await deleteAgentAction(agent.id);
             if (result.success) {
-                toast({
+                toast({ name: "default",
                     title: "Agent Deleted",
                     description: `The agent has been permanently deleted.`,
                 });
                 router.push('/manage/team');
             } else {
-                toast({
-                    variant: 'destructive',
+                toast({ name: "default",
+                    convey: 'danger',
                     title: "Deletion Failed",
                     description: result.error,
                 });
@@ -146,17 +146,17 @@ export function EditAgentForm({ agent, users }: EditAgentFormProps) {
                             </Button>
                         ) : (
                             <>
-                                <Button variant="outline" onClick={handleCancel}>
+                                <Button type="outlined" onClick={handleCancel}>
                                     Cancel
                                 </Button>
-                                <Button type="submit" form="agent-edit-form" disabled={isSaving}>
+                                <Button htmlType="submit" form="agent-edit-form" disabled={isSaving}>
                                     {isSaving ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...</> : 'Save Changes'}
                                 </Button>
                             </>
                         )}
                         <AlertDialog>
                             <AlertDialogTrigger asChild>
-                                <Button variant="destructive" disabled={isDeleting}>
+                                <Button type="solid" convey="danger" disabled={isDeleting}>
                                     {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
                                     Delete
                                 </Button>

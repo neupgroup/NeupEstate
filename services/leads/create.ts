@@ -1,7 +1,7 @@
 'use server';
 
-import { prisma } from '@/core/database/prisma';
-import { LeadPriority, LeadType, Prisma } from '@/core/database/prisma';
+import { prisma } from '#/core/database/prisma';
+import { LeadPriority, LeadType, Prisma } from '#/core/database/prisma';
 import { logProblem } from '@/services/problem-service';
 
 // ::neup.documentation::lead-create-service

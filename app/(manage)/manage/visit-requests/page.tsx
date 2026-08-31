@@ -1,10 +1,10 @@
 
 import { getVisitRequests } from '@/services/visit-request-service';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "#/components/ui/table";
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
 import { AlertCircle, CalendarClock, User, Mail, Phone, Home, Clock } from 'lucide-react';
 import { RelativeTime } from '@/components/manage/relative-time';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '#/components/ui/badge';
 import { ClientLink } from '@/components/client-link';
 
 export default async function VisitRequestsPage() {

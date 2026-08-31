@@ -2,8 +2,8 @@
 import type { Metadata } from 'next';
 import { Outfit } from 'next/font/google';
 import './globals.css';
-import { cn } from '@/core/utils';
-import { Toaster } from '@/components/ui/toaster';
+import { cn } from '#/core/utils';
+import { Toaster } from '#/components/ui/toast';
 import { Providers } from '@/components/layout/providers';
 import { ActivityTracker } from '@/components/activity-tracker';
 import { createAccount } from '@/services/account/create';

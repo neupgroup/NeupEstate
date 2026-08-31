@@ -7,12 +7,12 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createPropertyRequestAction } from '@/services/engagement';
 import { CreatePropertyRequestSchema, type CreatePropertyRequestFormValues, PropertyCategorySchema } from "@/types";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
+import { Button } from "#/components/ui/button";
+import { Textarea } from "#/components/ui/textarea";
+import { Input } from "#/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useToast } from "@/core/hooks/use-toast";
+import { useToast } from "#/core/hooks/useToast";
 import { Loader2, Send } from "lucide-react";
 
 export function PropertyRequestForm() {
@@ -37,14 +37,14 @@ export function PropertyRequestForm() {
         startSubmitting(async () => {
             const result = await createPropertyRequestAction(values);
             if (result.success) {
-                toast({
+                toast({ name: "default",
                     title: "Request Submitted",
                     description: "Thank you! An agent will review your request and get in touch.",
                 });
                 form.reset();
             } else {
-                toast({
-                    variant: "destructive",
+                toast({ name: "default",
+                    type: "solid", convey: "danger",
                     title: "Submission Failed",
                     description: result.error,
                 });
@@ -75,7 +75,7 @@ export function PropertyRequestForm() {
                     <FormField control={form.control} name="bathrooms" render={({ field }) => (<FormItem><FormLabel>Min. Bathrooms (Optional)</FormLabel><FormControl><Input type="number" placeholder="e.g., 2" {...field} /></FormControl><FormMessage /></FormItem>)}/>
                 </div>
                 <FormField control={form.control} name="remarks" render={({ field }) => (<FormItem><FormLabel>More Details / Remarks (Optional)</FormLabel><FormControl><Textarea rows={5} placeholder="Tell us more about what you're looking for. e.g., 'Must have a backyard for a dog', 'Close to public transportation', etc." {...field} /></FormControl><FormMessage /></FormItem>)}/>
-                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                <Button htmlType="submit" className="w-full" disabled={isSubmitting}>
                     {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
                     Submit Request
                 </Button>

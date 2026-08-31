@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useSession } from "@/core/providers/session";
+import { useSession } from "#/core/providers/session";
 import { HeaderV1 } from "@/components/elements/Header.v1";
 
 export function HeaderLayoutV1() {

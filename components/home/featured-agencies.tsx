@@ -1,5 +1,5 @@
 import { getFeaturedAgencies } from "@/services/agency-service";
-import { Card } from "@/components/ui/card";
+import { Card } from "#/components/ui/card";
 import { SafeImage } from "@/components/safe-image";
 import { Section } from "@/components/home/_components/section";
 import { SectionTitle } from "@/components/home/_components/section-title";

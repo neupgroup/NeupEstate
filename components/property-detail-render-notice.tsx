@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useToast } from "@/core/hooks/use-toast";
+import { useToast } from "#/core/hooks/useToast";
 
 type PropertyDetailRenderNoticeProps = {
   show: boolean;
@@ -17,8 +17,8 @@ export function PropertyDetailRenderNotice({ show }: PropertyDetailRenderNoticeP
     }
 
     hasShownRef.current = true;
-    toast({
-      variant: "destructive",
+    toast({ name: "default",
+      type: "solid", convey: "danger",
       title: "Something went wrong",
       description: "We could not fully load some property details, but the page is still available. Management is notified.",
     });

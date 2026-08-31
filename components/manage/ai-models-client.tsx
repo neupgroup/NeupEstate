@@ -7,20 +7,20 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "#/components/ui/alert-dialog";
+import { Button } from '#/components/ui/button';
+import { Input } from '#/components/ui/input';
+import { Alert, AlertDescription, AlertTitle } from "#/components/ui/alert";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { useToast } from '@/core/hooks/use-toast';
+import { useToast } from '#/core/hooks/useToast';
 import { createModelAction, updateModelAction, deleteModelAction, setDefaultModelAction } from '@/services/content';
 import type { AIModel, CreateAIModelFormValues, UpdateAIModelFormValues } from '@/types';
 import { CreateAIModelSchema, UpdateAIModelSchema } from '@/types';
 import { Bot, Info, PlusCircle, Trash2, Loader2, Pencil, Star, ShieldCheck } from 'lucide-react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Textarea } from '@/components/ui/textarea';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '#/components/ui/table';
+import { Textarea } from '#/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '#/components/ui/badge';
 
 function ModelForm({
     mode,
@@ -85,8 +85,8 @@ function ModelForm({
                     )}
                 />
                 <DialogFooter>
-                    <Button type="button" variant="outline" onClick={onClose} disabled={isPending}>Cancel</Button>
-                    <Button type="submit" disabled={isPending}>
+                    <Button htmlType="button" type="outlined" onClick={onClose} disabled={isPending}>Cancel</Button>
+                    <Button htmlType="submit" disabled={isPending}>
                         {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : (mode === 'create' ? 'Create Model' : 'Save Changes')}
                     </Button>
                 </DialogFooter>
@@ -124,11 +124,11 @@ export function AIModelsClient({ initialModels }: { initialModels: AIModel[] }) 
             const result = await action;
 
             if (result.success) {
-                toast({ title: `Model ${dialogMode === 'create' ? 'Created' : 'Updated'}` });
+                toast({ name: "default", title: `Model ${dialogMode === 'create' ? 'Created' : 'Updated'}` });
                 handleCloseDialog();
                 router.refresh();
             } else {
-                toast({ variant: 'destructive', title: `Error ${dialogMode === 'create' ? 'creating' : 'updating'} model`, description: result.error });
+                toast({ name: "default", convey: 'danger', title: `Error ${dialogMode === 'create' ? 'creating' : 'updating'} model`, description: result.error });
             }
         });
     };
@@ -137,10 +137,10 @@ export function AIModelsClient({ initialModels }: { initialModels: AIModel[] }) 
         startTransition(async () => {
             const result = await deleteModelAction(modelId);
             if(result.success) {
-                toast({ title: "Model Deleted" });
+                toast({ name: "default", title: "Model Deleted" });
                 router.refresh();
             } else {
-                 toast({ variant: 'destructive', title: 'Error deleting model', description: result.error });
+                 toast({ name: "default", convey: 'danger', title: 'Error deleting model', description: result.error });
             }
         });
     }
@@ -149,10 +149,10 @@ export function AIModelsClient({ initialModels }: { initialModels: AIModel[] }) 
         startTransition(async () => {
             const result = await setDefaultModelAction(modelId);
              if (result.success) {
-                toast({ title: "Default Model Updated" });
+                toast({ name: "default", title: "Default Model Updated" });
                 router.refresh();
             } else {
-                toast({ variant: 'destructive', title: 'Error setting default', description: result.error });
+                toast({ name: "default", convey: 'danger', title: 'Error setting default', description: result.error });
             }
         });
     };
@@ -212,14 +212,14 @@ export function AIModelsClient({ initialModels }: { initialModels: AIModel[] }) 
                                         <p className="text-sm">${model.costPerMillionInputTokens.toFixed(2)} / ${model.costPerMillionOutputTokens.toFixed(2)}</p>
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        <Button variant="ghost" size="icon" onClick={() => handleSetDefault(model.id)} disabled={model.isDefault || isPending}>
+                                        <Button type="plain" size="icon" onClick={() => handleSetDefault(model.id)} disabled={model.isDefault || isPending}>
                                             <ShieldCheck className="h-4 w-4"/>
                                             <span className="sr-only">Set as default</span>
                                         </Button>
-                                        <Button variant="ghost" size="icon" onClick={() => handleEdit(model)}><Pencil className="h-4 w-4"/></Button>
+                                        <Button type="plain" size="icon" onClick={() => handleEdit(model)}><Pencil className="h-4 w-4"/></Button>
                                         <AlertDialog>
                                             <AlertDialogTrigger asChild>
-                                                <Button variant="ghost" size="icon"><Trash2 className="h-4 w-4 text-destructive"/></Button>
+                                                <Button type="plain" size="icon"><Trash2 className="h-4 w-4 text-destructive"/></Button>
                                             </AlertDialogTrigger>
                                             <AlertDialogContent>
                                                 <AlertDialogHeader>

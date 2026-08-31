@@ -2,8 +2,8 @@
 import { notFound } from 'next/navigation';
 import { getAgentBySlug } from '@/services/agent-service';
 import { SafeImage, ClientLink } from '@/components/estate';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '#/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '#/components/ui/card';
 import { Mail, Phone, MessageSquare } from 'lucide-react';
 import { WhatsAppIcon } from '@/components/icons';
 
@@ -51,19 +51,19 @@ export default async function AgentContactPage({ params }: { params: Promise<{ s
                             </Button>
                         )}
                         {agent.contact.email && (
-                            <Button variant="outline" className="w-full justify-start" asChild>
+                            <Button type="outlined" className="w-full justify-start" asChild>
                                 <a href={`mailto:${agent.contact.email}`}>
                                     <Mail className="mr-4 h-5 w-5"/> Send Email
                                 </a>
                             </Button>
                         )}
-                         <Button variant="outline" className="w-full justify-start" disabled>
+                         <Button type="outlined" className="w-full justify-start" disabled>
                             <MessageSquare className="mr-4 h-5 w-5"/> Message (Coming Soon)
                         </Button>
                     </div>
                      <div className="pt-4 text-center">
                          <ClientLink href={`/agents/${agent.slug}`}>
-                            <Button variant="link">Back to profile</Button>
+                            <Button type="text">Back to profile</Button>
                         </ClientLink>
                     </div>
                 </CardContent>

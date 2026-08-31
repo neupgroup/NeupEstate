@@ -1,5 +1,5 @@
-import { prisma } from '@/core/database/prisma';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { prisma } from '#/core/database/prisma';
+import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
 import { Activity } from 'lucide-react';
 
 export default async function AccountActivityPage({ params }: { params: Promise<{ id: string }> }) {

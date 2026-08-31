@@ -11,7 +11,7 @@ import { cancelPropertyChangeDraftAction, createPropertyAction, getCurrentProper
 import { getCurrentAccountId } from '@/services/identity';
 
 import { Form } from '@/components/ui/form';
-import { useToast } from '@/core/hooks/use-toast';
+import { useToast } from '#/core/hooks/useToast';
 import { getUsers } from '@/services/user-service';
 import { useAgencyCustomization } from '@/inapp/agency-customization/use-agency-customization';
 import { evaluateAgencyCustomization } from '@/inapp/agency-customization/evaluate-agency-customization';
@@ -318,7 +318,7 @@ export default function CreatePropertyPage() {
         startTransition(async () => {
             const result = await createPropertyAction(values, postingAgencyId, draftChangeId, activeWorkingProfileId);
             if (result.success) {
-                toast({
+                toast({ name: "default",
                     title: 'Review Requested',
                     description: `The property "${values.title}" has been saved for approval.`,
                 });
@@ -327,8 +327,8 @@ export default function CreatePropertyPage() {
                 if (result.changeId && result.changeId !== draftChangeId) {
                     syncDraftChangeId(result.changeId);
                 }
-                toast({
-                    variant: 'destructive',
+                toast({ name: "default",
+                    convey: 'danger',
                     title: 'Error creating property',
                     description: result.error,
                 });
@@ -338,8 +338,8 @@ export default function CreatePropertyPage() {
 
     function onSubmitInvalid(errors: Record<string, any>) {
         focusFirstErrorSection(errors);
-        toast({
-            variant: 'destructive',
+        toast({ name: "default",
+            convey: 'danger',
             title: 'Please fix the highlighted errors',
             description: 'Some required fields still need attention before publishing.',
         });
@@ -355,8 +355,8 @@ export default function CreatePropertyPage() {
         });
 
         if (!result.success) {
-            toast({
-                variant: 'destructive',
+            toast({ name: "default",
+                convey: 'danger',
                 title: 'Could not save draft',
                 description: result.error || 'Please try again before continuing.',
             });
@@ -385,15 +385,15 @@ export default function CreatePropertyPage() {
 
         const result = await cancelPropertyChangeDraftAction(draftChangeId);
         if (!result.success) {
-            toast({
-                variant: 'destructive',
+            toast({ name: "default",
+                convey: 'danger',
                 title: 'Could not drop property',
                 description: result.error || 'Please try again.',
             });
             return false;
         }
 
-        toast({
+        toast({ name: "default",
             title: 'Property dropped',
             description: 'The unrequested property draft has been removed.',
         });

@@ -11,7 +11,7 @@ import { notFound, redirect } from "next/navigation";
 import { getPropertyById, getPropertyBySlug } from "@/services/property";
 import { logProblem } from "@/services/problem-service";
 import { PropertyGalleryFullPage } from "@/components/manage/property-gallery-full-page";
-import { Button } from "@/components/ui/button";
+import { Button } from "#/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
 type PropertyGalleryPageProps = {
@@ -92,7 +92,7 @@ export default async function PropertyGalleryPage({
             </p>
           </div>
 
-          <Button asChild variant="outline" className="gap-2">
+          <Button asChild type="outlined" className="gap-2">
             <Link href={`/properties/${propertySlug}`}>
               <ArrowLeft className="h-4 w-4" />
               Back to property

@@ -4,9 +4,9 @@
 import { useEffect, useState } from "react";
 import { searchProperties } from '@/services/property/search';
 import { PropertyCard } from "./property-card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "#/components/ui/skeleton";
 import type { Property, PropertyFilters } from "@/types";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "#/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { type RequirementsFormValues } from "@/components/profile/user-requirements-form";
 

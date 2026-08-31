@@ -8,7 +8,7 @@ Approves a property by making it active and publicly approved.
 ::end
 */
 
-import { prisma } from '@/core/database/prisma';
+import { prisma } from '#/core/database/prisma';
 import { logProblem } from '@/services/problem-service';
 import { PROPERTY_STATUS } from './shared';
 

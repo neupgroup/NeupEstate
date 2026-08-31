@@ -4,9 +4,9 @@
 import { useTransition } from 'react';
 import { updateInquiryStatusAction } from '@/services/content';
 import type { InquiryStatus } from '@/types';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/core/hooks/use-toast';
+import { Button } from '#/components/ui/button';
+import { Badge } from '#/components/ui/badge';
+import { useToast } from '#/core/hooks/useToast';
 import { Check, Mail, Archive, Loader2, RotateCcw } from 'lucide-react';
 
 interface InquiryStatusUpdaterProps {
@@ -22,9 +22,9 @@ export function InquiryStatusUpdater({ inquiryId, currentStatus }: InquiryStatus
     startTransition(async () => {
       const result = await updateInquiryStatusAction(inquiryId, newStatus);
       if (result.success) {
-        toast({ title: 'Status Updated', description: `Inquiry marked as ${newStatus}.` });
+        toast({ name: "default", title: 'Status Updated', description: `Inquiry marked as ${newStatus}.` });
       } else {
-        toast({ variant: 'destructive', title: 'Update Failed', description: result.error });
+        toast({ name: "default", convey: 'danger', title: 'Update Failed', description: result.error });
       }
     });
   };
@@ -32,7 +32,7 @@ export function InquiryStatusUpdater({ inquiryId, currentStatus }: InquiryStatus
   if (currentStatus === 'new') {
     return (
       <Button
-        variant="outline"
+        type="outlined"
         size="sm"
         onClick={() => handleStatusChange('replied')}
         disabled={isPending}
@@ -50,7 +50,7 @@ export function InquiryStatusUpdater({ inquiryId, currentStatus }: InquiryStatus
   if (currentStatus === 'replied') {
     return (
        <Button
-        variant="default"
+        type="solid"
         size="sm"
         onClick={() => handleStatusChange('closed')}
         disabled={isPending}
@@ -73,7 +73,7 @@ export function InquiryStatusUpdater({ inquiryId, currentStatus }: InquiryStatus
                 Closed
             </Badge>
             <Button
-                variant="link"
+                type="text"
                 size="sm"
                 className="h-auto p-0 text-xs"
                 onClick={() => handleStatusChange('new')}

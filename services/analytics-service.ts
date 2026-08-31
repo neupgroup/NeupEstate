@@ -1,7 +1,7 @@
 'use server';
 
-import { Prisma } from '@/core/database/prisma';
-import { prisma } from '@/core/database/prisma';
+import { Prisma } from '#/core/database/prisma';
+import { prisma } from '#/core/database/prisma';
 import type {
   AnalyticsDailyPoint,
   AnalyticsDashboardData,
@@ -10,7 +10,7 @@ import type {
   AnalyticsMetricTotals,
   AnalyticsScopeSummary,
   AnalyticsSourceScope,
-} from '@/core/analytics/types';
+} from '#/core/analytics/types';
 import { getAuthenticatedAccount } from '@/services/auth';
 import { getAgencyMapByAccount, getAgencyMapsByAgency } from '@/services/agency-customization-service';
 import { hasPermission, PERMISSIONS } from '@/services/permissions';

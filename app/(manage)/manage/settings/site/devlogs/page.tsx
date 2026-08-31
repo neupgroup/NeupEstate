@@ -1,5 +1,5 @@
 import { SiteDevLogsToggle } from '@/components/manage/site-dev-logs-toggle';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
 import { getSiteDevLogSetting } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';

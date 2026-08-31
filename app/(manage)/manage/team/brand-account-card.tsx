@@ -1,8 +1,8 @@
 'use client';
 
 import { SafeImage } from "@/components/safe-image";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from "#/components/ui/badge";
+import { Button } from "#/components/ui/button";
 import { resolveStoredAccountType } from "@/services/account-type";
 import { Building } from "lucide-react";
 import { useState, type MouseEvent } from "react";
@@ -243,7 +243,7 @@ export function BrandAccountCard({
           <Button
             size="sm"
             onClick={(event) => handleCreate(event)}
-            type="button"
+            htmlType="button"
             disabled={isLoading}
           >
             <Building className="mr-1.5 h-3.5 w-3.5" />

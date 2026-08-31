@@ -5,8 +5,8 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+} from "#/components/ui/accordion";
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
 import { HelpCircle } from 'lucide-react';
 import type { FAQ } from '@/types';
 

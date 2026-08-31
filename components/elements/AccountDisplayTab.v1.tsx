@@ -23,7 +23,7 @@ import Link from "next/link";
 import { BadgeCheck } from "lucide-react";
 import { getAccountDisplayName, getAccountHandle, type AccountDisplayUser } from "@/components/account-display";
 import { ProfileV1 } from "@/components/elements/Profile.v1";
-import { cn } from "@/core/utils";
+import { cn } from "#/core/utils";
 
 export function AccountDisplayTabV1({
   user,

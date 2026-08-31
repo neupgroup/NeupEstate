@@ -5,10 +5,10 @@ import { Control, UseFormSetValue, useFieldArray, useWatch } from "react-hook-fo
 import { CreatePropertyFormValues, User } from "@/types";
 import { searchClients } from "@/services/leads/search";
 import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "#/components/ui/input";
+import { Button } from "#/components/ui/button";
 import { PlusCircle, Search, Star, Trash2 } from "lucide-react";
-import { cn } from "@/core/utils";
+import { cn } from "#/core/utils";
 
 type ClientSearchResult = {
     id: string;
@@ -83,15 +83,15 @@ function OwnerClientPicker({
                 </div>
                 <div className="flex items-center gap-2">
                     <Button
-                        type="button"
-                        variant={isPrimary ? "default" : "outline"}
+                        htmlType="button"
+                        type={isPrimary ? "solid" : "outlined"}
                         size="sm"
                         onClick={() => makePrimary(index)}
                     >
                         <Star className="mr-2 h-4 w-4" />
                         {isPrimary ? "Primary Owner" : "Make Primary"}
                     </Button>
-                    <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)}>
+                    <Button htmlType="button" type="plain" size="icon" onClick={() => remove(index)}>
                         <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                 </div>
@@ -261,7 +261,7 @@ export function OwnerInfoSection({ control, setValue, formErrors, fieldChangeNot
                     />
                 ))}
 
-                <Button type="button" variant="outline" size="sm" onClick={appendOwner} disabled={fields.length >= 4}>
+                <Button htmlType="button" type="outlined" size="sm" onClick={appendOwner} disabled={fields.length >= 4}>
                     <PlusCircle className="mr-2 h-4 w-4" />
                     Add Owner
                 </Button>

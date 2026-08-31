@@ -3,11 +3,11 @@
 import type { ReactNode } from 'react';
 import { Building2, FileQuestion, Globe2, MousePointerClick, Network, ShieldCheck, User, UserPlus, Users } from 'lucide-react';
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
-import type { AnalyticsDashboardData, AnalyticsLevelSummary, AnalyticsScopeSummary } from '@/core/analytics/types';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ChartConfig, ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
+import type { AnalyticsDashboardData, AnalyticsLevelSummary, AnalyticsScopeSummary } from '#/core/analytics/types';
+import { Badge } from '#/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '#/components/ui/tabs';
+import { ChartConfig, ChartContainer, ChartTooltipContent } from '#/components/ui/chart';
 
 const chartConfig = {
   Reach: { label: 'Reach', color: 'hsl(var(--primary))' },

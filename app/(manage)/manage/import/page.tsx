@@ -4,12 +4,12 @@ import { useMemo, useState, useTransition } from 'react';
 import { z } from 'zod';
 import { AlertCircle, CheckCircle2, Database, Eye, Loader2 } from 'lucide-react';
 import { importJsonPropertiesAction } from './actions';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/core/hooks/use-toast';
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
+import { Button } from '#/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Label } from '#/components/ui/label';
+import { Textarea } from '#/components/ui/textarea';
+import { useToast } from '#/core/hooks/useToast';
 
 /*
 ::neup.documentation::manage-property-json-import-page
@@ -170,8 +170,8 @@ export default function ImportPropertiesPage() {
       nextStructureJson = setDryRun(structureJson, dryRun);
       importFormSchema.parse({ dataJson, structureJson: nextStructureJson });
     } catch (error) {
-      toast({
-        variant: 'destructive',
+      toast({ name: "default",
+        convey: 'danger',
         title: 'Invalid import input',
         description: error instanceof Error ? error.message : 'Check the JSON data and structure.',
       });
@@ -187,8 +187,8 @@ export default function ImportPropertiesPage() {
       });
 
       setResult(response);
-      toast({
-        variant: response.error ? 'destructive' : 'default',
+      toast({ name: "default",
+        convey: response.error ? 'danger' : 'info',
         title: response.error ? 'Import failed' : dryRun ? 'Preview complete' : 'Import complete',
         description: response.error ?? `${response.importedCount} rows processed.`,
       });
@@ -205,11 +205,11 @@ export default function ImportPropertiesPage() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button type="button" variant="outline" onClick={() => runImport(true)} disabled={isPending}>
+          <Button htmlType="button" type="outlined" onClick={() => runImport(true)} disabled={isPending}>
             {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Eye className="mr-2 h-4 w-4" />}
             Preview
           </Button>
-          <Button type="button" onClick={() => runImport(false)} disabled={isPending}>
+          <Button htmlType="button" onClick={() => runImport(false)} disabled={isPending}>
             {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Database className="mr-2 h-4 w-4" />}
             Import
           </Button>

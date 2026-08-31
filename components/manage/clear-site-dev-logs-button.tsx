@@ -2,7 +2,7 @@
 
 import { useTransition } from 'react';
 import { Loader2, Trash2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '#/components/ui/button';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,8 +13,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
-import { useToast } from '@/core/hooks/use-toast';
+} from '#/components/ui/alert-dialog';
+import { useToast } from '#/core/hooks/useToast';
 import { clearSiteDevLogsAction } from '@/services/communications';
 
 export function ClearSiteDevLogsButton() {
@@ -26,15 +26,15 @@ export function ClearSiteDevLogsButton() {
       const result = await clearSiteDevLogsAction();
 
       if (result.success) {
-        toast({
+        toast({ name: "default",
           title: 'Dev logs cleared',
           description: 'All recorded request logs have been deleted.',
         });
         return;
       }
 
-      toast({
-        variant: 'destructive',
+      toast({ name: "default",
+        convey: 'danger',
         title: 'Failed to clear dev logs',
         description: result.error,
       });
@@ -44,7 +44,7 @@ export function ClearSiteDevLogsButton() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" disabled={isPending}>
+        <Button type="solid" convey="danger" disabled={isPending}>
           {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
           Clear Dev Logs
         </Button>

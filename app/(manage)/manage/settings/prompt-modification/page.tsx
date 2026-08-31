@@ -3,12 +3,12 @@
 import { useEffect, useState } from 'react';
 import { getPrompts } from '@/services/prompt-service';
 import type { Prompt } from '@/services/prompt-service';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "#/components/ui/accordion";
+import { Button } from '#/components/ui/button';
 import { Pencil, Info, Bot } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
+import { Skeleton } from '#/components/ui/skeleton';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { PromptEditForm } from '@/components/manage/prompt-edit-form';
 
@@ -92,7 +92,7 @@ export default function AiConfigurationPage() {
                                                 <p className="text-sm text-muted-foreground font-normal">{prompt.description}</p>
                                             </div>
                                         </AccordionTrigger>
-                                        <Button variant="ghost" size="icon" className="ml-4" onClick={() => handleEditClick(prompt)}>
+                                        <Button type="plain" size="icon" className="ml-4" onClick={() => handleEditClick(prompt)}>
                                             <Pencil className="h-4 w-4" />
                                         </Button>
                                     </div>

@@ -4,7 +4,7 @@ import { type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { HeaderLayoutV1 } from "@/components/layout/HeaderLayout.v1";
 import { FooterLayoutV1 } from "@/components/layout/FooterLayout.v1";
-import { SessionProvider, type SessionUser } from "@/core/providers/session";
+import { SessionProvider, type SessionUser } from "#/core/providers/session";
 import { GuestSigninBanner } from "@/components/layout/guest-signin-banner";
 
 export function ProvidersV1({

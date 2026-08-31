@@ -4,8 +4,8 @@ import { getAccountIdFromJWT } from '@/services/neupid/check-auth-web';
 import { getAccountById } from '@/services/account-service';
 import { getAgencyAgentMapsByAgent } from '@/services/agency-agent-map-service';
 import { ClientLink } from '@/components/client-link';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Badge } from '#/components/ui/badge';
+import { Button } from '#/components/ui/button';
 import { Plus } from 'lucide-react';
 
 export default async function BaseLeadsPage() {

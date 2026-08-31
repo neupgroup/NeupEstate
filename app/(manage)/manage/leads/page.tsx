@@ -1,8 +1,8 @@
 import { getBaseLeads, getMyLeads, getSharedLeads } from '@/services/leads/search';
 import { checkAuthenticationForWeb, getAccountIdFromJWT } from '@/services/neupid/check-auth-web';
 import { ClientLink } from '@/components/client-link';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Button } from '#/components/ui/button';
+import { Badge } from '#/components/ui/badge';
 import { Plus, Flame, Users, Bell, Home } from 'lucide-react';
 import { requirePagePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permissions';

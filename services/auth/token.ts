@@ -22,7 +22,7 @@
  * ::end
  */
 
-import { logica } from '@/logica';
+import { logica } from '#/logica';
 
 export type AccountAuthTokenPayload = {
   aid?: string;

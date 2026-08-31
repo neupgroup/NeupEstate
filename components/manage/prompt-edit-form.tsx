@@ -11,11 +11,11 @@ import type { Prompt } from '@/services/prompt-service';
 import { updatePromptAction, createPromptAction } from '@/services/content';
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/core/hooks/use-toast';
+import { Input } from '#/components/ui/input';
+import { Button } from '#/components/ui/button';
+import { useToast } from '#/core/hooks/useToast';
 import { Loader2 } from 'lucide-react';
-import { Textarea } from '@/components/ui/textarea';
+import { Textarea } from '#/components/ui/textarea';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 
 const SYSTEM_DEFAULT_MODEL_VALUE = 'SYSTEM_DEFAULT';
@@ -62,14 +62,14 @@ export function PromptEditForm({ prompt, mode, models }: PromptEditFormProps) {
                 : await updatePromptAction(finalValues as UpdatePromptFormValues);
                 
             if (result.success) {
-                toast({
+                toast({ name: "default",
                     title: `Prompt ${mode === 'create' ? 'Created' : 'Updated'}`,
                     description: `The prompt "${values.name}" has been successfully saved.`,
                 });
                 router.push('/manage/settings/ai-configuration');
             } else {
-                toast({
-                    variant: 'destructive',
+                toast({ name: "default",
+                    convey: 'danger',
                     title: `Error ${mode === 'create' ? 'creating' : 'updating'} prompt`,
                     description: result.error,
                 });
@@ -124,7 +124,7 @@ export function PromptEditForm({ prompt, mode, models }: PromptEditFormProps) {
                     </FormItem>
                 )}/>
                 <div className="flex justify-end gap-2 pt-4">
-                    <Button type="submit" disabled={isSaving}>
+                    <Button htmlType="submit" disabled={isSaving}>
                         {isSaving ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...</> : (mode === 'create' ? 'Create Prompt' : 'Save Changes')}
                     </Button>
                 </div>

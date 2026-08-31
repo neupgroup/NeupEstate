@@ -13,14 +13,14 @@ import { getUsers } from "@/services/user-service";
 import { useAgencyCustomization } from '@/inapp/agency-customization/use-agency-customization';
 
 import { Form } from '@/components/ui/form';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/core/hooks/use-toast';
+import { Button } from '#/components/ui/button';
+import { useToast } from '#/core/hooks/useToast';
 import { ExternalLink } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardHeader, CardTitle, CardDescription } from '#/components/ui/card';
+import { Badge } from '#/components/ui/badge';
 import { ClientLink } from '@/components/client-link';
 import { ProgressivePropertySections } from '@/components/manage/progressive-property-sections';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Skeleton } from '#/components/ui/skeleton';
 
 const DEFAULT_DRAFT_PROPERTY_VALUES: UpdatePropertyFormValues = {
     title: '',
@@ -571,7 +571,7 @@ export default function EditPropertyPage() {
                     return;
                 }
 
-                toast({ variant: 'destructive', title: 'Error', description: 'Property not found.' });
+                toast({ name: "default", convey: 'danger', title: 'Error', description: 'Property not found.' });
                 router.push('/manage/properties');
                 return;
             }
@@ -702,14 +702,14 @@ export default function EditPropertyPage() {
                 );
 
                 if (result.success) {
-                    toast({
+                    toast({ name: "default",
                         title: 'Review Requested',
                         description: `The property "${values.title}" has been saved for approval.`,
                     });
                     router.push('/manage/properties');
                 } else {
-                    toast({
-                        variant: 'destructive',
+                    toast({ name: "default",
+                        convey: 'danger',
                         title: 'Could not request review',
                         description: result.error,
                     });
@@ -722,7 +722,7 @@ export default function EditPropertyPage() {
                 : values;
 
             if (property.isApproved && !hasDraftFields(data)) {
-                toast({
+                toast({ name: "default",
                     title: 'No changes to review',
                     description: 'Edit a field before requesting review.',
                 });
@@ -736,14 +736,14 @@ export default function EditPropertyPage() {
             });
 
             if (result.success) {
-                toast({
+                toast({ name: "default",
                     title: 'Review Requested',
                     description: `Your changes for "${values.title}" have been sent for review.`,
                 });
                 router.push(`/manage/properties/${property.id}`);
             } else {
-                toast({
-                    variant: 'destructive',
+                toast({ name: "default",
+                    convey: 'danger',
                     title: 'Could not request review',
                     description: result.error,
                 });
@@ -753,8 +753,8 @@ export default function EditPropertyPage() {
 
     function onSubmitInvalid(errors: Record<string, any>) {
         focusFirstErrorSection(errors);
-        toast({
-            variant: 'destructive',
+        toast({ name: "default",
+            convey: 'danger',
             title: 'Please fix the highlighted errors',
             description: 'Some required fields still need attention before publishing.',
         });
@@ -790,8 +790,8 @@ export default function EditPropertyPage() {
             });
 
         if (!result.success) {
-            toast({
-                variant: 'destructive',
+            toast({ name: "default",
+                convey: 'danger',
                 title: 'Could not save request',
                 description: result.error || 'Please try again before continuing.',
             });
@@ -835,15 +835,15 @@ export default function EditPropertyPage() {
 
         const result = await cancelPropertyChangeDraftAction(changeId);
         if (!result.success) {
-            toast({
-                variant: 'destructive',
+            toast({ name: "default",
+                convey: 'danger',
                 title: 'Could not drop property',
                 description: result.error || 'Please try again.',
             });
             return false;
         }
 
-        toast({
+        toast({ name: "default",
             title: 'Property dropped',
             description: 'The unrequested property draft has been removed.',
         });

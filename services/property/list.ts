@@ -8,7 +8,7 @@ Read-side property listing, search, queue, and bridge query services.
 ::end
 */
 
-import { prisma } from '@/core/database/prisma';
+import { prisma } from '#/core/database/prisma';
 import { logProblem } from '@/services/problem-service';
 import type { Property, PropertyFilters } from '@/types';
 import { mapPurposeToEnum, mapStatusToEnum, mapTypeFromEnum, mapTypeToEnum } from '@/inapp/database/adapters';

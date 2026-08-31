@@ -7,11 +7,11 @@ import { useEffect, useState, useActionState } from 'react';
 import { addSitemapAction, getNewUrlsFromSitemapAction, processSitemapUrlAction, updateSitemapCheckedTimeAction } from '@/services/automation';
 import { getSitemaps } from '@/services/sitemap-service';
 import type { Sitemap, SitemapLog } from '@/types';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/core/hooks/use-toast';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Input } from '#/components/ui/input';
+import { Button } from '#/components/ui/button';
+import { useToast } from '#/core/hooks/useToast';
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
 import { AlertCircle, CheckCircle, Loader2, Wand2, XCircle } from 'lucide-react';
 import {
   Table,
@@ -20,7 +20,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "#/components/ui/table";
 
 type SitemapCheckResult = {
     sitemapId: string;
@@ -34,7 +34,7 @@ type SitemapCheckResult = {
 function SubmitButton() {
     const { pending } = useFormStatus();
     return (
-        <Button type="submit" disabled={pending}>
+        <Button htmlType="submit" disabled={pending}>
             {pending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Adding...</> : 'Add Sitemap'}
         </Button>
     );
@@ -171,7 +171,7 @@ function SitemapList({
                         <TableCell className="text-right space-x-2">
                              {processingSitemapId === sitemap.id ? (
                                 <Button
-                                    variant="destructive"
+                                    type="solid" convey="danger"
                                     size="sm"
                                     onClick={onCancel}
                                 >
@@ -180,7 +180,7 @@ function SitemapList({
                                 </Button>
                              ) : (
                                 <Button 
-                                    variant="outline"
+                                    type="outlined"
                                     size="sm"
                                     onClick={() => onProcess(sitemap.id)}
                                     disabled={!!processingSitemapId}
@@ -214,7 +214,7 @@ export default function AutomationPage() {
         const fetchedSitemaps = await getSitemaps();
         setSitemaps(fetchedSitemaps);
       } catch (error: any) {
-        toast({ variant: 'destructive', title: 'Error fetching sitemaps', description: error.message });
+        toast({ name: "default", convey: 'danger', title: 'Error fetching sitemaps', description: error.message });
       } finally {
         setIsLoading(false);
       }
@@ -222,7 +222,7 @@ export default function AutomationPage() {
 
     const handleCancelProcessing = () => {
         setIsCancelled(true);
-        toast({ title: "Cancellation Requested", description: "The process will stop after the current URL is finished." });
+        toast({ name: "default", title: "Cancellation Requested", description: "The process will stop after the current URL is finished." });
     };
 
     const handleProcessSitemap = async (sitemapId: string) => {
@@ -285,7 +285,7 @@ export default function AutomationPage() {
                 summaryMessage: finalSummaryMessage,
             } : r));
             
-            toast({
+            toast({ name: "default",
                 title: "Sitemap Processed",
                 description: finalSummaryMessage,
             });
@@ -298,8 +298,8 @@ export default function AutomationPage() {
                 currentlyProcessingUrl: undefined,
                 summaryMessage: errorMessage,
             } : r));
-            toast({
-                variant: 'destructive',
+            toast({ name: "default",
+                convey: 'danger',
                 title: "Sitemap Processing Failed",
                 description: errorMessage
             });
@@ -312,10 +312,10 @@ export default function AutomationPage() {
 
     useEffect(() => {
         if (state.error) {
-            toast({ variant: 'destructive', title: 'Error', description: state.error });
+            toast({ name: "default", convey: 'danger', title: 'Error', description: state.error });
         }
         if (state.success) {
-            toast({ title: 'Success', description: 'Sitemap added successfully.' });
+            toast({ name: "default", title: 'Success', description: 'Sitemap added successfully.' });
             loadSitemaps();
         }
     }, [state, toast]);

@@ -6,14 +6,14 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { suggestPropertyQuestionsAction, createInquiryAction } from '@/services/content';
 import { CreateInquirySchema, type CreateInquiryFormValues } from "@/types";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "#/components/ui/card";
+import { Button } from "#/components/ui/button";
+import { Textarea } from "#/components/ui/textarea";
+import { Input } from "#/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { useToast } from "@/core/hooks/use-toast";
+import { useToast } from "#/core/hooks/useToast";
 import { Lightbulb, Loader2, Send } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "#/components/ui/skeleton";
 
 // --- Cookie Helper Functions ---
 function setCookie(name: string, value: string, days: number) {
@@ -93,7 +93,7 @@ export function PropertyQA({ propertyId }: PropertyQAProps) {
         startSubmitting(async () => {
             const result = await createInquiryAction(values);
             if (result.success) {
-                toast({
+                toast({ name: "default",
                     title: "Inquiry Submitted",
                     description: "Thank you! An agent will get back to you shortly.",
                 });
@@ -119,8 +119,8 @@ export function PropertyQA({ propertyId }: PropertyQAProps) {
                     question: "", // But clear the question
                 });
             } else {
-                toast({
-                    variant: "destructive",
+                toast({ name: "default",
+                    type: "solid", convey: "danger",
                     title: "Submission Failed",
                     description: result.error,
                 });
@@ -147,7 +147,7 @@ export function PropertyQA({ propertyId }: PropertyQAProps) {
                         </div>
                         <FormField control={form.control} name="phone" render={({ field }) => (<FormItem><FormLabel>Phone (Optional)</FormLabel><FormControl><Input placeholder="Your Phone Number" {...field} /></FormControl><FormMessage /></FormItem>)}/>
                         <FormField control={form.control} name="question" render={({ field }) => (<FormItem><FormLabel>Question</FormLabel><FormControl><Textarea placeholder="Type your question here..." {...field} /></FormControl><FormMessage /></FormItem>)}/>
-                        <Button type="submit" className="w-full" disabled={isSubmitting}>
+                        <Button htmlType="submit" className="w-full" disabled={isSubmitting}>
                             {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
                             Submit Inquiry
                         </Button>
@@ -169,8 +169,8 @@ export function PropertyQA({ propertyId }: PropertyQAProps) {
                             {suggestedQuestions.map((q, i) => (
                                 <Button
                                     key={i}
-                                    type="button"
-                                    variant="link"
+                                    htmlType="button"
+                                    type="text"
                                     className="h-auto p-0 text-left text-sm text-primary whitespace-normal"
                                     onClick={() => handleQuestionSelect(q)}
                                 >

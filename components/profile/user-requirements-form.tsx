@@ -3,11 +3,11 @@
 
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Button } from '#/components/ui/button';
+import { Input } from '#/components/ui/input';
+import { Label } from '#/components/ui/label';
 import { Save, X, Loader2 } from 'lucide-react';
-import { useToast } from '@/core/hooks/use-toast';
+import { useToast } from '#/core/hooks/useToast';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { Form, FormControl, FormItem } from '@/components/ui/form';
@@ -40,8 +40,8 @@ function SingleSelectButtonGroup({ value, onChange, options }: SingleSelectButto
             {options.map(option => (
                 <Button
                     key={option}
-                    type="button"
-                    variant={value === option ? 'default' : 'outline'}
+                    htmlType="button"
+                    type={value === option ? 'solid' : 'outlined'}
                     onClick={() => onChange(option)}
                     className="capitalize"
                 >
@@ -83,8 +83,8 @@ function MultiSelectButtonGroup({ value, onChange, options }: MultiSelectButtonG
             {options.map(option => (
                 <Button
                     key={option}
-                    type="button"
-                    variant={(value || []).includes(option) ? 'default' : 'outline'}
+                    htmlType="button"
+                    type={(value || []).includes(option) ? 'solid' : 'outlined'}
                     onClick={() => handleToggle(option)}
                 >
                     {option}
@@ -104,16 +104,16 @@ function LocationButtonGroup({ value, onChange }: LocationButtonGroupProps) {
             {PRESET_LOCATIONS.map(loc => (
                 <Button
                     key={loc}
-                    type="button"
-                    variant={value === loc ? 'default' : 'outline'}
+                    htmlType="button"
+                    type={value === loc ? 'solid' : 'outlined'}
                     onClick={() => onChange(loc)}
                 >
                     {loc}
                 </Button>
             ))}
              <Button
-                type="button"
-                variant={!PRESET_LOCATIONS.includes(value as any) && value !== '' ? 'default' : 'outline'}
+                htmlType="button"
+                type={!PRESET_LOCATIONS.includes(value as any) && value !== '' ? 'solid' : 'outlined'}
                 onClick={() => onChange('')}
             >
                 Other
@@ -154,14 +154,14 @@ export function UserRequirementsForm({ initialRequirements, onSave }: UserRequir
             const result = await onSave(dataToSave);
 
             if (result.success) {
-                toast({
+                toast({ name: "default",
                     title: "Requirements Saved",
                     description: "Your property preferences have been updated.",
                 });
                 router.push('/profile');
             } else {
-                 toast({
-                    variant: 'destructive',
+                 toast({ name: "default",
+                    convey: 'danger',
                     title: "Save Failed",
                     description: result.error || "An unknown error occurred.",
                 });
@@ -254,10 +254,10 @@ export function UserRequirementsForm({ initialRequirements, onSave }: UserRequir
 
                 </div>
                 <div className="flex justify-end gap-2 pt-4">
-                    <Button type="button" variant="outline" onClick={() => router.push('/profile')}>
+                    <Button htmlType="button" type="outlined" onClick={() => router.push('/profile')}>
                         Cancel
                     </Button>
-                    <Button type="submit" disabled={isPending}>
+                    <Button htmlType="submit" disabled={isPending}>
                         {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
                         Save Requirements
                     </Button>

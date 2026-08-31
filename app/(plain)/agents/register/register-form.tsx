@@ -11,10 +11,10 @@ Client form for confirming agent terms before submitting the enrollment action.
 import { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, ShieldCheck } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Checkbox } from "#/components/ui/checkbox";
+import { Label } from "#/components/ui/label";
+import { Button } from "#/components/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "#/components/ui/alert";
 import { registerAsAgentAction, type AgentRegisterActionState } from "./actions";
 
 const initialState: AgentRegisterActionState = {
@@ -82,7 +82,7 @@ export function AgentRegisterForm() {
         </Alert>
       ) : null}
 
-      <Button type="submit" size="lg" className="w-full sm:w-auto" disabled={!agreed || isPending}>
+      <Button htmlType="submit" size="lg" className="w-full sm:w-auto" disabled={!agreed || isPending}>
         {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
         Continue
       </Button>

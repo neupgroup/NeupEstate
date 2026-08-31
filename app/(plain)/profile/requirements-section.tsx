@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '#/components/ui/button';
 import { Plus, AlertCircle } from 'lucide-react';
 import { Section } from '@/components/home/_components/section';
 import { SectionTitle } from '@/components/home/_components/section-title';
@@ -9,10 +9,10 @@ import { RecommendedProperties } from "@/components/recommended-properties";
 import { getRequirementByUserId } from '@/services/requirements-service';
 import type { Requirement } from '@/types';
 import type { RequirementsFormValues } from '@/components/profile/user-requirements-form';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '#/components/ui/skeleton';
+import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
 import { ClientLink } from '@/components/client-link';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
 
 function ViewRequirements({ requirements, isLoading }: { requirements: Requirement[], isLoading: boolean }) {
   if (isLoading) {
@@ -43,7 +43,7 @@ function ViewRequirements({ requirements, isLoading }: { requirements: Requireme
             <div className="flex justify-between items-center">
               <CardTitle>Requirement Profile #{index + 1}</CardTitle>
               <ClientLink href={`/profile/requirements?id=${req.id}`}>
-                <Button variant="outline" size="sm">
+                <Button type="outlined" size="sm">
                   <Plus className="mr-2 h-4 w-4" />
                   Edit
                 </Button>

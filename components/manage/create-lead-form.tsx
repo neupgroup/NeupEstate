@@ -5,16 +5,16 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import type { LeadPriority, LeadType } from '@/core/database/prisma';
+import type { LeadPriority, LeadType } from '#/core/database/prisma';
 import { saveClient } from '@/services/leads/create';
 import { searchClients } from '@/services/leads/search';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { PhoneInput } from '@/components/ui/phone-input';
-import { Button } from '@/components/ui/button';
+import { Input } from '#/components/ui/input';
+import { PhoneInput } from '#/components/ui/phone-input';
+import { Button } from '#/components/ui/button';
 import { SelectionCards } from '@/components/ui/selection-cards';
-import { Badge } from '@/components/ui/badge';
-import { cn } from '@/core/utils';
+import { Badge } from '#/components/ui/badge';
+import { cn } from '#/core/utils';
 import { Search, UserPlus, ChevronRight, UserSearch, X } from 'lucide-react';
 import { PriceInput } from '@/components/ui/price-input';
 import { createLeadAction } from '@/services/agency';
@@ -22,7 +22,7 @@ import { getCurrentAccountId } from '@/services/identity';
 import { getAccountById, getAccounts } from '@/services/account-service';
 import { getAgencyAgentMapsByAgency, getAgencyAgentMapsByAgent } from '@/services/agency-agent-map-service';
 import type { Account } from '@/types';
-import { useToast } from '@/core/hooks/use-toast';
+import { useToast } from '#/core/hooks/useToast';
 
 type SearchedClient = {
     id: string;
@@ -296,8 +296,8 @@ export function CreateLeadForm() {
                 requirement: { minBudget: data.minBudget, maxBudget: data.maxBudget, location: data.location, notes: data.notes },
             });
             if (!result.success) {
-                toast({
-                    variant: 'destructive',
+                toast({ name: "default",
+                    convey: 'danger',
                     title: 'Unable to create lead',
                     description: result.error || 'Please review the lead owner selection.',
                 });
@@ -306,8 +306,8 @@ export function CreateLeadForm() {
             }
             router.push('/manage/leads/shared');
         } catch {
-            toast({
-                variant: 'destructive',
+            toast({ name: "default",
+                convey: 'danger',
                 title: 'Unable to create lead',
                 description: 'An unexpected error occurred while creating the lead.',
             });
@@ -359,7 +359,7 @@ export function CreateLeadForm() {
                                     onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                                     autoFocus={active === 0}
                                 />
-                                <Button type="button" onClick={handleSearch} disabled={isPending || !query.trim()}>
+                                <Button htmlType="button" onClick={handleSearch} disabled={isPending || !query.trim()}>
                                     <Search className="h-4 w-4" />
                                 </Button>
                             </div>
@@ -393,7 +393,7 @@ export function CreateLeadForm() {
                             {results.length === 0 && searched && (
                                 <p className="text-sm text-muted-foreground py-2">No clients matched. Create a new one below.</p>
                             )}
-                            <Button type="button" variant="outline" className="w-full mt-1" onClick={chooseNewClient}>
+                            <Button htmlType="button" type="outlined" className="w-full mt-1" onClick={chooseNewClient}>
                                 <UserPlus className="h-4 w-4 mr-2" /> Create New Client
                             </Button>
                         </div>
@@ -421,7 +421,7 @@ export function CreateLeadForm() {
                                     <FormField control={clientForm.control} name="source" render={({ field }) => (
                                         <FormItem><FormLabel>Source <span className="text-muted-foreground text-xs">(optional)</span></FormLabel><FormControl><Input placeholder="e.g. Referral, Facebook" {...field} /></FormControl><FormMessage /></FormItem>
                                     )} />
-                                    <Button type="submit" disabled={isPending} className="w-full">
+                                    <Button htmlType="submit" disabled={isPending} className="w-full">
                                         {isPending ? 'Saving...' : 'Continue'}
                                     </Button>
                                 </form>
@@ -442,8 +442,8 @@ export function CreateLeadForm() {
                                     ))}
                                 </div>
                                 <div className="flex gap-2">
-                                    <Button type="button" variant="ghost" size="sm" onClick={chooseNewClient}>Not this client</Button>
-                                    <Button type="button" className="flex-1" onClick={() => advance(3)}>Continue</Button>
+                                    <Button htmlType="button" type="plain" size="sm" onClick={chooseNewClient}>Not this client</Button>
+                                    <Button htmlType="button" className="flex-1" onClick={() => advance(3)}>Continue</Button>
                                 </div>
                             </div>
                         ) : null
@@ -528,8 +528,8 @@ export function CreateLeadForm() {
                                                               </p>
                                                           </div>
                                                           <Button
-                                                              type="button"
-                                                              variant="ghost"
+                                                              htmlType="button"
+                                                              type="plain"
                                                               size="sm"
                                                               onClick={() => {
                                                                   field.onChange('');
@@ -593,7 +593,7 @@ export function CreateLeadForm() {
                                 <FormField control={reqForm.control} name="notes" render={({ field }) => (
                                     <FormItem><FormLabel>Notes <span className="text-muted-foreground text-xs">(optional)</span></FormLabel><FormControl><Input placeholder="Any additional context" {...field} /></FormControl><FormMessage /></FormItem>
                                 )} />
-                                <Button type="submit" disabled={submitting} className="w-full">
+                                <Button htmlType="submit" disabled={submitting} className="w-full">
                                     {submitting ? 'Creating...' : 'Create Lead'}
                                 </Button>
                             </form>

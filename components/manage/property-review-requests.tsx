@@ -2,9 +2,9 @@
 
 import * as React from "react";
 import { reviewPropertyChangeAction } from '@/services/property/drafts';
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useToast } from "@/core/hooks/use-toast";
+import { Button } from "#/components/ui/button";
+import { Checkbox } from "#/components/ui/checkbox";
+import { useToast } from "#/core/hooks/useToast";
 import type { Property } from "@/types";
 import { PropertyImageGrid } from "@/components/manage/property-image-grid";
 import { useRouter } from "next/navigation";
@@ -103,9 +103,9 @@ export function PropertyReviewRequests({
       acceptedFields,
     });
     if (!result.success) {
-      toast({ variant: "destructive", title: "Review failed", description: result.error ?? "Could not approve request." });
+      toast({ name: "default", type: "solid", convey: "danger", title: "Review failed", description: result.error ?? "Could not approve request." });
     } else {
-      toast({ title: "Request approved" });
+      toast({ name: "default", title: "Request approved" });
       if (request.status === "deleting") {
         router.push("/manage/properties");
         return;
@@ -125,9 +125,9 @@ export function PropertyReviewRequests({
       approve: false,
     });
     if (!result.success) {
-      toast({ variant: "destructive", title: "Review failed", description: result.error ?? "Could not reject request." });
+      toast({ name: "default", type: "solid", convey: "danger", title: "Review failed", description: result.error ?? "Could not reject request." });
     } else {
-      toast({ title: "Request rejected" });
+      toast({ name: "default", title: "Request rejected" });
       if (!propertyId && !result.propertyId) {
         router.push("/manage/properties");
         return;
@@ -160,8 +160,8 @@ export function PropertyReviewRequests({
               </div>
               {canApprove && (
                 <div className="flex items-center gap-2">
-                  <Button type="button" onClick={() => approve(request)}>Approve</Button>
-                  <Button type="button" variant="outline" onClick={() => reject(request)}>Disapprove</Button>
+                  <Button htmlType="button" onClick={() => approve(request)}>Approve</Button>
+                  <Button htmlType="button" type="outlined" onClick={() => reject(request)}>Disapprove</Button>
                 </div>
               )}
             </div>

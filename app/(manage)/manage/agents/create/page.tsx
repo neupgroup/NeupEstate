@@ -10,9 +10,9 @@ import { createAgentAction } from '@/services/agents';
 import { getUsers } from '@/services/user-service';
 
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/core/hooks/use-toast';
+import { Input } from '#/components/ui/input';
+import { Button } from '#/components/ui/button';
+import { useToast } from '#/core/hooks/useToast';
 import { Loader2 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
@@ -64,14 +64,14 @@ export default function CreateAgentPage() {
         startTransition(async () => {
             const result = await createAgentAction(values);
             if (result.success) {
-                toast({
+                toast({ name: "default",
                     title: 'Agent Created',
                     description: `The agent has been successfully created.`,
                 });
                 router.push('/manage/team');
             } else {
-                toast({
-                    variant: 'destructive',
+                toast({ name: "default",
+                    convey: 'danger',
                     title: 'Error creating agent',
                     description: result.error,
                 });
@@ -190,7 +190,7 @@ export default function CreateAgentPage() {
                         </FormItem>
                     )}/>
 
-                    <Button type="submit" disabled={isPending}>
+                    <Button htmlType="submit" disabled={isPending}>
                         {isPending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating...</> : 'Create Agent'}
                     </Button>
                 </form>

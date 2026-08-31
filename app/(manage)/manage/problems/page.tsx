@@ -1,6 +1,6 @@
 
 import { getProblems } from "@/services/problem-service";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "#/components/ui/alert";
 import { ShieldAlert, Info, ServerCrash } from "lucide-react";
 import { ClearLogsButton } from "@/components/manage/clear-logs-button";
 import { Pagination } from "@/components/manage/pagination";

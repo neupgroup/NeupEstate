@@ -7,8 +7,8 @@ import { UserRequirementsForm, type RequirementsFormValues } from '@/components/
 import { upsertRequirementAction } from '@/services/engagement';
 import { getRequirementById } from '@/services/requirements-service';
 import type { Requirement } from '@/types';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Skeleton } from '#/components/ui/skeleton';
 import { getClientAccountId } from '@/services/account/get-account-id';
 
 const PRESET_LOCATIONS = ["Kathmandu", "Lalitpur", "Bhaktapur", "Pokhara"];

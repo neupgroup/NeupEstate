@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Input } from "@/components/ui/input";
+import { Input } from "#/components/ui/input";
 import { formatNepaliComma, toNepaliReadableWords } from "@/components/estate/logic/formatCurrency";
-import { cn } from "@/core/utils";
+import { cn } from "#/core/utils";
 
 interface PriceInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "value" | "type"> {
   value: string;

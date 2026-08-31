@@ -1,10 +1,10 @@
 import { ClientLink } from '@/components/client-link';
 import { RelativeTime } from '@/components/manage/relative-time';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { prisma } from '@/core/database/prisma';
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
+import { Badge } from '#/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '#/components/ui/table';
+import { prisma } from '#/core/database/prisma';
 import { getAgencyMapByAccount, getAgencyMapsByAgency } from '@/services/agency-customization-service';
 import { requireAuth } from '@/services/auth/account';
 import { AlertCircle, ArrowLeft, Building2, CalendarCheck2, Eye, FileQuestion, Heart, TrendingUp, UsersRound } from 'lucide-react';

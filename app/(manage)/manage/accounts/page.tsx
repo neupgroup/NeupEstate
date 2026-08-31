@@ -1,10 +1,10 @@
 import { getAccounts } from "@/services/account-service";
 import { fetchApplicationUsers } from "@/services/neupid/application-users";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "#/components/ui/alert";
 import { AlertCircle, User, ChevronRight } from "lucide-react";
 import { ClientLink } from "@/components/client-link";
 import { RelativeTime } from "@/components/manage/relative-time";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "#/components/ui/badge";
 import { requirePagePermission } from "@/services/permissions";
 import { PERMISSIONS } from "@/services/permissions";
 

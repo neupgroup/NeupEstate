@@ -3,11 +3,11 @@
 
 import { useTransition } from 'react';
 import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { useToast } from '@/core/hooks/use-toast';
+import { Label } from '#/components/ui/label';
+import { useToast } from '#/core/hooks/useToast';
 import { setAiInterventionAction } from '@/services/communications';
 import { Bot, User } from 'lucide-react';
-import { cn } from '@/core/utils';
+import { cn } from '#/core/utils';
 
 interface AiInterventionToggleProps {
   conversationId: string;
@@ -22,13 +22,13 @@ export function AiInterventionToggle({ conversationId, isActive }: AiInterventio
     startTransition(async () => {
       const result = await setAiInterventionAction(conversationId, checked);
       if (result.success) {
-        toast({
+        toast({ name: "default",
           title: `AI Intervention ${checked ? 'Enabled' : 'Disabled'}`,
           description: `The AI will ${checked ? 'now' : 'no longer'} respond automatically.`,
         });
       } else {
-        toast({
-          variant: 'destructive',
+        toast({ name: "default",
+          convey: 'danger',
           title: 'Update Failed',
           description: result.error,
         });

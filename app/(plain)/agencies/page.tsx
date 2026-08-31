@@ -1,8 +1,8 @@
 
 import Link from "next/link";
 import { getPublicAgencyAccounts } from "@/services/agency-service";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Card, CardContent, CardHeader, CardTitle } from "#/components/ui/card";
+import { Alert, AlertDescription, AlertTitle } from "#/components/ui/alert";
 import { SafeImage } from "@/components/estate";
 import { Building, AlertCircle } from "lucide-react";
 

@@ -1,4 +1,4 @@
-import { prisma } from '@/core/database/prisma';
+import { prisma } from '#/core/database/prisma';
 import { requirePagePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permissions';
 import { getCurrentAccountId } from '@/services/identity';

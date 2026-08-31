@@ -8,14 +8,14 @@ Renders the public property detail page with gallery, summary, pricing, and supp
 */
 import { notFound, redirect } from 'next/navigation';
 import { getPropertyById, getProperties, getPropertyBySlug } from '@/services/property';
-import { buildPublicAppUrl } from '@/core/helpers/link/url';
+import { buildPublicAppUrl } from '#/core/helpers/link/url';
 import { logProblem } from '@/services/problem-service';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Badge } from '#/components/ui/badge';
+import { Button } from '#/components/ui/button';
 import { BedDouble, Bath, SquareGanttChart, MapPin, Building, Home, Box, Utensils, Hash, Car, Bike, Milestone, School, Briefcase, LandPlot, Sprout, Tag, Mountain, Wallet, Banknote, Calendar, Check, Plane, Link as LinkIcon, Building2, User as UserIcon, FileText } from 'lucide-react';
 import { SafeImage, EmiCalculatorChart, PropertyMap, PropertyQA } from '@/components/estate';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '#/components/ui/table';
+import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
 import { PropertyDetailRenderNotice } from '@/components/property-detail-render-notice';
 import type { Property } from '@/types';
 import { areaValueToSqft } from '@/types';

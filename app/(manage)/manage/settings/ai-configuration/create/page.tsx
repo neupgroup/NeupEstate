@@ -1,7 +1,7 @@
 
 
 import { PromptEditForm } from '@/components/manage/prompt-edit-form';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
 import { getModels } from '@/services/model-service';
 
 export default async function CreatePromptPage() {

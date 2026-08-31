@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { Loader2, Radar } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/core/hooks/use-toast';
+import { Button } from '#/components/ui/button';
+import { useToast } from '#/core/hooks/useToast';
 import { crawlCompetitorSourcesAction, getCompetitorsAction } from '../competition/actions';
 
 type CrawlProgress = {
@@ -78,13 +78,13 @@ export function StartCrawlButton() {
         });
       }
 
-      toast({
+      toast({ name: "default",
         title: 'Crawl complete',
         description: `Reading ${totals.readPages} pages. Got ${totals.nonListingPages} non listing pages, ${totals.errorPages} error pages, skipped ${totals.skippedPages} pages.`,
       });
     } catch (error) {
-      toast({
-        variant: 'destructive',
+      toast({ name: "default",
+        convey: 'danger',
         title: 'Start crawl failed',
         description: error instanceof Error ? error.message : 'Unable to start crawl.',
       });

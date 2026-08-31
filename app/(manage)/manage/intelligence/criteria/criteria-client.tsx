@@ -3,10 +3,10 @@
 import { useState, useTransition } from 'react';
 import { ChevronLeft, ChevronDown, Plus, Trash2, Filter } from 'lucide-react';
 import { ClientLink } from '@/components/client-link';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Button } from '#/components/ui/button';
+import { Input } from '#/components/ui/input';
+import { Badge } from '#/components/ui/badge';
 import { createIntelligenceCriteriaAction, deleteIntelligenceCriteriaAction } from './actions';
 
 const PURPOSE_OPTIONS = ['rent', 'sale', 'sale.auction', 'sale.exchange'] as const;
@@ -96,11 +96,11 @@ export function IntelligenceCriteriaClient({ criteria, competitors }: { criteria
                 </select>
               </div>
               <div className="md:col-span-2 flex gap-2 pt-2">
-                <Button type="submit" disabled={isPending}>
+                <Button htmlType="submit" disabled={isPending}>
                   <Plus className="mr-2 h-4 w-4" />
                   Save Criteria
                 </Button>
-                <Button type="button" variant="ghost" onClick={() => setIsAddOpen(false)}>
+                <Button htmlType="button" type="plain" onClick={() => setIsAddOpen(false)}>
                   Cancel
                 </Button>
               </div>
@@ -139,7 +139,7 @@ export function IntelligenceCriteriaClient({ criteria, competitors }: { criteria
                   )}
                 </div>
                 <form action={deleteIntelligenceCriteriaAction.bind(null, item.id)}>
-                  <Button variant="ghost" size="icon" type="submit" aria-label="Delete criteria">
+                  <Button type="plain" size="icon" htmlType="submit" aria-label="Delete criteria">
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </form>

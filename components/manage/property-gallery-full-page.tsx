@@ -12,7 +12,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Check, ChevronLeft, ChevronRight, Copy, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "#/components/ui/button";
 
 type GalleryDirection = "next" | "previous";
 
@@ -213,8 +213,8 @@ export function PropertyGalleryFullPage({
         <div className="min-w-0 flex-1" />
 
         <Button
-          type="button"
-          variant="ghost"
+          htmlType="button"
+          type="plain"
           size="icon"
           onClick={copyPropertyLink}
           aria-label="Copy property link"
@@ -225,7 +225,7 @@ export function PropertyGalleryFullPage({
 
         <Button
           asChild
-          variant="ghost"
+          type="plain"
           size="icon"
           aria-label="Close gallery"
           className="h-9 w-11 shrink-0 rounded-lg text-white hover:bg-white/10 hover:text-white"
@@ -243,8 +243,8 @@ export function PropertyGalleryFullPage({
       >
         {visibleImages.length > 1 && (
           <Button
-            type="button"
-            variant="ghost"
+            htmlType="button"
+            type="plain"
             size="icon"
             onClick={showPreviousImage}
             disabled={isFirstImage}
@@ -271,8 +271,8 @@ export function PropertyGalleryFullPage({
 
         {visibleImages.length > 1 && (
           <Button
-            type="button"
-            variant="ghost"
+            htmlType="button"
+            type="plain"
             size="icon"
             onClick={showNextImage}
             disabled={isLastImage}

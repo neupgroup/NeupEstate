@@ -9,11 +9,11 @@ import { CreateAgencySchema, type Agency, type CreateAgencyFormValues } from '@/
 import { updateAgencyAction, deleteAgencyAction } from '@/services/agency';
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/core/hooks/use-toast';
+import { Input } from '#/components/ui/input';
+import { Button } from '#/components/ui/button';
+import { useToast } from '#/core/hooks/useToast';
 import { Loader2, Trash2, Pencil } from 'lucide-react';
-import { Textarea } from '@/components/ui/textarea';
+import { Textarea } from '#/components/ui/textarea';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,7 +24,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "#/components/ui/alert-dialog"
 
 interface EditAgencyFormProps {
     agency: Agency;
@@ -57,15 +57,15 @@ export function EditAgencyForm({ agency }: EditAgencyFormProps) {
         startSaveTransition(async () => {
             const result = await updateAgencyAction(agency.id, values);
             if (result.success) {
-                toast({
+                toast({ name: "default",
                     title: 'Agency Updated',
                     description: `The agency "${values.name}" has been successfully updated.`,
                 });
                 setIsEditing(false);
                 router.refresh();
             } else {
-                toast({
-                    variant: 'destructive',
+                toast({ name: "default",
+                    convey: 'danger',
                     title: 'Error updating agency',
                     description: result.error,
                 });
@@ -77,14 +77,14 @@ export function EditAgencyForm({ agency }: EditAgencyFormProps) {
         startDeleteTransition(async () => {
             const result = await deleteAgencyAction(agency.id);
             if (result.success) {
-                toast({
+                toast({ name: "default",
                     title: "Agency Deleted",
                     description: `"${agency.name}" has been permanently deleted.`,
                 });
                 router.push('/manage/agencies');
             } else {
-                toast({
-                    variant: 'destructive',
+                toast({ name: "default",
+                    convey: 'danger',
                     title: "Deletion Failed",
                     description: result.error,
                 });
@@ -123,17 +123,17 @@ export function EditAgencyForm({ agency }: EditAgencyFormProps) {
                         </Button>
                     ) : (
                         <>
-                            <Button variant="outline" onClick={handleCancel}>
+                            <Button type="outlined" onClick={handleCancel}>
                                 Cancel
                             </Button>
-                            <Button type="submit" form="agency-edit-form" disabled={isSaving}>
+                            <Button htmlType="submit" form="agency-edit-form" disabled={isSaving}>
                                 {isSaving ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...</> : 'Save Changes'}
                             </Button>
                         </>
                     )}
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button variant="destructive" disabled={isDeleting}>
+                            <Button type="solid" convey="danger" disabled={isDeleting}>
                                 {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
                                 Delete
                             </Button>

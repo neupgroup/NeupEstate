@@ -6,13 +6,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { searchProperties } from '@/services/property/search';
 import { searchAgentsByLocationAction } from '@/services/agents';
 import { PropertyCard } from "@/components/estate";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "#/components/ui/skeleton";
 import type { Property, PropertyFilters, Agent } from "@/types";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "#/components/ui/alert";
 import { AlertCircle, Search } from "lucide-react";
 import { SearchSidebar } from "@/components/estate";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "#/components/ui/input";
+import { Button } from "#/components/ui/button";
 import { Pagination } from "@/components/estate";
 import { AgentResults } from "@/components/estate";
 
@@ -114,7 +114,7 @@ export function SearchPageContent({ queryFromPath }: { queryFromPath: string }) 
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pr-12"
                 />
-                <Button type="submit" size="icon" variant="ghost" className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10">
+                <Button htmlType="submit" size="icon" type="plain" className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10">
                   <Search className="h-4 w-4" />
                   <span className="sr-only">Search</span>
                 </Button>

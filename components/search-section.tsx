@@ -2,8 +2,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "#/components/ui/input";
+import { Button } from "#/components/ui/button";
 import { Search } from "lucide-react";
 
 export function SearchSection() {
@@ -36,7 +36,7 @@ export function SearchSection() {
                             placeholder="e.g., 'a 3-bedroom house in Brooklyn with a backyard'"
                             className="h-14 pl-5 pr-14 text-base rounded-full shadow-lg"
                         />
-                        <Button type="submit" size="icon" className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full">
+                        <Button htmlType="submit" size="icon" className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full">
                             <Search className="h-5 w-5" />
                             <span className="sr-only">Search</span>
                         </Button>

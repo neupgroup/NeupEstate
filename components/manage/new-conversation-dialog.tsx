@@ -12,12 +12,12 @@ import {
   DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Button } from '@/components/ui/button';
+import { Button } from '#/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { PhoneInput } from '@/components/ui/phone-input';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/core/hooks/use-toast';
+import { Input } from '#/components/ui/input';
+import { PhoneInput } from '#/components/ui/phone-input';
+import { Textarea } from '#/components/ui/textarea';
+import { useToast } from '#/core/hooks/useToast';
 import { Loader2, MessageSquarePlus } from 'lucide-react';
 import { CreateConversationSchema, type CreateConversationFormValues } from '@/types';
 import { createConversationAction } from '@/services/communications';
@@ -41,7 +41,7 @@ export function NewConversationDialog() {
         startTransition(async () => {
             const result = await createConversationAction(values);
             if (result.success && result.conversationId) {
-                toast({
+                toast({ name: "default",
                     title: 'Conversation Created',
                     description: `You can now send an initial message to ${values.customerName}.`,
                 });
@@ -49,8 +49,8 @@ export function NewConversationDialog() {
                 form.reset();
                 router.push(`/admin/messages/${result.conversationId}`);
             } else {
-                toast({
-                    variant: 'destructive',
+                toast({ name: "default",
+                    convey: 'danger',
                     title: 'Error creating conversation',
                     description: result.error,
                 });
@@ -61,7 +61,7 @@ export function NewConversationDialog() {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline">
+                <Button type="outlined">
                     <MessageSquarePlus className="mr-2 h-4 w-4" />
                     New Conversation
                 </Button>
@@ -108,7 +108,7 @@ export function NewConversationDialog() {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit" className="w-full" disabled={isPending}>
+                        <Button htmlType="submit" className="w-full" disabled={isPending}>
                             {isPending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating...</> : 'Create and Continue'}
                         </Button>
                     </form>

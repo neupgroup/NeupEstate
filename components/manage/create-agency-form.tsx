@@ -8,14 +8,14 @@ import { useTransition } from 'react';
 import { CreateAgencySchema, type CreateAgencyFormValues } from '@/types';
 import { createAgencyAction } from '@/services/agency';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { PhoneInput } from '@/components/ui/phone-input';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/core/hooks/use-toast';
+import { Input } from '#/components/ui/input';
+import { PhoneInput } from '#/components/ui/phone-input';
+import { Button } from '#/components/ui/button';
+import { useToast } from '#/core/hooks/useToast';
 import { Loader2 } from 'lucide-react';
-import { Textarea } from '@/components/ui/textarea';
+import { Textarea } from '#/components/ui/textarea';
 
 export default function CreateAgencyPage() {
     const router = useRouter();
@@ -42,14 +42,14 @@ export default function CreateAgencyPage() {
         startTransition(async () => {
             const result = await createAgencyAction(values);
             if (result.success) {
-                toast({
+                toast({ name: "default",
                     title: 'Agency Created',
                     description: `The agency "${values.name}" has been successfully created.`,
                 });
                 router.push('/manage/agencies');
             } else {
-                toast({
-                    variant: 'destructive',
+                toast({ name: "default",
+                    convey: 'danger',
                     title: 'Error creating agency',
                     description: result.error,
                 });
@@ -156,7 +156,7 @@ export default function CreateAgencyPage() {
                             )}/>
                         </div>
                         
-                        <Button type="submit" disabled={isPending}>
+                        <Button htmlType="submit" disabled={isPending}>
                             {isPending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating...</> : 'Create Agency'}
                         </Button>
                     </form>

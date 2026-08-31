@@ -1,7 +1,7 @@
 import { getRequirementByUserId } from '@/services/requirements-service';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
 import { Target } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '#/components/ui/badge';
 
 export default async function AccountRequirementsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: accountId } = await params;

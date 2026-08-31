@@ -8,7 +8,7 @@ Single-property lookup, review-log, and saved-property read services.
 ::end
 */
 
-import { prisma } from '@/core/database/prisma';
+import { prisma } from '#/core/database/prisma';
 import { logProblem } from '@/services/problem-service';
 import type { Property } from '@/types';
 import { PROPERTY_INCLUDE, type SavedPropertyEntry, hydratePropertyAccountLabels, mapRecord, onlyActive } from './shared';

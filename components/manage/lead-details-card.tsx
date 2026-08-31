@@ -1,11 +1,11 @@
 
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "#/components/ui/card";
+import { Badge } from "#/components/ui/badge";
 import { Flame, CheckCircle, MessageSquare, Phone, User, Info, Building } from 'lucide-react';
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
+import { Button } from "#/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import type { Conversation } from "@/types";
 import { RelativeTime } from "./relative-time";

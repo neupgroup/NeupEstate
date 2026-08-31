@@ -36,10 +36,10 @@
  * ::private end
  * ::end
  */
-import { prisma } from '@/core/database/prisma';
+import { prisma } from '#/core/database/prisma';
 import { ClientLink } from '@/components/client-link';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Badge } from '#/components/ui/badge';
 import { ListChecks } from 'lucide-react';
 import { requirePagePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permissions';

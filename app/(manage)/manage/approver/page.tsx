@@ -3,12 +3,12 @@
 
 import { useState, useTransition } from 'react';
 import { getPendingPropertiesForAgent, getApprovedPropertiesForAgent, runPropertyApproval, runPropertyAmendment, runPropertyAssurance } from '@/services/automation';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/core/hooks/use-toast';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Button } from '#/components/ui/button';
+import { useToast } from '#/core/hooks/useToast';
 import { CheckCircle, AlertCircle, Loader2, Bot, Wrench, CircleDashed, ShieldCheck, StepForward } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Input } from '#/components/ui/input';
+import { Label } from '#/components/ui/label';
 import type { PropertyAssuranceResult } from '@/types';
 import { ClientLink } from '@/components/client-link';
 
@@ -41,7 +41,7 @@ export default function IntelligencePage() {
             try {
                 const propertiesToProcess = await getPendingPropertiesForAgent(limit);
                 if (propertiesToProcess.length === 0) {
-                    toast({ title: "No pending properties to process." });
+                    toast({ name: "default", title: "No pending properties to process." });
                     return;
                 }
 
@@ -66,10 +66,10 @@ export default function IntelligencePage() {
                     processedCount++;
                 }
 
-                toast({ title: "Assurance Agent Finished", description: `Processed ${processedCount} properties.` });
+                toast({ name: "default", title: "Assurance Agent Finished", description: `Processed ${processedCount} properties.` });
 
             } catch (e: any) {
-                 toast({ variant: 'destructive', title: "Agent Failed", description: e.message });
+                 toast({ name: "default", convey: 'danger', title: "Agent Failed", description: e.message });
                  setAssuranceResults([]);
             }
         });
@@ -84,7 +84,7 @@ export default function IntelligencePage() {
             try {
                 const propertiesToProcess = await getPendingPropertiesForAgent(limit);
                 if (propertiesToProcess.length === 0) {
-                    toast({ title: "No pending properties to process." });
+                    toast({ name: "default", title: "No pending properties to process." });
                     return;
                 }
 
@@ -109,10 +109,10 @@ export default function IntelligencePage() {
                     processedCount++;
                 }
 
-                toast({ title: "Approval Agent Finished", description: `Processed ${processedCount} properties.` });
+                toast({ name: "default", title: "Approval Agent Finished", description: `Processed ${processedCount} properties.` });
 
             } catch (e: any) {
-                 toast({ variant: 'destructive', title: "Agent Failed", description: e.message });
+                 toast({ name: "default", convey: 'danger', title: "Agent Failed", description: e.message });
                  setApprovalResults([]);
             }
         });
@@ -127,7 +127,7 @@ export default function IntelligencePage() {
              try {
                 const propertiesToProcess = await getApprovedPropertiesForAgent(limit);
                  if (propertiesToProcess.length === 0) {
-                    toast({ title: "No suitable properties found to amend." });
+                    toast({ name: "default", title: "No suitable properties found to amend." });
                     return;
                 }
 
@@ -151,9 +151,9 @@ export default function IntelligencePage() {
                     }
                     processedCount++;
                 }
-                 toast({ title: "Amendment Agent Finished", description: `Processed ${processedCount} properties.` });
+                 toast({ name: "default", title: "Amendment Agent Finished", description: `Processed ${processedCount} properties.` });
             } catch (e: any) {
-                toast({ variant: 'destructive', title: "Agent Failed", description: e.message });
+                toast({ name: "default", convey: 'danger', title: "Agent Failed", description: e.message });
                 setAmendmentResults([]);
             }
         });
@@ -254,7 +254,7 @@ export default function IntelligencePage() {
                                     <Input id="approval-limit" name="limit" type="number" defaultValue="50" min="1" max="1000" disabled={isAgentRunning} />
                                 </div>
                                 <div className="w-full sm:w-auto self-end">
-                                    <Button type="submit" disabled={isAgentRunning} className="w-full sm:w-auto">
+                                    <Button htmlType="submit" disabled={isAgentRunning} className="w-full sm:w-auto">
                                         {isApprovalAgentRunning ? (
                                             <>
                                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -289,7 +289,7 @@ export default function IntelligencePage() {
                                     <Input id="amendment-limit" name="limit" type="number" defaultValue="50" min="1" max="1000" disabled={isAgentRunning} />
                                 </div>
                                 <div className="w-full sm:w-auto self-end">
-                                     <Button type="submit" disabled={isAgentRunning} className="w-full sm:w-auto">
+                                     <Button htmlType="submit" disabled={isAgentRunning} className="w-full sm:w-auto">
                                         {isAmendmentAgentRunning ? (
                                             <>
                                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -324,7 +324,7 @@ export default function IntelligencePage() {
                                     <Input id="assurance-limit" name="limit" type="number" defaultValue="50" min="1" max="1000" disabled={isAgentRunning} />
                                 </div>
                                 <div className="w-full sm:w-auto self-end">
-                                    <Button type="submit" disabled={isAgentRunning} className="w-full sm:w-auto">
+                                    <Button htmlType="submit" disabled={isAgentRunning} className="w-full sm:w-auto">
                                         {isAssuranceAgentRunning ? (
                                             <>
                                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -2,11 +2,11 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Input } from '#/components/ui/input';
+import { Button } from '#/components/ui/button';
 import { Copy, Check } from 'lucide-react';
-import { useToast } from '@/core/hooks/use-toast';
+import { useToast } from '#/core/hooks/useToast';
 
 export function WebhookCallbackDisplay() {
     const [callbackUrl, setCallbackUrl] = useState('');
@@ -21,10 +21,10 @@ export function WebhookCallbackDisplay() {
     const handleCopy = () => {
         navigator.clipboard.writeText(callbackUrl).then(() => {
             setIsCopied(true);
-            toast({ title: "Copied to clipboard!" });
+            toast({ name: "default", title: "Copied to clipboard!" });
             setTimeout(() => setIsCopied(false), 2000);
         }).catch(err => {
-            toast({ variant: 'destructive', title: "Failed to copy", description: "Could not copy URL to clipboard." });
+            toast({ name: "default", convey: 'danger', title: "Failed to copy", description: "Could not copy URL to clipboard." });
         });
     };
 
@@ -44,8 +44,8 @@ export function WebhookCallbackDisplay() {
                         className="pr-12"
                     />
                     <Button 
-                        type="button" 
-                        variant="ghost" 
+                        htmlType="button" 
+                        type="plain" 
                         size="icon" 
                         className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
                         onClick={handleCopy}

@@ -2,7 +2,7 @@
 
 import { getSavedProperties } from "@/services/property";
 import { PropertyCard } from "@/components/property-card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "#/components/ui/alert";
 import { Heart, AlertCircle } from "lucide-react";
 import { ClientLink } from "@/components/client-link";
 import { getServerAccountId } from "@/services/account/get-account-id";

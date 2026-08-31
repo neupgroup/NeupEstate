@@ -9,20 +9,20 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { updateUserAction } from '@/services/account';
 import { getSavedPropertiesForUser } from '@/services/engagement';
 import { getUserPreferences } from '@/services/user-preference-service';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '#/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { PhoneInput } from '@/components/ui/phone-input';
+import { Input } from '#/components/ui/input';
+import { PhoneInput } from '#/components/ui/phone-input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useToast } from '@/core/hooks/use-toast';
+import { useToast } from '#/core/hooks/useToast';
 import { Loader2, Pencil, Trash2, PlusCircle, Link2, Info, CalendarDays, Clock, UserCircle, Fingerprint, Activity, Hourglass, Bookmark, BarChart, Wifi } from 'lucide-react';
 import type { UpdateUserFormValues, Account, UserPreferences, Property } from '@/types';
 import { UpdateUserSchema } from '@/types';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
 import { RelativeTime } from './relative-time';
 import { ClientLink } from '@/components/client-link';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Skeleton } from '#/components/ui/skeleton';
 
 interface EditUserFormProps {
     user: UpdateUserFormValues;
@@ -73,12 +73,12 @@ const ContactFieldArray = ({ control, name, label, typeOptions, disabled }: { co
                             </FormItem>
                         )}
                     />
-                    <Button type="button" variant="ghost" size="icon" className="text-destructive" onClick={() => remove(index)} disabled={disabled}><Trash2 className="h-4 w-4" /></Button>
+                    <Button htmlType="button" type="plain" size="icon" className="text-destructive" onClick={() => remove(index)} disabled={disabled}><Trash2 className="h-4 w-4" /></Button>
                 </div>
             ))}
             <Button
-                type="button"
-                variant="outline"
+                htmlType="button"
+                type="outlined"
                 className="w-full"
                 onClick={() => append({ type: 'primary', value: '' })}
                 disabled={disabled}
@@ -131,11 +131,11 @@ export function EditUserForm({ user, account }: EditUserFormProps) {
         startSaveTransition(async () => {
             const result = await updateUserAction(values);
             if (result.success) {
-                toast({ title: 'User Updated', description: `Details for ${values.name || 'user'} have been saved.` });
+                toast({ name: "default", title: 'User Updated', description: `Details for ${values.name || 'user'} have been saved.` });
                 setIsEditing(false);
                 router.refresh();
             } else {
-                toast({ variant: 'destructive', title: 'Update Failed', description: result.error });
+                toast({ name: "default", convey: 'danger', title: 'Update Failed', description: result.error });
             }
         });
     };
@@ -199,11 +199,11 @@ export function EditUserForm({ user, account }: EditUserFormProps) {
                         </div>
                         <div className="flex items-center gap-2">
                             {!isEditing ? (
-                                <Button type="button" onClick={() => setIsEditing(true)}><Pencil className="mr-2 h-4 w-4" /> Edit</Button>
+                                <Button htmlType="button" onClick={() => setIsEditing(true)}><Pencil className="mr-2 h-4 w-4" /> Edit</Button>
                             ) : (
                                 <>
-                                    <Button type="button" variant="outline" onClick={() => { setIsEditing(false); form.reset(); }}>Cancel</Button>
-                                    <Button type="submit" disabled={isSaving}>
+                                    <Button htmlType="button" type="outlined" onClick={() => { setIsEditing(false); form.reset(); }}>Cancel</Button>
+                                    <Button htmlType="submit" disabled={isSaving}>
                                         {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} Save Changes
                                     </Button>
                                 </>
@@ -235,7 +235,7 @@ export function EditUserForm({ user, account }: EditUserFormProps) {
                                         </div>
                                     ))}
                                     {savedProperties.length > 10 && (
-                                         <Button variant="outline" className="w-full" asChild>
+                                         <Button type="outlined" className="w-full" asChild>
                                             <ClientLink href={`/manage/users/${user.id}/activity`}>View All Activity</ClientLink>
                                         </Button>
                                     )}

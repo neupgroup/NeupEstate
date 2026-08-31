@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '#/components/ui/button';
 import { RefreshCw, CheckCircle2 } from 'lucide-react';
 import { crawlCompetitorSourcesAction } from './actions';
-import { useToast } from '@/core/hooks/use-toast';
+import { useToast } from '#/core/hooks/useToast';
 
 interface CrawlButtonProps {
   competitorId: string;
@@ -28,7 +28,7 @@ export function CrawlSourcesButton({ competitorId }: CrawlButtonProps) {
         };
         setLastCrawlStats(stats);
         
-        toast({
+        toast({ name: "default",
           title: 'Crawl Complete',
           description: `Discovered ${stats.discovered} URLs, saved ${stats.saved} new properties.${
             result.errors && result.errors.length > 0 ? ` Encountered ${result.errors.length} error(s).` : ''
@@ -41,15 +41,15 @@ export function CrawlSourcesButton({ competitorId }: CrawlButtonProps) {
           });
         }
       } else {
-        toast({
-          variant: 'destructive',
+        toast({ name: "default",
+          convey: 'danger',
           title: 'Crawl Failed',
           description: result.error || 'Unknown error occurred',
         });
       }
     } catch (error) {
-      toast({
-        variant: 'destructive',
+      toast({ name: "default",
+        convey: 'danger',
         title: 'Error',
         description: 'Failed to crawl sources. Please try again.',
       });
@@ -63,7 +63,7 @@ export function CrawlSourcesButton({ competitorId }: CrawlButtonProps) {
       <Button
         onClick={handleCrawl}
         disabled={isLoading}
-        variant="default"
+        type="solid"
         size="sm"
         className="gap-2"
       >

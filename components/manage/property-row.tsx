@@ -1,7 +1,7 @@
 "use client";
 
 import type { Property } from '@/types';
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "#/components/ui/badge";
 import {
     CheckCircle, Clock, FileClock, Home, Archive,
     Building2, LandPlot, Store, Layers,

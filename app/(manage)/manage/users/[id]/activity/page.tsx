@@ -1,8 +1,8 @@
 
 import { getAccountById } from '@/services/account-service';
 import { notFound } from 'next/navigation';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
 import { Info, List } from 'lucide-react';
 
 export default async function UserActivityPage({ params }: { params: Promise<{ id: string }> }) {

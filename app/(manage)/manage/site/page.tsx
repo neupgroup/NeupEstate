@@ -1,7 +1,7 @@
 import { Activity, AlertTriangle, Settings2, Webhook } from 'lucide-react';
 import { ClientLink } from '@/components/client-link';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Badge } from '#/components/ui/badge';
 import { getSiteDevLogSummary } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';

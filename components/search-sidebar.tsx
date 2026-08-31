@@ -3,14 +3,14 @@
 "use client";
 
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
+import { Label } from '#/components/ui/label';
+import { Input } from '#/components/ui/input';
+import { Button } from '#/components/ui/button';
 import { Minus, Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import type { PropertyFilters } from '@/types';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '#/components/ui/badge';
 import { PriceInput } from '@/components/ui/price-input';
 
 type StepperMode = 'any' | 'exact' | 'more' | 'less';
@@ -44,8 +44,8 @@ const ToggleButtonGroup = ({ options, value, onChange, multiSelect = true }: { o
             {options.map(option => (
                 <Button
                     key={option}
-                    type="button"
-                    variant={value.includes(option) ? 'default' : 'outline'}
+                    htmlType="button"
+                    type={value.includes(option) ? 'solid' : 'outlined'}
                     onClick={() => handleToggle(option)}
                     className="capitalize text-xs h-8"
                 >
@@ -95,7 +95,7 @@ const Stepper = ({ label, state, onChange }: { label: string, state: StepperStat
 
     return (
         <div className="flex items-center justify-between bg-secondary p-1 rounded-md">
-            <Button type="button" variant="ghost" size="icon" className="h-8 w-8" onClick={handleDecrement}>
+            <Button htmlType="button" type="plain" size="icon" className="h-8 w-8" onClick={handleDecrement}>
                 <Minus className="h-4 w-4" />
             </Button>
             <Label 
@@ -104,7 +104,7 @@ const Stepper = ({ label, state, onChange }: { label: string, state: StepperStat
             >
                 {getLabelText()}
             </Label>
-             <Button type="button" variant="ghost" size="icon" className="h-8 w-8" onClick={handleIncrement}>
+             <Button htmlType="button" type="plain" size="icon" className="h-8 w-8" onClick={handleIncrement}>
                 <Plus className="h-4 w-4" />
             </Button>
         </div>
@@ -269,7 +269,7 @@ export function SearchSidebar({ initialFilters }: { initialFilters?: PropertyFil
             )}
           </FilterSection>
 
-          <Button type="submit" className="w-full">Apply Filters</Button>
+          <Button htmlType="submit" className="w-full">Apply Filters</Button>
         </form>
       </CardContent>
     </Card>

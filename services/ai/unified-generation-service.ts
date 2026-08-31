@@ -10,7 +10,7 @@
  * to the appropriate provider based on the 'provider' parameter.
  */
 
-import { requestGoogleAiCompletion } from '@/core/ai/direct/googleai';
+import { requestGoogleAiCompletion } from '#/core/intelligence/googleai';
 import * as Handlebars from 'handlebars';
 import { logProblem } from '@/services/problem-service';
 import { z } from 'zod';

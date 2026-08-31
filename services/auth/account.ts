@@ -23,7 +23,7 @@ import { redirect } from 'next/navigation';
 import { getAuthCookieClient, getAuthCookieServer } from './cookie';
 import { accountAuthToken } from '@/services/auth/token';
 import { buildHandshakeGrantUrl } from './bridge';
-import { buildPublicAppUrl } from '@/core/helpers/link/url';
+import { buildPublicAppUrl } from '#/core/helpers/link/url';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 

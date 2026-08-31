@@ -2,8 +2,8 @@
 
 'use server';
 
-import { Prisma } from '@/core/database/prisma';
-import { prisma } from '@/core/database/prisma';
+import { Prisma } from '#/core/database/prisma';
+import { prisma } from '#/core/database/prisma';
 import { logProblem } from './problem-service';
 import { getAccountInformation, getSignedAccountInformation } from '@/services/account/lookup';
 import type { Account } from '@/types';

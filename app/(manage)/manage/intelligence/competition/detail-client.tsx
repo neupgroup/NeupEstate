@@ -2,14 +2,14 @@
 
 import { useEffect, useState, useTransition } from 'react';
 import { Plus, Trash2, Map, Link2, FileText, Globe, Check } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '#/components/ui/button';
+import { Input } from '#/components/ui/input';
+import { Badge } from '#/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
 import { ClientLink } from '@/components/client-link';
 import { addCompetitorSourceAction, deleteCompetitorSourceAction, saveCrawledCompetitorPageAction, updateCompetitorCrawlRulesAction } from './actions';
 import type { Competitor } from './types';
-import { useToast } from '@/core/hooks/use-toast';
+import { useToast } from '#/core/hooks/useToast';
 
 type SourceType = 'sitemap' | 'link' | 'manual';
 
@@ -82,13 +82,13 @@ export function CompetitionDetailClient({
     startTransition(async () => {
       const res = await updateCompetitorCrawlRulesAction(currentCompetitor.id, rules);
       if (res.success) {
-        toast({
+        toast({ name: "default",
           title: 'Rules saved',
           description: 'Crawl rules updated successfully.',
         });
       } else {
-        toast({
-          variant: 'destructive',
+        toast({ name: "default",
+          convey: 'danger',
           title: 'Save failed',
           description: res.error || 'Could not save crawl rules.',
         });
@@ -152,8 +152,8 @@ export function CompetitionDetailClient({
               knownUrls.add(url);
               setCrawlStats({ crawledCount, discoveredCount, savedCount });
             } else {
-              toast({
-                variant: 'destructive',
+              toast({ name: "default",
+                convey: 'danger',
                 title: 'Save failed',
                 description: saveResult.error || `Could not save ${url}`,
               });
@@ -161,13 +161,13 @@ export function CompetitionDetailClient({
           }
         }
 
-        toast({
+        toast({ name: "default",
           title: 'Crawl complete',
           description: `Crawled ${crawledCount} pages, discovered ${discoveredCount} new pages.`,
         });
       } catch (error) {
-        toast({
-          variant: 'destructive',
+        toast({ name: "default",
+          convey: 'danger',
           title: 'Crawl failed',
           description: error instanceof Error ? error.message : 'Failed to crawl sources.',
         });
@@ -304,7 +304,7 @@ export function CompetitionDetailClient({
                 <Badge variant="outline" className="shrink-0 capitalize">{SOURCE_LABELS[source.type as SourceType]}</Badge>
                 <span className="truncate text-sm text-muted-foreground">{source.value}</span>
               </div>
-              <Button size="sm" variant="ghost" disabled={isPending} onClick={() => handleDeleteSource(source.id)}>
+              <Button size="sm" type="plain" disabled={isPending} onClick={() => handleDeleteSource(source.id)}>
                 <Trash2 className="h-4 w-4" />
               </Button>
             </div>

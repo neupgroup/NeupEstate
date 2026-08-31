@@ -1,7 +1,7 @@
 import { ClientLink } from '@/components/client-link';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
+import { Badge } from '#/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
 import { getAgencyCustomizationsForAgency, getAgencyMapByAccount, getAgencyMapsByAgency } from '@/services/agency-customization-service';
 import { requireAuth } from '@/services/auth/account';
 import { getAccountById } from '@/services/account-service';

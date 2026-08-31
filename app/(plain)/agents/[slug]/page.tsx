@@ -4,10 +4,10 @@ import { getAgentBySlug } from '@/services/agent-service';
 import { getPropertiesByAgent } from '@/services/property';
 import { getReviewsByAgent } from '@/services/review-service';
 import { SafeImage, PropertyCard, ClientLink } from '@/components/estate';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
 import { Mail, Home, Star, MessageSquare, Phone } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '#/components/ui/button';
 
 function StarRating({ rating }: { rating: number }) {
     return (

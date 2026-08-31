@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { AgencyCustomizationRule, CreatePropertyFormValues, User } from "@/types";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "#/components/ui/button";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -15,7 +15,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+} from "#/components/ui/alert-dialog";
 import { AlertCircle, ArrowLeft, CornerDownRight } from "lucide-react";
 import { BasicDetailsSection } from "@/components/manage/property-form-sections/basic-details-section";
 import { PropertySpecificsSection } from "@/components/manage/property-form-sections/property-specifics-section";
@@ -27,7 +27,7 @@ import { OwnerInfoSection } from "@/components/manage/property-form-sections/own
 import { PropertyPhotosSection } from "@/components/manage/property-form-sections/property-photos-section";
 import { PropertyDocumentsSection } from "@/components/manage/property-form-sections/property-documents-section";
 import { TitleDescriptionSection } from "@/components/manage/property-form-sections/title-description-section";
-import { cn } from "@/core/utils";
+import { cn } from "#/core/utils";
 import { evaluateAgencyCustomization } from "@/inapp/agency-customization/evaluate-agency-customization";
 
 type PropertyFormStep = {
@@ -540,18 +540,18 @@ export function ProgressivePropertySections({
                         <div className="flex flex-col gap-2 mt-8 mb-6">
                             <div className="flex items-center gap-2">
                                 {activeIndex > 0 && (
-                                    <Button type="button" variant="outline" size="sm" onClick={handlePrev}>
+                                    <Button htmlType="button" type="outlined" size="sm" onClick={handlePrev}>
                                         <ArrowLeft className="h-4 w-4" />
                                         Back
                                     </Button>
                                 )}
                                 {isLastStep ? (
-                                    <Button type="submit" variant="primary" size="sm" disabled={isSubmitting || submitDisabled}>{submitLabel}</Button>
+                                    <Button htmlType="submit" type="solid" size="sm" disabled={isSubmitting || submitDisabled}>{submitLabel}</Button>
                                 ) : (
                                     <Button
-                                        type="button"
+                                        htmlType="button"
                                         size="sm"
-                                        variant={nextError ? "tertiary" : "secondary"}
+                                        type={nextError ? "outlined" : "tinted"}
                                         className={cn(
                                             nextError && "border-destructive text-destructive hover:bg-destructive/10"
                                         )}
@@ -565,9 +565,9 @@ export function ProgressivePropertySections({
                                     <AlertDialog>
                                         <AlertDialogTrigger asChild>
                                             <Button
-                                                type="button"
+                                                htmlType="button"
                                                 size="sm"
-                                                variant="destructiveTertiary"
+                                                type="outlined" convey="danger"
                                             >
                                                 <AlertCircle className="h-4 w-4" />
                                                 Cancel
@@ -584,7 +584,7 @@ export function ProgressivePropertySections({
                                                 {canDropCreationDraft && onDropCreationDraft && (
                                                     <AlertDialogAction
                                                         className={cn(
-                                                            buttonVariants({ variant: "destructive" }),
+                                                            buttonVariants({ type: "solid", convey: "danger" }),
                                                             "hover:bg-destructive hover:text-destructive-foreground/80 active:bg-destructive active:text-destructive-foreground/70"
                                                         )}
                                                         disabled={isDroppingCreationDraft}

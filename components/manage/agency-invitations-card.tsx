@@ -3,10 +3,10 @@
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { acceptAgencyAgentMapAction } from '@/services/agency';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useToast } from '@/core/hooks/use-toast';
+import { Badge } from '#/components/ui/badge';
+import { Button } from '#/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { useToast } from '#/core/hooks/useToast';
 
 export type AgencyInvitationItem = {
   id: string;
@@ -28,15 +28,15 @@ export function AgencyInvitationsCard({ invitations }: Props) {
     startTransition(async () => {
       const result = await acceptAgencyAgentMapAction(invitationId);
       if (!result.success) {
-        toast({
-          variant: 'destructive',
+        toast({ name: "default",
+          convey: 'danger',
           title: 'Unable to accept invitation',
           description: result.error || 'Please try again.',
         });
         return;
       }
 
-      toast({
+      toast({ name: "default",
         title: 'Invitation accepted',
         description: 'You can now use the agency tools that were granted to you.',
       });
@@ -63,7 +63,7 @@ export function AgencyInvitationsCard({ invitations }: Props) {
               <div className="flex flex-wrap items-center gap-2">
                 <Badge variant="secondary">Invited</Badge>
                 {invitation.isAdmin && <Badge>Admin</Badge>}
-                <Button type="button" size="sm" variant="outline" onClick={() => acceptInvitation(invitation.id)} disabled={isPending}>
+                <Button htmlType="button" size="sm" type="outlined" onClick={() => acceptInvitation(invitation.id)} disabled={isPending}>
                   Accept
                 </Button>
               </div>

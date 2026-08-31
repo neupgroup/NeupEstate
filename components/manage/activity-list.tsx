@@ -8,8 +8,8 @@ import { z } from 'zod';
 import { Loader2, Plus } from 'lucide-react';
 
 import { addLeadActivityAction } from '@/services/agency';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Badge } from '#/components/ui/badge';
+import { Button } from '#/components/ui/button';
 import {
     Dialog,
     DialogContent,
@@ -27,7 +27,7 @@ import {
     FormLabel,
     FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Input } from '#/components/ui/input';
 import {
     Select,
     SelectContent,
@@ -35,8 +35,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/core/hooks/use-toast';
+import { Textarea } from '#/components/ui/textarea';
+import { useToast } from '#/core/hooks/useToast';
 
 type Lead = {
     id: string;
@@ -199,7 +199,7 @@ function ActivityComposer({
             });
 
             if (result.success) {
-                toast({
+                toast({ name: "default",
                     title: 'Activity added',
                     description: 'The lead activity has been logged.',
                 });
@@ -215,8 +215,8 @@ function ActivityComposer({
                 return;
             }
 
-            toast({
-                variant: 'destructive',
+            toast({ name: "default",
+                convey: 'danger',
                 title: 'Failed to add activity',
                 description: result.error ?? 'Unable to save the activity.',
             });
@@ -353,10 +353,10 @@ function ActivityComposer({
                         />
 
                         <DialogFooter className="gap-2 sm:gap-0">
-                            <Button type="button" variant="outline" onClick={() => setOpen(false)} disabled={isPending}>
+                            <Button htmlType="button" type="outlined" onClick={() => setOpen(false)} disabled={isPending}>
                                 Cancel
                             </Button>
-                            <Button type="submit" disabled={isPending}>
+                            <Button htmlType="submit" disabled={isPending}>
                                 {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
                                 Save activity
                             </Button>

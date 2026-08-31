@@ -1,8 +1,8 @@
 import { getSharedLeads } from '@/services/leads/search';
 import { checkAuthenticationForWeb } from '@/services/neupid/check-auth-web';
 import { ClientLink } from '@/components/client-link';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Badge } from '#/components/ui/badge';
+import { Button } from '#/components/ui/button';
 import { Bell, ChevronRight } from 'lucide-react';
 import { requirePagePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permissions';
@@ -23,7 +23,7 @@ export default async function LeadAlertsPage() {
                     </p>
                 </div>
                 <ClientLink href="/manage/leads/add">
-                    <Button size="sm" variant="outline">
+                    <Button size="sm" type="outlined">
                         <Bell className="h-4 w-4 mr-1" />
                         New Lead
                     </Button>

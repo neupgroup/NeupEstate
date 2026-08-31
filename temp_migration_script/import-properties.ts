@@ -29,7 +29,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import slugify from 'slugify';
-import { prisma } from '@/core/database/prisma';
+import { prisma } from '#/core/database/prisma';
 
 const SOURCE_SQL = path.join(path.dirname(fileURLToPath(import.meta.url)), 'index.sql');
 const MEDIA_BASE_URL = 'https://api.propertyinnepal.com.np/storage';

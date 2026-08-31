@@ -6,12 +6,12 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createMortgageRequestAction } from '@/services/engagement';
 import { CreateMortgageRequestSchema, type CreateMortgageRequestFormValues } from "@/types";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "#/components/ui/button";
+import { Textarea } from "#/components/ui/textarea";
+import { Input } from "#/components/ui/input";
+import { Checkbox } from "#/components/ui/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
-import { useToast } from "@/core/hooks/use-toast";
+import { useToast } from "#/core/hooks/useToast";
 import { Loader2, Send } from "lucide-react";
 
 export function MortgageRequestForm() {
@@ -36,14 +36,14 @@ export function MortgageRequestForm() {
         startSubmitting(async () => {
             const result = await createMortgageRequestAction(values);
             if (result.success) {
-                toast({
+                toast({ name: "default",
                     title: "Request Submitted",
                     description: "Thank you! Our mortgage specialists will be in touch shortly.",
                 });
                 form.reset();
             } else {
-                toast({
-                    variant: "destructive",
+                toast({ name: "default",
+                    type: "solid", convey: "danger",
                     title: "Submission Failed",
                     description: result.error,
                 });
@@ -113,7 +113,7 @@ export function MortgageRequestForm() {
                     )}
                     />
                 
-                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                <Button htmlType="submit" className="w-full" disabled={isSubmitting}>
                     {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
                     Submit Mortgage Request
                 </Button>

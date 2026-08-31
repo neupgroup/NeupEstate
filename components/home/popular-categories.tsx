@@ -1,4 +1,4 @@
-import { Card } from "@/components/ui/card";
+import { Card } from "#/components/ui/card";
 import { ClientLink } from "@/components/estate";
 import { Home, Building, Briefcase, Sofa, LandPlot } from "lucide-react";
 import { Section } from "@/components/home/_components/section";

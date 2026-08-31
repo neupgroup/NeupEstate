@@ -41,7 +41,7 @@ import { createLeadActivity as createLeadActivityService } from '@/services/lead
 import { getIdentity } from '@/services/neupid/get-identity';
 import { hasPermission, requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permissions';
-import { prisma } from '@/core/database/prisma';
+import { prisma } from '#/core/database/prisma';
 import { isAgencyLikeAccountType, promoteStoredAccountType } from '@/services/account-type';
 import { resolvePropertyPostingContext } from '@/services/property-posting-context';
 import { requireIdentity, formatLocationString, firstPositivePrice, cleanPricing, deepMergeJson, normalizeOwnerEntries, normalizeOwnerReferenceEntries, normalizePropertyChangeData, mapPropertyToCreateFormValues } from '@/services/property/action-helpers';

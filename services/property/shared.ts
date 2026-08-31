@@ -6,7 +6,7 @@ Shared mapping, include, and normalization helpers for property service modules.
 ::end
 */
 
-import { prisma } from '@/core/database/prisma';
+import { prisma } from '#/core/database/prisma';
 import type { Property } from '@/types';
 import { mapPurposeFromEnum, mapTypeFromEnum } from '@/inapp/database/adapters';
 

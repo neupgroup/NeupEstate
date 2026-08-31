@@ -1,9 +1,9 @@
 import { notFound } from 'next/navigation';
 import { getBaseClientById } from '@/services/leads/search';
 import { ClientLink } from '@/components/client-link';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '#/components/ui/badge';
 import { ChevronLeft, Plus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '#/components/ui/button';
 
 export default async function BaseLeadClientPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;

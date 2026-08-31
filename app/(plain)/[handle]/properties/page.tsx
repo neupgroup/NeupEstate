@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
 import { PropertyCard } from '@/components/property-card';
 import { getPublicAgencyAccountByNeupId } from '@/services/agency-service';
 import { getBridgePropertiesByAccount } from '@/services/property';
