@@ -235,7 +235,7 @@ export function EditUserForm({ user, account }: EditUserFormProps) {
                                         </div>
                                     ))}
                                     {savedProperties.length > 10 && (
-                                         <Button type="outlined" className="w-full" asChild>
+                                         <Button type="outlined" className="w-full">
                                             <ClientLink href={`/manage/users/${user.id}/activity`}>View All Activity</ClientLink>
                                         </Button>
                                     )}

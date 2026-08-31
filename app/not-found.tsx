@@ -1,6 +1,4 @@
-import Link from "next/link";
-
-import { Button } from "#/components/ui/button";
+import { Link } from "#/components/ui/link";
 
 export default function NotFound() {
   return (
@@ -21,12 +19,8 @@ export default function NotFound() {
               Try a fresh search or return home.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button asChild>
-                <Link href="/">Back to home</Link>
-              </Button>
-              <Button type="outlined" asChild>
-                <Link href="/properties">Browse properties</Link>
-              </Button>
+              <Link href="/" type="solid">Back to home</Link>
+              <Link href="/properties" type="outlined">Browse properties</Link>
             </div>
             <div className="mt-10 grid grid-cols-1 gap-4 text-sm text-muted-foreground sm:grid-cols-3">
               <Link className="hover:text-foreground" href="/search">

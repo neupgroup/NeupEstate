@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { Outfit } from 'next/font/google';
 import './globals.css';
 import { cn } from '#/core/utils';
-import { Toaster } from '#/components/ui/toast';
+import SharedRootLayout from '#/components/layout/RootLayout';
 import { Providers } from '@/components/layout/providers';
 import { ActivityTracker } from '@/components/activity-tracker';
 import { createAccount } from '@/services/account/create';
@@ -63,9 +63,8 @@ export default async function RootLayout({
           showManagePanelLink={canShowManagePanel}
           showGuestBanner={isGuestUser}
         >
-          {children}
+          <SharedRootLayout>{children}</SharedRootLayout>
         </Providers>
-        <Toaster />
       </body>
     </html>
   );

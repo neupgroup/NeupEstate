@@ -37,21 +37,21 @@ export default async function AgentContactPage({ params }: { params: Promise<{ s
                     <h3 className="text-lg font-semibold text-center">Contact Options</h3>
                     <div className="space-y-2">
                         {agent.contact.phone && (
-                            <Button className="w-full justify-start" asChild>
+                            <Button className="w-full justify-start">
                                 <a href={`tel:${agent.contact.phone}`}>
                                     <Phone className="mr-4 h-5 w-5"/> Call Agent
                                 </a>
                             </Button>
                         )}
                          {agent.contact.phone && (
-                            <Button className="w-full justify-start bg-green-500 hover:bg-green-600" asChild>
+                            <Button className="w-full justify-start bg-green-500 hover:bg-green-600">
                                 <a href={`https://wa.me/${agent.contact.phone.replace(/[^0-9]/g, '')}`} target="_blank">
                                     <WhatsAppIcon className="mr-4 h-5 w-5"/> Start WhatsApp Chat
                                 </a>
                             </Button>
                         )}
                         {agent.contact.email && (
-                            <Button type="outlined" className="w-full justify-start" asChild>
+                            <Button type="outlined" className="w-full justify-start">
                                 <a href={`mailto:${agent.contact.email}`}>
                                     <Mail className="mr-4 h-5 w-5"/> Send Email
                                 </a>

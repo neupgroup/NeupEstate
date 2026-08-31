@@ -2,13 +2,10 @@
   "name": "nextn",
   "version": "0.1.0",
   "private": true,
-  
   "scripts": {
     "setup": "chmod +x ./setup.sh && ./setup.sh",
-    
     "predev": "npm run setup",
     "prebuild": "npm run setup",
-
     "dev": "next dev --experimental-https --port 37828",
     "build": "npx prisma generate && next build",
     "start": "next start --port 37828",
@@ -50,6 +47,7 @@
     "@radix-ui/react-tooltip": "^1.1.8",
     "@react-google-maps/api": "^2.19.3",
     "@types/leaflet": "^1.9.21",
+    "@types/nprogress": "^0.2.3",
     "@types/pg": "^8.16.0",
     "cheerio": "^1.0.0-rc.12",
     "class-variance-authority": "^0.7.1",
@@ -62,6 +60,7 @@
     "lucide-react": "^0.475.0",
     "mongodb": "^6.8.0",
     "next": "^16.2.1",
+    "nprogress": "^0.2.0",
     "patch-package": "^8.0.0",
     "pg": "^8.17.2",
     "postcss": "^8",

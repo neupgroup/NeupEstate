@@ -41,6 +41,7 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     ".neup/**/*.ts",
+    ".neup/**/*.tsx",
   ],
   "exclude": [
     "node_modules",

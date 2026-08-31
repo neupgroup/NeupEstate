@@ -92,12 +92,10 @@ export default async function PropertyGalleryPage({
             </p>
           </div>
 
-          <Button asChild type="outlined" className="gap-2">
-            <Link href={`/properties/${propertySlug}`}>
-              <ArrowLeft className="h-4 w-4" />
-              Back to property
-            </Link>
-          </Button>
+          <Link href={`/properties/${propertySlug}`} type="outlined" className="gap-2">
+            <ArrowLeft className="h-4 w-4" />
+            Back to property
+          </Link>
         </div>
 
         <div className="columns-1 gap-4 sm:columns-2 lg:columns-3">

@@ -1103,7 +1103,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                 <div className="space-y-4">
                     {canEditOwnership && !isCreationDraftView ? (
                         <div className="flex justify-start">
-                            <Button type="outlined" size="sm" asChild>
+                            <Button type="outlined" size="sm">
                                 <ClientLink href={`/manage/properties/${property.id}/transfer`}>
                                     <ArrowLeftRight className="mr-2 h-4 w-4" />
                                     Transfer Listing
@@ -1152,14 +1152,14 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
 
             <div className="flex justify-start">
                 <div className="flex flex-wrap gap-3">
-                    <Button asChild>
+                    <Button>
                         <ClientLink href={editUrl}>
                             <PenSquare className="mr-2 h-4 w-4" />
                             Edit Property
                         </ClientLink>
                     </Button>
                     {resolvedProperty && canViewPropertyLogs ? (
-                        <Button asChild type="outlined">
+                        <Button type="outlined">
                             <ClientLink href={`/manage/properties/${resolvedProperty.id}/logs`}>
                                 View Logs
                             </ClientLink>

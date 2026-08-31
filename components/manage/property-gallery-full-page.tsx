@@ -224,7 +224,6 @@ export function PropertyGalleryFullPage({
         </Button>
 
         <Button
-          asChild
           type="plain"
           size="icon"
           aria-label="Close gallery"
