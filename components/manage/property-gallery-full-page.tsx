@@ -223,7 +223,6 @@ export function PropertyGalleryFullPage({
         </Button>
 
         <LinkButton
-          basePath={true}
           href={propertyHref}
           variant="plain"
           size="icon"

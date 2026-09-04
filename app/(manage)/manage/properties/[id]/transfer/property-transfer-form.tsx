@@ -167,7 +167,7 @@ export function PropertyTransferForm({
       </div>
 
       <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <LinkButton variant="outlined" href={`/manage/properties/${propertyId}`} basePath={true}>
+        <LinkButton variant="outlined" href={`/manage/properties/${propertyId}`}>
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to property
         </LinkButton>

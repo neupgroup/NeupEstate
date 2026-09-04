@@ -11,7 +11,7 @@ export function PropertyRequirementsCTA() {
                   Let us know your requirements, and our expert agents will find the perfect property for you.
               </p>
               <div className="mt-6">
-                  <LinkButton href="/requests/create" basePath={true} size="lg" preIcon={<FileSearch />}>
+                  <LinkButton href="/requests/create" size="lg" preIcon={<FileSearch />}>
                       Post Your Requirements
                   </LinkButton>
               </div>

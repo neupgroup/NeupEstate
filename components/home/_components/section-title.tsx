@@ -6,7 +6,7 @@ export const SectionTitle = ({ children, href, showMoreButton = false }: { child
   <div className="flex justify-between items-center">
     <div className="flex items-center gap-3">
         {href && showMoreButton ? (
-             <Link href={href} basePath={true}>
+             <Link href={href}>
                 <h2 className="text-3xl font-headline font-bold text-gray-800 hover:underline">{children}</h2>
              </Link>
         ) : (
@@ -14,7 +14,7 @@ export const SectionTitle = ({ children, href, showMoreButton = false }: { child
         )}
     </div>
     {href && showMoreButton && (
-       <LinkButton href={href} basePath={true} variant="outlined" size="icon">
+       <LinkButton href={href} variant="outlined" size="icon">
           <ChevronRight className="h-5 w-5" />
        </LinkButton>
     )}

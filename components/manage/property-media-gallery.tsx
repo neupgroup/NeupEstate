@@ -337,7 +337,6 @@ export function PropertyMediaGallery({
 
       {mounted && visibleImages.length > 1 && (
         <LinkButton
-          basePath={true}
           href={galleryHref}
           variant="tinted"
         >
