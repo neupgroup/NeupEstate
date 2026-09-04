@@ -76,7 +76,7 @@ export function AccountRefreshButton({
   return (
     <div className="flex items-center gap-2">
       <Button
-        type="outlined"
+        variant="outlined"
         size="sm"
         onClick={handleClick}
         disabled={status === 'loading'}

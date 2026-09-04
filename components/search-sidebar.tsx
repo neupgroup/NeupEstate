@@ -45,7 +45,7 @@ const ToggleButtonGroup = ({ options, value, onChange, multiSelect = true }: { o
                 <Button
                     key={option}
                     htmlType="button"
-                    type={value.includes(option) ? 'solid' : 'outlined'}
+                    variant={value.includes(option) ? 'solid' : 'outlined'}
                     onClick={() => handleToggle(option)}
                     className="capitalize text-xs h-8"
                 >
@@ -95,7 +95,7 @@ const Stepper = ({ label, state, onChange }: { label: string, state: StepperStat
 
     return (
         <div className="flex items-center justify-between bg-secondary p-1 rounded-md">
-            <Button htmlType="button" type="plain" size="icon" className="h-8 w-8" onClick={handleDecrement}>
+            <Button htmlType="button" variant="plain" size="icon" className="h-8 w-8" onClick={handleDecrement}>
                 <Minus className="h-4 w-4" />
             </Button>
             <Label 
@@ -104,7 +104,7 @@ const Stepper = ({ label, state, onChange }: { label: string, state: StepperStat
             >
                 {getLabelText()}
             </Label>
-             <Button htmlType="button" type="plain" size="icon" className="h-8 w-8" onClick={handleIncrement}>
+             <Button htmlType="button" variant="plain" size="icon" className="h-8 w-8" onClick={handleIncrement}>
                 <Plus className="h-4 w-4" />
             </Button>
         </div>

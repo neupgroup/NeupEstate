@@ -9,10 +9,10 @@ Renders the routed full-page property image gallery using the URL query as the i
 */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Check, ChevronLeft, ChevronRight, Copy, X } from "lucide-react";
 import { Button } from "#/components/ui/button";
+import { LinkButton } from "#/components/ui/link-button";
 
 type GalleryDirection = "next" | "previous";
 
@@ -214,7 +214,7 @@ export function PropertyGalleryFullPage({
 
         <Button
           htmlType="button"
-          type="plain"
+          variant="plain"
           size="icon"
           onClick={copyPropertyLink}
           aria-label="Copy property link"
@@ -223,16 +223,15 @@ export function PropertyGalleryFullPage({
           {copied ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
         </Button>
 
-        <Button
-          type="plain"
+        <LinkButton
+          href={propertyHref}
+          variant="plain"
           size="icon"
           aria-label="Close gallery"
           className="h-9 w-11 shrink-0 rounded-lg text-white hover:bg-white/10 hover:text-white"
         >
-          <Link href={propertyHref}>
-            <X className="h-5 w-5" />
-          </Link>
-        </Button>
+          <X className="h-5 w-5" />
+        </LinkButton>
       </div>
 
       <div
@@ -243,7 +242,7 @@ export function PropertyGalleryFullPage({
         {visibleImages.length > 1 && (
           <Button
             htmlType="button"
-            type="plain"
+            variant="plain"
             size="icon"
             onClick={showPreviousImage}
             disabled={isFirstImage}
@@ -271,7 +270,7 @@ export function PropertyGalleryFullPage({
         {visibleImages.length > 1 && (
           <Button
             htmlType="button"
-            type="plain"
+            variant="plain"
             size="icon"
             onClick={showNextImage}
             disabled={isLastImage}

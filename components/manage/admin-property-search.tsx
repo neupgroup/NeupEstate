@@ -170,7 +170,7 @@ export function AdminPropertySearch() {
                         {query && (
                             <Button
                                 htmlType="button"
-                                type="plain"
+                                variant="plain"
                                 size="icon"
                                 className="h-8 w-8"
                                 onClick={handleClear}
@@ -181,7 +181,7 @@ export function AdminPropertySearch() {
                         )}
                         <Button
                             htmlType="button"
-                            type="plain"
+                            variant="plain"
                             size="icon"
                             onClick={() => setAdvanced(v => !v)}
                             className={cn(
@@ -374,7 +374,7 @@ export function AdminPropertySearch() {
                             Apply Filters
                         </Button>
                         {hasAdvancedFilters && (
-                            <Button htmlType="button" size="sm" type="plain" onClick={clearAdvanced}>
+                            <Button htmlType="button" size="sm" variant="plain" onClick={clearAdvanced}>
                                 Clear
                             </Button>
                         )}

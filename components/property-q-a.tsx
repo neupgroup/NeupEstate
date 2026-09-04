@@ -170,7 +170,7 @@ export function PropertyQA({ propertyId }: PropertyQAProps) {
                                 <Button
                                     key={i}
                                     htmlType="button"
-                                    type="text"
+                                    variant="text"
                                     className="h-auto p-0 text-left text-sm text-primary whitespace-normal"
                                     onClick={() => handleQuestionSelect(q)}
                                 >

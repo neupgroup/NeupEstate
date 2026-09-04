@@ -79,12 +79,12 @@ export default function AiConfigurationPage() {
                                             </div>
                                         </AccordionTrigger>
                                         <div className="flex items-center gap-1">
-                                            <ClientLink href={`/manage/settings/ai-configuration/${prompt.id}/edit`} className={cn(buttonVariants({ type: 'plain', size: 'icon' }), 'h-8 w-8')}>
+                                            <ClientLink href={`/manage/settings/ai-configuration/${prompt.id}/edit`} className={cn(buttonVariants({ variant: 'plain', size: 'icon' }), 'h-8 w-8')}>
                                                 <Pencil className="h-4 w-4" />
                                             </ClientLink>
                                             <AlertDialog>
                                                 <AlertDialogTrigger asChild>
-                                                    <Button type="plain" size="icon" className="h-8 w-8 text-destructive hover:text-destructive">
+                                                    <Button variant="plain" size="icon" className="h-8 w-8 text-destructive hover:text-destructive">
                                                         <Trash2 className="h-4 w-4" />
                                                     </Button>
                                                 </AlertDialogTrigger>

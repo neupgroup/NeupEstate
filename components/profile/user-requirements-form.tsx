@@ -41,7 +41,7 @@ function SingleSelectButtonGroup({ value, onChange, options }: SingleSelectButto
                 <Button
                     key={option}
                     htmlType="button"
-                    type={value === option ? 'solid' : 'outlined'}
+                    variant={value === option ? 'solid' : 'outlined'}
                     onClick={() => onChange(option)}
                     className="capitalize"
                 >
@@ -84,7 +84,7 @@ function MultiSelectButtonGroup({ value, onChange, options }: MultiSelectButtonG
                 <Button
                     key={option}
                     htmlType="button"
-                    type={(value || []).includes(option) ? 'solid' : 'outlined'}
+                    variant={(value || []).includes(option) ? 'solid' : 'outlined'}
                     onClick={() => handleToggle(option)}
                 >
                     {option}
@@ -105,7 +105,7 @@ function LocationButtonGroup({ value, onChange }: LocationButtonGroupProps) {
                 <Button
                     key={loc}
                     htmlType="button"
-                    type={value === loc ? 'solid' : 'outlined'}
+                    variant={value === loc ? 'solid' : 'outlined'}
                     onClick={() => onChange(loc)}
                 >
                     {loc}
@@ -113,7 +113,7 @@ function LocationButtonGroup({ value, onChange }: LocationButtonGroupProps) {
             ))}
              <Button
                 htmlType="button"
-                type={!PRESET_LOCATIONS.includes(value as any) && value !== '' ? 'solid' : 'outlined'}
+                variant={!PRESET_LOCATIONS.includes(value as any) && value !== '' ? 'solid' : 'outlined'}
                 onClick={() => onChange('')}
             >
                 Other
@@ -254,7 +254,7 @@ export function UserRequirementsForm({ initialRequirements, onSave }: UserRequir
 
                 </div>
                 <div className="flex justify-end gap-2 pt-4">
-                    <Button htmlType="button" type="outlined" onClick={() => router.push('/profile')}>
+                    <Button htmlType="button" variant="outlined" onClick={() => router.push('/profile')}>
                         Cancel
                     </Button>
                     <Button htmlType="submit" disabled={isPending}>

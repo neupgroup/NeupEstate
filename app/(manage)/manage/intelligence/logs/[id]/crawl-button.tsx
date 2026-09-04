@@ -63,7 +63,7 @@ export function CrawlSourcesButton({ competitorId }: CrawlButtonProps) {
       <Button
         onClick={handleCrawl}
         disabled={isLoading}
-        type="solid"
+        variant="solid"
         size="sm"
         className="gap-2"
       >

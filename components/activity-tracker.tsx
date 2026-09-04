@@ -3,6 +3,7 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import type { PropertyActivityEvent } from '@/types';
+import { makeAppPath } from '#/core/appconfig';
 
 const ACTIVE_TIME_INTERVAL = 5000;
 const INACTIVITY_TIMEOUT = 60000;
@@ -34,7 +35,7 @@ export function ActivityTracker() {
 
         if (activityEvents.current.length > 0) {
             try {
-                await fetch('/bridge/api.v1/activities', {
+                await fetch(makeAppPath('/bridge/api.v1/activities'), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ events: activityEvents.current, propertyId }),

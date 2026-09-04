@@ -43,7 +43,7 @@ function ViewRequirements({ requirements, isLoading }: { requirements: Requireme
             <div className="flex justify-between items-center">
               <CardTitle>Requirement Profile #{index + 1}</CardTitle>
               <ClientLink href={`/profile/requirements?id=${req.id}`}>
-                <Button type="outlined" size="sm">
+                <Button variant="outlined" size="sm">
                   <Plus className="mr-2 h-4 w-4" />
                   Edit
                 </Button>

@@ -353,7 +353,7 @@ function ActivityComposer({
                         />
 
                         <DialogFooter className="gap-2 sm:gap-0">
-                            <Button htmlType="button" type="outlined" onClick={() => setOpen(false)} disabled={isPending}>
+                            <Button htmlType="button" variant="outlined" onClick={() => setOpen(false)} disabled={isPending}>
                                 Cancel
                             </Button>
                             <Button htmlType="submit" disabled={isPending}>

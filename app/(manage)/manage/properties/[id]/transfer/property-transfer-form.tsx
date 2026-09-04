@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, Send } from "lucide-react";
 
 import { savePropertyChangeDraftAction } from '@/services/property/drafts';
-import { ClientLink } from "@/components/client-link";
 import { Alert, AlertDescription, AlertTitle } from "#/components/ui/alert";
 import { Button } from "#/components/ui/button";
+import { LinkButton } from "#/components/ui/link-button";
 import { Label } from "#/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "#/core/hooks/useToast";
@@ -167,12 +167,10 @@ export function PropertyTransferForm({
       </div>
 
       <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Button htmlType="button" type="outlined">
-          <ClientLink href={`/manage/properties/${propertyId}`}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to property
-          </ClientLink>
-        </Button>
+        <LinkButton variant="outlined" href={`/manage/properties/${propertyId}`}>
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to property
+        </LinkButton>
         <Button htmlType="button" onClick={submitTransfer} disabled={isPending}>
           <Send className="mr-2 h-4 w-4" />
           {isPending ? "Requesting..." : "Request Transfer"}

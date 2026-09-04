@@ -54,7 +54,7 @@ export function DailySchedule() {
                             </DialogTrigger>
                         </div>
                         <div className="flex items-center gap-2">
-                            <Button type="plain" size="icon" onClick={handleEdit}>
+                            <Button variant="plain" size="icon" onClick={handleEdit}>
                                 <Pencil className="h-4 w-4" />
                             </Button>
                         </div>

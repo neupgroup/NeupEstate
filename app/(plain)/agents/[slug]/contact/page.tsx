@@ -1,7 +1,8 @@
 
 import { notFound } from 'next/navigation';
 import { getAgentBySlug } from '@/services/agent-service';
-import { SafeImage, ClientLink } from '@/components/estate';
+import { SafeImage } from '@/components/estate';
+import { LinkButton } from '#/components/ui/link-button';
 import { Button } from '#/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '#/components/ui/card';
 import { Mail, Phone, MessageSquare } from 'lucide-react';
@@ -37,34 +38,26 @@ export default async function AgentContactPage({ params }: { params: Promise<{ s
                     <h3 className="text-lg font-semibold text-center">Contact Options</h3>
                     <div className="space-y-2">
                         {agent.contact.phone && (
-                            <Button className="w-full justify-start">
-                                <a href={`tel:${agent.contact.phone}`}>
-                                    <Phone className="mr-4 h-5 w-5"/> Call Agent
-                                </a>
-                            </Button>
+                            <LinkButton className="w-full justify-start" href={`tel:${agent.contact.phone}`}>
+                                <Phone className="mr-4 h-5 w-5"/> Call Agent
+                            </LinkButton>
                         )}
                          {agent.contact.phone && (
-                            <Button className="w-full justify-start bg-green-500 hover:bg-green-600">
-                                <a href={`https://wa.me/${agent.contact.phone.replace(/[^0-9]/g, '')}`} target="_blank">
-                                    <WhatsAppIcon className="mr-4 h-5 w-5"/> Start WhatsApp Chat
-                                </a>
-                            </Button>
+                            <LinkButton className="w-full justify-start bg-green-500 hover:bg-green-600" href={`https://wa.me/${agent.contact.phone.replace(/[^0-9]/g, '')}`} target="_blank">
+                                <WhatsAppIcon className="mr-4 h-5 w-5"/> Start WhatsApp Chat
+                            </LinkButton>
                         )}
                         {agent.contact.email && (
-                            <Button type="outlined" className="w-full justify-start">
-                                <a href={`mailto:${agent.contact.email}`}>
-                                    <Mail className="mr-4 h-5 w-5"/> Send Email
-                                </a>
-                            </Button>
+                            <LinkButton variant="outlined" className="w-full justify-start" href={`mailto:${agent.contact.email}`}>
+                                <Mail className="mr-4 h-5 w-5"/> Send Email
+                            </LinkButton>
                         )}
-                         <Button type="outlined" className="w-full justify-start" disabled>
+                         <Button variant="outlined" className="w-full justify-start" disabled>
                             <MessageSquare className="mr-4 h-5 w-5"/> Message (Coming Soon)
                         </Button>
                     </div>
                      <div className="pt-4 text-center">
-                         <ClientLink href={`/agents/${agent.slug}`}>
-                            <Button type="text">Back to profile</Button>
-                        </ClientLink>
+                         <LinkButton href={`/agents/${agent.slug}`} variant="text">Back to profile</LinkButton>
                     </div>
                 </CardContent>
             </Card>

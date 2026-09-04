@@ -171,7 +171,7 @@ function SitemapList({
                         <TableCell className="text-right space-x-2">
                              {processingSitemapId === sitemap.id ? (
                                 <Button
-                                    type="solid" convey="danger"
+                                    variant="solid" convey="danger"
                                     size="sm"
                                     onClick={onCancel}
                                 >
@@ -180,7 +180,7 @@ function SitemapList({
                                 </Button>
                              ) : (
                                 <Button 
-                                    type="outlined"
+                                    variant="outlined"
                                     size="sm"
                                     onClick={() => onProcess(sitemap.id)}
                                     disabled={!!processingSitemapId}

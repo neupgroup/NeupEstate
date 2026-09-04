@@ -8,6 +8,7 @@ import { getCurrentAccountId } from '@/services/identity';
 import { requestPropertyDeletionAction } from '@/services/property/review';
 import { prisma } from "#/core/database/prisma";
 import { Button } from "#/components/ui/button";
+import { LinkButton } from "#/components/ui/link-button";
 import { PropertyReviewRequests } from "@/components/manage/property-review-requests";
 import { ClientLink } from "@/components/client-link";
 import { AreaDisplayToggle } from "@/components/manage/area-display-toggle";
@@ -970,7 +971,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                                 >
                                     <Button
                                         htmlType="submit"
-                                        type="text"
+                                        variant="text"
                                         className="h-auto p-0 align-baseline underline font-medium text-inherit"
                                     >
                                         Don&apos;t want to delete, cancel it!
@@ -1103,12 +1104,10 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                 <div className="space-y-4">
                     {canEditOwnership && !isCreationDraftView ? (
                         <div className="flex justify-start">
-                            <Button type="outlined" size="sm">
-                                <ClientLink href={`/manage/properties/${property.id}/transfer`}>
-                                    <ArrowLeftRight className="mr-2 h-4 w-4" />
-                                    Transfer Listing
-                                </ClientLink>
-                            </Button>
+                            <LinkButton variant="outlined" size="sm" href={`/manage/properties/${property.id}/transfer`}>
+                                <ArrowLeftRight className="mr-2 h-4 w-4" />
+                                Transfer Listing
+                            </LinkButton>
                         </div>
                     ) : null}
                     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -1152,18 +1151,12 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
 
             <div className="flex justify-start">
                 <div className="flex flex-wrap gap-3">
-                    <Button>
-                        <ClientLink href={editUrl}>
-                            <PenSquare className="mr-2 h-4 w-4" />
-                            Edit Property
-                        </ClientLink>
-                    </Button>
+                    <LinkButton href={editUrl}>
+                        <PenSquare className="mr-2 h-4 w-4" />
+                        Edit Property
+                    </LinkButton>
                     {resolvedProperty && canViewPropertyLogs ? (
-                        <Button type="outlined">
-                            <ClientLink href={`/manage/properties/${resolvedProperty.id}/logs`}>
-                                View Logs
-                            </ClientLink>
-                        </Button>
+                        <LinkButton variant="outlined" href={`/manage/properties/${resolvedProperty.id}/logs`}>View Logs</LinkButton>
                     ) : null}
                     {resolvedProperty && currentChange?.status !== "deleting" ? (
                         <form
@@ -1172,7 +1165,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                                 await requestPropertyDeletionAction(resolvedProperty.id);
                             }}
                         >
-                            <Button htmlType="submit" type="outlined" className="text-destructive hover:text-destructive">
+                            <Button htmlType="submit" variant="outlined" className="text-destructive hover:text-destructive">
                                 Request Deletion
                             </Button>
                         </form>

@@ -76,22 +76,22 @@ function RichTextEditor({
     return (
         <div className="space-y-4">
             <div className="flex flex-wrap gap-1 rounded-md border bg-muted/30 p-1">
-                <Button htmlType="button" type="plain" size="sm" onClick={() => exec("bold")}>
+                <Button htmlType="button" variant="plain" size="sm" onClick={() => exec("bold")}>
                     <Bold className="h-4 w-4" />
                 </Button>
-                <Button htmlType="button" type="plain" size="sm" onClick={() => exec("italic")}>
+                <Button htmlType="button" variant="plain" size="sm" onClick={() => exec("italic")}>
                     <Italic className="h-4 w-4" />
                 </Button>
-                <Button htmlType="button" type="plain" size="sm" onClick={() => exec("underline")}>
+                <Button htmlType="button" variant="plain" size="sm" onClick={() => exec("underline")}>
                     <Underline className="h-4 w-4" />
                 </Button>
-                <Button htmlType="button" type="plain" size="sm" onClick={() => exec("insertUnorderedList")}>
+                <Button htmlType="button" variant="plain" size="sm" onClick={() => exec("insertUnorderedList")}>
                     <List className="h-4 w-4" />
                 </Button>
-                <Button htmlType="button" type="plain" size="sm" onClick={() => exec("insertOrderedList")}>
+                <Button htmlType="button" variant="plain" size="sm" onClick={() => exec("insertOrderedList")}>
                     <ListOrdered className="h-4 w-4" />
                 </Button>
-                <Button htmlType="button" type="plain" size="sm" onClick={() => exec("formatBlock", "p")}>
+                <Button htmlType="button" variant="plain" size="sm" onClick={() => exec("formatBlock", "p")}>
                     <Pilcrow className="h-4 w-4" />
                 </Button>
             </div>

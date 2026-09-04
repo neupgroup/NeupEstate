@@ -81,7 +81,7 @@ function FaqForm({
                     </FormItem>
                 )}/>
                 <DialogFooter>
-                    <Button htmlType="button" type="outlined" onClick={onClose} disabled={isPending}>Cancel</Button>
+                    <Button htmlType="button" variant="outlined" onClick={onClose} disabled={isPending}>Cancel</Button>
                     <Button htmlType="submit" disabled={isPending}>
                         {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : (mode === 'create' ? 'Create FAQ' : 'Save Changes')}
                     </Button>
@@ -191,10 +191,10 @@ export function FaqAdminClient({ initialFaqs }: { initialFaqs: Record<string, FA
                                         <div className="flex items-center justify-between w-full">
                                             <AccordionTrigger className="flex-1 text-left hover:no-underline">{faq.question}</AccordionTrigger>
                                             <div className="flex items-center gap-2 ml-4">
-                                                <Button type="plain" size="icon" onClick={() => handleEdit(faq)}><Pencil className="h-4 w-4"/></Button>
+                                                <Button variant="plain" size="icon" onClick={() => handleEdit(faq)}><Pencil className="h-4 w-4"/></Button>
                                                 <AlertDialog>
                                                     <AlertDialogTrigger asChild>
-                                                        <Button type="plain" size="icon"><Trash2 className="h-4 w-4 text-destructive"/></Button>
+                                                        <Button variant="plain" size="icon"><Trash2 className="h-4 w-4 text-destructive"/></Button>
                                                     </AlertDialogTrigger>
                                                     <AlertDialogContent>
                                                         <AlertDialogHeader>

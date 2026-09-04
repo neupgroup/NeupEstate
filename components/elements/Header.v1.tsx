@@ -104,7 +104,7 @@ export function HeaderV1({
           href={link.href}
           onClick={() => setMenuOpen(false)}
           className={cn(
-            buttonVariants({ type: "plain", size: "sm" }),
+            buttonVariants({ variant: "plain", size: "sm" }),
             "w-full justify-start text-sm",
             isActive && "bg-primary/15 text-primary hover:bg-primary/20 active:bg-primary/25 font-semibold"
           )}
@@ -131,7 +131,7 @@ export function HeaderV1({
           href={item.external ? item.href : appendManageProfileParamV1(item.href, { selectedProfile, workingProfile })}
           onClick={() => setMenuOpen(false)}
           className={cn(
-            buttonVariants({ type: "plain", size: "sm" }),
+            buttonVariants({ variant: "plain", size: "sm" }),
             "w-full justify-start text-sm",
             isActive
               ? "bg-primary/15 text-primary hover:bg-primary/20 active:bg-primary/25 font-semibold"
@@ -176,7 +176,7 @@ export function HeaderV1({
               </Link>
             )}
 
-            <Button type="plain" size="icon" className="md:hidden" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Toggle menu">
+            <Button variant="plain" size="icon" className="md:hidden" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Toggle menu">
               {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </div>

@@ -205,7 +205,7 @@ export default function ImportPropertiesPage() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button htmlType="button" type="outlined" onClick={() => runImport(true)} disabled={isPending}>
+          <Button htmlType="button" variant="outlined" onClick={() => runImport(true)} disabled={isPending}>
             {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Eye className="mr-2 h-4 w-4" />}
             Preview
           </Button>

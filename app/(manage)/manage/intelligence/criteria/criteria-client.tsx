@@ -100,7 +100,7 @@ export function IntelligenceCriteriaClient({ criteria, competitors }: { criteria
                   <Plus className="mr-2 h-4 w-4" />
                   Save Criteria
                 </Button>
-                <Button htmlType="button" type="plain" onClick={() => setIsAddOpen(false)}>
+                <Button htmlType="button" variant="plain" onClick={() => setIsAddOpen(false)}>
                   Cancel
                 </Button>
               </div>
@@ -139,7 +139,7 @@ export function IntelligenceCriteriaClient({ criteria, competitors }: { criteria
                   )}
                 </div>
                 <form action={deleteIntelligenceCriteriaAction.bind(null, item.id)}>
-                  <Button type="plain" size="icon" htmlType="submit" aria-label="Delete criteria">
+                  <Button variant="plain" size="icon" htmlType="submit" aria-label="Delete criteria">
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </form>

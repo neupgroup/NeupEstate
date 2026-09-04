@@ -92,7 +92,7 @@ export default function AiConfigurationPage() {
                                                 <p className="text-sm text-muted-foreground font-normal">{prompt.description}</p>
                                             </div>
                                         </AccordionTrigger>
-                                        <Button type="plain" size="icon" className="ml-4" onClick={() => handleEditClick(prompt)}>
+                                        <Button variant="plain" size="icon" className="ml-4" onClick={() => handleEditClick(prompt)}>
                                             <Pencil className="h-4 w-4" />
                                         </Button>
                                     </div>

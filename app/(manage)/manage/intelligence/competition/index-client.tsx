@@ -105,7 +105,7 @@ export function CompetitionIndexClient({ initialCompetitors }: { initialCompetit
 
               <Button
                 size="sm"
-                type="plain"
+                variant="plain"
                 disabled={isPending}
                 onClick={() => handleDeleteCompetitor(competitor.id)}
               >

@@ -142,7 +142,7 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
         </div>
 
         <Button
-          type="plain"
+          variant="plain"
           size="icon"
           className="absolute right-3 top-3 h-9 w-9 rounded-full border border-white/25 bg-white/80 text-foreground shadow-sm backdrop-blur-sm hover:bg-white"
           onClick={handleFavoriteToggle}

@@ -32,7 +32,7 @@ export function ExtractListingButton({ competitorPageId }: { competitorPageId: s
   };
 
   return (
-    <Button onClick={handleExtract} disabled={isPending || done} size="sm" type={done ? 'tinted' : 'solid'}>
+    <Button onClick={handleExtract} disabled={isPending || done} size="sm" variant={done ? 'tinted' : 'solid'}>
       <Sparkles className="mr-2 h-4 w-4" />
       {done ? 'Saved' : isPending ? 'Extracting...' : 'Extract Listing'}
     </Button>

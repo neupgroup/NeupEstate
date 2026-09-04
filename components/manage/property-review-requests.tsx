@@ -161,7 +161,7 @@ export function PropertyReviewRequests({
               {canApprove && (
                 <div className="flex items-center gap-2">
                   <Button htmlType="button" onClick={() => approve(request)}>Approve</Button>
-                  <Button htmlType="button" type="outlined" onClick={() => reject(request)}>Disapprove</Button>
+                  <Button htmlType="button" variant="outlined" onClick={() => reject(request)}>Disapprove</Button>
                 </div>
               )}
             </div>

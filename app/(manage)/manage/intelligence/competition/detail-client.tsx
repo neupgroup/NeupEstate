@@ -304,7 +304,7 @@ export function CompetitionDetailClient({
                 <Badge variant="outline" className="shrink-0 capitalize">{SOURCE_LABELS[source.type as SourceType]}</Badge>
                 <span className="truncate text-sm text-muted-foreground">{source.value}</span>
               </div>
-              <Button size="sm" type="plain" disabled={isPending} onClick={() => handleDeleteSource(source.id)}>
+              <Button size="sm" variant="plain" disabled={isPending} onClick={() => handleDeleteSource(source.id)}>
                 <Trash2 className="h-4 w-4" />
               </Button>
             </div>

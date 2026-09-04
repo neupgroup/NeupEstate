@@ -60,7 +60,7 @@ export function ApiRequestButton() {
         <Button 
           onClick={handleFetchBrandAccounts} 
           disabled={loading}
-          type="outlined"
+          variant="outlined"
         >
           {loading ? (
             <>

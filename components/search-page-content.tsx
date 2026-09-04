@@ -114,7 +114,7 @@ export function SearchPageContent({ queryFromPath }: { queryFromPath: string }) 
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pr-12"
                 />
-                <Button htmlType="submit" size="icon" type="plain" className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10">
+                <Button htmlType="submit" size="icon" variant="plain" className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-10">
                   <Search className="h-4 w-4" />
                   <span className="sr-only">Search</span>
                 </Button>

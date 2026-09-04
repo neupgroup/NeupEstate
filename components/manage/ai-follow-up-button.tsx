@@ -55,7 +55,7 @@ export function AiFollowUpButton({ conversationId, lastMessageSender, isNewConve
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button type="outlined" disabled={isDisabled} >
+                <Button variant="outlined" disabled={isDisabled} >
                     <Bot className="mr-2 h-4 w-4" />
                     AI Follow-up
                 </Button>

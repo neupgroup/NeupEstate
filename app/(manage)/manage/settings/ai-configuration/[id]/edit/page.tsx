@@ -21,7 +21,7 @@ export default async function EditPromptPage({ params }: { params: Promise<{ id:
 
     return (
         <div className="max-w-3xl mx-auto">
-             <ClientLink href="/manage/settings/ai-configuration" className={cn(buttonVariants({ type: 'plain' }), 'mb-4')}>
+             <ClientLink href="/manage/settings/ai-configuration" className={cn(buttonVariants({ variant: 'plain' }), 'mb-4')}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to AI Configuration
             </ClientLink>

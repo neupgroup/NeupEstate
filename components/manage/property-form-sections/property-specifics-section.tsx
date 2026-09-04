@@ -224,7 +224,7 @@ export function PropertySpecificsSection({ control, category, fieldChangeNotes }
                             <div key={field.id} className="p-4 border rounded-lg space-y-4">
                                 <div className="flex justify-between items-center">
                                     <span className="text-sm font-medium">Unit {index + 1}</span>
-                                    <Button htmlType="button" type="plain" size="icon" onClick={() => removeUnit(index)}>
+                                    <Button htmlType="button" variant="plain" size="icon" onClick={() => removeUnit(index)}>
                                         <Trash2 className="h-4 w-4 text-destructive" />
                                     </Button>
                                 </div>
@@ -251,7 +251,7 @@ export function PropertySpecificsSection({ control, category, fieldChangeNotes }
                                 </div>
                             </div>
                         ))}
-                        <Button htmlType="button" type="outlined" size="sm" onClick={() => appendUnit({ id: `unit-${unitFields.length + 1}` })}>
+                        <Button htmlType="button" variant="outlined" size="sm" onClick={() => appendUnit({ id: `unit-${unitFields.length + 1}` })}>
                             <PlusCircle className="mr-2 h-4 w-4" />Add Unit
                         </Button>
                     </div>
@@ -277,7 +277,7 @@ export function PropertySpecificsSection({ control, category, fieldChangeNotes }
                             <div key={field.id} className="p-4 border rounded-lg space-y-4">
                                 <div className="flex justify-between items-center">
                                     <span className="text-sm font-medium">Plot {index + 1}</span>
-                                    <Button htmlType="button" type="plain" size="icon" onClick={() => removePlot(index)}>
+                                    <Button htmlType="button" variant="plain" size="icon" onClick={() => removePlot(index)}>
                                         <Trash2 className="h-4 w-4 text-destructive" />
                                     </Button>
                                 </div>
@@ -298,7 +298,7 @@ export function PropertySpecificsSection({ control, category, fieldChangeNotes }
                                 </div>
                             </div>
                         ))}
-                        <Button htmlType="button" type="outlined" size="sm" onClick={() => appendPlot({ id: `plot-${plotFields.length + 1}`, area: undefined })}>
+                        <Button htmlType="button" variant="outlined" size="sm" onClick={() => appendPlot({ id: `plot-${plotFields.length + 1}`, area: undefined })}>
                             <PlusCircle className="mr-2 h-4 w-4" />Add Plot
                         </Button>
                     </div>

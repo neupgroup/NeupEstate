@@ -15,7 +15,7 @@ export const SectionTitle = ({ children, href, showMoreButton = false }: { child
         )}
     </div>
     {href && showMoreButton && (
-       <ClientLink href={href} className={cn(buttonVariants({ type: 'outlined', size: 'icon' }))}>
+       <ClientLink href={href} className={cn(buttonVariants({ variant: 'outlined', size: 'icon' }))}>
           <ChevronRight className="h-5 w-5" />
        </ClientLink>
     )}

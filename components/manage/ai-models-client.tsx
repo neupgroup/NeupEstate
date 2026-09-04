@@ -85,7 +85,7 @@ function ModelForm({
                     )}
                 />
                 <DialogFooter>
-                    <Button htmlType="button" type="outlined" onClick={onClose} disabled={isPending}>Cancel</Button>
+                    <Button htmlType="button" variant="outlined" onClick={onClose} disabled={isPending}>Cancel</Button>
                     <Button htmlType="submit" disabled={isPending}>
                         {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : (mode === 'create' ? 'Create Model' : 'Save Changes')}
                     </Button>
@@ -212,14 +212,14 @@ export function AIModelsClient({ initialModels }: { initialModels: AIModel[] }) 
                                         <p className="text-sm">${model.costPerMillionInputTokens.toFixed(2)} / ${model.costPerMillionOutputTokens.toFixed(2)}</p>
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        <Button type="plain" size="icon" onClick={() => handleSetDefault(model.id)} disabled={model.isDefault || isPending}>
+                                        <Button variant="plain" size="icon" onClick={() => handleSetDefault(model.id)} disabled={model.isDefault || isPending}>
                                             <ShieldCheck className="h-4 w-4"/>
                                             <span className="sr-only">Set as default</span>
                                         </Button>
-                                        <Button type="plain" size="icon" onClick={() => handleEdit(model)}><Pencil className="h-4 w-4"/></Button>
+                                        <Button variant="plain" size="icon" onClick={() => handleEdit(model)}><Pencil className="h-4 w-4"/></Button>
                                         <AlertDialog>
                                             <AlertDialogTrigger asChild>
-                                                <Button type="plain" size="icon"><Trash2 className="h-4 w-4 text-destructive"/></Button>
+                                                <Button variant="plain" size="icon"><Trash2 className="h-4 w-4 text-destructive"/></Button>
                                             </AlertDialogTrigger>
                                             <AlertDialogContent>
                                                 <AlertDialogHeader>

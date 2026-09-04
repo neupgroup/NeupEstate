@@ -146,7 +146,7 @@ export function EditAgentForm({ agent, users }: EditAgentFormProps) {
                             </Button>
                         ) : (
                             <>
-                                <Button type="outlined" onClick={handleCancel}>
+                                <Button variant="outlined" onClick={handleCancel}>
                                     Cancel
                                 </Button>
                                 <Button htmlType="submit" form="agent-edit-form" disabled={isSaving}>
@@ -156,7 +156,7 @@ export function EditAgentForm({ agent, users }: EditAgentFormProps) {
                         )}
                         <AlertDialog>
                             <AlertDialogTrigger asChild>
-                                <Button type="solid" convey="danger" disabled={isDeleting}>
+                                <Button variant="solid" convey="danger" disabled={isDeleting}>
                                     {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
                                     Delete
                                 </Button>

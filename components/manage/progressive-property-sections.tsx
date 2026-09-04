@@ -540,18 +540,18 @@ export function ProgressivePropertySections({
                         <div className="flex flex-col gap-2 mt-8 mb-6">
                             <div className="flex items-center gap-2">
                                 {activeIndex > 0 && (
-                                    <Button htmlType="button" type="outlined" size="sm" onClick={handlePrev}>
+                                    <Button htmlType="button" variant="outlined" size="sm" onClick={handlePrev}>
                                         <ArrowLeft className="h-4 w-4" />
                                         Back
                                     </Button>
                                 )}
                                 {isLastStep ? (
-                                    <Button htmlType="submit" type="solid" size="sm" disabled={isSubmitting || submitDisabled}>{submitLabel}</Button>
+                                    <Button htmlType="submit" variant="solid" size="sm" disabled={isSubmitting || submitDisabled}>{submitLabel}</Button>
                                 ) : (
                                     <Button
                                         htmlType="button"
                                         size="sm"
-                                        type={nextError ? "outlined" : "tinted"}
+                                        variant={nextError ? "outlined" : "tinted"}
                                         className={cn(
                                             nextError && "border-destructive text-destructive hover:bg-destructive/10"
                                         )}
@@ -567,7 +567,7 @@ export function ProgressivePropertySections({
                                             <Button
                                                 htmlType="button"
                                                 size="sm"
-                                                type="outlined" convey="danger"
+                                                variant="outlined" convey="danger"
                                             >
                                                 <AlertCircle className="h-4 w-4" />
                                                 Cancel
@@ -584,7 +584,7 @@ export function ProgressivePropertySections({
                                                 {canDropCreationDraft && onDropCreationDraft && (
                                                     <AlertDialogAction
                                                         className={cn(
-                                                            buttonVariants({ type: "solid", convey: "danger" }),
+                                                            buttonVariants({ variant: "solid", convey: "danger" }),
                                                             "hover:bg-destructive hover:text-destructive-foreground/80 active:bg-destructive active:text-destructive-foreground/70"
                                                         )}
                                                         disabled={isDroppingCreationDraft}

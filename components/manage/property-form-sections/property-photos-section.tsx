@@ -206,7 +206,7 @@ export function PropertyPhotosSection({ control, fieldChangeNotes, previousImage
                                     </div>
                                     <Button
                                         htmlType="button"
-                                        type="tinted"
+                                        variant="tinted"
                                         size="icon"
                                         className="absolute right-2 top-2 h-7 w-7 rounded-full bg-white/90 text-foreground shadow-md hover:bg-white"
                                         onClick={() => remove(index)}

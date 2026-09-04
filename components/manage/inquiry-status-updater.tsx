@@ -32,7 +32,7 @@ export function InquiryStatusUpdater({ inquiryId, currentStatus }: InquiryStatus
   if (currentStatus === 'new') {
     return (
       <Button
-        type="outlined"
+        variant="outlined"
         size="sm"
         onClick={() => handleStatusChange('replied')}
         disabled={isPending}
@@ -50,7 +50,7 @@ export function InquiryStatusUpdater({ inquiryId, currentStatus }: InquiryStatus
   if (currentStatus === 'replied') {
     return (
        <Button
-        type="solid"
+        variant="solid"
         size="sm"
         onClick={() => handleStatusChange('closed')}
         disabled={isPending}
@@ -73,7 +73,7 @@ export function InquiryStatusUpdater({ inquiryId, currentStatus }: InquiryStatus
                 Closed
             </Badge>
             <Button
-                type="text"
+                variant="text"
                 size="sm"
                 className="h-auto p-0 text-xs"
                 onClick={() => handleStatusChange('new')}

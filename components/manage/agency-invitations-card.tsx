@@ -63,7 +63,7 @@ export function AgencyInvitationsCard({ invitations }: Props) {
               <div className="flex flex-wrap items-center gap-2">
                 <Badge variant="secondary">Invited</Badge>
                 {invitation.isAdmin && <Badge>Admin</Badge>}
-                <Button htmlType="button" size="sm" type="outlined" onClick={() => acceptInvitation(invitation.id)} disabled={isPending}>
+                <Button htmlType="button" size="sm" variant="outlined" onClick={() => acceptInvitation(invitation.id)} disabled={isPending}>
                   Accept
                 </Button>
               </div>

@@ -61,7 +61,7 @@ export function NewConversationDialog() {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button type="outlined">
+                <Button variant="outlined">
                     <MessageSquarePlus className="mr-2 h-4 w-4" />
                     New Conversation
                 </Button>

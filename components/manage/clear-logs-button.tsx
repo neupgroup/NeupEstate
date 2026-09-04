@@ -43,7 +43,7 @@ export function ClearLogsButton() {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button type="solid" convey="danger" disabled={isPending}>
+                <Button variant="solid" convey="danger" disabled={isPending}>
                     {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
                     Clear Logs
                 </Button>

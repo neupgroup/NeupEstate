@@ -88,7 +88,7 @@ function DocumentGroup({ control, index: docIndex, remove }: { control: Control<
         <div className="p-4 border rounded-md space-y-6">
             <div className="flex justify-between items-center">
                 <FormLabel>Document Group {docIndex + 1}</FormLabel>
-                <Button htmlType="button" type="plain" size="icon" onClick={() => remove(docIndex)} disabled={isUploading}>
+                <Button htmlType="button" variant="plain" size="icon" onClick={() => remove(docIndex)} disabled={isUploading}>
                     <Trash2 className="h-4 w-4 text-destructive" />
                 </Button>
             </div>
@@ -127,10 +127,10 @@ function DocumentGroup({ control, index: docIndex, remove }: { control: Control<
                                 </FormItem>
                             )}
                         />
-                        <Button htmlType="button" type="plain" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 text-destructive hover:text-destructive" onClick={() => removeUrl(urlIndex)}><Trash2 className="h-4 w-4" /></Button>
+                        <Button htmlType="button" variant="plain" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 text-destructive hover:text-destructive" onClick={() => removeUrl(urlIndex)}><Trash2 className="h-4 w-4" /></Button>
                     </div>
                 ))}
-                <Button htmlType="button" type="outlined" size="sm" onClick={() => appendUrl({ value: '' })} disabled={isUploading}>
+                <Button htmlType="button" variant="outlined" size="sm" onClick={() => appendUrl({ value: '' })} disabled={isUploading}>
                     <PlusCircle className="mr-2 h-4 w-4" />
                     Add Link
                 </Button>
@@ -164,7 +164,7 @@ export function PropertyDocumentsSection({ control, fieldChangeNotes }: Property
                         remove={remove}
                     />
                 ))}
-                <Button htmlType="button" type="outlined" className="w-full" onClick={() => append({ name: '', urls: [{ value: '' }] })}><PlusCircle className="mr-2 h-4 w-4" />Add property documents (pdf/jpeg/doc)</Button>
+                <Button htmlType="button" variant="outlined" className="w-full" onClick={() => append({ name: '', urls: [{ value: '' }] })}><PlusCircle className="mr-2 h-4 w-4" />Add property documents (pdf/jpeg/doc)</Button>
             </div>
         </section>
     );

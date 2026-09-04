@@ -51,7 +51,7 @@ export function DeleteConversationButton({ conversationId, customerName }: Delet
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button type="solid" convey="danger" size="sm">
+                <Button variant="solid" convey="danger" size="sm">
                     <Trash2 className="mr-2 h-4 w-4" />
                     Delete
                 </Button>

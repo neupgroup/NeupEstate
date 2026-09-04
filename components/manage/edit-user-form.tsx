@@ -10,6 +10,7 @@ import { updateUserAction } from '@/services/account';
 import { getSavedPropertiesForUser } from '@/services/engagement';
 import { getUserPreferences } from '@/services/user-preference-service';
 import { Button } from '#/components/ui/button';
+import { LinkButton } from '#/components/ui/link-button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '#/components/ui/input';
@@ -73,12 +74,12 @@ const ContactFieldArray = ({ control, name, label, typeOptions, disabled }: { co
                             </FormItem>
                         )}
                     />
-                    <Button htmlType="button" type="plain" size="icon" className="text-destructive" onClick={() => remove(index)} disabled={disabled}><Trash2 className="h-4 w-4" /></Button>
+                    <Button htmlType="button" variant="plain" size="icon" className="text-destructive" onClick={() => remove(index)} disabled={disabled}><Trash2 className="h-4 w-4" /></Button>
                 </div>
             ))}
             <Button
                 htmlType="button"
-                type="outlined"
+                variant="outlined"
                 className="w-full"
                 onClick={() => append({ type: 'primary', value: '' })}
                 disabled={disabled}
@@ -202,7 +203,7 @@ export function EditUserForm({ user, account }: EditUserFormProps) {
                                 <Button htmlType="button" onClick={() => setIsEditing(true)}><Pencil className="mr-2 h-4 w-4" /> Edit</Button>
                             ) : (
                                 <>
-                                    <Button htmlType="button" type="outlined" onClick={() => { setIsEditing(false); form.reset(); }}>Cancel</Button>
+                                    <Button htmlType="button" variant="outlined" onClick={() => { setIsEditing(false); form.reset(); }}>Cancel</Button>
                                     <Button htmlType="submit" disabled={isSaving}>
                                         {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} Save Changes
                                     </Button>
@@ -235,9 +236,7 @@ export function EditUserForm({ user, account }: EditUserFormProps) {
                                         </div>
                                     ))}
                                     {savedProperties.length > 10 && (
-                                         <Button type="outlined" className="w-full">
-                                            <ClientLink href={`/manage/users/${user.id}/activity`}>View All Activity</ClientLink>
-                                        </Button>
+                                         <LinkButton variant="outlined" className="w-full" href={`/manage/users/${user.id}/activity`}>View All Activity</LinkButton>
                                     )}
                                 </div>
                              ) : (

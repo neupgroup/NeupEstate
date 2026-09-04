@@ -84,14 +84,14 @@ function OwnerClientPicker({
                 <div className="flex items-center gap-2">
                     <Button
                         htmlType="button"
-                        type={isPrimary ? "solid" : "outlined"}
+                        variant={isPrimary ? "solid" : "outlined"}
                         size="sm"
                         onClick={() => makePrimary(index)}
                     >
                         <Star className="mr-2 h-4 w-4" />
                         {isPrimary ? "Primary Owner" : "Make Primary"}
                     </Button>
-                    <Button htmlType="button" type="plain" size="icon" onClick={() => remove(index)}>
+                    <Button htmlType="button" variant="plain" size="icon" onClick={() => remove(index)}>
                         <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                 </div>
@@ -261,7 +261,7 @@ export function OwnerInfoSection({ control, setValue, formErrors, fieldChangeNot
                     />
                 ))}
 
-                <Button htmlType="button" type="outlined" size="sm" onClick={appendOwner} disabled={fields.length >= 4}>
+                <Button htmlType="button" variant="outlined" size="sm" onClick={appendOwner} disabled={fields.length >= 4}>
                     <PlusCircle className="mr-2 h-4 w-4" />
                     Add Owner
                 </Button>

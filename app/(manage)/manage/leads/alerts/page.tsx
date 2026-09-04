@@ -23,7 +23,7 @@ export default async function LeadAlertsPage() {
                     </p>
                 </div>
                 <ClientLink href="/manage/leads/add">
-                    <Button size="sm" type="outlined">
+                    <Button size="sm" variant="outlined">
                         <Bell className="h-4 w-4 mr-1" />
                         New Lead
                     </Button>

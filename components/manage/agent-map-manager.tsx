@@ -216,7 +216,7 @@ export function AgentMapManager({
                 <Checkbox checked={isAdmin} onCheckedChange={(checked) => setIsAdmin(Boolean(checked))} disabled={!selectedAgencyId} />
                 Grant admin
               </label>
-              <Button htmlType="button" type="tinted" onClick={() => setShowSearch((value) => !value)} disabled={!selectedAgencyId}>
+              <Button htmlType="button" variant="tinted" onClick={() => setShowSearch((value) => !value)} disabled={!selectedAgencyId}>
                 <Link2 className="mr-2 h-4 w-4" />
                 {showSearch ? 'Hide search' : 'Add agent'}
               </Button>

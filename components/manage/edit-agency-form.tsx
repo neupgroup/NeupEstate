@@ -123,7 +123,7 @@ export function EditAgencyForm({ agency }: EditAgencyFormProps) {
                         </Button>
                     ) : (
                         <>
-                            <Button type="outlined" onClick={handleCancel}>
+                            <Button variant="outlined" onClick={handleCancel}>
                                 Cancel
                             </Button>
                             <Button htmlType="submit" form="agency-edit-form" disabled={isSaving}>
@@ -133,7 +133,7 @@ export function EditAgencyForm({ agency }: EditAgencyFormProps) {
                     )}
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button type="solid" convey="danger" disabled={isDeleting}>
+                            <Button variant="solid" convey="danger" disabled={isDeleting}>
                                 {isDeleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
                                 Delete
                             </Button>
