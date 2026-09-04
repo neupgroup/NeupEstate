@@ -195,6 +195,21 @@ export async function getPublicAgencyAccounts({
   }
 }
 
+export async function getPublicAgencyAccountCount(): Promise<number> {
+  try {
+    return await prisma.account.count({
+      where: {
+        accountType: {
+          in: ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'],
+        },
+      },
+    });
+  } catch (e) {
+    await logProblem(e, 'getPublicAgencyAccountCount');
+    return 0;
+  }
+}
+
 export async function getPublicAccountProfileByNeupId(neupId: string): Promise<PublicAccountProfile | null> {
   try {
     const handle = normalizeHandle(neupId);

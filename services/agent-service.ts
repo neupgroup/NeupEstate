@@ -80,6 +80,15 @@ export async function getAgents({ limit = 100, offset = 0 }: { limit?: number; o
   } catch (e) { await logProblem(e, 'getAgents'); return []; }
 }
 
+export async function getAgentCount(): Promise<number> {
+  try {
+    return await prisma.account.count({ where: { accountType: 'individual.agent' } });
+  } catch (e) {
+    await logProblem(e, 'getAgentCount');
+    return 0;
+  }
+}
+
 export async function getAgentById(id: string): Promise<Agent | null> {
   try {
     const account = await prisma.account.findUnique({

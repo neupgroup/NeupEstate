@@ -34,7 +34,7 @@ export function ActivityTracker() {
 
         if (activityEvents.current.length > 0) {
             try {
-                await fetch('/api/activity', {
+                await fetch('/bridge/api.v1/activities', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ events: activityEvents.current, propertyId }),
