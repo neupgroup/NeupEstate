@@ -172,7 +172,6 @@ export function AdminPropertySearch() {
                                 htmlType="button"
                                 variant="plain"
                                 size="icon"
-                                className="h-8 w-8"
                                 onClick={handleClear}
                             >
                                 <X className="h-4 w-4" />

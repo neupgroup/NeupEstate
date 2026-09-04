@@ -74,7 +74,7 @@ export function ProfileHeader({
               </p>
             </div>
           </div>
-          <Button size="sm" variant="tinted" className="absolute top-4 right-4 z-20" disabled>
+          <Button size="sm" variant="tinted" disabled>
             <Camera className="mr-2 h-4 w-4" />
             Edit Profile
           </Button>

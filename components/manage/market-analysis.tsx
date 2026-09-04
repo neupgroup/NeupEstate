@@ -20,7 +20,7 @@ const initialState: MarketAnalysisState = {
 function AnalyzeSubmitButton() {
     const { pending } = useFormStatus();
     return (
-        <Button htmlType="submit" disabled={pending} className="w-full">
+        <Button htmlType="submit" disabled={pending}>
             {pending ? (
                 <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

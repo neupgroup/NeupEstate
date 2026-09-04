@@ -258,7 +258,7 @@ export function CompetitionDetailClient({
             </div>
           </div>
 
-          <Button onClick={handleAddSource} disabled={isPending || !sourceValue.trim()} className="w-full sm:w-auto">
+          <Button onClick={handleAddSource} disabled={isPending || !sourceValue.trim()}>
             <Plus className="h-4 w-4 mr-1" /> Add Source
           </Button>
         </CardContent>

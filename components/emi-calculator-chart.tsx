@@ -196,12 +196,12 @@ export function EmiCalculatorChart({ price }: EmiCalculatorChartProps) {
                 )}
             </CardContent>
             <CardFooter className="gap-4">
-                <Button variant="outlined" disabled className="w-full">
+                <Button variant="outlined" disabled>
                     <Banknote className="mr-2 h-4 w-4" />
                     Mortgage Availability (Soon)
                 </Button>
                  <ClientLink href="/mortgage/request" className="w-full">
-                     <Button variant="outlined" className="w-full">
+                     <Button variant="outlined">
                         <FileQuestion className="mr-2 h-4 w-4" />
                         Request for Mortgage Support
                     </Button>

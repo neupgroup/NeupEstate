@@ -100,7 +100,7 @@ export function StartCrawlButton() {
 
   return (
     <div className="flex flex-col items-end gap-2">
-      <Button onClick={handleStartCrawl} disabled={isPending} className="shrink-0">
+      <Button onClick={handleStartCrawl} disabled={isPending}>
         {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Radar className="h-4 w-4" />}
         {isPending ? 'Crawling...' : 'Start crawl'}
       </Button>

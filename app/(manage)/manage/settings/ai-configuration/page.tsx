@@ -84,7 +84,7 @@ export default function AiConfigurationPage() {
                                             </ClientLink>
                                             <AlertDialog>
                                                 <AlertDialogTrigger asChild>
-                                                    <Button variant="plain" size="icon" className="h-8 w-8 text-destructive hover:text-destructive">
+                                                    <Button variant="plain" size="icon">
                                                         <Trash2 className="h-4 w-4" />
                                                     </Button>
                                                 </AlertDialogTrigger>

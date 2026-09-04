@@ -75,7 +75,7 @@ export function PropertyRequestForm() {
                     <FormField control={form.control} name="bathrooms" render={({ field }) => (<FormItem><FormLabel>Min. Bathrooms (Optional)</FormLabel><FormControl><Input type="number" placeholder="e.g., 2" {...field} /></FormControl><FormMessage /></FormItem>)}/>
                 </div>
                 <FormField control={form.control} name="remarks" render={({ field }) => (<FormItem><FormLabel>More Details / Remarks (Optional)</FormLabel><FormControl><Textarea rows={5} placeholder="Tell us more about what you're looking for. e.g., 'Must have a backyard for a dog', 'Close to public transportation', etc." {...field} /></FormControl><FormMessage /></FormItem>)}/>
-                <Button htmlType="submit" className="w-full" disabled={isSubmitting}>
+                <Button htmlType="submit" disabled={isSubmitting}>
                     {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
                     Submit Request
                 </Button>

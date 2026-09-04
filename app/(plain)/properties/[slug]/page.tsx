@@ -732,7 +732,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
                 <Badge variant={property.purpose === 'Sale' ? 'default' : 'secondary'}>For {property.purpose}</Badge>
               </div>
 
-              <Button className="w-full text-lg h-12">Contact Agency</Button>
+              <Button>Contact Agency</Button>
               
               <PropertyQA propertyId={property.id} />
 

@@ -10,6 +10,7 @@ export default {
     './logica/core/**/*.{js,ts,jsx,tsx,mdx}',
     './services/**/*.{js,ts,jsx,tsx,mdx}',
     './types/**/*.{js,ts,jsx,tsx,mdx}',
+    "./.neup/components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     container: {

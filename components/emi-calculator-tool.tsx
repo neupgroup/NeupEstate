@@ -298,7 +298,7 @@ export function EmiCalculatorTool() {
               </div>
 
               <ClientLink href="/mortgage/request" className="block">
-                <Button className="w-full">
+                <Button>
                   <Landmark className="mr-2 h-4 w-4" />
                   Request Mortgage Support
                 </Button>

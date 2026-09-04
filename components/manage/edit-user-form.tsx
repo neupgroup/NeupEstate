@@ -74,13 +74,12 @@ const ContactFieldArray = ({ control, name, label, typeOptions, disabled }: { co
                             </FormItem>
                         )}
                     />
-                    <Button htmlType="button" variant="plain" size="icon" className="text-destructive" onClick={() => remove(index)} disabled={disabled}><Trash2 className="h-4 w-4" /></Button>
+                    <Button htmlType="button" variant="plain" size="icon" onClick={() => remove(index)} disabled={disabled}><Trash2 className="h-4 w-4" /></Button>
                 </div>
             ))}
             <Button
                 htmlType="button"
                 variant="outlined"
-                className="w-full"
                 onClick={() => append({ type: 'primary', value: '' })}
                 disabled={disabled}
             >
@@ -236,7 +235,7 @@ export function EditUserForm({ user, account }: EditUserFormProps) {
                                         </div>
                                     ))}
                                     {savedProperties.length > 10 && (
-                                         <LinkButton variant="outlined" className="w-full" href={`/manage/users/${user.id}/activity`}>View All Activity</LinkButton>
+                                         <LinkButton variant="outlined" href={`/manage/users/${user.id}/activity`}>View All Activity</LinkButton>
                                     )}
                                 </div>
                              ) : (

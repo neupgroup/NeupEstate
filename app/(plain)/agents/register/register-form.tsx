@@ -82,7 +82,7 @@ export function AgentRegisterForm() {
         </Alert>
       ) : null}
 
-      <Button htmlType="submit" size="lg" className="w-full sm:w-auto" disabled={!agreed || isPending}>
+      <Button htmlType="submit" size="lg" disabled={!agreed || isPending}>
         {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
         Continue
       </Button>

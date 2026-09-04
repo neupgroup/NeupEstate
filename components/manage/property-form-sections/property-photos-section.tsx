@@ -208,7 +208,6 @@ export function PropertyPhotosSection({ control, fieldChangeNotes, previousImage
                                         htmlType="button"
                                         variant="tinted"
                                         size="icon"
-                                        className="absolute right-2 top-2 h-7 w-7 rounded-full bg-white/90 text-foreground shadow-md hover:bg-white"
                                         onClick={() => remove(index)}
                                         disabled={fields.length <= 1}
                                         aria-label={`Remove image ${index + 1}`}

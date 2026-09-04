@@ -972,7 +972,6 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                                     <Button
                                         htmlType="submit"
                                         variant="text"
-                                        className="h-auto p-0 align-baseline underline font-medium text-inherit"
                                     >
                                         Don&apos;t want to delete, cancel it!
                                     </Button>
@@ -1165,7 +1164,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                                 await requestPropertyDeletionAction(resolvedProperty.id);
                             }}
                         >
-                            <Button htmlType="submit" variant="outlined" className="text-destructive hover:text-destructive">
+                            <Button htmlType="submit" variant="outlined">
                                 Request Deletion
                             </Button>
                         </form>

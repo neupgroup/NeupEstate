@@ -393,7 +393,7 @@ export function CreateLeadForm() {
                             {results.length === 0 && searched && (
                                 <p className="text-sm text-muted-foreground py-2">No clients matched. Create a new one below.</p>
                             )}
-                            <Button htmlType="button" variant="outlined" className="w-full mt-1" onClick={chooseNewClient}>
+                            <Button htmlType="button" variant="outlined" onClick={chooseNewClient}>
                                 <UserPlus className="h-4 w-4 mr-2" /> Create New Client
                             </Button>
                         </div>
@@ -421,7 +421,7 @@ export function CreateLeadForm() {
                                     <FormField control={clientForm.control} name="source" render={({ field }) => (
                                         <FormItem><FormLabel>Source <span className="text-muted-foreground text-xs">(optional)</span></FormLabel><FormControl><Input placeholder="e.g. Referral, Facebook" {...field} /></FormControl><FormMessage /></FormItem>
                                     )} />
-                                    <Button htmlType="submit" disabled={isPending} className="w-full">
+                                    <Button htmlType="submit" disabled={isPending}>
                                         {isPending ? 'Saving...' : 'Continue'}
                                     </Button>
                                 </form>
@@ -443,7 +443,7 @@ export function CreateLeadForm() {
                                 </div>
                                 <div className="flex gap-2">
                                     <Button htmlType="button" variant="plain" size="sm" onClick={chooseNewClient}>Not this client</Button>
-                                    <Button htmlType="button" className="flex-1" onClick={() => advance(3)}>Continue</Button>
+                                    <Button htmlType="button" onClick={() => advance(3)}>Continue</Button>
                                 </div>
                             </div>
                         ) : null
@@ -593,7 +593,7 @@ export function CreateLeadForm() {
                                 <FormField control={reqForm.control} name="notes" render={({ field }) => (
                                     <FormItem><FormLabel>Notes <span className="text-muted-foreground text-xs">(optional)</span></FormLabel><FormControl><Input placeholder="Any additional context" {...field} /></FormControl><FormMessage /></FormItem>
                                 )} />
-                                <Button htmlType="submit" disabled={submitting} className="w-full">
+                                <Button htmlType="submit" disabled={submitting}>
                                     {submitting ? 'Creating...' : 'Create Lead'}
                                 </Button>
                             </form>

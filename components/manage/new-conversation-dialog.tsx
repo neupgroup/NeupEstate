@@ -108,7 +108,7 @@ export function NewConversationDialog() {
                                 </FormItem>
                             )}
                         />
-                        <Button htmlType="submit" className="w-full" disabled={isPending}>
+                        <Button htmlType="submit" disabled={isPending}>
                             {isPending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating...</> : 'Create and Continue'}
                         </Button>
                     </form>

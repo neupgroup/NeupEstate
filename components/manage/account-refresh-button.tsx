@@ -80,7 +80,6 @@ export function AccountRefreshButton({
         size="sm"
         onClick={handleClick}
         disabled={status === 'loading'}
-        className="gap-1.5"
       >
         {status === 'loading' ? (
           <Loader2 className="h-3.5 w-3.5 animate-spin" />

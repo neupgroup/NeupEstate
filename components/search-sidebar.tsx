@@ -95,7 +95,7 @@ const Stepper = ({ label, state, onChange }: { label: string, state: StepperStat
 
     return (
         <div className="flex items-center justify-between bg-secondary p-1 rounded-md">
-            <Button htmlType="button" variant="plain" size="icon" className="h-8 w-8" onClick={handleDecrement}>
+            <Button htmlType="button" variant="plain" size="icon" onClick={handleDecrement}>
                 <Minus className="h-4 w-4" />
             </Button>
             <Label 
@@ -104,7 +104,7 @@ const Stepper = ({ label, state, onChange }: { label: string, state: StepperStat
             >
                 {getLabelText()}
             </Label>
-             <Button htmlType="button" variant="plain" size="icon" className="h-8 w-8" onClick={handleIncrement}>
+             <Button htmlType="button" variant="plain" size="icon" onClick={handleIncrement}>
                 <Plus className="h-4 w-4" />
             </Button>
         </div>
@@ -269,7 +269,7 @@ export function SearchSidebar({ initialFilters }: { initialFilters?: PropertyFil
             )}
           </FilterSection>
 
-          <Button htmlType="submit" className="w-full">Apply Filters</Button>
+          <Button htmlType="submit">Apply Filters</Button>
         </form>
       </CardContent>
     </Card>

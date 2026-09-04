@@ -1,5 +1,4 @@
-import { ClientLink } from "@/components/estate";
-import { buttonVariants } from "#/components/ui/button";
+import { LinkButton } from "#/components/ui/link-button";
 import { cn } from "#/core/utils";
 import { Section } from "@/components/home/_components/section";
 import { UserCheck, Building2 } from "lucide-react";
@@ -33,12 +32,13 @@ export function StartWithNeupEstate({ showAgentCard = true, showCards = true }: 
                             Register as a real estate agent and connect with buyers, sellers, and renters across Nepal.
                         </p>
                     </div>
-                    <ClientLink
+                    <LinkButton
                         href="/agents/register"
-                        className={cn(buttonVariants({ variant: "solid", size: "sm" }), "mt-auto")}
+                        variant="solid"
+                        size="sm"
                     >
                         Get Started
-                    </ClientLink>
+                    </LinkButton>
                 </div>
                 )}
 
@@ -53,12 +53,13 @@ export function StartWithNeupEstate({ showAgentCard = true, showCards = true }: 
                             Establish your agency's presence on NeupEstate and manage your team and listings in one place.
                         </p>
                     </div>
-                    <ClientLink
+                    <LinkButton
                         href="/agencies/register"
-                        className={cn(buttonVariants({ variant: "outlined", size: "sm" }), "mt-auto")}
+                        variant="outlined"
+                        size="sm"
                     >
                         Create Profile
-                    </ClientLink>
+                    </LinkButton>
                 </div>
                 </div>
             )}

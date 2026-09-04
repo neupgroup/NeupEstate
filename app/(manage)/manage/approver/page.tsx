@@ -254,7 +254,7 @@ export default function IntelligencePage() {
                                     <Input id="approval-limit" name="limit" type="number" defaultValue="50" min="1" max="1000" disabled={isAgentRunning} />
                                 </div>
                                 <div className="w-full sm:w-auto self-end">
-                                    <Button htmlType="submit" disabled={isAgentRunning} className="w-full sm:w-auto">
+                                    <Button htmlType="submit" disabled={isAgentRunning}>
                                         {isApprovalAgentRunning ? (
                                             <>
                                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -289,7 +289,7 @@ export default function IntelligencePage() {
                                     <Input id="amendment-limit" name="limit" type="number" defaultValue="50" min="1" max="1000" disabled={isAgentRunning} />
                                 </div>
                                 <div className="w-full sm:w-auto self-end">
-                                     <Button htmlType="submit" disabled={isAgentRunning} className="w-full sm:w-auto">
+                                     <Button htmlType="submit" disabled={isAgentRunning}>
                                         {isAmendmentAgentRunning ? (
                                             <>
                                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -324,7 +324,7 @@ export default function IntelligencePage() {
                                     <Input id="assurance-limit" name="limit" type="number" defaultValue="50" min="1" max="1000" disabled={isAgentRunning} />
                                 </div>
                                 <div className="w-full sm:w-auto self-end">
-                                    <Button htmlType="submit" disabled={isAgentRunning} className="w-full sm:w-auto">
+                                    <Button htmlType="submit" disabled={isAgentRunning}>
                                         {isAssuranceAgentRunning ? (
                                             <>
                                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

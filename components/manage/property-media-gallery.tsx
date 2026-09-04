@@ -339,7 +339,6 @@ export function PropertyMediaGallery({
         <LinkButton
           href={galleryHref}
           variant="tinted"
-          className="absolute bottom-4 right-4 z-20 gap-2 rounded-full border border-border/70 bg-background/95 px-4 shadow-lg backdrop-blur hover:bg-background"
         >
           <Grid2x2 className="h-4 w-4" />
           Show all photos

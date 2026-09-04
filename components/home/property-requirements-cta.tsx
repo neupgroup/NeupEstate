@@ -1,6 +1,4 @@
-import { ClientLink } from "@/components/estate";
-import { buttonVariants } from "#/components/ui/button";
-import { cn } from "#/core/utils";
+import { LinkButton } from "#/components/ui/link-button";
 import { FileSearch } from "lucide-react";
 import { Section } from "@/components/home/_components/section";
 
@@ -13,10 +11,9 @@ export function PropertyRequirementsCTA() {
                   Let us know your requirements, and our expert agents will find the perfect property for you.
               </p>
               <div className="mt-6">
-                  <ClientLink href="/requests/create" className={cn(buttonVariants({ size: 'lg' }))}>
-                      <FileSearch className="mr-2 h-5 w-5" />
+                  <LinkButton href="/requests/create" size="lg" preIcon={<FileSearch />}>
                       Post Your Requirements
-                  </ClientLink>
+                  </LinkButton>
               </div>
           </div>
       </Section>

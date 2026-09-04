@@ -11,7 +11,7 @@ import { sendMessageAction } from '@/services/communications';
 function SubmitButton() {
     const { pending } = useFormStatus();
     return (
-         <Button size="icon" className="h-10 w-10" htmlType="submit" disabled={pending}>
+         <Button size="icon" htmlType="submit" disabled={pending}>
             {pending ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
             <span className="sr-only">Send message</span>
         </Button>

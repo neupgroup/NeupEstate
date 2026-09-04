@@ -218,7 +218,6 @@ export function PropertyGalleryFullPage({
           size="icon"
           onClick={copyPropertyLink}
           aria-label="Copy property link"
-          className="h-9 w-11 shrink-0 rounded-lg text-white hover:bg-white/10 hover:text-white"
         >
           {copied ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
         </Button>
@@ -228,7 +227,6 @@ export function PropertyGalleryFullPage({
           variant="plain"
           size="icon"
           aria-label="Close gallery"
-          className="h-9 w-11 shrink-0 rounded-lg text-white hover:bg-white/10 hover:text-white"
         >
           <X className="h-5 w-5" />
         </LinkButton>
@@ -247,7 +245,6 @@ export function PropertyGalleryFullPage({
             onClick={showPreviousImage}
             disabled={isFirstImage}
             aria-label="Previous image"
-            className="absolute left-2 top-1/2 z-10 h-10 w-12 -translate-y-1/2 rounded-lg bg-black/25 text-white hover:bg-white/15 hover:text-white disabled:pointer-events-none disabled:opacity-30 sm:left-4"
           >
             <ChevronLeft className="h-6 w-6" />
           </Button>
@@ -275,7 +272,6 @@ export function PropertyGalleryFullPage({
             onClick={showNextImage}
             disabled={isLastImage}
             aria-label="Next image"
-            className="absolute right-2 top-1/2 z-10 h-10 w-12 -translate-y-1/2 rounded-lg bg-black/25 text-white hover:bg-white/15 hover:text-white disabled:pointer-events-none disabled:opacity-30 sm:right-4"
           >
             <ChevronRight className="h-6 w-6" />
           </Button>

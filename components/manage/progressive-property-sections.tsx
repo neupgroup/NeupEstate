@@ -552,9 +552,6 @@ export function ProgressivePropertySections({
                                         htmlType="button"
                                         size="sm"
                                         variant={nextError ? "outlined" : "tinted"}
-                                        className={cn(
-                                            nextError && "border-destructive text-destructive hover:bg-destructive/10"
-                                        )}
                                         onClick={handleNext}
                                     >
                                         Continue

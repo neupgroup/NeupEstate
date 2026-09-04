@@ -147,7 +147,7 @@ export function PropertyQA({ propertyId }: PropertyQAProps) {
                         </div>
                         <FormField control={form.control} name="phone" render={({ field }) => (<FormItem><FormLabel>Phone (Optional)</FormLabel><FormControl><Input placeholder="Your Phone Number" {...field} /></FormControl><FormMessage /></FormItem>)}/>
                         <FormField control={form.control} name="question" render={({ field }) => (<FormItem><FormLabel>Question</FormLabel><FormControl><Textarea placeholder="Type your question here..." {...field} /></FormControl><FormMessage /></FormItem>)}/>
-                        <Button htmlType="submit" className="w-full" disabled={isSubmitting}>
+                        <Button htmlType="submit" disabled={isSubmitting}>
                             {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
                             Submit Inquiry
                         </Button>
@@ -171,7 +171,6 @@ export function PropertyQA({ propertyId }: PropertyQAProps) {
                                     key={i}
                                     htmlType="button"
                                     variant="text"
-                                    className="h-auto p-0 text-left text-sm text-primary whitespace-normal"
                                     onClick={() => handleQuestionSelect(q)}
                                 >
                                     {q}

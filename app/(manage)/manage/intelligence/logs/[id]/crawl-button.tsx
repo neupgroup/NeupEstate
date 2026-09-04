@@ -65,7 +65,6 @@ export function CrawlSourcesButton({ competitorId }: CrawlButtonProps) {
         disabled={isLoading}
         variant="solid"
         size="sm"
-        className="gap-2"
       >
         <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
         {isLoading ? 'Crawling...' : 'Crawl Sources'}

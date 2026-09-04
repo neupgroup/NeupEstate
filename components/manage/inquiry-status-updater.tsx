@@ -75,7 +75,6 @@ export function InquiryStatusUpdater({ inquiryId, currentStatus }: InquiryStatus
             <Button
                 variant="text"
                 size="sm"
-                className="h-auto p-0 text-xs"
                 onClick={() => handleStatusChange('new')}
                 disabled={isPending}
             >

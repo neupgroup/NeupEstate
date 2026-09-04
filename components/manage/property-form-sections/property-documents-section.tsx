@@ -127,7 +127,7 @@ function DocumentGroup({ control, index: docIndex, remove }: { control: Control<
                                 </FormItem>
                             )}
                         />
-                        <Button htmlType="button" variant="plain" size="icon" className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 text-destructive hover:text-destructive" onClick={() => removeUrl(urlIndex)}><Trash2 className="h-4 w-4" /></Button>
+                        <Button htmlType="button" variant="plain" size="icon" onClick={() => removeUrl(urlIndex)}><Trash2 className="h-4 w-4" /></Button>
                     </div>
                 ))}
                 <Button htmlType="button" variant="outlined" size="sm" onClick={() => appendUrl({ value: '' })} disabled={isUploading}>
@@ -164,7 +164,7 @@ export function PropertyDocumentsSection({ control, fieldChangeNotes }: Property
                         remove={remove}
                     />
                 ))}
-                <Button htmlType="button" variant="outlined" className="w-full" onClick={() => append({ name: '', urls: [{ value: '' }] })}><PlusCircle className="mr-2 h-4 w-4" />Add property documents (pdf/jpeg/doc)</Button>
+                <Button htmlType="button" variant="outlined" onClick={() => append({ name: '', urls: [{ value: '' }] })}><PlusCircle className="mr-2 h-4 w-4" />Add property documents (pdf/jpeg/doc)</Button>
             </div>
         </section>
     );

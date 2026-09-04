@@ -65,7 +65,7 @@ export default async function AgentsPage() {
                 </CardContent>
                 <CardFooter className="p-4 mt-auto bg-secondary/30">
                     <ClientLink href={`/agents/${agent.slug}/contact`} className="w-full">
-                        <Button className="w-full" variant="outlined">
+                        <Button variant="outlined">
                             <MessageSquare className="mr-2 h-4 w-4"/>
                             Contact Agent
                         </Button>

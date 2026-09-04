@@ -5,9 +5,8 @@ Homepage call-to-action section that encourages owners to list a property.
 
 ::end
 */
-import { ClientLink } from "@/components/estate";
-import { buttonVariants } from "#/components/ui/button";
-import { cn } from "#/core/utils";
+import { LinkButton } from "#/components/ui/link-button";
+import { Home } from "lucide-react";
 import { Section } from "@/components/home/_components/section";
 
 export function PostPropertyCTA() {
@@ -19,9 +18,9 @@ export function PostPropertyCTA() {
                       Reach thousands of potential buyers and tenants by listing your property with us.
                   </p>
                   <div className="mt-6">
-                      <ClientLink href="/sell" className={cn(buttonVariants({ size: 'lg' }))}>
+                      <LinkButton href="/sell" size="lg" preIcon={<Home />}>
                           Post Your Property
-                      </ClientLink>
+                      </LinkButton>
                   </div>
               </div>
         </Section>

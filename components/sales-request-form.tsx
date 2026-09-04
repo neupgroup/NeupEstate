@@ -59,7 +59,7 @@ export function SalesRequestForm() {
                 <FormField control={form.control} name="propertyLocation" render={({ field }) => (<FormItem><FormLabel>Property Location</FormLabel><FormControl><Input placeholder="e.g., 123 Main St, Anytown USA" {...field} /></FormControl><FormMessage /></FormItem>)}/>
                 <FormField control={form.control} name="propertyType" render={({ field }) => (<FormItem><FormLabel>Property Type</FormLabel><FormControl><Input placeholder="e.g., 3-Bedroom House, Commercial Space" {...field} /></FormControl><FormMessage /></FormItem>)}/>
                 <FormField control={form.control} name="remarks" render={({ field }) => (<FormItem><FormLabel>Remarks / More Details (Optional)</FormLabel><FormControl><Textarea rows={5} placeholder="Tell us more about your property. e.g., 'Renovated in 2022, has a large backyard...'" {...field} /></FormControl><FormMessage /></FormItem>)}/>
-                <Button htmlType="submit" className="w-full" disabled={isSubmitting}>
+                <Button htmlType="submit" disabled={isSubmitting}>
                     {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
                     Submit Sales Request
                 </Button>
