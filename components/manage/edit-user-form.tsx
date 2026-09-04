@@ -235,7 +235,7 @@ export function EditUserForm({ user, account }: EditUserFormProps) {
                                         </div>
                                     ))}
                                     {savedProperties.length > 10 && (
-                                         <LinkButton variant="outlined" href={`/manage/users/${user.id}/activity`}>View All Activity</LinkButton>
+                                         <LinkButton variant="outlined" href={`/manage/users/${user.id}/activity`} basePath={true}>View All Activity</LinkButton>
                                     )}
                                 </div>
                              ) : (

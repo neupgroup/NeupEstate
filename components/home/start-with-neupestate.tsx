@@ -34,6 +34,7 @@ export function StartWithNeupEstate({ showAgentCard = true, showCards = true }: 
                     </div>
                     <LinkButton
                         href="/agents/register"
+                        basePath={true}
                         variant="solid"
                         size="sm"
                     >
@@ -55,6 +56,7 @@ export function StartWithNeupEstate({ showAgentCard = true, showCards = true }: 
                     </div>
                     <LinkButton
                         href="/agencies/register"
+                        basePath={true}
                         variant="outlined"
                         size="sm"
                     >

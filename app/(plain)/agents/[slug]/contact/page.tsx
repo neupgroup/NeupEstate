@@ -38,17 +38,17 @@ export default async function AgentContactPage({ params }: { params: Promise<{ s
                     <h3 className="text-lg font-semibold text-center">Contact Options</h3>
                     <div className="space-y-2">
                         {agent.contact.phone && (
-                            <LinkButton href={`tel:${agent.contact.phone}`}>
+                            <LinkButton href={`tel:${agent.contact.phone}`} basePath={true}>
                                 <Phone className="mr-4 h-5 w-5"/> Call Agent
                             </LinkButton>
                         )}
                          {agent.contact.phone && (
-                            <LinkButton href={`https://wa.me/${agent.contact.phone.replace(/[^0-9]/g, '')}`} target="_blank">
+                            <LinkButton href={`https://wa.me/${agent.contact.phone.replace(/[^0-9]/g, '')}`} basePath={true} target="_blank">
                                 <WhatsAppIcon className="mr-4 h-5 w-5"/> Start WhatsApp Chat
                             </LinkButton>
                         )}
                         {agent.contact.email && (
-                            <LinkButton variant="outlined" href={`mailto:${agent.contact.email}`}>
+                            <LinkButton variant="outlined" href={`mailto:${agent.contact.email}`} basePath={true}>
                                 <Mail className="mr-4 h-5 w-5"/> Send Email
                             </LinkButton>
                         )}
@@ -57,7 +57,7 @@ export default async function AgentContactPage({ params }: { params: Promise<{ s
                         </Button>
                     </div>
                      <div className="pt-4 text-center">
-                         <LinkButton href={`/agents/${agent.slug}`} variant="text">Back to profile</LinkButton>
+                         <LinkButton href={`/agents/${agent.slug}`} basePath={true} variant="text">Back to profile</LinkButton>
                     </div>
                 </CardContent>
             </Card>

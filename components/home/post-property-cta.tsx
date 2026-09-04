@@ -18,7 +18,7 @@ export function PostPropertyCTA() {
                       Reach thousands of potential buyers and tenants by listing your property with us.
                   </p>
                   <div className="mt-6">
-                      <LinkButton href="/sell" size="lg" preIcon={<Home />}>
+                      <LinkButton href="/sell" basePath={true} size="lg" preIcon={<Home />}>
                           Post Your Property
                       </LinkButton>
                   </div>

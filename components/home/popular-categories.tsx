@@ -1,5 +1,5 @@
 import { Card } from "#/components/ui/card";
-import { ClientLink } from "@/components/estate";
+import { Link } from "#/components/ui/link";
 import { Home, Building, Briefcase, Sofa, LandPlot } from "lucide-react";
 import { Section } from "@/components/home/_components/section";
 import { SectionTitle } from "@/components/home/_components/section-title";
@@ -23,12 +23,12 @@ export function PopularCategories() {
       </p>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
         {categories.map((category) => (
-          <ClientLink href={category.href} key={category.name}>
+          <Link href={category.href} basePath={true} key={category.name}>
             <Card className="text-center p-4 card-hover-effect">
               <div className="flex justify-center text-primary mb-2">{category.icon}</div>
               <p className="font-semibold text-sm">{category.name}</p>
             </Card>
-          </ClientLink>
+          </Link>
         ))}
       </div>
     </Section>
