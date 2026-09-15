@@ -8,7 +8,7 @@ function normalizePath(pathname: string): string {
 function matchesGlob(pathname: string, pattern: string): boolean {
   const normalizedPath = normalizePath(pathname);
   const normalizedPattern = normalizePath(pattern.trim());
-  const prefix = normalizedPattern.replace(/\*+$/g, '');
+  const prefix = normalizedPattern.replace(/\*+@base/g, '');
   return normalizedPath.startsWith(prefix);
 }
 

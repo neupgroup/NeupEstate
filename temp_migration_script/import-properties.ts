@@ -29,7 +29,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import slugify from 'slugify';
-import { prisma } from '#/core/database/prisma';
+import { prisma } from '@neup/core/database/prisma';
 
 const SOURCE_SQL = path.join(path.dirname(fileURLToPath(import.meta.url)), 'index.sql');
 const MEDIA_BASE_URL = 'https://api.propertyinnepal.com.np/storage';
@@ -116,9 +116,9 @@ function parseInsertStatement(statement: string, table: string): Row[] {
   const match = statement.match(header);
   if (!match?.[1]) return [];
 
-  const columns = match[1].split(',').map((column) => column.trim().replace(/^`|`$/g, ''));
+  const columns = match[1].split(',').map((column) => column.trim().replace(/^`|`@base/g, ''));
   const valuesStart = match.index! + match[0].length;
-  const tuples = splitTuples(statement.slice(valuesStart).replace(/;\s*$/, ''));
+  const tuples = splitTuples(statement.slice(valuesStart).replace(/;\s*@base/, ''));
 
   return tuples.map((tuple) => {
     const values = parseTupleValues(tuple);
@@ -225,8 +225,8 @@ function decodeMysqlEscape(char: string): string {
 function normalizeSqlToken(token: string, wasString: boolean): SqlValue {
   if (wasString) return token;
   const trimmed = token.trim();
-  if (!trimmed || /^null$/i.test(trimmed)) return null;
-  if (/^-?\d+(\.\d+)?$/.test(trimmed)) return Number(trimmed);
+  if (!trimmed || /^null@base/i.test(trimmed)) return null;
+  if (/^-?\d+(\.\d+)?@base/.test(trimmed)) return Number(trimmed);
   return trimmed;
 }
 

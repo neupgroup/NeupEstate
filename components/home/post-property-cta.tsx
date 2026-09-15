@@ -5,7 +5,7 @@ Homepage call-to-action section that encourages owners to list a property.
 
 ::end
 */
-import { LinkButton } from "#/components/ui/link-button";
+import { LinkButton } from "@neup/components/ui/link-button";
 import { Home } from "lucide-react";
 import { Section } from "@/components/home/_components/section";
 

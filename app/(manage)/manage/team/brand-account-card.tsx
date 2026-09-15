@@ -1,8 +1,8 @@
 'use client';
 
 import { SafeImage } from "@/components/safe-image";
-import { Badge } from "#/components/ui/badge";
-import { Button } from "#/components/ui/button";
+import { Badge } from "@neup/components/ui/badge";
+import { Button } from "@neup/components/ui/button";
 import { resolveStoredAccountType } from "@/services/account-type";
 import { Building } from "lucide-react";
 import { useState, type MouseEvent } from "react";

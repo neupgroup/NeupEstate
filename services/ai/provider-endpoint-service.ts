@@ -33,11 +33,11 @@ It keeps transport logic out of `app/api/*` route files.
 
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import type { DirectAiMessage, DirectAiRequest } from '#/core/intelligence/_types';
-import { requestAnthropicCompletion } from '#/core/intelligence/anthropic';
-import { requestGoogleAiCompletion } from '#/core/intelligence/googleai';
-import { requestOpenAiCompletion } from '#/core/intelligence/openai';
-import { requestOpenRouterCompletion } from '#/core/intelligence/openrouter';
+import type { DirectAiMessage, DirectAiRequest } from '@neup/core/intelligence/_types';
+import { requestAnthropicCompletion } from '@neup/core/intelligence/anthropic';
+import { requestGoogleAiCompletion } from '@neup/core/intelligence/googleai';
+import { requestOpenAiCompletion } from '@neup/core/intelligence/openai';
+import { requestOpenRouterCompletion } from '@neup/core/intelligence/openrouter';
 import { logProblem } from '@/services/problem-service';
 
 type ProviderName = 'googleai' | 'openai' | 'anthropic' | 'openrouter';

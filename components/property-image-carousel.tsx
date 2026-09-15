@@ -6,7 +6,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "#/components/ui/carousel"
+} from "@neup/components/ui/carousel"
 import { SafeImage } from "./safe-image"
 
 interface PropertyImageCarouselProps {

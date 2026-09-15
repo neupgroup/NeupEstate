@@ -10,15 +10,15 @@ import {
 } from "@/components/ui/dialog";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
-} from "#/components/ui/alert-dialog";
-import { Button } from '#/components/ui/button';
-import { Input } from '#/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
-import { Alert, AlertTitle, AlertDescription } from '#/components/ui/alert';
+} from "@neup/components/ui/alert-dialog";
+import { Button } from '@neup/components/ui/button';
+import { Input } from '@neup/components/ui/input';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
+import { Alert, AlertTitle, AlertDescription } from '@neup/components/ui/alert';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '#/components/ui/textarea';
-import { useToast } from '#/core/hooks/useToast';
+import { Textarea } from '@neup/components/ui/textarea';
+import { useToast } from '@neup/core/hooks/useToast';
 import { createFaqAction, updateFaqAction, deleteFaqAction } from '@/services/content';
 import type { FAQ, CreateFaqFormValues } from '@/types';
 import { CreateFaqSchema, FaqCategorySchema } from '@/types';
@@ -28,7 +28,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "#/components/ui/accordion";
+} from "@neup/components/ui/accordion";
 
 
 function FaqForm({

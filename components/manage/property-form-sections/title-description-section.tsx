@@ -6,13 +6,13 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { Bold, Building2, Italic, List, ListOrdered, Pilcrow, Underline, UserRound } from "lucide-react";
 import { CreatePropertyFormValues } from "@/types";
 import { ClientLink } from "@/components/client-link";
-import { Avatar, AvatarFallback, AvatarImage } from "#/components/ui/avatar";
-import { Button } from "#/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@neup/components/ui/avatar";
+import { Button } from "@neup/components/ui/button";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "#/components/ui/input";
+import { Input } from "@neup/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { cn } from "#/core/utils";
+import { cn } from "@neup/core/utils";
 
 interface TitleDescriptionSectionProps {
     control: Control<CreatePropertyFormValues>;

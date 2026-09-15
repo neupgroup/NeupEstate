@@ -9,11 +9,11 @@ import { CreateAgencySchema, type Agency, type CreateAgencyFormValues } from '@/
 import { updateAgencyAction, deleteAgencyAction } from '@/services/agency';
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '#/components/ui/input';
-import { Button } from '#/components/ui/button';
-import { useToast } from '#/core/hooks/useToast';
+import { Input } from '@neup/components/ui/input';
+import { Button } from '@neup/components/ui/button';
+import { useToast } from '@neup/core/hooks/useToast';
 import { Loader2, Trash2, Pencil } from 'lucide-react';
-import { Textarea } from '#/components/ui/textarea';
+import { Textarea } from '@neup/components/ui/textarea';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,7 +24,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "#/components/ui/alert-dialog"
+} from "@neup/components/ui/alert-dialog"
 
 interface EditAgencyFormProps {
     agency: Agency;

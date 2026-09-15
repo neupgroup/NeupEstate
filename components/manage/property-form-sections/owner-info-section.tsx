@@ -5,10 +5,10 @@ import { Control, UseFormSetValue, useFieldArray, useWatch } from "react-hook-fo
 import { CreatePropertyFormValues, User } from "@/types";
 import { searchClients } from "@/services/leads/search";
 import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "#/components/ui/input";
-import { Button } from "#/components/ui/button";
+import { Input } from "@neup/components/ui/input";
+import { Button } from "@neup/components/ui/button";
 import { PlusCircle, Search, Star, Trash2 } from "lucide-react";
-import { cn } from "#/core/utils";
+import { cn } from "@neup/core/utils";
 
 type ClientSearchResult = {
     id: string;

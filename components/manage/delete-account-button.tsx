@@ -12,10 +12,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "#/components/ui/alert-dialog";
-import { Button } from '#/components/ui/button';
+} from "@neup/components/ui/alert-dialog";
+import { Button } from '@neup/components/ui/button';
 import { Trash2, Loader2 } from 'lucide-react';
-import { useToast } from '#/core/hooks/useToast';
+import { useToast } from '@neup/core/hooks/useToast';
 import { deleteAccountAction } from '@/services/communications';
 
 interface DeleteAccountButtonProps {

@@ -10,9 +10,9 @@ import { createAgentAction } from '@/services/agents';
 import { getUsers } from '@/services/user-service';
 
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '#/components/ui/input';
-import { Button } from '#/components/ui/button';
-import { useToast } from '#/core/hooks/useToast';
+import { Input } from '@neup/components/ui/input';
+import { Button } from '@neup/components/ui/button';
+import { useToast } from '@neup/core/hooks/useToast';
 import { Loader2 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';

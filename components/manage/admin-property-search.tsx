@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { Input } from '#/components/ui/input';
-import { Button } from '#/components/ui/button';
+import { Input } from '@neup/components/ui/input';
+import { Button } from '@neup/components/ui/button';
 import { Search, X, SlidersHorizontal } from 'lucide-react';
-import { cn } from '#/core/utils';
+import { cn } from '@neup/core/utils';
 import { PriceInput } from '@/components/ui/price-input';
 
 // ─── Quick filter definitions ─────────────────────────────────────────────────

@@ -5,11 +5,11 @@ import { Control, useFieldArray, useFormContext } from "react-hook-form";
 import { useState } from "react";
 import { CreatePropertyFormValues } from "@/types";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
-import { Button } from "#/components/ui/button";
-import { Input } from "#/components/ui/input";
+import { Button } from "@neup/components/ui/button";
+import { Input } from "@neup/components/ui/input";
 import { PlusCircle, Trash2 } from "lucide-react";
-import { Label } from "#/components/ui/label";
-import { useToast } from "#/core/hooks/useToast";
+import { Label } from "@neup/components/ui/label";
+import { useToast } from "@neup/core/hooks/useToast";
 import { uploadPropertyMediaFile } from "./media-upload";
 
 // Sub-component to handle nested useFieldArray

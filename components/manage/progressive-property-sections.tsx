@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { AgencyCustomizationRule, CreatePropertyFormValues, User } from "@/types";
-import { Button, buttonVariants } from "#/components/ui/button";
+import { Button, buttonVariants } from "@neup/components/ui/button";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -15,7 +15,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-} from "#/components/ui/alert-dialog";
+} from "@neup/components/ui/alert-dialog";
 import { AlertCircle, ArrowLeft, CornerDownRight } from "lucide-react";
 import { BasicDetailsSection } from "@/components/manage/property-form-sections/basic-details-section";
 import { PropertySpecificsSection } from "@/components/manage/property-form-sections/property-specifics-section";
@@ -27,7 +27,7 @@ import { OwnerInfoSection } from "@/components/manage/property-form-sections/own
 import { PropertyPhotosSection } from "@/components/manage/property-form-sections/property-photos-section";
 import { PropertyDocumentsSection } from "@/components/manage/property-form-sections/property-documents-section";
 import { TitleDescriptionSection } from "@/components/manage/property-form-sections/title-description-section";
-import { cn } from "#/core/utils";
+import { cn } from "@neup/core/utils";
 import { evaluateAgencyCustomization } from "@/inapp/agency-customization/evaluate-agency-customization";
 
 type PropertyFormStep = {
@@ -75,7 +75,7 @@ function labelForPath(path: string): string {
 
     const normalized = path
         .replace(/\.\d+(?=\.|$)/g, "")
-        .replace(/\.[^.]+$/g, (part) => (/^[a-z0-9-]+$/i.test(part.slice(1)) ? "" : part));
+        .replace(/\.[^.]+@base/g, (part) => (/^[a-z0-9-]+@base/i.test(part.slice(1)) ? "" : part));
 
     if (FIELD_LABELS[normalized]) return FIELD_LABELS[normalized];
 
@@ -496,7 +496,7 @@ export function ProgressivePropertySections({
         }
 
         if (pathname.endsWith("/edit")) {
-            router.push(pathname.replace(/\/edit$/, ""));
+            router.push(pathname.replace(/\/edit@base/, ""));
             return;
         }
 

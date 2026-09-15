@@ -2,7 +2,7 @@
 "use client";
 
 import { useTransition } from 'react';
-import { Button } from "#/components/ui/button";
+import { Button } from "@neup/components/ui/button";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,9 +13,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "#/components/ui/alert-dialog"
+} from "@neup/components/ui/alert-dialog"
 import { Trash2, Loader2 } from 'lucide-react';
-import { useToast } from '#/core/hooks/useToast';
+import { useToast } from '@neup/core/hooks/useToast';
 import { clearAllProblemsAction } from '@/services/automation';
 
 export function ClearLogsButton() {

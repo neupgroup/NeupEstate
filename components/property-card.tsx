@@ -11,16 +11,16 @@ Reusable public property card used across homepage, search, saved, and collectio
 
 import Link from "next/link";
 import type { Property } from "@/types";
-import { Button } from "#/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "#/components/ui/card";
-import { Badge } from "#/components/ui/badge";
+import { Button } from "@neup/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@neup/components/ui/card";
+import { Badge } from "@neup/components/ui/badge";
 import { Heart, Loader2, Star, MapPin } from "lucide-react";
 import { useState, useTransition, useEffect } from "react";
-import { cn } from "#/core/utils";
+import { cn } from "@neup/core/utils";
 import { getHiddenPriceLabel, getPrimaryCurrency, getPrimaryPrice, getPrimaryPricingSuffix } from "@/services/property/price-display";
 import { SafeImage } from "./safe-image";
 import { isPropertySavedAction, toggleSavePropertyAction } from '@/services/property/saved-actions';
-import { useToast } from "#/core/hooks/useToast";
+import { useToast } from "@neup/core/hooks/useToast";
 import { getClientAccountId } from "@/services/account/get-account-id";
 
 interface PropertyCardProps {

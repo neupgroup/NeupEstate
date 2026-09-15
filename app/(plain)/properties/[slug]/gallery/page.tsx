@@ -11,7 +11,7 @@ import { notFound, redirect } from "next/navigation";
 import { getPropertyById, getPropertyBySlug } from "@/services/property";
 import { logProblem } from "@/services/problem-service";
 import { PropertyGalleryFullPage } from "@/components/manage/property-gallery-full-page";
-import { Button } from "#/components/ui/button";
+import { Button } from "@neup/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
 type PropertyGalleryPageProps = {

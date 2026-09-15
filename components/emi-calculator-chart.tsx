@@ -2,14 +2,14 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Card, CardContent, CardFooter } from '#/components/ui/card';
+import { Card, CardContent, CardFooter } from '@neup/components/ui/card';
 import { Slider } from '@/components/ui/slider';
-import { Label } from '#/components/ui/label';
-import { Input } from '#/components/ui/input';
+import { Label } from '@neup/components/ui/label';
+import { Input } from '@neup/components/ui/input';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis, Legend } from 'recharts';
-import type { ChartConfig } from '#/components/ui/chart';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '#/components/ui/chart';
-import { Button } from '#/components/ui/button';
+import type { ChartConfig } from '@neup/components/ui/chart';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@neup/components/ui/chart';
+import { Button } from '@neup/components/ui/button';
 import { Banknote, FileQuestion } from 'lucide-react';
 import { ClientLink } from './client-link';
 

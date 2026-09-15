@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { X } from "lucide-react";
-import { cn } from "#/core/utils";
+import { cn } from "@neup/core/utils";
 
 interface CounterCardProps {
     name: string;
@@ -52,7 +52,7 @@ export function CounterCard({
             return;
         }
         const parsed = Number(text);
-        if (Number.isFinite(parsed) && /^\d+$/.test(text.trim())) {
+        if (Number.isFinite(parsed) && /^\d+@base/.test(text.trim())) {
             select(parsed);
             return;
         }
@@ -92,7 +92,7 @@ export function CounterCard({
                     value={text}
                     onChange={(event) => {
                         const nextText = event.target.value;
-                        if (nextText === "" || /^\d*$/.test(nextText)) {
+                        if (nextText === "" || /^\d*@base/.test(nextText)) {
                             setText(nextText);
                             setTouched(true);
                         }

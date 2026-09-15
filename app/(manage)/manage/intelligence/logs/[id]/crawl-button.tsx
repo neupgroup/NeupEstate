@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '#/components/ui/button';
+import { Button } from '@neup/components/ui/button';
 import { RefreshCw, CheckCircle2 } from 'lucide-react';
 import { crawlCompetitorSourcesAction } from './actions';
-import { useToast } from '#/core/hooks/useToast';
+import { useToast } from '@neup/core/hooks/useToast';
 
 interface CrawlButtonProps {
   competitorId: string;

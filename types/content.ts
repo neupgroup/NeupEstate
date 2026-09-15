@@ -22,7 +22,7 @@ export interface FAQ {
 }
 
 // Prompt
-const camelCaseRegex = /^[a-z]+([A-Z][a-z]*)*$/;
+const camelCaseRegex = /^[a-z]+([A-Z][a-z]*)*@base/;
 
 export const CreatePromptSchema = z.object({
   id: z.string().min(3, "ID must be at least 3 characters.").regex(camelCaseRegex, "ID must be in camelCase format (e.g., myPromptName)."),

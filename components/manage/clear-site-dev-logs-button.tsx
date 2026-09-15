@@ -2,7 +2,7 @@
 
 import { useTransition } from 'react';
 import { Loader2, Trash2 } from 'lucide-react';
-import { Button } from '#/components/ui/button';
+import { Button } from '@neup/components/ui/button';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,8 +13,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '#/components/ui/alert-dialog';
-import { useToast } from '#/core/hooks/useToast';
+} from '@neup/components/ui/alert-dialog';
+import { useToast } from '@neup/core/hooks/useToast';
 import { clearSiteDevLogsAction } from '@/services/communications';
 
 export function ClearSiteDevLogsButton() {

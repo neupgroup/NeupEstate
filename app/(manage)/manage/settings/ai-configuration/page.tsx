@@ -4,17 +4,17 @@
 import { useEffect, useState, useTransition } from 'react';
 import { getPrompts } from '@/services/prompt-service';
 import type { Prompt } from '@/services/prompt-service';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "#/components/ui/accordion";
-import { Button, buttonVariants } from '#/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@neup/components/ui/accordion";
+import { Button, buttonVariants } from '@neup/components/ui/button';
 import { Pencil, Info, Bot, PlusCircle, Trash2, Loader2 } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
-import { Skeleton } from '#/components/ui/skeleton';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "#/components/ui/alert-dialog";
-import { useToast } from '#/core/hooks/useToast';
+import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
+import { Skeleton } from '@neup/components/ui/skeleton';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@neup/components/ui/alert-dialog";
+import { useToast } from '@neup/core/hooks/useToast';
 import { deletePromptAction } from '@/services/content';
 import { ClientLink } from '@/components/client-link';
-import { cn } from '#/core/utils';
+import { cn } from '@neup/core/utils';
 
 export default function AiConfigurationPage() {
     const { toast } = useToast();

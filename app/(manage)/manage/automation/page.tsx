@@ -7,11 +7,11 @@ import { useEffect, useState, useActionState } from 'react';
 import { addSitemapAction, getNewUrlsFromSitemapAction, processSitemapUrlAction, updateSitemapCheckedTimeAction } from '@/services/automation';
 import { getSitemaps } from '@/services/sitemap-service';
 import type { Sitemap, SitemapLog } from '@/types';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
-import { Input } from '#/components/ui/input';
-import { Button } from '#/components/ui/button';
-import { useToast } from '#/core/hooks/useToast';
-import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
+import { Input } from '@neup/components/ui/input';
+import { Button } from '@neup/components/ui/button';
+import { useToast } from '@neup/core/hooks/useToast';
+import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { AlertCircle, CheckCircle, Loader2, Wand2, XCircle } from 'lucide-react';
 import {
   Table,
@@ -20,7 +20,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "#/components/ui/table";
+} from "@neup/components/ui/table";
 
 type SitemapCheckResult = {
     sitemapId: string;

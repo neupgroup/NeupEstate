@@ -8,12 +8,12 @@ import { useState, useTransition, useEffect } from 'react';
 import { UpdateAgentSchema, type Agent, type UpdateAgentFormValues, type User } from '@/types';
 import { updateAgentAction, deleteAgentAction } from '@/services/agents';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '#/components/ui/input';
-import { PhoneInput } from '#/components/ui/phone-input';
-import { Button } from '#/components/ui/button';
-import { useToast } from '#/core/hooks/useToast';
+import { Input } from '@neup/components/ui/input';
+import { PhoneInput } from '@neup/components/ui/phone-input';
+import { Button } from '@neup/components/ui/button';
+import { useToast } from '@neup/core/hooks/useToast';
 import { Loader2, Trash2, Pencil } from 'lucide-react';
 import {
   AlertDialog,
@@ -25,11 +25,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "#/components/ui/alert-dialog";
+} from "@neup/components/ui/alert-dialog";
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
-import { Badge } from "#/components/ui/badge";
-import { Textarea } from '#/components/ui/textarea';
+import { Badge } from "@neup/components/ui/badge";
+import { Textarea } from '@neup/components/ui/textarea';
 
 interface EditAgentFormProps {
     agent: Agent;

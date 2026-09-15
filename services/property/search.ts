@@ -43,7 +43,7 @@ import { deleteAccountAndData } from '@/services/account-service';
 import { createLead as createLeadService } from '@/services/leads/create';
 import { createLeadActivity as createLeadActivityService } from '@/services/leads/activity/create';
 import { getIdentity } from '@/services/neupid/get-identity';
-import { prisma } from '#/core/database/prisma';
+import { prisma } from '@neup/core/database/prisma';
 import { isAgencyLikeAccountType, promoteStoredAccountType } from '@/services/account-type';
 import { resolvePropertyPostingContext } from '@/services/property-posting-context';
 import { requireIdentity, formatLocationString, firstPositivePrice, cleanPricing, deepMergeJson, normalizeOwnerEntries, normalizeOwnerReferenceEntries, normalizePropertyChangeData, mapPropertyToCreateFormValues } from '@/services/property/action-helpers';
@@ -100,7 +100,7 @@ export async function searchProperties(
     } else {
       // It's a regular search, likely with a text query `q`.
       let parsedQueryFilters: PropertyFilters = {};
-      const isRecordId = q && typeof q === 'string' && /^c[a-z0-9]{24}$/.test(q as string);
+      const isRecordId = q && typeof q === 'string' && /^c[a-z0-9]{24}@base/.test(q as string);
 
       if (isRecordId) {
         parsedQueryFilters = { id: q as string };

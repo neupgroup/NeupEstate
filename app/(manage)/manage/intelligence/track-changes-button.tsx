@@ -2,8 +2,8 @@
 
 import { useTransition } from 'react';
 import { Loader2, Radar } from 'lucide-react';
-import { Button } from '#/components/ui/button';
-import { useToast } from '#/core/hooks/useToast';
+import { Button } from '@neup/components/ui/button';
+import { useToast } from '@neup/core/hooks/useToast';
 import { crawlAllCompetitorSourcesAction } from './competition/actions';
 
 export function TrackChangesButton() {

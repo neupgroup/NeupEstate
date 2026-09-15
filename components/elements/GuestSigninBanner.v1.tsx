@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Sparkles, ArrowRight } from "lucide-react";
-import { cn } from "#/core/utils";
+import { cn } from "@neup/core/utils";
 
 type GuestSigninBannerProps = {
   variant: "hero" | "inline";
@@ -60,4 +60,3 @@ export function GuestSigninBannerV1({ variant }: GuestSigninBannerProps) {
     </section>
   );
 }
-

@@ -175,7 +175,7 @@ const registeredAgentSchema = z.object({
     phone: z.string().optional(),
     photoUrl: z.string().optional(),
     specializations: z.string().optional(),
-    availability_hours: z.string().regex(/^\d{1,2}-\d{1,2}$/, "Format must be HH-HH, e.g., 9-17").optional().or(z.literal('')),
+    availability_hours: z.string().regex(/^\d{1,2}-\d{1,2}@base/, "Format must be HH-HH, e.g., 9-17").optional().or(z.literal('')),
     time_slot_duration: z.coerce.number().optional(),
     unavailability: z.any().optional(), // Simplified for form handling
 });
@@ -190,7 +190,7 @@ const manualAgentSchema = z.object({
     about: z.string().optional(),
     photoUrl: z.string().url({ message: "Please enter a valid photo URL." }).optional().or(z.literal('')),
     specializations: z.string().optional(),
-    availability_hours: z.string().regex(/^\d{1,2}-\d{1,2}$/, "Format must be HH-HH, e.g., 9-17").optional().or(z.literal('')),
+    availability_hours: z.string().regex(/^\d{1,2}-\d{1,2}@base/, "Format must be HH-HH, e.g., 9-17").optional().or(z.literal('')),
     time_slot_duration: z.coerce.number().optional(),
     unavailability: z.any().optional(), // Simplified for form handling
 });

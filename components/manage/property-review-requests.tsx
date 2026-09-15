@@ -2,9 +2,9 @@
 
 import * as React from "react";
 import { reviewPropertyChangeAction } from '@/services/property/drafts';
-import { Button } from "#/components/ui/button";
-import { Checkbox } from "#/components/ui/checkbox";
-import { useToast } from "#/core/hooks/useToast";
+import { Button } from "@neup/components/ui/button";
+import { Checkbox } from "@neup/components/ui/checkbox";
+import { useToast } from "@neup/core/hooks/useToast";
 import type { Property } from "@/types";
 import { PropertyImageGrid } from "@/components/manage/property-image-grid";
 import { useRouter } from "next/navigation";

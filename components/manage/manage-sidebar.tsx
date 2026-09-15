@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ExternalLink } from "lucide-react";
-import { buttonVariants } from "#/components/ui/button";
-import { cn } from "#/core/utils";
+import { buttonVariants } from "@neup/components/ui/button";
+import { cn } from "@neup/core/utils";
 import { manageNav } from "@/components/manage-nav";
 import { appendManageProfileParamV1, getLongestMatchingManageNavHrefV1 } from "@/components/logic/ManageNavSelection.v1";
 

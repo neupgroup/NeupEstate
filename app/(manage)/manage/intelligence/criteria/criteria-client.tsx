@@ -3,10 +3,10 @@
 import { useState, useTransition } from 'react';
 import { ChevronLeft, ChevronDown, Plus, Trash2, Filter } from 'lucide-react';
 import { ClientLink } from '@/components/client-link';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
-import { Button } from '#/components/ui/button';
-import { Input } from '#/components/ui/input';
-import { Badge } from '#/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
+import { Button } from '@neup/components/ui/button';
+import { Input } from '@neup/components/ui/input';
+import { Badge } from '@neup/components/ui/badge';
 import { createIntelligenceCriteriaAction, deleteIntelligenceCriteriaAction } from './actions';
 
 const PURPOSE_OPTIONS = ['rent', 'sale', 'sale.auction', 'sale.exchange'] as const;

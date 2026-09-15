@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { cn } from "#/core/utils";
+import { cn } from "@neup/core/utils";
 
 type RoadAccessUnit = "meter" | "feet" | "haat" | "inch";
 
@@ -91,7 +91,7 @@ t                     <span className="text-foreground">Road Access</span>
                     value={text}
                     onChange={(event) => {
                         const nextText = event.target.value;
-                        if (nextText === "" || /^\d*(?:\.\d*)?$/.test(nextText)) {
+                        if (nextText === "" || /^\d*(?:\.\d*)?@base/.test(nextText)) {
                             setText(nextText);
                             setTouched(true);
                         }

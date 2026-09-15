@@ -107,7 +107,7 @@ export default async function ManagePropertiesPage({
   if (minBathrooms)  filters.minBathrooms = minBathrooms;
 
   if (query) {
-    const isRecordId = /^c[a-z0-9]{24}$/.test(query);
+    const isRecordId = /^c[a-z0-9]{24}@base/.test(query);
     if (isRecordId)      { filters.id = query; }
     else {
       try {

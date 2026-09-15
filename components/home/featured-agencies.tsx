@@ -1,9 +1,9 @@
 import { getFeaturedAgencies } from "@/services/agency-service";
-import { Card } from "#/components/ui/card";
+import { Card } from "@neup/components/ui/card";
 import { SafeImage } from "@/components/safe-image";
 import { Section } from "@/components/home/_components/section";
 import { SectionTitle } from "@/components/home/_components/section-title";
-import { Link } from "#/components/ui/link";
+import { Link } from "@neup/components/ui/link";
 
 export async function FeaturedAgencies() {
     const agencies = await getFeaturedAgencies(4);

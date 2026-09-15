@@ -4,9 +4,9 @@
 import { useTransition } from 'react';
 import { updateInquiryStatusAction } from '@/services/content';
 import type { InquiryStatus } from '@/types';
-import { Button } from '#/components/ui/button';
-import { Badge } from '#/components/ui/badge';
-import { useToast } from '#/core/hooks/useToast';
+import { Button } from '@neup/components/ui/button';
+import { Badge } from '@neup/components/ui/badge';
+import { useToast } from '@neup/core/hooks/useToast';
 import { Check, Mail, Archive, Loader2, RotateCcw } from 'lucide-react';
 
 interface InquiryStatusUpdaterProps {

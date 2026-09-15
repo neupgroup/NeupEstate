@@ -8,11 +8,11 @@ import { naturalLanguagePropertySearch } from '@/services/property/search';
 import type { NaturalLanguageSearchOutput } from '@/types';
 
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
-import { Input } from '#/components/ui/input';
-import { Button } from '#/components/ui/button';
-import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
+import { Input } from '@neup/components/ui/input';
+import { Button } from '@neup/components/ui/button';
+import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { Lightbulb, Loader2 } from 'lucide-react';
-import { useToast } from '#/core/hooks/useToast';
+import { useToast } from '@neup/core/hooks/useToast';
 
 const formSchema = z.object({
   query: z.string().min(10, {

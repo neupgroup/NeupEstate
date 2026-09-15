@@ -3,11 +3,11 @@
 
 import { useTransition } from 'react';
 import { Switch } from '@/components/ui/switch';
-import { Label } from '#/components/ui/label';
-import { useToast } from '#/core/hooks/useToast';
+import { Label } from '@neup/components/ui/label';
+import { useToast } from '@neup/core/hooks/useToast';
 import { setAiInterventionAction } from '@/services/communications';
 import { Bot, User } from 'lucide-react';
-import { cn } from '#/core/utils';
+import { cn } from '@neup/core/utils';
 
 interface AiInterventionToggleProps {
   conversationId: string;

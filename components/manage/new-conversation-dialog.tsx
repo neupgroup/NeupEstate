@@ -12,12 +12,12 @@ import {
   DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Button } from '#/components/ui/button';
+import { Button } from '@neup/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '#/components/ui/input';
-import { PhoneInput } from '#/components/ui/phone-input';
-import { Textarea } from '#/components/ui/textarea';
-import { useToast } from '#/core/hooks/useToast';
+import { Input } from '@neup/components/ui/input';
+import { PhoneInput } from '@neup/components/ui/phone-input';
+import { Textarea } from '@neup/components/ui/textarea';
+import { useToast } from '@neup/core/hooks/useToast';
 import { Loader2, MessageSquarePlus } from 'lucide-react';
 import { CreateConversationSchema, type CreateConversationFormValues } from '@/types';
 import { createConversationAction } from '@/services/communications';

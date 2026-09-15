@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { Button } from '#/components/ui/button';
+import { Button } from '@neup/components/ui/button';
 import { Sparkles } from 'lucide-react';
 import { extractCompetitorListingAction } from './actions';
-import { useToast } from '#/core/hooks/useToast';
+import { useToast } from '@neup/core/hooks/useToast';
 
 export function ExtractListingButton({ competitorPageId }: { competitorPageId: string }) {
   const [isPending, startTransition] = useTransition();

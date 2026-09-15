@@ -9,16 +9,16 @@ import { CreateAgentSchema, type CreateAgentFormValues, type User } from '@/type
 import { createAgentAction } from '@/services/agents';
 import { getUsers } from '@/services/user-service';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '#/components/ui/input';
-import { PhoneInput } from '#/components/ui/phone-input';
-import { Button } from '#/components/ui/button';
-import { useToast } from '#/core/hooks/useToast';
+import { Input } from '@neup/components/ui/input';
+import { PhoneInput } from '@neup/components/ui/phone-input';
+import { Button } from '@neup/components/ui/button';
+import { useToast } from '@neup/core/hooks/useToast';
 import { Loader2 } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { Textarea } from '#/components/ui/textarea';
+import { Textarea } from '@neup/components/ui/textarea';
 
 export default function CreateAgentPage() {
     const router = useRouter();

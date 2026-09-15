@@ -4,18 +4,18 @@
 
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
-import { Input } from '#/components/ui/input';
-import { Button } from '#/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "#/components/ui/table";
-import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
+import { Input } from '@neup/components/ui/input';
+import { Button } from '@neup/components/ui/button';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@neup/components/ui/table";
+import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { Loader2, Search, Bookmark, AlertCircle, ExternalLink, User } from 'lucide-react';
 import { Property, User as UserType } from '@/types';
 import { getSavedPropertiesForUser, getUsersBySavedProperty } from '@/services/engagement';
 import { ClientLink } from '@/components/client-link';
 import { RelativeTime } from './relative-time';
 import { type SavedPropertyEntry } from '@/services/property';
-import { Label } from '#/components/ui/label';
+import { Label } from '@neup/components/ui/label';
 
 const SearchResultDisplay = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <Card className="mt-6">
@@ -177,5 +177,4 @@ export function SavedPropertiesDashboard({ initialSavedProperties }: { initialSa
         </div>
     );
 }
-
 

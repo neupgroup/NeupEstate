@@ -8,14 +8,14 @@ import { useTransition } from 'react';
 import { CreateAgencySchema, type CreateAgencyFormValues } from '@/types';
 import { createAgencyAction } from '@/services/agency';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '#/components/ui/input';
-import { PhoneInput } from '#/components/ui/phone-input';
-import { Button } from '#/components/ui/button';
-import { useToast } from '#/core/hooks/useToast';
+import { Input } from '@neup/components/ui/input';
+import { PhoneInput } from '@neup/components/ui/phone-input';
+import { Button } from '@neup/components/ui/button';
+import { useToast } from '@neup/core/hooks/useToast';
 import { Loader2 } from 'lucide-react';
-import { Textarea } from '#/components/ui/textarea';
+import { Textarea } from '@neup/components/ui/textarea';
 
 export default function CreateAgencyPage() {
     const router = useRouter();

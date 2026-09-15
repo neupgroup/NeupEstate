@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { Sparkles } from 'lucide-react';
-import { useToast } from '#/core/hooks/useToast';
+import { useToast } from '@neup/core/hooks/useToast';
 import { extractCompetitorListingAction } from '../listings/actions';
 
 export function FetchPropertyButton({

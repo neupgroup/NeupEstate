@@ -2,11 +2,11 @@
 
 import { useState, useTransition } from 'react';
 import { Plus, Trash2, Globe, Map, Link2, FileText, ChevronRight } from 'lucide-react';
-import { Button } from '#/components/ui/button';
-import { Input } from '#/components/ui/input';
-import { Textarea } from '#/components/ui/textarea';
-import { Badge } from '#/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
+import { Button } from '@neup/components/ui/button';
+import { Input } from '@neup/components/ui/input';
+import { Textarea } from '@neup/components/ui/textarea';
+import { Badge } from '@neup/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { ClientLink } from '@/components/client-link';
 import { createCompetitorAction, deleteCompetitorAction } from './actions';
 import type { Competitor } from './types';

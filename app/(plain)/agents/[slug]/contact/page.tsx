@@ -2,9 +2,9 @@
 import { notFound } from 'next/navigation';
 import { getAgentBySlug } from '@/services/agent-service';
 import { SafeImage } from '@/components/estate';
-import { LinkButton } from '#/components/ui/link-button';
-import { Button } from '#/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '#/components/ui/card';
+import { LinkButton } from '@neup/components/ui/link-button';
+import { Button } from '@neup/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@neup/components/ui/card';
 import { Mail, Phone, MessageSquare } from 'lucide-react';
 import { WhatsAppIcon } from '@/components/icons';
 

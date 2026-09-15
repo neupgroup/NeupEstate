@@ -11,7 +11,7 @@ import { cancelPropertyChangeDraftAction, createPropertyAction, getCurrentProper
 import { getCurrentAccountId } from '@/services/identity';
 
 import { Form } from '@/components/ui/form';
-import { useToast } from '#/core/hooks/useToast';
+import { useToast } from '@neup/core/hooks/useToast';
 import { getUsers } from '@/services/user-service';
 import { useAgencyCustomization } from '@/inapp/agency-customization/use-agency-customization';
 import { evaluateAgencyCustomization } from '@/inapp/agency-customization/evaluate-agency-customization';

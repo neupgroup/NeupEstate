@@ -11,8 +11,8 @@ Renders the routed full-page property image gallery using the URL query as the i
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Check, ChevronLeft, ChevronRight, Copy, X } from "lucide-react";
-import { Button } from "#/components/ui/button";
-import { LinkButton } from "#/components/ui/link-button";
+import { Button } from "@neup/components/ui/button";
+import { LinkButton } from "@neup/components/ui/link-button";
 
 type GalleryDirection = "next" | "previous";
 

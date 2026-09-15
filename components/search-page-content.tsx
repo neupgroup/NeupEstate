@@ -6,13 +6,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { searchProperties } from '@/services/property/search';
 import { searchAgentsByLocationAction } from '@/services/agents';
 import { PropertyCard } from "@/components/estate";
-import { Skeleton } from "#/components/ui/skeleton";
+import { Skeleton } from "@neup/components/ui/skeleton";
 import type { Property, PropertyFilters, Agent } from "@/types";
-import { Alert, AlertDescription, AlertTitle } from "#/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@neup/components/ui/alert";
 import { AlertCircle, Search } from "lucide-react";
 import { SearchSidebar } from "@/components/estate";
-import { Input } from "#/components/ui/input";
-import { Button } from "#/components/ui/button";
+import { Input } from "@neup/components/ui/input";
+import { Button } from "@neup/components/ui/button";
 import { Pagination } from "@/components/estate";
 import { AgentResults } from "@/components/estate";
 
@@ -114,7 +114,12 @@ export function SearchPageContent({ queryFromPath }: { queryFromPath: string }) 
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pr-12"
                 />
-                <Button htmlType="submit" size="icon" variant="plain">
+                <Button
+                  htmlType="submit"
+                  size="icon"
+                  variant="plain"
+                  aria-label="Search"
+                >
                   <Search className="h-4 w-4" />
                   <span className="sr-only">Search</span>
                 </Button>

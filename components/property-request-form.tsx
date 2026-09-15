@@ -7,12 +7,12 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createPropertyRequestAction } from '@/services/engagement';
 import { CreatePropertyRequestSchema, type CreatePropertyRequestFormValues, PropertyCategorySchema } from "@/types";
-import { Button } from "#/components/ui/button";
-import { Textarea } from "#/components/ui/textarea";
-import { Input } from "#/components/ui/input";
+import { Button } from "@neup/components/ui/button";
+import { Textarea } from "@neup/components/ui/textarea";
+import { Input } from "@neup/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useToast } from "#/core/hooks/useToast";
+import { useToast } from "@neup/core/hooks/useToast";
 import { Loader2, Send } from "lucide-react";
 
 export function PropertyRequestForm() {

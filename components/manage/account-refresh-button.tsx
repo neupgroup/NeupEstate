@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from '#/components/ui/button';
+import { Button } from '@neup/components/ui/button';
 import { RefreshCw, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 import { refreshAccountDisplayInfo } from '@/services/account-service';
 

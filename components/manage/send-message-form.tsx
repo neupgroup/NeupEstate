@@ -3,8 +3,8 @@
 
 import { useRef } from 'react';
 import { useFormStatus } from 'react-dom';
-import { Textarea } from '#/components/ui/textarea';
-import { Button } from '#/components/ui/button';
+import { Textarea } from '@neup/components/ui/textarea';
+import { Button } from '@neup/components/ui/button';
 import { Send, Loader2 } from 'lucide-react';
 import { sendMessageAction } from '@/services/communications';
 

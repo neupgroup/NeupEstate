@@ -11,7 +11,7 @@ Renders a collage-style property photo gallery that links to the full-page galle
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { Grid2x2 } from "lucide-react";
-import { LinkButton } from "#/components/ui/link-button";
+import { LinkButton } from "@neup/components/ui/link-button";
 
 interface PropertyMediaGalleryProps {
   images: string[];

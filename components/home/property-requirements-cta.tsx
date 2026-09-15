@@ -1,4 +1,4 @@
-import { LinkButton } from "#/components/ui/link-button";
+import { LinkButton } from "@neup/components/ui/link-button";
 import { FileSearch } from "lucide-react";
 import { Section } from "@/components/home/_components/section";
 

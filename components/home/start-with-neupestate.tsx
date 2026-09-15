@@ -1,5 +1,5 @@
-import { LinkButton } from "#/components/ui/link-button";
-import { cn } from "#/core/utils";
+import { LinkButton } from "@neup/components/ui/link-button";
+import { cn } from "@neup/core/utils";
 import { Section } from "@/components/home/_components/section";
 import { UserCheck, Building2 } from "lucide-react";
 

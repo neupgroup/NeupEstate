@@ -1,5 +1,5 @@
-import { Link } from "#/components/ui/link";
-import { LinkButton } from "#/components/ui/link-button";
+import { Link } from "@neup/components/ui/link";
+import { LinkButton } from "@neup/components/ui/link-button";
 import { ArrowRight, ChevronRight } from "lucide-react";
 
 export const SectionTitle = ({ children, href, showMoreButton = false }: { children: React.ReactNode, href?: string, showMoreButton?: boolean }) => (

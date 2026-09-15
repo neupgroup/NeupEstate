@@ -3,12 +3,12 @@
 
 import { useState, useTransition } from 'react';
 import { getPendingPropertiesForAgent, getApprovedPropertiesForAgent, runPropertyApproval, runPropertyAmendment, runPropertyAssurance } from '@/services/automation';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
-import { Button } from '#/components/ui/button';
-import { useToast } from '#/core/hooks/useToast';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
+import { Button } from '@neup/components/ui/button';
+import { useToast } from '@neup/core/hooks/useToast';
 import { CheckCircle, AlertCircle, Loader2, Bot, Wrench, CircleDashed, ShieldCheck, StepForward } from 'lucide-react';
-import { Input } from '#/components/ui/input';
-import { Label } from '#/components/ui/label';
+import { Input } from '@neup/components/ui/input';
+import { Label } from '@neup/components/ui/label';
 import type { PropertyAssuranceResult } from '@/types';
 import { ClientLink } from '@/components/client-link';
 

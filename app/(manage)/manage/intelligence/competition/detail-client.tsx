@@ -2,14 +2,14 @@
 
 import { useEffect, useState, useTransition } from 'react';
 import { Plus, Trash2, Map, Link2, FileText, Globe, Check } from 'lucide-react';
-import { Button } from '#/components/ui/button';
-import { Input } from '#/components/ui/input';
-import { Badge } from '#/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
+import { Button } from '@neup/components/ui/button';
+import { Input } from '@neup/components/ui/input';
+import { Badge } from '@neup/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { ClientLink } from '@/components/client-link';
 import { addCompetitorSourceAction, deleteCompetitorSourceAction, saveCrawledCompetitorPageAction, updateCompetitorCrawlRulesAction } from './actions';
 import type { Competitor } from './types';
-import { useToast } from '#/core/hooks/useToast';
+import { useToast } from '@neup/core/hooks/useToast';
 
 type SourceType = 'sitemap' | 'link' | 'manual';
 

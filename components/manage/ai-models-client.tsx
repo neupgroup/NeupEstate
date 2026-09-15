@@ -7,20 +7,20 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "#/components/ui/alert-dialog";
-import { Button } from '#/components/ui/button';
-import { Input } from '#/components/ui/input';
-import { Alert, AlertDescription, AlertTitle } from "#/components/ui/alert";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@neup/components/ui/alert-dialog";
+import { Button } from '@neup/components/ui/button';
+import { Input } from '@neup/components/ui/input';
+import { Alert, AlertDescription, AlertTitle } from "@neup/components/ui/alert";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { useToast } from '#/core/hooks/useToast';
+import { useToast } from '@neup/core/hooks/useToast';
 import { createModelAction, updateModelAction, deleteModelAction, setDefaultModelAction } from '@/services/content';
 import type { AIModel, CreateAIModelFormValues, UpdateAIModelFormValues } from '@/types';
 import { CreateAIModelSchema, UpdateAIModelSchema } from '@/types';
 import { Bot, Info, PlusCircle, Trash2, Loader2, Pencil, Star, ShieldCheck } from 'lucide-react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '#/components/ui/table';
-import { Textarea } from '#/components/ui/textarea';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@neup/components/ui/table';
+import { Textarea } from '@neup/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { Badge } from '#/components/ui/badge';
+import { Badge } from '@neup/components/ui/badge';
 
 function ModelForm({
     mode,

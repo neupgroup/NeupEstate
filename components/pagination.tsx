@@ -2,9 +2,9 @@
 'use client';
 
 import { useSearchParams, usePathname } from 'next/navigation';
-import { buttonVariants } from '#/components/ui/button';
+import { buttonVariants } from '@neup/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { cn } from '#/core/utils';
+import { cn } from '@neup/core/utils';
 import { ClientLink } from './client-link';
 
 interface PaginationProps {

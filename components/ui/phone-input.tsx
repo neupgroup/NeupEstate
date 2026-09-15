@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { cn } from "#/core/utils";
+import { cn } from "@neup/core/utils";
 
 type CountryCodeIndicator = {
   aliases: string[];
@@ -202,7 +202,7 @@ function detectSharedCountryCode(rawValue: string): CountryCodeDetectionResult |
     }
 
     const rest = normalizeRest(match[2] ?? "");
-    const finalizedMatch = rest.match(/^(\d{3})([\s_-]+)(.*)$/);
+    const finalizedMatch = rest.match(/^(\d{3})([\s_-]+)(.*)@base/);
     if (!finalizedMatch) {
       return { country: null, localNumber: rest, sharedCode: code, mode: "shared-pending" };
     }
@@ -332,11 +332,11 @@ export interface PhoneInputProps extends Omit<React.ComponentProps<"input">, "va
 }
 
 function normalizeTriggerAttempt(value: string) {
-  return value.replace(/[\s\-_]+$/, "").trim();
+  return value.replace(/[\s\-_]+@base/, "").trim();
 }
 
 function isExplicitCountryTriggerAttempt(value: string) {
-  return /[\s\-_]+$/.test(value) && Boolean(normalizeTriggerAttempt(value));
+  return /[\s\-_]+@base/.test(value) && Boolean(normalizeTriggerAttempt(value));
 }
 
 const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(

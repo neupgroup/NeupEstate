@@ -8,9 +8,9 @@ import {
     LandZoningSchema,
 } from "@/types";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
-import { Input } from "#/components/ui/input";
-import { Button } from "#/components/ui/button";
-import { Checkbox } from "#/components/ui/checkbox";
+import { Input } from "@neup/components/ui/input";
+import { Button } from "@neup/components/ui/button";
+import { Checkbox } from "@neup/components/ui/checkbox";
 import { SelectionCards } from "@/components/ui/selection-cards";
 import { AreaInput } from "@/components/ui/area-input";
 import { CounterCard } from "@/components/ui/counter-card";

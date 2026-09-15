@@ -3,12 +3,12 @@
 import { useEffect, useState } from 'react';
 import { getPrompts } from '@/services/prompt-service';
 import type { Prompt } from '@/services/prompt-service';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "#/components/ui/accordion";
-import { Button } from '#/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@neup/components/ui/accordion";
+import { Button } from '@neup/components/ui/button';
 import { Pencil, Info, Bot } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
-import { Skeleton } from '#/components/ui/skeleton';
+import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
+import { Skeleton } from '@neup/components/ui/skeleton';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { PromptEditForm } from '@/components/manage/prompt-edit-form';
 

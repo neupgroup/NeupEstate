@@ -6,14 +6,14 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { suggestPropertyQuestionsAction, createInquiryAction } from '@/services/content';
 import { CreateInquirySchema, type CreateInquiryFormValues } from "@/types";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "#/components/ui/card";
-import { Button } from "#/components/ui/button";
-import { Textarea } from "#/components/ui/textarea";
-import { Input } from "#/components/ui/input";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@neup/components/ui/card";
+import { Button } from "@neup/components/ui/button";
+import { Textarea } from "@neup/components/ui/textarea";
+import { Input } from "@neup/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { useToast } from "#/core/hooks/useToast";
+import { useToast } from "@neup/core/hooks/useToast";
 import { Lightbulb, Loader2, Send } from "lucide-react";
-import { Skeleton } from "#/components/ui/skeleton";
+import { Skeleton } from "@neup/components/ui/skeleton";
 
 // --- Cookie Helper Functions ---
 function setCookie(name: string, value: string, days: number) {

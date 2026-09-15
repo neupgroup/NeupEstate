@@ -11,7 +11,7 @@ type UploadPropertyMediaOptions = {
 };
 
 function stripExtension(filename: string): string {
-  return filename.replace(/\.[^.]+$/, "");
+  return filename.replace(/\.[^.]+@base/, "");
 }
 
 async function parseUploadError(response: Response): Promise<string> {

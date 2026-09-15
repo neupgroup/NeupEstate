@@ -3,7 +3,7 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import type { PropertyActivityEvent } from '@/types';
-import { makeAppPath } from '#/core/appconfig';
+import { makeAppPath } from '@neup/core/appconfig';
 
 const ACTIVE_TIME_INTERVAL = 5000;
 const INACTIVITY_TIMEOUT = 60000;

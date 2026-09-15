@@ -1,5 +1,5 @@
-import { Link } from "#/components/ui/link";
-import { LinkButton } from "#/components/ui/link-button";
+import { Link } from "@neup/components/ui/link";
+import { LinkButton } from "@neup/components/ui/link-button";
 import { Compass, Home, Search } from "lucide-react";
 
 export default function NotFound() {

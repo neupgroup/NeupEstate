@@ -6,11 +6,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createSalesRequestAction } from '@/services/engagement';
 import { CreateSalesRequestSchema, type CreateSalesRequestFormValues } from "@/types";
-import { Button } from "#/components/ui/button";
-import { Textarea } from "#/components/ui/textarea";
-import { Input } from "#/components/ui/input";
+import { Button } from "@neup/components/ui/button";
+import { Textarea } from "@neup/components/ui/textarea";
+import { Input } from "@neup/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { useToast } from "#/core/hooks/useToast";
+import { useToast } from "@neup/core/hooks/useToast";
 import { Loader2, Send } from "lucide-react";
 
 export function SalesRequestForm() {

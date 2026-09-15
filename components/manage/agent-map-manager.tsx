@@ -4,14 +4,14 @@ import { useMemo, useState, useTransition } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { createAgencyAgentMapAction } from '@/services/agency';
 import type { Account, AgencyAgentMap } from '@/types';
-import { Button } from '#/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
-import { Input } from '#/components/ui/input';
-import { Badge } from '#/components/ui/badge';
-import { Checkbox } from '#/components/ui/checkbox';
-import { useToast } from '#/core/hooks/useToast';
+import { Button } from '@neup/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
+import { Input } from '@neup/components/ui/input';
+import { Badge } from '@neup/components/ui/badge';
+import { Checkbox } from '@neup/components/ui/checkbox';
+import { useToast } from '@neup/core/hooks/useToast';
 import { Loader2, Link2, Search, Users } from 'lucide-react';
-import { cn } from '#/core/utils';
+import { cn } from '@neup/core/utils';
 
 type Props = {
   agencies: Account[];

@@ -3,14 +3,14 @@
 "use client";
 
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card';
-import { Label } from '#/components/ui/label';
-import { Input } from '#/components/ui/input';
-import { Button } from '#/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@neup/components/ui/card';
+import { Label } from '@neup/components/ui/label';
+import { Input } from '@neup/components/ui/input';
+import { Button } from '@neup/components/ui/button';
 import { Minus, Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import type { PropertyFilters } from '@/types';
-import { Badge } from '#/components/ui/badge';
+import { Badge } from '@neup/components/ui/badge';
 import { PriceInput } from '@/components/ui/price-input';
 
 type StepperMode = 'any' | 'exact' | 'more' | 'less';
@@ -275,6 +275,5 @@ export function SearchSidebar({ initialFilters }: { initialFilters?: PropertyFil
     </Card>
   );
 }
-
 
 

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useFormContext, useFormState } from "react-hook-form";
 import { ChevronRight, Triangle } from "lucide-react";
-import { cn } from "#/core/utils";
+import { cn } from "@neup/core/utils";
 
 type SystemKey = "aana" | "kattha" | "feet" | "meter";
 type SubUnit = { key: string; label: string; steps: number[] };
@@ -180,7 +180,7 @@ function formatText(vals: Record<string, number>, system: SystemKey): string {
   return order
     .map((key) => ({ key, value: vals[key] }))
     .filter(({ value }) => Number(value) > 0)
-    .map(({ key, value }) => `${String(Number(value) || 0).replace(/\.0+$/, "")} ${key === "sqft" ? "Sq Ft" : key === "sqm" ? "Sq Meter" : key.charAt(0).toUpperCase() + key.slice(1)}`)
+    .map(({ key, value }) => `${String(Number(value) || 0).replace(/\.0+@base/, "")} ${key === "sqft" ? "Sq Ft" : key === "sqm" ? "Sq Meter" : key.charAt(0).toUpperCase() + key.slice(1)}`)
     .join(" ");
 }
 
@@ -188,7 +188,7 @@ function formatCompactText(vals: Record<string, number>, system: SystemKey): str
   const order = SYSTEM_KEYS[system];
   return order
     .map((key) => ({ key, value: vals[key] }))
-    .map(({ value }) => String(Number(value) || 0).replace(/\.0+$/, ""))
+    .map(({ value }) => String(Number(value) || 0).replace(/\.0+@base/, ""))
     .join("-");
 }
 

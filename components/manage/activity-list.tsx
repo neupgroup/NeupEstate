@@ -8,8 +8,8 @@ import { z } from 'zod';
 import { Loader2, Plus } from 'lucide-react';
 
 import { addLeadActivityAction } from '@/services/agency';
-import { Badge } from '#/components/ui/badge';
-import { Button } from '#/components/ui/button';
+import { Badge } from '@neup/components/ui/badge';
+import { Button } from '@neup/components/ui/button';
 import {
     Dialog,
     DialogContent,
@@ -27,7 +27,7 @@ import {
     FormLabel,
     FormMessage,
 } from '@/components/ui/form';
-import { Input } from '#/components/ui/input';
+import { Input } from '@neup/components/ui/input';
 import {
     Select,
     SelectContent,
@@ -35,8 +35,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Textarea } from '#/components/ui/textarea';
-import { useToast } from '#/core/hooks/useToast';
+import { Textarea } from '@neup/components/ui/textarea';
+import { useToast } from '@neup/core/hooks/useToast';
 
 type Lead = {
     id: string;

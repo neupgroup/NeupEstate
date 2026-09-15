@@ -4,12 +4,12 @@ import { useMemo, useState, useTransition } from 'react';
 import { z } from 'zod';
 import { AlertCircle, CheckCircle2, Database, Eye, Loader2 } from 'lucide-react';
 import { importJsonPropertiesAction } from './actions';
-import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
-import { Button } from '#/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
-import { Label } from '#/components/ui/label';
-import { Textarea } from '#/components/ui/textarea';
-import { useToast } from '#/core/hooks/useToast';
+import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
+import { Button } from '@neup/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
+import { Label } from '@neup/components/ui/label';
+import { Textarea } from '@neup/components/ui/textarea';
+import { useToast } from '@neup/core/hooks/useToast';
 
 /*
 ::neup.documentation::manage-property-json-import-page

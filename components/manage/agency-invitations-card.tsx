@@ -3,10 +3,10 @@
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { acceptAgencyAgentMapAction } from '@/services/agency';
-import { Badge } from '#/components/ui/badge';
-import { Button } from '#/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
-import { useToast } from '#/core/hooks/useToast';
+import { Badge } from '@neup/components/ui/badge';
+import { Button } from '@neup/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
+import { useToast } from '@neup/core/hooks/useToast';
 
 export type AgencyInvitationItem = {
   id: string;

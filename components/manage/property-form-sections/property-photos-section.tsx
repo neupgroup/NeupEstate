@@ -5,10 +5,10 @@ import { Control, useFieldArray, useFormContext, useWatch } from "react-hook-for
 import { useEffect, useRef, useState } from "react";
 import Link from 'next/link';
 import { CreatePropertyFormValues } from "@/types";
-import { Input } from "#/components/ui/input";
-import { Button } from "#/components/ui/button";
+import { Input } from "@neup/components/ui/input";
+import { Button } from "@neup/components/ui/button";
 import { ImagePlus, GripVertical, RotateCcw, Trash2 } from "lucide-react";
-import { useToast } from "#/core/hooks/useToast";
+import { useToast } from "@neup/core/hooks/useToast";
 import { uploadPropertyMediaFile } from "./media-upload";
 
 interface PropertyPhotosSectionProps {

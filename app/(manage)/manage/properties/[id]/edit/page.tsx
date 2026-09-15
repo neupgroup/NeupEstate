@@ -13,14 +13,14 @@ import { getUsers } from "@/services/user-service";
 import { useAgencyCustomization } from '@/inapp/agency-customization/use-agency-customization';
 
 import { Form } from '@/components/ui/form';
-import { Button } from '#/components/ui/button';
-import { useToast } from '#/core/hooks/useToast';
+import { Button } from '@neup/components/ui/button';
+import { useToast } from '@neup/core/hooks/useToast';
 import { ExternalLink } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardDescription } from '#/components/ui/card';
-import { Badge } from '#/components/ui/badge';
+import { Card, CardHeader, CardTitle, CardDescription } from '@neup/components/ui/card';
+import { Badge } from '@neup/components/ui/badge';
 import { ClientLink } from '@/components/client-link';
 import { ProgressivePropertySections } from '@/components/manage/progressive-property-sections';
-import { Skeleton } from '#/components/ui/skeleton';
+import { Skeleton } from '@neup/components/ui/skeleton';
 
 const DEFAULT_DRAFT_PROPERTY_VALUES: UpdatePropertyFormValues = {
     title: '',

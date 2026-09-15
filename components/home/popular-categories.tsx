@@ -1,5 +1,5 @@
-import { Card } from "#/components/ui/card";
-import { Link } from "#/components/ui/link";
+import { Card } from "@neup/components/ui/card";
+import { Link } from "@neup/components/ui/link";
 import { Home, Building, Briefcase, Sofa, LandPlot } from "lucide-react";
 import { Section } from "@/components/home/_components/section";
 import { SectionTitle } from "@/components/home/_components/section-title";

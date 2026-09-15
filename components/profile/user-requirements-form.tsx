@@ -3,11 +3,11 @@
 
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Button } from '#/components/ui/button';
-import { Input } from '#/components/ui/input';
-import { Label } from '#/components/ui/label';
+import { Button } from '@neup/components/ui/button';
+import { Input } from '@neup/components/ui/input';
+import { Label } from '@neup/components/ui/label';
 import { Save, X, Loader2 } from 'lucide-react';
-import { useToast } from '#/core/hooks/useToast';
+import { useToast } from '@neup/core/hooks/useToast';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { Form, FormControl, FormItem } from '@/components/ui/form';

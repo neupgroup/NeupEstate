@@ -5,13 +5,13 @@ import { useEffect, useState, useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { analyzeMarketAction, type MarketAnalysisState } from '@/services/automation';
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card';
-import { Button } from '#/components/ui/button';
-import { Label } from '#/components/ui/label';
-import { Alert, AlertDescription, AlertTitle } from '#/components/ui/alert';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
+import { Button } from '@neup/components/ui/button';
+import { Label } from '@neup/components/ui/label';
+import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { Loader2, Calculator, BarChartBig, AlertCircle } from 'lucide-react';
-import { Skeleton } from '#/components/ui/skeleton';
-import { Textarea } from '#/components/ui/textarea';
+import { Skeleton } from '@neup/components/ui/skeleton';
+import { Textarea } from '@neup/components/ui/textarea';
 
 const initialState: MarketAnalysisState = {
     success: false,

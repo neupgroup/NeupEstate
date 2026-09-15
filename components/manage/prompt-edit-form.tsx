@@ -11,11 +11,11 @@ import type { Prompt } from '@/services/prompt-service';
 import { updatePromptAction, createPromptAction } from '@/services/content';
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
-import { Input } from '#/components/ui/input';
-import { Button } from '#/components/ui/button';
-import { useToast } from '#/core/hooks/useToast';
+import { Input } from '@neup/components/ui/input';
+import { Button } from '@neup/components/ui/button';
+import { useToast } from '@neup/core/hooks/useToast';
 import { Loader2 } from 'lucide-react';
-import { Textarea } from '#/components/ui/textarea';
+import { Textarea } from '@neup/components/ui/textarea';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 
 const SYSTEM_DEFAULT_MODEL_VALUE = 'SYSTEM_DEFAULT';
