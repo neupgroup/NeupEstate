@@ -34,12 +34,13 @@ export function SearchSection() {
                         <Input 
                             name="q"
                             placeholder="e.g., 'a 3-bedroom house in Brooklyn with a backyard'"
-                            className="h-14 pl-5 pr-14 text-base rounded-full shadow-lg"
+                            className="h-14 pl-5 pr-16 text-base rounded-full shadow-lg"
                         />
                         <Button
                             htmlType="submit"
                             size="icon"
                             aria-label="Search"
+                            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full"
                         >
                             <Search className="h-5 w-5" />
                             <span className="sr-only">Search</span>
