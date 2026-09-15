@@ -73,6 +73,12 @@ export default async function proxy(request: NextRequest) {
 
   const pass = () => NextResponse.next({ request: { headers: requestHeaders } });
 
+  // Sitemap routes must remain directly accessible, including when the app
+  // is mounted below its configured base path.
+  if (pathname.startsWith('/sitemap') || pathname.startsWith('/estate/sitemap')) {
+    return pass();
+  }
+
   // ── 1. Bridge routes — always pass through ──────────────────────────────
   if (pathname.startsWith('/bridge')) {
     return pass();
