@@ -147,7 +147,11 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
         {isMounted ? <Button
           variant="plain"
           size="icon"
-          className="!absolute !right-3 !top-3 z-10 rounded-full border-2 border-white !bg-white/80 text-gray-900 shadow-lg hover:!bg-white/90"
+          className={cn(
+            "group/heart !absolute !right-3 !top-3 z-10 rounded-full border border-white/80 text-gray-800 shadow-lg backdrop-blur-[2px] transition-colors duration-500",
+            isFavorited ? "!bg-white" : "!bg-white hover:!bg-white",
+          )}
+          style={{ backgroundColor: "rgba(255, 255, 255, 0.96)" }}
           onClick={handleFavoriteToggle}
           disabled={isTogglingFavorite}
           aria-label={isFavorited ? "Remove property from saved properties" : "Save property"}
@@ -155,9 +159,11 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
           <Heart
             strokeWidth={2.75}
             className={cn(
-              "h-6 w-6 text-gray-900 transition-transform",
+              "h-6 w-6 transition-all duration-500",
               (isCheckingFavorite || isTogglingFavorite) && "animate-pulse",
-              isFavorited ? "fill-red-500 text-red-500" : "fill-none text-gray-900",
+              isFavorited
+                ? "fill-red-500 text-red-500"
+                : "fill-none text-gray-700 group-hover/heart:fill-red-500 group-hover/heart:text-red-500 group-hover/heart:stroke-red-500",
             )}
           />
         </Button> : null}
