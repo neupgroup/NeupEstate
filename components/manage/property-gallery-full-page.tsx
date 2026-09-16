@@ -9,7 +9,6 @@ Renders the routed full-page property image gallery using the URL query as the i
 */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { Check, ChevronLeft, ChevronRight, Copy, X } from "lucide-react";
 import { Button } from "@neup/components/ui/button";
 import { LinkButton } from "@neup/components/ui/link-button";
@@ -70,7 +69,6 @@ export function PropertyGalleryFullPage({
   propertySlug,
   initialImage,
 }: PropertyGalleryFullPageProps) {
-  const router = useRouter();
   const [selectedIndex, setSelectedIndex] = useState(() =>
     clampImageIndex(initialImage - 1, images.length)
   );
@@ -169,10 +167,6 @@ export function PropertyGalleryFullPage({
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        router.push(propertyHref);
-      }
-
       if (event.key === "ArrowLeft" && visibleImages.length > 1) {
         showPreviousImage();
       }
@@ -187,7 +181,7 @@ export function PropertyGalleryFullPage({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [propertyHref, router, showNextImage, showPreviousImage, visibleImages.length]);
+  }, [showNextImage, showPreviousImage, visibleImages.length]);
 
   return (
     <main className="fixed inset-0 z-[9999] h-dvh w-screen overflow-hidden bg-neutral-950 text-white">

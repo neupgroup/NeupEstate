@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Card, CardContent, CardFooter } from '@neup/components/ui/card';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@neup/components/ui/label';
@@ -26,9 +26,14 @@ const formatCurrency = (value: number) => {
 };
 
 export function EmiCalculatorChart({ price }: EmiCalculatorChartProps) {
+  const [isHydrated, setIsHydrated] = useState(false);
   const [downPaymentPercent, setDownPaymentPercent] = useState(20);
   const [interestRate, setInterestRate] = useState(6.5);
   const [tenureYears, setTenureYears] = useState(20);
+
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   const { emi, totalInterest, totalPayment, loanAmount, chartData } = useMemo(() => {
     const downPaymentAmount = price * (downPaymentPercent / 100);
@@ -164,7 +169,7 @@ export function EmiCalculatorChart({ price }: EmiCalculatorChartProps) {
                     </div>
                 </div>
                 
-                {chartData.length > 0 && (
+                {isHydrated && chartData.length > 0 && (
                     <div className="h-[350px] w-full">
                         <ChartContainer config={chartConfig} className="w-full h-full">
                             <BarChart data={chartData} accessibilityLayer>

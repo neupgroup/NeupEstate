@@ -13,7 +13,10 @@ import { logProblem } from '@/services/problem-service';
 import { Badge } from '@neup/components/ui/badge';
 import { Button } from '@neup/components/ui/button';
 import { BedDouble, Bath, SquareGanttChart, MapPin, Building, Home, Box, Utensils, Hash, Car, Bike, Milestone, School, Briefcase, LandPlot, Sprout, Tag, Mountain, Wallet, Banknote, Calendar, Check, Plane, Link as LinkIcon, Building2, User as UserIcon, FileText } from 'lucide-react';
-import { SafeImage, EmiCalculatorChart, PropertyMap, PropertyQA } from '@/components/estate';
+import { SafeImage } from '@/components/safe-image';
+import { EmiCalculatorChart } from '@/components/emi-calculator-chart';
+import { PropertyQA } from '@/components/property-q-a';
+import { PropertyMapClient } from '@/components/property-map-client';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@neup/components/ui/table';
 import { Card, CardContent, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { PropertyDetailRenderNotice } from '@/components/property-detail-render-notice';
@@ -707,7 +710,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
             {mapLocation ? (
               <div className="mt-6 border-t pt-6">
                 <h2 className="text-2xl font-headline font-semibold mb-4">Location on Map</h2>
-                <PropertyMap
+                <PropertyMapClient
                   center={mapLocation.center}
                   searchTargets={mapLocation.searchTargets}
                   approximate={mapLocation.approximate}

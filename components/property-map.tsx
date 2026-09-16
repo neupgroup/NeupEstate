@@ -9,11 +9,13 @@ fallback geocoding search from street/tole to municipality to district.
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import L from "leaflet";
+import type Leaflet from "leaflet";
 import { Skeleton } from "@neup/components/ui/skeleton";
 
 const LEAFLET_STYLESHEET_ID = "leaflet-stylesheet";
 const LEAFLET_STYLESHEET_HREF = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+
+let L: typeof Leaflet;
 
 type MapCenter = {
   lat: number;
@@ -157,25 +159,36 @@ export function PropertyMap({ center, searchTargets, approximate = false }: Prop
       return;
     }
 
-    const map = L.map(containerRef.current, {
+    let cancelled = false;
+    let map: Leaflet.Map | null = null;
+
+    void import("leaflet").then((leafletModule) => {
+      if (cancelled || !containerRef.current || mapRef.current) {
+        return;
+      }
+
+      L = leafletModule.default;
+      map = L.map(containerRef.current, {
       zoomControl: true,
       attributionControl: true,
+      });
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "&copy; OpenStreetMap contributors",
+        maxZoom: 19,
+      }).addTo(map);
+
+      mapRef.current = map;
+      setIsMapReady(true);
     });
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "&copy; OpenStreetMap contributors",
-      maxZoom: 19,
-    }).addTo(map);
-
-    mapRef.current = map;
-    setIsMapReady(true);
-
     return () => {
+      cancelled = true;
       markerRef.current?.remove();
       markerRef.current = null;
       polygonRef.current?.remove();
       polygonRef.current = null;
-      map.remove();
+      map?.remove();
       mapRef.current = null;
     };
   }, []);
