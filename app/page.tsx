@@ -47,13 +47,9 @@ export default async function Home() {
       {showGuestBanner && <GuestSigninBanner variant="hero" />}
 
       <div className="home-sections">
-        <Suspense fallback={<SectionSkeleton />}>
-          <PopularCategories />
-        </Suspense>
+        <PopularCategories />
         
-        <Suspense fallback={<SectionSkeleton />}>
-          <FeaturedProperties />
-        </Suspense>
+        <FeaturedProperties />
 
         <Suspense fallback={<SectionSkeleton />}>
           <CuratedForYouSection />
@@ -61,9 +57,7 @@ export default async function Home() {
         
         <PropertyRequirementsCTA />
 
-        <Suspense fallback={<SectionSkeleton />}>
-          <RecentProperties />
-        </Suspense>
+        <RecentProperties />
         
         <PostPropertyCTA />
         
