@@ -14,7 +14,7 @@ import type { Property } from "@/types";
 import { Button } from "@neup/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@neup/components/ui/card";
 import { Badge } from "@neup/components/ui/badge";
-import { Heart, Loader2, Star, MapPin } from "lucide-react";
+import { Heart, Star, MapPin } from "lucide-react";
 import { useState, useTransition, useEffect } from "react";
 import { cn } from "@neup/core/utils";
 import { getHiddenPriceLabel, getPrimaryCurrency, getPrimaryPrice, getPrimaryPricingSuffix } from "@/services/property/price-display";
@@ -41,6 +41,7 @@ const FALLBACK_IMAGES = [
 export function PropertyCard({ property, propertyCount, reviewCount, rating }: PropertyCardProps) {
   const [isFavorited, setIsFavorited] = useState(false);
   const [isCheckingFavorite, setIsCheckingFavorite] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
   const [isTogglingFavorite, startToggleTransition] = useTransition();
   const [userId, setUserId] = useState<string | null>(null);
   const [fallbackImage, setFallbackImage] = useState<string | null>(null);
@@ -50,6 +51,7 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
   const slugOrId = property.slug || property.id;
 
   useEffect(() => {
+    setIsMounted(true);
     // Set fallback image on client mount to avoid hydration mismatch
     setFallbackImage(FALLBACK_IMAGES[Math.floor(Math.random() * FALLBACK_IMAGES.length)]);
     // Prefer aid from auth_accounts; fall back to temp_account_id
@@ -70,6 +72,7 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
   }, [property.id]);
 
   const handleFavoriteToggle = () => {
+    if (isCheckingFavorite) return;
     if (!userId) {
         toast({ name: "default",
             type: "solid", convey: "danger",
@@ -117,7 +120,7 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
   
   return (
     <Card className="group card-hover-effect flex h-full flex-col overflow-hidden rounded-2xl border border-border/80 bg-card shadow-sm">
-      <CardHeader className="relative p-0">
+      <CardHeader className="relative block p-0">
         <Link href={`/properties/${slugOrId}`} className="block overflow-hidden">
           <SafeImage
             src={imageUrl || fallbackImage || "https://placehold.co/600x400.png"}
@@ -141,18 +144,23 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
           </Badge>
         </div>
 
-        <Button
+        {isMounted ? <Button
           variant="plain"
           size="icon"
+          className="!absolute !right-3 !top-3 z-10 rounded-full border-2 border-white !bg-white/80 text-gray-900 shadow-lg hover:!bg-white/90"
           onClick={handleFavoriteToggle}
-          disabled={isTogglingFavorite || isCheckingFavorite}
+          disabled={isTogglingFavorite}
+          aria-label={isFavorited ? "Remove property from saved properties" : "Save property"}
         >
-          {isTogglingFavorite || isCheckingFavorite ? (
-            <Loader2 className="h-5 w-5 animate-spin text-gray-600" />
-          ) : (
-            <Heart className={cn("h-5 w-5 text-gray-600", isFavorited && "fill-red-500 text-red-500")} />
-          )}
-        </Button>
+          <Heart
+            strokeWidth={2.75}
+            className={cn(
+              "h-6 w-6 text-gray-900 transition-transform",
+              (isCheckingFavorite || isTogglingFavorite) && "animate-pulse",
+              isFavorited ? "fill-red-500 text-red-500" : "fill-none text-gray-900",
+            )}
+          />
+        </Button> : null}
       </CardHeader>
       <CardContent className="flex flex-1 flex-col gap-3 p-4">
         <div className="space-y-2">

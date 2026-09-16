@@ -18,6 +18,10 @@ const nextConfig: NextConfig = {
   ],
 
   images: {
+    // Property media is hosted remotely and must be served directly. Sending
+    // it through Next's optimizer makes the app proxy the remote image and
+    // can timeout when the upstream storage service is slow.
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',

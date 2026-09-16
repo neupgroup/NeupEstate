@@ -19,6 +19,9 @@ export const SafeImage = forwardRef<HTMLImageElement, SafeImageProps>(({ fallbac
     <Image
       ref={ref}
       {...props}
+      // Keep remote images on their original URL instead of requesting
+      // /_next/image and having Next fetch/process the upstream asset.
+      unoptimized
       src={imgSrc || fallbackSrc}
       onError={() => {
         setImgSrc(fallbackSrc);
