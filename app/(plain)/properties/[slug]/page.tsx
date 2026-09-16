@@ -10,9 +10,7 @@ import { notFound, redirect } from 'next/navigation';
 import { getPropertyById, getProperties, getPropertyBySlug } from '@/services/property';
 import { buildPublicAppUrl } from '@neup/core/helpers/link/url';
 import { logProblem } from '@/services/problem-service';
-import { Badge } from '@neup/components/ui/badge';
-import { Button } from '@neup/components/ui/button';
-import { BedDouble, Bath, SquareGanttChart, MapPin, Building, Home, Box, Utensils, Hash, Car, Bike, Milestone, School, Briefcase, LandPlot, Sprout, Tag, Mountain, Wallet, Banknote, Calendar, Check, Plane, Link as LinkIcon, Building2, User as UserIcon, FileText } from 'lucide-react';
+import { BedDouble, Bath, SquareGanttChart, MapPin, Building, Home, Box, Utensils, Hash, Car, Bike, Milestone, School, Briefcase, LandPlot, Sprout, Tag, Mountain, Wallet, Banknote, Calendar, Check, Plane, Link as LinkIcon, User as UserIcon, FileText } from 'lucide-react';
 import { SafeImage } from '@/components/safe-image';
 import { EmiCalculatorChart } from '@/components/emi-calculator-chart';
 import { PropertyQA } from '@/components/property-q-a';
@@ -459,15 +457,9 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
     { label: 'Bike Parking', value: property.bikeParkingSpots, singular: 'Bike Parking', icon: <Bike className="h-4 w-4 text-primary" /> },
   ].filter((item) => hasPositiveValue(item.value));
   const primaryPrice = hasPositiveValue(property.pricing?.listed) ? property.pricing.listed : property.price;
-  const primaryCurrency = property.pricing?.currency || 'USD';
   const pricingBasis = property.pricing?.basis;
   const pricingFrequency = pricingBasis ? property.pricing?.basisFrequencies?.[pricingBasis] ?? null : null;
   const pricingUnit = pricingBasis ? property.pricing?.basisUnits?.[pricingBasis] ?? null : null;
-  const primaryPricingSuffix = formatPricingBasisSuffix({
-    basis: pricingBasis,
-    frequency: pricingFrequency,
-    unit: pricingUnit,
-  });
   const mapLocation = getLocation(property);
   const showExactMapLocation = mapLocation?.mode === 'exact';
 
@@ -722,34 +714,14 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
           </div>
 
           <div className="lg:col-span-1">
-            <div className="sticky top-24 bg-white p-6 rounded-lg shadow-lg border">
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <p className="text-3xl font-bold text-primary">
-                      {hiddenPriceLabel || formatPrice(primaryPrice, primaryCurrency)}
-                  </p>
-                  {!hiddenPriceLabel && primaryPricingSuffix && (
-                    <span className="text-sm font-normal text-muted-foreground">{primaryPricingSuffix}</span>
-                  )}
-                </div>
-                <Badge variant={property.purpose === 'Sale' ? 'default' : 'secondary'}>For {property.purpose}</Badge>
-              </div>
-
-              <Button>Contact Agency</Button>
-              
+            <div className="sticky top-24 space-y-4">
+              <Card>
+                <CardContent className="flex items-center gap-4 p-4">
+                  <SafeImage src={property.agency.logoUrl} alt={property.agency.name} width={56} height={56} className="h-14 w-14 rounded-full object-cover" data-ai-hint="agent portrait" fallbackSrc="https://placehold.co/80x80.png" />
+                  <div><p className="font-semibold">{property.agency.name}</p><p className="text-sm text-muted-foreground">Property consultant</p></div>
+                </CardContent>
+              </Card>
               <PropertyQA propertyId={property.id} />
-
-              <div className="mt-6 border-t pt-4">
-                  <h3 className="text-lg font-semibold flex items-center gap-2">
-                      <Building2 className="h-5 w-5" />
-                      Listed by
-                  </h3>
-                  <div className="flex items-center gap-4 mt-4">
-                      <SafeImage src={property.agency.logoUrl} alt={property.agency.name} width={80} height={32} data-ai-hint="company logo" fallbackSrc="https://placehold.co/80x32.png" />
-                      <p className="font-medium">{property.agency.name}</p>
-                  </div>
-              </div>
-
             </div>
           </div>
         </div>
