@@ -1,5 +1,3 @@
-"use client";
-
 /*
 ::neup.documentation::property-media-gallery
 
@@ -8,7 +6,7 @@ Renders a collage-style property photo gallery that links to the full-page galle
 ::end
 */
 
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { Grid2x2 } from "lucide-react";
 import { LinkButton } from "@neup/components/ui/link-button";
@@ -28,13 +26,7 @@ function GalleryImage({
   alt: string;
   className?: string;
 }) {
-  const [failed, setFailed] = useState(false);
-
-  useEffect(() => {
-    setFailed(false);
-  }, [src]);
-
-  if (!src || failed) {
+  if (!src) {
     return (
       <div
         className={`flex h-full w-full items-center justify-center bg-muted text-sm text-muted-foreground ${
@@ -52,7 +44,6 @@ function GalleryImage({
       alt={alt}
       loading="lazy"
       className={className}
-      onError={() => setFailed(true)}
     />
   );
 }
@@ -62,20 +53,9 @@ export function PropertyMediaGallery({
   title,
   propertySlug,
 }: PropertyMediaGalleryProps) {
-  const [mounted, setMounted] = useState(false);
-
-  const visibleImages = useMemo(
-    () =>
-      images.filter(
-        (image) =>
-          typeof image === "string" && image.trim().length > 0
-      ),
-    [images]
+  const visibleImages = images.filter(
+    (image) => typeof image === "string" && image.trim().length > 0
   );
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   if (!visibleImages.length) {
     return (
@@ -335,7 +315,7 @@ export function PropertyMediaGallery({
     <div className="relative h-[320px] min-h-0 overflow-hidden rounded-3xl sm:h-[360px] lg:h-[420px]">
       {renderCollage()}
 
-      {mounted && visibleImages.length > 1 && (
+      {visibleImages.length > 1 && (
         <LinkButton
           href={galleryHref}
           variant="tinted"
