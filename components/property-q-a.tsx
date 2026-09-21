@@ -4,19 +4,19 @@
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { suggestPropertyQuestionsAction, createInquiryAction } from '@/services/content';
+import { createInquiryAction } from '@/services/content';
 import { CreateInquirySchema, type CreateInquiryFormValues } from "@/types";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@neup/components/ui/card";
+import { Card, CardContent, CardHeader } from "@neup/components/ui/card";
 import { Button } from "@neup/components/ui/button";
 import { Textarea } from "@neup/components/ui/textarea";
 import { Input } from "@neup/components/ui/input";
 import { PhoneInput } from "@neup/components/ui/phone-input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@neup/core/hooks/useToast";
-import { CalendarDays, Check, Lightbulb, Loader2, Mail, Phone, Send } from "lucide-react";
-import { Skeleton } from "@neup/components/ui/skeleton";
+import { ChevronLeft, ChevronRight, Loader2, Mail, Phone, Send } from "lucide-react";
 import { useSession } from "@neup/core/providers/session";
 import { cn } from "@neup/core/utils";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 // --- Cookie Helper Functions ---
 function setCookie(name: string, value: string, days: number) {
@@ -44,17 +44,23 @@ function getCookie(name: string): string | null {
 
 interface PropertyQAProps {
     propertyId: string;
+    agentName?: string;
+    agentImage?: string;
+    agentPhone?: string;
+    agentEmail?: string;
+    flat?: boolean;
 }
 
-export function PropertyQA({ propertyId }: PropertyQAProps) {
+export function PropertyQA({ propertyId, agentName = "Property Agent", agentImage, agentPhone, agentEmail, flat = false }: PropertyQAProps) {
     const { user } = useSession();
     const { toast } = useToast();
-    const [isLoadingSuggestions, startLoadingSuggestions] = useTransition();
     const [isSubmitting, startSubmitting] = useTransition();
-    const [suggestedQuestions, setSuggestedQuestions] = useState<string[]>([]);
     const [rememberedDetails, setRememberedDetails] = useState<{ email?: string; phone?: string }>({});
     const [selectedTourDate, setSelectedTourDate] = useState<string | null>(null);
+    const [customTourStartDate, setCustomTourStartDate] = useState<string | null>(null);
     const [showDatePicker, setShowDatePicker] = useState(false);
+    const [calendarMonth, setCalendarMonth] = useState(() => new Date());
+    const [activeTab, setActiveTab] = useState<"visit" | "inquiry">("visit");
     
     const form = useForm<CreateInquiryFormValues>({
         resolver: zodResolver(CreateInquirySchema),
@@ -97,23 +103,16 @@ export function PropertyQA({ propertyId }: PropertyQAProps) {
         }
     }, [form, user]);
 
-    useEffect(() => {
-        startLoadingSuggestions(async () => {
-            const result = await suggestPropertyQuestionsAction(propertyId);
-            if (result.success && result.questions) {
-                setSuggestedQuestions(result.questions);
-            }
-        });
-    }, [propertyId]);
-
     const formatDateKey = (date: Date) => date.toISOString().slice(0, 10);
-    const formatDayLabel = (date: Date, index: number) => index === 0 ? "Today" : index === 1 ? "Tomorrow" : date.toLocaleDateString("en-US", { weekday: "short" });
-    const tourDates = useMemo(() => Array.from({ length: 5 }, (_, index) => {
-        const date = new Date();
+    const formatDayLabel = (date: Date, index: number) => customTourStartDate
+        ? date.toLocaleDateString("en-US", { weekday: "short" })
+        : index === 0 ? "Today" : index === 1 ? "Tomorrow" : date.toLocaleDateString("en-US", { weekday: "short" });
+    const tourDates = useMemo(() => Array.from({ length: 3 }, (_, index) => {
+        const date = customTourStartDate ? new Date(`${customTourStartDate}T00:00:00`) : new Date();
         date.setHours(0, 0, 0, 0);
         date.setDate(date.getDate() + index);
         return date;
-    }), []);
+    }), [customTourStartDate]);
     const tourDateBounds = useMemo(() => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
@@ -121,9 +120,19 @@ export function PropertyQA({ propertyId }: PropertyQAProps) {
         maximum.setDate(maximum.getDate() + 30);
         return { min: formatDateKey(today), max: formatDateKey(maximum) };
     }, []);
-
-    const handleQuestionSelect = (question: string) => {
-        form.setValue("question", question);
+    const calendarDays = useMemo(() => {
+        const firstDay = new Date(calendarMonth.getFullYear(), calendarMonth.getMonth(), 1);
+        const start = new Date(firstDay);
+        start.setDate(firstDay.getDate() - firstDay.getDay());
+        return Array.from({ length: 42 }, (_, index) => {
+            const date = new Date(start);
+            date.setDate(start.getDate() + index);
+            return date;
+        });
+    }, [calendarMonth]);
+    const isDateInRange = (date: Date) => {
+        const key = formatDateKey(date);
+        return key >= tourDateBounds.min && key <= tourDateBounds.max;
     };
 
     const onSubmit = (values: CreateInquiryFormValues) => {
@@ -166,16 +175,43 @@ export function PropertyQA({ propertyId }: PropertyQAProps) {
     };
 
     return (
-        <Card className="mt-6">
-            <CardHeader className="p-4 pb-2">
-                <CardTitle className="flex items-center gap-2 text-lg">
-                    Have a question?
-                </CardTitle>
-                <CardDescription>
-                    {user ? "Your details are ready. Ask us anything about this property." : "Ask us anything about this property."}
-                </CardDescription>
+        <Card className={cn(
+            "overflow-hidden rounded-[2rem] border-border bg-card text-card-foreground shadow-[0_14px_34px_-16px_hsl(var(--foreground)/0.24),0_6px_14px_-10px_hsl(var(--foreground)/0.14)]",
+            flat && "overflow-visible rounded-none border-0 bg-transparent shadow-none",
+        )}>
+            <CardHeader className={cn(
+                "rounded-t-[2rem] bg-primary/5 p-6 pb-5 text-muted-foreground",
+                flat && "rounded-none bg-transparent p-0",
+            )}>
+                <div className="flex items-center gap-5">
+                    <div className="h-20 w-20 shrink-0 overflow-hidden rounded-3xl border-2 border-white bg-white shadow-md">
+                        {agentImage ? <img src={agentImage} alt={agentName} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center font-headline text-2xl font-bold text-primary">{agentName.charAt(0)}</div>}
+                    </div>
+                    <div className="min-w-0"><p className="truncate font-headline text-xl font-bold text-foreground">{agentName}</p><p className="mt-1 text-base">Agent</p></div>
+                </div>
+                <div className="mt-7 space-y-3 text-lg">
+                    {agentPhone && <div className="flex items-center gap-4"><span className="flex h-12 w-12 items-center justify-center rounded-full bg-background text-primary"><Phone className="h-6 w-6" /></span><span>{agentPhone}</span></div>}
+                    {agentEmail && <div className="flex items-center gap-4"><span className="flex h-12 w-12 items-center justify-center rounded-full bg-background text-primary"><Mail className="h-6 w-6" /></span><span className="truncate">{agentEmail}</span></div>}
+                </div>
             </CardHeader>
-            <CardContent className="p-4 pt-2">
+            <CardContent className={cn(
+                "bg-card p-8 pt-4",
+                flat && "bg-transparent p-0",
+            )}>
+                <div className="mb-4 flex rounded-full bg-muted-foreground/20 p-1 text-center text-xs font-semibold text-muted-foreground">
+                    <button type="button" onClick={() => setActiveTab("visit")} className={cn("flex-1 rounded-full px-2 py-2 transition-colors", activeTab === "visit" && "bg-background text-primary shadow-sm")}>Request Visit</button>
+                    <button type="button" onClick={() => setActiveTab("inquiry")} className={cn("flex-1 rounded-full px-2 py-2 transition-colors", activeTab === "inquiry" && "bg-background text-primary shadow-sm")}>Make Inquiry</button>
+                </div>
+                {activeTab === "visit" && <div className="mb-5">
+                    <p className="mb-2 text-sm font-semibold">When</p>
+                    <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-4">
+                        {tourDates.slice(0, 3).map((date, index) => {
+                            const key = formatDateKey(date);
+                            return <button key={key} type="button" onClick={() => { setSelectedTourDate(key); setShowDatePicker(false); }} className={cn("min-w-0 rounded-xl border px-1 py-2 text-center transition-colors hover:border-primary", selectedTourDate === key && "border-primary bg-primary/10 text-primary")}><span className="block text-base font-semibold">{date.getDate()}</span><span className="block truncate text-[10px] text-muted-foreground">{formatDayLabel(date, index)}</span></button>;
+                        })}
+                        <button type="button" onClick={() => { setCalendarMonth(new Date()); setShowDatePicker(true); }} className="min-w-0 rounded-xl border px-1 py-2 text-center text-xs font-medium transition-colors hover:border-primary">Choose another</button>
+                    </div>
+                </div>}
                 {user && <div className="mb-4 flex items-center gap-3 rounded-lg border bg-muted/30 p-3">
                     <div className="h-12 w-12 overflow-hidden rounded-full bg-primary/10">
                         {user.displayImage ? <img src={user.displayImage} alt={user.displayName ?? "User"} className="h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center font-semibold text-primary">{(user.displayName ?? "U").charAt(0)}</div>}
@@ -184,66 +220,42 @@ export function PropertyQA({ propertyId }: PropertyQAProps) {
                 </div>}
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                        {(!user || !user.displayName) && <FormField control={form.control} name="name" render={({ field }) => (<FormItem className="w-full"><FormLabel>Name</FormLabel><FormControl><Input placeholder="Your Name" {...field} /></FormControl><FormMessage /></FormItem>)}/>} 
-                        {(!user || !rememberedDetails.email) && <FormField control={form.control} name="email" render={({ field }) => (<FormItem className="w-full"><FormControl><Input type="email" preIcon={<Mail className="h-4 w-4" />} placeholder="Your Email" {...field} /></FormControl><FormMessage /></FormItem>)}/>} 
-                        {(!user || !rememberedDetails.phone) && <FormField control={form.control} name="phone" render={({ field }) => (<FormItem className="w-full"><FormControl><div className="relative flex w-full items-center"><Phone className="pointer-events-none absolute left-3 z-10 h-4 w-4 text-muted-foreground" /><div className="w-full"><PhoneInput className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 pl-10 ring-offset-background transition-[border-color,box-shadow,background-color,color] duration-500 focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2" placeholder="+countryCode Phone" value={field.value} onChange={field.onChange} onBlur={field.onBlur} name={field.name} ref={field.ref} /></div></div></FormControl><FormMessage /></FormItem>)}/>}<FormField control={form.control} name="question" render={({ field }) => (<FormItem><FormControl><Textarea placeholder="Type your question here..." {...field} /></FormControl><FormMessage /></FormItem>)}/>
-                        <Button htmlType="submit" disabled={isSubmitting}>
+                        {(!user || !user.displayName) && <FormField control={form.control} name="name" render={({ field }) => (<FormItem className="w-full"><FormLabel>Name</FormLabel><FormControl><Input className="h-11 rounded-xl px-4" placeholder="Your full name" {...field} /></FormControl><FormMessage /></FormItem>)}/>} 
+                        {(!user || !rememberedDetails.phone) && <FormField control={form.control} name="phone" render={({ field }) => (<FormItem className="w-full"><FormLabel>Contact number</FormLabel><FormControl><div className="relative flex w-full items-center"><div className="w-full"><PhoneInput className="h-11 rounded-xl border border-input bg-background px-4 py-2 ring-offset-background" placeholder="Phone number" value={field.value} onChange={field.onChange} onBlur={field.onBlur} name={field.name} ref={field.ref} /></div></div></FormControl><FormMessage /></FormItem>)}/>} 
+                        {(!user || !rememberedDetails.email) && <FormField control={form.control} name="email" render={({ field }) => (<FormItem className="w-full"><FormLabel>Email</FormLabel><FormControl><Input className="h-11 rounded-xl px-4" type="email" placeholder="Email address" {...field} /></FormControl><FormMessage /></FormItem>)}/>}<FormField control={form.control} name="question" render={({ field }) => (<FormItem><FormLabel>Message</FormLabel><FormControl><Textarea className="min-h-16 rounded-xl px-4" placeholder="Add any visit notes" {...field} /></FormControl><FormMessage /></FormItem>)}/>
+                        <Button htmlType="submit" variant="solid" className="h-11 w-full rounded-full text-sm" disabled={isSubmitting}>
                             {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
                             Submit Inquiry
                         </Button>
                     </form>
                 </Form>
                 {!user && <p className="mt-2 text-xs text-muted-foreground">Sign in to auto-fill your contact details.</p>}
-                <div className="mt-4 space-y-2">
-                    <h4 className="text-sm font-medium flex items-center gap-2 text-muted-foreground">
-                        <Lightbulb className="h-4 w-4 text-yellow-400" />
-                        Suggested Questions
-                    </h4>
-                    {isLoadingSuggestions ? (
-                        <div className="space-y-2">
-                            <Skeleton className="h-8 w-full" />
-                            <Skeleton className="h-8 w-3/4" />
-                            <Skeleton className="h-8 w-full" />
-                        </div>
-                    ) : (
-                        <div className="flex flex-col items-start gap-2">
-                            {suggestedQuestions.map((q, i) => (
-                                <Button
-                                    key={i}
-                                    htmlType="button"
-                                    variant="text"
-                                    alignment="left"
-                                    className="h-auto min-h-10 w-full max-w-full whitespace-normal break-words text-left [overflow-wrap:anywhere]"
-                                    onClick={() => handleQuestionSelect(q)}
-                                >
-                                    {q}
-                                </Button>
-                            ))}
-                        </div>
-                    )}
-                </div>
-
-                <div className="mt-6 border-t pt-6">
-                    <div className="mb-4 flex items-start gap-3">
-                        <CalendarDays className="mt-1 h-5 w-5 text-primary" />
-                        <div>
-                            <h3 className="text-lg font-semibold">Schedule a tour</h3>
-                            <p className="text-sm text-muted-foreground">Choose your preferred date.</p>
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                        {tourDates.map((date, index) => {
-                            const key = formatDateKey(date);
-                            return <button key={key} type="button" onClick={() => { setSelectedTourDate(key); setShowDatePicker(false); }} className={cn("rounded-md border px-2 py-3 text-center transition-colors hover:border-primary", selectedTourDate === key && "border-primary bg-primary/10 text-primary")}><span className="block text-xl font-semibold">{date.getDate()}</span><span className="text-xs text-muted-foreground">{formatDayLabel(date, index)}</span>{selectedTourDate === key && <Check className="mx-auto mt-1 h-4 w-4" />}</button>;
-                        })}
-                        <button type="button" onClick={() => setShowDatePicker((value) => !value)} className={cn("rounded-md border px-2 py-3 text-center text-sm font-medium transition-colors hover:border-primary", showDatePicker && "border-primary bg-primary/10 text-primary")}>
-                            Choose another
-                        </button>
-                    </div>
-                    {showDatePicker && <Input type="date" className="mt-3" min={tourDateBounds.min} max={tourDateBounds.max} onChange={(event) => setSelectedTourDate(event.target.value)} />}
-                    <Button type="button" disabled={!selectedTourDate} className="mt-4 w-full" onClick={() => toast({ name: "default", title: "Tour request ready", description: `We'll help arrange your tour for ${selectedTourDate}.` })}>Book a Tour</Button>
-                </div>
             </CardContent>
+            <Dialog open={showDatePicker} onOpenChange={setShowDatePicker}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Choose another date</DialogTitle>
+                        <DialogDescription>Select a preferred visit date.</DialogDescription>
+                    </DialogHeader>
+                    <div className="rounded-xl border p-3">
+                        <div className="mb-3 flex items-center justify-between">
+                            <button type="button" className="rounded-lg p-2 hover:bg-muted" onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() - 1, 1))} aria-label="Previous month"><ChevronLeft className="h-4 w-4" /></button>
+                            <p className="font-semibold">{calendarMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}</p>
+                            <button type="button" className="rounded-lg p-2 hover:bg-muted" onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1, 1))} aria-label="Next month"><ChevronRight className="h-4 w-4" /></button>
+                        </div>
+                        <div className="mb-2 grid grid-cols-7 text-center text-xs font-medium text-muted-foreground">
+                            {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((day) => <span key={day}>{day}</span>)}
+                        </div>
+                        <div className="grid grid-cols-7 gap-1">
+                            {calendarDays.map((date) => {
+                                const key = formatDateKey(date);
+                                const available = isDateInRange(date);
+                                return <button key={key} type="button" disabled={!available} onClick={() => { setSelectedTourDate(key); setCustomTourStartDate(key); setShowDatePicker(false); }} className={cn("h-9 rounded-lg text-sm", date.getMonth() !== calendarMonth.getMonth() && "text-muted-foreground/40", available && "hover:bg-primary/10", selectedTourDate === key && "bg-primary text-primary-foreground", !available && "cursor-not-allowed opacity-40")}>{date.getDate()}</button>;
+                            })}
+                        </div>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </Card>
     );
 }

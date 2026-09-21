@@ -1,218 +1,51 @@
-
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
-import { Card, CardContent, CardFooter } from '@neup/components/ui/card';
-import { Slider } from '@/components/ui/slider';
-import { Label } from '@neup/components/ui/label';
-import { Input } from '@neup/components/ui/input';
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis, Legend } from 'recharts';
-import type { ChartConfig } from '@neup/components/ui/chart';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@neup/components/ui/chart';
+import { useMemo, useState } from 'react';
+import { Calculator, Landmark } from 'lucide-react';
+import { Card, CardContent } from '@neup/components/ui/card';
 import { Button } from '@neup/components/ui/button';
-import { Banknote, FileQuestion } from 'lucide-react';
+import { Label } from '@neup/components/ui/label';
+import { Slider } from '@/components/ui/slider';
 import { ClientLink } from './client-link';
+import { calculateEmiBreakdown } from '@/components/logic/EmiCalculator.v1';
 
 interface EmiCalculatorChartProps {
   price: number;
+  currency?: string;
 }
 
-const formatCurrency = (value: number) => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-  }).format(value);
-};
+const formatCurrency = (value: number, currency: string) => new Intl.NumberFormat('en-US', {
+  style: 'currency', currency, maximumFractionDigits: 0,
+}).format(value);
 
-export function EmiCalculatorChart({ price }: EmiCalculatorChartProps) {
-  const [isHydrated, setIsHydrated] = useState(false);
+export function EmiCalculatorChart({ price, currency = 'USD' }: EmiCalculatorChartProps) {
+  const [discountPercent, setDiscountPercent] = useState(0);
   const [downPaymentPercent, setDownPaymentPercent] = useState(20);
   const [interestRate, setInterestRate] = useState(6.5);
-  const [tenureYears, setTenureYears] = useState(20);
-
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
-
-  const { emi, totalInterest, totalPayment, loanAmount, chartData } = useMemo(() => {
-    const downPaymentAmount = price * (downPaymentPercent / 100);
-    const P = price - downPaymentAmount; // Principal loan amount
-    const r = interestRate / 12 / 100; // Monthly interest rate
-    const n = tenureYears * 12; // Tenure in months
-
-    if (P <= 0 || r <= 0 || n <= 0) {
-      return { emi: 0, totalInterest: 0, totalPayment: 0, loanAmount: 0, chartData: [] };
-    }
-
-    const emiValue = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-    const totalPaymentValue = emiValue * n;
-    const totalInterestValue = totalPaymentValue - P;
-    
-    let balance = P;
-    const yearlyData = [];
-    for (let year = 1; year <= tenureYears; year++) {
-        let yearlyInterest = 0;
-        let yearlyPrincipal = 0;
-        for (let month = 1; month <= 12; month++) {
-            if (balance <= 0) break;
-            const interestForMonth = balance * r;
-            const principalForMonth = emiValue - interestForMonth;
-            balance -= principalForMonth;
-            yearlyInterest += interestForMonth;
-            yearlyPrincipal += principalForMonth;
-        }
-        yearlyData.push({
-            year: `${year}`,
-            principal: Math.round(yearlyPrincipal),
-            interest: Math.round(yearlyInterest),
-        });
-    }
-
-    return {
-      emi: emiValue,
-      totalInterest: totalInterestValue,
-      totalPayment: totalPaymentValue,
-      loanAmount: P,
-      chartData: yearlyData,
-    };
-  }, [price, downPaymentPercent, interestRate, tenureYears]);
-
-  const chartConfig = {
-    principal: {
-      label: 'Principal',
-      color: 'hsl(var(--primary))',
-    },
-    interest: {
-      label: 'Interest',
-      color: 'hsl(var(--accent))',
-    },
-  } satisfies ChartConfig;
+  const [termYears, setTermYears] = useState(20);
+  const discountedAmount = price * (1 - discountPercent / 100);
+  const downPaymentAmount = discountedAmount * downPaymentPercent / 100;
+  const loanAmount = discountedAmount - downPaymentAmount;
+  const result = useMemo(() => calculateEmiBreakdown({
+    principal: loanAmount, annualInterestRate: interestRate, termYears,
+  }), [loanAmount, interestRate, termYears]);
 
   return (
-    <div className="mt-6 border-t pt-6">
-        <h2 className="text-2xl font-headline font-semibold mb-4">Mortgage Calculator</h2>
-        <Card>
-            <CardContent className="p-6 space-y-8">
-                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div className="space-y-4">
-                        <Label htmlFor="price">Total Price</Label>
-                        <Input id="price" value={formatCurrency(price)} readOnly />
-                    </div>
-                     <div className="space-y-4">
-                        <Label htmlFor="loanAmount">Loan Amount</Label>
-                        <Input id="loanAmount" value={formatCurrency(loanAmount)} readOnly />
-                    </div>
-                     <div className="space-y-4">
-                        <Label htmlFor="emi">Monthly Payment (EMI)</Label>
-                        <Input id="emi" value={formatCurrency(emi)} readOnly className="text-primary font-bold text-lg" />
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-                    <div className="space-y-2">
-                        <div className="flex justify-between">
-                            <Label>Down Payment</Label>
-                            <span className="font-semibold">{downPaymentPercent}%</span>
-                        </div>
-                        <Slider
-                            value={[downPaymentPercent]}
-                            onValueChange={(value) => setDownPaymentPercent(value[0])}
-                            min={0}
-                            max={50}
-                            step={1}
-                        />
-                    </div>
-                    <div className="space-y-2">
-                         <div className="flex justify-between">
-                            <Label>Interest Rate</Label>
-                            <span className="font-semibold">{interestRate.toFixed(2)}%</span>
-                        </div>
-                        <Slider
-                            value={[interestRate]}
-                            onValueChange={(value) => setInterestRate(value[0])}
-                            min={1}
-                            max={15}
-                            step={0.1}
-                        />
-                    </div>
-                    <div className="space-y-2">
-                         <div className="flex justify-between">
-                            <Label>Loan Tenure</Label>
-                            <span className="font-semibold">{tenureYears} Years</span>
-                        </div>
-                        <Slider
-                            value={[tenureYears]}
-                            onValueChange={(value) => setTenureYears(value[0])}
-                            min={5}
-                            max={30}
-                            step={1}
-                        />
-                    </div>
-                </div>
-                
-                <div className="space-y-4">
-                    <h3 className="text-lg font-medium text-center">Payment Breakdown</h3>
-                    <div className="grid grid-cols-3 gap-4 text-center text-sm">
-                        <div>
-                            <p className="text-muted-foreground">Loan Amount</p>
-                            <p className="font-semibold text-lg">{formatCurrency(loanAmount)}</p>
-                        </div>
-                         <div>
-                            <p className="text-muted-foreground">Total Interest</p>
-                            <p className="font-semibold text-lg">{formatCurrency(totalInterest)}</p>
-                        </div>
-                         <div>
-                            <p className="text-muted-foreground">Total Payment</p>
-                            <p className="font-semibold text-lg">{formatCurrency(totalPayment)}</p>
-                        </div>
-                    </div>
-                </div>
-                
-                {isHydrated && chartData.length > 0 && (
-                    <div className="h-[350px] w-full">
-                        <ChartContainer config={chartConfig} className="w-full h-full">
-                            <BarChart data={chartData} accessibilityLayer>
-                                <CartesianGrid vertical={false} />
-                                <XAxis
-                                    dataKey="year"
-                                    tickLine={false}
-                                    tickMargin={10}
-                                    axisLine={false}
-                                    tickFormatter={(value) => `Year ${value}`}
-                                />
-                                <YAxis
-                                    tickFormatter={(value) => `$${Number(value) / 1000}K`}
-                                    tickLine={false}
-                                    tickMargin={10}
-                                    axisLine={false}
-                                    allowDecimals={false}
-                                />
-                                <ChartTooltip
-                                    cursor={false}
-                                    content={<ChartTooltipContent hideLabel />}
-                                />
-                                <Legend />
-                                <Bar dataKey="principal" stackId="a" fill="var(--color-principal)" radius={[0, 0, 4, 4]} />
-                                <Bar dataKey="interest" stackId="a" fill="var(--color-interest)" radius={[4, 4, 0, 0]} />
-                            </BarChart>
-                        </ChartContainer>
-                    </div>
-                )}
-            </CardContent>
-            <CardFooter className="gap-4">
-                <Button variant="outlined" disabled>
-                    <Banknote className="mr-2 h-4 w-4" />
-                    Mortgage Availability (Soon)
-                </Button>
-                 <ClientLink href="/mortgage/request" className="w-full">
-                     <Button variant="outlined">
-                        <FileQuestion className="mr-2 h-4 w-4" />
-                        Request for Mortgage Support
-                    </Button>
-                </ClientLink>
-            </CardFooter>
-        </Card>
-    </div>
+    <section className="mt-6 border-t pt-6">
+      <div className="mb-4 flex items-center gap-2"><Calculator className="h-5 w-5 text-primary" /><h2 className="text-2xl font-headline font-semibold">Mortgage Calculator</h2></div>
+      <Card className="overflow-hidden border-border/70 shadow-sm">
+        <CardContent className="grid gap-8 p-5 sm:p-7 lg:grid-cols-[minmax(0,1.15fr)_minmax(300px,0.85fr)] lg:p-8">
+          <div className="space-y-8">
+            <div><div className="mb-3 flex items-baseline justify-between gap-4"><Label>Total amount</Label><span className="text-xl font-bold sm:text-2xl">{formatCurrency(price, currency)}</span></div><p className="text-sm text-muted-foreground">The full listed price of this property.</p></div>
+            <div><div className="mb-3 flex items-baseline justify-between gap-4"><Label>Discounted amount</Label><span className="text-xl font-bold sm:text-2xl">{formatCurrency(discountedAmount, currency)}</span></div><Slider value={[discountPercent]} onValueChange={([value]) => setDiscountPercent(value)} min={0} max={50} step={1} aria-label="Discount" /><div className="mt-2 flex justify-between text-xs text-muted-foreground"><span>No discount</span><span>50% discount</span></div><p className="mt-2 text-sm text-muted-foreground">Apply a discount to the total property amount.</p></div>
+            <div><div className="mb-3 flex items-baseline justify-between gap-4"><Label>Down payment</Label><span className="text-xl font-bold">{formatCurrency(downPaymentAmount, currency)} ({downPaymentPercent}%)</span></div><Slider value={[downPaymentPercent]} onValueChange={([value]) => setDownPaymentPercent(value)} min={0} max={90} step={1} aria-label="Down payment" /><div className="mt-2 flex justify-between text-xs text-muted-foreground"><span>0%</span><span>90%</span></div></div>
+            <div><div className="mb-3 flex items-baseline justify-between gap-4"><Label>Loan amount</Label><span className="text-xl font-bold sm:text-2xl">{formatCurrency(loanAmount, currency)}</span></div><p className="text-sm text-muted-foreground">The amount financed after the down payment.</p></div>
+            <div><div className="mb-3 flex items-baseline justify-between gap-4"><Label>Interest rate</Label><span className="text-xl font-bold">{interestRate.toFixed(1)}%</span></div><Slider value={[interestRate]} onValueChange={([value]) => setInterestRate(value)} min={1} max={15} step={0.1} aria-label="Interest rate" /><div className="mt-2 flex justify-between text-xs text-muted-foreground"><span>1%</span><span>15%</span></div></div>
+            <div><div className="mb-3 flex items-baseline justify-between gap-4"><Label>Loan period</Label><span className="text-xl font-bold">{termYears} years</span></div><Slider value={[termYears]} onValueChange={([value]) => setTermYears(value)} min={5} max={40} step={1} aria-label="Loan period" /><div className="mt-2 flex justify-between text-xs text-muted-foreground"><span>5 years</span><span>40 years</span></div></div>
+          </div>
+          <div className="flex flex-col rounded-2xl bg-primary/5 p-6 sm:p-7"><p className="text-lg font-semibold">Monthly payment</p><p className="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">{formatCurrency(result.monthlyPayment, currency)}</p><p className="mt-3 text-sm leading-relaxed text-muted-foreground">This is an approximate monthly repayment based on the inputs above.</p><div className="my-6 border-t border-border/70" /><div className="flex items-start justify-between gap-4"><div><p className="font-semibold">Total interest paid</p><p className="mt-1 text-sm text-muted-foreground">Over the full loan period.</p></div><p className="font-semibold">{formatCurrency(result.totalInterest, currency)}</p></div><div className="mt-auto pt-8"><p className="text-2xl font-bold">Ready to get started?</p><p className="mt-2 text-sm text-muted-foreground">Get in touch with our mortgage advisors for personalized advice.</p><ClientLink href="/mortgage/request" className="mt-5 block"><Button className="w-full"><Landmark className="mr-2 h-4 w-4" />Request Mortgage Support</Button></ClientLink></div></div>
+        </CardContent>
+      </Card>
+    </section>
   );
 }

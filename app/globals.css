@@ -6,6 +6,8 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
+    --property-section-white: 0 0% 100%;
+    --property-section-tint: 210 40% 96.5%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -36,6 +38,8 @@
   }
   .dark {
     --background: 222.2 84% 4.9%;
+    --property-section-white: 222.2 84% 4.9%;
+    --property-section-tint: 217.2 32.6% 12%;
     --foreground: 0 0% 98%;
     --card: 222.2 84% 4.9%;
     --card-foreground: 0 0% 98%;
@@ -128,5 +132,43 @@
     background:
       radial-gradient(circle at top left, hsl(var(--accent) / 0.08), transparent 28%),
       linear-gradient(180deg, hsl(var(--background)), hsl(var(--secondary) / 0.55));
+  }
+
+  .property-page-sections > * {
+    padding-block: 3rem;
+    background-color: hsl(var(--property-section-tint));
+    box-shadow: 0 0 0 100vmax hsl(var(--property-section-tint));
+    clip-path: inset(0 -100vmax);
+    border-top-width: 0;
+  }
+
+  .property-detail-page > .property-section {
+    position: relative;
+    isolation: isolate;
+    padding-block: 3rem;
+    background-color: hsl(var(--property-section-white));
+    box-shadow: 0 0 0 100vmax hsl(var(--property-section-white));
+    clip-path: inset(0 -100vmax);
+  }
+
+  .property-detail-page > .property-section-first {
+    padding-block: 0.5rem;
+    background-color: hsl(var(--property-section-white));
+    box-shadow: 0 0 0 100vmax hsl(var(--property-section-white));
+  }
+
+  .property-detail-page > .property-section-even {
+    background-color: hsl(var(--property-section-tint));
+    box-shadow: 0 0 0 100vmax hsl(var(--property-section-tint));
+  }
+
+  .property-page-sections > *:nth-child(even) {
+    background-color: hsl(var(--property-section-white));
+    box-shadow: 0 0 0 100vmax hsl(var(--property-section-white));
+  }
+
+  .property-page-sections > .rounded-lg {
+    border: 0;
+    border-radius: 0;
   }
 }

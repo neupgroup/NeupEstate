@@ -454,12 +454,13 @@ export async function hydratePropertyAccountLabels(properties: Property[]): Prom
 
   const accounts = await prisma.account.findMany({
     where: { id: { in: accountIds } },
-    select: { id: true, displayName: true },
+    select: { id: true, displayName: true, displayImage: true },
   });
   const nameById = new Map(accounts.map((account) => [
     account.id,
     account.displayName?.trim() || account.id,
   ]));
+  const imageById = new Map(accounts.map((account) => [account.id, account.displayImage]));
 
   return properties.map((property) => ({
     ...property,
@@ -470,6 +471,9 @@ export async function hydratePropertyAccountLabels(properties: Property[]): Prom
     listingAgent: property.listingAgent
       ? (nameById.get(property.listingAgent) || property.listingAgent)
       : property.listingAgent,
+    listingAgentImage: property.listingAgentId
+      ? (imageById.get(property.listingAgentId) || undefined)
+      : undefined,
   }));
 }
 

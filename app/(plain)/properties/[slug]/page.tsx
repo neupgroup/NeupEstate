@@ -7,6 +7,7 @@ Renders the public property detail page with gallery, summary, pricing, and supp
 ::end
 */
 import { notFound, redirect } from 'next/navigation';
+import Link from 'next/link';
 import { getPropertyById, getProperties, getPropertyBySlug } from '@/services/property';
 import { buildPublicAppUrl } from '@neup/core/helpers/link/url';
 import { logProblem } from '@/services/problem-service';
@@ -14,6 +15,7 @@ import { BedDouble, Bath, SquareGanttChart, MapPin, Building, Home, Box, Utensil
 import { SafeImage } from '@/components/safe-image';
 import { EmiCalculatorChart } from '@/components/emi-calculator-chart';
 import { PropertyQA } from '@/components/property-q-a';
+import { ResponsivePropertyQA } from '@/components/responsive-property-qa';
 import { PropertyMapClient } from '@/components/property-map-client';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@neup/components/ui/table';
 import { Card, CardContent, CardHeader, CardTitle } from '@neup/components/ui/card';
@@ -470,45 +472,54 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: schemaJson }}
       />
-      <main className="container mx-auto space-y-8 px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-        <PropertyMediaGallery
-          images={safeImages}
-          title={property.title}
-          propertySlug={property.slug || property.id}
-        />
+      <main className="property-detail-page container mx-auto space-y-8 px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+        <section className="property-section property-section-first space-y-3">
+          <PropertyMediaGallery
+            images={safeImages}
+            title={property.title}
+            propertySlug={property.slug || property.id}
+          />
 
-        <section className="space-y-3">
-          <div className="space-y-2">
-            <h1 className="text-3xl font-headline font-bold tracking-tight sm:text-4xl">
-              {property.title}
-            </h1>
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,2.15fr)_minmax(260px,0.85fr)]">
+          <div className="property-page-sections space-y-8">
+            <div className="space-y-2">
+              <h1 className="text-3xl font-headline font-bold tracking-tight sm:text-4xl">
+                {property.title}
+              </h1>
 
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <MapPin className="h-5 w-5" />
-              <span>{property.location}</span>
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <MapPin className="h-5 w-5" />
+                <span>{property.location}</span>
+              </div>
             </div>
-          </div>
 
-          {roomSummaryItems.length > 0 ? (
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {roomSummaryItems.map((item) => (
-                <div key={item.label} className="rounded-xl border px-4 py-3">
-                  <div className="mb-2 flex items-center gap-2 text-sm text-muted-foreground">
-                    {item.icon}
-                    <p>{item.label}</p>
-                  </div>
-                  <p className="text-base font-medium">
-                    {item.value} {item.value === 1 ? item.singular : item.label}
-                  </p>
+            <ResponsivePropertyQA
+                propertyId={property.id}
+                agentName={property.listingAgent || (property.isOwnerListing ? primaryOwnerName : property.agency.name)}
+                agentImage={property.listingAgentImage || property.agency.logoUrl}
+                agentPhone={property.agency.contactPhone || undefined}
+                agentEmail={property.agency.contactEmail || undefined}
+            />
+
+            <section className="property-section property-section-even space-y-3">
+              {roomSummaryItems.length > 0 ? (
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {roomSummaryItems.map((item) => (
+                    <div key={item.label} className="rounded-xl border px-4 py-3">
+                      <div className="mb-2 flex items-center gap-2 text-sm text-muted-foreground">
+                        {item.icon}
+                        <p>{item.label}</p>
+                      </div>
+                      <p className="text-base font-medium">
+                        {item.value} {item.value === 1 ? item.singular : item.label}
+                      </p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          ) : null}
-        </section>
+              ) : null}
+            </section>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          <div className="lg:col-span-2 space-y-8">
-            <div className="border-t pt-6">
+            <div className="property-section border-t pt-6">
               <h2 className="text-2xl font-headline font-semibold mb-4">About this property</h2>
               <RichTextHtml html={property.description} />
             </div>
@@ -710,21 +721,16 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
               </div>
             ) : null}
 
-            {property.purpose === 'Sale' && hasPositiveValue(primaryPrice) && <EmiCalculatorChart price={primaryPrice} />}
+            {hasPositiveValue(primaryPrice) && <EmiCalculatorChart price={primaryPrice} currency={property.pricing?.currency || 'USD'} />}
           </div>
 
-          <div className="lg:col-span-1">
+          <div className="hidden lg:block">
             <div className="sticky top-24 space-y-4">
-              <Card>
-                <CardContent className="flex items-center gap-4 p-4">
-                  <SafeImage src={property.agency.logoUrl} alt={property.agency.name} width={56} height={56} className="h-14 w-14 rounded-full object-cover" data-ai-hint="agent portrait" fallbackSrc="https://placehold.co/80x80.png" />
-                  <div><p className="font-semibold">{property.agency.name}</p><p className="text-sm text-muted-foreground">Property consultant</p></div>
-                </CardContent>
-              </Card>
-              <PropertyQA propertyId={property.id} />
+              <PropertyQA propertyId={property.id} agentName={property.listingAgent || (property.isOwnerListing ? primaryOwnerName : property.agency.name)} agentImage={property.listingAgentImage || property.agency.logoUrl} agentPhone={property.agency.contactPhone || undefined} agentEmail={property.agency.contactEmail || undefined} />
             </div>
           </div>
-        </div>
+          </div>
+        </section>
       </main>
     </>
   );

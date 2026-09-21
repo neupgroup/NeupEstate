@@ -313,6 +313,7 @@ export interface Property {
     agency: Agency;
     listingAgent?: string;
     listingAgentId?: string;
+    listingAgentImage?: string;
     isOwnerListing?: boolean;
     isFeatured?: boolean;
     isApproved?: boolean;
