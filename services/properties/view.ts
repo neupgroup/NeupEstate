@@ -11,7 +11,7 @@ Single-property lookup, review-log, and saved-property read services.
 import { prisma } from '@neup/core/database/prisma';
 import { logProblem } from '@/services/problem-service';
 import type { Property } from '@/types';
-import { PROPERTY_INCLUDE, type SavedPropertyEntry, hydratePropertyAccountLabels, mapRecord, onlyActive } from './shared';
+import { PROPERTY_INCLUDE, type SavedPropertyEntry, hydratePropertyAccountLabels, mapRecord, onlyActive } from '../property/shared';
 
 export async function getPropertyById(id: string, opts: { includeInactive?: boolean } = {}): Promise<Property | null> {
   try {

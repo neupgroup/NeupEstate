@@ -4,7 +4,8 @@
 ::public
 
 Returns the public list of agencies. Supports `limit` and `offset` query
-parameters for pagination.
+parameters for pagination. Filters: `id`, `name`, `query`, `neupId`, and `agent`.
+Both rows and totals use the same filters. Limits default to 10 and are capped at 25.
 
 ::public end
 ::end
@@ -19,11 +20,20 @@ export const dynamic = 'force-dynamic';
 const getHandler = async (request: NextRequest) => {
   try {
     const params = request.nextUrl.searchParams;
-    const limit = Math.min(Math.max(Number(params.get('limit') ?? 10) || 10, 1), 25);
-    const offset = Math.max(Number(params.get('offset') ?? 0) || 0, 0);
+    const requestedLimit = Number(params.get('limit') ?? 10);
+    const requestedOffset = Number(params.get('offset') ?? 0);
+    const limit = Number.isSafeInteger(requestedLimit) && requestedLimit > 0 ? Math.min(requestedLimit, 25) : 10;
+    const offset = Number.isSafeInteger(requestedOffset) && requestedOffset >= 0 ? requestedOffset : 0;
+    const filters = {
+      id: params.get('id')?.trim() || undefined,
+      name: params.get('name')?.trim() || undefined,
+      query: params.get('query')?.trim() || undefined,
+      neupId: params.get('neupId')?.trim() || undefined,
+      agent: params.get('agent')?.trim() || undefined,
+    };
     const [agencies, total] = await Promise.all([
-      getPublicAgencyAccounts({ limit, offset }),
-      getPublicAgencyAccountCount(),
+      getPublicAgencyAccounts({ limit, offset, filters }),
+      getPublicAgencyAccountCount(filters),
     ]);
 
     return NextResponse.json({

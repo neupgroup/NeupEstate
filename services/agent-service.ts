@@ -4,6 +4,7 @@ import { prisma } from '@neup/core/database/prisma';
 import { logProblem } from './problem-service';
 import type { Agent, CreateAgentFormValues, UpdateAgentFormValues } from '@/types';
 import slugify from 'slugify';
+import { filter, type Filters } from './agent/filter';
 
 function mapRecord(r: any): Agent {
   return {
@@ -46,9 +47,11 @@ function mapAccountRecord(record: {
   };
 }
 
-async function getAccountBackedAgents(): Promise<Agent[]> {
+async function getAccountBackedAgents(options: { limit?: number; offset?: number; filters?: Filters } = {}): Promise<Agent[]> {
   const accounts = await prisma.account.findMany({
-    where: { accountType: 'individual.agent' },
+    where: filter(options.filters),
+    take: options.limit,
+    skip: options.offset,
     select: {
       id: true,
       neupId: true,
@@ -56,7 +59,7 @@ async function getAccountBackedAgents(): Promise<Agent[]> {
       displayImage: true,
       accessedOn: true,
     },
-    orderBy: [{ accessedOn: 'desc' }, { createdOn: 'desc' }],
+    orderBy: [{ accessedOn: 'desc' }, { createdOn: 'desc' }, { id: 'asc' }],
   });
 
   return accounts.map(mapAccountRecord);
@@ -73,16 +76,15 @@ async function uniqueSlug(name: string, excludeId?: string): Promise<string> {
   }
 }
 
-export async function getAgents({ limit = 100, offset = 0 }: { limit?: number; offset?: number } = {}): Promise<Agent[]> {
+export async function getAgents({ limit = 100, offset = 0, filters = {} }: { limit?: number; offset?: number; filters?: Filters } = {}): Promise<Agent[]> {
   try {
-    const accountBackedAgents = await getAccountBackedAgents();
-    return accountBackedAgents.slice(offset, offset + limit);
+    return await getAccountBackedAgents({ limit, offset, filters });
   } catch (e) { await logProblem(e, 'getAgents'); return []; }
 }
 
-export async function getAgentCount(): Promise<number> {
+export async function getAgentCount(filters: Filters = {}): Promise<number> {
   try {
-    return await prisma.account.count({ where: { accountType: 'individual.agent' } });
+    return await prisma.account.count({ where: filter(filters) });
   } catch (e) {
     await logProblem(e, 'getAgentCount');
     return 0;

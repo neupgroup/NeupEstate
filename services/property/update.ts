@@ -15,7 +15,7 @@ import { areaValueToSqft } from '@/types';
 import { mapPurposeToEnum, mapStatusToEnum, mapTypeToEnum } from '@/inapp/database/adapters';
 import slugify from 'slugify';
 import { randomBytes } from 'crypto';
-import { getPropertyById } from './view';
+import { getPropertyById } from '../properties/view';
 import { PROPERTY_TYPE, type PropertyTypeValue } from './shared';
 
 function buildPropertyDetails(d: Partial<CreatePropertyInput> & Record<string, any>) {

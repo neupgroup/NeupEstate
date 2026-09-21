@@ -29,7 +29,7 @@
     ],
     "status": "ACTIVE",
     "visibility": "PUBLIC",
-    "images": [
+    "media": [
       {
         "id": "cmsfqwe7m05avnm9k31eleohs",
         "url": "https://api.propertyinnepal.com.np/storage/6419/6ZSdTNMEKU2AnFxAVzGv8IwYhW1O08-metaUEhPVE8tMjAyNS0xMS0zMC0xNi00OS01Mi5qcGc=-.jpg",
@@ -182,9 +182,10 @@
       "study room",
       "land size"
     ],
-    "details": {
+    "specifics": {
       "house": {
         "bedrooms": 8,
+        "bedroomsWithAttachedBathrooms": 8,
         "bathrooms": 6,
         "livingRooms": 2,
         "diningRooms": 0,
@@ -194,12 +195,67 @@
         "bikeParkingSpots": 0,
         "builtYear": 0,
         "furnished": true,
-        "details": []
+        "facingDirection.house": "South",
+        "facingDirection.land": "South",
+        "moreDetails": []
       },
-      "apartment": null,
-      "land": null,
-      "flat": null,
-      "space": null
-    }
+      "apartment": {
+        "bedrooms": 0,
+        "bedroomsWithAttachedBathrooms": 0,
+        "bathrooms": 0,
+        "livingRooms": 0,
+        "diningRooms": 0,
+        "kitchens": 0,
+        "floors": 0,
+        "carParkingSpots": 0,
+        "bikeParkingSpots": 0,
+        "builtYear": 0,
+        "furnished": false,
+        "facingDirection.apartment": null,
+        "facingDirection.building": null,
+        "moreDetails": []
+      },
+      "land": {
+        "size": 0,
+        "facingDirection.land": null,
+        "moreDetails": []
+      },
+      "flat": {
+        "bedrooms": 0,
+        "bedroomsWithAttachedBathrooms": 0,
+        "bathrooms": 0,
+        "livingRooms": 0,
+        "diningRooms": 0,
+        "kitchens": 0,
+        "floors": 0,
+        "carParkingSpots": 0,
+        "bikeParkingSpots": 0,
+        "builtYear": 0,
+        "furnished": false,
+        "facingDirection.flat": null,
+        "facingDirection.building": null,
+        "moreDetails": []
+      },
+      "space": {
+        "size": 0,
+        "facingDirection.space": null,
+        "facingDirection.building": null,
+        "moreDetails": []
+      }
+    },
+    "owners": [
+      {
+        "id": "owner-1",
+        "name": "Ram Kumar Karki",
+        "contact": "+977.9800000000",
+        "email": "ramkumar.karki@gmail.com"
+      },
+      {
+        "id": "owner-2",
+        "name": "Ram Kumar Subedi",
+        "contact": "+977.9800000000",
+        "email": "ramkumar.subedi@gmail.com"
+      }
+    ]
   }
 }

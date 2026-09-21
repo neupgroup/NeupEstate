@@ -6,9 +6,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTransition, useState, useEffect, useMemo } from 'react';
 import { UpdatePropertySchema, type Property, type User, type UpdatePropertyFormValues } from '@/types';
-import { cancelPropertyChangeDraftAction, createPropertyAction, getCurrentPropertyCreateDraftAction, savePropertyChangeDraftAction, getPropertyChangeContextAction, getPropertyEditCapabilitiesAction, getListingAgentOptionsAction, savePropertyCreateDraftAction } from '@/services/property/drafts';
+import { createPropertyAction, getCurrentPropertyCreateDraftAction, savePropertyChangeDraftAction, getPropertyChangeContextAction, getPropertyEditCapabilitiesAction, getListingAgentOptionsAction, savePropertyCreateDraftAction } from '@/services/properties/drafts';
+import { cancelPropertyChangeDraftAction } from '@/services/properties/id/review';
 import { getCurrentAccountId } from '@/services/identity';
-import { getPropertyById } from "@/services/property/view";
+import { getPropertyById } from "@/services/properties/view";
 import { getUsers } from "@/services/user-service";
 import { useAgencyCustomization } from '@/inapp/agency-customization/use-agency-customization';
 

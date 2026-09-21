@@ -15,7 +15,7 @@ non-preview imports.
 
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
-import { importPropertiesFromJson, type PropertyJsonImportStructure } from '@/services/property/json-import';
+import { importPropertiesFromJson, type PropertyJsonImportStructure } from '@/services/properties/import';
 import { logProblem } from '@/services/problem-service';
 import { PERMISSIONS, requirePermission } from '@/services/permissions';
 

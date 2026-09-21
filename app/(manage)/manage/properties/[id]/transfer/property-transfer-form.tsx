@@ -4,7 +4,7 @@ import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Send } from "lucide-react";
 
-import { savePropertyChangeDraftAction } from '@/services/property/drafts';
+import { savePropertyChangeDraftAction } from '@/services/properties/drafts';
 import { Alert, AlertDescription, AlertTitle } from "@neup/components/ui/alert";
 import { Button } from "@neup/components/ui/button";
 import { LinkButton } from "@neup/components/ui/link-button";

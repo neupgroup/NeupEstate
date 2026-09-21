@@ -14,7 +14,7 @@ and one-to-many data, plus root-level many-to-one and many-to-many lookups.
 */
 
 import type { ExtractedPropertyData } from '@/types';
-import { addProperty } from './update';
+import { addProperty } from '@/services/property/update';
 import { logProblem } from '@/services/problem-service';
 
 type JsonObject = Record<string, unknown>;

@@ -1,10 +1,8 @@
 export * from './shared';
-export * from './list';
-export * from './view';
+export * from '../properties/list';
+export * from '../properties/view';
 export * from './update';
-export * from './delete';
-export * from './approve';
-export * from './reject';
-export * from './search';
-export * from './drafts';
-export * from './review';
+export * from '../properties/id/delete';
+export { approveProperty, rejectProperty, approvePropertyAction, deletePropertyAction, requestPropertyDeletionAction } from '../properties/id/review';
+export * from '../properties/search';
+export * from '../properties/drafts';

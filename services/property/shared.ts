@@ -152,7 +152,8 @@ export const BRIDGE_PROPERTY_FIELDS = [
 ] as const satisfies readonly BridgePropertyField[];
 
 export const DEFAULT_BRIDGE_PROPERTY_FIELDS = [
-  ...BRIDGE_PROPERTY_FIELDS,
+  'id', 'title', 'purpose', 'category', 'type', 'price',
+  'location', 'area', 'areaUnit', 'bedrooms', 'bathrooms', 'images',
 ] as const satisfies readonly BridgePropertyField[];
 
 export const BRIDGE_PROPERTY_DEFAULT_LIMIT = 10;
@@ -161,7 +162,7 @@ export const BRIDGE_PROPERTY_MAX_LIMIT = 15;
 export function resolveBridgePropertyFields(fields?: string[]): BridgePropertyField[] {
   if (!fields?.length) return [...DEFAULT_BRIDGE_PROPERTY_FIELDS];
 
-  return fields
+  return [...DEFAULT_BRIDGE_PROPERTY_FIELDS, ...fields]
     .map((field) => field.trim())
     .filter(Boolean)
     .filter((field, index, list) => list.indexOf(field) === index);

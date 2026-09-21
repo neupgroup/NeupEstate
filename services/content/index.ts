@@ -33,7 +33,7 @@ import { createVisitRequest as createVisitRequestService } from '@/services/visi
 import { createMortgageRequest as createMortgageRequestService } from '@/services/mortgage-request-service';
 import { createModel as createModelService, updateModel as updateModelService, deleteModel as deleteModelService, setDefaultModel as setDefaultModelService } from '@/services/model-service';
 import { createRequirement as createRequirementService, updateRequirement as updateRequirementService } from '@/services/requirements-service';
-import { createPropertyDraftRequest, editUncreatedPropertyDraftRequest } from '@/services/bridge-property-service';
+import { createPropertyDraftRequest, editUncreatedPropertyDraftRequest } from '@/services/properties/create';
 import { resolveAccount, updateUser, getAccountById, getAccounts } from '@/services/account-service';
 import { deleteAccountAndData } from '@/services/account-service';
 import { createLead as createLeadService } from '@/services/leads/create';

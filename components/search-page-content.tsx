@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { searchProperties } from '@/services/property/search';
+import { searchProperties } from '@/services/properties/search';
 import { searchAgentsByLocationAction } from '@/services/agents';
 import { PropertyCard } from "@/components/estate";
 import { Skeleton } from "@neup/components/ui/skeleton";

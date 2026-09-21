@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { searchProperties } from '@/services/property/search';
+import { searchProperties } from '@/services/properties/search';
 import { PropertyCard } from "@/components/estate";
 import { Skeleton } from "@neup/components/ui/skeleton";
 import type { Property, PropertyFilters } from "@/types";

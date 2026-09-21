@@ -27,7 +27,7 @@ import {
   onlyActive,
   pickPropertyFields,
   resolveBridgePropertyFields,
-} from './shared';
+} from '../property/shared';
 
 export async function getProperties(opts: { includeInactive?: boolean } = {}): Promise<Property[]> {
   try {
@@ -69,6 +69,14 @@ export async function getPaginatedProperties(opts: {
     if (filters.isOwnerListing === false) where.agency = { not: null };
     if (filters.purpose?.length) where.purpose = { in: filters.purpose.map(mapPurposeToEnum) };
     if (filters.category?.length) where.type = { in: filters.category.map(mapTypeToEnum) };
+    // Match the same usage classification exposed by mapRecord.
+    if (filters.type?.length) {
+      const categories = [
+        ...(filters.type.includes('Commercial') ? ['COMMERCIAL'] : []),
+        ...(filters.type.includes('Residential') ? ['HOUSE', 'APARTMENT', 'LAND'] : []),
+      ];
+      andClauses.push({ type: { in: categories } });
+    }
     if (filters.agencyName) where.agency = { contains: filters.agencyName, mode: 'insensitive' };
     if (filters.listingAgent) where.agent = { contains: filters.listingAgent, mode: 'insensitive' };
     if (filters.minBedrooms != null || filters.maxBedrooms != null) {
@@ -397,4 +405,20 @@ export async function getBridgePropertiesByAccount(opts: BridgePropertyQuery): P
       offset: Math.max(0, opts.offset ?? 0),
     };
   }
+}
+
+export type ListPropertiesInput = { limit: number; offset: number; filters: PropertyFilters; agencyId?: string; agentId?: string; orderBy: 'newestFirst' | 'oldestFirst'; fields?: string[] };
+
+/** Canonical collection operation used by both the bridge adapter and server callers. */
+export async function listProperties(input: ListPropertiesInput): Promise<BridgePropertyResult & { appliedFilters: PropertyFilters }> {
+  const result = await getPaginatedProperties({
+    limit: input.limit,
+    offset: input.offset,
+    filters: input.filters,
+    agencyIds: input.agencyId ? [input.agencyId] : undefined,
+    agentAccountId: input.agentId,
+    orderBy: input.orderBy,
+  });
+  const fields = resolveBridgePropertyFields(input.fields);
+  return { properties: result.properties.map((property) => pickPropertyFields(property, fields)), totalCount: result.totalCount, limit: input.limit, offset: input.offset, appliedFilters: input.filters };
 }

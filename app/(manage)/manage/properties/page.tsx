@@ -1,5 +1,6 @@
 
-import { getAwaitingReviewItems, getPaginatedProperties, getPropertyDrafts } from "@/services/property";
+import { getAwaitingReviewItems, getPaginatedProperties } from "@/services/property";
+import { getPropertyDrafts } from "@/services/properties/get";
 import { checkAuthenticationForWeb } from "@/services/neupid/check-auth-web";
 import { FilePlus2 } from "lucide-react";
 import { AdminPropertyDraftRow, AdminPropertyRow } from "@/components/manage/property-row";

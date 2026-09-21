@@ -4,6 +4,7 @@ import { prisma } from '@neup/core/database/prisma';
 import { logProblem } from './problem-service';
 import type { Agency, CreateAgencyInput, UpdateAgencyInput } from '@/types';
 import { isAgencyLikeAccountType } from './account-type';
+import { filter, type Filters } from './agency/filter';
 
 export type PublicAgencyAccount = {
   id: string;
@@ -131,17 +132,15 @@ export async function getFeaturedAgencies(limit = 4): Promise<Agency[]> {
 export async function getPublicAgencyAccounts({
   limit = 100,
   offset = 0,
+  filters = {},
 }: {
   limit?: number;
   offset?: number;
+  filters?: Filters;
 } = {}): Promise<PublicAgencyAccount[]> {
   try {
     const records = await prisma.account.findMany({
-      where: {
-        accountType: {
-          in: ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'],
-        },
-      },
+      where: filter(filters),
       select: {
         id: true,
         neupId: true,
@@ -195,14 +194,10 @@ export async function getPublicAgencyAccounts({
   }
 }
 
-export async function getPublicAgencyAccountCount(): Promise<number> {
+export async function getPublicAgencyAccountCount(filters: Filters = {}): Promise<number> {
   try {
     return await prisma.account.count({
-      where: {
-        accountType: {
-          in: ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'],
-        },
-      },
+      where: filter(filters),
     });
   } catch (e) {
     await logProblem(e, 'getPublicAgencyAccountCount');

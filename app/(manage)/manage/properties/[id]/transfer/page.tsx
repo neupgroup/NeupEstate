@@ -4,7 +4,7 @@ import { ArrowLeftRight, ShieldCheck } from "lucide-react";
 import { ClientLink } from "@/components/client-link";
 import { PropertyTransferForm } from "@/app/(manage)/manage/properties/[id]/transfer/property-transfer-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@neup/components/ui/card";
-import { getListingAgentOptionsAction } from '@/services/property/drafts';
+import { getListingAgentOptionsAction } from '@/services/properties/drafts';
 import { hasPermission } from "@/services/permissions";
 import { PERMISSIONS } from "@/services/permissions";
 import { getPublicAgencyAccounts } from "@/services/agency-service";

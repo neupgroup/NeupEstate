@@ -4,7 +4,7 @@ import { getIdentity } from '@/services/neupid/get-identity';
 import { logProblem } from '@/services/problem-service';
 import { requirePermission, PERMISSIONS } from '@/services/permissions';
 import { revalidatePath } from 'next/cache';
-import { isPropertySaved, toggleSavedProperty } from './view';
+import { isPropertySaved, toggleSavedProperty } from '../properties/view';
 
 export async function isPropertySavedAction(userId: string, propertyId: string): Promise<boolean> {
   try {
