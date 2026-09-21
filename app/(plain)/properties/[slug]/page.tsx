@@ -474,25 +474,27 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
       />
       <main className="property-detail-page container mx-auto space-y-8 px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
         <section className="property-section property-section-first space-y-3">
-          <PropertyMediaGallery
-            images={safeImages}
-            title={property.title}
-            propertySlug={property.slug || property.id}
-          />
+          <div className="property-detail-gallery">
+            <PropertyMediaGallery
+              images={safeImages}
+              title={property.title}
+              propertySlug={property.slug || property.id}
+            />
+          </div>
+          <div className="property-detail-title space-y-2">
+            <h1 className="text-3xl font-headline font-bold tracking-tight sm:text-4xl">
+              {property.title}
+            </h1>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,2.15fr)_minmax(260px,0.85fr)]">
-          <div className="property-page-sections space-y-8">
-            <div className="space-y-2">
-              <h1 className="text-3xl font-headline font-bold tracking-tight sm:text-4xl">
-                {property.title}
-              </h1>
-
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <MapPin className="h-5 w-5" />
-                <span>{property.location}</span>
-              </div>
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <MapPin className="h-5 w-5" />
+              <span>{property.location}</span>
             </div>
+          </div>
+        </section>
 
+        <div className="property-detail-body grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,2.15fr)_minmax(260px,0.85fr)]">
+          <div className="property-page-sections space-y-8">
             <ResponsivePropertyQA
                 propertyId={property.id}
                 agentName={property.listingAgent || (property.isOwnerListing ? primaryOwnerName : property.agency.name)}
@@ -724,13 +726,12 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
             {hasPositiveValue(primaryPrice) && <EmiCalculatorChart price={primaryPrice} currency={property.pricing?.currency || 'USD'} />}
           </div>
 
-          <div className="hidden lg:block">
+          <div className="property-detail-sidebar hidden lg:block">
             <div className="sticky top-24 space-y-4">
               <PropertyQA propertyId={property.id} agentName={property.listingAgent || (property.isOwnerListing ? primaryOwnerName : property.agency.name)} agentImage={property.listingAgentImage || property.agency.logoUrl} agentPhone={property.agency.contactPhone || undefined} agentEmail={property.agency.contactEmail || undefined} />
             </div>
           </div>
-          </div>
-        </section>
+        </div>
       </main>
     </>
   );

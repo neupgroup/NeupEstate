@@ -1,0 +1,687 @@
+Table: _prisma_migrations, Model: no Prisma model
+Fields:
+> id: varchar(36) PK, NOT NULL;
+> checksum: varchar(64) NOT NULL;
+> finished_at: timestamptz(6);
+> migration_name: varchar(255) NOT NULL;
+> logs: text;
+> rolled_back_at: timestamptz(6);
+> started_at: timestamptz(6) NOT NULL, default: now();
+> applied_steps_count: integer NOT NULL, default: 0;
+
+Table: account, Model: Account
+Fields:
+> id: text PK, NOT NULL;
+> accountType: text NOT NULL;
+> created_on: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> accessed_on: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> displayImage: text;
+> displayName: text;
+> neup_id: text UNIQUE account_neupId_key(neup_id); account_neup_id_key(neup_id);
+> connectionId: text;
+> working_profile: text references account.id;
+
+Table: account_access, Model: AccountAccess
+Fields:
+> account_id: text PK, NOT NULL, references account.id;
+> app_id: text PK, NOT NULL;
+> role_id: text PK, NOT NULL, references authz_role.id;
+> updated_on: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+
+Table: activity, Model: Activity
+Fields:
+> id: text PK, NOT NULL;
+> accountId: text NOT NULL;
+> title: text NOT NULL;
+> details: jsonb NOT NULL;
+> activityOn: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> ipAddress: text NOT NULL;
+
+Table: agencies, Model: Agency
+Fields:
+> id: text PK, NOT NULL;
+> name: text NOT NULL;
+> logoUrl: text;
+> registeredName: text;
+> contactEmail: text;
+> contactPhone: text;
+> mainLocation: text;
+> branches: text[] default ARRAY[]::text[];
+> description: text;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
+
+Table: agency_agent_map, Model: AgencyAgentMap
+Fields:
+> id: text PK, NOT NULL;
+> agency_id: text NOT NULL, UNIQUE agency_agent_map_agency_id_agent_id_key(agency_id, agent_id), references account.id;
+> agent_id: text NOT NULL, UNIQUE agency_agent_map_agency_id_agent_id_key(agency_id, agent_id), references account.id;
+> status: text NOT NULL, default: 'invited'::text;
+> is_admin: boolean NOT NULL, default: false;
+
+Table: agency_customization, Model: AgencyCustomization
+Fields:
+> id: text PK, NOT NULL;
+> agencyId: text NOT NULL, UNIQUE agency_customization_agencyId_customizeFor_key(agencyId, customizeFor), references agencies.id;
+> customizeFor: text NOT NULL, UNIQUE agency_customization_agencyId_customizeFor_key(agencyId, customizeFor);
+> customization: jsonb NOT NULL;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
+
+Table: agency_map, Model: AgencyMap
+Fields:
+> id: text PK, NOT NULL;
+> agencyAccountId: text NOT NULL, references agencies.id;
+> accountId: text NOT NULL;
+> role: text NOT NULL;
+> lockIn: boolean NOT NULL, default: false;
+
+Table: agents, Model: Agent
+Fields:
+> id: text PK, NOT NULL;
+> name: text NOT NULL;
+> slug: text UNIQUE agents_slug_key(slug);
+> location: text;
+> registered: boolean NOT NULL, default: false;
+> userId: text;
+> email: text;
+> phone: text;
+> about: text;
+> photoUrl: text;
+> specializations: text[] default ARRAY[]::text[];
+> availabilityHours: text;
+> timeSlotDuration: integer;
+> unavailability: jsonb;
+> agencyId: text;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
+
+Table: authz_account_access_grant, Model: AuthzAccountAccessGrant
+Fields:
+> id: text PK, NOT NULL;
+> owner_account_id: text NOT NULL;
+> target_account_id: text NOT NULL;
+> role_id: text NOT NULL;
+> portfolio_id: text;
+
+Table: authz_assets_access_grant, Model: AuthzAssetsAccessGrant
+Fields:
+> id: text PK, NOT NULL;
+> asset_id: text NOT NULL;
+> account_id: text NOT NULL;
+> role_id: text NOT NULL;
+> portfolio_id: text;
+> asset_type: text;
+
+Table: authz_role, Model: AuthzRole
+Fields:
+> id: text PK, NOT NULL;
+> name: text NOT NULL;
+> description: text;
+> app_id: text NOT NULL;
+> scope: text;
+> permissions: jsonb;
+> updatedOn: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> acquisition_type: text;
+> approval_policy: text;
+> applicable_for: jsonb;
+
+Table: authz_role_capability, Model: RoleCapability
+Fields:
+> id: text PK, NOT NULL;
+> role_id: text NOT NULL;
+> capability_id: text NOT NULL;
+> scope: text;
+> denormalized_capability: jsonb;
+> role_name: text;
+
+Table: base_lead, Model: BaseLead
+Fields:
+> id: text PK, NOT NULL;
+> firstName: text NOT NULL;
+> lastName: text NOT NULL;
+> contact: jsonb NOT NULL;
+> source: text;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
+
+Table: client_contact, Model: ClientContact
+Fields:
+> id: text PK, NOT NULL;
+> client_id: text NOT NULL, references base_lead.id;
+> type: text NOT NULL;
+> value: text NOT NULL;
+
+Table: client_link, Model: ClientLink
+Fields:
+> id: text PK, NOT NULL;
+> trackerId: text NOT NULL;
+> clientId: text NOT NULL, references base_lead.id;
+
+Table: competitor, Model: Competitor
+Fields:
+> id: text PK, NOT NULL;
+> name: text NOT NULL;
+> description: text;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
+> crawlRules: jsonb;
+
+Table: competitor_listings, Model: CompetitorListing
+Fields:
+> id: text PK, NOT NULL;
+> competitorPageId: text NOT NULL, UNIQUE competitor_listings_competitorPageId_key(competitorPageId), references competitor_pages.id;
+> title: text NOT NULL;
+> description: text;
+> purpose: text NOT NULL;
+> agentName: text;
+> price: jsonb;
+> priceBasis: text;
+> isSold: boolean NOT NULL, default: false;
+> details: jsonb;
+> loggedOn: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
+> competitorId: text NOT NULL, references competitor.id;
+
+Table: competitor_pages, Model: CompetitorPage
+Fields:
+> id: text PK, NOT NULL;
+> competitorId: text NOT NULL, references competitor.id;
+> title: text NOT NULL;
+> description: text;
+> source: text NOT NULL;
+> details: jsonb;
+> listedOn: timestamp(3);
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
+> visibleHtml: text;
+> lastLoggedStatus: text;
+> lastLoggedOn: timestamp(3);
+
+Table: competitor_sources, Model: CompetitorSource
+Fields:
+> id: text PK, NOT NULL;
+> competitorId: text NOT NULL, references competitor.id;
+> type: text NOT NULL;
+> value: text NOT NULL;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+
+Table: competitor_tracking, Model: CompetitorTracking
+Fields:
+> id: text PK, NOT NULL;
+> competitorPageId: text NOT NULL, references competitor_pages.id;
+> ourPropertyId: text;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+
+Table: conversations, Model: Conversation
+Fields:
+> id: text PK, NOT NULL;
+> accountId: text;
+> customerName: text NOT NULL;
+> customerPhone: text NOT NULL;
+> customerEmail: text;
+> customerAvatarUrl: text;
+> notes: text;
+> assignedTo: text NOT NULL, default: 'AI Assistant'::text;
+> subject: text NOT NULL;
+> lastMessageAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> lastMessageSnippet: text;
+> lastMessageSender: text NOT NULL, default: 'agent'::text;
+> isRead: boolean NOT NULL, default: true;
+> leadCategory: text NOT NULL, default: 'New Inquiry'::text;
+> leadScore: integer NOT NULL, default: 5;
+> aiInterventionActive: boolean NOT NULL, default: true;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
+
+Table: faqs, Model: FAQ
+Fields:
+> id: text PK, NOT NULL;
+> question: text NOT NULL;
+> answer: text NOT NULL;
+> category: text NOT NULL, default: 'General'::text;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
+
+Table: inquiries, Model: Inquiry
+Fields:
+> id: text PK, NOT NULL;
+> propertyId: text NOT NULL;
+> propertyTitle: text NOT NULL;
+> agentName: text;
+> name: text NOT NULL;
+> email: text NOT NULL;
+> phone: text;
+> question: text NOT NULL;
+> status: text NOT NULL, default: 'new'::text;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+
+Table: intelligence_alerts, Model: IntelligenceAlert
+Fields:
+> id: text PK, NOT NULL;
+> map_id: text NOT NULL, references intelligence_mapping.id;
+> account_id: text NOT NULL, references account.id;
+> listing_id: text NOT NULL, references competitor.id;
+> status: text;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
+
+Table: intelligence_mapping, Model: IntelligenceMapping
+Fields:
+> id: text PK, NOT NULL;
+> account_id: text NOT NULL, references account.id;
+> c_location: text;
+> c_min_budget: integer;
+> c_max_budget: integer;
+> c_competitor: text references competitor.id;
+> c_type: text;
+> c_purpose: text NOT NULL;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
+
+Table: lead_activity, Model: LeadActivity
+Fields:
+> id: text PK, NOT NULL;
+> leadId: text NOT NULL, references shared_leads.id;
+> data: jsonb NOT NULL;
+> activityOn: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> activityBy: text NOT NULL;
+
+Table: messages, Model: Message
+Fields:
+> id: text PK, NOT NULL;
+> conversationId: text NOT NULL, references conversations.id;
+> sender: text NOT NULL;
+> text: text NOT NULL;
+> timestamp: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+
+Table: mortgage_requests, Model: MortgageRequest
+Fields:
+> id: text PK, NOT NULL;
+> name: text NOT NULL;
+> email: text NOT NULL;
+> phone: text NOT NULL;
+> address: text NOT NULL;
+> age: integer NOT NULL;
+> income: integer NOT NULL;
+> moreDetails: text;
+> contactMethods: text[] default ARRAY[]::text[];
+> status: text NOT NULL, default: 'new'::text;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
+
+Table: newsletter_subscriptions, Model: NewsletterSubscription
+Fields:
+> id: text PK, NOT NULL;
+> email: text NOT NULL, UNIQUE newsletter_subscriptions_email_key(email);
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+
+Table: problems, Model: Problem
+Fields:
+> id: text PK, NOT NULL;
+> context: text NOT NULL;
+> message: text NOT NULL;
+> stack: text;
+> details: jsonb;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+
+Table: property, Model: Property
+Fields:
+> id: text PK, NOT NULL;
+> slug: text NOT NULL, UNIQUE property_slug_key(slug);
+> title: varchar(255) NOT NULL;
+> description: text NOT NULL;
+> coverImage: varchar(255) NOT NULL;
+> type: PropertyType NOT NULL;
+> purpose: PropertyPurpose NOT NULL;
+> status: PropertyStatus NOT NULL, default: 'PENDING'::"PropertyStatus";
+> currency: varchar(10) NOT NULL;
+> displayPrice: numeric(18,2) NOT NULL;
+> displayPriceUnit: varchar(24) NOT NULL;
+> areaUnit: varchar(64) NOT NULL;
+> locationText: varchar(255) NOT NULL;
+> geoLocation: varchar(63) NOT NULL;
+> structuredLocation: text NOT NULL;
+> agency: text;
+> agent: text;
+> pricing: jsonb;
+> roadAccessDetails: jsonb;
+> distancing: jsonb;
+> earnings: jsonb;
+> landDetails: jsonb;
+> plots: jsonb;
+> apartmentDetails: jsonb;
+> metaTags: text[] default ARRAY[]::text[];
+> amenities: text[] default ARRAY[]::text[];
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
+> isFeatured: boolean NOT NULL, default: false;
+> isApproved: boolean NOT NULL, default: false;
+> isDeleted: boolean NOT NULL, default: false;
+> customId: text;
+> details: jsonb;
+
+Table: property_apartment_detail, Model: PropertyApartmentDetail
+Fields:
+> propertyId: text PK, NOT NULL, UNIQUE property_apartment_detail_propertyId_key(propertyId), references property.id;
+> bedrooms: integer NOT NULL;
+> bathrooms: integer NOT NULL;
+> onFloor: integer NOT NULL;
+> totalFloors: integer NOT NULL;
+> balconies: integer NOT NULL;
+> lifts: integer NOT NULL;
+> carParkingSpots: integer NOT NULL;
+> bikeParkingSpots: integer NOT NULL;
+> furnished: boolean NOT NULL;
+> blockName: varchar(100) NOT NULL;
+> unitNumber: varchar(100) NOT NULL;
+> superArea: numeric(18,8) NOT NULL;
+> builtUpArea: numeric(18,8) NOT NULL;
+> maintenanceFee: numeric(18,8) NOT NULL;
+
+Table: property_changes, Model: PropertyChange
+Fields:
+> id: text PK, NOT NULL;
+> data: jsonb NOT NULL;
+> modifiedOn: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> status: text NOT NULL, default: 'editing'::text;
+> createdOn: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> property_id: text references property.id;
+> is_approved: boolean;
+> account_id: text NOT NULL, references account.id;
+> created_by_id: text references account.id;
+> created_for_id: text references account.id;
+> working_profile_id: text references account.id;
+
+Table: property_commercial_detail, Model: PropertyCommercialDetail
+Fields:
+> propertyId: text PK, NOT NULL, UNIQUE property_commercial_detail_propertyId_key(propertyId), references property.id;
+> floor: integer NOT NULL;
+> washrooms: integer NOT NULL;
+> parkingSpots: integer NOT NULL;
+> frontage: numeric(18,8) NOT NULL;
+> usableArea: numeric(18,8) NOT NULL;
+> buildingType: varchar(100) NOT NULL;
+
+Table: property_competition_map, Model: PropertyCompetitionMap
+Fields:
+> id: text PK, NOT NULL;
+> property_id: text NOT NULL, references property.id;
+> competitor_property_id: text NOT NULL, references competitor_listings.id;
+> status: text NOT NULL, default: 'UNVERIFIED'::text;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
+
+Table: property_document, Model: PropertyDocument
+Fields:
+> id: text PK, NOT NULL;
+> propertyId: text NOT NULL, references property.id;
+> name: text NOT NULL;
+> urls: jsonb NOT NULL;
+> sortOrder: integer NOT NULL, default: 0;
+
+Table: property_house_detail, Model: PropertyHouseDetail
+Fields:
+> propertyId: text PK, NOT NULL, UNIQUE property_house_detail_propertyId_key(propertyId), references property.id;
+> bedrooms: integer NOT NULL;
+> bathrooms: integer NOT NULL;
+> floors: integer NOT NULL;
+> kitchens: integer NOT NULL;
+> livingRooms: integer NOT NULL;
+> diningRooms: integer NOT NULL;
+> carParkingSpots: integer NOT NULL;
+> bikeParkingSpots: integer NOT NULL;
+> furnished: boolean NOT NULL;
+> buildYear: integer NOT NULL;
+> area: numeric(18,8) NOT NULL;
+> facing: varchar(50) NOT NULL;
+> roadAccess: numeric(18,8) NOT NULL;
+
+Table: property_land_detail, Model: PropertyLandDetail
+Fields:
+> propertyId: text PK, NOT NULL, UNIQUE property_land_detail_propertyId_key(propertyId), references property.id;
+> area: numeric(18,8) NOT NULL;
+> facing: varchar(50) NOT NULL;
+> roadAccess: numeric(18,8) NOT NULL;
+> plotShape: varchar(100) NOT NULL;
+> cornerPlot: boolean NOT NULL;
+> waterAvailable: boolean NOT NULL;
+> electricityAvailable: boolean NOT NULL;
+> boundaryWall: boolean NOT NULL;
+
+Table: property_link, Model: PropertyLink
+Fields:
+> id: text PK, NOT NULL;
+> primaryId: text NOT NULL, references property.id;
+> secondaryId: text NOT NULL, references property.id;
+
+Table: property_log, Model: PropertyLog
+Fields:
+> id: text PK, NOT NULL;
+> property_id: text NOT NULL;
+> requested_by: text NOT NULL;
+> approved_by: text;
+> data: jsonb[] NOT NULL, default: ARRAY[]::jsonb[];
+> requested_on: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> approved_on: timestamp(3);
+
+Table: property_media, Model: PropertyMedia
+Fields:
+> id: text PK, NOT NULL;
+> propertyId: text NOT NULL, references property.id;
+> type: text NOT NULL;
+> url: varchar(500) NOT NULL;
+> alt: varchar(255) NOT NULL;
+> sortOrder: integer NOT NULL, default: 0;
+> isPrimary: boolean NOT NULL, default: false;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> isDeleted: boolean NOT NULL, default: false;
+
+Table: property_owner, Model: PropertyOwner
+Fields:
+> id: text PK, NOT NULL;
+> property_id: text NOT NULL, UNIQUE property_owner_property_id_owner_client_id_key(property_id, owner_client_id), references property.id;
+> owner_client_id: text NOT NULL, UNIQUE property_owner_property_id_owner_client_id_key(property_id, owner_client_id), references base_lead.id;
+> is_primary_owner: boolean NOT NULL, default: false;
+
+Table: property_price, Model: PropertyPrice
+Fields:
+> id: text PK, NOT NULL;
+> propertyId: text NOT NULL, references property.id;
+> for: text NOT NULL;
+> currency: varchar(10) NOT NULL;
+> unit: text NOT NULL;
+> price: numeric(18,2) NOT NULL;
+> priceUnit: varchar(24) NOT NULL;
+
+Table: property_requests, Model: PropertyRequest
+Fields:
+> id: text PK, NOT NULL;
+> name: text NOT NULL;
+> email: text NOT NULL;
+> phone: text;
+> location: text;
+> propertyType: text;
+> bedrooms: integer;
+> bathrooms: integer;
+> budget: integer;
+> remarks: text;
+> status: text NOT NULL, default: 'new'::text;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
+
+Table: property_views, Model: PropertyView
+Fields:
+> id: text PK, NOT NULL;
+> accountId: text NOT NULL;
+> propertyId: text NOT NULL, references property.id;
+> onType: text NOT NULL;
+> viewedAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> timeViewed: integer NOT NULL;
+> viewedOn: text NOT NULL;
+
+Table: reacted_properties, Model: ReactedProperty
+Fields:
+> id: text PK, NOT NULL;
+> trackedId: text NOT NULL;
+> propertyId: text NOT NULL, references property.id;
+> onType: text NOT NULL;
+> reaction: Reaction NOT NULL;
+> reactedAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+
+Table: requirements, Model: Requirement
+Fields:
+> id: text PK, NOT NULL;
+> userId: text NOT NULL;
+> minBudget: integer;
+> maxBudget: integer;
+> location: text;
+> propertyType: text[] default ARRAY[]::text[];
+> purpose: text;
+> urgency: text;
+> requiredTime: text;
+> paymentMethod: text[] default ARRAY[]::text[];
+> loan: boolean NOT NULL, default: false;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
+
+Table: review, Model: Review
+Fields:
+> id: text PK, NOT NULL;
+> reviewedBy: text NOT NULL;
+> rating: integer NOT NULL;
+> review: varchar(255) NOT NULL;
+> reviewedOn: timestamp(3) NOT NULL;
+> response: varchar(255);
+> responseBy: text;
+> responseOn: timestamp(3);
+
+Table: sales_requests, Model: SalesRequest
+Fields:
+> id: text PK, NOT NULL;
+> name: text NOT NULL;
+> email: text NOT NULL;
+> phone: text NOT NULL;
+> propertyLocation: text NOT NULL;
+> propertyType: text NOT NULL;
+> remarks: text;
+> status: text NOT NULL, default: 'new'::text;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
+
+Table: saved_property, Model: SavedProperty
+Fields:
+> id: text PK, NOT NULL;
+> accountId: text NOT NULL;
+> propertyId: text NOT NULL, references property.id;
+> savedAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+
+Table: shared_leads, Model: SharedLeads
+Fields:
+> id: text PK, NOT NULL;
+> baseLeadId: text NOT NULL, references base_lead.id;
+> type: LeadType NOT NULL;
+> requirements: jsonb;
+> priority: LeadPriority NOT NULL, default: 'MEDIUM'::"LeadPriority";
+> owner: text NOT NULL, references account.id;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
+
+Table: SharedLead, Model: no Prisma model
+Fields:
+> id: text PK, NOT NULL;
+> baseLead_id: text NOT NULL, references base_lead.id;
+> type: LeadType NOT NULL;
+> requirements: jsonb;
+> priority: LeadPriority NOT NULL, default: 'MEDIUM'::"LeadPriority";
+> leadOwner: text references account.id;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
+> ownerId: text NOT NULL, references account.id;
+
+Table: site_content, Model: SiteContent
+Fields:
+> id: text PK, NOT NULL;
+> key: text NOT NULL, UNIQUE site_content_key_key(key);
+> value: text NOT NULL;
+> section: text;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
+
+Table: site_dev_log_entries, Model: SiteDevLogEntry
+Fields:
+> id: text PK, NOT NULL;
+> requestId: text;
+> source: text NOT NULL;
+> method: text;
+> path: text NOT NULL;
+> statusCode: integer;
+> outcome: text;
+> durationMs: integer;
+> summary: text;
+> details: jsonb;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+
+Table: site_dev_log_settings, Model: SiteDevLogSetting
+Fields:
+> id: text PK, NOT NULL;
+> enabled: boolean NOT NULL, default: false;
+> updatedAt: timestamp(3) NOT NULL;
+
+Table: sitemaps, Model: SitemapEntry
+Fields:
+> id: text PK, NOT NULL;
+> url: text NOT NULL, UNIQUE sitemaps_url_key(url);
+> priority: double precision NOT NULL, default: 0.5;
+> frequency: text NOT NULL, default: 'weekly'::text;
+> lastmod: timestamp(3);
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
+
+Table: team_members, Model: TeamMember
+Fields:
+> id: text PK, NOT NULL;
+> orgId: text;
+> userId: text;
+> name: text NOT NULL;
+> slug: text UNIQUE team_members_slug_key(slug);
+> position: text NOT NULL;
+> socialMedia: jsonb;
+> about: text NOT NULL;
+> moreDetails: text;
+> photoUrl: text;
+> registered: boolean NOT NULL, default: false;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
+
+Table: user_preferences, Model: UserPreference
+Fields:
+> id: text PK, NOT NULL;
+> accountId: text NOT NULL, UNIQUE user_preferences_accountId_key(accountId);
+> updatedAt: timestamp(3) NOT NULL;
+> preferences: jsonb NOT NULL, default: '{}'::jsonb;
+> totalViews: integer NOT NULL, default: 0;
+> totalSaves: integer NOT NULL, default: 0;
+> totalCalls: integer NOT NULL, default: 0;
+> totalInquiries: integer NOT NULL, default: 0;
+> totalVisitRequests: integer NOT NULL, default: 0;
+> totalMortgageRequests: integer NOT NULL, default: 0;
+> totalShares: integer NOT NULL, default: 0;
+> totalTimeSpentInSeconds: integer NOT NULL, default: 0;
+
+Table: visit_requests, Model: VisitRequest
+Fields:
+> id: text PK, NOT NULL;
+> propertyId: text NOT NULL;
+> propertyTitle: text NOT NULL;
+> agentId: text NOT NULL;
+> agentName: text NOT NULL;
+> name: text NOT NULL;
+> email: text NOT NULL;
+> phone: text;
+> preferredDate: text NOT NULL;
+> preferredTime: text;
+> status: text NOT NULL, default: 'new'::text;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;

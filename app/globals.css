@@ -172,3 +172,50 @@
     border-radius: 0;
   }
 }
+
+/* Share the title row with the sidebar only on desktop. */
+@media (min-width: 1024px) {
+  .property-detail-page {
+    --property-title-gap: 1.5rem;
+    display: grid;
+    grid-template-columns: minmax(0, 2.15fr) minmax(260px, 0.85fr);
+    grid-template-rows: auto auto 1fr;
+    column-gap: 2rem;
+    row-gap: 0;
+  }
+
+  .property-detail-page > .property-section-first,
+  .property-detail-page > .property-detail-body {
+    display: contents;
+  }
+
+  .property-detail-page .property-detail-gallery {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    padding-top: 0.5rem;
+    margin-bottom: 0;
+  }
+
+  .property-detail-page .property-detail-title {
+    grid-column: 1;
+    grid-row: 2;
+    margin-top: 0;
+    padding-top: var(--property-title-gap);
+    padding-bottom: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .property-detail-body > .property-page-sections {
+    grid-column: 1;
+    grid-row: 3;
+    min-width: 0;
+  }
+
+  .property-detail-body > .property-detail-sidebar {
+    grid-column: 2;
+    grid-row: 2 / 4;
+    padding-top: var(--property-title-gap);
+    position: relative;
+    z-index: 1;
+  }
+}

@@ -10,7 +10,8 @@
     "build": "npx prisma generate && next build",
     "start": "next start --port 37828",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "postinstall": "cd @neup && git clone --depth 1 --single-branch --branch main https://github.com/neupgroup/nextjs.setup.git && mv nextjs.setup setup && chmod +x ./index.sh && ./index.sh --lang nextsj"
   },
   "engines": {
     "node": ">=20.9.0"
