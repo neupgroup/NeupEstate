@@ -6,7 +6,7 @@ import { useTransition, useState, useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { updateUserAction } from '@/services/account/id/update';
+import { updateUserAction } from '@/services/accounts/id/update';
 import { getSavedPropertiesForUser } from '@/services/properties/single/engage/view';
 import { getAccountPreferences } from '@/services/accounts/single/preferences';
 import { Button } from '@neup/components/ui/button';

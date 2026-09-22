@@ -1,7 +1,7 @@
 import { getBaseLeads } from '@/services/leads/search';
 import { checkAuthenticationForWeb } from '@/services/neupid/check-auth-web';
 import { getAccountIdFromJWT } from '@/services/neupid/check-auth-web';
-import { getAccountById } from '@/services/account/id/get';
+import { getAccountById } from '@/services/accounts/id/get';
 import { getAgencyAgentMapsByAgent } from '@/services/agency-agent-map-service';
 import { ClientLink } from '@/components/client-link';
 import { Badge } from '@neup/components/ui/badge';

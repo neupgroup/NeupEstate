@@ -3,7 +3,7 @@
 import { prisma } from '@neup/core/database/prisma';
 import { logger } from "@neup/logica/logger";
 import type { Agency, CreateAgencyInput, UpdateAgencyInput } from '@/types';
-import { isAgencyLikeAccountType } from './account/type';
+import { isAgencyLikeAccountType } from './accounts/type';
 import { filter, type Filters } from './agency/filter';
 
 export type PublicAgencyAccount = {

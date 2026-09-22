@@ -42,7 +42,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getAccountInformation } from '@/services/account/lookup';
+import { getAccountInformation } from '@/services/accounts/lookup';
 import { prisma } from '@neup/core/database/prisma';
 import { logger } from "@neup/logica/logger";
 import { withRequestDevLog } from '@/services/site-dev-log-service';

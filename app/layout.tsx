@@ -6,7 +6,7 @@ import { cn } from '@neup/core/utils';
 import SharedRootLayout from '@neup/components/layout/RootLayout';
 import { Providers } from '@/components/layout/providers';
 import { ActivityTracker } from '@/components/activity-tracker';
-import { createAccount } from '@/services/account/create';
+import { createAccount } from '@/services/accounts/create';
 import { getAuthenticatedMeData } from '@/services/auth/me';
 import { canShowManagePanelLink } from '@/services/permissions';
 

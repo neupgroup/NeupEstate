@@ -1,6 +1,6 @@
 
 import { getAgentById } from "@/services/agent-service";
-import { listAccounts } from "@/services/account/list";
+import { listAccounts } from "@/services/accounts/list";
 import { notFound } from "next/navigation";
 import { EditAgentForm } from "@/components/manage/edit-agent-form";
 

@@ -42,7 +42,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthenticatedAccount, buildHandshakeGrantUrl } from '@/services/auth';
-import { getSignedAccountInformation } from '@/services/account/lookup';
+import { getSignedAccountInformation } from '@/services/accounts/lookup';
 import { prisma } from '@neup/core/database/prisma';
 import { withRequestDevLog } from '@/services/site-dev-log-service';
 

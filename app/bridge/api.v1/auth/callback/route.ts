@@ -43,7 +43,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from "@neup/logica/logger";
-import { createAccount } from '@/services/account/create';
+import { createAccount } from '@/services/accounts/create';
 import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 function getRedirectTarget(request: NextRequest): string {

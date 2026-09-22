@@ -1,9 +1,9 @@
 
-import { getAccountById } from '@/services/account/id/get';
+import { getAccountById } from '@/services/accounts/id/get';
 import { notFound } from 'next/navigation';
 import { EditUserForm } from '@/components/manage/edit-user-form';
 import type { Account, UpdateUserFormValues } from '@/types';
-import { listAccounts } from '@/services/account/list';
+import { listAccounts } from '@/services/accounts/list';
 
 export default async function UserDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;

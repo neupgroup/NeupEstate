@@ -7,4 +7,4 @@ export * from './personnel';
 export * from './property';
 export * from './mortgage';
 export * from './requirements';
-export * from '../services/account/type';
+export * from '../services/accounts/type';

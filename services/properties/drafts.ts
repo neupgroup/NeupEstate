@@ -5,7 +5,7 @@ import { approveProperty } from '@/services/properties/single/review';
 import { deleteProperty as deletePropertyService } from '@/services/properties/single/delete';
 import { createPropertyLog, getPropertyById } from '@/services/properties/view';
 import { getAgencyAgentAccountsByAgency as getAgencyAgentAccountsByAgencyService, getAgencyAgentMaps } from '@/services/agency-agent-map-service';
-import { getAccountById, getAccounts } from '@/services/account/id/lookup';
+import { getAccountById, getAccounts } from '@/services/accounts/id/lookup';
 import { createPropertyDraftRequest, editUncreatedPropertyDraftRequest } from '@/services/properties/create';
 import { rewritePropertyDetails } from '@/services/ai/rewrite-property-details-flow';
 import { logger } from "@neup/logica/logger";

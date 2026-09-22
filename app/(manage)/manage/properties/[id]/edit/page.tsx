@@ -10,7 +10,7 @@ import { createPropertyAction, getCurrentPropertyCreateDraftAction, saveProperty
 import { cancelPropertyChangeDraftAction } from '@/services/properties/single/review';
 import { getCurrentAccountId } from '@/services/identity';
 import { getPropertyById } from "@/services/properties/view";
-import { listAccounts } from "@/services/account/list";
+import { listAccounts } from "@/services/accounts/list";
 import { useAgencyCustomization } from '@/inapp/agency-customization/use-agency-customization';
 
 import { Form } from '@/components/ui/form';

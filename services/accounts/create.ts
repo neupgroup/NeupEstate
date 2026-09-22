@@ -24,7 +24,7 @@
 
 import { prisma } from '@neup/core/database/prisma';
 import { logica } from '@neup/logica';
-import { getAccountInformation } from '@/services/account/lookup';
+import { getAccountInformation } from '@/services/accounts/lookup';
 import { getAuthenticatedAccount } from '@/services/auth';
 import { getAuthCookieServer } from '@/services/auth/cookie';
 import { logger } from "@neup/logica/logger";

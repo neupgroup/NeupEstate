@@ -5,7 +5,7 @@
 import { Prisma } from '@neup/core/database/prisma';
 import { prisma } from '@neup/core/database/prisma';
 import { logger } from "@neup/logica/logger";
-import { getAccountInformation, getSignedAccountInformation } from '@/services/account/lookup';
+import { getAccountInformation, getSignedAccountInformation } from '@/services/accounts/lookup';
 import type { Account } from '@/types';
 
 /**

@@ -10,7 +10,7 @@
  */
 
 import { useEffect } from 'react';
-import { resolveAccountAction } from '@/services/account/resolve';
+import { resolveAccountAction } from '@/services/accounts/resolve';
 
 export function AccountManager() {
   useEffect(() => {

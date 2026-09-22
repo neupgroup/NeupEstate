@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { CreateAgentSchema, type CreateAgentFormValues, type User } from '@/types';
 import { createAgentAction } from '@/services/agents';
-import { listAccounts } from '@/services/account/list';
+import { listAccounts } from '@/services/accounts/list';
 
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@neup/components/ui/input';

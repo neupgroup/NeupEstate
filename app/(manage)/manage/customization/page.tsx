@@ -4,7 +4,7 @@ import { Badge } from '@neup/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { getAgencyCustomizationsForAgency, getAgencyMapByAccount, getAgencyMapsByAgency } from '@/services/agency-customization-service';
 import { requireAuth } from '@/services/auth/account';
-import { getAccountById } from '@/services/account/id/get';
+import { getAccountById } from '@/services/accounts/id/get';
 import { AlertCircle, ArrowLeft, Building2, Settings2, UsersRound } from 'lucide-react';
 
 type SearchParams = Record<string, string | string[] | undefined>;
