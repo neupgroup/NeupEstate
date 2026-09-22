@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logica } from '@neup/logica';
 import { prisma } from '@neup/core/database/prisma';
-import { buildHandshakeGrantUrl, getAuthenticatedAccount } from '@/services/auth';
+import { getAuthenticatedAccount } from '@/services/auth/account';
+import { buildHandshakeGrantUrl } from '@/services/auth/bridge';
 
 export type AuthenticatedMe = {
   accountId: string;

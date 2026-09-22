@@ -6,8 +6,8 @@
 
 'use server';
 
-import { getAuthCookieServer } from '@/services/auth';
-import { logAuthError } from '@/services/auth';
+import { getAuthCookieServer } from '@/services/auth/cookie';
+import { logger } from '@neup/logica/logger';
 import { logica } from '@neup/logica';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -61,10 +61,10 @@ export async function getBrandAccounts(): Promise<BrandAccountsResponse> {
   try {
     const authCookie = await getAuthCookieServer();
     if (!authCookie) {
-      await logAuthError('No auth cookie found when fetching accessible accounts', {
+      await logger().type('auth').data({ error: String('No auth cookie found when fetching accessible accounts'), details: {
         reason: 'missing_auth_cookie',
         level: 'error',
-      });
+      } }).log();
 
       return {
         success: false,
@@ -75,12 +75,12 @@ export async function getBrandAccounts(): Promise<BrandAccountsResponse> {
 
     const response = await logica.account.brand.list({ authAccountToken: authCookie });
     if (!response.ok || !response.body.success) {
-      await logAuthError('Accounts API returned success: false', {
+      await logger().type('auth').data({ error: String('Accounts API returned success: false'), details: {
         reason: 'api_failure',
         level: 'error',
         response: response.body,
         statusCode: response.status,
-      });
+      } }).log();
 
       return {
         success: false,
@@ -104,12 +104,12 @@ export async function getBrandAccounts(): Promise<BrandAccountsResponse> {
       })),
     };
   } catch (error) {
-    await logAuthError(error as Error, {
+    await logger().type('auth').data({ error: String(error as Error), details: {
       reason: 'fetch_error',
       level: 'error',
       operation: 'get_brand_accounts',
       requestMethod: 'GET',
-    });
+    } }).log();
 
     return {
       success: false,
@@ -154,10 +154,10 @@ export async function createBrandAccountConnection(accountId: string): Promise<C
   try {
     const authCookie = await getAuthCookieServer();
     if (!authCookie) {
-      await logAuthError('No auth cookie found when creating brand account connection', {
+      await logger().type('auth').data({ error: String('No auth cookie found when creating brand account connection'), details: {
         reason: 'missing_auth_cookie',
         level: 'error',
-      });
+      } }).log();
       return {
         success: false,
         error: 'Authentication required. Please log in.',
@@ -185,12 +185,12 @@ export async function createBrandAccountConnection(accountId: string): Promise<C
         (typeof payload?.error === 'string' && payload.error.trim()) ||
         `Failed to create brand account connection: HTTP ${response.status}`;
 
-      await logAuthError(`Failed to create brand account connection: ${response.status}`, {
+      await logger().type('auth').data({ error: String(`Failed to create brand account connection: ${response.status}`), details: {
         reason: 'api_error',
         level: 'error',
         statusCode: response.status,
         response: payload,
-      });
+      } }).log();
 
       return {
         success: false,
@@ -204,7 +204,7 @@ export async function createBrandAccountConnection(accountId: string): Promise<C
       status: payload.status ?? 'active',
     };
   } catch (error) {
-    await logAuthError(error as Error, {
+    await logger().type('auth').data({ error: String(error as Error), details: {
       reason: 'fetch_error',
       level: 'error',
       operation: 'create_brand_account_connection',
@@ -212,7 +212,7 @@ export async function createBrandAccountConnection(accountId: string): Promise<C
       requestBody: {
         accountId: accountId.trim(),
       },
-    });
+    } }).log();
 
     return {
       success: false,

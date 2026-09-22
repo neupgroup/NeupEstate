@@ -21,7 +21,7 @@
 
 import { redirect } from 'next/navigation';
 import { getAuthCookieClient, getAuthCookieServer } from './cookie';
-import { accountAuthToken } from '@/services/auth/token';
+import { logica } from '@neup/logica';
 import { buildHandshakeGrantUrl } from './bridge';
 import { buildPublicAppUrl } from '@neup/core/helpers/link/url';
 
@@ -62,6 +62,18 @@ export type AccountInfo = {
 // ─── Constants ───────────────────────────────────────────────────────────
 
 const DEFAULT_REDIRECT_PATH = '/';
+
+function decodeAccountAuthToken(token: string | null | undefined): AuthAccountPayload | null {
+  if (!token) return null;
+  const encoded = token.split('.')[1];
+  if (!encoded) return null;
+  try {
+    const normalized = encoded.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - encoded.length % 4) % 4);
+    return JSON.parse(Buffer.from(normalized, 'base64').toString('utf8')) as AuthAccountPayload;
+  } catch {
+    return null;
+  }
+}
 
 async function getRedirectPath(request?: { url?: string; nextUrl?: { href?: string }; headers?: { get(name: string): string | null } }): Promise<string> {
   if (request?.nextUrl?.href) {
@@ -117,7 +129,7 @@ async function verifyAuthToken(token: string | null | undefined): Promise<AuthTo
     return { valid: false, reason: 'missing_token' };
   }
 
-  const verification = await accountAuthToken(token).validate();
+  const verification = await logica.account.auth.verify(token);
   if (!verification.valid) {
     return {
       valid: false,
@@ -340,7 +352,7 @@ export async function requireRegisteredAuth(request?: { url?: string; nextUrl?: 
  */
 export function getClientAccount(): AuthAccountPayload | null {
   const token = getAuthCookieClient();
-  const payload = accountAuthToken(token).decode();
+  const payload = decodeAccountAuthToken(token);
   return payload?.aid ? payload as AuthAccountPayload : null;
 }
 

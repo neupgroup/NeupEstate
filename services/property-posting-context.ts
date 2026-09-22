@@ -1,5 +1,5 @@
 import { prisma } from '@neup/core/database/prisma';
-import { getAuthenticatedAccount } from '@/services/auth';
+import { getAuthenticatedAccount } from '@/services/auth/account';
 import { isAgencyLikeAccountType } from '@/services/accounts/type';
 
 /*

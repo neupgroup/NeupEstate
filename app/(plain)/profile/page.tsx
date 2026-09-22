@@ -1,6 +1,6 @@
 import { ServerProfileHeader } from './server-profile-header';
 import { RequirementsSection } from './requirements-section';
-import { requireAuth } from '@/services/auth';
+import { requireAuth } from '@/services/auth/account';
 import { GuestSigninBanner } from '@/components/layout/guest-signin-banner';
 import { getAuthenticatedMeData } from '@/services/auth/me';
 

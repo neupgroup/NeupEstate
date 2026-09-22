@@ -41,7 +41,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getAuthenticatedAccount, buildHandshakeGrantUrl } from '@/services/auth';
+import { getAuthenticatedAccount } from '@/services/auth/account';
+import { buildHandshakeGrantUrl } from '@/services/auth/bridge';
 import { getSignedAccountInformation } from '@/services/accounts/lookup';
 import { prisma } from '@neup/core/database/prisma';
 import { withRequestDevLog } from '@/services/site-dev-log-service';

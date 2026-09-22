@@ -5,7 +5,7 @@
  * Handles both client-side and server-side cookie access.
  */
 
-import { logCookieError } from './logger';
+import { logger } from '@neup/logica/logger';
 
 const COOKIE_NAME = 'auth_account';
 
@@ -47,7 +47,7 @@ export async function getAuthCookieServer(): Promise<string | null> {
     const store = await cookies();
     return store.get(COOKIE_NAME)?.value ?? null;
   } catch (error) {
-    await logCookieError(error as Error);
+    await logger().type('auth.cookie').data({ error: String(error) }).log();
     return null;
   }
 }

@@ -13,7 +13,7 @@ import { logPropertyViews } from '@/services/properties/single/views';
 import type { PropertyActivityEvent } from '@/types';
 import { withRequestDevLog } from '@/services/site-dev-log-service';
 import { getAuthCookieServer } from '@/services/auth/cookie';
-import { accountAuthToken } from '@/services/auth/token';
+import { logica } from '@neup/logica';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,7 +34,7 @@ const postHandler = async (request: NextRequest) => {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
     }
 
-    const verification = await accountAuthToken(token).validate();
+    const verification = await logica.account.auth.verify(token);
     const userId = verification?.payload?.aid as string | undefined;
     if (!userId) {
       return NextResponse.json({ success: false, error: 'Invalid token' }, { status: 401 });

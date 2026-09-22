@@ -6,11 +6,11 @@ export default {
   content: [
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './logica/core/hooks/**/*.{js,ts,jsx,tsx,mdx}',
-    './logica/core/**/*.{js,ts,jsx,tsx,mdx}',
+    './@neup/core/hooks/**/*.{js,ts,jsx,tsx,mdx}',
+    './@neup/logica/**/*.{js,ts,jsx,tsx,mdx}',
     './services/**/*.{js,ts,jsx,tsx,mdx}',
     './types/**/*.{js,ts,jsx,tsx,mdx}',
-    "./.neup/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./@neup/components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     container: {

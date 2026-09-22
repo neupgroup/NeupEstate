@@ -9,7 +9,7 @@ promotes the local account row to an agent account on success.
 
 import { headers } from "next/headers";
 import { prisma } from "@neup/core/database/prisma";
-import { getAccountId } from "@/services/auth";
+import { getAccountId } from "@/services/auth/account";
 
 import { logApiExchange } from "@/services/api-log-service";
 

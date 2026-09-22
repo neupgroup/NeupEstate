@@ -11,7 +11,7 @@ import type {
   AnalyticsScopeSummary,
   AnalyticsSourceScope,
 } from '@neup/core/analytics/types';
-import { getAuthenticatedAccount } from '@/services/auth';
+import { getAuthenticatedAccount } from '@/services/auth/account';
 import { getAgencyMapByAccount, getAgencyMapsByAgency } from '@/services/agency-customization-service';
 import { hasPermission, PERMISSIONS } from '@/services/permissions';
 

@@ -25,8 +25,7 @@
  *   }
  */
 
-import { getAuthenticatedAccount } from '@/services/auth';
-import { accountAuthToken } from '@/services/auth/token';
+import { getAuthenticatedAccount } from '@/services/auth/account';
 
 export type IdentityResult =
   | { authenticated: true;  guest: false; account: { accountId: string; nid: string } }
@@ -43,7 +42,8 @@ export async function getIdentity(cookieValue?: string): Promise<IdentityResult>
   // If a specific cookie value is provided, decode it (for backward compatibility)
   // Otherwise use the centralized auth service
   if (cookieValue !== undefined) {
-    const account = accountAuthToken(cookieValue).decode();
+    const encoded = cookieValue.split('.')[1];
+    const account = encoded ? JSON.parse(Buffer.from(encoded.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - encoded.length % 4) % 4), 'base64').toString('utf8')) : null;
     
     if (!account?.aid) {
       return { authenticated: false, reason: 'no_active_session' };
