@@ -41,7 +41,7 @@ import { hasPermission, requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permissions';
 import { prisma } from '@neup/core/database/prisma';
 import { isAgencyLikeAccountType } from '@/services/accounts/type';
-import { resolvePropertyPostingContext } from '@/services/property-posting-context';
+import { resolvePropertyCreateContext } from '@/services/properties/create/context';
 import { requireIdentity, formatLocationString, firstPositivePrice, cleanPricing, deepMergeJson, normalizeOwnerEntries, normalizeOwnerReferenceEntries, normalizePropertyChangeData, mapPropertyToCreateFormValues } from '@/services/properties/action-helpers';
 
 export async function createFaqAction(

@@ -1,10 +1,10 @@
 import { prisma } from '@neup/core/database/prisma';
 import { CreatePropertySchema, areaValueToSqft, type ApartmentUnit, type CreatePropertyFormValues, type CreatePropertyInput, type LandDetails, type PlotDetails } from '@/types';
-import { resolvePropertyPostingContext, type PropertyPostingContext } from '@/services/property-posting-context';
+import { resolvePropertyCreateContext, type PropertyCreateContext } from '@/services/properties/create/context';
 import { cleanPricing, firstPositivePrice, formatLocationString, normalizeOwnerEntries } from '@/services/properties/action-helpers';
 import { logger } from '@neup/logica/logger';
 
-export type CreatePropertyContext = Pick<PropertyPostingContext, 'actorAccountId'> & { actorId?: string; postingAgencyId?: string | null; workingProfileId?: string | null };
+export type CreatePropertyContext = Pick<PropertyCreateContext, 'actorAccountId'> & { actorId?: string; postingAgencyId?: string | null; workingProfileId?: string | null };
 export type CreatePropertyResult = { requestId: string };
 
 
@@ -18,7 +18,7 @@ export type CreatePropertyResult = { requestId: string };
 export async function createProperty(input: CreatePropertyFormValues, context: CreatePropertyContext): Promise<CreatePropertyResult> {
   const actorId = context.actorId ?? context.actorAccountId;
   const validatedData = CreatePropertySchema.parse(input);
-  const postingContext = await resolvePropertyPostingContext({ actorAccountId: actorId, requestedWorkingProfileId: context.workingProfileId ?? null });
+  const postingContext = await resolvePropertyCreateContext({ actorAccountId: actorId, requestedWorkingProfileId: context.workingProfileId ?? null });
   const purposes = validatedData.purposes?.length ? validatedData.purposes : validatedData.purpose ? [validatedData.purpose] : [];
   if (!purposes.length) throw new Error('Please select at least one purpose.');
   const priceDisplayMode = validatedData.pricing?.priceDisplayMode ?? 'show-price';

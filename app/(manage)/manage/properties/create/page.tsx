@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTransition, useEffect, useMemo, useState } from 'react';
 import { CreatePropertySchema, type CreatePropertyFormValues, type User } from '@/types';
-import { createPropertyAction, getCurrentPropertyCreateDraftAction, getCurrentPropertyPostingContextAction, getListingAgentOptionsAction, savePropertyCreateDraftAction } from '@/services/properties/drafts';
+import { createPropertyAction, getCurrentPropertyCreateDraftAction, getCurrentPropertyCreateContextAction, getListingAgentOptionsAction, savePropertyCreateDraftAction } from '@/services/properties/drafts';
 import { cancelPropertyChangeDraftAction } from '@/services/properties/single/review';
 import { getCurrentAccountId } from '@/services/identity';
 
@@ -138,7 +138,7 @@ export default function CreatePropertyPage() {
                 requestedChangeId
                     ? getCurrentPropertyCreateDraftAction(requestedChangeId)
                     : Promise.resolve({ success: true } as Awaited<ReturnType<typeof getCurrentPropertyCreateDraftAction>>),
-                getCurrentPropertyPostingContextAction({ workingProfileId: activeWorkingProfileId }),
+                getCurrentPropertyCreateContextAction({ workingProfileId: activeWorkingProfileId }),
             ]);
 
             setUsers(userList);

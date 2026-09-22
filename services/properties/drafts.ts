@@ -16,7 +16,7 @@ import { z } from "zod";
 import { hasPermission, requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permissions';
 import { prisma } from '@neup/core/database/prisma';
-import { resolvePropertyPostingContext } from '@/services/property-posting-context';
+import { resolvePropertyCreateContext } from '@/services/properties/create/context';
 import { requireIdentity, formatLocationString, firstPositivePrice, cleanPricing, deepMergeJson, normalizeOwnerEntries, normalizePropertyChangeData, mapPropertyToCreateFormValues } from '@/services/properties/action-helpers';
 
 type PropertyChangeDraftStatus =
@@ -52,7 +52,7 @@ export async function savePropertyCreateDraftAction(input: {
   try {
     await requirePermission(PERMISSIONS.manage.propertySelfCreate);
     const actorId = await requireIdentity();
-    const postingContext = await resolvePropertyPostingContext({
+    const postingContext = await resolvePropertyCreateContext({
       actorAccountId: actorId,
       requestedWorkingProfileId: input.workingProfileId,
     });
@@ -856,11 +856,11 @@ export async function createPropertyAction(
 
 
 /**
- * getCurrentPropertyPostingContextAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ * getCurrentPropertyCreateContextAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export async function getCurrentPropertyPostingContextAction(input?: {
+export async function getCurrentPropertyCreateContextAction(input?: {
   workingProfileId?: string | null;
 }): Promise<{
   success: boolean;
@@ -876,7 +876,7 @@ export async function getCurrentPropertyPostingContextAction(input?: {
   try {
     await requirePermission(PERMISSIONS.manage.propertySelfCreate);
     const actorId = await requireIdentity();
-    const context = await resolvePropertyPostingContext({
+    const context = await resolvePropertyCreateContext({
       actorAccountId: actorId,
       requestedWorkingProfileId: input?.workingProfileId,
     });
@@ -892,7 +892,7 @@ export async function getCurrentPropertyPostingContextAction(input?: {
       postingAgencyId: context.postingAgencyId,
     };
   } catch (error: any) {
-    await logger().type('getCurrentPropertyPostingContextAction').data({ error: String(error), details: {} }).log();
+    await logger().type('getCurrentPropertyCreateContextAction').data({ error: String(error), details: {} }).log();
     return {
       success: false,
       error: error?.message || 'Failed to resolve property posting context.',

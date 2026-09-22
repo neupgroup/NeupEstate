@@ -3,7 +3,7 @@ import { getAuthenticatedAccount } from '@/services/auth/account';
 import { isAgencyLikeAccountType } from '@/services/accounts/type';
 
 /*
-::neup.documentation::property-posting-context
+::neup.documentation::property-create-context
 
 ::private
 
@@ -27,7 +27,7 @@ type PostingContextAccount = {
   displayImage: string | null;
 };
 
-export type PropertyPostingContext = {
+export type PropertyCreateContext = {
   actorAccountId: string;
   actorDisplayName: string | null;
   actorDisplayImage: string | null;
@@ -84,10 +84,10 @@ async function canAccessWorkingProfile(actorAccountId: string, workingProfileId:
   return Boolean(agencyMembership || agencyInvite);
 }
 
-export async function resolvePropertyPostingContext(input: {
+export async function resolvePropertyCreateContext(input: {
   actorAccountId: string;
   requestedWorkingProfileId?: string | null;
-}): Promise<PropertyPostingContext> {
+}): Promise<PropertyCreateContext> {
   const actor = await readAccount(input.actorAccountId);
   if (!actor) {
     throw new Error('Account not found.');
