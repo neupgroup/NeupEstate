@@ -25,7 +25,7 @@ import { areaValueToSqft } from '@/types';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { getHiddenPriceLabel } from '@/services/properties/price-display';
 import { PropertyMediaGallery } from '@/components/manage/property-media-gallery';
-import { getLocation } from '@/services/property-location-service';
+import { getLocation } from '@/services/properties/create/location';
 
 function stripHtml(html: string) {
   return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();

@@ -25,7 +25,7 @@ import { PROPERTY_TYPE, type PropertyTypeValue } from './shared';
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function buildPropertyDetails(d: Partial<CreatePropertyInput> & Record<string, any>) {
+function buildPropertyDetails(d: Partial<CreatePropertyInput> & Record<string, any>) {
   const baseDetails = isPlainObject(d.details) ? { ...d.details } : {};
 
   return {
@@ -85,7 +85,7 @@ export function buildPropertyDetails(d: Partial<CreatePropertyInput> & Record<st
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function buildCoreData(d: Partial<CreatePropertyInput> & Record<string, any>) {
+function buildCoreData(d: Partial<CreatePropertyInput> & Record<string, any>) {
   const geo = (d.latitude != null && d.longitude != null) ? `${d.latitude},${d.longitude}` : '';
   const truncate = (s: string | undefined | null, max: number) =>
     s ? s.substring(0, max) : '';
@@ -141,7 +141,7 @@ risk.
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function buildPropertySlug(input: { slug?: string | null; title?: string | null }, withSuffix = false): string {
+function buildPropertySlug(input: { slug?: string | null; title?: string | null }, withSuffix = false): string {
   const explicitSlug = typeof input.slug === 'string' ? input.slug.trim() : '';
   if (explicitSlug) {
     return explicitSlug.substring(0, 120);
@@ -167,7 +167,7 @@ export function buildPropertySlug(input: { slug?: string | null; title?: string 
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function isUniqueConstraintError(error: unknown): error is { code: 'P2002' } {
+function isUniqueConstraintError(error: unknown): error is { code: 'P2002' } {
   return Boolean(error && typeof error === 'object' && 'code' in error && error.code === 'P2002');
 }
 
@@ -203,11 +203,11 @@ export async function createPropertyRecordWithGeneratedSlug(data: Record<string,
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function isPlainObject(value: unknown): value is Record<string, any> {
+function isPlainObject(value: unknown): value is Record<string, any> {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value) && !(value instanceof Date);
 }
 
-export function deepMergePropertyData<T>(base: T, patch: any): T {
+function deepMergePropertyData<T>(base: T, patch: any): T {
   if (!isPlainObject(base) || !isPlainObject(patch)) {
     return (patch === undefined ? base : patch) as T;
   }
@@ -236,7 +236,7 @@ export function deepMergePropertyData<T>(base: T, patch: any): T {
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function normalizePropertyAgency(value: unknown): string | null | undefined {
+function normalizePropertyAgency(value: unknown): string | null | undefined {
   if (value === undefined) return undefined;
   if (value === null) return null;
   if (typeof value === 'string') return value.trim() || null;
@@ -253,7 +253,7 @@ export function normalizePropertyAgency(value: unknown): string | null | undefin
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function normalizePropertyAgent(value: unknown): string | null | undefined {
+function normalizePropertyAgent(value: unknown): string | null | undefined {
   if (value === undefined) return undefined;
   if (value === null) return null;
   if (typeof value === 'string') return value.trim() || null;
@@ -335,7 +335,7 @@ export async function upsertDetailTable(propertyId: string, type: PropertyTypeVa
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function normalizePropertyImages(images: unknown): string[] {
+function normalizePropertyImages(images: unknown): string[] {
   if (Array.isArray(images)) {
     return images.filter((image): image is string => typeof image === 'string' && image.trim().length > 0);
   }
@@ -363,7 +363,7 @@ export function normalizePropertyImages(images: unknown): string[] {
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function normalizeArrayLikeValue(value: unknown): unknown[] {
+function normalizeArrayLikeValue(value: unknown): unknown[] {
   if (Array.isArray(value)) return value;
   if (!value || typeof value !== 'object') return [];
 
@@ -380,7 +380,7 @@ export function normalizeArrayLikeValue(value: unknown): unknown[] {
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function normalizePropertyOwners(owners: unknown): NonNullable<CreatePropertyInput['owners']> {
+function normalizePropertyOwners(owners: unknown): NonNullable<CreatePropertyInput['owners']> {
   const rawEntries = Array.isArray(owners)
     ? owners
     : owners && typeof owners === 'object'
