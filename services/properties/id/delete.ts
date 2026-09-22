@@ -1,5 +1,6 @@
 import { prisma } from '@neup/core/database/prisma';
 import { requirePermission, PERMISSIONS } from '@/services/permissions';
+import { logger } from '@neup/logica/logger';
 
 export type DeletePropertyInput = { propertyId: string };
 export type DeletePropertyContext = { actorAccountId: string };
@@ -17,4 +18,5 @@ export async function deleteProperty(input: DeletePropertyInput, context: Delete
     await transaction.propertyChange.deleteMany({ where: { propertyId: input.propertyId } });
     await transaction.property.delete({ where: { id: input.propertyId } });
   });
+  await logger().type('property.delete').data({ propertyId: input.propertyId, actorAccountId: context.actorAccountId }).log();
 }

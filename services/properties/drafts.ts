@@ -8,7 +8,7 @@ import { getAgencyAgentAccountsByAgency as getAgencyAgentAccountsByAgencyService
 import { getAccountById, getAccounts } from '@/services/account-service';
 import { createPropertyDraftRequest, editUncreatedPropertyDraftRequest } from '@/services/properties/create';
 import { rewritePropertyDetails } from '@/services/ai/rewrite-property-details-flow';
-import { logProblem } from "@/services/problem-service";
+import { logProblem } from '@/services/problem-service';
 import type { CreatePropertyInput, UpdatePropertyInput, CreatePropertyFormValues, UpdatePropertyFormValues, RewritePropertyDetailsOutput, LandDetails, PlotDetails, ApartmentUnit } from "@/types";
 import { UpdatePropertySchema, areaValueToSqft } from "@/types";
 import { revalidatePath } from "next/cache";

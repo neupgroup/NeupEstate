@@ -3,15 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "setup": "chmod +x ./setup.sh && ./setup.sh",
-    "predev": "npm run setup",
-    "prebuild": "npm run setup",
     "dev": "next dev --experimental-https --port 37828",
     "build": "npx prisma generate && next build",
     "start": "next start --port 37828",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
-    "postinstall": "cd @neup && git clone --depth 1 --single-branch --branch main https://github.com/neupgroup/nextjs.setup.git && mv nextjs.setup setup && chmod +x ./index.sh && ./index.sh --lang nextsj"
+    "typecheck": "tsc --noEmit"
   },
   "engines": {
     "node": ">=20.9.0"

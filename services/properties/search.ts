@@ -5,7 +5,7 @@ import { recommendProperties as recommendPropertiesFlow } from "@/services/ai/ai
 import { extractAndSaveProperty as extractAndSavePropertyFlow, type ExtractPropertyDetailsOutput } from "@/services/ai/extract-property-details-flow";
 import { getPaginatedProperties } from '@/services/properties/list';
 import { updatePropertyImages } from '@/services/property/update';
-import { logProblem } from "@/services/problem-service";
+import { logProblem } from '@/services/problem-service';
 import type { NaturalLanguageSearchOutput, Property, PropertyFilters } from "@/types";
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
 import { getUserPreferences } from '@/services/user-preference-service';

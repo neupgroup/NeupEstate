@@ -10,6 +10,7 @@ Read-side property listing, search, queue, and bridge query services.
 
 import { prisma } from '@neup/core/database/prisma';
 import { logProblem } from '@/services/problem-service';
+import { logger } from '@neup/logica/logger';
 import type { Property, PropertyFilters } from '@/types';
 import { mapPurposeToEnum, mapStatusToEnum, mapTypeFromEnum, mapTypeToEnum } from '@/inapp/database/adapters';
 import {
@@ -420,5 +421,7 @@ export async function listProperties(input: ListPropertiesInput): Promise<Bridge
     orderBy: input.orderBy,
   });
   const fields = resolveBridgePropertyFields(input.fields);
-  return { properties: result.properties.map((property) => pickPropertyFields(property, fields)), totalCount: result.totalCount, limit: input.limit, offset: input.offset, appliedFilters: input.filters };
+  const properties = result.properties.map((property) => pickPropertyFields(property, fields));
+  await logger().type('property.list').data({ limit: input.limit, offset: input.offset, totalCount: result.totalCount }).log();
+  return { properties, totalCount: result.totalCount, limit: input.limit, offset: input.offset, appliedFilters: input.filters };
 }

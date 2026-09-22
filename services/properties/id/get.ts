@@ -1,5 +1,6 @@
 import { prisma } from '@neup/core/database/prisma';
 import { logProblem } from '@/services/problem-service';
+import { logger } from '@neup/logica/logger';
 import type { Property } from '@/types';
 import { PROPERTY_INCLUDE, hydratePropertyAccountLabels, mapRecord, pickPropertyFields, resolveBridgePropertyFields } from '@/services/property/shared';
 
@@ -11,10 +12,15 @@ export async function getProperty(input: GetPropertyInput): Promise<(Partial<Pro
   const propertyCode = input.propertyCode?.trim();
   if (!propertyId && !propertyCode) throw new Error('Provide propertyId or propertyCode.');
   try {
+    const loggerResponse = await logger().type('property.get.called').data({ propertyId: propertyId ?? null, propertyCode: propertyCode ?? null, fields: input.fields ?? null }).log();
+    if (!loggerResponse.ok) console.error('[property.get] Logger request failed.', loggerResponse.status, loggerResponse.body);
     const record = await prisma.property.findFirst({ where: propertyId ? { id: propertyId } : { customId: propertyCode }, include: PROPERTY_INCLUDE });
     if (!record || !record.isApproved) return null;
     const [property] = await hydratePropertyAccountLabels([mapRecord(record)]);
-    return pickPropertyFields(property, resolveBridgePropertyFields(input.fields));
+    const selectedProperty = pickPropertyFields(property, resolveBridgePropertyFields(input.fields));
+    const resultLoggerResponse = await logger().type('property.get').data({ propertyId: property.id, propertyCode: propertyCode ?? null }).log();
+    if (!resultLoggerResponse.ok) console.error('[property.get] Logger request failed.', resultLoggerResponse.status, resultLoggerResponse.body);
+    return selectedProperty;
   } catch (error) {
     await logProblem(error, 'getProperty');
     throw error;
