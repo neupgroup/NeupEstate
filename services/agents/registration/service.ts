@@ -11,7 +11,7 @@ import { headers } from "next/headers";
 import { prisma } from "@neup/core/database/prisma";
 import { getAccountId } from "@/services/auth/account";
 
-import { logApiExchange } from "@/services/api-log-service";
+import { logger } from "@neup/logica/logger";
 
 const ENROLL_AGENT_ROLE_URL = "https://neupgroup.com/account/bridge/api.v1/roles/enroll";
 const AGENT_APP_ID = "neupestate";
@@ -88,36 +88,14 @@ export async function enrollCurrentAccountAsAgent(): Promise<AgentEnrollmentResu
       cache: "no-store",
     });
   } catch (error: any) {
-    await logApiExchange({
-      context: "agent-registration:enroll",
-      request: {
-        method: "POST",
-        url: ENROLL_AGENT_ROLE_URL,
-        headers: { "Content-Type": "application/json", ...(inboundOrigin ? { Origin: inboundOrigin } : {}) },
-        body: { appId, appSecret: "***REDACTED***", roleId: AGENT_ROLE_ID, accountId },
-      },
-      error: error?.message ?? "network_error",
-    });
+    await logger().type('agent-registration:enroll').data({ error: error?.message ?? 'network_error' }).log();
     return { success: false, error: error?.message ?? "Unable to contact the enrollment service." };
   }
 
   const responseText = await response.text();
   const responseBody = safeJsonParse(responseText);
 
-  await logApiExchange({
-    context: "agent-registration:enroll",
-    request: {
-      method: "POST",
-      url: ENROLL_AGENT_ROLE_URL,
-      headers: { "Content-Type": "application/json", ...(inboundOrigin ? { Origin: inboundOrigin } : {}) },
-      body: { appId, appSecret: "***REDACTED***", roleId: AGENT_ROLE_ID, accountId },
-    },
-    response: {
-      status: response.status,
-      headers: headersToObject(response.headers),
-      body: responseBody,
-    },
-  });
+  await logger().type('agent-registration:enroll').data({ status: response.status, response: responseBody }).log();
 
   if (!response.ok) {
     return {

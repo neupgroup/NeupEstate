@@ -16,6 +16,7 @@ type RequestLike = {
 };
 
 import { buildPublicAppUrl } from '@neup/core/helpers/link/url';
+import { logger } from '@neup/logica/logger';
 
 function getAppId(): string {
   return process.env.NEUP_APP_ID ?? '';
@@ -95,20 +96,12 @@ export async function fetchWhoami(token: string) {
       credentials: 'include',
     });
   } catch (error: any) {
-    await logApiExchange({
-      context: 'auth/bridge:fetchWhoami',
-      request: { method: 'GET', url, headers },
-      error: error?.message ?? 'network_error',
-    });
+    await logger().type('auth/bridge:fetchWhoami').data({ error: error?.message ?? 'network_error' }).log();
     return { success: false, status: 0 };
   }
 
   const responseText = await response.text();
-  await logApiExchange({
-    context: 'auth/bridge:fetchWhoami',
-    request: { method: 'GET', url, headers },
-    response: { status: response.status, body: responseText },
-  });
+  await logger().type('auth/bridge:fetchWhoami').data({ status: response.status, body: responseText }).log();
 
   if (!response.ok) {
     return { success: false, status: response.status };
@@ -135,20 +128,12 @@ export async function fetchAccessInfo(token: string) {
       credentials: 'include',
     });
   } catch (error: any) {
-    await logApiExchange({
-      context: 'auth/bridge:fetchAccessInfo',
-      request: { method: 'GET', url, headers },
-      error: error?.message ?? 'network_error',
-    });
+    await logger().type('auth/bridge:fetchAccessInfo').data({ error: error?.message ?? 'network_error' }).log();
     return { success: false, status: 0 };
   }
 
   const responseText = await response.text();
-  await logApiExchange({
-    context: 'auth/bridge:fetchAccessInfo',
-    request: { method: 'GET', url, headers },
-    response: { status: response.status, body: responseText },
-  });
+  await logger().type('auth/bridge:fetchAccessInfo').data({ status: response.status, body: responseText }).log();
 
   if (!response.ok) {
     return { success: false, status: response.status };
@@ -157,4 +142,3 @@ export async function fetchAccessInfo(token: string) {
   const data = safeParseJson(responseText);
   return { success: true, data };
 }
-import { logApiExchange } from '@/services/api-log-service';
