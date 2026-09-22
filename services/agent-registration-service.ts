@@ -10,7 +10,7 @@ promotes the local account row to an agent account on success.
 import { headers } from "next/headers";
 import { prisma } from "@neup/core/database/prisma";
 import { getAccountId } from "@/services/auth";
-import { promoteStoredAccountType } from "@/services/account-type";
+
 import { logApiExchange } from "@/services/api-log-service";
 
 const ENROLL_AGENT_ROLE_URL = "https://neupgroup.com/account/bridge/api.v1/roles/enroll";
@@ -144,7 +144,7 @@ export async function enrollCurrentAccountAsAgent(): Promise<AgentEnrollmentResu
   await prisma.account.update({
     where: { id: accountId },
     data: {
-      accountType: promoteStoredAccountType(existingAccount?.accountType, "agent"),
+      accountType: "individual.agent",
     },
   });
 

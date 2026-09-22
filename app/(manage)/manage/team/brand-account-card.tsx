@@ -3,7 +3,6 @@
 import { SafeImage } from "@/components/safe-image";
 import { Badge } from "@neup/components/ui/badge";
 import { Button } from "@neup/components/ui/button";
-import { resolveStoredAccountType } from "@/services/account-type";
 import { Building } from "lucide-react";
 import { useState, type MouseEvent } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -98,10 +97,7 @@ export function BrandAccountCard({
   const isExisting = !!existingAccount;
   const hasConnection = Boolean(existingAccount?.connectionId?.trim());
   const isRemoteBrandAccount = brandAccount.source === "brand";
-  const displayAccountType = resolveStoredAccountType({
-    remoteAccountType: brandAccount.accountType,
-    existingAccountType: existingAccount?.accountType,
-  });
+  const displayAccountType = existingAccount?.accountType ?? brandAccount.accountType ?? 'individual';
   const canCreateRemoteConnection =
     isRemoteBrandAccount &&
     supportsRemoteConnection(brandAccount.accountType) &&

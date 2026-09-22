@@ -19,7 +19,7 @@ import { Search, UserPlus, ChevronRight, UserSearch, X } from 'lucide-react';
 import { PriceInput } from '@/components/ui/price-input';
 import { createLeadAction } from '@/services/agency';
 import { getCurrentAccountId } from '@/services/identity';
-import { getAccountById, getAccounts } from '@/services/account-service';
+import { getAccountById, getAccounts } from '@/services/account/id/lookup';
 import { getAgencyAgentMapsByAgency, getAgencyAgentMapsByAgent } from '@/services/agency-agent-map-service';
 import type { Account } from '@/types';
 import { useToast } from '@neup/core/hooks/useToast';

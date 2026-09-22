@@ -1,4 +1,4 @@
-import { getAccounts } from "@/services/account-service";
+import { getAccounts } from "@/services/account/id/lookup";
 import { fetchApplicationUsers } from "@/services/neupid/application-users";
 import { Alert, AlertDescription, AlertTitle } from "@neup/components/ui/alert";
 import { AlertCircle, User, ChevronRight } from "lucide-react";

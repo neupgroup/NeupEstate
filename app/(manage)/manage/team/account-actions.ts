@@ -5,7 +5,6 @@ import { logProblem } from '@/services/problem-service';
 import { getIdentity } from '@/services/neupid/get-identity';
 import { createBrandAccountConnection, getBrandAccounts } from '@/services/neupid/get-brand-accounts';
 import type { BrandAccount } from '@/services/neupid/get-brand-accounts';
-import { resolveStoredAccountType } from '@/services/account-type';
 
 type CreateAccountInput = {
   id: string;
@@ -40,10 +39,7 @@ export async function createAccountAction(input: CreateAccountInput): Promise<Ac
         where: { id: input.id },
         data: {
           neupId: input.neupId?.trim() || null,
-          accountType: resolveStoredAccountType({
-            remoteAccountType: input.accountType,
-            existingAccountType: existing.accountType,
-          }),
+          accountType: 'individual',
           displayName: input.displayName,
           displayImage: input.displayImage,
           connectionId: remoteConnectionResult.connectionId,
@@ -57,7 +53,7 @@ export async function createAccountAction(input: CreateAccountInput): Promise<Ac
       data: {
         id: input.id,
         neupId: input.neupId?.trim() || null,
-        accountType: resolveStoredAccountType({ remoteAccountType: input.accountType }),
+        accountType: "individual",
         displayName: input.displayName,
         displayImage: input.displayImage,
         connectionId: remoteConnectionResult.connectionId,
@@ -107,10 +103,7 @@ export async function syncBrandAccountsToLocalAccounts(
         prisma.account.updateMany({
           where: { id: account.id },
           data: {
-            accountType: resolveStoredAccountType({
-              remoteAccountType: account.accountType || 'brand',
-              existingAccountType: existingTypeById.get(account.id),
-            }),
+            accountType: 'individual',
           },
         }),
       ),

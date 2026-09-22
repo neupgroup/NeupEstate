@@ -1,4 +1,4 @@
-import { getAccountById } from '@/services/account-service';
+import { getAccountById } from '@/services/account/id/get';
 import { getSavedProperties } from '@/services/properties';
 import { Card, CardContent, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Bookmark } from 'lucide-react';

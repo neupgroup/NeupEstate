@@ -1,6 +1,6 @@
 import { prisma } from '@neup/core/database/prisma';
 import { getAuthenticatedAccount } from '@/services/auth';
-import { isAgencyLikeAccountType } from '@/services/account-type';
+import { isAgencyLikeAccountType } from '@/services/account/type';
 
 /*
 ::neup.documentation::property-posting-context

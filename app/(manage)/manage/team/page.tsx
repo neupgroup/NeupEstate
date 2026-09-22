@@ -1,5 +1,5 @@
 import { requireAuth } from '@/services/auth/account';
-import { getAccountById, getAccounts } from '@/services/account-service';
+import { getAccountById, getAccounts } from '@/services/account/id/lookup';
 import { getBrandAccounts } from '@/services/neupid/get-brand-accounts';
 import {
   getAgencyMapByAccount,

@@ -54,3 +54,7 @@ export const AccountSchema = z.discriminatedUnion("registered", [
 ]);
 
 export type Account = z.infer<typeof AccountSchema>;
+
+export function isAgencyLikeAccountType(accountType?: string | null): boolean {
+  return ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'].includes(accountType?.trim().toLowerCase() ?? '');
+}

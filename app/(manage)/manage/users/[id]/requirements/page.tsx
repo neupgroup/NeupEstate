@@ -1,5 +1,5 @@
 
-import { getAccountById } from '@/services/account-service';
+import { getAccountById } from '@/services/account/id/get';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';

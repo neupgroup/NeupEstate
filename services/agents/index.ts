@@ -34,13 +34,13 @@ import { createMortgageRequest as createMortgageRequestService } from '@/service
 import { createModel as createModelService, updateModel as updateModelService, deleteModel as deleteModelService, setDefaultModel as setDefaultModelService } from '@/services/model-service';
 import { createRequirement as createRequirementService, updateRequirement as updateRequirementService } from '@/services/requirements-service';
 import { createPropertyDraftRequest, editUncreatedPropertyDraftRequest } from '@/services/properties/create';
-import { resolveAccount, updateUser, getAccountById, getAccounts } from '@/services/account-service';
-import { deleteAccountAndData } from '@/services/account-service';
+import { resolveAccount, updateUser, getAccountById, getAccounts } from '@/services/account/id/lookup';
+import { deleteAccountAndData } from '@/services/account/id/delete';
 import { createLead as createLeadService } from '@/services/leads/create';
 import { createLeadActivity as createLeadActivityService } from '@/services/leads/activity/create';
 import { getIdentity } from '@/services/neupid/get-identity';
 import { prisma } from '@neup/core/database/prisma';
-import { isAgencyLikeAccountType, promoteStoredAccountType } from '@/services/account-type';
+import { isAgencyLikeAccountType } from '@/services/account/type';
 import { resolvePropertyPostingContext } from '@/services/property-posting-context';
 import { requireIdentity, formatLocationString, firstPositivePrice, cleanPricing, deepMergeJson, normalizeOwnerEntries, normalizeOwnerReferenceEntries, normalizePropertyChangeData, mapPropertyToCreateFormValues } from '@/services/properties/action-helpers';
 
@@ -75,7 +75,7 @@ export async function createAgentAction(
       });
       await prisma.account.updateMany({
         where: { id: validatedData.userId },
-        data: { accountType: promoteStoredAccountType(agentAccount?.accountType, 'agent') },
+        data: { accountType: "individual.agent" },
       });
     }
     revalidatePath('/manage/team');

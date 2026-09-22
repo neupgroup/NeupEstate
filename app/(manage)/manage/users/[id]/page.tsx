@@ -1,5 +1,5 @@
 
-import { getAccountById } from '@/services/account-service';
+import { getAccountById } from '@/services/account/id/get';
 import { notFound } from 'next/navigation';
 import { EditUserForm } from '@/components/manage/edit-user-form';
 import type { Account, UpdateUserFormValues } from '@/types';

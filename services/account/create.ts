@@ -24,7 +24,6 @@
 
 import { prisma } from '@neup/core/database/prisma';
 import { logica } from '@neup/logica';
-import { resolveStoredAccountType } from '@/services/account-type';
 import { getAccountInformation } from '@/services/account/lookup';
 import { getAuthenticatedAccount } from '@/services/auth';
 import { getAuthCookieServer } from '@/services/auth/cookie';
@@ -56,9 +55,7 @@ async function getLocalAccountSeed(accountId: string, connectionId: string | nul
     neupId: foundAccount?.neupId ?? null,
     displayName: foundAccount?.displayName ?? null,
     displayImage: foundAccount?.displayImage ?? null,
-    accountType: resolveStoredAccountType({
-      remoteAccountType: foundAccount?.accountType ?? 'individual',
-    }),
+    accountType: 'individual',
     connectionId,
   };
 }
@@ -114,10 +111,7 @@ export async function createAccount(): Promise<void> {
       update: {
         accessedOn: new Date(),
         neupId: seed.neupId,
-        accountType: resolveStoredAccountType({
-          remoteAccountType: seed.accountType,
-          existingAccountType: existing?.accountType ?? null,
-        }),
+        accountType: 'individual',
         displayName: seed.displayName,
         displayImage: seed.displayImage,
         connectionId: seed.connectionId,

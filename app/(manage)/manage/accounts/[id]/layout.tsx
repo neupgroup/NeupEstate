@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { getAccountById } from '@/services/account-service';
+import { getAccountById } from '@/services/account/id/get';
 import { getRequirementByUserId } from '@/services/requirements-service';
 import { getSavedProperties, getPaginatedProperties } from '@/services/properties';
-import { isAgencyLikeAccountType } from '@/services/account-type';
+import { isAgencyLikeAccountType } from '@/services/account/type';
 import { prisma } from '@neup/core/database/prisma';
 import { requireAuth } from '@/services/auth/account';
 import { logProblem } from '@/services/problem-service';

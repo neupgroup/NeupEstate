@@ -6,7 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
 import { BrandAccountCard, type AgencyManagementAccount } from '@/app/(manage)/manage/team/brand-account-card';
 import { syncBrandAccountsToLocalAccounts } from '@/app/(manage)/manage/team/account-actions';
-import { isAgencyLikeAccountType } from '@/services/account-type';
+import { isAgencyLikeAccountType } from '@/services/account/type';
 
 type SearchParams = Record<string, string | string[] | undefined>;
 

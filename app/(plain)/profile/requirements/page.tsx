@@ -9,7 +9,7 @@ import { getRequirementById } from '@/services/requirements-service';
 import type { Requirement } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Skeleton } from '@neup/components/ui/skeleton';
-import { getClientAccountId } from '@/services/account/get-account-id';
+import { getClientAccountId } from '@/services/auth/client';
 
 const PRESET_LOCATIONS = ["Kathmandu", "Lalitpur", "Bhaktapur", "Pokhara"];
 

@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { logica } from '@neup/logica';
 import { prisma } from '@neup/core/database/prisma';
 import { buildHandshakeGrantUrl, getAuthenticatedAccount } from '@/services/auth';
-import { resolveStoredAccountType } from '@/services/account-type';
 
 export type AuthenticatedMe = {
   accountId: string;
@@ -37,10 +36,7 @@ export async function getAuthenticatedMeData(): Promise<AuthenticatedMe | null> 
   try {
     const profile = await logica.account(account.aid).get(['displayName', 'displayImage', 'accountType', 'neupid']);
     const profileBody = profile.ok && profile.body.success ? profile.body : null;
-    const resolvedAccountType = resolveStoredAccountType({
-      remoteAccountType: profileBody?.accountType ?? accountType,
-      existingAccountType: storedAccount?.accountType ?? null,
-    });
+    const resolvedAccountType = 'individual';
 
     const me = {
       accountId: account.aid,
@@ -56,10 +52,7 @@ export async function getAuthenticatedMeData(): Promise<AuthenticatedMe | null> 
 
     return me;
   } catch {
-    const resolvedAccountType = resolveStoredAccountType({
-      remoteAccountType: accountType,
-      existingAccountType: storedAccount?.accountType ?? null,
-    });
+    const resolvedAccountType = 'individual';
     const me = {
       accountId: account.aid,
       neupId: account.nid ?? null,

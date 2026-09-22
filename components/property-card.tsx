@@ -21,7 +21,7 @@ import { getHiddenPriceLabel, getPrimaryCurrency, getPrimaryPrice, getPrimaryPri
 import { SafeImage } from "./safe-image";
 import { isSaved, toggleSave } from '@/services/properties/id/save';
 import { useToast } from "@neup/core/hooks/useToast";
-import { getClientAccountId } from "@/services/account/get-account-id";
+import { getClientAccountId } from '@/services/auth/client';
 
 interface PropertyCardProps {
   property: Property;

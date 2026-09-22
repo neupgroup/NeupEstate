@@ -2,7 +2,7 @@
 
 import { prisma } from '@neup/core/database/prisma';
 import { logProblem } from './problem-service';
-import { getAccounts } from './account-service';
+import { getAccounts } from './account/list';
 import type { Account, AgencyAgentMap, CreateAgencyAgentMapInput } from '@/types';
 
 function mapRecord(record: any): AgencyAgentMap {

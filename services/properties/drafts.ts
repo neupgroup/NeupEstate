@@ -5,7 +5,7 @@ import { approveProperty } from '@/services/properties/id/review';
 import { deleteProperty as deletePropertyService } from '@/services/properties/id/delete';
 import { createPropertyLog, getPropertyById } from '@/services/properties/view';
 import { getAgencyAgentAccountsByAgency as getAgencyAgentAccountsByAgencyService, getAgencyAgentMaps } from '@/services/agency-agent-map-service';
-import { getAccountById, getAccounts } from '@/services/account-service';
+import { getAccountById, getAccounts } from '@/services/account/id/lookup';
 import { createPropertyDraftRequest, editUncreatedPropertyDraftRequest } from '@/services/properties/create';
 import { rewritePropertyDetails } from '@/services/ai/rewrite-property-details-flow';
 import { logProblem } from '@/services/problem-service';

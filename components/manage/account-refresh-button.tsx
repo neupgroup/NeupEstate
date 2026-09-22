@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@neup/components/ui/button';
 import { RefreshCw, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
-import { refreshAccountDisplayInfo } from '@/services/account-service';
+import { refreshAccountDisplayInfo } from '@/services/account/id/update';
 
 type Status = 'idle' | 'loading' | 'success' | 'error' | 'no_change';
 

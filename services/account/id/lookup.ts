@@ -4,10 +4,9 @@
 
 import { Prisma } from '@neup/core/database/prisma';
 import { prisma } from '@neup/core/database/prisma';
-import { logProblem } from './problem-service';
+import { logProblem } from '@/services/problem-service';
 import { getAccountInformation, getSignedAccountInformation } from '@/services/account/lookup';
 import type { Account } from '@/types';
-import { resolveStoredAccountType } from '@/services/account-type';
 
 /**
  * Ensures an account row exists for the given ssid and returns it.
@@ -54,7 +53,7 @@ export async function resolveAccount(
     await prisma.account.create({
       data: {
         id: aid,
-        accountType: resolveStoredAccountType({ remoteAccountType: 'individual' }),
+        accountType: "individual",
         createdOn: new Date(),
         accessedOn: new Date(),
         displayName:  displayName  ?? null,
