@@ -3,7 +3,7 @@
 import { crawlSitemap } from '@/services/crawl/sitemap';
 import { crawlLinks } from '@/services/crawl/links';
 import { getCompetitorById, getCompetitorPages, upsertCompetitorPage } from '@/services/competitor-service';
-import { fetchPageSourceCode } from '@/services/activities/fetch-page-source2';
+import { fetchPageSourceCode } from '@/services/crawl/fetch-page-source';
 import { extractVisibleHtml } from '@/services/crawl/visible-html';
 import { shouldIndexCrawledUrl } from '@/services/crawl/crawl-rules';
 import { extractIntelligencePage } from '@/services/ai/extract-intelligence-page-flow';

@@ -1,7 +1,7 @@
 'use server';
 
 import * as cheerio from 'cheerio';
-import { fetchPageSourceCode } from '@/services/activities/fetch-page-source2';
+import { fetchPageSourceCode } from '@/services/crawl/fetch-page-source';
 
 export type SitemapCrawlResult = {
   url: string;

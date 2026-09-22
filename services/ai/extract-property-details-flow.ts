@@ -11,7 +11,7 @@
 import { z } from 'zod';
 import { addProperty, updatePropertyWithExtractedData } from '@/services/properties';
 import { ExtractedPropertySchema } from '@/types';
-import { fetchPageSourceCode } from '@/services/activities/fetch-page-source2';
+import { fetchPageSourceCode } from '@/services/crawl/fetch-page-source';
 import { getPrompt } from '@/services/prompt-service';
 import { generateText } from '@/services/ai/unified-generation-service';
 

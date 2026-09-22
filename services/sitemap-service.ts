@@ -5,7 +5,7 @@ import { prisma } from '@neup/core/database/prisma';
 import type { Sitemap, SitemapLog } from '@/types';
 import * as cheerio from 'cheerio';
 import { extractAndSaveProperty as extractAndSavePropertyFlow } from '@/services/ai/extract-property-details-flow';
-import { fetchPageSourceCode } from '@/services/activities/fetch-page-source2';
+import { fetchPageSourceCode } from '@/services/crawl/fetch-page-source';
 
 export async function addSitemap(url: string): Promise<string> {
     const existing = await prisma.sitemapEntry.findUnique({

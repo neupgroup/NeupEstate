@@ -6,7 +6,7 @@
  */
 
 import { z } from 'zod';
-import { fetchPageSourceCode } from '@/services/activities/fetch-page-source2';
+import { fetchPageSourceCode } from '@/services/crawl/fetch-page-source';
 import { logProblem } from '@/services/problem-service';
 import { generateText } from '@/services/ai/unified-generation-service';
 
