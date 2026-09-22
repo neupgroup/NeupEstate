@@ -1,7 +1,7 @@
 'use server';
 
 import { getIdentity } from '@/services/neupid/get-identity';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 import { requirePermission, PERMISSIONS } from '@/services/permissions';
 import { revalidatePath } from 'next/cache';
 import { isPropertySaved, toggleSavedProperty } from '../../view';
@@ -25,7 +25,7 @@ export async function isSaved(accountId: string, propertyId: string): Promise<bo
     if (!verifiedUserId) return false;
     return await isPropertySaved(verifiedUserId, propertyId);
   } catch (error) {
-    await logProblem(error, `isSaved (Account: ${accountId}, Prop: ${propertyId})`);
+    await logger().type(`isSaved (Account: ${accountId}, Prop: ${propertyId})`).data({ error: String(error), details: {} }).log();
     return false;
   }
 }

@@ -20,7 +20,7 @@ backward compatible without changing the table shape.
 import { prisma } from '@neup/core/database/prisma';
 import type { Inquiry, CreateInquiryFormValues, InquiryStatus } from '@/types';
 import { getPropertyById } from './properties';
-import { logProblem } from './problem-service';
+import { logger } from "@neup/logica/logger";
 
 export class InquiryServiceError extends Error {
     status: number;
@@ -70,7 +70,7 @@ export async function createInquiry(data: CreateInquiryFormValues): Promise<stri
         });
         return inquiry.id;
     } catch (error) {
-        await logProblem(error, 'createInquiry');
+        await logger().type('createInquiry').data({ error: String(error), details: {} }).log();
         throw new Error('Failed to submit inquiry.');
     }
 }
@@ -115,7 +115,7 @@ export async function createBridgeInquiry(input: CreateBridgeInquiryInput): Prom
             throw error;
         }
 
-        await logProblem(error, `createBridgeInquiry ${propertyId}${input.accountId ? ` account:${input.accountId}` : ''}`);
+        await logger().type(`createBridgeInquiry ${propertyId}${input.accountId ? ` account:${input.accountId}` : ''}`).data({ error: String(error), details: {} }).log();
         throw new InquiryServiceError('Failed to submit inquiry.', 500);
     }
 }
@@ -140,7 +140,7 @@ export async function getInquiries({ limit = 20, offset = 0 }: { limit?: number;
             status: inquiry.status as InquiryStatus,
         }));
     } catch (error) {
-        await logProblem(error, 'getInquiries');
+        await logger().type('getInquiries').data({ error: String(error), details: {} }).log();
         return [];
     }
 }
@@ -152,7 +152,7 @@ export async function updateInquiryStatus(id: string, status: InquiryStatus): Pr
             data: { status },
         });
     } catch (error) {
-        await logProblem(error, `updateInquiryStatus (ID: ${id})`);
+        await logger().type(`updateInquiryStatus (ID: ${id})`).data({ error: String(error), details: {} }).log();
         throw new Error('Failed to update inquiry status.');
     }
 }

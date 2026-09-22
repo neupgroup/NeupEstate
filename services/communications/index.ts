@@ -8,7 +8,7 @@ import { createAgency as createAgencyService, updateAgency as updateAgencyServic
 import { createAgencyAgentMap as createAgencyAgentMapService, getAgencyAgentAccountsByAgency as getAgencyAgentAccountsByAgencyService, getAgencyAgentMaps, getAgencyAgentMapsByAgent as getAgencyAgentMapsByAgentService, getAgencyAgentMapsByAgency as getAgencyAgentMapsByAgencyService } from '@/services/agency-agent-map-service';
 import { getAgentsByLocation as getAgentsByLocationService, createAgent as createAgentService, updateAgent as updateAgentService, deleteAgent as deleteAgentService } from '@/services/agent-service';
 import { addSitemap, getNewUrlsFromSitemap, processSitemapUrl, updateSitemapCheckedTime } from "@/services/sitemap-service";
-import { logProblem } from "@/services/problem-service";
+import { logger } from "@neup/logica/logger";
 import type { NaturalLanguageSearchOutput, Property, CreatePropertyInput, UpdatePropertyInput, CreateAgencyInput, UpdateAgencyInput, PropertyApprovalResult, CreatePropertyFormValues, UpdatePropertyFormValues, CreateAgencyFormValues, UpdateAgencyFormValues, PropertyFilters, ExtractedPropertyData, SitemapLog, PropertyAmendmentResult, RewritePropertyDetailsOutput, PropertyAssuranceResult, Agent, CreateAgentFormValues, UpdateAgentFormValues, StructuredLocation, CreateConversationFormValues, CreateUserActivityInput, PropertyImageUpdateResult, CreateFaqFormValues, UpdateFaqFormValues, CreateInquiryFormValues, InquiryStatus, UpdatePromptFormValues, CreatePromptFormValues, User, CreatePropertyRequestFormValues, CreateSalesRequestFormValues, CreateVisitRequestFormValues, CreateMortgageRequestFormValues, PropertyActivityEvent, UserPreferences, AIModel, CreateAIModelFormValues, UpdateAIModelFormValues, CreateRequirementFormValues, Requirement, UpdateUserFormValues, LandDetails, PlotDetails, ApartmentUnit } from "@/types";
 import { CreatePropertySchema, UpdatePropertySchema, CreateAgencySchema, UpdateAgencySchema, PropertyPurposeSchema, PropertyCategorySchema, PropertyUsageTypeSchema, CreateAgentSchema, UpdateAgentSchema, CreateConversationSchema, CreateFaqSchema, UpdateFaqSchema, CreateInquirySchema, UpdatePromptSchema, CreatePromptSchema, CreatePropertyRequestSchema, CreateSalesRequestSchema, CreateVisitRequestSchema, CreateMortgageRequestSchema, CreateAIModelSchema, UpdateAIModelSchema, CreateRequirementSchema, UpdateUserSchema, areaValueToSqft } from "@/types";
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
@@ -75,7 +75,7 @@ export async function createConversationAction(data: CreateConversationFormValue
     revalidatePath('/manage/messages');
     return { success: true, conversationId, error: null };
   } catch (e: any) {
-    await logProblem(e, 'createConversationAction');
+    await logger().type('createConversationAction').data({ error: String(e), details: {} }).log();
     if (e instanceof z.ZodError) {
       return { success: false, error: e.message, conversationId: null };
     }
@@ -89,7 +89,7 @@ export async function deleteConversationAction(conversationId: string) {
         revalidatePath('/manage/messages');
         return { success: true };
     } catch (e: any) {
-        await logProblem(e, `deleteConversationAction (ID: ${conversationId})`);
+        await logger().type(`deleteConversationAction (ID: ${conversationId})`).data({ error: String(e), details: {} }).log();
         return { success: false, error: "Failed to delete conversation." };
     }
 }
@@ -102,7 +102,7 @@ export async function deleteAccountAction(accountId: string) {
     } catch (_) {}
     return { success: true };
   } catch (e: any) {
-    await logProblem(e, `deleteAccountAction (ID: ${accountId})`);
+    await logger().type(`deleteAccountAction (ID: ${accountId})`).data({ error: String(e), details: {} }).log();
     return { success: false, error: 'Failed to delete account.' };
   }
 }
@@ -113,7 +113,7 @@ export async function setAiInterventionAction(conversationId: string, active: bo
     revalidatePath(`/manage/messages/${conversationId}`);
     return { success: true };
   } catch (e: any) {
-    await logProblem(e, `setAiInterventionAction (ID: ${conversationId})`);
+    await logger().type(`setAiInterventionAction (ID: ${conversationId})`).data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message || "Failed to toggle AI intervention." };
   }
 }
@@ -159,7 +159,7 @@ export async function sendAiFollowUpAction(conversationId: string): Promise<{ su
     return { success: true, messagesSent: aiResult.messages.length };
 
   } catch (e: any) {
-    await logProblem(e, `sendAiFollowUpAction (ID: ${conversationId})`);
+    await logger().type(`sendAiFollowUpAction (ID: ${conversationId})`).data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message || 'An unknown error occurred while sending follow-ups.' };
   }
 }

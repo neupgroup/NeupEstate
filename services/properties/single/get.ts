@@ -1,6 +1,5 @@
 import { prisma } from '@neup/core/database/prisma';
-import { logProblem } from '@/services/problem-service';
-import { logger } from '@neup/logica/logger';
+import { logger } from "@neup/logica/logger";
 import type { Property } from '@/types';
 import { PROPERTY_INCLUDE, hydratePropertyAccountLabels, mapRecord, pickPropertyFields, resolveBridgePropertyFields } from '@/services/properties/shared';
 
@@ -29,7 +28,7 @@ export async function getProperty(input: GetPropertyInput): Promise<(Partial<Pro
     if (!resultLoggerResponse.ok) console.error('[property.get] Logger request failed.', resultLoggerResponse.status, resultLoggerResponse.body);
     return selectedProperty;
   } catch (error) {
-    await logProblem(error, 'getProperty');
+    await logger().type('getProperty').data({ error: String(error), details: {} }).log();
     throw error;
   }
 }

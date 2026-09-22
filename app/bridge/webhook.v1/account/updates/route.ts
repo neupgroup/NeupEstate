@@ -1,7 +1,7 @@
 import { createDecipheriv, createHash, createHmac, timingSafeEqual } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { Prisma, prisma } from "@neup/core/database/prisma";
-import { logProblem } from "@/services/problem-service";
+import { logger } from "@neup/logica/logger";
 import { withRequestDevLog } from "@/services/site-dev-log-service";
 
 export const dynamic = "force-dynamic";
@@ -436,7 +436,7 @@ const postHandler = async (req: NextRequest) => {
   try {
     decryptedText = decryptEnvelope(body.iv, body.tag, body.data, appSecret);
   } catch (error) {
-    await logProblem(error, "bridge/webhook.v1/account/updates decrypt");
+    await logger().type("bridge/webhook.v1/account/updates decrypt").data({ error: String(error), details: {} }).log();
     webhookLog(undefined, "Failed to decrypt payload.");
     return fail("decrypt_failed");
   }
@@ -469,7 +469,7 @@ const postHandler = async (req: NextRequest) => {
       }
     });
   } catch (error) {
-    await logProblem(error, "bridge/webhook.v1/account/updates persist");
+    await logger().type("bridge/webhook.v1/account/updates persist").data({ error: String(error), details: {} }).log();
     if (error instanceof Error && error.message.startsWith("Role does not exist in authz_role:")) {
       webhookLog(undefined, "Role does not exist. Sending failure response.", { reason: error.message });
       return NextResponse.json(

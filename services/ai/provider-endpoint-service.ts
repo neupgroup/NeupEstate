@@ -38,7 +38,7 @@ import { requestAnthropicCompletion } from '@neup/core/intelligence/anthropic';
 import { requestGoogleAiCompletion } from '@neup/core/intelligence/googleai';
 import { requestOpenAiCompletion } from '@neup/core/intelligence/openai';
 import { requestOpenRouterCompletion } from '@neup/core/intelligence/openrouter';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 
 type ProviderName = 'googleai' | 'openai' | 'anthropic' | 'openrouter';
 
@@ -208,7 +208,7 @@ export async function handleAiProviderRequest(
       );
     }
 
-    await logProblem(error, `services/ai/provider-endpoint-service:${provider}`);
+    await logger().type(`services/ai/provider-endpoint-service:${provider}`).data({ error: String(error), details: {} }).log();
 
     return NextResponse.json(
       {

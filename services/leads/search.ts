@@ -1,7 +1,7 @@
 'use server';
 
 import { prisma } from '@neup/core/database/prisma';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 
 // ::neup.documentation::lead-search-service
 // ::private
@@ -67,7 +67,7 @@ export async function searchClients(query: string) {
         });
         return clients.map(normalizeClient);
     } catch (e) {
-        await logProblem(e, 'searchClients');
+        await logger().type('searchClients').data({ error: String(e), details: {} }).log();
         return [];
     }
 }
@@ -80,7 +80,7 @@ export async function getBaseLeads() {
         });
         return leads.map(normalizeLead);
     } catch (e) {
-        await logProblem(e, 'getBaseLeads');
+        await logger().type('getBaseLeads').data({ error: String(e), details: {} }).log();
         return [];
     }
 }
@@ -93,7 +93,7 @@ export async function getSharedLeads() {
         });
         return leads.map(normalizeLead);
     } catch (e) {
-        await logProblem(e, 'getSharedLeads');
+        await logger().type('getSharedLeads').data({ error: String(e), details: {} }).log();
         return [];
     }
 }
@@ -107,7 +107,7 @@ export async function getMyLeads(accountId: string) {
         });
         return leads.map(normalizeLead);
     } catch (e) {
-        await logProblem(e, 'getMyLeads');
+        await logger().type('getMyLeads').data({ error: String(e), details: {} }).log();
         return [];
     }
 }
@@ -125,7 +125,7 @@ export async function getBaseClientById(id: string) {
         });
         return client ? { ...normalizeClient(client), leads: client.sharedLeads } : null;
     } catch (e) {
-        await logProblem(e, `getBaseClientById ${id}`);
+        await logger().type(`getBaseClientById ${id}`).data({ error: String(e), details: {} }).log();
         return null;
     }
 }
@@ -138,7 +138,7 @@ export async function getLeadById(id: string) {
         });
         return lead ? normalizeLead(lead) : null;
     } catch (e) {
-        await logProblem(e, `getLeadById ${id}`);
+        await logger().type(`getLeadById ${id}`).data({ error: String(e), details: {} }).log();
         return null;
     }
 }

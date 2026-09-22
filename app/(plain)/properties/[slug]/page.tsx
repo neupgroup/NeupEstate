@@ -10,7 +10,7 @@ import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 import { getPropertyById, getProperties, getPropertyBySlug } from '@/services/properties';
 import { buildPublicAppUrl } from '@neup/core/helpers/link/url';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 import { BedDouble, Bath, SquareGanttChart, MapPin, Building, Home, Box, Utensils, Hash, Car, Bike, Milestone, School, Briefcase, LandPlot, Sprout, Tag, Mountain, Wallet, Banknote, Calendar, Check, Plane, Link as LinkIcon, User as UserIcon, FileText } from 'lucide-react';
 import { SafeImage } from '@/components/safe-image';
 import { EmiCalculatorChart } from '@/components/emi-calculator-chart';
@@ -193,7 +193,7 @@ export async function generateMetadata(
   try {
     property = await getPropertyBySlug(slug) || await getPropertyById(slug);
   } catch (error) {
-     await logProblem(error, `generateMetadata for PropertyDetailPage (slug: ${slug})`);
+     await logger().type(`generateMetadata for PropertyDetailPage (slug: ${slug})`).data({ error: String(error), details: {} }).log();
   }
 
   if (!property) {
@@ -245,7 +245,7 @@ export async function generateStaticParams() {
       slug: property.slug!,
     }));
   } catch (e) {
-    await logProblem(e, 'generateStaticParams for PropertyDetailPage');
+    await logger().type('generateStaticParams for PropertyDetailPage').data({ error: String(e), details: {} }).log();
     return [];
   }
 }
@@ -360,7 +360,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
       property = await getPropertyById(slug);
     }
   } catch (e) {
-    await logProblem(e, `Error fetching property on detail page for slug/ID: ${slug}`);
+    await logger().type(`Error fetching property on detail page for slug/ID: ${slug}`).data({ error: String(e), details: {} }).log();
     notFound();
   }
   
@@ -425,15 +425,11 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
   }
 
   if (renderIssues.length > 0) {
-    await logProblem(
-      new Error('Property detail page rendered with malformed property data.'),
-      `PropertyDetailPage render (slug/ID: ${slug})`,
-      {
+    await logger().type(`PropertyDetailPage render (slug/ID: ${slug})`).data({ error: String(new Error('Property detail page rendered with malformed property data.')), details: {
         propertyId: property.id,
         propertySlug: property.slug || null,
         issues: renderIssues,
-      },
-    );
+      } }).log();
   }
 
   const formatPrice = (price: number, currency: string = 'USD') => {

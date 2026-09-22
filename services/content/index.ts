@@ -8,7 +8,7 @@ import { createAgency as createAgencyService, updateAgency as updateAgencyServic
 import { createAgencyAgentMap as createAgencyAgentMapService, getAgencyAgentAccountsByAgency as getAgencyAgentAccountsByAgencyService, getAgencyAgentMaps, getAgencyAgentMapsByAgent as getAgencyAgentMapsByAgentService, getAgencyAgentMapsByAgency as getAgencyAgentMapsByAgencyService } from '@/services/agency-agent-map-service';
 import { getAgentsByLocation as getAgentsByLocationService, createAgent as createAgentService, updateAgent as updateAgentService, deleteAgent as deleteAgentService } from '@/services/agent-service';
 import { addSitemap, getNewUrlsFromSitemap, processSitemapUrl, updateSitemapCheckedTime } from "@/services/sitemap-service";
-import { logProblem } from "@/services/problem-service";
+import { logger } from "@neup/logica/logger";
 import type { NaturalLanguageSearchOutput, Property, CreatePropertyInput, UpdatePropertyInput, CreateAgencyInput, UpdateAgencyInput, PropertyApprovalResult, CreatePropertyFormValues, UpdatePropertyFormValues, CreateAgencyFormValues, UpdateAgencyFormValues, PropertyFilters, ExtractedPropertyData, SitemapLog, PropertyAmendmentResult, RewritePropertyDetailsOutput, PropertyAssuranceResult, Agent, CreateAgentFormValues, UpdateAgentFormValues, StructuredLocation, CreateConversationFormValues, CreateUserActivityInput, PropertyImageUpdateResult, CreateFaqFormValues, UpdateFaqFormValues, CreateInquiryFormValues, InquiryStatus, UpdatePromptFormValues, CreatePromptFormValues, User, CreatePropertyRequestFormValues, CreateSalesRequestFormValues, CreateVisitRequestFormValues, CreateMortgageRequestFormValues, PropertyActivityEvent, UserPreferences, AIModel, CreateAIModelFormValues, UpdateAIModelFormValues, CreateRequirementFormValues, Requirement, UpdateUserFormValues, LandDetails, PlotDetails, ApartmentUnit } from "@/types";
 import { CreatePropertySchema, UpdatePropertySchema, CreateAgencySchema, UpdateAgencySchema, PropertyPurposeSchema, PropertyCategorySchema, PropertyUsageTypeSchema, CreateAgentSchema, UpdateAgentSchema, CreateConversationSchema, CreateFaqSchema, UpdateFaqSchema, CreateInquirySchema, UpdatePromptSchema, CreatePromptSchema, CreatePropertyRequestSchema, CreateSalesRequestSchema, CreateVisitRequestSchema, CreateMortgageRequestSchema, CreateAIModelSchema, UpdateAIModelSchema, CreateRequirementSchema, UpdateUserSchema, areaValueToSqft } from "@/types";
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
@@ -55,7 +55,7 @@ export async function createFaqAction(
     revalidatePath('/faq');
     return { success: true, faqId, error: null };
   } catch (e: any) {
-    await logProblem(e, 'createFaqAction');
+    await logger().type('createFaqAction').data({ error: String(e), details: {} }).log();
     if (e instanceof z.ZodError) {
         return { success: false, error: e.message, faqId: null };
     }
@@ -75,7 +75,7 @@ export async function updateFaqAction(
     revalidatePath('/faq');
     return { success: true, error: null };
   } catch (e: any) {
-    await logProblem(e, `updateFaqAction (ID: ${id})`);
+    await logger().type(`updateFaqAction (ID: ${id})`).data({ error: String(e), details: {} }).log();
     if (e instanceof z.ZodError) {
         return { success: false, error: e.message };
     }
@@ -91,7 +91,7 @@ export async function deleteFaqAction(faqId: string): Promise<{ success: boolean
         revalidatePath('/faq');
         return { success: true };
     } catch (error: any) {
-        await logProblem(error, `deleteFaqAction (ID: ${faqId})`);
+        await logger().type(`deleteFaqAction (ID: ${faqId})`).data({ error: String(error), details: {} }).log();
         return { success: false, error: "Failed to delete FAQ." };
     }
 }
@@ -113,7 +113,7 @@ export async function suggestPropertyQuestionsAction(
 
     return { success: true, questions: result.questions };
   } catch (e: any) {
-    await logProblem(e, `suggestPropertyQuestionsAction (ID: ${propertyId})`);
+    await logger().type(`suggestPropertyQuestionsAction (ID: ${propertyId})`).data({ error: String(e), details: {} }).log();
     return { success: false, error: "Failed to generate suggested questions." };
   }
 }
@@ -164,7 +164,7 @@ export async function createPromptAction(
     if (e instanceof z.ZodError) {
       return { success: false, error: e.message };
     }
-    await logProblem(e, `createPromptAction (ID: ${data.id})`);
+    await logger().type(`createPromptAction (ID: ${data.id})`).data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message || "An unexpected server error occurred." };
   }
 }
@@ -181,7 +181,7 @@ export async function updatePromptAction(
     if (e instanceof z.ZodError) {
       return { success: false, error: e.message };
     }
-    await logProblem(e, `updatePromptAction (ID: ${data.id})`);
+    await logger().type(`updatePromptAction (ID: ${data.id})`).data({ error: String(e), details: {} }).log();
     return { success: false, error: "An unexpected server error occurred." };
   }
 }
@@ -192,7 +192,7 @@ export async function deletePromptAction(promptId: string): Promise<{ success: b
     revalidatePath('/manage/settings/ai-configuration');
     return { success: true };
   } catch (error: any) {
-    await logProblem(error, `deletePromptAction (ID: ${promptId})`);
+    await logger().type(`deletePromptAction (ID: ${promptId})`).data({ error: String(error), details: {} }).log();
     return { success: false, error: (error as Error).message || "Failed to delete prompt." };
   }
 }
@@ -208,7 +208,7 @@ export async function createModelAction(data: CreateAIModelFormValues): Promise<
     if (e instanceof z.ZodError) {
       return { success: false, error: e.message };
     }
-    await logProblem(e, `createModelAction`);
+    await logger().type(`createModelAction`).data({ error: String(e), details: {} }).log();
     return { success: false, error: (e as Error).message };
   }
 }
@@ -224,7 +224,7 @@ export async function updateModelAction(data: UpdateAIModelFormValues): Promise<
     if (e instanceof z.ZodError) {
       return { success: false, error: e.message };
     }
-    await logProblem(e, `updateModelAction`);
+    await logger().type(`updateModelAction`).data({ error: String(e), details: {} }).log();
     return { success: false, error: (e as Error).message };
   }
 }
@@ -235,7 +235,7 @@ export async function deleteModelAction(id: string): Promise<{ success: boolean;
     revalidatePath('/manage/settings/ai-models');
     return { success: true };
   } catch (e: any) {
-    await logProblem(e, `deleteModelAction`);
+    await logger().type(`deleteModelAction`).data({ error: String(e), details: {} }).log();
     return { success: false, error: (e as Error).message };
   }
 }
@@ -246,7 +246,7 @@ export async function setDefaultModelAction(id: string): Promise<{ success: bool
     revalidatePath('/manage/settings/ai-models');
     return { success: true };
   } catch (e: any) {
-    await logProblem(e, `setDefaultModelAction`);
+    await logger().type(`setDefaultModelAction`).data({ error: String(e), details: {} }).log();
     return { success: false, error: (e as Error).message };
   }
 }

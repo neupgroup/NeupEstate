@@ -1,7 +1,7 @@
 'use server';
 
 import { prisma } from '@neup/core/database/prisma';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 
 // ::neup.documentation::lead-activity-view-service
 // ::private
@@ -61,7 +61,7 @@ export async function getLeadActivity(leadId: string) {
         ]);
         return { lead: lead ? normalizeLead(lead) : null, activities };
     } catch (e) {
-        await logProblem(e, `getLeadActivity ${leadId}`);
+        await logger().type(`getLeadActivity ${leadId}`).data({ error: String(e), details: {} }).log();
         return { lead: null, activities: [] };
     }
 }

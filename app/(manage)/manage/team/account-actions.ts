@@ -1,7 +1,7 @@
 'use server';
 
 import { prisma } from '@neup/core/database/prisma';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 import { getIdentity } from '@/services/neupid/get-identity';
 import { createBrandAccountConnection, getBrandAccounts } from '@/services/neupid/get-brand-accounts';
 import type { BrandAccount } from '@/services/neupid/get-brand-accounts';
@@ -62,7 +62,7 @@ export async function createAccountAction(input: CreateAccountInput): Promise<Ac
 
     return { success: true };
   } catch (error) {
-    await logProblem(error, 'createAccountAction');
+    await logger().type('createAccountAction').data({ error: String(error), details: {} }).log();
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to create account'
@@ -109,7 +109,7 @@ export async function syncBrandAccountsToLocalAccounts(
       ),
     );
   } catch (error) {
-    await logProblem(error, 'syncBrandAccountsToLocalAccounts');
+    await logger().type('syncBrandAccountsToLocalAccounts').data({ error: String(error), details: {} }).log();
   }
 }
 
@@ -184,7 +184,7 @@ export async function setWorkingProfileAction(accountId: string): Promise<Action
 
     return { success: true };
   } catch (error) {
-    await logProblem(error, `setWorkingProfileAction ${accountId}`);
+    await logger().type(`setWorkingProfileAction ${accountId}`).data({ error: String(error), details: {} }).log();
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to set working profile',

@@ -7,7 +7,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@neup/core/database/prisma';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';
@@ -80,7 +80,7 @@ const getHandler = async (
         : null,
     });
   } catch (err) {
-    await logProblem(err, 'bridge/api.v1/intelligence/property/[id]');
+    await logger().type('bridge/api.v1/intelligence/property/[id]').data({ error: String(err), details: {} }).log();
     return NextResponse.json(
       { success: false, error: 'Internal server error.' },
       { status: 500 },

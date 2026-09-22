@@ -1,7 +1,7 @@
 'use server';
 
 import { prisma } from '@neup/core/database/prisma';
-import { logProblem } from './problem-service';
+import { logger } from "@neup/logica/logger";
 import type { Agency, CreateAgencyInput, UpdateAgencyInput } from '@/types';
 import { isAgencyLikeAccountType } from './account/type';
 import { filter, type Filters } from './agency/filter';
@@ -112,21 +112,21 @@ export async function createAgency(d: CreateAgencyInput): Promise<string> {
       },
     });
     return agency.id;
-  } catch (e) { await logProblem(e, 'createAgency'); throw new Error('Failed to create agency.'); }
+  } catch (e) { await logger().type('createAgency').data({ error: String(e), details: {} }).log(); throw new Error('Failed to create agency.'); }
 }
 
 export async function getAgencies({ limit = 20, offset = 0 }: { limit?: number; offset?: number } = {}): Promise<Agency[]> {
   try {
     const records = await prisma.agency.findMany({ orderBy: { createdAt: 'desc' }, take: limit, skip: offset });
     return records.map(mapRecord);
-  } catch (e) { await logProblem(e, 'getAgencies'); return []; }
+  } catch (e) { await logger().type('getAgencies').data({ error: String(e), details: {} }).log(); return []; }
 }
 
 export async function getFeaturedAgencies(limit = 4): Promise<Agency[]> {
   try {
     const records = await prisma.agency.findMany({ orderBy: { createdAt: 'desc' }, take: limit });
     return records.map(mapRecord);
-  } catch (e) { await logProblem(e, 'getFeaturedAgencies'); return []; }
+  } catch (e) { await logger().type('getFeaturedAgencies').data({ error: String(e), details: {} }).log(); return []; }
 }
 
 export async function getPublicAgencyAccounts({
@@ -189,7 +189,7 @@ export async function getPublicAgencyAccounts({
       }),
     );
   } catch (e) {
-    await logProblem(e, 'getPublicAgencyAccounts');
+    await logger().type('getPublicAgencyAccounts').data({ error: String(e), details: {} }).log();
     return [];
   }
 }
@@ -200,7 +200,7 @@ export async function getPublicAgencyAccountCount(filters: Filters = {}): Promis
       where: filter(filters),
     });
   } catch (e) {
-    await logProblem(e, 'getPublicAgencyAccountCount');
+    await logger().type('getPublicAgencyAccountCount').data({ error: String(e), details: {} }).log();
     return 0;
   }
 }
@@ -230,7 +230,7 @@ export async function getPublicAccountProfileByNeupId(neupId: string): Promise<P
     }
     return null;
   } catch (e) {
-    await logProblem(e, `getPublicAccountProfileByNeupId ${neupId}`);
+    await logger().type(`getPublicAccountProfileByNeupId ${neupId}`).data({ error: String(e), details: {} }).log();
     return null;
   }
 }
@@ -248,7 +248,7 @@ export async function getAgencyById(id: string): Promise<Agency | null> {
   try {
     const record = await prisma.agency.findUnique({ where: { id } });
     return record ? mapRecord(record) : null;
-  } catch (e) { await logProblem(e, `getAgencyById ${id}`); return null; }
+  } catch (e) { await logger().type(`getAgencyById ${id}`).data({ error: String(e), details: {} }).log(); return null; }
 }
 
 export async function updateAgency(id: string, d: UpdateAgencyInput): Promise<void> {
@@ -265,11 +265,11 @@ export async function updateAgency(id: string, d: UpdateAgencyInput): Promise<vo
         branches:       d.branches || [],
       },
     });
-  } catch (e) { await logProblem(e, `updateAgency ${id}`); throw new Error('Failed to update agency.'); }
+  } catch (e) { await logger().type(`updateAgency ${id}`).data({ error: String(e), details: {} }).log(); throw new Error('Failed to update agency.'); }
 }
 
 export async function deleteAgency(id: string): Promise<void> {
   try {
     await prisma.agency.delete({ where: { id } });
-  } catch (e) { await logProblem(e, `deleteAgency ${id}`); throw new Error('Failed to delete agency.'); }
+  } catch (e) { await logger().type(`deleteAgency ${id}`).data({ error: String(e), details: {} }).log(); throw new Error('Failed to delete agency.'); }
 }

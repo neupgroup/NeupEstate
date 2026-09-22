@@ -42,7 +42,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 import { createAccount } from '@/services/account/create';
 import { withRequestDevLog } from '@/services/site-dev-log-service';
 
@@ -68,7 +68,7 @@ async function handleCallback(request: NextRequest) {
     const redirectTarget = getRedirectTarget(request);
     return NextResponse.redirect(new URL(redirectTarget, request.url));
   } catch (error) {
-    await logProblem(error, 'GET /api/auth/callback');
+    await logger().type('GET /api/auth/callback').data({ error: String(error), details: {} }).log();
     return NextResponse.json({ error: 'internal_error' }, { status: 500 });
   }
 }

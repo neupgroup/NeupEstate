@@ -12,7 +12,7 @@ Both rows and totals use the same filters. Limits default to 10 and are capped a
 */
 import { NextRequest, NextResponse } from 'next/server';
 import { getAgentCount, getAgents } from '@/services/agent-service';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';
@@ -41,7 +41,7 @@ const getHandler = async (request: NextRequest) => {
       pagination: { limit, offset, total, hasMore: offset + agents.length < total },
     });
   } catch (error) {
-    await logProblem(error, 'bridge/api.v1/agents:GET');
+    await logger().type('bridge/api.v1/agents:GET').data({ error: String(error), details: {} }).log();
     return NextResponse.json({ success: false, error: 'Internal server error.' }, { status: 500 });
   }
 };

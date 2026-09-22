@@ -5,7 +5,7 @@ import { prisma } from '@neup/core/database/prisma';
 import type { VisitRequest, CreateVisitRequestFormValues } from '@/types';
 import { getPropertyById } from '../../view';
 import { getAgentById } from '@/services/agent-service';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 
 
 export async function createVisitRequest(data: CreateVisitRequestFormValues): Promise<string> {
@@ -39,7 +39,7 @@ export async function createVisitRequest(data: CreateVisitRequestFormValues): Pr
         });
         return request.id;
     } catch (error) {
-        await logProblem(error, 'createVisitRequest');
+        await logger().type('createVisitRequest').data({ error: String(error), details: {} }).log();
         throw new Error('Failed to submit visit request.');
     }
 }
@@ -61,7 +61,7 @@ export async function getVisitRequests({ limit = 20, offset = 0 }: { limit?: num
             createdAt: r.createdAt.toISOString(),
         }));
     } catch (error) {
-        await logProblem(error, 'getVisitRequests');
+        await logger().type('getVisitRequests').data({ error: String(error), details: {} }).log();
         return [];
     }
 }

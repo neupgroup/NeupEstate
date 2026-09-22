@@ -44,7 +44,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAccountInformation } from '@/services/account/lookup';
 import { prisma } from '@neup/core/database/prisma';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';
@@ -122,7 +122,7 @@ const getHandler = async (req: NextRequest) => {
   try {
     return await resolveLookup(accountId, neupId);
   } catch (err: any) {
-    await logProblem(err, 'bridge/api.v1/accounts/lookup');
+    await logger().type('bridge/api.v1/accounts/lookup').data({ error: String(err), details: {} }).log();
     return NextResponse.json(
       { success: false, error: 'Internal server error.' },
       { status: 500 },
@@ -152,7 +152,7 @@ const postHandler = async (req: NextRequest) => {
 
     return await resolveLookup(accountId, neupId);
   } catch (err: any) {
-    await logProblem(err, 'bridge/api.v1/accounts/lookup:POST');
+    await logger().type('bridge/api.v1/accounts/lookup:POST').data({ error: String(err), details: {} }).log();
     return NextResponse.json(
       { success: false, error: 'Internal server error.' },
       { status: 500 },

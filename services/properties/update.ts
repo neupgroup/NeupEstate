@@ -9,7 +9,7 @@ Property create and mutation services that persist core property fields, details
 */
 
 import { prisma } from '@neup/core/database/prisma';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 import type { CreatePropertyInput, ExtractedPropertyData, UpdatePropertyInput } from '@/types';
 import { areaValueToSqft } from '@/types';
 import { mapPurposeToEnum, mapStatusToEnum, mapTypeToEnum } from '@/inapp/database/adapters';
@@ -459,7 +459,7 @@ export async function createProperty(d: CreatePropertyInput & { creatorId?: stri
     await replacePropertyOwners(created.id, d.owners);
 
     return created.id;
-  } catch (e) { await logProblem(e, 'createProperty'); throw new Error('Failed to create property.'); }
+  } catch (e) { await logger().type('createProperty').data({ error: String(e), details: {} }).log(); throw new Error('Failed to create property.'); }
 }
 
 
@@ -478,7 +478,7 @@ export async function addProperty(d: Omit<ExtractedPropertyData, 'embedding'>): 
     await upsertDetailTable(created.id, created.type, rest);
     await upsertMedia(created.id, rest.images ?? []);
     return created.id;
-  } catch (e) { await logProblem(e, 'addProperty'); throw new Error('Failed to add property.'); }
+  } catch (e) { await logger().type('addProperty').data({ error: String(e), details: {} }).log(); throw new Error('Failed to add property.'); }
 }
 
 
@@ -496,7 +496,7 @@ export async function updateProperty(id: string, d: UpdatePropertyInput): Promis
     await upsertDetailTable(id, mapTypeToEnum((merged as any).category ?? merged.categories?.[0]), merged);
     if (merged.images !== undefined) await upsertMedia(id, merged.images ?? []);
     await replacePropertyOwners(id, merged.owners);
-  } catch (e) { await logProblem(e, `updateProperty ${id}`); throw new Error('Failed to update property.'); }
+  } catch (e) { await logger().type(`updateProperty ${id}`).data({ error: String(e), details: {} }).log(); throw new Error('Failed to update property.'); }
 }
 
 
@@ -525,5 +525,5 @@ export async function updatePropertyImages(id: string, images: string[]): Promis
       where: { id },
       data: { coverImage: normalizePropertyImages(images)[0] ?? '' },
     });
-  } catch (e) { await logProblem(e, `updatePropertyImages ${id}`); throw new Error('Failed to update images.'); }
+  } catch (e) { await logger().type(`updatePropertyImages ${id}`).data({ error: String(e), details: {} }).log(); throw new Error('Failed to update images.'); }
 }

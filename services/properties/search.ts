@@ -5,7 +5,7 @@ import { recommendProperties as recommendPropertiesFlow } from "@/services/ai/ai
 import { extractAndSaveProperty as extractAndSavePropertyFlow, type ExtractPropertyDetailsOutput } from "@/services/ai/extract-property-details-flow";
 import { getPaginatedProperties } from '@/services/properties/list';
 import { updatePropertyImages } from '@/services/properties/update';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 import type { NaturalLanguageSearchOutput, Property, PropertyFilters } from "@/types";
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
 import { getAccountPreferences } from '@/services/accounts/single/preferences';
@@ -27,7 +27,7 @@ export async function naturalLanguagePropertySearch(
     const result = await naturalLanguagePropertySearchFlow({ query });
     return { success: true, data: result, error: null };
   } catch (e) {
-    await logProblem(e, 'naturalLanguagePropertySearch');
+    await logger().type('naturalLanguagePropertySearch').data({ error: String(e), details: {} }).log();
     return { success: false, data: null, error: "An AI error occurred during the search. Please try again." };
   }
 }
@@ -51,7 +51,7 @@ export async function recommendProperties(userId: string): Promise<{ success: bo
         const result = await recommendPropertiesFlow(preferences);
         return { success: true, data: result.filters, error: null };
     } catch (e) {
-        await logProblem(e, 'recommendProperties');
+        await logger().type('recommendProperties').data({ error: String(e), details: {} }).log();
         return { success: false, data: null, error: "Could not fetch AI recommendations." };
     }
 }
@@ -126,7 +126,7 @@ export async function searchProperties(
     
     return { success: true, data: { properties, totalCount, appliedFilters: combinedFilters }, error: null };
   } catch (e: any) {
-    await logProblem(e, 'searchProperties');
+    await logger().type('searchProperties').data({ error: String(e), details: {} }).log();
     return { success: false, data: null, error: e.message || "An error occurred during the search." };
   }
 }
@@ -164,7 +164,7 @@ export async function extractAndSaveProperty(
                 error: "Property details were extracted, but no database record ID was returned.",
             });
         } catch (e: any) {
-            await logProblem(e, `extractAndSaveProperty (URL: ${url})`);
+            await logger().type(`extractAndSaveProperty (URL: ${url})`).data({ error: String(e), details: {} }).log();
             results.push({ url, error: e.message || "An unknown error occurred." });
         }
     }
@@ -195,7 +195,7 @@ export async function applyFetchedImagesToPropertyAction(
     revalidatePath(`/manage/properties/${propertyId}/edit`);
     return { success: true };
   } catch (e: any) {
-    await logProblem(e, `applyFetchedImagesToPropertyAction (ID: ${propertyId})`);
+    await logger().type(`applyFetchedImagesToPropertyAction (ID: ${propertyId})`).data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message };
   }
 }

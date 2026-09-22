@@ -27,7 +27,7 @@ import { NextRequest } from 'next/server';
 import { getProperty } from '@/services/properties/single/get';
 import { updateProperty } from '@/services/properties/single/update';
 import { deleteProperty } from '@/services/properties/single/delete';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';
@@ -46,7 +46,7 @@ const getHandler = async (req: NextRequest, context: Context) => {
     return property ? Response.json({ success: true, property }) : Response.json({ success: false, error: 'Property not found.' }, { status: 404 });
   }
   catch (err) {
-    await logProblem(err, 'bridge/api.v1/properties/[id]:GET');
+    await logger().type('bridge/api.v1/properties/[id]:GET').data({ error: String(err), details: {} }).log();
     return Response.json({ success: false, error: 'Internal server error.' }, { status: 500 });
   }
 };
@@ -64,7 +64,7 @@ const patchHandler = async (req: NextRequest, context: Context) => {
     return Response.json({ success: true, requestId: result.requestId, status: 'awaiting review' });
   }
   catch (err) {
-    await logProblem(err, 'bridge/api.v1/properties/[id]:PATCH');
+    await logger().type('bridge/api.v1/properties/[id]:PATCH').data({ error: String(err), details: {} }).log();
     return Response.json({ success: false, error: 'Internal server error.' }, { status: 500 });
   }
 };
@@ -82,7 +82,7 @@ const deleteHandler = async (req: NextRequest, context: Context) => {
     await deleteProperty({ propertyId: (await context.params).id }, { actorAccountId });
     return Response.json({ success: true }, { status: 200 });
   } catch (err) {
-    await logProblem(err, 'bridge/api.v1/properties/[id]:DELETE');
+    await logger().type('bridge/api.v1/properties/[id]:DELETE').data({ error: String(err), details: {} }).log();
     return Response.json({ success: false, error: 'Failed to delete property.' }, { status: 500 });
   }
 };

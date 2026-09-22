@@ -1,6 +1,6 @@
 import { prisma } from '@neup/core/database/prisma';
 import { Prisma, PrismaClient } from '@neup/core/database/prisma';
-import { logProblem } from './problem-service';
+import { logger } from "@neup/logica/logger";
 
 // ============================================================================
 // Types
@@ -36,7 +36,7 @@ export async function insertRoleCapability(data: {
     });
     return record.id;
   } catch (e) {
-    await logProblem(e, 'authz:insertRoleCapability');
+    await logger().type('authz:insertRoleCapability').data({ error: String(e), details: {} }).log();
     throw new Error('Failed to insert role capability.');
   }
 }
@@ -69,7 +69,7 @@ export async function updateRoleCapability(
       },
     });
   } catch (e) {
-    await logProblem(e, `authz:updateRoleCapability ${id}`);
+    await logger().type(`authz:updateRoleCapability ${id}`).data({ error: String(e), details: {} }).log();
     throw new Error('Failed to update role capability.');
   }
 }
@@ -78,7 +78,7 @@ export async function deleteRoleCapability(id: string, db: AuthzDbClient = prism
   try {
     await db.roleCapability.delete({ where: { id } });
   } catch (e) {
-    await logProblem(e, `authz:deleteRoleCapability ${id}`);
+    await logger().type(`authz:deleteRoleCapability ${id}`).data({ error: String(e), details: {} }).log();
     throw new Error('Failed to delete role capability.');
   }
 }
@@ -90,7 +90,7 @@ export async function deleteRoleCapabilities(ids: string[], db: AuthzDbClient = 
     });
     return result.count;
   } catch (e) {
-    await logProblem(e, 'authz:deleteRoleCapabilities');
+    await logger().type('authz:deleteRoleCapabilities').data({ error: String(e), details: {} }).log();
     throw new Error('Failed to bulk delete role capabilities.');
   }
 }
@@ -100,7 +100,7 @@ export async function deleteAllRoleCapabilities(db: AuthzDbClient = prisma): Pro
     const result = await db.roleCapability.deleteMany();
     return result.count;
   } catch (e) {
-    await logProblem(e, 'authz:deleteAllRoleCapabilities');
+    await logger().type('authz:deleteAllRoleCapabilities').data({ error: String(e), details: {} }).log();
     throw new Error('Failed to truncate role capabilities.');
   }
 }
@@ -119,7 +119,7 @@ export async function insertAccountAccessGrant(data: {
     const record = await db.authzAccountAccessGrant.create({ data });
     return record.id;
   } catch (e) {
-    await logProblem(e, 'authz:insertAccountAccessGrant');
+    await logger().type('authz:insertAccountAccessGrant').data({ error: String(e), details: {} }).log();
     throw new Error('Failed to insert account access grant.');
   }
 }
@@ -137,7 +137,7 @@ export async function updateAccountAccessGrant(
   try {
     await db.authzAccountAccessGrant.update({ where: { id }, data });
   } catch (e) {
-    await logProblem(e, `authz:updateAccountAccessGrant ${id}`);
+    await logger().type(`authz:updateAccountAccessGrant ${id}`).data({ error: String(e), details: {} }).log();
     throw new Error('Failed to update account access grant.');
   }
 }
@@ -146,7 +146,7 @@ export async function deleteAccountAccessGrant(id: string, db: AuthzDbClient = p
   try {
     await db.authzAccountAccessGrant.delete({ where: { id } });
   } catch (e) {
-    await logProblem(e, `authz:deleteAccountAccessGrant ${id}`);
+    await logger().type(`authz:deleteAccountAccessGrant ${id}`).data({ error: String(e), details: {} }).log();
     throw new Error('Failed to delete account access grant.');
   }
 }
@@ -158,7 +158,7 @@ export async function deleteAccountAccessGrants(ids: string[], db: AuthzDbClient
     });
     return result.count;
   } catch (e) {
-    await logProblem(e, 'authz:deleteAccountAccessGrants');
+    await logger().type('authz:deleteAccountAccessGrants').data({ error: String(e), details: {} }).log();
     throw new Error('Failed to bulk delete account access grants.');
   }
 }
@@ -168,7 +168,7 @@ export async function deleteAllAccountAccessGrants(db: AuthzDbClient = prisma): 
     const result = await db.authzAccountAccessGrant.deleteMany();
     return result.count;
   } catch (e) {
-    await logProblem(e, 'authz:deleteAllAccountAccessGrants');
+    await logger().type('authz:deleteAllAccountAccessGrants').data({ error: String(e), details: {} }).log();
     throw new Error('Failed to truncate account access grants.');
   }
 }
@@ -188,7 +188,7 @@ export async function insertAssetsAccessGrant(data: {
     const record = await db.authzAssetsAccessGrant.create({ data });
     return record.id;
   } catch (e) {
-    await logProblem(e, 'authz:insertAssetsAccessGrant');
+    await logger().type('authz:insertAssetsAccessGrant').data({ error: String(e), details: {} }).log();
     throw new Error('Failed to insert assets access grant.');
   }
 }
@@ -207,7 +207,7 @@ export async function updateAssetsAccessGrant(
   try {
     await db.authzAssetsAccessGrant.update({ where: { id }, data });
   } catch (e) {
-    await logProblem(e, `authz:updateAssetsAccessGrant ${id}`);
+    await logger().type(`authz:updateAssetsAccessGrant ${id}`).data({ error: String(e), details: {} }).log();
     throw new Error('Failed to update assets access grant.');
   }
 }
@@ -216,7 +216,7 @@ export async function deleteAssetsAccessGrant(id: string, db: AuthzDbClient = pr
   try {
     await db.authzAssetsAccessGrant.delete({ where: { id } });
   } catch (e) {
-    await logProblem(e, `authz:deleteAssetsAccessGrant ${id}`);
+    await logger().type(`authz:deleteAssetsAccessGrant ${id}`).data({ error: String(e), details: {} }).log();
     throw new Error('Failed to delete assets access grant.');
   }
 }
@@ -228,7 +228,7 @@ export async function deleteAssetsAccessGrants(ids: string[], db: AuthzDbClient 
     });
     return result.count;
   } catch (e) {
-    await logProblem(e, 'authz:deleteAssetsAccessGrants');
+    await logger().type('authz:deleteAssetsAccessGrants').data({ error: String(e), details: {} }).log();
     throw new Error('Failed to bulk delete assets access grants.');
   }
 }
@@ -238,7 +238,7 @@ export async function deleteAllAssetsAccessGrants(db: AuthzDbClient = prisma): P
     const result = await db.authzAssetsAccessGrant.deleteMany();
     return result.count;
   } catch (e) {
-    await logProblem(e, 'authz:deleteAllAssetsAccessGrants');
+    await logger().type('authz:deleteAllAssetsAccessGrants').data({ error: String(e), details: {} }).log();
     throw new Error('Failed to truncate assets access grants.');
   }
 }

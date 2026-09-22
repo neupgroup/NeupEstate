@@ -9,8 +9,7 @@ Single-property lookup, review-log, and saved-property read services.
 */
 
 import { prisma } from '@neup/core/database/prisma';
-import { logger } from '@neup/logica/logger';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 import type { Property } from '@/types';
 import { PROPERTY_INCLUDE, type SavedPropertyEntry, hydratePropertyAccountLabels, mapRecord, onlyActive } from '../properties/shared';
 
@@ -27,7 +26,7 @@ export async function getPropertyById(id: string, opts: { includeInactive?: bool
     if (!record) return null;
     const [p] = await hydratePropertyAccountLabels([mapRecord(record)]);
     return opts.includeInactive ? p : (p.isApproved ? p : null);
-  } catch (e) { await logProblem(e, `getPropertyById ${id}`); return null; }
+  } catch (e) { await logger().type(`getPropertyById ${id}`).data({ error: String(e), details: {} }).log(); return null; }
 }
 
 
@@ -47,7 +46,7 @@ export async function getPropertyBySlug(slug: string, opts: { includeInactive?: 
       return opts.includeInactive ? p : (p.isApproved ? p : null);
     }
     return getPropertyById(slug, opts);
-  } catch (e) { await logProblem(e, `getPropertyBySlug ${slug}`); return null; }
+  } catch (e) { await logger().type(`getPropertyBySlug ${slug}`).data({ error: String(e), details: {} }).log(); return null; }
 }
 
 
@@ -103,7 +102,7 @@ export async function getPropertyReviewRequests(propertyId: string): Promise<Arr
       } : null,
     }));
   } catch (e) {
-    await logProblem(e, `getPropertyReviewRequests ${propertyId}`);
+    await logger().type(`getPropertyReviewRequests ${propertyId}`).data({ error: String(e), details: {} }).log();
     return [];
   }
 }
@@ -133,7 +132,7 @@ export async function createPropertyLog(input: {
       },
     });
   } catch (e) {
-    await logProblem(e, `createPropertyLog ${input.propertyId}`);
+    await logger().type(`createPropertyLog ${input.propertyId}`).data({ error: String(e), details: {} }).log();
   }
 }
 
@@ -188,7 +187,7 @@ export async function getPropertyLogs(propertyId: string): Promise<Array<{
       approvedByAccount: log.approvedBy ? accountMap.get(log.approvedBy) ?? null : null,
     }));
   } catch (e) {
-    await logProblem(e, `getPropertyLogs ${propertyId}`);
+    await logger().type(`getPropertyLogs ${propertyId}`).data({ error: String(e), details: {} }).log();
     return [];
   }
 }
@@ -206,7 +205,7 @@ export async function isPropertySaved(userId: string, propertyId: string): Promi
   try {
     const existing = await prisma.savedProperty.findFirst({ where: { accountId: userId, propertyId } });
     return Boolean(existing);
-  } catch (e) { await logProblem(e, 'isPropertySaved'); return false; }
+  } catch (e) { await logger().type('isPropertySaved').data({ error: String(e), details: {} }).log(); return false; }
 }
 
 
@@ -225,7 +224,7 @@ export async function toggleSavedProperty(userId: string, propertyId: string): P
     }
     await prisma.savedProperty.create({ data: { accountId: userId, propertyId } });
     return { saved: true };
-  } catch (e) { await logProblem(e, 'toggleSavedProperty'); throw new Error('Failed to toggle saved property.'); }
+  } catch (e) { await logger().type('toggleSavedProperty').data({ error: String(e), details: {} }).log(); throw new Error('Failed to toggle saved property.'); }
 }
 
 
@@ -239,7 +238,7 @@ export async function getSavedProperties(userId: string): Promise<Property[]> {
   try {
     const saved = await prisma.savedProperty.findMany({ where: { accountId: userId }, include: { property: { include: PROPERTY_INCLUDE } }, orderBy: { savedAt: 'desc' } });
     return saved.map((e) => e.property).filter(Boolean).map(mapRecord).filter(onlyActive);
-  } catch (e) { await logProblem(e, `getSavedProperties ${userId}`); return []; }
+  } catch (e) { await logger().type(`getSavedProperties ${userId}`).data({ error: String(e), details: {} }).log(); return []; }
 }
 
 
@@ -259,7 +258,7 @@ export async function getLatestSavedProperties(limit = 20): Promise<SavedPropert
       propertyTitle: e.property?.title || 'Unknown Property',
       savedAt: e.savedAt.toISOString(),
     }));
-  } catch (e) { await logProblem(e, 'getLatestSavedProperties'); return []; }
+  } catch (e) { await logger().type('getLatestSavedProperties').data({ error: String(e), details: {} }).log(); return []; }
 }
 
 
@@ -272,7 +271,7 @@ export async function getLatestSavedProperties(limit = 20): Promise<SavedPropert
 export async function getUsersBySavedProperty(propertyId: string) {
   try {
     return await prisma.savedProperty.findMany({ where: { propertyId }, orderBy: { savedAt: 'desc' } });
-  } catch (e) { await logProblem(e, `getUsersBySavedProperty ${propertyId}`); return []; }
+  } catch (e) { await logger().type(`getUsersBySavedProperty ${propertyId}`).data({ error: String(e), details: {} }).log(); return []; }
 }
 
 // Alias kept for backward compatibility with actions.ts

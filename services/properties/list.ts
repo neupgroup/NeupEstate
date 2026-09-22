@@ -9,8 +9,7 @@ Read-side property listing, search, queue, and bridge query services.
 */
 
 import { prisma } from '@neup/core/database/prisma';
-import { logProblem } from '@/services/problem-service';
-import { logger } from '@neup/logica/logger';
+import { logger } from "@neup/logica/logger";
 import type { Property, PropertyFilters } from '@/types';
 import { mapPurposeToEnum, mapStatusToEnum, mapTypeFromEnum, mapTypeToEnum } from '@/inapp/database/adapters';
 import {
@@ -42,7 +41,7 @@ export async function getProperties(opts: { includeInactive?: boolean } = {}): P
     const records = await prisma.property.findMany({ orderBy: { updatedAt: 'desc' }, include: PROPERTY_INCLUDE });
     const all = await hydratePropertyAccountLabels(records.map(mapRecord));
     return opts.includeInactive ? all : all.filter(onlyActive);
-  } catch (e) { await logProblem(e, 'getProperties'); return []; }
+  } catch (e) { await logger().type('getProperties').data({ error: String(e), details: {} }).log(); return []; }
 }
 
 
@@ -134,7 +133,7 @@ export async function getPaginatedProperties(opts: {
       prisma.property.findMany({ where, orderBy: { createdAt: opts.orderBy === 'oldestFirst' ? 'asc' : 'desc' }, take: limit, skip: offset, include: PROPERTY_INCLUDE }),
     ]);
     return { properties: await hydratePropertyAccountLabels(records.map(mapRecord)), totalCount };
-  } catch (e) { await logProblem(e, 'getPaginatedProperties'); return { properties: [], totalCount: 0 }; }
+  } catch (e) { await logger().type('getPaginatedProperties').data({ error: String(e), details: {} }).log(); return { properties: [], totalCount: 0 }; }
 }
 
 
@@ -194,7 +193,7 @@ export async function getPropertyDrafts(accountId: string): Promise<PropertyDraf
       };
     });
   } catch (e) {
-    await logProblem(e, `getPropertyDrafts ${accountId}`);
+    await logger().type(`getPropertyDrafts ${accountId}`).data({ error: String(e), details: {} }).log();
     return [];
   }
 }
@@ -212,7 +211,7 @@ export async function getFeaturedProperties(limit = 4): Promise<Property[]> {
     if (records.length > 0) return hydratePropertyAccountLabels(records.map(mapRecord));
     const fallback = await prisma.property.findMany({ where: { status: PROPERTY_STATUS.ACTIVE }, orderBy: { updatedAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
     return hydratePropertyAccountLabels(fallback.map(mapRecord));
-  } catch (e) { await logProblem(e, 'getFeaturedProperties'); return []; }
+  } catch (e) { await logger().type('getFeaturedProperties').data({ error: String(e), details: {} }).log(); return []; }
 }
 
 
@@ -226,7 +225,7 @@ export async function getRecentProperties(limit = 4): Promise<Property[]> {
   try {
     const records = await prisma.property.findMany({ where: { status: PROPERTY_STATUS.ACTIVE }, orderBy: { createdAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
     return hydratePropertyAccountLabels(records.map(mapRecord));
-  } catch (e) { await logProblem(e, 'getRecentProperties'); return []; }
+  } catch (e) { await logger().type('getRecentProperties').data({ error: String(e), details: {} }).log(); return []; }
 }
 
 
@@ -240,7 +239,7 @@ export async function getPropertiesByPurpose(purpose: 'Sale' | 'Rent' | 'Lease',
   try {
     const records = await prisma.property.findMany({ where: { purpose: mapPurposeToEnum(purpose), status: PROPERTY_STATUS.ACTIVE }, orderBy: { updatedAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
     return hydratePropertyAccountLabels(records.map(mapRecord));
-  } catch (e) { await logProblem(e, 'getPropertiesByPurpose'); return []; }
+  } catch (e) { await logger().type('getPropertiesByPurpose').data({ error: String(e), details: {} }).log(); return []; }
 }
 
 
@@ -265,7 +264,7 @@ export async function getPremiumProperties(limit = 4): Promise<Property[]> {
   try {
     const records = await prisma.property.findMany({ where: { status: PROPERTY_STATUS.ACTIVE, displayPrice: { gt: 0 } }, orderBy: { displayPrice: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
     return hydratePropertyAccountLabels(records.map(mapRecord));
-  } catch (e) { await logProblem(e, 'getPremiumProperties'); return []; }
+  } catch (e) { await logger().type('getPremiumProperties').data({ error: String(e), details: {} }).log(); return []; }
 }
 
 
@@ -295,7 +294,7 @@ export async function getPendingProperties(limit = 50): Promise<Property[]> {
       include: PROPERTY_INCLUDE,
     });
     return records.map(mapRecord);
-  } catch (e) { await logProblem(e, 'getPendingProperties'); return []; }
+  } catch (e) { await logger().type('getPendingProperties').data({ error: String(e), details: {} }).log(); return []; }
 }
 
 
@@ -433,7 +432,7 @@ export async function getAwaitingReviewItems(
       .sort((a, b) => String(b.modifiedOn || '').localeCompare(String(a.modifiedOn || '')))
       .slice(0, limit);
   } catch (e) {
-    await logProblem(e, 'getAwaitingReviewItems');
+    await logger().type('getAwaitingReviewItems').data({ error: String(e), details: {} }).log();
     return [];
   }
 }
@@ -451,7 +450,7 @@ export async function getPropertiesByAgent(agentId: string, opts: { includeInact
     if (!opts.includeInactive) where.status = PROPERTY_STATUS.ACTIVE;
     const records = await prisma.property.findMany({ where, orderBy: { updatedAt: 'desc' }, include: PROPERTY_INCLUDE });
     return hydratePropertyAccountLabels(records.map(mapRecord));
-  } catch (e) { await logProblem(e, `getPropertiesByAgent ${agentId}`); return []; }
+  } catch (e) { await logger().type(`getPropertiesByAgent ${agentId}`).data({ error: String(e), details: {} }).log(); return []; }
 }
 
 
@@ -488,7 +487,7 @@ export async function getBridgePropertiesByAccount(opts: BridgePropertyQuery): P
 
     return { properties, totalCount, limit, offset };
   } catch (e) {
-    await logProblem(e, `getBridgePropertiesByAccount ${opts.agencyId || opts.agentId || 'unknown'}`);
+    await logger().type(`getBridgePropertiesByAccount ${opts.agencyId || opts.agentId || 'unknown'}`).data({ error: String(e), details: {} }).log();
     return {
       properties: [],
       totalCount: 0,

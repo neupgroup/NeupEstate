@@ -8,7 +8,7 @@ import { createAgency as createAgencyService, updateAgency as updateAgencyServic
 import { createAgencyAgentMap as createAgencyAgentMapService, getAgencyAgentAccountsByAgency as getAgencyAgentAccountsByAgencyService, getAgencyAgentMaps, getAgencyAgentMapsByAgent as getAgencyAgentMapsByAgentService, getAgencyAgentMapsByAgency as getAgencyAgentMapsByAgencyService } from '@/services/agency-agent-map-service';
 import { getAgentsByLocation as getAgentsByLocationService, createAgent as createAgentService, updateAgent as updateAgentService, deleteAgent as deleteAgentService } from '@/services/agent-service';
 import { addSitemap, getNewUrlsFromSitemap, processSitemapUrl, updateSitemapCheckedTime } from "@/services/sitemap-service";
-import { logProblem } from "@/services/problem-service";
+import { logger } from "@neup/logica/logger";
 import type { NaturalLanguageSearchOutput, Property, CreatePropertyInput, UpdatePropertyInput, CreateAgencyInput, UpdateAgencyInput, PropertyApprovalResult, CreatePropertyFormValues, UpdatePropertyFormValues, CreateAgencyFormValues, UpdateAgencyFormValues, PropertyFilters, ExtractedPropertyData, SitemapLog, PropertyAmendmentResult, RewritePropertyDetailsOutput, PropertyAssuranceResult, Agent, CreateAgentFormValues, UpdateAgentFormValues, StructuredLocation, CreateConversationFormValues, CreateUserActivityInput, PropertyImageUpdateResult, CreateFaqFormValues, UpdateFaqFormValues, CreateInquiryFormValues, InquiryStatus, UpdatePromptFormValues, CreatePromptFormValues, User, CreatePropertyRequestFormValues, CreateSalesRequestFormValues, CreateVisitRequestFormValues, CreateMortgageRequestFormValues, PropertyActivityEvent, UserPreferences, AIModel, CreateAIModelFormValues, UpdateAIModelFormValues, CreateRequirementFormValues, Requirement, UpdateUserFormValues, LandDetails, PlotDetails, ApartmentUnit } from "@/types";
 import { CreatePropertySchema, UpdatePropertySchema, CreateAgencySchema, UpdateAgencySchema, PropertyPurposeSchema, PropertyCategorySchema, PropertyUsageTypeSchema, CreateAgentSchema, UpdateAgentSchema, CreateConversationSchema, CreateFaqSchema, UpdateFaqSchema, CreateInquirySchema, UpdatePromptSchema, CreatePromptSchema, CreatePropertyRequestSchema, CreateSalesRequestSchema, CreateVisitRequestSchema, CreateMortgageRequestSchema, CreateAIModelSchema, UpdateAIModelSchema, CreateRequirementSchema, UpdateUserSchema, areaValueToSqft } from "@/types";
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
@@ -53,7 +53,7 @@ export async function searchAgentsByLocationAction(
     const agents = await getAgentsByLocationService(location);
     return { success: true, data: agents, error: null };
   } catch (e: any) {
-    await logProblem(e, 'searchAgentsByLocationAction');
+    await logger().type('searchAgentsByLocationAction').data({ error: String(e), details: {} }).log();
     return { success: false, data: null, error: "An error occurred while searching for agents." };
   }
 }
@@ -79,7 +79,7 @@ export async function createAgentAction(
     revalidatePath('/manage/team');
     return { success: true, agentId, error: null };
   } catch (e: any) {
-    await logProblem(e, 'createAgentAction');
+    await logger().type('createAgentAction').data({ error: String(e), details: {} }).log();
     if (e instanceof z.ZodError) {
         return { success: false, error: e.message, agentId: null };
     }
@@ -99,7 +99,7 @@ export async function updateAgentAction(
     revalidatePath(`/manage/agents/${id}/edit`);
     return { success: true, error: null };
   } catch (e: any) {
-    await logProblem(e, `updateAgentAction (ID: ${id})`);
+    await logger().type(`updateAgentAction (ID: ${id})`).data({ error: String(e), details: {} }).log();
     if (e instanceof z.ZodError) {
         return { success: false, error: e.message };
     }
@@ -113,7 +113,7 @@ export async function deleteAgentAction(agentId: string) {
         revalidatePath('/manage/team');
         return { success: true };
     } catch (error: any) {
-        await logProblem(error, `deleteAgentAction (ID: ${agentId})`);
+        await logger().type(`deleteAgentAction (ID: ${agentId})`).data({ error: String(error), details: {} }).log();
         return { success: false, error: "Failed to delete agent." };
     }
 }

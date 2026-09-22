@@ -8,7 +8,7 @@
  * Edge runtime and client-side will only log to console.
  */
 
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 
 // ─── Configuration ───────────────────────────────────────────────────────────
 
@@ -180,16 +180,12 @@ export async function logAuthError(
   }
 
   if (level === 'error') {
-    await logProblem(
-      error instanceof Error ? error : new Error(errorMessage),
-      'auth.logger',
-      {
+    await logger().type('auth.logger').data({ error: String(error instanceof Error ? error : new Error(errorMessage)), details: {
         reason: context?.reason,
         operation: context?.operation,
         token: truncateToken(context?.token),
         authContext: context ? { ...context, token: undefined, level } : { level },
-      },
-    );
+      } }).log();
   }
 
   // Log to file (only in Node.js runtime, async, don't block)

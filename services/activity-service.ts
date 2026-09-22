@@ -4,7 +4,7 @@
 
 import { prisma } from '@neup/core/database/prisma';
 import type { CreateUserActivityInput } from '@/types';
-import { logProblem } from './problem-service';
+import { logger } from "@neup/logica/logger";
 
 export async function logActivity(activityData: CreateUserActivityInput): Promise<string> {
     try {
@@ -28,7 +28,7 @@ export async function logActivity(activityData: CreateUserActivityInput): Promis
         return activity.id;
     } catch (error: any) {
         // Log the error but don't crash the user-facing operation
-        await logProblem(error, 'logActivity');
+        await logger().type('logActivity').data({ error: String(error), details: {} }).log();
         return '';
     }
 }
@@ -47,6 +47,6 @@ export async function updateAccountAccessInfo(accountId: string, ipAddress: stri
             },
         });
     } catch (error) {
-        await logProblem(error, 'updateAccountAccessInfo');
+        await logger().type('updateAccountAccessInfo').data({ error: String(error), details: {} }).log();
     }
 }

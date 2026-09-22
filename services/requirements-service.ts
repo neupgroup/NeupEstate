@@ -2,7 +2,7 @@
 'use server';
 
 import { prisma } from '@neup/core/database/prisma';
-import { logProblem } from './problem-service';
+import { logger } from "@neup/logica/logger";
 import type { Requirement, CreateRequirementFormValues } from '@/types';
 
 export async function createRequirement(data: CreateRequirementFormValues): Promise<string> {
@@ -23,7 +23,7 @@ export async function createRequirement(data: CreateRequirementFormValues): Prom
         });
         return requirement.id;
     } catch (error) {
-        await logProblem(error, 'createRequirement');
+        await logger().type('createRequirement').data({ error: String(error), details: {} }).log();
         throw new Error("Failed to create requirement in the database.");
     }
 }
@@ -35,7 +35,7 @@ export async function getRequirementById(id: string): Promise<Requirement | null
         });
         return requirement ? mapPrismaRequirementToType(requirement) : null;
     } catch (error) {
-        await logProblem(error, `getRequirementById (ID: ${id})`);
+        await logger().type(`getRequirementById (ID: ${id})`).data({ error: String(error), details: {} }).log();
         return null;
     }
 }
@@ -47,7 +47,7 @@ export async function getRequirementByUserId(userId: string): Promise<Requiremen
         });
         return requirements.map(mapPrismaRequirementToType);
     } catch (error) {
-        await logProblem(error, `getRequirementByUserId (UserID: ${userId})`);
+        await logger().type(`getRequirementByUserId (UserID: ${userId})`).data({ error: String(error), details: {} }).log();
         return null;
     }
 }
@@ -69,7 +69,7 @@ export async function updateRequirement(id: string, data: CreateRequirementFormV
             },
         });
     } catch (error) {
-        await logProblem(error, `updateRequirement (ID: ${id})`);
+        await logger().type(`updateRequirement (ID: ${id})`).data({ error: String(error), details: {} }).log();
         throw new Error("Failed to update requirement in the database.");
     }
 }

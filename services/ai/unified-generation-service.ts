@@ -12,7 +12,7 @@
 
 import { requestGoogleAiCompletion } from '@neup/core/intelligence/googleai';
 import * as Handlebars from 'handlebars';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 import { z } from 'zod';
 
 /**
@@ -92,10 +92,10 @@ export async function generateText<T>(options: GenerateTextInput): Promise<T> {
 
     } catch (error: any) {
         // Log the full error object for detailed debugging, including raw API responses.
-        await logProblem(error, 'unified-generation-service', {
+        await logger().type('unified-generation-service').data({ error: String(error), details: {
             model: modelIdentifier,
             errorDetails: JSON.parse(JSON.stringify(error, Object.getOwnPropertyNames(error)))
-        });
+        } }).log();
         throw new Error(`AI generation failed: ${error.message}`);
     }
 
@@ -134,10 +134,10 @@ export async function generateText<T>(options: GenerateTextInput): Promise<T> {
         const jsonOutput = JSON.parse(jsonString);
         return outputSchema.parse(jsonOutput) as T;
     } catch (error) {
-         await logProblem(error, 'generateText-output-parsing', {
+         await logger().type('generateText-output-parsing').data({ error: String(error), details: {
             model: modelIdentifier,
             rawOutput: generatedJsonString,
-        });
+        } }).log();
         throw new Error('AI returned a response with an invalid format.');
     }
 }

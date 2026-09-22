@@ -8,7 +8,7 @@ import { getAgencyAgentAccountsByAgency as getAgencyAgentAccountsByAgencyService
 import { getAccountById, getAccounts } from '@/services/account/id/lookup';
 import { createPropertyDraftRequest, editUncreatedPropertyDraftRequest } from '@/services/properties/create';
 import { rewritePropertyDetails } from '@/services/ai/rewrite-property-details-flow';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 import type { CreatePropertyInput, UpdatePropertyInput, CreatePropertyFormValues, UpdatePropertyFormValues, RewritePropertyDetailsOutput, LandDetails, PlotDetails, ApartmentUnit } from "@/types";
 import { UpdatePropertySchema, areaValueToSqft } from "@/types";
 import { revalidatePath } from "next/cache";
@@ -112,7 +112,7 @@ export async function savePropertyCreateDraftAction(input: {
 
     return { success: true, changeId: draft.id, propertyId: draft.propertyId };
   } catch (e: any) {
-    await logProblem(e, 'savePropertyCreateDraftAction');
+    await logger().type('savePropertyCreateDraftAction').data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message || 'Failed to save property draft.' };
   }
 }
@@ -172,7 +172,7 @@ export async function getCurrentPropertyCreateDraftAction(changeId?: string | nu
       propertyId: draft.propertyId,
     };
   } catch (e: any) {
-    await logProblem(e, `getCurrentPropertyCreateDraftAction ${changeId ?? 'latest'}`);
+    await logger().type(`getCurrentPropertyCreateDraftAction ${changeId ?? 'latest'}`).data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message || 'Failed to load property draft.' };
   }
 }
@@ -249,7 +249,7 @@ export async function savePropertyChangeDraftAction(input: {
 
     return { success: true, changeId: draft.id };
   } catch (e: any) {
-    await logProblem(e, 'savePropertyChangeDraftAction');
+    await logger().type('savePropertyChangeDraftAction').data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message || 'Failed to save property draft.' };
   }
 }
@@ -272,7 +272,7 @@ export async function getPropertyEditCapabilitiesAction(): Promise<{
       canEditOwnership: await hasPermission(PERMISSIONS.manage.propertySelfTransfer),
     };
   } catch (error) {
-    await logProblem(error, 'getPropertyEditCapabilitiesAction');
+    await logger().type('getPropertyEditCapabilitiesAction').data({ error: String(error), details: {} }).log();
     return {
       success: false,
       canEditOwnership: false,
@@ -397,7 +397,7 @@ export async function getListingAgentOptionsAction(input: {
         .map(({ id, name, imageUrl, agencyId, agencyName }) => ({ id, name, imageUrl, agencyId, agencyName })),
     };
   } catch (error) {
-    await logProblem(error, 'getListingAgentOptionsAction');
+    await logger().type('getListingAgentOptionsAction').data({ error: String(error), details: {} }).log();
     return { success: false, agents: [] };
   }
 }
@@ -442,7 +442,7 @@ export async function getPropertyChangeDraftAction(changeId: string): Promise<{
       propertyId: draft.propertyId,
     };
   } catch (e: any) {
-    await logProblem(e, `getPropertyChangeDraftAction ${changeId}`);
+    await logger().type(`getPropertyChangeDraftAction ${changeId}`).data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message || 'Failed to load property draft.' };
   }
 }
@@ -550,7 +550,7 @@ export async function getPropertyChangeContextAction(propertyId: string): Promis
       },
     };
   } catch (e: any) {
-    await logProblem(e, `getPropertyChangeContextAction ${propertyId}`);
+    await logger().type(`getPropertyChangeContextAction ${propertyId}`).data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message || 'Failed to load property change context.' };
   }
 }
@@ -610,7 +610,7 @@ export async function cancelPropertyChangeDraftAction(changeId: string): Promise
     }
     return { success: true };
   } catch (e: any) {
-    await logProblem(e, `cancelPropertyChangeDraftAction ${changeId}`);
+    await logger().type(`cancelPropertyChangeDraftAction ${changeId}`).data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message || 'Failed to cancel property change draft.' };
   }
 }
@@ -784,7 +784,7 @@ export async function reviewPropertyChangeAction(input: {
     }
     return { success: true, propertyId: request.propertyId };
   } catch (e: any) {
-    await logProblem(e, `reviewPropertyChangeAction ${input.propertyId}/${input.changeId}`);
+    await logger().type(`reviewPropertyChangeAction ${input.propertyId}/${input.changeId}`).data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message || 'Failed to review property change.' };
   }
 }
@@ -812,7 +812,7 @@ export async function getPropertyCreateDraftAction(propertyId: string): Promise<
       data: mapPropertyToCreateFormValues(property),
     };
   } catch (e: any) {
-    await logProblem(e, `getPropertyCreateDraftAction ${propertyId}`);
+    await logger().type(`getPropertyCreateDraftAction ${propertyId}`).data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message || 'Failed to load property data.' };
   }
 }
@@ -845,7 +845,7 @@ export async function createPropertyAction(
     revalidatePath('/manage/properties');
     return { success: true, propertyId: null, changeId: draft.requestId, error: null };
   } catch (e: any) {
-    await logProblem(e, 'createPropertyAction');
+    await logger().type('createPropertyAction').data({ error: String(e), details: {} }).log();
     if (e instanceof z.ZodError) {
         return { success: false, error: e.message, propertyId: null, changeId: null };
     }
@@ -892,7 +892,7 @@ export async function getCurrentPropertyPostingContextAction(input?: {
       postingAgencyId: context.postingAgencyId,
     };
   } catch (error: any) {
-    await logProblem(error, 'getCurrentPropertyPostingContextAction');
+    await logger().type('getCurrentPropertyPostingContextAction').data({ error: String(error), details: {} }).log();
     return {
       success: false,
       error: error?.message || 'Failed to resolve property posting context.',
@@ -974,7 +974,7 @@ export async function updatePropertyAction(
     revalidatePath(`/manage/properties/${id}/edit`);
     return { success: true, error: null };
   } catch (e: any) {
-    await logProblem(e, `updatePropertyAction (ID: ${id})`);
+    await logger().type(`updatePropertyAction (ID: ${id})`).data({ error: String(e), details: {} }).log();
      if (e instanceof z.ZodError) {
         return { success: false, error: e.message };
     }
@@ -1022,7 +1022,7 @@ export async function rewritePropertyDetailsAction(
 
     return { success: true, data: rewrittenData };
   } catch (e: any) {
-    await logProblem(e, `rewritePropertyDetailsAction (ID: ${propertyId})`);
+    await logger().type(`rewritePropertyDetailsAction (ID: ${propertyId})`).data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message || "Failed to rewrite property details." };
   }
 }

@@ -2,7 +2,7 @@
 import { prisma } from '@neup/core/database/prisma';
 import { requireIdentity, normalizePropertyChangeData } from '@/services/properties/action-helpers';
 import { requirePermission, PERMISSIONS } from '@/services/permissions';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 import { deleteProperty } from './delete';
 import { getPropertyById, createPropertyLog } from '@/services/properties/view';
 import { revalidatePath } from 'next/cache';
@@ -19,7 +19,7 @@ export async function approveProperty(propertyId: string): Promise<void> {
   try {
     await prisma.property.update({ where: { id: propertyId }, data: { status: 'ACTIVE', isApproved: true } });
   } catch (error) {
-    await logProblem(error, `approveProperty ${propertyId}`);
+    await logger().type(`approveProperty ${propertyId}`).data({ error: String(error), details: {} }).log();
     throw new Error('Failed to approve property.');
   }
 }
@@ -35,7 +35,7 @@ export async function rejectProperty(propertyId: string): Promise<void> {
   try {
     await prisma.property.update({ where: { id: propertyId }, data: { status: 'PENDING', isApproved: false } });
   } catch (error) {
-    await logProblem(error, `rejectProperty ${propertyId}`);
+    await logger().type(`rejectProperty ${propertyId}`).data({ error: String(error), details: {} }).log();
     throw new Error('Failed to reject property.');
   }
 }
@@ -53,7 +53,7 @@ export async function approvePropertyAction(propertyId: string) {
     const property = await getPropertyById(propertyId, { includeInactive: true });
     if (property) await createPropertyLog({ propertyId, requestedBy: actorId, approvedBy: actorId, approvedOn: new Date(), data: Object.entries(property as Record<string, any>).map(([field, value]) => ({ field, value: field === 'owner' ? normalizeOwnerReferenceEntries(value) : value })) });
     revalidatePath('/manage/properties'); revalidatePath(`/manage/properties/${propertyId}/edit`); return { success: true };
-  } catch (error) { await logProblem(error, `approvePropertyAction (ID: ${propertyId})`); return { success: false, error: 'Failed to approve property.' }; }
+  } catch (error) { await logger().type(`approvePropertyAction (ID: ${propertyId})`).data({ error: String(error), details: {} }).log(); return { success: false, error: 'Failed to approve property.' }; }
 }
 
 
@@ -65,7 +65,7 @@ export async function approvePropertyAction(propertyId: string) {
  */
 export async function deletePropertyAction(propertyId: string) {
   try { await requirePermission(PERMISSIONS.manage.propertySelfDelete); const actorAccountId = await requireIdentity(); await deleteProperty({ propertyId }, { actorAccountId }); revalidatePath('/manage/properties'); return { success: true }; }
-  catch (error) { await logProblem(error, `deletePropertyAction (ID: ${propertyId})`); return { success: false, error: 'Failed to delete property.' }; }
+  catch (error) { await logger().type(`deletePropertyAction (ID: ${propertyId})`).data({ error: String(error), details: {} }).log(); return { success: false, error: 'Failed to delete property.' }; }
 }
 
 
@@ -82,7 +82,7 @@ export async function requestPropertyDeletionAction(propertyId: string) {
     const data = existingDraft?.data && typeof existingDraft.data === 'object' && !Array.isArray(existingDraft.data) ? normalizePropertyChangeData(existingDraft.data as Record<string, any>) : {};
     await prisma.propertyChange.upsert({ where: { id: existingDraft?.id ?? '__new_property_change__' }, update: { status: 'deleting', data, modifiedOn: new Date() }, create: { propertyId, accountId, status: 'deleting', isApproved: null, data } });
     revalidatePath('/manage/properties'); revalidatePath(`/manage/properties/${propertyId}`); return { success: true };
-  } catch (error) { await logProblem(error, `requestPropertyDeletionAction (ID: ${propertyId})`); return { success: false, error: 'Failed to request property deletion.' }; }
+  } catch (error) { await logger().type(`requestPropertyDeletionAction (ID: ${propertyId})`).data({ error: String(error), details: {} }).log(); return { success: false, error: 'Failed to request property deletion.' }; }
 }
 
 
@@ -101,7 +101,7 @@ export async function cancelPropertyChangeDraftAction(changeId: string): Promise
     if (draft.status === 'deleting' && draft.propertyId) await prisma.property.update({ where: { id: draft.propertyId }, data: { status: 'ACTIVE' } });
     await prisma.propertyChange.delete({ where: { id: draft.id } });
     return { success: true };
-  } catch (error) { await logProblem(error, `cancelPropertyChangeDraftAction ${changeId}`); return { success: false, error: error instanceof Error ? error.message : 'Failed to cancel property change draft.' }; }
+  } catch (error) { await logger().type(`cancelPropertyChangeDraftAction ${changeId}`).data({ error: String(error), details: {} }).log(); return { success: false, error: error instanceof Error ? error.message : 'Failed to cancel property change draft.' }; }
 }
 
 
@@ -121,5 +121,5 @@ export async function reviewPropertyChangeAction(input: { changeId: string; prop
     if (request.status === 'deleting' && request.propertyId) await deleteProperty({ propertyId: request.propertyId }, { actorAccountId: accountId });
     await prisma.propertyChange.update({ where: { id: request.id }, data: { isApproved: true, modifiedOn: new Date() } });
     return { success: true, propertyId: request.propertyId };
-  } catch (error) { await logProblem(error, `reviewPropertyChangeAction ${input.propertyId}/${input.changeId}`); return { success: false, error: error instanceof Error ? error.message : 'Failed to review property change.' }; }
+  } catch (error) { await logger().type(`reviewPropertyChangeAction ${input.propertyId}/${input.changeId}`).data({ error: String(error), details: {} }).log(); return { success: false, error: error instanceof Error ? error.message : 'Failed to review property change.' }; }
 }

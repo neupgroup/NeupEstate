@@ -7,7 +7,7 @@ import { CreateRequirementSchema } from "@/types";
 import { createRequirement, updateRequirement } from "@/services/requirements-service";
 import { requireIdentity } from "@/services/properties/action-helpers";
 import { requirePermission, PERMISSIONS } from "@/services/permissions";
-import { logProblem } from "@/services/problem-service";
+import { logger } from "@neup/logica/logger";
 
 export async function upsertRequirementAction(
   data: CreateRequirementFormValues,
@@ -28,7 +28,7 @@ export async function upsertRequirementAction(
     return { success: true, error: null };
   } catch (error: any) {
     if (error instanceof z.ZodError) return { success: false, error: error.message };
-    await logProblem(error, 'upsertRequirementAction');
+    await logger().type('upsertRequirementAction').data({ error: String(error), details: {} }).log();
     return { success: false, error: 'Failed to save requirements.' };
   }
 }

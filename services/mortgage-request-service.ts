@@ -3,7 +3,7 @@
 
 import { prisma } from '@neup/core/database/prisma';
 import type { MortgageRequest, CreateMortgageRequestFormValues } from '@/types';
-import { logProblem } from './problem-service';
+import { logger } from "@neup/logica/logger";
 
 
 export async function createMortgageRequest(data: CreateMortgageRequestFormValues): Promise<string> {
@@ -24,7 +24,7 @@ export async function createMortgageRequest(data: CreateMortgageRequestFormValue
         });
         return request.id;
     } catch (error) {
-        await logProblem(error, 'createMortgageRequest');
+        await logger().type('createMortgageRequest').data({ error: String(error), details: {} }).log();
         throw new Error('Failed to submit mortgage request.');
     }
 }
@@ -45,7 +45,7 @@ export async function getMortgageRequests({ limit = 20, offset = 0 }: { limit?: 
             createdAt: r.createdAt.toISOString(),
         }));
     } catch (error) {
-        await logProblem(error, 'getMortgageRequests');
+        await logger().type('getMortgageRequests').data({ error: String(error), details: {} }).log();
         return [];
     }
 }

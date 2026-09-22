@@ -6,7 +6,7 @@ import { getSavedProperties, getPaginatedProperties } from '@/services/propertie
 import { isAgencyLikeAccountType } from '@/services/account/type';
 import { prisma } from '@neup/core/database/prisma';
 import { requireAuth } from '@/services/auth/account';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 import { ClientLink } from '@/components/client-link';
 import { Badge } from '@neup/components/ui/badge';
 import { ChevronLeft, User, ShieldAlert, CalendarDays, Clock, BadgeCheck } from 'lucide-react';
@@ -30,11 +30,7 @@ export default async function ManageAccountLayout({
 
   const account = await getAccountById(accountId);
   if (!account) {
-    await logProblem(
-      new Error(`Account not found in local DB: ${accountId}`),
-      'manage/accounts/[id]:account_not_found',
-      { accountId, authAid: authAccount.aid },
-    );
+    await logger().type('manage/accounts/[id]:account_not_found').data({ error: String(new Error(`Account not found in local DB: ${accountId}`)), details: { accountId, authAid: authAccount.aid } }).log();
     notFound();
   }
 

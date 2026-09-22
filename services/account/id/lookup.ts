@@ -4,7 +4,7 @@
 
 import { Prisma } from '@neup/core/database/prisma';
 import { prisma } from '@neup/core/database/prisma';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 import { getAccountInformation, getSignedAccountInformation } from '@/services/account/lookup';
 import type { Account } from '@/types';
 
@@ -87,7 +87,7 @@ export async function getAccounts(): Promise<Account[]> {
     const accounts = await prisma.account.findMany();
     return accounts.map(mapRecord);
   } catch (error) {
-    await logProblem(error, 'getAccounts');
+    await logger().type('getAccounts').data({ error: String(error), details: {} }).log();
     return [];
   }
 }
@@ -97,7 +97,7 @@ export async function getAccountById(id: string): Promise<Account | null> {
     const account = await prisma.account.findUnique({ where: { id } });
     return account ? mapRecord(account) : null;
   } catch (error) {
-    await logProblem(error, `getAccountById (ID: ${id})`);
+    await logger().type(`getAccountById (ID: ${id})`).data({ error: String(error), details: {} }).log();
     return null;
   }
 }
@@ -109,7 +109,7 @@ export async function updateAccountAccessInfo(id: string): Promise<void> {
       data: { accessedOn: new Date() },
     });
   } catch (error) {
-    await logProblem(error, `updateAccountAccessInfo (ID: ${id})`);
+    await logger().type(`updateAccountAccessInfo (ID: ${id})`).data({ error: String(error), details: {} }).log();
   }
 }
 
@@ -180,16 +180,12 @@ export async function refreshAccountDisplayInfo(
   try {
     const info = await getAccountInformation({ accountId: id });
     if (!info.found) {
-      await logProblem(
-        new Error(`NeupID lookup failed while refreshing account: ${info.error}`),
-        `refreshAccountDisplayInfo (ID: ${id})`,
-        {
+      await logger().type(`refreshAccountDisplayInfo (ID: ${id})`).data({ error: String(new Error(`NeupID lookup failed while refreshing account: ${info.error}`)), details: {
           accountId: id,
           lookupError: info.error,
           request: info.meta.request,
           response: info.meta.response ?? null,
-        },
-      );
+        } }).log();
       return null;
     }
 
@@ -277,7 +273,7 @@ export async function refreshAccountDisplayInfo(
       permissions,
     };
   } catch (error) {
-    await logProblem(error, `refreshAccountDisplayInfo (ID: ${id})`);
+    await logger().type(`refreshAccountDisplayInfo (ID: ${id})`).data({ error: String(error), details: {} }).log();
     return null;
   }
 }
@@ -419,7 +415,7 @@ export async function deleteAccountAndData(id: string): Promise<void> {
       prisma.account.delete({ where: { id } }),
     ]);
   } catch (e) {
-    await logProblem(e, `deleteAccountAndData (ID: ${id})`);
+    await logger().type(`deleteAccountAndData (ID: ${id})`).data({ error: String(e), details: {} }).log();
     throw new Error('Failed to delete account and related data.');
   }
 }

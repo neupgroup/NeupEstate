@@ -7,7 +7,7 @@ import { fetchPageSourceCode } from '@/services/crawl/fetch-page-source';
 import { extractVisibleHtml } from '@/services/crawl/visible-html';
 import { shouldIndexCrawledUrl } from '@/services/crawl/crawl-rules';
 import { extractIntelligencePage } from '@/services/ai/extract-intelligence-page-flow';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 import { revalidatePath } from 'next/cache';
 
 function getHttpStatusFromError(error: unknown): string | null {
@@ -174,7 +174,7 @@ export async function crawlCompetitorSourcesAction(competitorId: string) {
       errors,
     };
   } catch (e) {
-    await logProblem(e, `crawlCompetitorSourcesAction (${competitorId})`);
+    await logger().type(`crawlCompetitorSourcesAction (${competitorId})`).data({ error: String(e), details: {} }).log();
     return {
       success: false,
       error: e instanceof Error ? e.message : 'Unknown error occurred',

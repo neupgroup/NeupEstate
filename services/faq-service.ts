@@ -3,7 +3,7 @@
 
 import { prisma } from '@neup/core/database/prisma';
 import type { FAQ, CreateFaqFormValues } from '@/types';
-import { logProblem } from './problem-service';
+import { logger } from "@neup/logica/logger";
 
 
 export async function getFaqs({ limit = 50, offset = 0 }: { limit?: number; offset?: number } = {}): Promise<FAQ[]> {
@@ -21,7 +21,7 @@ export async function getFaqs({ limit = 50, offset = 0 }: { limit?: number; offs
             createdAt: faq.createdAt.toISOString(),
         }));
     } catch (error) {
-        await logProblem(error, 'getFaqs');
+        await logger().type('getFaqs').data({ error: String(error), details: {} }).log();
         return [];
     }
 }
@@ -37,7 +37,7 @@ export async function createFaq(faqData: CreateFaqFormValues): Promise<string> {
         });
         return faq.id;
     } catch (error: any) {
-        await logProblem(error, 'createFaq');
+        await logger().type('createFaq').data({ error: String(error), details: {} }).log();
         throw new Error('Failed to create FAQ.');
     }
 }
@@ -53,7 +53,7 @@ export async function updateFaq(id: string, faqData: CreateFaqFormValues): Promi
             },
         });
     } catch (error: any) {
-        await logProblem(error, `updateFaq (ID: ${id})`);
+        await logger().type(`updateFaq (ID: ${id})`).data({ error: String(error), details: {} }).log();
         throw new Error('Failed to update FAQ.');
     }
 }
@@ -64,7 +64,7 @@ export async function deleteFaq(id: string): Promise<void> {
             where: { id },
         });
     } catch (error: any) {
-        await logProblem(error, `deleteFaq (ID: ${id})`);
+        await logger().type(`deleteFaq (ID: ${id})`).data({ error: String(error), details: {} }).log();
         throw new Error('Failed to delete FAQ.');
     }
 }

@@ -7,7 +7,7 @@
 
 import { z } from 'zod';
 import { fetchPageSourceCode } from '@/services/crawl/fetch-page-source';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 import { generateText } from '@/services/ai/unified-generation-service';
 
 const FetchPropertyImagesInputSchema = z.object({
@@ -61,7 +61,7 @@ async function fetchPropertyImagesFlow({ url }: FetchPropertyImagesInput): Promi
 
         return { images: output.images };
     } catch (e: any) {
-        await logProblem(e, 'fetchPropertyImagesFlow');
+        await logger().type('fetchPropertyImagesFlow').data({ error: String(e), details: {} }).log();
         return { error: e.message || 'An unknown error occurred during image extraction.' };
     }
 }

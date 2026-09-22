@@ -36,7 +36,7 @@ the bridge property service.
 import { NextRequest } from 'next/server';
 import { createProperty } from '@/services/properties/create';
 import { listProperties } from '@/services/properties/list';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 import { withRequestDevLog } from '@/services/site-dev-log-service';
 import { PropertyFiltersSchema } from '@/types';
 
@@ -59,7 +59,7 @@ const getHandler = async (req: NextRequest) => {
     return Response.json({ success: true, properties: result.properties, totalCount: result.totalCount, limit, offset, page: Math.floor(offset / limit) + 1, totalPages: Math.ceil(result.totalCount / limit), appliedFilters: parsed.data }, { status: 200 });
   }
   catch (err) {
-    await logProblem(err, 'bridge/api.v1/properties:GET');
+    await logger().type('bridge/api.v1/properties:GET').data({ error: String(err), details: {} }).log();
     return Response.json({ success: false, error: 'Internal server error.' }, { status: 500 });
   }
 };

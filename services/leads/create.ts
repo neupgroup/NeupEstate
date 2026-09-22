@@ -2,7 +2,7 @@
 
 import { prisma } from '@neup/core/database/prisma';
 import { LeadPriority, LeadType, Prisma } from '@neup/core/database/prisma';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 
 // ::neup.documentation::lead-create-service
 // ::private
@@ -87,7 +87,7 @@ export async function saveClient(data: {
         });
         return c.id;
     } catch (e) {
-        await logProblem(e, 'saveClient');
+        await logger().type('saveClient').data({ error: String(e), details: {} }).log();
         throw new Error('Failed to save client.');
     }
 }
@@ -130,7 +130,7 @@ export async function createLead(data: CreateLeadInput): Promise<string> {
 
         return lead.id;
     } catch (e) {
-        await logProblem(e, 'createLead');
+        await logger().type('createLead').data({ error: String(e), details: {} }).log();
         throw new Error('Failed to create lead.');
     }
 }

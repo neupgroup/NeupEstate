@@ -3,7 +3,7 @@ export { updateAccountAccessInfo, refreshAccountDisplayInfo };
 
 import { revalidatePath } from 'next/cache';
 import { UpdateUserSchema, type UpdateUserFormValues } from '@/types';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 
 export async function updateUserAction(data: UpdateUserFormValues): Promise<{ success: boolean; error?: string }> {
   try {
@@ -15,7 +15,7 @@ export async function updateUserAction(data: UpdateUserFormValues): Promise<{ su
     if (error instanceof Error) {
       return { success: false, error: error.message };
     }
-    await logProblem(error, `updateUserAction (ID: ${data.id})`);
+    await logger().type(`updateUserAction (ID: ${data.id})`).data({ error: String(error), details: {} }).log();
     return { success: false, error: 'Failed to update user.' };
   }
 }

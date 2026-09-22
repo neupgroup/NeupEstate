@@ -1,7 +1,7 @@
 'use server';
 
 import { prisma } from '@neup/core/database/prisma';
-import { logProblem } from './problem-service';
+import { logger } from "@neup/logica/logger";
 import { getAccounts } from './account/list';
 import type { Account, AgencyAgentMap, CreateAgencyAgentMapInput } from '@/types';
 
@@ -38,7 +38,7 @@ export async function createAgencyAgentMap(input: CreateAgencyAgentMapInput): Pr
 
     return mapRecord(record);
   } catch (e) {
-    await logProblem(e, 'createAgencyAgentMap');
+    await logger().type('createAgencyAgentMap').data({ error: String(e), details: {} }).log();
     throw new Error('Failed to create agency-agent invitation.');
   }
 }
@@ -50,7 +50,7 @@ export async function getAgencyAgentMaps(): Promise<AgencyAgentMap[]> {
     });
     return records.map(mapRecord);
   } catch (e) {
-    await logProblem(e, 'getAgencyAgentMaps');
+    await logger().type('getAgencyAgentMaps').data({ error: String(e), details: {} }).log();
     return [];
   }
 }
@@ -63,7 +63,7 @@ export async function getAgencyAgentMapsByAgent(agentId: string): Promise<Agency
     });
     return records.map(mapRecord);
   } catch (e) {
-    await logProblem(e, `getAgencyAgentMapsByAgent ${agentId}`);
+    await logger().type(`getAgencyAgentMapsByAgent ${agentId}`).data({ error: String(e), details: {} }).log();
     return [];
   }
 }
@@ -76,7 +76,7 @@ export async function getAgencyAgentMapsByAgency(agencyId: string): Promise<Agen
     });
     return records.map(mapRecord);
   } catch (e) {
-    await logProblem(e, `getAgencyAgentMapsByAgency ${agencyId}`);
+    await logger().type(`getAgencyAgentMapsByAgency ${agencyId}`).data({ error: String(e), details: {} }).log();
     return [];
   }
 }
@@ -89,7 +89,7 @@ export async function getPrimaryAgencyForAgent(agentId: string): Promise<AgencyA
     });
     return record ? mapRecord(record) : null;
   } catch (e) {
-    await logProblem(e, `getPrimaryAgencyForAgent ${agentId}`);
+    await logger().type(`getPrimaryAgencyForAgent ${agentId}`).data({ error: String(e), details: {} }).log();
     return null;
   }
 }
@@ -102,7 +102,7 @@ export async function acceptAgencyAgentMap(id: string, isAdmin = false): Promise
     });
     return mapRecord(record);
   } catch (e) {
-    await logProblem(e, `acceptAgencyAgentMap ${id}`);
+    await logger().type(`acceptAgencyAgentMap ${id}`).data({ error: String(e), details: {} }).log();
     throw new Error('Failed to accept agency-agent invitation.');
   }
 }
@@ -121,7 +121,7 @@ export async function getAgencyAgentAccountsByAgency(agencyId: string): Promise<
         !['brand', 'brand.agency', 'subbrand', 'subbrand.agency'].includes(account.account_type),
     );
   } catch (e) {
-    await logProblem(e, `getAgencyAgentAccountsByAgency ${agencyId}`);
+    await logger().type(`getAgencyAgentAccountsByAgency ${agencyId}`).data({ error: String(e), details: {} }).log();
     return [];
   }
 }
@@ -130,7 +130,7 @@ export async function deleteAgencyAgentMap(id: string): Promise<void> {
   try {
     await prisma.agencyAgentMap.delete({ where: { id } });
   } catch (e) {
-    await logProblem(e, `deleteAgencyAgentMap ${id}`);
+    await logger().type(`deleteAgencyAgentMap ${id}`).data({ error: String(e), details: {} }).log();
     throw new Error('Failed to delete agency-agent invitation.');
   }
 }

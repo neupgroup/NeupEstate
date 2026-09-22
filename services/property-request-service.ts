@@ -4,7 +4,7 @@
 
 import { prisma } from '@neup/core/database/prisma';
 import type { PropertyRequest, CreatePropertyRequestFormValues, CreateInquiryFormValues, InquiryStatus } from '@/types';
-import { logProblem } from './problem-service';
+import { logger } from "@neup/logica/logger";
 import { createInquiry as createInquiryService, updateInquiryStatus as updateInquiryStatusService } from './inquiry-service';
 
 
@@ -27,7 +27,7 @@ export async function createPropertyRequest(data: CreatePropertyRequestFormValue
         });
         return request.id;
     } catch (error) {
-        await logProblem(error, 'createPropertyRequest');
+        await logger().type('createPropertyRequest').data({ error: String(error), details: {} }).log();
         throw new Error('Failed to submit property request.');
     }
 }
@@ -53,7 +53,7 @@ export async function getPropertyRequests({ limit = 20, offset = 0 }: { limit?: 
             createdAt: r.createdAt.toISOString(),
         }));
     } catch (error) {
-        await logProblem(error, 'getPropertyRequests');
+        await logger().type('getPropertyRequests').data({ error: String(error), details: {} }).log();
         return [];
     }
 }

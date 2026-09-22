@@ -3,7 +3,7 @@
 import { z } from 'zod';
 import * as cheerio from 'cheerio';
 import { fetchPageSourceCode } from '@/services/crawl/fetch-page-source';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 import { generateText } from '@/services/ai/unified-generation-service';
 
 const ExtractCompetitorListingInputSchema = z.object({
@@ -120,7 +120,7 @@ export async function extractCompetitorListing(input: ExtractCompetitorListingIn
 
     return output;
   } catch (error) {
-    await logProblem(error, 'extractCompetitorListing');
+    await logger().type('extractCompetitorListing').data({ error: String(error), details: {} }).log();
     throw error;
   }
 }

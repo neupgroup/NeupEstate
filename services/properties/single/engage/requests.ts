@@ -17,7 +17,7 @@ import { createSalesRequest } from "@/services/sales-request-service";
 import { createMortgageRequest } from "@/services/mortgage-request-service";
 import { requireIdentity } from "@/services/properties/action-helpers";
 import { requirePermission, PERMISSIONS } from "@/services/permissions";
-import { logProblem } from "@/services/problem-service";
+import { logger } from "@neup/logica/logger";
 
 export async function createPropertyRequestAction(data: CreatePropertyRequestFormValues): Promise<{ success: boolean; error?: string }> {
   try {
@@ -29,7 +29,7 @@ export async function createPropertyRequestAction(data: CreatePropertyRequestFor
     return { success: true };
   } catch (error: any) {
     if (error instanceof z.ZodError) return { success: false, error: error.message };
-    await logProblem(error, 'createPropertyRequestAction');
+    await logger().type('createPropertyRequestAction').data({ error: String(error), details: {} }).log();
     return { success: false, error: error.message || 'Failed to submit property request.' };
   }
 }
@@ -43,7 +43,7 @@ export async function createSalesRequestAction(data: CreateSalesRequestFormValue
     return { success: true };
   } catch (error: any) {
     if (error instanceof z.ZodError) return { success: false, error: error.message };
-    await logProblem(error, 'createSalesRequestAction');
+    await logger().type('createSalesRequestAction').data({ error: String(error), details: {} }).log();
     return { success: false, error: error.message || 'Failed to submit sales request.' };
   }
 }
@@ -58,7 +58,7 @@ export async function createMortgageRequestAction(data: CreateMortgageRequestFor
     return { success: true };
   } catch (error: any) {
     if (error instanceof z.ZodError) return { success: false, error: error.message };
-    await logProblem(error, 'createMortgageRequestAction');
+    await logger().type('createMortgageRequestAction').data({ error: String(error), details: {} }).log();
     return { success: false, error: error.message || 'Failed to submit mortgage request.' };
   }
 }

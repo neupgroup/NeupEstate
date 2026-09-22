@@ -8,7 +8,7 @@ import { createAgency as createAgencyService, updateAgency as updateAgencyServic
 import { createAgencyAgentMap as createAgencyAgentMapService, getAgencyAgentAccountsByAgency as getAgencyAgentAccountsByAgencyService, getAgencyAgentMaps, getAgencyAgentMapsByAgent as getAgencyAgentMapsByAgentService, getAgencyAgentMapsByAgency as getAgencyAgentMapsByAgencyService } from '@/services/agency-agent-map-service';
 import { getAgentsByLocation as getAgentsByLocationService, createAgent as createAgentService, updateAgent as updateAgentService, deleteAgent as deleteAgentService } from '@/services/agent-service';
 import { addSitemap, getNewUrlsFromSitemap, processSitemapUrl, updateSitemapCheckedTime } from "@/services/sitemap-service";
-import { logProblem } from "@/services/problem-service";
+import { logger } from "@neup/logica/logger";
 import type { NaturalLanguageSearchOutput, Property, CreatePropertyInput, UpdatePropertyInput, CreateAgencyInput, UpdateAgencyInput, PropertyApprovalResult, CreatePropertyFormValues, UpdatePropertyFormValues, CreateAgencyFormValues, UpdateAgencyFormValues, PropertyFilters, ExtractedPropertyData, SitemapLog, PropertyAmendmentResult, RewritePropertyDetailsOutput, PropertyAssuranceResult, Agent, CreateAgentFormValues, UpdateAgentFormValues, StructuredLocation, CreateConversationFormValues, CreateUserActivityInput, PropertyImageUpdateResult, CreateFaqFormValues, UpdateFaqFormValues, CreateInquiryFormValues, InquiryStatus, UpdatePromptFormValues, CreatePromptFormValues, User, CreatePropertyRequestFormValues, CreateSalesRequestFormValues, CreateVisitRequestFormValues, CreateMortgageRequestFormValues, PropertyActivityEvent, UserPreferences, AIModel, CreateAIModelFormValues, UpdateAIModelFormValues, CreateRequirementFormValues, Requirement, UpdateUserFormValues, LandDetails, PlotDetails, ApartmentUnit } from "@/types";
 import { CreatePropertySchema, UpdatePropertySchema, CreateAgencySchema, UpdateAgencySchema, PropertyPurposeSchema, PropertyCategorySchema, PropertyUsageTypeSchema, CreateAgentSchema, UpdateAgentSchema, CreateConversationSchema, CreateFaqSchema, UpdateFaqSchema, CreateInquirySchema, UpdatePromptSchema, CreatePromptSchema, CreatePropertyRequestSchema, CreateSalesRequestSchema, CreateVisitRequestSchema, CreateMortgageRequestSchema, CreateAIModelSchema, UpdateAIModelSchema, CreateRequirementSchema, UpdateUserSchema, areaValueToSqft } from "@/types";
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
@@ -81,7 +81,7 @@ export async function createAgencyAction(
     return { success: true, agencyId, error: null };
   } catch (e: any)
    {
-    await logProblem(e, 'createAgencyAction');
+    await logger().type('createAgencyAction').data({ error: String(e), details: {} }).log();
     if (e instanceof z.ZodError) {
         return { success: false, error: e.message, agencyId: null };
     }
@@ -107,7 +107,7 @@ export async function updateAgencyAction(
     revalidatePath(`/manage/agencies/${id}/edit`);
     return { success: true, error: null };
   } catch (e: any) {
-    await logProblem(e, `updateAgencyAction (ID: ${id})`);
+    await logger().type(`updateAgencyAction (ID: ${id})`).data({ error: String(e), details: {} }).log();
     if (e instanceof z.ZodError) {
         return { success: false, error: e.message };
     }
@@ -123,7 +123,7 @@ export async function deleteAgencyAction(agencyId: string) {
         revalidatePath('/agencies');
         return { success: true };
     } catch (error: any) {
-        await logProblem(error, `deleteAgencyAction (ID: ${agencyId})`);
+        await logger().type(`deleteAgencyAction (ID: ${agencyId})`).data({ error: String(error), details: {} }).log();
         return { success: false, error: "Failed to delete agency." };
     }
 }
@@ -166,7 +166,7 @@ export async function createAgencyAgentMapAction(
     revalidatePath('/manage/dashboard');
     return { success: true, error: null };
   } catch (error: any) {
-    await logProblem(error, 'createAgencyAgentMapAction');
+    await logger().type('createAgencyAgentMapAction').data({ error: String(error), details: {} }).log();
     return { success: false, error: error?.message ?? 'Failed to create agency-agent mapping.' };
   }
 }
@@ -233,7 +233,7 @@ export async function createLeadAction(
     revalidatePath('/manage/leads/shared');
     return { success: true, error: null, leadId };
   } catch (error: any) {
-    await logProblem(error, 'createLeadAction');
+    await logger().type('createLeadAction').data({ error: String(error), details: {} }).log();
     return { success: false, error: error?.message ?? 'Failed to create lead.', leadId: null };
   }
 }
@@ -273,7 +273,7 @@ export async function addLeadActivityAction(
     revalidatePath('/manage/leads');
     return { success: true, error: null, activityId };
   } catch (error: any) {
-    await logProblem(error, 'addLeadActivityAction');
+    await logger().type('addLeadActivityAction').data({ error: String(error), details: {} }).log();
     return { success: false, error: error?.message ?? 'Failed to add lead activity.', activityId: null };
   }
 }
@@ -303,7 +303,7 @@ export async function acceptAgencyAgentMapAction(mapId: string): Promise<{ succe
     revalidatePath('/manage/leads/my');
     return { success: true, error: null };
   } catch (error: any) {
-    await logProblem(error, 'acceptAgencyAgentMapAction');
+    await logger().type('acceptAgencyAgentMapAction').data({ error: String(error), details: {} }).log();
     return { success: false, error: error?.message ?? 'Failed to accept invitation.' };
   }
 }

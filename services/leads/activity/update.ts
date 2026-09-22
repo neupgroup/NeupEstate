@@ -1,7 +1,7 @@
 'use server';
 
 import { prisma } from '@neup/core/database/prisma';
-import { logProblem } from '@/services/problem-service';
+import { logger } from "@neup/logica/logger";
 import type { LeadActivityType } from './create';
 
 // ::neup.documentation::lead-activity-update-service
@@ -58,7 +58,7 @@ export async function updateLeadActivity(id: string, input: UpdateLeadActivityIn
 
         return id;
     } catch (e) {
-        await logProblem(e, `updateLeadActivity ${id}`);
+        await logger().type(`updateLeadActivity ${id}`).data({ error: String(e), details: {} }).log();
         throw new Error('Failed to update lead activity.');
     }
 }
