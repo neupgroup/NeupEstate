@@ -14,7 +14,7 @@ const mocks = {
   'next/server': { NextResponse: { json: (body, options) => ({ body, ...options }) } },
   '@neup/core/database/prisma': { Prisma: { validator: () => (value) => value }, prisma: {} },
   '@/types': { PropertyFiltersSchema: { omit: () => ({ safeParse: (data) => ({ success: true, data }) }) } },
-  '@/services/property': { getPaginatedProperties: async (options) => { databaseOptions = options; return { properties: [], totalCount: 49 }; } },
+  '@/services/properties': { getPaginatedProperties: async (options) => { databaseOptions = options; return { properties: [], totalCount: 49 }; } },
   '@/services/property-posting-context': {},
 };
 function load(filename) {

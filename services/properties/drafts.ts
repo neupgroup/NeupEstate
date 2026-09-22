@@ -1,6 +1,6 @@
 "use server";
 
-import { createProperty as createPropertyService, updateProperty as updatePropertyService, updatePropertyWithExtractedData } from '@/services/property/update';
+import { createProperty as createPropertyService, updateProperty as updatePropertyService, updatePropertyWithExtractedData } from '@/services/properties/update';
 import { approveProperty } from '@/services/properties/id/review';
 import { deleteProperty as deletePropertyService } from '@/services/properties/id/delete';
 import { createPropertyLog, getPropertyById } from '@/services/properties/view';
@@ -17,7 +17,7 @@ import { hasPermission, requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permissions';
 import { prisma } from '@neup/core/database/prisma';
 import { resolvePropertyPostingContext } from '@/services/property-posting-context';
-import { requireIdentity, formatLocationString, firstPositivePrice, cleanPricing, deepMergeJson, normalizeOwnerEntries, normalizePropertyChangeData, mapPropertyToCreateFormValues } from '@/services/property/action-helpers';
+import { requireIdentity, formatLocationString, firstPositivePrice, cleanPricing, deepMergeJson, normalizeOwnerEntries, normalizePropertyChangeData, mapPropertyToCreateFormValues } from '@/services/properties/action-helpers';
 
 type PropertyChangeDraftStatus =
   | 'creation_draft'
@@ -38,6 +38,11 @@ into the review-ready property payload.
 ::private end
 ::end
 */
+/**
+ * savePropertyCreateDraftAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function savePropertyCreateDraftAction(input: {
   changeId?: string | null;
   postingAgencyId?: string | null;
@@ -112,6 +117,13 @@ export async function savePropertyCreateDraftAction(input: {
   }
 }
 
+
+
+/**
+ * getCurrentPropertyCreateDraftAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getCurrentPropertyCreateDraftAction(changeId?: string | null): Promise<{
   success: boolean;
   changeId?: string;
@@ -165,6 +177,13 @@ export async function getCurrentPropertyCreateDraftAction(changeId?: string | nu
   }
 }
 
+
+
+/**
+ * savePropertyChangeDraftAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function savePropertyChangeDraftAction(input: {
   propertyId: string;
   data: Record<string, any>;
@@ -235,6 +254,13 @@ export async function savePropertyChangeDraftAction(input: {
   }
 }
 
+
+
+/**
+ * getPropertyEditCapabilitiesAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getPropertyEditCapabilitiesAction(): Promise<{
   success: boolean;
   canEditOwnership: boolean;
@@ -254,6 +280,13 @@ export async function getPropertyEditCapabilitiesAction(): Promise<{
   }
 }
 
+
+
+/**
+ * getListingAgentOptionsAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getListingAgentOptionsAction(input: {
   agencyId?: string | null;
   currentAgentId?: string | null;
@@ -369,6 +402,13 @@ export async function getListingAgentOptionsAction(input: {
   }
 }
 
+
+
+/**
+ * getPropertyChangeDraftAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getPropertyChangeDraftAction(changeId: string): Promise<{
   success: boolean;
   data?: Record<string, any>;
@@ -407,6 +447,13 @@ export async function getPropertyChangeDraftAction(changeId: string): Promise<{
   }
 }
 
+
+
+/**
+ * getPropertyChangeContextAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getPropertyChangeContextAction(propertyId: string): Promise<{
   success: boolean;
   currentUserChange?: {
@@ -508,6 +555,13 @@ export async function getPropertyChangeContextAction(propertyId: string): Promis
   }
 }
 
+
+
+/**
+ * cancelPropertyChangeDraftAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function cancelPropertyChangeDraftAction(changeId: string): Promise<{ success: boolean; error?: string }> {
   try {
     const accountId = await requireIdentity();
@@ -561,6 +615,13 @@ export async function cancelPropertyChangeDraftAction(changeId: string): Promise
   }
 }
 
+
+
+/**
+ * reviewPropertyChangeAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function reviewPropertyChangeAction(input: {
   changeId: string;
   propertyId?: string | null;
@@ -728,6 +789,13 @@ export async function reviewPropertyChangeAction(input: {
   }
 }
 
+
+
+/**
+ * getPropertyCreateDraftAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getPropertyCreateDraftAction(propertyId: string): Promise<{
   success: boolean;
   data?: Partial<CreatePropertyFormValues>;
@@ -749,6 +817,13 @@ export async function getPropertyCreateDraftAction(propertyId: string): Promise<
   }
 }
 
+
+
+/**
+ * createPropertyAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function createPropertyAction(
   data: CreatePropertyFormValues,
   postingAgencyId?: string | null,
@@ -778,6 +853,13 @@ export async function createPropertyAction(
   }
 }
 
+
+
+/**
+ * getCurrentPropertyPostingContextAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getCurrentPropertyPostingContextAction(input?: {
   workingProfileId?: string | null;
 }): Promise<{
@@ -818,6 +900,13 @@ export async function getCurrentPropertyPostingContextAction(input?: {
   }
 }
 
+
+
+/**
+ * updatePropertyAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function updatePropertyAction(
   id: string,
   data: UpdatePropertyFormValues
@@ -893,6 +982,13 @@ export async function updatePropertyAction(
   }
 }
 
+
+
+/**
+ * rewritePropertyDetailsAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function rewritePropertyDetailsAction(
   propertyId: string
 ): Promise<{

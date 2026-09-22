@@ -12,8 +12,15 @@ import { prisma } from '@neup/core/database/prisma';
 import { logger } from '@neup/logica/logger';
 import { logProblem } from '@/services/problem-service';
 import type { Property } from '@/types';
-import { PROPERTY_INCLUDE, type SavedPropertyEntry, hydratePropertyAccountLabels, mapRecord, onlyActive } from '../property/shared';
+import { PROPERTY_INCLUDE, type SavedPropertyEntry, hydratePropertyAccountLabels, mapRecord, onlyActive } from '../properties/shared';
 
+
+
+/**
+ * getPropertyById handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getPropertyById(id: string, opts: { includeInactive?: boolean } = {}): Promise<Property | null> {
   try {
     const record = await prisma.property.findUnique({ where: { id }, include: PROPERTY_INCLUDE });
@@ -23,6 +30,13 @@ export async function getPropertyById(id: string, opts: { includeInactive?: bool
   } catch (e) { await logProblem(e, `getPropertyById ${id}`); return null; }
 }
 
+
+
+/**
+ * getPropertyBySlug handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getPropertyBySlug(slug: string, opts: { includeInactive?: boolean } = {}): Promise<Property | null> {
   try {
     const loggerResponse = await logger().type('property.get.slug.called').data({ slug, includeInactive: Boolean(opts.includeInactive) }).log();
@@ -36,6 +50,13 @@ export async function getPropertyBySlug(slug: string, opts: { includeInactive?: 
   } catch (e) { await logProblem(e, `getPropertyBySlug ${slug}`); return null; }
 }
 
+
+
+/**
+ * getPropertyReviewRequests handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getPropertyReviewRequests(propertyId: string): Promise<Array<{
   id: string;
   propertyId?: string;
@@ -87,6 +108,13 @@ export async function getPropertyReviewRequests(propertyId: string): Promise<Arr
   }
 }
 
+
+
+/**
+ * createPropertyLog handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function createPropertyLog(input: {
   propertyId: string;
   requestedBy: string;
@@ -109,6 +137,13 @@ export async function createPropertyLog(input: {
   }
 }
 
+
+
+/**
+ * getPropertyLogs handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getPropertyLogs(propertyId: string): Promise<Array<{
   id: string;
   propertyId: string;
@@ -160,6 +195,13 @@ export async function getPropertyLogs(propertyId: string): Promise<Array<{
 
 // ─── Saved Properties ─────────────────────────────────────────────────────────
 
+
+
+/**
+ * isPropertySaved handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function isPropertySaved(userId: string, propertyId: string): Promise<boolean> {
   try {
     const existing = await prisma.savedProperty.findFirst({ where: { accountId: userId, propertyId } });
@@ -167,6 +209,13 @@ export async function isPropertySaved(userId: string, propertyId: string): Promi
   } catch (e) { await logProblem(e, 'isPropertySaved'); return false; }
 }
 
+
+
+/**
+ * toggleSavedProperty handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function toggleSavedProperty(userId: string, propertyId: string): Promise<{ saved: boolean }> {
   try {
     const existing = await prisma.savedProperty.findFirst({ where: { accountId: userId, propertyId } });
@@ -179,6 +228,13 @@ export async function toggleSavedProperty(userId: string, propertyId: string): P
   } catch (e) { await logProblem(e, 'toggleSavedProperty'); throw new Error('Failed to toggle saved property.'); }
 }
 
+
+
+/**
+ * getSavedProperties handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getSavedProperties(userId: string): Promise<Property[]> {
   try {
     const saved = await prisma.savedProperty.findMany({ where: { accountId: userId }, include: { property: { include: PROPERTY_INCLUDE } }, orderBy: { savedAt: 'desc' } });
@@ -186,6 +242,13 @@ export async function getSavedProperties(userId: string): Promise<Property[]> {
   } catch (e) { await logProblem(e, `getSavedProperties ${userId}`); return []; }
 }
 
+
+
+/**
+ * getLatestSavedProperties handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getLatestSavedProperties(limit = 20): Promise<SavedPropertyEntry[]> {
   try {
     const saved = await prisma.savedProperty.findMany({ orderBy: { savedAt: 'desc' }, take: limit, include: { property: { include: PROPERTY_INCLUDE } } });
@@ -199,6 +262,13 @@ export async function getLatestSavedProperties(limit = 20): Promise<SavedPropert
   } catch (e) { await logProblem(e, 'getLatestSavedProperties'); return []; }
 }
 
+
+
+/**
+ * getUsersBySavedProperty handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getUsersBySavedProperty(propertyId: string) {
   try {
     return await prisma.savedProperty.findMany({ where: { propertyId }, orderBy: { savedAt: 'desc' } });
@@ -206,6 +276,11 @@ export async function getUsersBySavedProperty(propertyId: string) {
 }
 
 // Alias kept for backward compatibility with actions.ts
+/**
+ * getSavedPropertiesForUser handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getSavedPropertiesForUser(userId: string): Promise<Property[]> {
   return getSavedProperties(userId);
 }

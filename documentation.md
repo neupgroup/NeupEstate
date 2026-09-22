@@ -2036,7 +2036,7 @@ Documentation for account-related API operations.
 
 - [Account Creation](./create.php)
 - [Account Retrieval](./get.php)
-- [Account Update](./update.php)
+- [Account Update](./property-mutations.php)
 - [Account Deletion](./delete.php)
 ```
 
@@ -2322,7 +2322,7 @@ Example managed section:
 
 - [Account Creation](./create.php)
 - [Account Retrieval](./get.php)
-- [Account Update](./update.php)
+- [Account Update](./property-mutations.php)
 - [Account Deletion](./delete.php)
 
 <!-- ::neup.documentation.index end -->

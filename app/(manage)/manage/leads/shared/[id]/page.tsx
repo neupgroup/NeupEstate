@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getLeadActivity } from '@/services/leads/activity/view';
-import { getProperties } from '@/services/property';
+import { getProperties } from '@/services/properties';
 import { ClientLink } from '@/components/client-link';
 import { ChevronLeft } from 'lucide-react';
 import { Badge } from '@neup/components/ui/badge';

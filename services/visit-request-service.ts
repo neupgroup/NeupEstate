@@ -3,7 +3,7 @@
 
 import { prisma } from '@neup/core/database/prisma';
 import type { VisitRequest, CreateVisitRequestFormValues } from '@/types';
-import { getPropertyById } from './property';
+import { getPropertyById } from './properties';
 import { getAgentById } from './agent-service';
 import { logProblem } from './problem-service';
 

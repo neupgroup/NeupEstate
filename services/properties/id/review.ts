@@ -1,13 +1,20 @@
 "use server";
 import { prisma } from '@neup/core/database/prisma';
-import { requireIdentity, normalizePropertyChangeData } from '@/services/property/action-helpers';
+import { requireIdentity, normalizePropertyChangeData } from '@/services/properties/action-helpers';
 import { requirePermission, PERMISSIONS } from '@/services/permissions';
 import { logProblem } from '@/services/problem-service';
 import { deleteProperty } from './delete';
 import { getPropertyById, createPropertyLog } from '@/services/properties/view';
 import { revalidatePath } from 'next/cache';
-import { normalizeOwnerReferenceEntries } from '@/services/property/action-helpers';
+import { normalizeOwnerReferenceEntries } from '@/services/properties/action-helpers';
 
+
+
+/**
+ * approveProperty handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function approveProperty(propertyId: string): Promise<void> {
   try {
     await prisma.property.update({ where: { id: propertyId }, data: { status: 'ACTIVE', isApproved: true } });
@@ -17,6 +24,13 @@ export async function approveProperty(propertyId: string): Promise<void> {
   }
 }
 
+
+
+/**
+ * rejectProperty handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function rejectProperty(propertyId: string): Promise<void> {
   try {
     await prisma.property.update({ where: { id: propertyId }, data: { status: 'PENDING', isApproved: false } });
@@ -26,6 +40,13 @@ export async function rejectProperty(propertyId: string): Promise<void> {
   }
 }
 
+
+
+/**
+ * approvePropertyAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function approvePropertyAction(propertyId: string) {
   try {
     const actorId = await requireIdentity(); await approveProperty(propertyId);
@@ -35,11 +56,25 @@ export async function approvePropertyAction(propertyId: string) {
   } catch (error) { await logProblem(error, `approvePropertyAction (ID: ${propertyId})`); return { success: false, error: 'Failed to approve property.' }; }
 }
 
+
+
+/**
+ * deletePropertyAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function deletePropertyAction(propertyId: string) {
   try { await requirePermission(PERMISSIONS.manage.propertySelfDelete); const actorAccountId = await requireIdentity(); await deleteProperty({ propertyId }, { actorAccountId }); revalidatePath('/manage/properties'); return { success: true }; }
   catch (error) { await logProblem(error, `deletePropertyAction (ID: ${propertyId})`); return { success: false, error: 'Failed to delete property.' }; }
 }
 
+
+
+/**
+ * requestPropertyDeletionAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function requestPropertyDeletionAction(propertyId: string) {
   try {
     await requirePermission(PERMISSIONS.manage.propertySelfDelete); const accountId = await requireIdentity();
@@ -50,6 +85,13 @@ export async function requestPropertyDeletionAction(propertyId: string) {
   } catch (error) { await logProblem(error, `requestPropertyDeletionAction (ID: ${propertyId})`); return { success: false, error: 'Failed to request property deletion.' }; }
 }
 
+
+
+/**
+ * cancelPropertyChangeDraftAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function cancelPropertyChangeDraftAction(changeId: string): Promise<{ success: boolean; error?: string }> {
   try {
     const accountId = await requireIdentity();
@@ -62,6 +104,13 @@ export async function cancelPropertyChangeDraftAction(changeId: string): Promise
   } catch (error) { await logProblem(error, `cancelPropertyChangeDraftAction ${changeId}`); return { success: false, error: error instanceof Error ? error.message : 'Failed to cancel property change draft.' }; }
 }
 
+
+
+/**
+ * reviewPropertyChangeAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function reviewPropertyChangeAction(input: { changeId: string; propertyId?: string | null; approve: boolean; acceptedFields?: string[] }): Promise<{ success: boolean; error?: string; propertyId?: string | null }> {
   try {
     await requirePermission(PERMISSIONS.manage.propertyReviewApprove);

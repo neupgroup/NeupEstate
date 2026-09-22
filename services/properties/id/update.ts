@@ -1,5 +1,10 @@
 import { prisma } from '@neup/core/database/prisma';
 export type UpdatePropertyInput = { propertyId: string; accountId: string; data: Record<string, unknown> };
+/**
+ * updateProperty handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function updateProperty(input: UpdatePropertyInput): Promise<{ requestId: string }> {
   const property = await prisma.property.findUnique({ where: { id: input.propertyId }, select: { id: true, isApproved: true } });
   if (!property) throw new Error('Property not found.');

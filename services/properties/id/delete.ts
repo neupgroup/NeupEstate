@@ -5,7 +5,14 @@ import { logger } from '@neup/logica/logger';
 export type DeletePropertyInput = { propertyId: string };
 export type DeletePropertyContext = { actorAccountId: string };
 
+
+
 /** Authorizes and permanently deletes a property and its dependent records. */
+/**
+ * deleteProperty handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function deleteProperty(input: DeletePropertyInput, context: DeletePropertyContext): Promise<void> {
   if (!context.actorAccountId.trim()) throw new Error('Authenticated account is required.');
   await requirePermission(PERMISSIONS.manage.propertySelfDelete);

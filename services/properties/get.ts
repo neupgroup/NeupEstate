@@ -1,9 +1,16 @@
 import { prisma } from '@neup/core/database/prisma';
 import { logProblem } from '@/services/problem-service';
 import { mapTypeFromEnum } from '@/inapp/database/adapters';
-import { normalizePropertyChangeStatus } from '@/services/property/shared';
-import type { PropertyDraftSummary } from '@/services/property/shared';
+import { normalizePropertyChangeStatus } from '@/services/properties/shared';
+import type { PropertyDraftSummary } from '@/services/properties/shared';
 
+
+
+/**
+ * getPropertyDrafts handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getPropertyDrafts(accountId: string): Promise<PropertyDraftSummary[]> {
   try {
     const drafts = await prisma.propertyChange.findMany({

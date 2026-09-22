@@ -2,11 +2,18 @@ import { prisma } from '@neup/core/database/prisma';
 import { logProblem } from '@/services/problem-service';
 import { logger } from '@neup/logica/logger';
 import type { Property } from '@/types';
-import { PROPERTY_INCLUDE, hydratePropertyAccountLabels, mapRecord, pickPropertyFields, resolveBridgePropertyFields } from '@/services/property/shared';
+import { PROPERTY_INCLUDE, hydratePropertyAccountLabels, mapRecord, pickPropertyFields, resolveBridgePropertyFields } from '@/services/properties/shared';
 
 export type GetPropertyInput = { propertyId?: string; propertyCode?: string; fields?: string[] };
 
+
+
 /** Retrieves one approved property by id or custom code. */
+/**
+ * getProperty handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getProperty(input: GetPropertyInput): Promise<(Partial<Property> & Record<string, unknown>) | null> {
   const propertyId = input.propertyId?.trim();
   const propertyCode = input.propertyCode?.trim();

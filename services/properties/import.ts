@@ -14,7 +14,7 @@ and one-to-many data, plus root-level many-to-one and many-to-many lookups.
 */
 
 import type { ExtractedPropertyData } from '@/types';
-import { addProperty } from '@/services/property/update';
+import { addProperty } from '@/services/properties/update';
 import { logProblem } from '@/services/problem-service';
 
 type JsonObject = Record<string, unknown>;
@@ -69,11 +69,25 @@ export type PropertyJsonImportResult = {
   error?: string;
 };
 
-function isObject(value: unknown): value is JsonObject {
+
+
+/**
+ * isObject handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function isObject(value: unknown): value is JsonObject {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 }
 
-function splitPath(path: string): string[] {
+
+
+/**
+ * splitPath handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function splitPath(path: string): string[] {
   return path
     .replace(/\[(\d+)\]/g, '.$1')
     .split('.')
@@ -81,7 +95,14 @@ function splitPath(path: string): string[] {
     .filter(Boolean);
 }
 
-function getPath(source: unknown, path?: string): unknown {
+
+
+/**
+ * getPath handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function getPath(source: unknown, path?: string): unknown {
   if (!path) return source;
   const normalizedPath = path.startsWith('$.') ? path.slice(2) : path;
   return splitPath(normalizedPath).reduce<unknown>((current, part) => {
@@ -95,14 +116,28 @@ function getPath(source: unknown, path?: string): unknown {
   }, source);
 }
 
-function resolvePath(input: { path?: string; item: JsonObject; root: unknown }): unknown {
+
+
+/**
+ * resolvePath handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function resolvePath(input: { path?: string; item: JsonObject; root: unknown }): unknown {
   if (!input.path) return input.item;
   return input.path.startsWith('$.')
     ? getPath(input.root, input.path)
     : getPath(input.item, input.path);
 }
 
-function applyCoerce(value: unknown, mode?: CoerceMode, joinWith = ', '): unknown {
+
+
+/**
+ * applyCoerce handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function applyCoerce(value: unknown, mode?: CoerceMode, joinWith = ', '): unknown {
   if (value == null) return value;
 
   if (mode === 'first') return Array.isArray(value) ? value[0] : value;
@@ -128,7 +163,14 @@ function applyCoerce(value: unknown, mode?: CoerceMode, joinWith = ', '): unknow
   return value;
 }
 
-function resolveField(definition: FieldDefinition, item: JsonObject, root: unknown): unknown {
+
+
+/**
+ * resolveField handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function resolveField(definition: FieldDefinition, item: JsonObject, root: unknown): unknown {
   if (typeof definition === 'string') return resolvePath({ path: definition, item, root });
 
   const value = 'value' in definition
@@ -141,7 +183,14 @@ function resolveField(definition: FieldDefinition, item: JsonObject, root: unkno
   return applyCoerce(fallbackValue, definition.coerce, definition.joinWith);
 }
 
-function selectValue(source: unknown, select: SelectDefinition | undefined, root: unknown): unknown {
+
+
+/**
+ * selectValue handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function selectValue(source: unknown, select: SelectDefinition | undefined, root: unknown): unknown {
   if (!select) return source;
   if (typeof select === 'string') return getPath(source, select);
   if (!isObject(source)) return undefined;
@@ -153,12 +202,26 @@ function selectValue(source: unknown, select: SelectDefinition | undefined, root
   }, {});
 }
 
-function primitiveSet(value: unknown): Set<unknown> {
+
+
+/**
+ * primitiveSet handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function primitiveSet(value: unknown): Set<unknown> {
   if (Array.isArray(value)) return new Set(value);
   return new Set([value]);
 }
 
-function resolveRelationship(
+
+
+/**
+ * resolveRelationship handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function resolveRelationship(
   definition: RelationshipDefinition,
   item: JsonObject,
   root: unknown,
@@ -196,7 +259,14 @@ function resolveRelationship(
   return applyCoerce(selected.length ? selected : definition.default, definition.coerce, definition.joinWith);
 }
 
-function normalizePropertyData(data: Record<string, unknown>): ExtractedPropertyData {
+
+
+/**
+ * normalizePropertyData handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function normalizePropertyData(data: Record<string, unknown>): ExtractedPropertyData {
   const category = Array.isArray(data.categories) ? data.categories[0] : data.category;
   const type = Array.isArray(data.types) ? data.types[0] : data.type;
   const purpose = Array.isArray(data.purposes) ? data.purposes[0] : data.purpose;
@@ -220,7 +290,14 @@ function normalizePropertyData(data: Record<string, unknown>): ExtractedProperty
   };
 }
 
-function validateImportableProperty(data: ExtractedPropertyData): string[] {
+
+
+/**
+ * validateImportableProperty handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function validateImportableProperty(data: ExtractedPropertyData): string[] {
   const missing: string[] = [];
   if (!data.title) missing.push('title');
   if (!data.description) missing.push('description');
@@ -231,12 +308,26 @@ function validateImportableProperty(data: ExtractedPropertyData): string[] {
   return missing;
 }
 
-function buildRows(input: unknown, structure: PropertyJsonImportStructure): JsonObject[] {
+
+
+/**
+ * buildRows handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function buildRows(input: unknown, structure: PropertyJsonImportStructure): JsonObject[] {
   const collection = structure.collection ? getPath(input, structure.collection) : input;
   const rows = Array.isArray(collection) ? collection : [collection];
   return rows.filter(isObject);
 }
 
+
+
+/**
+ * importPropertiesFromJson handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function importPropertiesFromJson(
   input: unknown,
   structure: PropertyJsonImportStructure,

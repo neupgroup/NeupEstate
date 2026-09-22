@@ -28,8 +28,15 @@ import {
   onlyActive,
   pickPropertyFields,
   resolveBridgePropertyFields,
-} from '../property/shared';
+} from '../properties/shared';
 
+
+
+/**
+ * getProperties handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getProperties(opts: { includeInactive?: boolean } = {}): Promise<Property[]> {
   try {
     const records = await prisma.property.findMany({ orderBy: { updatedAt: 'desc' }, include: PROPERTY_INCLUDE });
@@ -38,6 +45,13 @@ export async function getProperties(opts: { includeInactive?: boolean } = {}): P
   } catch (e) { await logProblem(e, 'getProperties'); return []; }
 }
 
+
+
+/**
+ * getPaginatedProperties handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getPaginatedProperties(opts: {
   page?: number;
   offset?: number;
@@ -123,6 +137,13 @@ export async function getPaginatedProperties(opts: {
   } catch (e) { await logProblem(e, 'getPaginatedProperties'); return { properties: [], totalCount: 0 }; }
 }
 
+
+
+/**
+ * getPropertyDrafts handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getPropertyDrafts(accountId: string): Promise<PropertyDraftSummary[]> {
   try {
     const drafts = await prisma.propertyChange.findMany({
@@ -178,6 +199,13 @@ export async function getPropertyDrafts(accountId: string): Promise<PropertyDraf
   }
 }
 
+
+
+/**
+ * getFeaturedProperties handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getFeaturedProperties(limit = 4): Promise<Property[]> {
   try {
     const records = await prisma.property.findMany({ where: { isFeatured: true, status: PROPERTY_STATUS.ACTIVE }, orderBy: { updatedAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
@@ -187,6 +215,13 @@ export async function getFeaturedProperties(limit = 4): Promise<Property[]> {
   } catch (e) { await logProblem(e, 'getFeaturedProperties'); return []; }
 }
 
+
+
+/**
+ * getRecentProperties handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getRecentProperties(limit = 4): Promise<Property[]> {
   try {
     const records = await prisma.property.findMany({ where: { status: PROPERTY_STATUS.ACTIVE }, orderBy: { createdAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
@@ -194,6 +229,13 @@ export async function getRecentProperties(limit = 4): Promise<Property[]> {
   } catch (e) { await logProblem(e, 'getRecentProperties'); return []; }
 }
 
+
+
+/**
+ * getPropertiesByPurpose handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getPropertiesByPurpose(purpose: 'Sale' | 'Rent' | 'Lease', limit = 4): Promise<Property[]> {
   try {
     const records = await prisma.property.findMany({ where: { purpose: mapPurposeToEnum(purpose), status: PROPERTY_STATUS.ACTIVE }, orderBy: { updatedAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
@@ -201,10 +243,24 @@ export async function getPropertiesByPurpose(purpose: 'Sale' | 'Rent' | 'Lease',
   } catch (e) { await logProblem(e, 'getPropertiesByPurpose'); return []; }
 }
 
+
+
+/**
+ * getFeaturedProjects handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getFeaturedProjects(limit = 4): Promise<Property[]> {
   return getFeaturedProperties(limit);
 }
 
+
+
+/**
+ * getPremiumProperties handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getPremiumProperties(limit = 4): Promise<Property[]> {
   try {
     const records = await prisma.property.findMany({ where: { status: PROPERTY_STATUS.ACTIVE, displayPrice: { gt: 0 } }, orderBy: { displayPrice: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
@@ -212,10 +268,24 @@ export async function getPremiumProperties(limit = 4): Promise<Property[]> {
   } catch (e) { await logProblem(e, 'getPremiumProperties'); return []; }
 }
 
+
+
+/**
+ * getLuxuriousProperties handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getLuxuriousProperties(limit = 4): Promise<Property[]> {
   return getPremiumProperties(limit);
 }
 
+
+
+/**
+ * getPendingProperties handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getPendingProperties(limit = 50): Promise<Property[]> {
   try {
     const records = await prisma.property.findMany({
@@ -228,6 +298,13 @@ export async function getPendingProperties(limit = 50): Promise<Property[]> {
   } catch (e) { await logProblem(e, 'getPendingProperties'); return []; }
 }
 
+
+
+/**
+ * getAwaitingReviewItems handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getAwaitingReviewItems(
   limit = 50,
   opts: { accountId?: string | null; includeAll?: boolean } = {},
@@ -361,6 +438,13 @@ export async function getAwaitingReviewItems(
   }
 }
 
+
+
+/**
+ * getPropertiesByAgent handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getPropertiesByAgent(agentId: string, opts: { includeInactive?: boolean } = {}): Promise<Property[]> {
   try {
     const where: any = { agent: agentId };
@@ -370,6 +454,13 @@ export async function getPropertiesByAgent(agentId: string, opts: { includeInact
   } catch (e) { await logProblem(e, `getPropertiesByAgent ${agentId}`); return []; }
 }
 
+
+
+/**
+ * getBridgePropertiesByAccount handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function getBridgePropertiesByAccount(opts: BridgePropertyQuery): Promise<BridgePropertyResult> {
   try {
     const limit = Math.min(Math.max(1, opts.limit ?? BRIDGE_PROPERTY_DEFAULT_LIMIT), BRIDGE_PROPERTY_MAX_LIMIT);
@@ -410,7 +501,14 @@ export async function getBridgePropertiesByAccount(opts: BridgePropertyQuery): P
 
 export type ListPropertiesInput = { limit: number; offset: number; filters: PropertyFilters; agencyId?: string; agentId?: string; orderBy: 'newestFirst' | 'oldestFirst'; fields?: string[] };
 
+
+
 /** Canonical collection operation used by both the bridge adapter and server callers. */
+/**
+ * listProperties handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function listProperties(input: ListPropertiesInput): Promise<BridgePropertyResult & { appliedFilters: PropertyFilters }> {
   const result = await getPaginatedProperties({
     limit: input.limit,

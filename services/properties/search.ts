@@ -4,12 +4,19 @@ import { naturalLanguagePropertySearch as naturalLanguagePropertySearchFlow } fr
 import { recommendProperties as recommendPropertiesFlow } from "@/services/ai/ai-powered-recommendations";
 import { extractAndSaveProperty as extractAndSavePropertyFlow, type ExtractPropertyDetailsOutput } from "@/services/ai/extract-property-details-flow";
 import { getPaginatedProperties } from '@/services/properties/list';
-import { updatePropertyImages } from '@/services/property/update';
+import { updatePropertyImages } from '@/services/properties/update';
 import { logProblem } from '@/services/problem-service';
 import type { NaturalLanguageSearchOutput, Property, PropertyFilters } from "@/types";
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
 import { getUserPreferences } from '@/services/user-preference-service';
 
+
+
+/**
+ * naturalLanguagePropertySearch handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function naturalLanguagePropertySearch(
   query: string
 ): Promise<{ success: boolean; data: NaturalLanguageSearchOutput | null; error: string | null }> {
@@ -25,6 +32,13 @@ export async function naturalLanguagePropertySearch(
   }
 }
 
+
+
+/**
+ * recommendProperties handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function recommendProperties(userId: string): Promise<{ success: boolean; data: PropertyFilters[] | null; error: string | null }> {
     try {
         if (!userId) {
@@ -42,6 +56,13 @@ export async function recommendProperties(userId: string): Promise<{ success: bo
     }
 }
 
+
+
+/**
+ * searchProperties handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function searchProperties(
   params: { [key: string]: any }
 ): Promise<{ success: boolean; data: { properties: Property[]; totalCount: number, appliedFilters: PropertyFilters } | null; error: string | null }> {
@@ -111,6 +132,13 @@ export async function searchProperties(
 }
 
 
+
+
+/**
+ * extractAndSaveProperty handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function extractAndSaveProperty(
   urls: string[]
 ): Promise<{ success: boolean; results: ({ url: string } & ExtractPropertyDetailsOutput)[] }> {
@@ -151,6 +179,13 @@ export async function extractAndSaveProperty(
     return { success: true, results };
 }
 
+
+
+/**
+ * applyFetchedImagesToPropertyAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function applyFetchedImagesToPropertyAction(
   propertyId: string,
   images: string[]

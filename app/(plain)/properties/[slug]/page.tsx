@@ -8,7 +8,7 @@ Renders the public property detail page with gallery, summary, pricing, and supp
 */
 import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
-import { getPropertyById, getProperties, getPropertyBySlug } from '@/services/property';
+import { getPropertyById, getProperties, getPropertyBySlug } from '@/services/properties';
 import { buildPublicAppUrl } from '@neup/core/helpers/link/url';
 import { logProblem } from '@/services/problem-service';
 import { BedDouble, Bath, SquareGanttChart, MapPin, Building, Home, Box, Utensils, Hash, Car, Bike, Milestone, School, Briefcase, LandPlot, Sprout, Tag, Mountain, Wallet, Banknote, Calendar, Check, Plane, Link as LinkIcon, User as UserIcon, FileText } from 'lucide-react';
@@ -23,7 +23,7 @@ import { PropertyDetailRenderNotice } from '@/components/property-detail-render-
 import type { Property } from '@/types';
 import { areaValueToSqft } from '@/types';
 import type { Metadata, ResolvingMetadata } from 'next';
-import { getHiddenPriceLabel } from '@/services/property/price-display';
+import { getHiddenPriceLabel } from '@/services/properties/price-display';
 import { PropertyMediaGallery } from '@/components/manage/property-media-gallery';
 import { getLocation } from '@/services/property-location-service';
 

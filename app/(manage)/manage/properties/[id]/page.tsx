@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
-import { getPropertyById, getPropertyReviewRequests } from "@/services/property";
+import { getPropertyById, getPropertyReviewRequests } from "@/services/properties";
 import { hasPermission } from "@/services/permissions";
 import { PERMISSIONS } from "@/services/permissions";
 import { getPropertyChangeContextAction } from '@/services/properties/drafts';

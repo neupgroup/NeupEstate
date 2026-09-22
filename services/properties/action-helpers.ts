@@ -3,6 +3,11 @@ import { getIdentity } from '@/services/neupid/get-identity';
 
 // Returns the verified accountId on success, or throws with a structured error
 // that callers can surface directly to the UI.
+/**
+ * requireIdentity handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function requireIdentity(): Promise<string> {
   const identity = await getIdentity();
   if (!identity.authenticated) {
@@ -27,6 +32,13 @@ export const formatLocationString = (structuredLocation?: StructuredLocation): s
   return parts.filter(Boolean).join(', ');
 };
 
+
+
+/**
+ * firstPositivePrice handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export function firstPositivePrice(pricing?: CreatePropertyFormValues['pricing']): number {
   const direct = Number(pricing?.listed ?? 0);
   if (direct > 0) return direct;
@@ -38,6 +50,13 @@ export function firstPositivePrice(pricing?: CreatePropertyFormValues['pricing']
   return prices[0] ?? 0;
 }
 
+
+
+/**
+ * cleanPricing handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export function cleanPricing(pricing?: CreatePropertyFormValues['pricing']) {
   if (!pricing) return undefined;
 
@@ -74,7 +93,14 @@ export function cleanPricing(pricing?: CreatePropertyFormValues['pricing']) {
   };
 }
 
-function isPlainObject(value: unknown): value is Record<string, any> {
+
+
+/**
+ * isPlainObject handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function isPlainObject(value: unknown): value is Record<string, any> {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 }
 
@@ -99,6 +125,13 @@ export function deepMergeJson<T>(base: T, patch: any): T {
   return merged as T;
 }
 
+
+
+/**
+ * normalizeArrayLikeValue handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export function normalizeArrayLikeValue(value: unknown): unknown[] {
   if (Array.isArray(value)) return value;
   if (!value || typeof value !== 'object') return [];
@@ -109,6 +142,13 @@ export function normalizeArrayLikeValue(value: unknown): unknown[] {
     .filter((entry) => entry !== undefined);
 }
 
+
+
+/**
+ * normalizeOwnerEntries handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export function normalizeOwnerEntries(value: unknown): NonNullable<CreatePropertyInput['owners']> {
   return normalizeArrayLikeValue(value)
     .filter((entry): entry is Record<string, any> => Boolean(entry) && typeof entry === 'object' && !Array.isArray(entry))
@@ -122,6 +162,13 @@ export function normalizeOwnerEntries(value: unknown): NonNullable<CreatePropert
     .filter((entry) => entry.ownerClientId.length > 0) as NonNullable<CreatePropertyInput['owners']>;
 }
 
+
+
+/**
+ * normalizeOwnerReferenceEntries handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export function normalizeOwnerReferenceEntries(value: unknown): Array<{ id: string; isprimary: boolean }> {
   const rawEntries = Array.isArray(value)
     ? value
@@ -146,6 +193,13 @@ export function normalizeOwnerReferenceEntries(value: unknown): Array<{ id: stri
     .filter((entry) => entry.id.length > 0);
 }
 
+
+
+/**
+ * normalizePropertyChangeData handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export function normalizePropertyChangeData(data: Record<string, any>): Record<string, any> {
   const next = { ...data };
   for (const key of ['images', 'documents', 'plots', 'apartmentUnits']) {
@@ -170,6 +224,13 @@ export function normalizePropertyChangeData(data: Record<string, any>): Record<s
   return next;
 }
 
+
+
+/**
+ * mapPropertyToCreateFormValues handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export function mapPropertyToCreateFormValues(property: Property): Partial<CreatePropertyFormValues> {
   return {
     title: property.title,

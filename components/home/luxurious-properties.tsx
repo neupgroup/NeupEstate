@@ -1,5 +1,5 @@
 
-import { getLuxuriousProperties } from "@/services/property";
+import { getLuxuriousProperties } from "@/services/properties";
 import { PropertyCard } from "@/components/estate";
 import { Section } from "@/components/home/_components/section";
 import { SectionTitle } from "@/components/home/_components/section-title";

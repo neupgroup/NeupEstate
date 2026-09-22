@@ -1,13 +1,20 @@
 import { prisma } from '@neup/core/database/prisma';
 import { CreatePropertySchema, areaValueToSqft, type ApartmentUnit, type CreatePropertyFormValues, type CreatePropertyInput, type LandDetails, type PlotDetails } from '@/types';
 import { resolvePropertyPostingContext, type PropertyPostingContext } from '@/services/property-posting-context';
-import { cleanPricing, firstPositivePrice, formatLocationString, normalizeOwnerEntries } from '@/services/property/action-helpers';
+import { cleanPricing, firstPositivePrice, formatLocationString, normalizeOwnerEntries } from '@/services/properties/action-helpers';
 import { logger } from '@neup/logica/logger';
 
 export type CreatePropertyContext = Pick<PropertyPostingContext, 'actorAccountId'> & { actorId?: string; postingAgencyId?: string | null; workingProfileId?: string | null };
 export type CreatePropertyResult = { requestId: string };
 
+
+
 /** Creates or refreshes the actor's awaiting-review property draft. */
+/**
+ * createProperty handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function createProperty(input: CreatePropertyFormValues, context: CreatePropertyContext): Promise<CreatePropertyResult> {
   const actorId = context.actorId ?? context.actorAccountId;
   const validatedData = CreatePropertySchema.parse(input);
@@ -36,10 +43,24 @@ export async function createProperty(input: CreatePropertyFormValues, context: C
   return { requestId: draft.id };
 }
 
+
+
+/**
+ * createPropertyDraftRequest handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function createPropertyDraftRequest(input: { actorId: string; postingAgencyId?: string | null; workingProfileId?: string | null; data: CreatePropertyFormValues }) {
   return createProperty(input.data, { actorAccountId: input.actorId, postingAgencyId: input.postingAgencyId, workingProfileId: input.workingProfileId });
 }
 
+
+
+/**
+ * editUncreatedPropertyDraftRequest handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function editUncreatedPropertyDraftRequest(input: { requestId: string; actorId?: string; postingAgencyId?: string | null; workingProfileId?: string | null; data: CreatePropertyFormValues }) {
   const request = await prisma.propertyChange.findUnique({ where: { id: input.requestId }, select: { id: true, accountId: true, propertyId: true, status: true, isApproved: true } });
   if (!request || !['creation_draft', 'creation_pending', 'creating'].includes(request.status) || request.isApproved !== null) throw new Error('Pending create request not found.');

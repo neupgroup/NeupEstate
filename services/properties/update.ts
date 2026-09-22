@@ -18,7 +18,14 @@ import { randomBytes } from 'crypto';
 import { getPropertyById } from '../properties/view';
 import { PROPERTY_TYPE, type PropertyTypeValue } from './shared';
 
-function buildPropertyDetails(d: Partial<CreatePropertyInput> & Record<string, any>) {
+
+
+/**
+ * buildPropertyDetails handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function buildPropertyDetails(d: Partial<CreatePropertyInput> & Record<string, any>) {
   const baseDetails = isPlainObject(d.details) ? { ...d.details } : {};
 
   return {
@@ -71,7 +78,14 @@ function buildPropertyDetails(d: Partial<CreatePropertyInput> & Record<string, a
   };
 }
 
-function buildCoreData(d: Partial<CreatePropertyInput> & Record<string, any>) {
+
+
+/**
+ * buildCoreData handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function buildCoreData(d: Partial<CreatePropertyInput> & Record<string, any>) {
   const geo = (d.latitude != null && d.longitude != null) ? `${d.latitude},${d.longitude}` : '';
   const truncate = (s: string | undefined | null, max: number) =>
     s ? s.substring(0, max) : '';
@@ -122,7 +136,12 @@ risk.
 ::private end
 ::end
 */
-function buildPropertySlug(input: { slug?: string | null; title?: string | null }, withSuffix = false): string {
+/**
+ * buildPropertySlug handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function buildPropertySlug(input: { slug?: string | null; title?: string | null }, withSuffix = false): string {
   const explicitSlug = typeof input.slug === 'string' ? input.slug.trim() : '';
   if (explicitSlug) {
     return explicitSlug.substring(0, 120);
@@ -141,11 +160,25 @@ function buildPropertySlug(input: { slug?: string | null; title?: string | null 
   return joined.substring(0, 120);
 }
 
-function isUniqueConstraintError(error: unknown): error is { code: 'P2002' } {
+
+
+/**
+ * isUniqueConstraintError handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function isUniqueConstraintError(error: unknown): error is { code: 'P2002' } {
   return Boolean(error && typeof error === 'object' && 'code' in error && error.code === 'P2002');
 }
 
-async function createPropertyRecordWithGeneratedSlug(data: Record<string, any>) {
+
+
+/**
+ * createPropertyRecordWithGeneratedSlug handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export async function createPropertyRecordWithGeneratedSlug(data: Record<string, any>) {
   const primarySlug = buildPropertySlug(data);
 
   try {
@@ -163,11 +196,18 @@ async function createPropertyRecordWithGeneratedSlug(data: Record<string, any>) 
   }
 }
 
-function isPlainObject(value: unknown): value is Record<string, any> {
+
+
+/**
+ * isPlainObject handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function isPlainObject(value: unknown): value is Record<string, any> {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value) && !(value instanceof Date);
 }
 
-function deepMergePropertyData<T>(base: T, patch: any): T {
+export function deepMergePropertyData<T>(base: T, patch: any): T {
   if (!isPlainObject(base) || !isPlainObject(patch)) {
     return (patch === undefined ? base : patch) as T;
   }
@@ -189,7 +229,14 @@ function deepMergePropertyData<T>(base: T, patch: any): T {
   return merged as T;
 }
 
-function normalizePropertyAgency(value: unknown): string | null | undefined {
+
+
+/**
+ * normalizePropertyAgency handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function normalizePropertyAgency(value: unknown): string | null | undefined {
   if (value === undefined) return undefined;
   if (value === null) return null;
   if (typeof value === 'string') return value.trim() || null;
@@ -199,14 +246,28 @@ function normalizePropertyAgency(value: unknown): string | null | undefined {
   return undefined;
 }
 
-function normalizePropertyAgent(value: unknown): string | null | undefined {
+
+
+/**
+ * normalizePropertyAgent handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function normalizePropertyAgent(value: unknown): string | null | undefined {
   if (value === undefined) return undefined;
   if (value === null) return null;
   if (typeof value === 'string') return value.trim() || null;
   return undefined;
 }
 
-async function resolveMergedPropertyData(id: string, patch: Partial<CreatePropertyInput> & Record<string, any>) {
+
+
+/**
+ * resolveMergedPropertyData handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export async function resolveMergedPropertyData(id: string, patch: Partial<CreatePropertyInput> & Record<string, any>) {
   const [current, currentRecord] = await Promise.all([
     getPropertyById(id, { includeInactive: true }),
     prisma.property.findUnique({ where: { id }, select: { agency: true } }),
@@ -231,7 +292,14 @@ async function resolveMergedPropertyData(id: string, patch: Partial<CreateProper
   return merged;
 }
 
-async function upsertDetailTable(propertyId: string, type: PropertyTypeValue, d: any) {
+
+
+/**
+ * upsertDetailTable handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export async function upsertDetailTable(propertyId: string, type: PropertyTypeValue, d: any) {
   const area = areaValueToSqft(d.area);
   if (type === PROPERTY_TYPE.HOUSE) {
     await prisma.propertyHouseDetail.upsert({
@@ -260,7 +328,14 @@ async function upsertDetailTable(propertyId: string, type: PropertyTypeValue, d:
   }
 }
 
-function normalizePropertyImages(images: unknown): string[] {
+
+
+/**
+ * normalizePropertyImages handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function normalizePropertyImages(images: unknown): string[] {
   if (Array.isArray(images)) {
     return images.filter((image): image is string => typeof image === 'string' && image.trim().length > 0);
   }
@@ -281,7 +356,14 @@ function normalizePropertyImages(images: unknown): string[] {
   return [];
 }
 
-function normalizeArrayLikeValue(value: unknown): unknown[] {
+
+
+/**
+ * normalizeArrayLikeValue handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function normalizeArrayLikeValue(value: unknown): unknown[] {
   if (Array.isArray(value)) return value;
   if (!value || typeof value !== 'object') return [];
 
@@ -291,7 +373,14 @@ function normalizeArrayLikeValue(value: unknown): unknown[] {
     .filter((entry) => entry !== undefined);
 }
 
-function normalizePropertyOwners(owners: unknown): NonNullable<CreatePropertyInput['owners']> {
+
+
+/**
+ * normalizePropertyOwners handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function normalizePropertyOwners(owners: unknown): NonNullable<CreatePropertyInput['owners']> {
   const rawEntries = Array.isArray(owners)
     ? owners
     : owners && typeof owners === 'object'
@@ -314,7 +403,14 @@ function normalizePropertyOwners(owners: unknown): NonNullable<CreatePropertyInp
     .filter((owner) => owner.ownerClientId.length > 0) as NonNullable<CreatePropertyInput['owners']>;
 }
 
-async function upsertMedia(propertyId: string, images: unknown) {
+
+
+/**
+ * upsertMedia handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export async function upsertMedia(propertyId: string, images: unknown) {
   const normalizedImages = normalizePropertyImages(images);
   await prisma.propertyMedia.deleteMany({ where: { propertyId } });
   if (normalizedImages.length > 0) {
@@ -324,7 +420,14 @@ async function upsertMedia(propertyId: string, images: unknown) {
   }
 }
 
-async function replacePropertyOwners(propertyId: string, owners: CreatePropertyInput['owners'] = []) {
+
+
+/**
+ * replacePropertyOwners handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export async function replacePropertyOwners(propertyId: string, owners: CreatePropertyInput['owners'] = []) {
   const normalizedOwners = normalizePropertyOwners(owners);
   await prisma.propertyOwner.deleteMany({ where: { propertyId } });
   if (!normalizedOwners.length) return;
@@ -338,6 +441,13 @@ async function replacePropertyOwners(propertyId: string, owners: CreatePropertyI
   });
 }
 
+
+
+/**
+ * createProperty handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function createProperty(d: CreatePropertyInput & { creatorId?: string }): Promise<string> {
   try {
     const coreData = buildCoreData({ ...d, status: 'approved', isApproved: true });
@@ -352,6 +462,13 @@ export async function createProperty(d: CreatePropertyInput & { creatorId?: stri
   } catch (e) { await logProblem(e, 'createProperty'); throw new Error('Failed to create property.'); }
 }
 
+
+
+/**
+ * addProperty handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function addProperty(d: Omit<ExtractedPropertyData, 'embedding'>): Promise<string> {
   try {
     const { isPropertyPage: _, ...rest } = d as any;
@@ -364,6 +481,13 @@ export async function addProperty(d: Omit<ExtractedPropertyData, 'embedding'>): 
   } catch (e) { await logProblem(e, 'addProperty'); throw new Error('Failed to add property.'); }
 }
 
+
+
+/**
+ * updateProperty handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function updateProperty(id: string, d: UpdatePropertyInput): Promise<void> {
   try {
     const merged = await resolveMergedPropertyData(id, d as Partial<CreatePropertyInput> & Record<string, any>);
@@ -375,11 +499,25 @@ export async function updateProperty(id: string, d: UpdatePropertyInput): Promis
   } catch (e) { await logProblem(e, `updateProperty ${id}`); throw new Error('Failed to update property.'); }
 }
 
+
+
+/**
+ * updatePropertyWithExtractedData handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function updatePropertyWithExtractedData(id: string, d: ExtractedPropertyData): Promise<void> {
   const { isPropertyPage: _, ...rest } = d as any;
   return updateProperty(id, rest);
 }
 
+
+
+/**
+ * updatePropertyImages handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function updatePropertyImages(id: string, images: string[]): Promise<void> {
   try {
     await upsertMedia(id, images);

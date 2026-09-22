@@ -1,5 +1,5 @@
 import { getAccountById } from '@/services/account-service';
-import { getSavedProperties } from '@/services/property';
+import { getSavedProperties } from '@/services/properties';
 import { Card, CardContent, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Bookmark } from 'lucide-react';
 import { AdminPropertyRow } from '@/components/manage/property-row';

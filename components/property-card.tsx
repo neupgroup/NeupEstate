@@ -17,9 +17,9 @@ import { Badge } from "@neup/components/ui/badge";
 import { Heart, Star, MapPin } from "lucide-react";
 import { useState, useTransition, useEffect } from "react";
 import { cn } from "@neup/core/utils";
-import { getHiddenPriceLabel, getPrimaryCurrency, getPrimaryPrice, getPrimaryPricingSuffix } from "@/services/property/price-display";
+import { getHiddenPriceLabel, getPrimaryCurrency, getPrimaryPrice, getPrimaryPricingSuffix } from "@/services/properties/price-display";
 import { SafeImage } from "./safe-image";
-import { isPropertySavedAction, toggleSavePropertyAction } from '@/services/property/saved-actions';
+import { isSaved, toggleSave } from '@/services/properties/id/save';
 import { useToast } from "@neup/core/hooks/useToast";
 import { getClientAccountId } from "@/services/account/get-account-id";
 
@@ -64,7 +64,7 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
         return;
       }
       setIsCheckingFavorite(true);
-      const saved = await isPropertySavedAction(currentUserId, property.id);
+      const saved = await isSaved(currentUserId, property.id);
       setIsFavorited(saved);
       setIsCheckingFavorite(false);
     }
@@ -83,7 +83,7 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
     }
     startToggleTransition(async () => {
       try {
-        const result = await toggleSavePropertyAction(userId, property.id);
+        const result = await toggleSave(userId, property.id);
         setIsFavorited(result.saved);
         toast({ name: "default",
           title: result.saved ? "Property Saved" : "Property Unsaved",

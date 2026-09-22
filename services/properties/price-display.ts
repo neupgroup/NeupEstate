@@ -1,9 +1,23 @@
 import type { Property } from '@/types';
 
-function hasPositivePrice(value: number | null | undefined): value is number {
+
+
+/**
+ * hasPositivePrice handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function hasPositivePrice(value: number | null | undefined): value is number {
   return typeof value === 'number' && !Number.isNaN(value) && value > 0;
 }
 
+
+
+/**
+ * getHiddenPriceLabel handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export function getHiddenPriceLabel(property: Pick<Property, 'pricing'>): string | null {
   const mode = property.pricing?.priceDisplayMode;
 
@@ -13,10 +27,24 @@ export function getHiddenPriceLabel(property: Pick<Property, 'pricing'>): string
   return null;
 }
 
+
+
+/**
+ * getPrimaryCurrency handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export function getPrimaryCurrency(property: Pick<Property, 'pricing'>): string {
   return property.pricing?.currency || 'USD';
 }
 
+
+
+/**
+ * getPrimaryPrice handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export function getPrimaryPrice(property: Pick<Property, 'price' | 'pricing'>): number {
   if (hasPositivePrice(property.pricing?.listed)) {
     return property.pricing.listed;
@@ -25,6 +53,13 @@ export function getPrimaryPrice(property: Pick<Property, 'price' | 'pricing'>): 
   return property.price || 0;
 }
 
+
+
+/**
+ * formatPricingBasisSuffix handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export function formatPricingBasisSuffix({
   basis,
   frequency,
@@ -55,6 +90,13 @@ export function formatPricingBasisSuffix({
   return null;
 }
 
+
+
+/**
+ * getPrimaryPricingSuffix handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export function getPrimaryPricingSuffix(property: Pick<Property, 'pricing'>): string | null {
   const basis = property.pricing?.basis;
 

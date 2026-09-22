@@ -39,6 +39,13 @@ export interface AwaitingReviewItem {
   modifiedOn?: string;
 }
 
+
+
+/**
+ * normalizePropertyChangeStatus handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export function normalizePropertyChangeStatus(status: string | null | undefined): PropertyDraftSummary['status'] | string {
   if (status === 'creating') return 'creation_draft';
   return status || 'creation_draft';
@@ -159,6 +166,13 @@ export const DEFAULT_BRIDGE_PROPERTY_FIELDS = [
 export const BRIDGE_PROPERTY_DEFAULT_LIMIT = 10;
 export const BRIDGE_PROPERTY_MAX_LIMIT = 15;
 
+
+
+/**
+ * resolveBridgePropertyFields handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export function resolveBridgePropertyFields(fields?: string[]): BridgePropertyField[] {
   if (!fields?.length) return [...DEFAULT_BRIDGE_PROPERTY_FIELDS];
 
@@ -168,11 +182,25 @@ export function resolveBridgePropertyFields(fields?: string[]): BridgePropertyFi
     .filter((field, index, list) => list.indexOf(field) === index);
 }
 
+
+
+/**
+ * isRecord handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 }
 
-function setNestedValue(target: Record<string, unknown>, path: string[], value: unknown) {
+
+
+/**
+ * setNestedValue handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function setNestedValue(target: Record<string, unknown>, path: string[], value: unknown) {
   let cursor = target;
 
   for (const [index, segment] of path.entries()) {
@@ -190,12 +218,26 @@ function setNestedValue(target: Record<string, unknown>, path: string[], value: 
   }
 }
 
-function normalizeBridgeFieldPath(field: BridgePropertyField): string[] {
+
+
+/**
+ * normalizeBridgeFieldPath handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function normalizeBridgeFieldPath(field: BridgePropertyField): string[] {
   const path = field.split('.').map((part) => part.trim()).filter(Boolean);
   return path[0] === 'property' ? path.slice(1) : path;
 }
 
-function getSpecificsValue(property: Property, path: string[]): unknown {
+
+
+/**
+ * getSpecificsValue handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function getSpecificsValue(property: Property, path: string[]): unknown {
   if (path.length === 0) {
     return {
       rooms: getSpecificsValue(property, ['rooms']),
@@ -239,7 +281,14 @@ function getSpecificsValue(property: Property, path: string[]): unknown {
   return rest.reduce<unknown>((current, key) => (isRecord(current) ? current[key] : undefined), value);
 }
 
-function getPropertyDetailsValue(property: Property): Record<string, unknown> {
+
+
+/**
+ * getPropertyDetailsValue handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function getPropertyDetailsValue(property: Property): Record<string, unknown> {
   return {
     landDetails: property.landDetails,
     plots: property.plots,
@@ -259,7 +308,14 @@ function getPropertyDetailsValue(property: Property): Record<string, unknown> {
   };
 }
 
-function getPropertySpacingValue(property: Property): Record<string, unknown> {
+
+
+/**
+ * getPropertySpacingValue handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function getPropertySpacingValue(property: Property): Record<string, unknown> {
   return {
     bedrooms: property.bedrooms,
     bathrooms: property.bathrooms,
@@ -273,7 +329,14 @@ function getPropertySpacingValue(property: Property): Record<string, unknown> {
   };
 }
 
-function getBridgePropertyFieldValue(property: Property, path: string[]): unknown {
+
+
+/**
+ * getBridgePropertyFieldValue handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function getBridgePropertyFieldValue(property: Property, path: string[]): unknown {
   const [root, ...rest] = path;
   if (!root) return undefined;
 
@@ -300,6 +363,13 @@ function getBridgePropertyFieldValue(property: Property, path: string[]): unknow
   return rest.reduce<unknown>((current, key) => (isRecord(current) ? current[key] : undefined), value);
 }
 
+
+
+/**
+ * pickPropertyFields handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export function pickPropertyFields(property: Property, fields: BridgePropertyField[]): Partial<Property> & Record<string, unknown> {
   return fields.reduce<Partial<Property> & Record<string, unknown>>((picked, field) => {
     const path = normalizeBridgeFieldPath(field);
@@ -313,25 +383,53 @@ export function pickPropertyFields(property: Property, fields: BridgePropertyFie
   }, {});
 }
 
-function parseGeoLocation(geo: string | null): { latitude?: number; longitude?: number } {
+
+
+/**
+ * parseGeoLocation handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function parseGeoLocation(geo: string | null): { latitude?: number; longitude?: number } {
   if (!geo) return {};
   const [lat, lng] = geo.split(',').map(Number);
   if (isNaN(lat) || isNaN(lng)) return {};
   return { latitude: lat, longitude: lng };
 }
 
-function parseStructuredLocation(raw: string | null): any {
+
+
+/**
+ * parseStructuredLocation handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function parseStructuredLocation(raw: string | null): any {
   if (!raw) return undefined;
   try { return JSON.parse(raw); } catch { return undefined; }
 }
 
-function normalizeStringArray(value: unknown): string[] {
+
+
+/**
+ * normalizeStringArray handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function normalizeStringArray(value: unknown): string[] {
   if (!value) return [];
   if (Array.isArray(value)) return value.map(String).filter(Boolean);
   if (typeof value === 'string') return value.split(',').map((s) => s.trim()).filter(Boolean);
   return [];
 }
 
+
+
+/**
+ * mapRecord handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export function mapRecord(record: any): Property {
   const purpose  = mapPurposeFromEnum(record.purpose) as Property['purpose'];
   const category = mapTypeFromEnum(record.type)       as Property['category'];
@@ -444,6 +542,13 @@ export function mapRecord(record: any): Property {
   } as Property;
 }
 
+
+
+/**
+ * hydratePropertyAccountLabels handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export async function hydratePropertyAccountLabels(properties: Property[]): Promise<Property[]> {
   const accountIds = Array.from(new Set(
     properties
@@ -478,4 +583,11 @@ export async function hydratePropertyAccountLabels(properties: Property[]): Prom
   }));
 }
 
+
+
+/**
+ * onlyActive handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
 export function onlyActive(p: Property) { return Boolean(p.isApproved); }

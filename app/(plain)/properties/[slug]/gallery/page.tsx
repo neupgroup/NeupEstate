@@ -8,7 +8,7 @@ Renders the public property gallery grid and optionally the full-page selected-i
 
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { getPropertyById, getPropertyBySlug } from "@/services/property";
+import { getPropertyById, getPropertyBySlug } from "@/services/properties";
 import { logProblem } from "@/services/problem-service";
 import { PropertyGalleryFullPage } from "@/components/manage/property-gallery-full-page";
 import { Button } from "@neup/components/ui/button";
