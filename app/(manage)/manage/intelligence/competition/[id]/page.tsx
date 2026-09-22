@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getCompetitorById, getCompetitorPages } from '@/services/competitor-service';
+import { getCompetitorById, getCompetitorPages } from '@/services/competitors/service';
 import { CompetitionDetailClient } from '../detail-client';
 
 export default async function CompetitionDetailPage({ params }: { params: Promise<{ id: string }> }) {

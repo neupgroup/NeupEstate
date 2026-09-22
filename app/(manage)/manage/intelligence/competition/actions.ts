@@ -10,7 +10,7 @@ import {
   getCompetitorPages,
   upsertCompetitorPage,
   type Competitor,
-} from '@/services/competitor-service';
+} from '@/services/competitors/service';
 import { crawlSitemap } from '@/services/crawl/sitemap';
 import { crawlLinks } from '@/services/crawl/links';
 import { fetchPageSourceCode } from '@/services/crawl/fetch-page-source';
@@ -20,7 +20,7 @@ import { extractIntelligencePage } from '@/services/ai/extract-intelligence-page
 import { extractCompetitorListing } from '@/services/ai/extract-competitor-listing-flow';
 import { revalidatePath } from 'next/cache';
 import { prisma } from '@neup/core/database/prisma';
-import { upsertCompetitorListing } from '@/services/competitor-service';
+import { upsertCompetitorListing } from '@/services/competitors/service';
 
 function getHttpStatusFromError(error: unknown): string | null {
   const message = error instanceof Error ? error.message : String(error);

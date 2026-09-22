@@ -6,7 +6,7 @@ import {
   getCompetitorPageById,
   getCompetitorListingByPageId,
   upsertCompetitorListing,
-} from '@/services/competitor-service';
+} from '@/services/competitors/service';
 
 function getFriendlyAiError(error: unknown): string {
   const message = error instanceof Error ? error.message : String(error);

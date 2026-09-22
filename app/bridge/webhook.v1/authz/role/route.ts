@@ -19,7 +19,7 @@ import {
   deleteAssetsAccessGrants,
   deleteAllAssetsAccessGrants,
   type AuthzTable,
-} from '@/services/authz-service';
+} from '@/services/authorization/roles';
 
 export const dynamic = 'force-dynamic';
 

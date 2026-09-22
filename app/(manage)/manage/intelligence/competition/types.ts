@@ -1,1 +1,1 @@
-export type { Competitor, CompetitorSource } from '@/services/competitor-service';
+export type { Competitor, CompetitorSource } from '@/services/competitors/service';
