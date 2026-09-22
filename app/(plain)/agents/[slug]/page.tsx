@@ -2,7 +2,7 @@
 import { notFound } from 'next/navigation';
 import { getAgentBySlug } from '@/services/agent-service';
 import { getPropertiesByAgent } from '@/services/properties';
-import { getReviewsByAgent } from '@/services/review-service';
+import { getReviewsByAgent } from '@/services/reviews';
 import { SafeImage, PropertyCard, ClientLink } from '@/components/estate';
 import { Card, CardContent, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';

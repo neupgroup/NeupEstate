@@ -8,12 +8,12 @@ export type GetPropertyInput = { propertyId?: string; propertyCode?: string; fie
 
 
 
-/** Retrieves one approved property by id or custom code. */
 /**
- * getProperty handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ * Retrieves one approved property by id or custom code.
  *
+ * Handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
- */
+*/
 export async function getProperty(input: GetPropertyInput): Promise<(Partial<Property> & Record<string, unknown>) | null> {
   const propertyId = input.propertyId?.trim();
   const propertyCode = input.propertyCode?.trim();

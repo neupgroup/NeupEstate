@@ -1,5 +1,5 @@
 
-import { getReviews } from '@/services/review-service';
+import { getReviews } from '@/services/reviews';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Star } from 'lucide-react';
 import { requirePagePermission } from '@/services/permissions';
