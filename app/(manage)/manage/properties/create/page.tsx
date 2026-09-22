@@ -13,7 +13,7 @@ import { getCurrentAccountId } from '@/services/identity';
 
 import { Form } from '@/components/ui/form';
 import { useToast } from '@neup/core/hooks/useToast';
-import { getUsers } from '@/services/user-service';
+import { listAccounts } from '@/services/account/list';
 import { useAgencyCustomization } from '@/inapp/agency-customization/use-agency-customization';
 import { evaluateAgencyCustomization } from '@/inapp/agency-customization/evaluate-agency-customization';
 
@@ -133,7 +133,7 @@ export default function CreatePropertyPage() {
     useEffect(() => {
         async function loadContext() {
             const [userList, currentId, draftResult, postingContextResult] = await Promise.all([
-                getUsers(),
+                listAccounts(),
                 getCurrentAccountId(),
                 requestedChangeId
                     ? getCurrentPropertyCreateDraftAction(requestedChangeId)

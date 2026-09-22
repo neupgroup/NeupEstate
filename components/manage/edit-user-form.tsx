@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { updateUserAction } from '@/services/account/id/update';
 import { getSavedPropertiesForUser } from '@/services/properties/single/engage/view';
-import { getUserPreferences } from '@/services/user-preference-service';
+import { getAccountPreferences } from '@/services/accounts/single/preferences';
 import { Button } from '@neup/components/ui/button';
 import { LinkButton } from '@neup/components/ui/link-button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
@@ -113,7 +113,7 @@ export function EditUserForm({ user, account }: EditUserFormProps) {
         setIsClient(true);
         async function loadData() {
             const [prefs, saved] = await Promise.all([
-                getUserPreferences(user.id),
+                getAccountPreferences(user.id),
                 getSavedPropertiesForUser(user.id)
             ]);
             setPreferences(prefs);

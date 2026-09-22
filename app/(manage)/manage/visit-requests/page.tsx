@@ -1,5 +1,5 @@
 
-import { getVisitRequests } from '@/services/visit-request-service';
+import { getVisitRequests } from '@/services/properties/single/engage/visit';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@neup/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { AlertCircle, CalendarClock, User, Mail, Phone, Home, Clock } from 'lucide-react';

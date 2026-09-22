@@ -3,7 +3,7 @@
 import type { CreateUserActivityInput, PropertyActivityEvent } from "@/types";
 import { getPropertyById } from "../view";
 import { logActivity, updateAccountAccessInfo } from "@/services/activity-service";
-import { updateUserPreferences } from "@/services/user-preference-service";
+import { updateAccountPreferences } from "@/services/accounts/single/preferences";
 import { logProblem } from "@/services/problem-service";
 
 export async function logPropertyViews(userId: string, events: PropertyActivityEvent[], propertyId?: string): Promise<{ success: boolean; error?: string }> {
@@ -16,7 +16,7 @@ export async function logPropertyViews(userId: string, events: PropertyActivityE
     }
     if (propertyId) {
       const property = await getPropertyById(propertyId);
-      if (property) await updateUserPreferences(userId, property, events);
+      if (property) await updateAccountPreferences(userId, property, events);
       else await logProblem(new Error('Property not found during preference update.'), `logPropertyViews (Prop: ${propertyId})`);
     }
     return { success: true };

@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { CreateAgentSchema, type CreateAgentFormValues, type User } from '@/types';
 import { createAgentAction } from '@/services/agents';
-import { getUsers } from '@/services/user-service';
+import { listAccounts } from '@/services/account/list';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -29,7 +29,7 @@ export default function CreateAgentPage() {
 
     useEffect(() => {
         async function fetchUsers() {
-            const userList = await getUsers();
+            const userList = await listAccounts();
             setUsers(userList);
         }
         fetchUsers();

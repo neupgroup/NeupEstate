@@ -10,7 +10,7 @@ import { createPropertyAction, getCurrentPropertyCreateDraftAction, saveProperty
 import { cancelPropertyChangeDraftAction } from '@/services/properties/single/review';
 import { getCurrentAccountId } from '@/services/identity';
 import { getPropertyById } from "@/services/properties/view";
-import { getUsers } from "@/services/user-service";
+import { listAccounts } from "@/services/account/list";
 import { useAgencyCustomization } from '@/inapp/agency-customization/use-agency-customization';
 
 import { Form } from '@/components/ui/form';
@@ -531,7 +531,7 @@ export default function EditPropertyPage() {
         async function loadData() {
             const [propertyData, userData, resolvedAccountId, capabilities] = await Promise.all([
                 getPropertyById(propertyId, { includeInactive: true }),
-                getUsers(),
+                listAccounts(),
                 getCurrentAccountId(),
                 getPropertyEditCapabilitiesAction(),
             ]);

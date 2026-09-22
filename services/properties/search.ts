@@ -8,7 +8,7 @@ import { updatePropertyImages } from '@/services/properties/update';
 import { logProblem } from '@/services/problem-service';
 import type { NaturalLanguageSearchOutput, Property, PropertyFilters } from "@/types";
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
-import { getUserPreferences } from '@/services/user-preference-service';
+import { getAccountPreferences } from '@/services/accounts/single/preferences';
 
 
 
@@ -44,7 +44,7 @@ export async function recommendProperties(userId: string): Promise<{ success: bo
         if (!userId) {
             return { success: false, data: null, error: "User ID is required for recommendations." };
         }
-        const preferences = await getUserPreferences(userId);
+        const preferences = await getAccountPreferences(userId);
         if (!preferences) {
           return { success: false, data: null, error: "Could not retrieve user preferences." };
         }

@@ -3,7 +3,7 @@ import { getAccountById } from '@/services/account/id/get';
 import { notFound } from 'next/navigation';
 import { EditUserForm } from '@/components/manage/edit-user-form';
 import type { Account, UpdateUserFormValues } from '@/types';
-import { getUsers } from '@/services/user-service';
+import { listAccounts } from '@/services/account/list';
 
 export default async function UserDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -24,7 +24,7 @@ export default async function UserDetailPage({ params }: { params: Promise<{ id:
     };
 
     if (account.registered) {
-        const allUsers = await getUsers();
+        const allUsers = await listAccounts();
         const registeredUser = allUsers.find(u => u.id === account.id);
         if (registeredUser) {
             userProfile = { 

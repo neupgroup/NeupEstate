@@ -3,9 +3,9 @@
 
 import { prisma } from '@neup/core/database/prisma';
 import type { VisitRequest, CreateVisitRequestFormValues } from '@/types';
-import { getPropertyById } from './properties';
-import { getAgentById } from './agent-service';
-import { logProblem } from './problem-service';
+import { getPropertyById } from '../../view';
+import { getAgentById } from '@/services/agent-service';
+import { logProblem } from '@/services/problem-service';
 
 
 export async function createVisitRequest(data: CreateVisitRequestFormValues): Promise<string> {

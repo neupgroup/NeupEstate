@@ -4,7 +4,7 @@
 
 import { prisma } from '@neup/core/database/prisma';
 import type { Property, PropertyActivityEvent, UserPreferences } from '@/types';
-import { logProblem } from './problem-service';
+import { logProblem } from '@/services/problem-service';
 
 
 const WEIGHTS = {
@@ -25,37 +25,37 @@ function getBudgetRange(price: number): string {
     return `${lower}-${upper}`;
 }
 
-export async function getUserPreferences(userId: string): Promise<UserPreferences | null> {
+export async function getAccountPreferences(accountId: string): Promise<UserPreferences | null> {
 
     try {
         let pref = await prisma.userPreference.findUnique({
-            where: { accountId: userId },
+            where: { accountId: accountId },
         });
         
         if (!pref) {
             // Create a new preference record if it doesn't exist
             pref = await prisma.userPreference.create({
                 data: {
-                    accountId: userId,
+                    accountId: accountId,
                     preferences: {},
                 },
             });
         }
 
         return {
-            userId,
+            userId: accountId,
             ...pref,
             updatedAt: pref.updatedAt.toISOString(),
             preferences: (pref.preferences as any) || {},
         } as UserPreferences;
     } catch (error) {
-        await logProblem(error, `getUserPreferences (User: ${userId})`);
+        await logProblem(error, `getAccountPreferences (Account: ${accountId})`);
         return null;
     }
 }
 
-export async function updateUserPreferences(
-    userId: string,
+export async function updateAccountPreferences(
+    accountId: string,
     property: Property,
     events: PropertyActivityEvent[]
 ): Promise<void> {
@@ -63,13 +63,13 @@ export async function updateUserPreferences(
     try {
         // Get or create preference document
         let pref = await prisma.userPreference.findUnique({
-            where: { accountId: userId },
+            where: { accountId: accountId },
         });
 
         if (!pref) {
             pref = await prisma.userPreference.create({
                 data: {
-                    accountId: userId,
+                    accountId: accountId,
                     preferences: {},
                 },
             });
@@ -175,7 +175,7 @@ export async function updateUserPreferences(
 
         // Update preference record in database
         await prisma.userPreference.update({
-            where: { accountId: userId },
+            where: { accountId: accountId },
             data: {
                 preferences: prefs,
                 totalSaves: counters.totalSaves,
@@ -189,6 +189,6 @@ export async function updateUserPreferences(
         });
 
     } catch (error) {
-        await logProblem(error, `updateUserPreferences (User: ${userId})`);
+        await logProblem(error, `updateAccountPreferences (Account: ${accountId})`);
     }
 }
