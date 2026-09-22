@@ -34,7 +34,7 @@ the bridge property service.
 ::end
 */
 import { NextRequest } from 'next/server';
-import { createProperty } from '@/services/properties/create';
+import { submitPropertyCreation } from '@/services/properties/create';
 import { listProperties } from '@/services/properties/list';
 import { logger } from "@neup/logica/logger";
 import { withRequestDevLog } from '@/services/site-dev-log-service';
@@ -76,7 +76,7 @@ const postHandler = async (req: NextRequest) => {
     const postingAgencyId = text(body?.postingAgencyId) || text(req.headers.get('postingAgencyId')) || text(req.headers.get('agencyId'));
     const property = body?.property && typeof body.property === 'object' ? body.property : Object.fromEntries(Object.entries(body ?? {}).filter(([key]) => !['accountId', 'workingProfileId', 'workingProfile', 'postingAgencyId'].includes(key)));
     if (!actorId) return Response.json({ success: false, error: 'Provide accountId in the request body or headers.' }, { status: 400 });
-    const result = await createProperty(property, { actorAccountId: actorId, postingAgencyId: postingAgencyId ?? null, workingProfileId: workingProfileId ?? null });
+    const result = await submitPropertyCreation(property, { actorAccountId: actorId, postingAgencyId: postingAgencyId ?? null, workingProfileId: workingProfileId ?? null });
     return Response.json({ success: true, requestId: result.requestId, status: 'awaiting review' });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Failed to create property draft.';

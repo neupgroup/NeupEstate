@@ -1,6 +1,6 @@
 "use server";
 
-import { createProperty as createPropertyService, updateProperty as updatePropertyService, updatePropertyWithExtractedData } from '@/services/properties/update';
+import { createPropertyRecord, updateProperty as updatePropertyService, updatePropertyWithExtractedData } from '@/services/properties/update';
 import { approveProperty } from '@/services/properties/single/review';
 import { deleteProperty as deletePropertyService } from '@/services/properties/single/delete';
 import { createPropertyLog, getPropertyById } from '@/services/properties/view';
@@ -677,7 +677,7 @@ export async function reviewPropertyChangeAction(input: {
         ];
         const createdPropertyId = request.propertyId
           ? request.propertyId
-          : await createPropertyService(requestData as CreatePropertyInput);
+          : await createPropertyRecord(requestData as CreatePropertyInput);
         if (request.propertyId) {
           await updatePropertyWithExtractedData(createdPropertyId, requestData as any);
           await approveProperty(createdPropertyId);

@@ -15,7 +15,7 @@ export type CreatePropertyResult = { requestId: string };
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export async function createProperty(input: CreatePropertyFormValues, context: CreatePropertyContext): Promise<CreatePropertyResult> {
+export async function submitPropertyCreation(input: CreatePropertyFormValues, context: CreatePropertyContext): Promise<CreatePropertyResult> {
   const actorId = context.actorId ?? context.actorAccountId;
   const validatedData = CreatePropertySchema.parse(input);
   const postingContext = await resolvePropertyCreateContext({ actorAccountId: actorId, requestedWorkingProfileId: context.workingProfileId ?? null });
@@ -51,7 +51,7 @@ export async function createProperty(input: CreatePropertyFormValues, context: C
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
 export async function createPropertyDraftRequest(input: { actorId: string; postingAgencyId?: string | null; workingProfileId?: string | null; data: CreatePropertyFormValues }) {
-  return createProperty(input.data, { actorAccountId: input.actorId, postingAgencyId: input.postingAgencyId, workingProfileId: input.workingProfileId });
+  return submitPropertyCreation(input.data, { actorAccountId: input.actorId, postingAgencyId: input.postingAgencyId, workingProfileId: input.workingProfileId });
 }
 
 
@@ -65,7 +65,7 @@ export async function editUncreatedPropertyDraftRequest(input: { requestId: stri
   const request = await prisma.propertyChange.findUnique({ where: { id: input.requestId }, select: { id: true, accountId: true, propertyId: true, status: true, isApproved: true } });
   if (!request || !['creation_draft', 'creation_pending', 'creating'].includes(request.status) || request.isApproved !== null) throw new Error('Pending create request not found.');
   if (input.actorId && request.accountId !== input.actorId) throw new Error('The provided requestId does not belong to the provided accountId.');
-  const result = await createProperty(input.data, { actorAccountId: request.accountId, postingAgencyId: input.postingAgencyId, workingProfileId: input.workingProfileId });
+  const result = await submitPropertyCreation(input.data, { actorAccountId: request.accountId, postingAgencyId: input.postingAgencyId, workingProfileId: input.workingProfileId });
   if (result.requestId !== input.requestId) throw new Error('The provided requestId does not match the active pending create request.');
   return result;
 }

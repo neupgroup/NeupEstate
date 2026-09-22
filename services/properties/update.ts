@@ -448,7 +448,7 @@ export async function replacePropertyOwners(propertyId: string, owners: CreatePr
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export async function createProperty(d: CreatePropertyInput & { creatorId?: string }): Promise<string> {
+export async function createPropertyRecord(d: CreatePropertyInput & { creatorId?: string }): Promise<string> {
   try {
     const coreData = buildCoreData({ ...d, status: 'approved', isApproved: true });
     const created = await createPropertyRecordWithGeneratedSlug(coreData);
@@ -459,7 +459,7 @@ export async function createProperty(d: CreatePropertyInput & { creatorId?: stri
     await replacePropertyOwners(created.id, d.owners);
 
     return created.id;
-  } catch (e) { await logger().type('createProperty').data({ error: String(e), details: {} }).log(); throw new Error('Failed to create property.'); }
+  } catch (e) { await logger().type('createPropertyRecord').data({ error: String(e), details: {} }).log(); throw new Error('Failed to create property.'); }
 }
 
 
