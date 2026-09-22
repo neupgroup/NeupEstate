@@ -36,15 +36,13 @@ export default async function UserDetailPage({ params }: { params: Promise<{ id:
             };
         }
     } else {
-        // For guest accounts, we check the conversation data.
-        const { getConversationByAccountId } = await import('@/services/conversation-service');
-        const conversation = await getConversationByAccountId(account.id);
+        // Guest accounts do not have conversation records.
         userProfile = {
             id: account.id,
-            name: conversation?.customerName || account.display_name || 'Guest User',
+            name: account.display_name || 'Guest User',
             location: 'Not set',
             email: [],
-            phone: conversation?.customerPhone ? [{ type: 'primary', value: conversation.customerPhone }] : [],
+            phone: [],
         };
     }
 

@@ -18,7 +18,6 @@ import { runPropertyAmendment as runPropertyAmendmentFlow } from "@/services/ai/
 import { runPropertyAssurance as runPropertyAssuranceFlow } from "@/services/ai/property-assurance-flow";
 import { rewritePropertyDetails } from "@/services/ai/rewrite-property-details-flow";
 import { parseAdminFilter } from "@/services/ai/parse-admin-filter-flow";
-import { createMessage as createMessageService, createConversation as createConversationService, deleteConversation as deleteConversationService, getConversationById, getMessagesByConversationId, setAiIntervention as setAiInterventionService } from '@/services/conversation-service';
 import { generateFollowUpMessages } from '@/services/ai/ai-follow-up-flow';
 import { suggestQuestions as suggestQuestionsFlow } from '@/services/ai/suggest-questions-flow';
 import { getAccountPreferences } from '@/services/accounts/single/preferences';
@@ -41,59 +40,6 @@ import { isAgencyLikeAccountType } from '@/services/accounts/type';
 import { resolvePropertyCreateContext } from '@/services/properties/create/context';
 import { requireIdentity, formatLocationString, firstPositivePrice, cleanPricing, deepMergeJson, normalizeOwnerEntries, normalizeOwnerReferenceEntries, normalizePropertyChangeData, mapPropertyToCreateFormValues } from '@/services/properties/action-helpers';
 
-// Message Actions
-export async function sendMessageAction(conversationId: string, formData: FormData) {
-  const messageText = formData.get('messageText') as string;
-  if (!messageText?.trim()) {
-    return { success: false, error: "Message cannot be empty." };
-  }
-
-  try {
-    // 1. Get conversation details
-    const conversation = await getConversationById(conversationId);
-
-    if (!conversation) {
-      return { success: false, error: "Conversation not found." };
-    }
-    await createMessageService(conversationId, messageText, 'agent');
-    revalidatePath(`/manage/messages/${conversationId}`);
-    return { success: true };
-  } catch (e: any) {
-    return { success: false, error: e.message || "Failed to send message." };
-  }
-}
-
-export async function createConversationAction(data: CreateConversationFormValues): Promise<{
-  success: boolean;
-  error?: string | null;
-  conversationId?: string | null;
-}> {
-  try {
-    const actorId = await requireIdentity();
-    const validatedData = CreateConversationSchema.parse(data);
-    const conversationId = await createConversationService({ ...validatedData, userId: actorId });
-    revalidatePath('/manage/messages');
-    return { success: true, conversationId, error: null };
-  } catch (e: any) {
-    await logger().type('createConversationAction').data({ error: String(e), details: {} }).log();
-    if (e instanceof z.ZodError) {
-      return { success: false, error: e.message, conversationId: null };
-    }
-    return { success: false, error: "An unexpected server error occurred.", conversationId: null };
-  }
-}
-
-export async function deleteConversationAction(conversationId: string) {
-    try {
-        await deleteConversationService(conversationId);
-        revalidatePath('/manage/messages');
-        return { success: true };
-    } catch (e: any) {
-        await logger().type(`deleteConversationAction (ID: ${conversationId})`).data({ error: String(e), details: {} }).log();
-        return { success: false, error: "Failed to delete conversation." };
-    }
-}
-
 export async function deleteAccountAction(accountId: string) {
   try {
     await deleteAccountAndData(accountId);
@@ -104,62 +50,5 @@ export async function deleteAccountAction(accountId: string) {
   } catch (e: any) {
     await logger().type(`deleteAccountAction (ID: ${accountId})`).data({ error: String(e), details: {} }).log();
     return { success: false, error: 'Failed to delete account.' };
-  }
-}
-
-export async function setAiInterventionAction(conversationId: string, active: boolean) {
-  try {
-    await setAiInterventionService(conversationId, active);
-    revalidatePath(`/manage/messages/${conversationId}`);
-    return { success: true };
-  } catch (e: any) {
-    await logger().type(`setAiInterventionAction (ID: ${conversationId})`).data({ error: String(e), details: {} }).log();
-    return { success: false, error: e.message || "Failed to toggle AI intervention." };
-  }
-}
-
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-export async function sendAiFollowUpAction(conversationId: string): Promise<{ success: boolean; error?: string; messagesSent?: number }> {
-  try {
-    const conversation = await getConversationById(conversationId);
-    if (!conversation) {
-      return { success: false, error: 'Conversation not found.' };
-    }
-
-    const messages = await getMessagesByConversationId(conversationId);
-    if (messages.length === 0) {
-      return { success: false, error: 'Cannot follow-up on an empty conversation.' };
-    }
-    if (messages[messages.length - 1].sender === 'customer') {
-      return { success: false, error: 'Cannot follow-up when the customer was the last to message.' };
-    }
-
-    const formattedHistory = messages.map(msg => ({
-      role: msg.sender === 'customer' ? 'user' : ('model' as 'user' | 'model'),
-      content: msg.text
-    }));
-
-    // Call the AI to generate the follow-up messages
-    const aiResult = await generateFollowUpMessages({
-      history: formattedHistory,
-      customerName: conversation.customerName,
-    });
-
-    if (!aiResult || !aiResult.messages || aiResult.messages.length === 0) {
-      return { success: false, error: 'AI failed to generate follow-up messages.' };
-    }
-
-    for (const messageText of aiResult.messages) {
-      await createMessageService(conversationId, messageText, 'agent');
-      await delay(1500);
-    }
-    
-    revalidatePath(`/manage/messages/${conversationId}`);
-    return { success: true, messagesSent: aiResult.messages.length };
-
-  } catch (e: any) {
-    await logger().type(`sendAiFollowUpAction (ID: ${conversationId})`).data({ error: String(e), details: {} }).log();
-    return { success: false, error: e.message || 'An unknown error occurred while sending follow-ups.' };
   }
 }
