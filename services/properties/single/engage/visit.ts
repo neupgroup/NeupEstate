@@ -4,7 +4,7 @@
 import { prisma } from '@neup/core/database/prisma';
 import type { VisitRequest, CreateVisitRequestFormValues } from '@/types';
 import { getPropertyById } from '../../view';
-import { getAgentById } from '@/services/agent-service';
+import { getAgentById } from '@/services/agents/agent/service';
 import { logger } from "@neup/logica/logger";
 
 

@@ -1,6 +1,6 @@
 
 import { notFound } from 'next/navigation';
-import { getAgentBySlug } from '@/services/agent-service';
+import { getAgentBySlug } from '@/services/agents/agent/service';
 import { SafeImage } from '@/components/estate';
 import { LinkButton } from '@neup/components/ui/link-button';
 import { Button } from '@neup/components/ui/button';

@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '@neup/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
-import { getPublicAgencyAccountByNeupId } from '@/services/agency-service';
-import { getAgencyAgentAccountsByAgency } from '@/services/agency-agent-map-service';
+import { getPublicAgencyAccountByNeupId } from '@/services/agencies/agency/service';
+import { getAgencyAgentAccountsByAgency } from '@/services/agencies/agent-maps/service';
 import { AlertCircle, Users } from 'lucide-react';
 
 function resolveNeupId(handle: string) {

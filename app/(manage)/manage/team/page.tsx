@@ -4,8 +4,8 @@ import { getBrandAccounts } from '@/services/neupid/get-brand-accounts';
 import {
   getAgencyMapByAccount,
   getAgencyMapsByAgency,
-} from '@/services/agency-customization-service';
-import { getAgencyAgentMapsByAgency } from '@/services/agency-agent-map-service';
+} from '@/services/agencies/customization/service';
+import { getAgencyAgentMapsByAgency } from '@/services/agencies/agent-maps/service';
 import { prisma } from '@neup/core/database/prisma';
 import { Badge } from '@neup/components/ui/badge';
 import {

@@ -1,4 +1,4 @@
-import { getAgents } from "@/services/agent-service";
+import { getAgents } from "@/services/agents/agent/service";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@neup/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@neup/components/ui/alert";
 import { SafeImage, ClientLink } from "@/components/estate";

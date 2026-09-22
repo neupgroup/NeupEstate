@@ -18,7 +18,7 @@ fields need to be enforced in the UI.
 
 import { useEffect, useState } from 'react';
 import type { AgencyCustomizationRule, AgencyCustomizeFor } from '@/types';
-import { getCustomizationForAccount } from '@/services/agency-customization-service';
+import { getCustomizationForAccount } from '@/services/agencies/customization/service';
 
 type UseAgencyCustomizationResult = {
   rule: AgencyCustomizationRule | null;

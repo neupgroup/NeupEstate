@@ -9,7 +9,7 @@ Validates the public agent registration agreement and triggers enrollment.
 */
 
 import { getAuthenticatedMeData } from "@/services/auth/me";
-import { enrollCurrentAccountAsAgent } from "@/services/agent-registration-service";
+import { enrollCurrentAccountAsAgent } from "@/services/agents/registration/service";
 
 export type AgentRegisterActionState = {
   error: string | null;

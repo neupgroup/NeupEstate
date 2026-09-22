@@ -2,7 +2,7 @@ import { ClientLink } from '@/components/client-link';
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { Badge } from '@neup/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
-import { getAgencyCustomizationsForAgency, getAgencyMapByAccount, getAgencyMapsByAgency } from '@/services/agency-customization-service';
+import { getAgencyCustomizationsForAgency, getAgencyMapByAccount, getAgencyMapsByAgency } from '@/services/agencies/customization/service';
 import { requireAuth } from '@/services/auth/account';
 import { getAccountById } from '@/services/accounts/id/get';
 import { AlertCircle, ArrowLeft, Building2, Settings2, UsersRound } from 'lucide-react';

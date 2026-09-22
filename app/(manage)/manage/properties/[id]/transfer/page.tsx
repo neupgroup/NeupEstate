@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@neup
 import { getListingAgentOptionsAction } from '@/services/properties/drafts';
 import { hasPermission } from "@/services/permissions";
 import { PERMISSIONS } from "@/services/permissions";
-import { getPublicAgencyAccounts } from "@/services/agency-service";
+import { getPublicAgencyAccounts } from "@/services/agencies/agency/service";
 import { requireAuth } from "@/services/auth/account";
 import { getPropertyById } from "@/services/properties";
 

@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { Card, CardContent } from '@neup/components/ui/card';
 import { SafeImage } from '@/components/safe-image';
 import { Building, Home, Users } from 'lucide-react';
-import { getPublicAccountProfileByNeupId } from '@/services/agency-service';
+import { getPublicAccountProfileByNeupId } from '@/services/agencies/agency/service';
 
 function resolveNeupId(handle: string) {
   const decodedHandle = decodeURIComponent(handle);

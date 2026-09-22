@@ -12,7 +12,7 @@ import type {
   AnalyticsSourceScope,
 } from '@neup/core/analytics/types';
 import { getAuthenticatedAccount } from '@/services/auth/account';
-import { getAgencyMapByAccount, getAgencyMapsByAgency } from '@/services/agency-customization-service';
+import { getAgencyMapByAccount, getAgencyMapsByAgency } from '@/services/agencies/customization/service';
 import { hasPermission, PERMISSIONS } from '@/services/permissions';
 
 const ANALYTICS_DAYS = 30;

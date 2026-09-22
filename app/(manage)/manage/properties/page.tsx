@@ -11,7 +11,7 @@ import type { PropertyFilters } from "@/types";
 import { ClientLink } from "@/components/client-link";
 import { PERMISSIONS } from "@/services/permissions";
 import { getIdentity } from "@/services/neupid/get-identity";
-import { getAgencyAgentMapsByAgent } from "@/services/agency-agent-map-service";
+import { getAgencyAgentMapsByAgent } from "@/services/agencies/agent-maps/service";
 import { hasPermission } from "@/services/permissions";
 import { notFound } from "next/navigation";
 

@@ -5,7 +5,7 @@ import { Badge } from '@neup/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@neup/components/ui/table';
 import { prisma } from '@neup/core/database/prisma';
-import { getAgencyMapByAccount, getAgencyMapsByAgency } from '@/services/agency-customization-service';
+import { getAgencyMapByAccount, getAgencyMapsByAgency } from '@/services/agencies/customization/service';
 import { requireAuth } from '@/services/auth/account';
 import { AlertCircle, ArrowLeft, Building2, CalendarCheck2, Eye, FileQuestion, Heart, TrendingUp, UsersRound } from 'lucide-react';
 import type { ReactNode } from 'react';

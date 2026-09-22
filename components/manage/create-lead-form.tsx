@@ -20,7 +20,7 @@ import { PriceInput } from '@/components/ui/price-input';
 import { createLeadAction } from '@/services/agency';
 import { getCurrentAccountId } from '@/services/identity';
 import { getAccountById, getAccounts } from '@/services/accounts/id/lookup';
-import { getAgencyAgentMapsByAgency, getAgencyAgentMapsByAgent } from '@/services/agency-agent-map-service';
+import { getAgencyAgentMapsByAgency, getAgencyAgentMapsByAgent } from '@/services/agencies/agent-maps/service';
 import type { Account } from '@/types';
 import { useToast } from '@neup/core/hooks/useToast';
 

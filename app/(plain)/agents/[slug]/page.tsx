@@ -1,6 +1,6 @@
 
 import { notFound } from 'next/navigation';
-import { getAgentBySlug } from '@/services/agent-service';
+import { getAgentBySlug } from '@/services/agents/agent/service';
 import { getPropertiesByAgent } from '@/services/properties';
 import { getReviewsByAgent } from '@/services/reviews';
 import { SafeImage, PropertyCard, ClientLink } from '@/components/estate';

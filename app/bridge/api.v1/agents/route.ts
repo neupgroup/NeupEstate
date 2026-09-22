@@ -11,7 +11,7 @@ Both rows and totals use the same filters. Limits default to 10 and are capped a
 ::end
 */
 import { NextRequest, NextResponse } from 'next/server';
-import { getAgentCount, getAgents } from '@/services/agent-service';
+import { getAgentCount, getAgents } from '@/services/agents/agent/service';
 import { logger } from "@neup/logica/logger";
 import { withRequestDevLog } from '@/services/site-dev-log-service';
 

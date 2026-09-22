@@ -1,6 +1,6 @@
 
 import { AnalyticsDashboard } from '@/components/manage/analytics-dashboard';
-import { getAnalyticsDashboardData } from '@/services/analytics-service';
+import { getAnalyticsDashboardData } from '@/services/analytics/reports/dashboard';
 import { requirePagePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permissions';
 
