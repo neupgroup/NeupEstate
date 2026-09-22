@@ -4,7 +4,7 @@ import { prisma } from '@neup/core/database/prisma';
 import { logger } from "@neup/logica/logger";
 import type { Agent, CreateAgentFormValues, UpdateAgentFormValues } from '@/types';
 import slugify from 'slugify';
-import { filter, type Filters } from './agent/filter';
+import { filter, type Filters } from './agents/filter';
 
 function mapRecord(r: any): Agent {
   return {
