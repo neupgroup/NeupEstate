@@ -2,14 +2,15 @@
 
 import type { CreateUserActivityInput, PropertyActivityEvent } from "@/types";
 import { getPropertyById } from "../view";
-import { logActivity, updateAccountAccessInfo } from "@/services/activity-service";
+import { logActivity } from "@/services/activities/log";
+import { updateAccountAccessInfo } from "@/services/accounts/id/lookup";
 import { updateAccountPreferences } from "@/services/accounts/single/preferences";
 import { logger } from "@neup/logica/logger";
 
 export async function logPropertyViews(userId: string, events: PropertyActivityEvent[], propertyId?: string): Promise<{ success: boolean; error?: string }> {
   try {
     if (!userId || events.length === 0) return { success: true };
-    await updateAccountAccessInfo(userId, 'unknown');
+    await updateAccountAccessInfo(userId);
     for (const event of events) {
       const activityData: CreateUserActivityInput = { userId, activity: event.type, page: event.page, propertyId, activityOn: new Date().toISOString(), duration: event.duration };
       await logActivity(activityData);
