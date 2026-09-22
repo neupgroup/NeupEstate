@@ -19,7 +19,7 @@ import { useState, useTransition, useEffect } from "react";
 import { cn } from "@neup/core/utils";
 import { getHiddenPriceLabel, getPrimaryCurrency, getPrimaryPrice, getPrimaryPricingSuffix } from "@/services/properties/price-display";
 import { SafeImage } from "./safe-image";
-import { isSaved, toggleSave } from '@/services/properties/id/save';
+import { isSaved, save } from '@/services/properties/single/engage/save';
 import { useToast } from "@neup/core/hooks/useToast";
 import { getClientAccountId } from '@/services/auth/client';
 
@@ -83,7 +83,7 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
     }
     startToggleTransition(async () => {
       try {
-        const result = await toggleSave(userId, property.id);
+                const result = await save(userId, property.id);
         setIsFavorited(result.saved);
         toast({ name: "default",
           title: result.saved ? "Property Saved" : "Property Unsaved",

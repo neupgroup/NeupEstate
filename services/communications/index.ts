@@ -21,8 +21,7 @@ import { parseAdminFilter } from "@/services/ai/parse-admin-filter-flow";
 import { createMessage as createMessageService, createConversation as createConversationService, deleteConversation as deleteConversationService, getConversationById, getMessagesByConversationId, setAiIntervention as setAiInterventionService } from '@/services/conversation-service';
 import { generateFollowUpMessages } from '@/services/ai/ai-follow-up-flow';
 import { suggestQuestions as suggestQuestionsFlow } from '@/services/ai/suggest-questions-flow';
-import { logActivity as logActivityService, updateAccountAccessInfo } from '@/services/activity-service';
-import { updateUserPreferences, getUserPreferences } from '@/services/user-preference-service';
+import { getUserPreferences } from '@/services/user-preference-service';
 import { createFaq as createFaqService, updateFaq as updateFaqService, deleteFaq as deleteFaqService } from '@/services/faq-service';
 import { updatePrompt as updatePromptService, createPrompt as createPromptService, deletePrompt as deletePromptService } from '@/services/prompt-service';
 import { createPropertyRequest as createPropertyRequestService, createInquiry as createInquiryService, updateInquiryStatus as updateInquiryStatusService } from '@/services/property-request-service';
@@ -163,47 +162,4 @@ export async function sendAiFollowUpAction(conversationId: string): Promise<{ su
     await logProblem(e, `sendAiFollowUpAction (ID: ${conversationId})`);
     return { success: false, error: e.message || 'An unknown error occurred while sending follow-ups.' };
   }
-}
-
-export async function logUserActivity(
-    userId: string,
-    events: PropertyActivityEvent[],
-    propertyId?: string,
-): Promise<{ success: boolean; error?: string }> {
-    try {
-        if (!userId || events.length === 0) {
-            return { success: true }; // No data to log, not an error.
-        }
-        
-        // Update account last access time
-        await updateAccountAccessInfo(userId, 'unknown');
-        
-        // Log general activities to a separate collection
-        for (const event of events) {
-            const activityData: CreateUserActivityInput = {
-                userId,
-                activity: event.type,
-                page: event.page,
-                propertyId, // This is okay; it will be undefined for general pages
-                activityOn: new Date().toISOString(),
-                duration: event.duration,
-            };
-            await logActivityService(activityData);
-        }
-
-        // If a propertyId is provided, update property-specific preferences for recommendations
-        if (propertyId) {
-            const property = await getPropertyById(propertyId);
-            if (property) {
-                 await updateUserPreferences(userId, property, events);
-            } else {
-                await logProblem(new Error('Property not found during preference update.'), `logUserActivity (Prop: ${propertyId})`);
-            }
-        }
-
-        return { success: true };
-    } catch (e: any) {
-        await logProblem(e, `logUserActivity (User: ${userId}, Prop: ${propertyId})`);
-        return { success: false, error: e.message || "Failed to log user activity." };
-    }
 }

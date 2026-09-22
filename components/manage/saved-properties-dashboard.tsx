@@ -11,7 +11,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { Loader2, Search, Bookmark, AlertCircle, ExternalLink, User } from 'lucide-react';
 import { Property, User as UserType } from '@/types';
-import { getSavedPropertiesForUser, getUsersBySavedProperty } from '@/services/engagement';
+import { getSavedPropertiesForUser, getUsersBySavedProperty } from '@/services/properties/single/engage/view';
 import { ClientLink } from '@/components/client-link';
 import { RelativeTime } from './relative-time';
 import { type SavedPropertyEntry } from '@/services/properties';
@@ -177,4 +177,3 @@ export function SavedPropertiesDashboard({ initialSavedProperties }: { initialSa
         </div>
     );
 }
-

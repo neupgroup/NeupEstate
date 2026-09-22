@@ -7,7 +7,7 @@ import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigat
 import { useTransition, useState, useEffect, useMemo } from 'react';
 import { UpdatePropertySchema, type Property, type User, type UpdatePropertyFormValues } from '@/types';
 import { createPropertyAction, getCurrentPropertyCreateDraftAction, savePropertyChangeDraftAction, getPropertyChangeContextAction, getPropertyEditCapabilitiesAction, getListingAgentOptionsAction, savePropertyCreateDraftAction } from '@/services/properties/drafts';
-import { cancelPropertyChangeDraftAction } from '@/services/properties/id/review';
+import { cancelPropertyChangeDraftAction } from '@/services/properties/single/review';
 import { getCurrentAccountId } from '@/services/identity';
 import { getPropertyById } from "@/services/properties/view";
 import { getUsers } from "@/services/user-service";

@@ -24,9 +24,9 @@ handlers; clients no longer need `/view` or `/edit` endpoints.
 ::end
 */
 import { NextRequest } from 'next/server';
-import { getProperty } from '@/services/properties/id/get';
-import { updateProperty } from '@/services/properties/id/update';
-import { deleteProperty } from '@/services/properties/id/delete';
+import { getProperty } from '@/services/properties/single/get';
+import { updateProperty } from '@/services/properties/single/update';
+import { deleteProperty } from '@/services/properties/single/delete';
 import { logProblem } from '@/services/problem-service';
 import { withRequestDevLog } from '@/services/site-dev-log-service';
 

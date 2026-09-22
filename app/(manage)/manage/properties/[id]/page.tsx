@@ -4,9 +4,9 @@ import { getPropertyById, getPropertyReviewRequests } from "@/services/propertie
 import { hasPermission } from "@/services/permissions";
 import { PERMISSIONS } from "@/services/permissions";
 import { getPropertyChangeContextAction } from '@/services/properties/drafts';
-import { cancelPropertyChangeDraftAction } from '@/services/properties/id/review';
+import { cancelPropertyChangeDraftAction } from '@/services/properties/single/review';
 import { getCurrentAccountId } from '@/services/identity';
-import { requestPropertyDeletionAction } from '@/services/properties/id/review';
+import { requestPropertyDeletionAction } from '@/services/properties/single/review';
 import { prisma } from "@neup/core/database/prisma";
 import { Button } from "@neup/components/ui/button";
 import { LinkButton } from "@neup/components/ui/link-button";

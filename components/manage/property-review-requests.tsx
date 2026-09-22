@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { reviewPropertyChangeAction } from '@/services/properties/id/review';
+import { reviewPropertyChangeAction } from '@/services/properties/single/review';
 import { Button } from "@neup/components/ui/button";
 import { Checkbox } from "@neup/components/ui/checkbox";
 import { useToast } from "@neup/core/hooks/useToast";

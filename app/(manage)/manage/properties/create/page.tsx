@@ -8,7 +8,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useTransition, useEffect, useMemo, useState } from 'react';
 import { CreatePropertySchema, type CreatePropertyFormValues, type User } from '@/types';
 import { createPropertyAction, getCurrentPropertyCreateDraftAction, getCurrentPropertyPostingContextAction, getListingAgentOptionsAction, savePropertyCreateDraftAction } from '@/services/properties/drafts';
-import { cancelPropertyChangeDraftAction } from '@/services/properties/id/review';
+import { cancelPropertyChangeDraftAction } from '@/services/properties/single/review';
 import { getCurrentAccountId } from '@/services/identity';
 
 import { Form } from '@/components/ui/form';

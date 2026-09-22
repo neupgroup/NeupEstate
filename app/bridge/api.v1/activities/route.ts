@@ -9,7 +9,7 @@ Accepts property activity events for an authenticated user.
 ::end
 */
 import { NextRequest, NextResponse } from 'next/server';
-import { logUserActivity } from '@/services/communications';
+import { logPropertyViews } from '@/services/properties/single/views';
 import type { PropertyActivityEvent } from '@/types';
 import { withRequestDevLog } from '@/services/site-dev-log-service';
 import { getAuthCookieServer } from '@/services/auth/cookie';
@@ -40,7 +40,7 @@ const postHandler = async (request: NextRequest) => {
       return NextResponse.json({ success: false, error: 'Invalid token' }, { status: 401 });
     }
 
-    await logUserActivity(userId, events, propertyId);
+    await logPropertyViews(userId, events, propertyId);
 
     return NextResponse.json({ message: 'Activity received.' }, { status: 202 });
   } catch (error) {

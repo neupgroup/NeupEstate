@@ -1,8 +1,8 @@
 "use server";
 
 import { createProperty as createPropertyService, updateProperty as updatePropertyService, updatePropertyWithExtractedData } from '@/services/properties/update';
-import { approveProperty } from '@/services/properties/id/review';
-import { deleteProperty as deletePropertyService } from '@/services/properties/id/delete';
+import { approveProperty } from '@/services/properties/single/review';
+import { deleteProperty as deletePropertyService } from '@/services/properties/single/delete';
 import { createPropertyLog, getPropertyById } from '@/services/properties/view';
 import { getAgencyAgentAccountsByAgency as getAgencyAgentAccountsByAgencyService, getAgencyAgentMaps } from '@/services/agency-agent-map-service';
 import { getAccountById, getAccounts } from '@/services/account/id/lookup';

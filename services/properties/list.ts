@@ -458,7 +458,6 @@ export async function getPropertiesByAgent(agentId: string, opts: { includeInact
 
 /**
  * getBridgePropertiesByAccount handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
- *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
 export async function getBridgePropertiesByAccount(opts: BridgePropertyQuery): Promise<BridgePropertyResult> {
@@ -503,12 +502,12 @@ export type ListPropertiesInput = { limit: number; offset: number; filters: Prop
 
 
 
-/** Canonical collection operation used by both the bridge adapter and server callers. */
 /**
+ * Canonical collection operation used by both the bridge adapter and server callers.
  * listProperties handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
- *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
+
 export async function listProperties(input: ListPropertiesInput): Promise<BridgePropertyResult & { appliedFilters: PropertyFilters }> {
   const result = await getPaginatedProperties({
     limit: input.limit,

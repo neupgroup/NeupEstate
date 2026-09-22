@@ -5,7 +5,7 @@
 import { useTransition } from "react";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createPropertyRequestAction } from '@/services/engagement';
+import { createPropertyRequestAction } from '@/services/properties/single/engage/requests';
 import { CreatePropertyRequestSchema, type CreatePropertyRequestFormValues, PropertyCategorySchema } from "@/types";
 import { Button } from "@neup/components/ui/button";
 import { Textarea } from "@neup/components/ui/textarea";
