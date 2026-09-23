@@ -4,7 +4,7 @@ import { Control, useFormContext } from "react-hook-form";
 import { CreatePropertyFormValues, PropertyCategorySchema, PropertyPurposeOptions, PropertyUsageTypeSchema } from "@/types";
 import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { SelectionCards } from "@/components/ui/selection-cards";
-import { deriveSelectionState, getDisabledNaturesByNature } from "@/services/property-selection-rules";
+import { deriveSelectionState, getDisabledNaturesByNature } from "@/services/properties/selection-logic";
 import { useEffect } from "react";
 
 interface BasicDetailsSectionProps {
