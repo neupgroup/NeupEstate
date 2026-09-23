@@ -5,7 +5,7 @@
 import { useFormStatus } from 'react-dom';
 import { useEffect, useState, useActionState } from 'react';
 import { addSitemapAction, getNewUrlsFromSitemapAction, processSitemapUrlAction, updateSitemapCheckedTimeAction } from '@/services/automation';
-import { getSitemaps } from '@/services/sitemap-service';
+import { getSitemaps } from '@/services/crawl/sitemap';
 import type { Sitemap, SitemapLog } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Input } from '@neup/components/ui/input';
