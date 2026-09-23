@@ -76,7 +76,7 @@ export type PropertyJsonImportResult = {
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function isObject(value: unknown): value is JsonObject {
+function isObject(value: unknown): value is JsonObject {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 }
 
@@ -87,7 +87,7 @@ export function isObject(value: unknown): value is JsonObject {
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function splitPath(path: string): string[] {
+function splitPath(path: string): string[] {
   return path
     .replace(/\[(\d+)\]/g, '.$1')
     .split('.')
@@ -102,7 +102,7 @@ export function splitPath(path: string): string[] {
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function getPath(source: unknown, path?: string): unknown {
+function getPath(source: unknown, path?: string): unknown {
   if (!path) return source;
   const normalizedPath = path.startsWith('$.') ? path.slice(2) : path;
   return splitPath(normalizedPath).reduce<unknown>((current, part) => {
@@ -123,7 +123,7 @@ export function getPath(source: unknown, path?: string): unknown {
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function resolvePath(input: { path?: string; item: JsonObject; root: unknown }): unknown {
+function resolvePath(input: { path?: string; item: JsonObject; root: unknown }): unknown {
   if (!input.path) return input.item;
   return input.path.startsWith('$.')
     ? getPath(input.root, input.path)
@@ -137,7 +137,7 @@ export function resolvePath(input: { path?: string; item: JsonObject; root: unkn
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function applyCoerce(value: unknown, mode?: CoerceMode, joinWith = ', '): unknown {
+function applyCoerce(value: unknown, mode?: CoerceMode, joinWith = ', '): unknown {
   if (value == null) return value;
 
   if (mode === 'first') return Array.isArray(value) ? value[0] : value;
@@ -170,7 +170,7 @@ export function applyCoerce(value: unknown, mode?: CoerceMode, joinWith = ', '):
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function resolveField(definition: FieldDefinition, item: JsonObject, root: unknown): unknown {
+function resolveField(definition: FieldDefinition, item: JsonObject, root: unknown): unknown {
   if (typeof definition === 'string') return resolvePath({ path: definition, item, root });
 
   const value = 'value' in definition
@@ -190,7 +190,7 @@ export function resolveField(definition: FieldDefinition, item: JsonObject, root
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function selectValue(source: unknown, select: SelectDefinition | undefined, root: unknown): unknown {
+function selectValue(source: unknown, select: SelectDefinition | undefined, root: unknown): unknown {
   if (!select) return source;
   if (typeof select === 'string') return getPath(source, select);
   if (!isObject(source)) return undefined;
@@ -209,7 +209,7 @@ export function selectValue(source: unknown, select: SelectDefinition | undefine
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function primitiveSet(value: unknown): Set<unknown> {
+function primitiveSet(value: unknown): Set<unknown> {
   if (Array.isArray(value)) return new Set(value);
   return new Set([value]);
 }
@@ -221,7 +221,7 @@ export function primitiveSet(value: unknown): Set<unknown> {
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function resolveRelationship(
+function resolveRelationship(
   definition: RelationshipDefinition,
   item: JsonObject,
   root: unknown,
@@ -266,7 +266,7 @@ export function resolveRelationship(
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function normalizePropertyData(data: Record<string, unknown>): ExtractedPropertyData {
+function normalizePropertyData(data: Record<string, unknown>): ExtractedPropertyData {
   const category = Array.isArray(data.categories) ? data.categories[0] : data.category;
   const type = Array.isArray(data.types) ? data.types[0] : data.type;
   const purpose = Array.isArray(data.purposes) ? data.purposes[0] : data.purpose;
@@ -297,7 +297,7 @@ export function normalizePropertyData(data: Record<string, unknown>): ExtractedP
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function validateImportableProperty(data: ExtractedPropertyData): string[] {
+function validateImportableProperty(data: ExtractedPropertyData): string[] {
   const missing: string[] = [];
   if (!data.title) missing.push('title');
   if (!data.description) missing.push('description');
@@ -315,7 +315,7 @@ export function validateImportableProperty(data: ExtractedPropertyData): string[
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function buildRows(input: unknown, structure: PropertyJsonImportStructure): JsonObject[] {
+function buildRows(input: unknown, structure: PropertyJsonImportStructure): JsonObject[] {
   const collection = structure.collection ? getPath(input, structure.collection) : input;
   const rows = Array.isArray(collection) ? collection : [collection];
   return rows.filter(isObject);
