@@ -24,7 +24,7 @@ export default async function ManageAccountLayout({
   children: React.ReactNode;
   params: Promise<{ id: string }>;
 }) {
-  await requirePagePermission(PERMISSIONS.manage.accountsView);
+  await requirePagePermission(PERMISSIONS.manage.accountView);
   const authAccount = await requireAuth();
   const { id: accountId } = await params;
 

@@ -3,9 +3,11 @@ export { updateAccountAccessInfo, refreshAccountDisplayInfo };
 
 import { UpdateUserSchema, type UpdateUserFormValues } from '@/types';
 import { logger } from "@neup/logica/logger";
+import { PERMISSIONS, requirePermission } from '@/services/permissions';
 
 export async function updateUserAction(data: UpdateUserFormValues): Promise<{ success: boolean; error?: string }> {
   try {
+    await requirePermission(PERMISSIONS.manage.accountUpdate);
     const validatedData = UpdateUserSchema.parse(data);
     await updateUser(validatedData.id, validatedData);
     return { success: true };

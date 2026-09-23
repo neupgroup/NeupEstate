@@ -9,7 +9,7 @@ import { requirePagePermission } from "@/services/permissions";
 import { PERMISSIONS } from "@/services/permissions";
 
 export default async function ManageAccountsPage() {
-  await requirePagePermission(PERMISSIONS.manage.accountsView);
+  await requirePagePermission(PERMISSIONS.manage.accountView);
 
   const [accounts, remoteUsersResult] = await Promise.all([
     getAccounts(),
