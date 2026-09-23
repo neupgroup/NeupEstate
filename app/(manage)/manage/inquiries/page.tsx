@@ -1,5 +1,5 @@
 
-import { getInquiries } from '@/services/inquiry-service';
+import { listInquiries } from '@/services/inquiry/list';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@neup/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
@@ -8,7 +8,7 @@ import { RelativeTime } from '@/components/manage/relative-time';
 import { InquiryStatusUpdater } from '@/components/manage/inquiry-status-updater';
 
 export default async function InquiriesPage() {
-    const inquiries = await getInquiries();
+    const inquiries = await listInquiries();
 
     return (
         <div className="space-y-6">

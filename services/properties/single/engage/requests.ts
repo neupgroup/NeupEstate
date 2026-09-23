@@ -12,8 +12,8 @@ import {
   CreatePropertyRequestSchema,
   CreateSalesRequestSchema,
 } from "@/types";
-import { createPropertyRequest } from "@/services/property-request-service";
-import { createSalesRequest } from "@/services/sales-request-service";
+import { createPropertyRequest } from "@/services/inquiry/property-requests";
+import { createSalesRequest } from "@/services/inquiry/sales-requests";
 import { createMortgageRequest } from "@/services/mortgage/create";
 import { requireIdentity } from "@/services/properties/action-helpers";
 import { requirePermission, PERMISSIONS } from "@/services/permissions";

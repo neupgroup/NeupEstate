@@ -29,7 +29,7 @@
  *
  * The bridge payload is intentionally looser than the site inquiry form.
  * Missing optional database-backed fields are normalized in
- * `createBridgeInquiry()` so older bridge clients can submit only a phone
+ * `createInquiry(...)` so older bridge clients can submit only a phone
  * number or only an email address.
  *
  * ::private end
@@ -38,7 +38,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
-import { createBridgeInquiry, InquiryServiceError } from '@/services/inquiry-service';
+import { createInquiry, InquiryServiceError } from '@/services/inquiry/create';
 import { logger } from "@neup/logica/logger";
 import { withRequestDevLog } from '@/services/site-dev-log-service';
 
@@ -60,14 +60,11 @@ const postHandler = async (req: NextRequest) => {
       (typeof body.property === 'string' ? body.property.trim() : '') ||
       (typeof body.property_id === 'string' ? body.property_id.trim() : '');
 
-    const inquiryId = await createBridgeInquiry({
-      propertyId,
-      phone: typeof body.phone === 'string' ? body.phone : undefined,
-      email: typeof body.email === 'string' ? body.email : undefined,
-      message: typeof body.message === 'string' ? body.message : undefined,
-      name: typeof body.name === 'string' ? body.name : undefined,
-      accountId: typeof body.account_id === 'string' ? body.account_id : undefined,
-    });
+    const inquiryId = await createInquiry(
+      typeof body.account_id === 'string' ? body.account_id : undefined,
+      "bridge",
+      { propertyId, phone: typeof body.phone === 'string' ? body.phone : undefined, email: typeof body.email === 'string' ? body.email : undefined, message: typeof body.message === 'string' ? body.message : undefined, name: typeof body.name === 'string' ? body.name : undefined },
+    );
 
     revalidatePath('/manage/inquiries');
 

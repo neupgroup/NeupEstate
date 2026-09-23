@@ -1,5 +1,5 @@
 
-import { getPropertyRequests } from '@/services/property-request-service';
+import { getPropertyRequests } from '@/services/inquiry/property-requests';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@neup/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { AlertCircle, User, MapPin, Home, DollarSign, BedDouble, Bath } from 'lucide-react';

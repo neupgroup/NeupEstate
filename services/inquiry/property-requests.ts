@@ -3,9 +3,8 @@
 'use server';
 
 import { prisma } from '@neup/core/database/prisma';
-import type { PropertyRequest, CreatePropertyRequestFormValues, CreateInquiryFormValues, InquiryStatus } from '@/types';
+import type { PropertyRequest, CreatePropertyRequestFormValues } from '@/types';
 import { logger } from "@neup/logica/logger";
-import { createInquiry as createInquiryService, updateInquiryStatus as updateInquiryStatusService } from './inquiry-service';
 
 
 export async function createPropertyRequest(data: CreatePropertyRequestFormValues): Promise<string> {
@@ -56,12 +55,4 @@ export async function getPropertyRequests({ limit = 20, offset = 0 }: { limit?: 
         await logger().type('getPropertyRequests').data({ error: String(error), details: {} }).log();
         return [];
     }
-}
-
-export async function createInquiry(data: CreateInquiryFormValues): Promise<string> {
-    return createInquiryService(data);
-}
-
-export async function updateInquiryStatus(id: string, status: InquiryStatus): Promise<void> {
-    return updateInquiryStatusService(id, status);
 }

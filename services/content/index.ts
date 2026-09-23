@@ -23,8 +23,10 @@ import { logActivity as logActivityService } from '@/services/activities/log';
 import { updateAccountAccessInfo } from '@/services/accounts/id/lookup';
 import { updateAccountPreferences, getAccountPreferences } from '@/services/accounts/single/preferences';
 import { updatePrompt as updatePromptService, createPrompt as createPromptService, deletePrompt as deletePromptService } from '@/services/intelligence/prompts';
-import { createPropertyRequest as createPropertyRequestService, createInquiry as createInquiryService, updateInquiryStatus as updateInquiryStatusService } from '@/services/property-request-service';
-import { createSalesRequest as createSalesRequestService } from '@/services/sales-request-service';
+import { createPropertyRequest as createPropertyRequestService } from '@/services/inquiry/property-requests';
+import { createInquiry as createInquiryService } from '@/services/inquiry/create';
+import { updateInquiry as updateInquiryService } from '@/services/inquiry/update';
+import { createSalesRequest as createSalesRequestService } from '@/services/inquiry/sales-requests';
 import { createVisitRequest as createVisitRequestService } from '@/services/properties/single/engage/visit';
 import { createMortgageRequest as createMortgageRequestService } from '@/services/mortgage/create';
 import { createModel as createModelService, updateModel as updateModelService, deleteModel as deleteModelService, setDefaultModel as setDefaultModelService } from '@/services/intelligence/models';
@@ -72,7 +74,7 @@ export async function createInquiryAction(
     await requirePermission(PERMISSIONS.public.propertyInquire);
     const actorId = await requireIdentity();
     const validatedData = CreateInquirySchema.parse({ ...data, submittedBy: actorId });
-    await createInquiryService(validatedData);
+    await createInquiryService(actorId, "property", validatedData);
     revalidatePath('/manage/inquiries');
     return { success: true };
   } catch (e: any) {
@@ -89,7 +91,7 @@ export async function updateInquiryStatusAction(
   status: InquiryStatus
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    await updateInquiryStatusService(inquiryId, status);
+    await updateInquiryService(inquiryId, status);
     revalidatePath('/manage/inquiries');
     return { success: true };
   } catch (e: any) {

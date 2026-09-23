@@ -21,8 +21,10 @@ import { parseAdminFilter } from "@/services/intelligence/parse-admin-filter-flo
 import { suggestQuestions as suggestQuestionsFlow } from '@/services/intelligence/suggest-questions-flow';
 import { getAccountPreferences } from '@/services/accounts/single/preferences';
 import { updatePrompt as updatePromptService, createPrompt as createPromptService, deletePrompt as deletePromptService } from '@/services/intelligence/prompts';
-import { createPropertyRequest as createPropertyRequestService, createInquiry as createInquiryService, updateInquiryStatus as updateInquiryStatusService } from '@/services/property-request-service';
-import { createSalesRequest as createSalesRequestService } from '@/services/sales-request-service';
+import { createPropertyRequest as createPropertyRequestService } from '@/services/inquiry/property-requests';
+import { createInquiry as createInquiryService } from '@/services/inquiry/create';
+import { updateInquiry as updateInquiryService } from '@/services/inquiry/update';
+import { createSalesRequest as createSalesRequestService } from '@/services/inquiry/sales-requests';
 import { createVisitRequest as createVisitRequestService } from '@/services/properties/single/engage/visit';
 import { createMortgageRequest as createMortgageRequestService } from '@/services/mortgage/create';
 import { createModel as createModelService, updateModel as updateModelService, deleteModel as deleteModelService, setDefaultModel as setDefaultModelService } from '@/services/intelligence/models';

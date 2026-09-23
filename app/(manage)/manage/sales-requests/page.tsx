@@ -1,5 +1,5 @@
 
-import { getSalesRequests } from '@/services/sales-request-service';
+import { getSalesRequests } from '@/services/inquiry/sales-requests';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@neup/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { AlertCircle, User, MapPin, Home } from 'lucide-react';

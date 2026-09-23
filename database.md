@@ -390,7 +390,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 ### public.inquiries (Inquiry)
 
 - purpose: Stores property-specific customer questions/inquiries.
-- usage: Used by inquiry-service create/list/update flows and property inquiry forms.
+- usage: Used by inquiries/inquiries create/list/update flows and property inquiry forms.
 
 - id text PK, NOT NULL
 - propertyId text NOT NULL
