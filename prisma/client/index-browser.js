@@ -588,26 +588,6 @@ exports.Prisma.SitemapEntryScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.SiteDevLogSettingScalarFieldEnum = {
-  id: 'id',
-  enabled: 'enabled',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.SiteDevLogEntryScalarFieldEnum = {
-  id: 'id',
-  requestId: 'requestId',
-  source: 'source',
-  method: 'method',
-  path: 'path',
-  statusCode: 'statusCode',
-  outcome: 'outcome',
-  durationMs: 'durationMs',
-  summary: 'summary',
-  details: 'details',
-  createdAt: 'createdAt'
-};
-
 exports.Prisma.InquiryScalarFieldEnum = {
   id: 'id',
   propertyId: 'propertyId',
@@ -899,8 +879,6 @@ exports.Prisma.ModelName = {
   VisitRequest: 'VisitRequest',
   Problem: 'Problem',
   SitemapEntry: 'SitemapEntry',
-  SiteDevLogSetting: 'SiteDevLogSetting',
-  SiteDevLogEntry: 'SiteDevLogEntry',
   Inquiry: 'Inquiry',
   NewsletterSubscription: 'NewsletterSubscription',
   AuthzRole: 'AuthzRole',

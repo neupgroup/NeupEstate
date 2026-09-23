@@ -44,7 +44,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from "@neup/logica/logger";
 import { createAccount } from '@/services/accounts/create';
-import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 function getRedirectTarget(request: NextRequest): string {
   const redirectsTo = request.nextUrl.searchParams.get('redirectsTo');
@@ -81,5 +80,5 @@ const postHandler = async (req: NextRequest) => {
   return await handleCallback(req);
 };
 
-export const GET = withRequestDevLog({ source: 'api', name: 'bridge/api.v1/auth/callback:GET' }, getHandler);
-export const POST = withRequestDevLog({ source: 'api', name: 'bridge/api.v1/auth/callback:POST' }, postHandler);
+export const GET = getHandler;
+export const POST = postHandler;

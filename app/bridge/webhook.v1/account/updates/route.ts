@@ -2,7 +2,6 @@ import { createDecipheriv, createHash, createHmac, timingSafeEqual } from "crypt
 import { NextRequest, NextResponse } from "next/server";
 import { Prisma, prisma } from "@neup/core/database/prisma";
 import { logger } from "@neup/logica/logger";
-import { withRequestDevLog } from "@/services/site-dev-log-service";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -504,5 +503,5 @@ const getHandler = async (req: NextRequest) => {
   );
 };
 
-export const POST = withRequestDevLog({ source: 'webhook', name: 'bridge/webhook.v1/account/updates:POST' }, postHandler);
-export const GET = withRequestDevLog({ source: 'webhook', name: 'bridge/webhook.v1/account/updates:GET' }, getHandler);
+export const POST = postHandler;
+export const GET = getHandler;

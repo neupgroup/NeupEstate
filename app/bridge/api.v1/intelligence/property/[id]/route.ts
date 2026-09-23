@@ -8,7 +8,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@neup/core/database/prisma';
 import { logger } from "@neup/logica/logger";
-import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';
 
@@ -88,4 +87,4 @@ const getHandler = async (
   }
 };
 
-export const GET = withRequestDevLog({ source: 'api', name: 'bridge/api.v1/intelligence/property/[id]' }, getHandler);
+export const GET = getHandler;

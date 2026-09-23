@@ -37,7 +37,6 @@ import { NextRequest } from 'next/server';
 import { submitPropertyCreation } from '@/services/properties/create';
 import { listProperties } from '@/services/properties/list';
 import { logger } from "@neup/logica/logger";
-import { withRequestDevLog } from '@/services/site-dev-log-service';
 import { PropertyFiltersSchema } from '@/types';
 
 export const dynamic = 'force-dynamic';
@@ -84,5 +83,5 @@ const postHandler = async (req: NextRequest) => {
   }
 };
 
-export const GET = withRequestDevLog({ source: 'api', name: 'bridge/api.v1/properties:GET' }, getHandler);
-export const POST = withRequestDevLog({ source: 'api', name: 'bridge/api.v1/properties:POST' }, postHandler);
+export const GET = getHandler;
+export const POST = postHandler;

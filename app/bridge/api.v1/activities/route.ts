@@ -11,7 +11,6 @@ Accepts property activity events for an authenticated user.
 import { NextRequest, NextResponse } from 'next/server';
 import { logPropertyViews } from '@/services/properties/single/views';
 import type { PropertyActivityEvent } from '@/types';
-import { withRequestDevLog } from '@/services/site-dev-log-service';
 import { getAuthCookieServer } from '@/services/auth/cookie';
 import { logica } from '@neup/logica';
 
@@ -49,4 +48,4 @@ const postHandler = async (request: NextRequest) => {
   }
 };
 
-export const POST = withRequestDevLog({ source: 'api', name: 'bridge/api.v1/activities:POST' }, postHandler);
+export const POST = postHandler;

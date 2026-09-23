@@ -505,7 +505,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 ### public.problems (Problem)
 
 - purpose: Stores application problem/error reports with context, stack, and details.
-- usage: Used by problem-service and site-dev-log-service for diagnostics and cleanup.
+- usage: Used by problem-service for diagnostics and cleanup.
 
 - id text PK, NOT NULL
 - context text NOT NULL
@@ -937,38 +937,6 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 
 - divergence: model SiteContent maps to table site_content
 - divergence based on fields: database has 6 fields; Prisma model has 6 persisted scalar fields; difference 0
-
-### public.site_dev_log_entries (SiteDevLogEntry)
-
-- purpose: Stores development/diagnostic request logs with status, outcome, timing, and details.
-- usage: Used by site-dev-log-service for logging, listing, counts, and cleanup.
-
-- id text PK, NOT NULL
-- requestId text
-- source text NOT NULL
-- method text
-- path text NOT NULL
-- statusCode integer
-- outcome text
-- durationMs integer
-- summary text
-- details jsonb
-- createdAt timestamp(3) NOT NULL, default CURRENT_TIMESTAMP
-
-- divergence: model SiteDevLogEntry maps to table site_dev_log_entries
-- divergence based on fields: database has 11 fields; Prisma model has 11 persisted scalar fields; difference 0
-
-### public.site_dev_log_settings (SiteDevLogSetting)
-
-- purpose: Stores the global site development logging enabled flag.
-- usage: Used by site-dev-log-service to decide whether diagnostic logging is active.
-
-- id text PK, NOT NULL
-- enabled boolean NOT NULL, default false
-- updatedAt timestamp(3) NOT NULL
-
-- divergence: model SiteDevLogSetting maps to table site_dev_log_settings
-- divergence based on fields: database has 3 fields; Prisma model has 3 persisted scalar fields; difference 0
 
 ### public.sitemaps (SitemapEntry)
 

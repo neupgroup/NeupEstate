@@ -407,20 +407,7 @@ async function buildApiScopeSummary(
   const dailyData = makeDailyData(from);
   const totals = makeEmptyTotals();
   const propertyFilter = buildPropertyFilter(context);
-  const routePrefix =
-    scope === 'site.custom.via.api'
-      ? ['bridge/api.v1/properties', 'bridge/api.v1/inquiry']
-      : ['bridge/api.v1/properties', 'bridge/api.v1/accounts', 'bridge/api.v1/auth'];
-
-  const [logs, inquiries, createdProperties] = await Promise.all([
-    prisma.siteDevLogEntry.findMany({
-      where: {
-        source: 'api',
-        createdAt: { gte: from, lt: to },
-        OR: routePrefix.map((prefix) => ({ summary: { startsWith: prefix } })),
-      },
-      select: { createdAt: true, statusCode: true },
-    }),
+  const [inquiries, createdProperties] = await Promise.all([
     scope === 'site.custom.via.api'
       ? prisma.inquiry.findMany({
           where: {
@@ -441,17 +428,6 @@ async function buildApiScopeSummary(
         })
       : Promise.resolve([]),
   ]);
-
-  for (const log of logs) {
-    totals.reach += 1;
-    if (!log.statusCode || log.statusCode < 400) {
-      totals.interactions += 1;
-    }
-    addDailyValue(dailyData, from, log.createdAt, 'Reach');
-    if (!log.statusCode || log.statusCode < 400) {
-      addDailyValue(dailyData, from, log.createdAt, 'Interactions');
-    }
-  }
 
   for (const inquiry of inquiries) {
     totals.inquiries += 1;

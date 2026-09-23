@@ -600,26 +600,6 @@ Fields:
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > updatedAt: timestamp(3) NOT NULL;
 
-Table: site_dev_log_entries, Model: SiteDevLogEntry
-Fields:
-> id: text PK, NOT NULL;
-> requestId: text;
-> source: text NOT NULL;
-> method: text;
-> path: text NOT NULL;
-> statusCode: integer;
-> outcome: text;
-> durationMs: integer;
-> summary: text;
-> details: jsonb;
-> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
-
-Table: site_dev_log_settings, Model: SiteDevLogSetting
-Fields:
-> id: text PK, NOT NULL;
-> enabled: boolean NOT NULL, default: false;
-> updatedAt: timestamp(3) NOT NULL;
-
 Table: sitemaps, Model: SitemapEntry
 Fields:
 > id: text PK, NOT NULL;

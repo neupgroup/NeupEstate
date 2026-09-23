@@ -45,7 +45,6 @@ import { getAuthenticatedAccount } from '@/services/auth/account';
 import { buildHandshakeGrantUrl } from '@/services/auth/bridge';
 import { getSignedAccountInformation } from '@/services/accounts/lookup';
 import { prisma } from '@neup/core/database/prisma';
-import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 const getHandler = async (request: NextRequest) => {
   // Verify authentication
@@ -146,4 +145,4 @@ const getHandler = async (request: NextRequest) => {
   });
 };
 
-export const GET = withRequestDevLog({ source: 'api', name: 'bridge/api.v1/auth/user' }, getHandler);
+export const GET = getHandler;

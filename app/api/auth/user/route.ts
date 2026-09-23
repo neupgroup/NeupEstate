@@ -7,5 +7,6 @@ export async function GET(
   req: NextRequest,
   context: { params: Promise<Record<string, string | string[]>> },
 ) {
-  return getBridgeUser(req, context);
+  void context;
+  return getBridgeUser(req);
 }

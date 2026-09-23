@@ -21,10 +21,9 @@ Provider dispatch is delegated to `handleAiProviderRequest()` so the route stays
 
 import type { NextRequest } from 'next/server';
 import { handleAiProviderRequest } from '@/services/intelligence/provider-endpoint-service';
-import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';
 
 const postHandler = async (req: NextRequest) => handleAiProviderRequest(req, 'anthropic');
 
-export const POST = withRequestDevLog({ source: 'api', name: 'api/ai/direct/anthropic:POST' }, postHandler);
+export const POST = postHandler;

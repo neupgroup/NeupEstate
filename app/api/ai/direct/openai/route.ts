@@ -21,10 +21,9 @@ This route uses the shared provider endpoint service so validation and error han
 
 import type { NextRequest } from 'next/server';
 import { handleAiProviderRequest } from '@/services/intelligence/provider-endpoint-service';
-import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';
 
 const postHandler = async (req: NextRequest) => handleAiProviderRequest(req, 'openai');
 
-export const POST = withRequestDevLog({ source: 'api', name: 'api/ai/direct/openai:POST' }, postHandler);
+export const POST = postHandler;

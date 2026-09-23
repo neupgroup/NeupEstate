@@ -32,10 +32,9 @@ The route keeps provider-specific logic in `services/intelligence/provider-endpo
 
 import type { NextRequest } from 'next/server';
 import { handleAiProviderRequest } from '@/services/intelligence/provider-endpoint-service';
-import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';
 
 const postHandler = async (req: NextRequest) => handleAiProviderRequest(req, 'googleai');
 
-export const POST = withRequestDevLog({ source: 'api', name: 'api/ai/direct/googleai:POST' }, postHandler);
+export const POST = postHandler;

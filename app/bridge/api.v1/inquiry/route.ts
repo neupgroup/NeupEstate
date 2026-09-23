@@ -40,7 +40,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { createInquiry, InquiryServiceError } from '@/services/inquiry/create';
 import { logger } from "@neup/logica/logger";
-import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';
 
@@ -88,4 +87,4 @@ const postHandler = async (req: NextRequest) => {
   }
 };
 
-export const POST = withRequestDevLog({ source: 'api', name: 'bridge/api.v1/inquiry:POST' }, postHandler);
+export const POST = postHandler;

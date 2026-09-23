@@ -28,7 +28,6 @@ import { getProperty } from '@/services/properties/single/get';
 import { updateProperty } from '@/services/properties/single/update';
 import { deleteProperty } from '@/services/properties/single/delete';
 import { logger } from "@neup/logica/logger";
-import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';
 type Context = { params: Promise<{ id: string }> };
@@ -69,8 +68,8 @@ const patchHandler = async (req: NextRequest, context: Context) => {
   }
 };
 
-export const GET = withRequestDevLog({ source: 'api', name: 'bridge/api.v1/properties/[id]:GET' }, getHandler);
-export const PATCH = withRequestDevLog({ source: 'api', name: 'bridge/api.v1/properties/[id]:PATCH' }, patchHandler);
+export const GET = getHandler;
+export const PATCH = patchHandler;
 
 const deleteHandler = async (req: NextRequest, context: Context) => {
   try {
@@ -87,4 +86,4 @@ const deleteHandler = async (req: NextRequest, context: Context) => {
   }
 };
 
-export const DELETE = withRequestDevLog({ source: 'api', name: 'bridge/api.v1/properties/[id]:DELETE' }, deleteHandler);
+export const DELETE = deleteHandler;

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@neup/core/database/prisma';
 import { logger } from "@neup/logica/logger";
-import { withRequestDevLog } from '@/services/site-dev-log-service';
 import {
   insertRoleCapability,
   updateRoleCapability,
@@ -366,7 +365,7 @@ const postHandler = async (req: NextRequest) => {
   }
 };
 
-export const POST = withRequestDevLog({ source: 'webhook', name: 'bridge/webhook.v1/authz/role:POST' }, postHandler);
+export const POST = postHandler;
 
 // ---------------------------------------------------------------------------
 // Helpers
