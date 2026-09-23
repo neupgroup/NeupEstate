@@ -14,7 +14,7 @@ import {
 } from "@/types";
 import { createPropertyRequest } from "@/services/property-request-service";
 import { createSalesRequest } from "@/services/sales-request-service";
-import { createMortgageRequest } from "@/services/mortgage-request-service";
+import { createMortgageRequest } from "@/services/mortgage/create";
 import { requireIdentity } from "@/services/properties/action-helpers";
 import { requirePermission, PERMISSIONS } from "@/services/permissions";
 import { logger } from "@neup/logica/logger";

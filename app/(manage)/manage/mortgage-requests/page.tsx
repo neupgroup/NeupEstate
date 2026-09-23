@@ -1,5 +1,5 @@
 
-import { getMortgageRequests } from '@/services/mortgage-request-service';
+import { getMortgageRequests } from '@/services/mortgage/list';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@neup/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { AlertCircle, User, MapPin, BadgePercent, Phone, Mail, Contact } from 'lucide-react';

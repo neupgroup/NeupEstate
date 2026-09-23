@@ -26,7 +26,7 @@ import { updatePrompt as updatePromptService, createPrompt as createPromptServic
 import { createPropertyRequest as createPropertyRequestService, createInquiry as createInquiryService, updateInquiryStatus as updateInquiryStatusService } from '@/services/property-request-service';
 import { createSalesRequest as createSalesRequestService } from '@/services/sales-request-service';
 import { createVisitRequest as createVisitRequestService } from '@/services/properties/single/engage/visit';
-import { createMortgageRequest as createMortgageRequestService } from '@/services/mortgage-request-service';
+import { createMortgageRequest as createMortgageRequestService } from '@/services/mortgage/create';
 import { createModel as createModelService, updateModel as updateModelService, deleteModel as deleteModelService, setDefaultModel as setDefaultModelService } from '@/services/intelligence/models';
 import { createRequirement as createRequirementService } from '@/services/requirements/create';
 import { updateRequirement as updateRequirementService } from '@/services/requirements/update';
