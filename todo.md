@@ -4,7 +4,7 @@
 - [ ] Upstream the `logica.account.auth.token(token).validate()`, scoped `logica.account(accountId).lookup`, and `logica.account(accountId).token(token).validate()` object helpers into `neup.logica`; this repo ignores and refreshes `logica/`, so local SDK edits are not persistent.
 - [ ] Fix authenticated profile display data resolution so `services/auth/me.ts` falls back to the local `account` row or signed account lookup when remote account lookup returns null `displayName`/`displayImage`.
 - [ ] Fix `app/bridge/api.v1/auth/user/route.ts` so signed account lookup fills missing `displayImage`, not only missing `displayName`.
-- [ ] Fix `services/ai/provider-endpoint-service.ts` imports from `@/core/ai/direct/googleai`; the current typecheck reports missing exports for `DirectAiMessage` and `DirectAiRequest`.
+- [ ] Fix `services/intelligence/provider-endpoint-service.ts` imports from `@/core/ai/direct/googleai`; the current typecheck reports missing exports for `DirectAiMessage` and `DirectAiRequest`.
 - [ ] Fix `logica/navigation.ts` imports from `@/core/helpers/navigation`; the current typecheck reports missing exports for `CORE_NAVIGATION_BACK_TARGETS`, `resolveBackNavigationHref`, `resolvePreviousRawPath`, `NavigationBackTargets`, and `NavigationBackTargetConfig`.
 - [ ] Reconcile Prisma CLI/client versions and datasource configuration. `npx prisma generate` currently runs `prisma@5.22.0` while `@prisma/client` resolves to `7.8.0`, so the CLI still requires `datasource db.url` in `prisma/schema.prisma` instead of honoring the newer `prisma.config.ts` datasource configuration.
 - [ ] Reconcile `BaseLead.belongsTo` with the live `base_lead` table. `prisma/schema.prisma` defines the persisted field, but the current database table does not have the column.
@@ -73,8 +73,8 @@
 - [ ] Add a Neup documentation block to [services/auth/account.ts](/Users/neupkishor/Code/neup.estate/services/auth/account.ts).
 - [ ] Add a Neup documentation block to [services/auth/index.ts](/Users/neupkishor/Code/neup.estate/services/auth/index.ts).
 - [ ] Add a Neup documentation block to [services/account-service.ts](/Users/neupkishor/Code/neup.estate/services/account-service.ts).
-- [ ] Add a Neup documentation block to [services/ai/dev.ts](/Users/neupkishor/Code/neup.estate/services/ai/dev.ts).
-- [ ] Add a Neup documentation block to [services/ai/unified-generation-service.ts](/Users/neupkishor/Code/neup.estate/services/ai/unified-generation-service.ts).
+- [ ] Add a Neup documentation block to [services/intelligence/dev.ts](/Users/neupkishor/Code/neup.estate/services/intelligence/dev.ts).
+- [ ] Add a Neup documentation block to [services/intelligence/unified-generation-service.ts](/Users/neupkishor/Code/neup.estate/services/intelligence/unified-generation-service.ts).
 - [ ] Add a Neup documentation block to [services/account/lookup.ts](/Users/neupkishor/Code/neup.estate/services/account/lookup.ts).
 - [ ] Add a Neup documentation block to [services/account-type.ts](/Users/neupkishor/Code/neup.estate/services/account-type.ts).
 - [ ] Add a Neup documentation block to [services/property-service.ts](/Users/neupkishor/Code/neup.estate/services/property-service.ts).

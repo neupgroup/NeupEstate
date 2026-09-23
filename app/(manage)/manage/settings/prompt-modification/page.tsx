@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { getPrompts } from '@/services/prompt-service';
-import type { Prompt } from '@/services/prompt-service';
+import { getPrompts } from '@/services/intelligence/prompts';
+import type { Prompt } from '@/services/intelligence/prompts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@neup/components/ui/accordion";
 import { Button } from '@neup/components/ui/button';

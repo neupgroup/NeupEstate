@@ -20,7 +20,7 @@ This route uses the shared provider endpoint service so validation and error han
 */
 
 import type { NextRequest } from 'next/server';
-import { handleAiProviderRequest } from '@/services/ai/provider-endpoint-service';
+import { handleAiProviderRequest } from '@/services/intelligence/provider-endpoint-service';
 import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';

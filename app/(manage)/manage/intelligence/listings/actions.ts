@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { extractCompetitorListing } from '@/services/ai/extract-competitor-listing-flow';
+import { extractCompetitorListing } from '@/services/intelligence/extract-competitor-listing-flow';
 import {
   getCompetitorPageById,
   getCompetitorListingByPageId,

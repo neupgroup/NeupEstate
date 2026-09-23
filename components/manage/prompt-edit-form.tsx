@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { UpdatePromptSchema, CreatePromptSchema, type UpdatePromptFormValues, type CreatePromptFormValues, type AIModel } from '@/types';
-import type { Prompt } from '@/services/prompt-service';
+import type { Prompt } from '@/services/intelligence/prompts';
 import { updatePromptAction, createPromptAction } from '@/services/content';
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';

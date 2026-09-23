@@ -3,7 +3,7 @@
 
 import { prisma } from '@neup/core/database/prisma';
 import type { Sitemap, SitemapLog } from '@/types';
-import { extractAndSaveProperty as extractAndSavePropertyFlow } from '@/services/ai/extract-property-details-flow';
+import { extractAndSaveProperty as extractAndSavePropertyFlow } from '@/services/intelligence/extract-property-details-flow';
 import { logger } from '@neup/logica/logger';
 
 export async function addSitemap(url: string): Promise<string> {

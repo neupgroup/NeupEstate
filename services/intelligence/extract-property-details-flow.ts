@@ -12,8 +12,8 @@ import { z } from 'zod';
 import { addProperty, updatePropertyWithExtractedData } from '@/services/properties';
 import { ExtractedPropertySchema } from '@/types';
 import { fetchPageSourceCode } from '@/services/crawl/fetch-page-source';
-import { getPrompt } from '@/services/prompt-service';
-import { generateText } from '@/services/ai/unified-generation-service';
+import { getPrompt } from '@/services/intelligence/prompts';
+import { generateText } from '@/services/intelligence/unified-generation-service';
 
 const ExtractPropertyDetailsInputSchema = z.object({
   url: z.string().url().describe('The URL of the property listing page.'),

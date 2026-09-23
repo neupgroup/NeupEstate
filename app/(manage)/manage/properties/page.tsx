@@ -6,7 +6,7 @@ import { FilePlus2 } from "lucide-react";
 import { AdminPropertyDraftRow, AdminPropertyRow } from "@/components/manage/property-row";
 import { Pagination } from "@/components/manage/pagination";
 import { AdminPropertySearch } from "@/components/manage/admin-property-search";
-import { parseAdminFilter } from "@/services/ai/parse-admin-filter-flow";
+import { parseAdminFilter } from "@/services/intelligence/parse-admin-filter-flow";
 import type { PropertyFilters } from "@/types";
 import { ClientLink } from "@/components/client-link";
 import { PERMISSIONS } from "@/services/permissions";

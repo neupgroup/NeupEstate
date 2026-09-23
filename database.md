@@ -926,7 +926,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 ### public.site_content (SiteContent)
 
 - purpose: Stores key/value site content and configuration entries.
-- usage: Used by model-service for AI model configuration and by site content management.
+- usage: Used by intelligence/models for AI model configuration and by site content management.
 
 - id text PK, NOT NULL
 - key text NOT NULL, UNIQUE site_content_key_key(key)

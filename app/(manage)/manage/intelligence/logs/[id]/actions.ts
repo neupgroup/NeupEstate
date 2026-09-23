@@ -6,7 +6,7 @@ import { getCompetitorById, getCompetitorPages, upsertCompetitorPage } from '@/s
 import { fetchPageSourceCode } from '@/services/crawl/fetch-page-source';
 import { extractVisibleHtml } from '@/services/crawl/visible-html';
 import { shouldIndexCrawledUrl } from '@/services/crawl/crawl-rules';
-import { extractIntelligencePage } from '@/services/ai/extract-intelligence-page-flow';
+import { extractIntelligencePage } from '@/services/intelligence/extract-intelligence-page-flow';
 import { logger } from "@neup/logica/logger";
 import { revalidatePath } from 'next/cache';
 

@@ -11,7 +11,7 @@
  */
 
 import { z } from 'zod';
-import { getPrompt } from '@/services/prompt-service';
+import { getPrompt } from '@/services/intelligence/prompts';
 import { generateText } from './unified-generation-service';
 
 const SuggestQuestionsInputSchema = z.object({

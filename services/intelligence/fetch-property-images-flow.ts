@@ -8,7 +8,7 @@
 import { z } from 'zod';
 import { fetchPageSourceCode } from '@/services/crawl/fetch-page-source';
 import { logger } from "@neup/logica/logger";
-import { generateText } from '@/services/ai/unified-generation-service';
+import { generateText } from '@/services/intelligence/unified-generation-service';
 
 const FetchPropertyImagesInputSchema = z.object({
   url: z.string().url().describe('The URL of the property listing page.'),

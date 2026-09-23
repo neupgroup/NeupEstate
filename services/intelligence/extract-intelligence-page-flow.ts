@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod';
-import { generateText } from '@/services/ai/unified-generation-service';
+import { generateText } from '@/services/intelligence/unified-generation-service';
 
 const IntelligencePageInputSchema = z.object({
   url: z.string().url(),

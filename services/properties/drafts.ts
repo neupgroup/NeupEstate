@@ -7,7 +7,7 @@ import { createPropertyLog, getPropertyById } from '@/services/properties/view';
 import { getAgencyAgentAccountsByAgency as getAgencyAgentAccountsByAgencyService, getAgencyAgentMaps } from '@/services/agencies/agent-maps/service';
 import { getAccountById, getAccounts } from '@/services/accounts/id/lookup';
 import { createPropertyDraftRequest, editUncreatedPropertyDraftRequest } from '@/services/properties/create';
-import { rewritePropertyDetails } from '@/services/ai/rewrite-property-details-flow';
+import { rewritePropertyDetails } from '@/services/intelligence/rewrite-property-details-flow';
 import { logger } from "@neup/logica/logger";
 import type { CreatePropertyInput, UpdatePropertyInput, CreatePropertyFormValues, UpdatePropertyFormValues, RewritePropertyDetailsOutput, LandDetails, PlotDetails, ApartmentUnit } from "@/types";
 import { UpdatePropertySchema, areaValueToSqft } from "@/types";

@@ -2,7 +2,7 @@
 
 import { PromptEditForm } from '@/components/manage/prompt-edit-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
-import { getModels } from '@/services/model-service';
+import { getModels } from '@/services/intelligence/models';
 
 export default async function CreatePromptPage() {
     const models = await getModels();

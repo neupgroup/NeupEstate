@@ -9,7 +9,7 @@
  */
 
 import { z } from 'zod';
-import { getPrompt } from '@/services/prompt-service';
+import { getPrompt } from '@/services/intelligence/prompts';
 import type { RecommendPropertiesInput, RecommendPropertiesOutput } from '@/types';
 import { RecommendPropertiesInputSchema, RecommendPropertiesOutputSchema } from '@/types';
 import { generateText } from './unified-generation-service';

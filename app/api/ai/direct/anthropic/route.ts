@@ -20,7 +20,7 @@ Provider dispatch is delegated to `handleAiProviderRequest()` so the route stays
 */
 
 import type { NextRequest } from 'next/server';
-import { handleAiProviderRequest } from '@/services/ai/provider-endpoint-service';
+import { handleAiProviderRequest } from '@/services/intelligence/provider-endpoint-service';
 import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';

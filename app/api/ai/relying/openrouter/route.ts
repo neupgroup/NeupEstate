@@ -20,7 +20,7 @@ The route is separate from the direct providers because OpenRouter is an upstrea
 */
 
 import type { NextRequest } from 'next/server';
-import { handleAiProviderRequest } from '@/services/ai/provider-endpoint-service';
+import { handleAiProviderRequest } from '@/services/intelligence/provider-endpoint-service';
 import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';

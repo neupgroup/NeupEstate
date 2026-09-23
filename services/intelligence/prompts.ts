@@ -5,7 +5,7 @@
 import { prisma } from '@neup/core/database/prisma';
 import { logger } from "@neup/logica/logger";
 import type { CreatePromptFormValues } from '@/types';
-import { resolveModelIdentifier } from './model-service';
+import { resolveModelIdentifier } from './models';
 
 export interface Prompt {
     id: string;

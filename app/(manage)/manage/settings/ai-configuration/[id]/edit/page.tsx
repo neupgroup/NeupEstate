@@ -1,6 +1,6 @@
 
 
-import { getPromptById } from '@/services/prompt-service';
+import { getPromptById } from '@/services/intelligence/prompts';
 import { PromptEditForm } from '@/components/manage/prompt-edit-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { notFound } from 'next/navigation';
@@ -8,7 +8,7 @@ import { ClientLink } from '@/components/client-link';
 import { buttonVariants } from '@neup/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { cn } from '@neup/core/utils';
-import { getModels } from '@/services/model-service';
+import { getModels } from '@/services/intelligence/models';
 
 export default async function EditPromptPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;

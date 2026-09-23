@@ -23,7 +23,7 @@ Returns:
 
 ::private
 
-The route keeps provider-specific logic in `services/ai/provider-endpoint-service.ts`.
+The route keeps provider-specific logic in `services/intelligence/provider-endpoint-service.ts`.
 
 ::private end
 
@@ -31,7 +31,7 @@ The route keeps provider-specific logic in `services/ai/provider-endpoint-servic
 */
 
 import type { NextRequest } from 'next/server';
-import { handleAiProviderRequest } from '@/services/ai/provider-endpoint-service';
+import { handleAiProviderRequest } from '@/services/intelligence/provider-endpoint-service';
 import { withRequestDevLog } from '@/services/site-dev-log-service';
 
 export const dynamic = 'force-dynamic';

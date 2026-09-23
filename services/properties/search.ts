@@ -1,8 +1,8 @@
 "use server";
 
-import { naturalLanguagePropertySearch as naturalLanguagePropertySearchFlow } from "@/services/ai/natural-language-property-search";
-import { recommendProperties as recommendPropertiesFlow } from "@/services/ai/ai-powered-recommendations";
-import { extractAndSaveProperty as extractAndSavePropertyFlow, type ExtractPropertyDetailsOutput } from "@/services/ai/extract-property-details-flow";
+import { naturalLanguagePropertySearch as naturalLanguagePropertySearchFlow } from "@/services/intelligence/natural-language-property-search";
+import { recommendProperties as recommendPropertiesFlow } from "@/services/intelligence/ai-powered-recommendations";
+import { extractAndSaveProperty as extractAndSavePropertyFlow, type ExtractPropertyDetailsOutput } from "@/services/intelligence/extract-property-details-flow";
 import { getPaginatedProperties } from '@/services/properties/list';
 import { updatePropertyImages } from '@/services/properties/update';
 import { logger } from "@neup/logica/logger";

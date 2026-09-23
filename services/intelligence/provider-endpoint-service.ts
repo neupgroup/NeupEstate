@@ -208,7 +208,7 @@ export async function handleAiProviderRequest(
       );
     }
 
-    await logger().type(`services/ai/provider-endpoint-service:${provider}`).data({ error: String(error), details: {} }).log();
+    await logger().type(`services/intelligence/provider-endpoint-service:${provider}`).data({ error: String(error), details: {} }).log();
 
     return NextResponse.json(
       {

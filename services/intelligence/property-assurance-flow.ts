@@ -6,8 +6,8 @@
  * - runPropertyAssurance - A function that handles the property assurance process.
  */
 
-import { runPropertyAmendment } from '@/services/ai/property-amendment-flow';
-import { runPropertyApproval } from '@/services/ai/property-approval-flow';
+import { runPropertyAmendment } from '@/services/intelligence/property-amendment-flow';
+import { runPropertyApproval } from '@/services/intelligence/property-approval-flow';
 import { getPropertyById } from '@/services/properties';
 import type { PropertyAssuranceResult } from '@/types';
 

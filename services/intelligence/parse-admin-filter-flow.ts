@@ -10,7 +10,7 @@
 
 import {z} from 'zod';
 import { PropertyFiltersSchema, type PropertyFilters } from '@/types';
-import { getPrompt } from '@/services/prompt-service';
+import { getPrompt } from '@/services/intelligence/prompts';
 import { generateText } from './unified-generation-service';
 
 const AdminFilterInputSchema = z.object({

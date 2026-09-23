@@ -13,7 +13,7 @@
 
 import {z} from 'zod';
 import { NaturalLanguageSearchOutputSchema, type NaturalLanguageSearchOutput } from '@/types';
-import { getPrompt } from '@/services/prompt-service';
+import { getPrompt } from '@/services/intelligence/prompts';
 import { generateText } from './unified-generation-service';
 
 const NaturalLanguageSearchInputSchema = z.object({

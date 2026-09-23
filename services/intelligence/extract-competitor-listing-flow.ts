@@ -4,7 +4,7 @@ import { z } from 'zod';
 import * as cheerio from 'cheerio';
 import { fetchPageSourceCode } from '@/services/crawl/fetch-page-source';
 import { logger } from "@neup/logica/logger";
-import { generateText } from '@/services/ai/unified-generation-service';
+import { generateText } from '@/services/intelligence/unified-generation-service';
 
 const ExtractCompetitorListingInputSchema = z.object({
   url: z.string().url(),
