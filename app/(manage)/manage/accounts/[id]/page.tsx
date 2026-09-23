@@ -3,7 +3,7 @@ import { Badge } from '@neup/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { prisma } from '@neup/core/database/prisma';
 import { getAccountById } from '@/services/accounts/id/get';
-import { getRequirementByUserId } from '@/services/requirements-service';
+import { getRequirementByUserId } from '@/services/requirements/get';
 import { getSavedProperties, getPaginatedProperties } from '@/services/properties';
 import { isAgencyLikeAccountType } from '@/services/accounts/type';
 import { AdminPropertyRow } from '@/components/manage/property-row';

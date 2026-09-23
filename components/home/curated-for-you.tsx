@@ -1,5 +1,5 @@
 
-import { getRequirementByUserId } from "@/services/requirements-service";
+import { getRequirementByUserId } from "@/services/requirements/get";
 import { RecommendedProperties } from "@/components/estate";
 import { Section } from "@/components/home/_components/section";
 import { SectionTitle } from "@/components/home/_components/section-title";

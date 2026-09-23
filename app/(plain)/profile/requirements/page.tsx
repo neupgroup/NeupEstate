@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { UserRequirementsForm, type RequirementsFormValues } from '@/components/profile/user-requirements-form';
 import { upsertRequirementAction } from '@/services/accounts/id/requirements';
-import { getRequirementById } from '@/services/requirements-service';
+import { getRequirementById } from '@/services/requirements/get';
 import type { Requirement } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Skeleton } from '@neup/components/ui/skeleton';

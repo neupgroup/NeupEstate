@@ -6,7 +6,7 @@ import { Plus, AlertCircle } from 'lucide-react';
 import { Section } from '@/components/home/_components/section';
 import { SectionTitle } from '@/components/home/_components/section-title';
 import { RecommendedProperties } from "@/components/recommended-properties";
-import { getRequirementByUserId } from '@/services/requirements-service';
+import { getRequirementByUserId } from '@/services/requirements/get';
 import type { Requirement } from '@/types';
 import type { RequirementsFormValues } from '@/components/profile/user-requirements-form';
 import { Skeleton } from '@neup/components/ui/skeleton';

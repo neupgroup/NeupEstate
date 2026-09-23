@@ -1,4 +1,4 @@
-import { getRequirementByUserId } from '@/services/requirements-service';
+import { getRequirementByUserId } from '@/services/requirements/get';
 import { Card, CardContent, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Target } from 'lucide-react';
 import { Badge } from '@neup/components/ui/badge';

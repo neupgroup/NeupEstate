@@ -820,7 +820,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 ### public.requirements (Requirement)
 
 - purpose: Stores saved/search property requirements for a user.
-- usage: Used by requirements-service create/read/list/update flows and account cleanup.
+- usage: Used by requirements services create/read/list/update flows and account cleanup.
 
 - id text PK, NOT NULL
 - userId text NOT NULL

@@ -28,7 +28,8 @@ import { createSalesRequest as createSalesRequestService } from '@/services/sale
 import { createVisitRequest as createVisitRequestService } from '@/services/properties/single/engage/visit';
 import { createMortgageRequest as createMortgageRequestService } from '@/services/mortgage-request-service';
 import { createModel as createModelService, updateModel as updateModelService, deleteModel as deleteModelService, setDefaultModel as setDefaultModelService } from '@/services/model-service';
-import { createRequirement as createRequirementService, updateRequirement as updateRequirementService } from '@/services/requirements-service';
+import { createRequirement as createRequirementService } from '@/services/requirements/create';
+import { updateRequirement as updateRequirementService } from '@/services/requirements/update';
 import { createPropertyDraftRequest, editUncreatedPropertyDraftRequest } from '@/services/properties/create';
 import { resolveAccount, updateUser, getAccountById, getAccounts } from '@/services/accounts/id/lookup';
 import { deleteAccountAndData } from '@/services/accounts/id/delete';
