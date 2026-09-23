@@ -235,15 +235,6 @@ Fields:
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > updatedAt: timestamp(3) NOT NULL;
 
-Table: faqs, Model: FAQ
-Fields:
-> id: text PK, NOT NULL;
-> question: text NOT NULL;
-> answer: text NOT NULL;
-> category: text NOT NULL, default: 'General'::text;
-> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
-> updatedAt: timestamp(3) NOT NULL;
-
 Table: inquiries, Model: Inquiry
 Fields:
 > id: text PK, NOT NULL;

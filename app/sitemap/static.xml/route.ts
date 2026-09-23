@@ -13,7 +13,6 @@ export async function GET(request: Request) {
     '/agents/register',
     '/collections',
     '/documents',
-    '/faq',
     '/mortgage/request',
     '/requests/create',
     '/search',

@@ -861,17 +861,6 @@ model NewsletterSubscription {
   @@map("newsletter_subscriptions")
 }
 
-model FAQ {
-  id        String   @id @default(cuid())
-  question  String
-  answer    String
-  category  String   @default("General")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("faqs")
-}
-
 // ============================================================================
 // Authorization
 // ============================================================================

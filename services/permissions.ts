@@ -41,10 +41,6 @@ export const PERMISSIONS = {
     agentMapView: 'manage.agent_map.view',
     analyticsView: 'manage.analytics.view',
     dashboardView: 'manage.dashboard.view',
-    faqCreate: 'manage.faq.create',
-    faqDelete: 'manage.faq.delete',
-    faqUpdate: 'manage.faq.update',
-    faqView: 'manage.faq.view',
     intelligenceListingsView: 'manage.intelligence.listings.view',
     notificationView: 'manage.notification.view',
     propertyCollectionSelfView: 'manage.property_collection.self.view',
@@ -82,7 +78,6 @@ type ManageLayoutPermissionState = {
   canLeadsSharedView: boolean;
   canLeadsAlertsView: boolean;
   canReviewsView: boolean;
-  canFaqView: boolean;
   canAgentMapView: boolean;
   canNotificationView: boolean;
 };
@@ -236,7 +231,6 @@ export async function getManageLayoutPermissionState(): Promise<ManageLayoutPerm
     canLeadsSharedView: has(PERMISSIONS.manage.selfLeadView),
     canLeadsAlertsView: has(PERMISSIONS.manage.selfLeadView),
     canReviewsView: has(PERMISSIONS.manage.selfReviewsView),
-    canFaqView: has(PERMISSIONS.manage.faqView),
     canAgentMapView: has(PERMISSIONS.manage.agentMapView),
     canNotificationView: has(PERMISSIONS.manage.notificationView),
   };

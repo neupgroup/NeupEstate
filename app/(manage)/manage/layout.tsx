@@ -23,7 +23,6 @@ export default async function ManageLayout({
     canLeadsSharedView,
     canLeadsAlertsView,
     canReviewsView,
-    canFaqView,
     canAgentMapView,
     canNotificationView,
   } = await getManageLayoutPermissionState();
@@ -46,7 +45,6 @@ export default async function ManageLayout({
           canLeadsSharedView={canLeadsSharedView}
           canLeadsAlertsView={canLeadsAlertsView}
           canReviewsView={canReviewsView}
-          canFaqView={canFaqView}
           canAgentMapView={canAgentMapView}
           canNotificationView={canNotificationView}
         />

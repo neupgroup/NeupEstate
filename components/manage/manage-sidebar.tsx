@@ -24,7 +24,6 @@ type Props = {
   canLeadsSharedView: boolean;
   canLeadsAlertsView: boolean;
   canReviewsView: boolean;
-  canFaqView: boolean;
   canAgentMapView: boolean;
   canNotificationView: boolean;
 };
@@ -52,7 +51,6 @@ export function ManageSidebar(props: Props) {
     "/manage/leads/shared": props.canLeadsSharedView,
     "/manage/leads/alerts": props.canLeadsAlertsView,
     "/manage/reviews": props.canReviewsView,
-    "/manage/faq": props.canFaqView,
     "/manage/notifications": props.canNotificationView,
   };
 

@@ -22,7 +22,6 @@ type SidebarProps = {
   canLeadsAlertsView?: boolean;
   canLeadsView?: boolean;
   canReviewsView?: boolean;
-  canFaqView?: boolean;
   canAgentMapView?: boolean;
   canNotificationView?: boolean;
 };
@@ -49,7 +48,6 @@ export function SidebarT1(props: SidebarProps) {
     "/manage/leads/shared": props.canLeadsSharedView ?? true,
     "/manage/leads/alerts": props.canLeadsAlertsView ?? true,
     "/manage/reviews": props.canReviewsView ?? true,
-    "/manage/faq": props.canFaqView ?? true,
     "/manage/agentmap": props.canAgentMapView ?? true,
     "/manage/notifications": props.canNotificationView ?? true,
   };

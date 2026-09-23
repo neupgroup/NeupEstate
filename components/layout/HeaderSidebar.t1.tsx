@@ -16,7 +16,6 @@ type HeaderSidebarProps = {
   canCollectionView?: boolean;
   canLeadsView?: boolean;
   canReviewsView?: boolean;
-  canFaqView?: boolean;
   canAgentMapView?: boolean;
   canNotificationView?: boolean;
 };

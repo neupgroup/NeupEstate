@@ -9,8 +9,8 @@ import { createAgencyAgentMap as createAgencyAgentMapService, getAgencyAgentAcco
 import { getAgentsByLocation as getAgentsByLocationService, createAgent as createAgentService, updateAgent as updateAgentService, deleteAgent as deleteAgentService } from '@/services/agents/agent/service';
 import { addSitemap, getNewUrlsFromSitemap, processSitemapUrl, updateSitemapCheckedTime } from "@/services/crawl/sitemap";
 import { logger } from "@neup/logica/logger";
-import type { NaturalLanguageSearchOutput, Property, CreatePropertyInput, UpdatePropertyInput, CreateAgencyInput, UpdateAgencyInput, PropertyApprovalResult, CreatePropertyFormValues, UpdatePropertyFormValues, CreateAgencyFormValues, UpdateAgencyFormValues, PropertyFilters, ExtractedPropertyData, SitemapLog, PropertyAmendmentResult, RewritePropertyDetailsOutput, PropertyAssuranceResult, Agent, CreateAgentFormValues, UpdateAgentFormValues, StructuredLocation, CreateUserActivityInput, PropertyImageUpdateResult, CreateFaqFormValues, UpdateFaqFormValues, CreateInquiryFormValues, InquiryStatus, UpdatePromptFormValues, CreatePromptFormValues, User, CreatePropertyRequestFormValues, CreateSalesRequestFormValues, CreateVisitRequestFormValues, CreateMortgageRequestFormValues, PropertyActivityEvent, UserPreferences, AIModel, CreateAIModelFormValues, UpdateAIModelFormValues, CreateRequirementFormValues, Requirement, UpdateUserFormValues, LandDetails, PlotDetails, ApartmentUnit } from "@/types";
-import { CreatePropertySchema, UpdatePropertySchema, CreateAgencySchema, UpdateAgencySchema, PropertyPurposeSchema, PropertyCategorySchema, PropertyUsageTypeSchema, CreateAgentSchema, UpdateAgentSchema, CreateFaqSchema, UpdateFaqSchema, CreateInquirySchema, UpdatePromptSchema, CreatePromptSchema, CreatePropertyRequestSchema, CreateSalesRequestSchema, CreateVisitRequestSchema, CreateMortgageRequestSchema, CreateAIModelSchema, UpdateAIModelSchema, CreateRequirementSchema, UpdateUserSchema, areaValueToSqft } from "@/types";
+import type { NaturalLanguageSearchOutput, Property, CreatePropertyInput, UpdatePropertyInput, CreateAgencyInput, UpdateAgencyInput, PropertyApprovalResult, CreatePropertyFormValues, UpdatePropertyFormValues, CreateAgencyFormValues, UpdateAgencyFormValues, PropertyFilters, ExtractedPropertyData, SitemapLog, PropertyAmendmentResult, RewritePropertyDetailsOutput, PropertyAssuranceResult, Agent, CreateAgentFormValues, UpdateAgentFormValues, StructuredLocation, CreateUserActivityInput, PropertyImageUpdateResult, CreateInquiryFormValues, InquiryStatus, UpdatePromptFormValues, CreatePromptFormValues, User, CreatePropertyRequestFormValues, CreateSalesRequestFormValues, CreateVisitRequestFormValues, CreateMortgageRequestFormValues, PropertyActivityEvent, UserPreferences, AIModel, CreateAIModelFormValues, UpdateAIModelFormValues, CreateRequirementFormValues, Requirement, UpdateUserFormValues, LandDetails, PlotDetails, ApartmentUnit } from "@/types";
+import { CreatePropertySchema, UpdatePropertySchema, CreateAgencySchema, UpdateAgencySchema, PropertyPurposeSchema, PropertyCategorySchema, PropertyUsageTypeSchema, CreateAgentSchema, UpdateAgentSchema, CreateInquirySchema, UpdatePromptSchema, CreatePromptSchema, CreatePropertyRequestSchema, CreateSalesRequestSchema, CreateVisitRequestSchema, CreateMortgageRequestSchema, CreateAIModelSchema, UpdateAIModelSchema, CreateRequirementSchema, UpdateUserSchema, areaValueToSqft } from "@/types";
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
 import { z } from "zod";
 import { runPropertyApproval as runPropertyApprovalFlow } from "@/services/ai/property-approval-flow";
@@ -22,7 +22,6 @@ import { suggestQuestions as suggestQuestionsFlow } from '@/services/ai/suggest-
 import { logActivity as logActivityService } from '@/services/activities/log';
 import { updateAccountAccessInfo } from '@/services/accounts/id/lookup';
 import { updateAccountPreferences, getAccountPreferences } from '@/services/accounts/single/preferences';
-import { createFaq as createFaqService, updateFaq as updateFaqService, deleteFaq as deleteFaqService } from '@/services/faq-service';
 import { updatePrompt as updatePromptService, createPrompt as createPromptService, deletePrompt as deletePromptService } from '@/services/prompt-service';
 import { createPropertyRequest as createPropertyRequestService, createInquiry as createInquiryService, updateInquiryStatus as updateInquiryStatusService } from '@/services/property-request-service';
 import { createSalesRequest as createSalesRequestService } from '@/services/sales-request-service';
@@ -42,58 +41,6 @@ import { prisma } from '@neup/core/database/prisma';
 import { isAgencyLikeAccountType } from '@/services/accounts/type';
 import { resolvePropertyCreateContext } from '@/services/properties/create/context';
 import { requireIdentity, formatLocationString, firstPositivePrice, cleanPricing, deepMergeJson, normalizeOwnerEntries, normalizeOwnerReferenceEntries, normalizePropertyChangeData, mapPropertyToCreateFormValues } from '@/services/properties/action-helpers';
-
-export async function createFaqAction(
-  data: CreateFaqFormValues
-): Promise<{ success: boolean; error?: string | null; faqId?: string | null }> {
-  try {
-    await requirePermission(PERMISSIONS.manage.faqCreate);
-    const validatedData = CreateFaqSchema.parse(data);
-    const faqId = await createFaqService(validatedData);
-    revalidatePath('/manage/faq');
-    revalidatePath('/faq');
-    return { success: true, faqId, error: null };
-  } catch (e: any) {
-    await logger().type('createFaqAction').data({ error: String(e), details: {} }).log();
-    if (e instanceof z.ZodError) {
-        return { success: false, error: e.message, faqId: null };
-    }
-    return { success: false, error: "An unexpected server error occurred.", faqId: null };
-  }
-}
-
-export async function updateFaqAction(
-  id: string,
-  data: UpdateFaqFormValues
-): Promise<{ success: boolean; error?: string | null; }> {
-  try {
-    await requirePermission(PERMISSIONS.manage.faqUpdate);
-    const validatedData = UpdateFaqSchema.parse(data);
-    await updateFaqService(id, validatedData);
-    revalidatePath('/manage/faq');
-    revalidatePath('/faq');
-    return { success: true, error: null };
-  } catch (e: any) {
-    await logger().type(`updateFaqAction (ID: ${id})`).data({ error: String(e), details: {} }).log();
-    if (e instanceof z.ZodError) {
-        return { success: false, error: e.message };
-    }
-    return { success: false, error: "An unexpected server error occurred." };
-  }
-}
-
-export async function deleteFaqAction(faqId: string): Promise<{ success: boolean, error?: string }> {
-    try {
-        await requirePermission(PERMISSIONS.manage.faqDelete);
-        await deleteFaqService(faqId);
-        revalidatePath('/manage/faq');
-        revalidatePath('/faq');
-        return { success: true };
-    } catch (error: any) {
-        await logger().type(`deleteFaqAction (ID: ${faqId})`).data({ error: String(error), details: {} }).log();
-        return { success: false, error: "Failed to delete FAQ." };
-    }
-}
 
 export async function suggestPropertyQuestionsAction(
   propertyId: string

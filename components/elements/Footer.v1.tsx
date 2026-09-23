@@ -32,7 +32,6 @@ export function FooterV1({ showManagePanelLink }: { showManagePanelLink: boolean
               <li><ClientLink href="/search" className="text-muted-foreground transition-colors hover:text-primary">Listings</ClientLink></li>
               <li><ClientLink href="/collections" className="text-muted-foreground transition-colors hover:text-primary">For You</ClientLink></li>
               <li><ClientLink href="/agencies" className="text-muted-foreground transition-colors hover:text-primary">Agencies</ClientLink></li>
-              <li><ClientLink href="/faq" className="text-muted-foreground transition-colors hover:text-primary">FAQs</ClientLink></li>
             </ul>
           </div>
 

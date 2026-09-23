@@ -1,26 +1,6 @@
 
 import { z } from 'zod';
 
-// FAQ
-export const FaqCategorySchema = z.enum(["General", "Buying", "Selling", "Renting", "Technical"]);
-
-export const CreateFaqSchema = z.object({
-  question: z.string().min(10, "Question must be at least 10 characters long."),
-  answer: z.string().min(10, "Answer must be at least 10 characters long."),
-  category: FaqCategorySchema,
-});
-export type CreateFaqFormValues = z.infer<typeof CreateFaqSchema>;
-export const UpdateFaqSchema = CreateFaqSchema;
-export type UpdateFaqFormValues = CreateFaqFormValues;
-
-export interface FAQ {
-  id: string;
-  question: string;
-  answer: string;
-  category: z.infer<typeof FaqCategorySchema>;
-  createdAt: string;
-}
-
 // Prompt
 const camelCaseRegex = /^[a-z]+([A-Z][a-z]*)*@base/;
 
