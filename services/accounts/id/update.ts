@@ -1,7 +1,6 @@
 import { updateUser, updateAccountAccessInfo, refreshAccountDisplayInfo } from './lookup';
 export { updateAccountAccessInfo, refreshAccountDisplayInfo };
 
-import { revalidatePath } from 'next/cache';
 import { UpdateUserSchema, type UpdateUserFormValues } from '@/types';
 import { logger } from "@neup/logica/logger";
 
@@ -9,7 +8,6 @@ export async function updateUserAction(data: UpdateUserFormValues): Promise<{ su
   try {
     const validatedData = UpdateUserSchema.parse(data);
     await updateUser(validatedData.id, validatedData);
-    revalidatePath(`/manage/users/${validatedData.id}`);
     return { success: true };
   } catch (error) {
     if (error instanceof Error) {
