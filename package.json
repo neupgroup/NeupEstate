@@ -1,8 +1,15 @@
 {
-  "name": "nextn",
+  "name": "neupestate",
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "neup.cloner": "test -d ./@neup/setup || (mkdir -p ./@neup && cd ./@neup && git clone --depth 1 --single-branch --branch main https://github.com/neupgroup/nextjs.setup.git nextjs.setup && mv nextjs.setup setup)",
+    "setup": "npm run neup.cloner && cd ./@neup && chmod +x ./setup/index.sh && ./setup/index.sh",
+    "preinstall": "npm run setup -- --mode preinstall",
+    "postinstall": "npm run setup -- --mode postinstall",
+    "prebuild": "npm run setup -- --mode prebuild",
+    "postbuild": "npm run setup -- --mode postbuild",
+    "predev": "npm run setup -- --mode predev",
     "dev": "next dev --experimental-https --port 37828",
     "build": "npx prisma generate && next build",
     "start": "next start --port 37828",
