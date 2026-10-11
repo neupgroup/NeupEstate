@@ -8,7 +8,8 @@ import { Textarea } from '@neup/components/ui/textarea';
 import { Badge } from '@neup/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Link } from '@neup/components/ui/link';
-import { createCompetitorAction, deleteCompetitorAction } from './actions';
+import { createCompetitorAction } from '@/services/competitors/create';
+import { deleteCompetitorAction } from '@/services/competitors/delete';
 import type { Competitor } from './types';
 
 type SourceType = 'sitemap' | 'link' | 'manual';

@@ -1,4 +1,4 @@
-import { getCompetitorsAction } from './actions';
+import { getCompetitorsAction } from '@/services/competitors/list';
 import type { Competitor } from './types';
 import { CompetitionIndexClient } from './index-client';
 

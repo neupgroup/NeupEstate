@@ -4,7 +4,7 @@ import { useTransition } from 'react';
 import { Loader2, Radar } from 'lucide-react';
 import { Button } from '@neup/components/ui/button';
 import { useToast } from '@neup/core/hooks/useToast';
-import { crawlAllCompetitorSourcesAction } from './competition/actions';
+import { crawlAllCompetitorSourcesAction } from '@/services/competitors/crawl-all';
 
 export function TrackChangesButton() {
   const { toast } = useToast();

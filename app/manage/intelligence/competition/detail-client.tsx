@@ -7,7 +7,10 @@ import { Input } from '@neup/components/ui/input';
 import { Badge } from '@neup/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Link } from '@neup/components/ui/link';
-import { addCompetitorSourceAction, deleteCompetitorSourceAction, saveCrawledCompetitorPageAction, updateCompetitorCrawlRulesAction } from './actions';
+import { addCompetitorSourceAction } from '@/services/competitors/add-source';
+import { deleteCompetitorSourceAction } from '@/services/competitors/delete-source';
+import { saveCrawledCompetitorPageAction } from '@/services/competitors/save-crawled-page';
+import { updateCompetitorCrawlRulesAction } from '@/services/competitors/update-crawl-rules';
 import type { Competitor } from './types';
 import { useToast } from '@neup/core/hooks/useToast';
 

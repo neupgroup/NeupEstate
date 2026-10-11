@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { Loader2, Radar } from 'lucide-react';
 import { Button } from '@neup/components/ui/button';
 import { useToast } from '@neup/core/hooks/useToast';
-import { crawlCompetitorSourcesAction, getCompetitorsAction } from '../competition/actions';
+import { crawlCompetitorSourcesAction } from '@/services/competitors/crawl';
+import { getCompetitorsAction } from '@/services/competitors/list';
 
 type CrawlProgress = {
   phase: string;
