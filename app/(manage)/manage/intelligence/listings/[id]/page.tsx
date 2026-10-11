@@ -1,5 +1,5 @@
 import { requirePagePermission } from '@/services/permissions';
-import { PERMISSIONS } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permission-names';;
 import { prisma } from '@neup/core/database/prisma';
 import { logger } from "@neup/logica/logger";
 import { Link } from '@neup/components/ui/link';

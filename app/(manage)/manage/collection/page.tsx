@@ -2,7 +2,7 @@
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { Info } from 'lucide-react';
 import { requirePagePermission } from '@/services/permissions';
-import { PERMISSIONS } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permission-names';;
 
 export default async function CollectionPage() {
     await requirePagePermission(PERMISSIONS.manage.propertyCollectionSelfView);

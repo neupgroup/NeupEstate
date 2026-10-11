@@ -42,7 +42,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup
 import { Badge } from '@neup/components/ui/badge';
 import { ListChecks } from 'lucide-react';
 import { requirePagePermission } from '@/services/permissions';
-import { PERMISSIONS } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permission-names';;
 import { Pagination } from '@/components/manage/pagination';
 import { StartCrawlButton } from './start-crawl-button';
 

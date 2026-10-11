@@ -14,7 +14,7 @@ import { UpdatePropertySchema, areaValueToSqft } from "@/types";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { hasPermission, requirePermission } from '@/services/permissions';
-import { PERMISSIONS } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permission-names';;
 import { prisma } from '@neup/core/database/prisma';
 import { resolvePropertyCreateContext } from '@/services/properties/create/context';
 import { requireIdentity, formatLocationString, firstPositivePrice, cleanPricing, deepMergeJson, normalizeOwnerEntries, normalizePropertyChangeData, mapPropertyToCreateFormValues } from '@/services/properties/action-helpers';

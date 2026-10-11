@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@neup
 import { Separator } from "@/components/ui/separator";
 import { Link } from "@neup/components/ui/link";
 import { hasPermission } from "@/services/permissions";
-import { PERMISSIONS } from "@/services/permissions";
+import { PERMISSIONS } from '@/services/permission-names';;
 import { PropertyReviewRequests } from "@/components/manage/property-review-requests";
 import { PropertyImageGrid } from "@/components/manage/property-image-grid";
 import { PropertyImageDiffGrid } from "@/components/manage/property-image-diff-grid";

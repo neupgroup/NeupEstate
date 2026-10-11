@@ -2,7 +2,8 @@
 
 import { getIdentity } from '@/services/neupid/get-identity';
 import { logger } from "@neup/logica/logger";
-import { requirePermission, PERMISSIONS } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permission-names';;
+import { requirePermission } from '@/services/permissions';;
 import { revalidatePath } from 'next/cache';
 import { isPropertySaved, toggleSavedProperty } from '../../view';
 

@@ -4,7 +4,7 @@ import { Link } from '@neup/components/ui/link';
 import { BarChart2, TrendingUp, ListChecks, Swords, FileText, Bell } from 'lucide-react';
 import { TrackChangesButton } from './track-changes-button';
 import { requirePagePermission } from '@/services/permissions';
-import { PERMISSIONS } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permission-names';;
 import { prisma } from '@neup/core/database/prisma';
 import { getCurrentAccountId } from '@/services/identity';
 

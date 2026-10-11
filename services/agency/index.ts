@@ -38,7 +38,7 @@ import { createLead as createLeadService } from '@/services/leads/create';
 import { createLeadActivity as createLeadActivityService } from '@/services/leads/activity/create';
 import { getIdentity } from '@/services/neupid/get-identity';
 import { hasPermission, requirePermission } from '@/services/permissions';
-import { PERMISSIONS } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permission-names';;
 import { prisma } from '@neup/core/database/prisma';
 import { isAgencyLikeAccountType } from '@/services/accounts/type';
 import { resolvePropertyCreateContext } from '@/services/properties/create/context';

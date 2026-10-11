@@ -6,7 +6,7 @@ import { Link } from "@neup/components/ui/link";
 import { RelativeTime } from "@/components/manage/relative-time";
 import { Badge } from "@neup/components/ui/badge";
 import { requirePagePermission } from "@/services/permissions";
-import { PERMISSIONS } from "@/services/permissions";
+import { PERMISSIONS } from '@/services/permission-names';;
 
 export default async function ManageAccountsPage() {
   await requirePagePermission(PERMISSIONS.manage.accountView);

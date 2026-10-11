@@ -1,5 +1,5 @@
 import { requirePagePermission } from '@/services/permissions';
-import { PERMISSIONS } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permission-names';;
 import { checkAuthenticationForWeb } from '@/services/neupid/check-auth-web';
 import { CreateLeadForm } from '@/components/manage/create-lead-form';
 import { Link } from '@neup/components/ui/link';

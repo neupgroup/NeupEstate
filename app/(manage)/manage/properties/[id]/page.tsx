@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { getPropertyById, getPropertyReviewRequests } from "@/services/properties";
 import { hasPermission } from "@/services/permissions";
-import { PERMISSIONS } from "@/services/permissions";
+import { PERMISSIONS } from '@/services/permission-names';;
 import { getPropertyChangeContextAction } from '@/services/properties/drafts';
 import { cancelPropertyChangeDraftAction } from '@/services/properties/single/review';
 import { getCurrentAccountId } from '@/services/identity';

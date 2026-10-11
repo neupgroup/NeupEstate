@@ -9,7 +9,7 @@ import { AdminPropertySearch } from "@/components/manage/admin-property-search";
 import { parseAdminFilter } from "@/services/intelligence/parse-admin-filter-flow";
 import type { PropertyFilters } from "@/types";
 import { Link } from "@neup/components/ui/link";
-import { PERMISSIONS } from "@/services/permissions";
+import { PERMISSIONS } from '@/services/permission-names';;
 import { getIdentity } from "@/services/neupid/get-identity";
 import { getAgencyAgentMapsByAgent } from "@/services/agencies/agent-maps/service";
 import { hasPermission } from "@/services/permissions";

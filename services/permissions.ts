@@ -29,7 +29,7 @@ names used by the app.
 import { notFound } from 'next/navigation';
 import { prisma } from '@neup/core/database/prisma';
 import { getAuthenticatedAccount } from '@/services/auth/account';
-import { PERMISSIONS, type PermissionName } from '@/services/permission-names';
+import { PERMISSIONS, type PermissionName } from '@/services/permission-names';;
 
 type ManageLayoutPermissionState = {
   canDashboard: boolean;

@@ -1,5 +1,6 @@
 import { prisma } from '@neup/core/database/prisma';
-import { requirePermission, PERMISSIONS } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permission-names';;
+import { requirePermission } from '@/services/permissions';;
 import { logger } from '@neup/logica/logger';
 
 export type DeletePropertyInput = { propertyId: string };

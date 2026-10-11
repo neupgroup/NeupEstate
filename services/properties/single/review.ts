@@ -1,7 +1,8 @@
 "use server";
 import { prisma } from '@neup/core/database/prisma';
 import { requireIdentity, normalizePropertyChangeData } from '@/services/properties/action-helpers';
-import { requirePermission, PERMISSIONS } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permission-names';;
+import { requirePermission } from '@/services/permissions';;
 import { logger } from "@neup/logica/logger";
 import { deleteProperty } from './delete';
 import { getPropertyById, createPropertyLog } from '@/services/properties/view';

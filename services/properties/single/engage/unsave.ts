@@ -1,7 +1,8 @@
 'use server';
 
 import { getIdentity } from '@/services/neupid/get-identity';
-import { requirePermission, PERMISSIONS } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permission-names';;
+import { requirePermission } from '@/services/permissions';;
 import { revalidatePath } from 'next/cache';
 import { toggleSavedProperty } from '../../view';
 

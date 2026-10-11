@@ -1,7 +1,7 @@
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { Bell } from 'lucide-react';
 import { requirePagePermission } from '@/services/permissions';
-import { PERMISSIONS } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permission-names';;
 
 export default async function NotificationsPage() {
     await requirePagePermission(PERMISSIONS.manage.notificationView);

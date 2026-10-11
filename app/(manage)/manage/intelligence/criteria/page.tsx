@@ -1,6 +1,6 @@
 import { prisma } from '@neup/core/database/prisma';
 import { requirePagePermission } from '@/services/permissions';
-import { PERMISSIONS } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permission-names';;
 import { getCurrentAccountId } from '@/services/identity';
 import { IntelligenceCriteriaClient } from './criteria-client';
 

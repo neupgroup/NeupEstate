@@ -11,7 +11,7 @@ import { Link } from '@neup/components/ui/link';
 import { Badge } from '@neup/components/ui/badge';
 import { ChevronLeft, User, ShieldAlert, CalendarDays, Clock, BadgeCheck } from 'lucide-react';
 import { requirePagePermission } from '@/services/permissions';
-import { PERMISSIONS } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permission-names';;
 
 function isAgentAccountType(accountType?: string | null): boolean {
   return accountType?.trim().toLowerCase() === 'individual.agent';

@@ -2,7 +2,7 @@
 import { AnalyticsDashboard } from '@/components/manage/analytics-dashboard';
 import { getAnalyticsDashboardData } from '@/services/analytics/reports/dashboard';
 import { requirePagePermission } from '@/services/permissions';
-import { PERMISSIONS } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permission-names';;
 
 type SearchParams = Record<string, string | string[] | undefined>;
 

@@ -6,7 +6,7 @@ import { PropertyTransferForm } from "@/app/(manage)/manage/properties/[id]/tran
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@neup/components/ui/card";
 import { getListingAgentOptionsAction } from '@/services/properties/drafts';
 import { hasPermission } from "@/services/permissions";
-import { PERMISSIONS } from "@/services/permissions";
+import { PERMISSIONS } from '@/services/permission-names';;
 import { getPublicAgencyAccounts } from "@/services/agencies/agency/service";
 import { requireAuth } from "@/services/auth/account";
 import { getPropertyById } from "@/services/properties";

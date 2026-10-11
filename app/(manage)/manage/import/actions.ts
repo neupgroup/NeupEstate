@@ -17,7 +17,8 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { importPropertiesFromJson, type PropertyJsonImportStructure } from '@/services/properties/import';
 import { logger } from "@neup/logica/logger";
-import { PERMISSIONS, requirePermission } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permission-names';;
+import { requirePermission } from '@/services/permissions';;
 
 type ImportActionResult = Awaited<ReturnType<typeof importPropertiesFromJson>>;
 

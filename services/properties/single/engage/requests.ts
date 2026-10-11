@@ -16,7 +16,8 @@ import { createPropertyRequest } from "@/services/inquiry/property-requests";
 import { createSalesRequest } from "@/services/inquiry/sales-requests";
 import { createMortgageRequest } from "@/services/mortgage/create";
 import { requireIdentity } from "@/services/properties/action-helpers";
-import { requirePermission, PERMISSIONS } from "@/services/permissions";
+import { PERMISSIONS } from '@/services/permission-names';;
+import { requirePermission } from '@/services/permissions';;
 import { logger } from "@neup/logica/logger";
 
 export async function createPropertyRequestAction(data: CreatePropertyRequestFormValues): Promise<{ success: boolean; error?: string }> {

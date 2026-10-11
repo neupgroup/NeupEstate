@@ -4,7 +4,7 @@ import { PropertyRequestForm } from '@/components/estate';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { FileSearch } from 'lucide-react';
 import { requirePagePermission } from '@/services/permissions';
-import { PERMISSIONS } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permission-names';;
 
 export default async function CreateRequestPage() {
     await requirePagePermission(PERMISSIONS.public.requirementCreate);

@@ -5,7 +5,7 @@ import { Button } from '@neup/components/ui/button';
 import { Badge } from '@neup/components/ui/badge';
 import { Plus, Flame, Users, Bell, Home } from 'lucide-react';
 import { requirePagePermission } from '@/services/permissions';
-import { PERMISSIONS } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permission-names';;
 
 export default async function LeadsHomePage() {
     await requirePagePermission(PERMISSIONS.manage.selfLeadView);

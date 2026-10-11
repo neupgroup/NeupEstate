@@ -3,7 +3,7 @@ import { Link } from '@neup/components/ui/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { ListChecks } from 'lucide-react';
 import { requirePagePermission } from '@/services/permissions';
-import { PERMISSIONS } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permission-names';;
 import { Pagination } from '@/components/manage/pagination';
 
 function formatCompactValue(value: unknown): string | null {
