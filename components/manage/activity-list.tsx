@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Loader2, Plus } from 'lucide-react';
 
-import { addLeadActivityAction } from '@/services/agency';
+import { addLeadActivityAction } from '@/services/leads/activity/add';
 import { Badge } from '@neup/components/ui/badge';
 import { Button } from '@neup/components/ui/button';
 import {
