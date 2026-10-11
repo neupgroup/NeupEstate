@@ -2,8 +2,8 @@
 
 import { revalidatePath } from 'next/cache';
 import { createLeadActivity } from '@/services/leads/activity/create';
-import { getAccountById } from '@/services/accounts/id/lookup';
-import { requireIdentity } from '@/services/properties/action-helpers';
+import { prisma } from '@neup/core/database/prisma';
+import { getIdentity } from '@/services/neupid/get-identity';
 import { requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';
 import { logger } from '@neup/logica/logger';
@@ -18,9 +18,16 @@ export async function addLeadActivityAction(data: {
 }): Promise<{ success: boolean; error?: string | null; activityId?: string | null }> {
     try {
         await requirePermission(PERMISSIONS.manage.selfLeadAddActivity);
-        const actorId = await requireIdentity();
-        const account = await getAccountById(actorId);
-        const activityBy = account?.display_name?.trim() || actorId;
+        const identity = await getIdentity();
+        if (!identity.authenticated) {
+            throw new Error('Authentication required. Please sign in and try again.');
+        }
+        const actorId = identity.account.accountId;
+        const account = await prisma.account.findUnique({
+            where: { id: actorId },
+            select: { displayName: true },
+        });
+        const activityBy = account?.displayName?.trim() || actorId;
 
         if (!data.leadId?.trim()) {
             return { success: false, error: 'Lead ID is required.', activityId: null };
