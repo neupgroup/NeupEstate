@@ -1,3 +1,5 @@
+'use server';
+
 import { updateUser, updateAccountAccessInfo, refreshAccountDisplayInfo } from './lookup';
 export { updateAccountAccessInfo, refreshAccountDisplayInfo };
 

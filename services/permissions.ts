@@ -24,6 +24,8 @@ names used by the app.
 ::end
 */
 
+'use server';
+
 import { notFound } from 'next/navigation';
 import { prisma } from '@neup/core/database/prisma';
 import { getAuthenticatedAccount } from '@/services/auth/account';

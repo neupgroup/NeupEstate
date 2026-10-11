@@ -10,7 +10,8 @@
  * to the appropriate provider based on the 'provider' parameter.
  */
 
-import { requestGoogleAiCompletion } from '@neup/core/intelligence/googleai';
+import { googleAI } from '@genkit-ai/google-genai';
+import { genkit } from 'genkit';
 import * as Handlebars from 'handlebars';
 import { logger } from "@neup/logica/logger";
 import { z } from 'zod';
@@ -77,15 +78,12 @@ export async function generateText<T>(options: GenerateTextInput): Promise<T> {
         const resolvedModel = resolveGoogleModel(modelIdentifier);
         console.log(`Requesting response from model: ${resolvedModel}`);
 
-        const result = await requestGoogleAiCompletion({
-            apiKey: getGoogleAiApiKey(),
-            model: resolvedModel,
-            messages: [
-                {
-                    role: 'user',
-                    content: withJsonOutputInstruction(compiledPrompt),
-                },
-            ],
+        const ai = genkit({
+            plugins: [googleAI({ apiKey: getGoogleAiApiKey() })],
+        });
+        const result = await ai.generate({
+            model: googleAI.model(resolvedModel),
+            prompt: withJsonOutputInstruction(compiledPrompt),
         });
 
         generatedJsonString = result.text;

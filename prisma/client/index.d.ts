@@ -69987,10 +69987,10 @@ export namespace Prisma {
 
   export type PropertyWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    slug?: string
     AND?: PropertyWhereInput | PropertyWhereInput[]
     OR?: PropertyWhereInput[]
     NOT?: PropertyWhereInput | PropertyWhereInput[]
+    slug?: StringFilter<"Property"> | string
     title?: StringFilter<"Property"> | string
     description?: StringFilter<"Property"> | string
     coverImage?: StringFilter<"Property"> | string
@@ -70037,7 +70037,7 @@ export namespace Prisma {
     reactions?: ReactedPropertyListRelationFilter
     views?: PropertyViewListRelationFilter
     competitionMaps?: PropertyCompetitionMapListRelationFilter
-  }, "id" | "slug">
+  }, "id">
 
   export type PropertyOrderByWithAggregationInput = {
     id?: SortOrder
