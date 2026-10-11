@@ -1,6 +1,6 @@
 import { prisma } from '@neup/core/database/prisma';
 import type { CreateInquiryFormValues } from '@/types';
-import { getPropertyById } from '@/services/properties';
+import { getPropertyById } from '@/services/properties/view';
 import { logger } from '@neup/logica/logger';
 
 export class InquiryServiceError extends Error { status: number; constructor(message: string, status: number) { super(message); this.name = 'InquiryServiceError'; this.status = status; } }
