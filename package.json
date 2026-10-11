@@ -12,7 +12,7 @@
     "predev": "npm run setup -- --mode predev",
     "dev": "next dev --experimental-https --hostname dev.neupgroup.com --port 37828",
     "build": "next build",
-    "start": "next start --hostname dev.neupgroup.com --port 37828",
+    "start": "next start --port 37828",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit"
   },
