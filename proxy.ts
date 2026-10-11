@@ -14,7 +14,7 @@ import { logica } from '@neup/logica';
  *   3. /manage/*       → full auth required:
  *                        - valid JWT, aid present, nid present, no guest flag
  *                        → redirect to the documented handshake grant flow on failure
- *   4. Project selection is enforced after authentication for page routes.
+ *   4. Account selection is handled from /switch.
  */
 
 // ---------------------------------------------------------------------------
@@ -37,7 +37,7 @@ async function verifyJwt(token: string): Promise<{ payload: JwtPayload | null; r
 // ---------------------------------------------------------------------------
 
 const NEUPID_BASE = 'https://neupgroup.com/account';
-const switchPaths = new Set(['/switch', '/manage/switch']);
+const switchPaths = new Set(['/switch']);
 
 // ---------------------------------------------------------------------------
 // Redirect helpers
@@ -82,6 +82,9 @@ export default async function proxy(request: NextRequest) {
   // Device block.
   if (request.cookies.has('device_block')) return NextResponse.redirect(new URL('/auth/blocked', request.url));
 
+  // The account switch page must stay reachable.
+  if (switchPaths.has(pathname.replace(/\/$/, ''))) return pass();
+
   // Read and verify the auth_account JWT.
   const raw = request.cookies.get('auth_account')?.value;
   const verification = raw ? await verifyJwt(raw.trim()) : { payload: null, reason: 'missing_token' };
@@ -99,17 +102,7 @@ export default async function proxy(request: NextRequest) {
     return redirectToNeupStart(request, pathname);
   }
 
-  // The switch page is the destination when no project is selected.
-  if (switchPaths.has(pathname)) return pass();
-  if (searchParams.has('project')) return pass();
-
-  // Add the configured default project while preserving the current path and
-  // any other query parameters. If none is configured, let the user choose.
-  const defaultProject = process.env.DEFAULT_PROJECT?.trim();
-  if (!defaultProject) return NextResponse.redirect(new URL('/manage/switch', request.url));
-  const redirectUrl = request.nextUrl.clone();
-  redirectUrl.searchParams.set('project', defaultProject);
-  return NextResponse.redirect(redirectUrl);
+  return pass();
 }
 
 export const config = {

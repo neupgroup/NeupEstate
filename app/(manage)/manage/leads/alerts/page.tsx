@@ -1,6 +1,6 @@
 import { getSharedLeads } from '@/services/leads/search';
 import { checkAuthenticationForWeb } from '@/services/neupid/check-auth-web';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { Badge } from '@neup/components/ui/badge';
 import { Button } from '@neup/components/ui/button';
 import { Bell, ChevronRight } from 'lucide-react';
@@ -22,12 +22,12 @@ export default async function LeadAlertsPage() {
                         {alerts.length} alert{alerts.length !== 1 ? 's' : ''}
                     </p>
                 </div>
-                <ClientLink href="/manage/leads/add">
+                <Link href="/manage/leads/add">
                     <Button size="sm" variant="outlined">
                         <Bell className="h-4 w-4 mr-1" />
                         New Lead
                     </Button>
-                </ClientLink>
+                </Link>
             </div>
 
             {alerts.length === 0 ? (
@@ -37,7 +37,7 @@ export default async function LeadAlertsPage() {
                     {alerts.map((lead) => {
                         const contact = lead.client.contact as any;
                         return (
-                            <ClientLink
+                            <Link
                                 key={lead.id}
                                 href={`/manage/leads/shared/${lead.id}`}
                                 className="block rounded-lg border border-border px-5 py-4 hover:border-primary hover:bg-primary/5 transition-colors"
@@ -56,7 +56,7 @@ export default async function LeadAlertsPage() {
                                     </div>
                                     <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0 mt-1" />
                                 </div>
-                            </ClientLink>
+                            </Link>
                         );
                     })}
                 </div>

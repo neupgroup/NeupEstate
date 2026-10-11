@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@neup/components/ui/link";
 import { useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { ExternalLink } from "lucide-react";

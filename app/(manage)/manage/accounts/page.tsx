@@ -2,7 +2,7 @@ import { getAccounts } from "@/services/accounts/id/lookup";
 import { fetchApplicationUsers } from "@/services/neupid/application-users";
 import { Alert, AlertDescription, AlertTitle } from "@neup/components/ui/alert";
 import { AlertCircle, User, ChevronRight } from "lucide-react";
-import { ClientLink } from "@/components/client-link";
+import { Link } from "@neup/components/ui/link";
 import { RelativeTime } from "@/components/manage/relative-time";
 import { Badge } from "@neup/components/ui/badge";
 import { requirePagePermission } from "@/services/permissions";
@@ -61,7 +61,7 @@ export default async function ManageAccountsPage() {
               const acctType = local?.account_type ?? remote?.accountType ?? 'unknown';
               const isSynced = status === 'synced';
               return (
-                <ClientLink
+                <Link
                   key={id}
                   href={`/manage/accounts/${id}`}
                   className="flex gap-4 p-4 hover:bg-muted/70 transition-colors items-center justify-between"
@@ -99,7 +99,7 @@ export default async function ManageAccountsPage() {
                     </div>
                   </div>
                   <ChevronRight className="h-5 w-5 shrink-0 text-muted-foreground/50" />
-                </ClientLink>
+                </Link>
               );
             })}
           </div>

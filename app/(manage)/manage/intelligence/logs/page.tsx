@@ -37,7 +37,7 @@
  * ::end
  */
 import { prisma } from '@neup/core/database/prisma';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Badge } from '@neup/components/ui/badge';
 import { ListChecks } from 'lucide-react';
@@ -106,9 +106,9 @@ export default async function ListingsIntelligencePage({
       {listings.length === 0 && (
         <p className="text-sm text-muted-foreground">
           No listings found yet. Add sources in{' '}
-          <ClientLink href="/manage/intelligence/competition" className="text-primary underline">
+          <Link href="/manage/intelligence/competition" className="text-primary underline">
             Competition
-          </ClientLink>
+          </Link>
           .
         </p>
       )}
@@ -122,9 +122,9 @@ export default async function ListingsIntelligencePage({
             <CardHeader className="min-w-0 pb-2">
               <CardTitle className="flex w-full items-start gap-2 text-base min-w-0">
                 <span className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ${getStatusDotColor(listing.listingId ? { id: listing.listingId } : null, listing.lastLoggedStatus)}`} aria-hidden="true" />
-                <a href={listing.source} target="_blank" rel="noreferrer" className="block min-w-0 flex-1 whitespace-normal break-all leading-snug hover:underline">
+                <Link href={listing.source} target="_blank" rel="noreferrer" className="block min-w-0 flex-1 whitespace-normal break-all leading-snug hover:underline">
                   {listing.title}
-                </a>
+                </Link>
               </CardTitle>
               <CardDescription className="min-w-0 whitespace-normal break-all">
                 {listing.source}

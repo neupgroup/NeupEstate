@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getLeadActivity } from '@/services/leads/activity/view';
 import { getProperties } from '@/services/properties';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { ChevronLeft } from 'lucide-react';
 import { Badge } from '@neup/components/ui/badge';
 import { ActivityList } from '@/components/manage/activity-list';
@@ -29,9 +29,9 @@ export default async function SharedLeadPage({ params }: { params: Promise<{ id:
     return (
         <div className="space-y-6">
             <div>
-                <ClientLink href="/manage/leads/shared" className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4">
+                <Link href="/manage/leads/shared" className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4">
                     <ChevronLeft className="h-4 w-4" /> Back to Shared Leads
-                </ClientLink>
+                </Link>
                 <div className="flex items-start justify-between">
                     <div>
                         <h2 className="text-2xl font-semibold">Lead Activity</h2>

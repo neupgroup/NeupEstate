@@ -1,5 +1,5 @@
 
-import Link from "next/link";
+import { Link } from "@neup/components/ui/link";
 import { getPublicAgencyAccounts } from "@/services/agencies/agency/service";
 import { Card, CardContent, CardHeader, CardTitle } from "@neup/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@neup/components/ui/alert";

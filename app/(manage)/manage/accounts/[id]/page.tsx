@@ -7,7 +7,7 @@ import { getRequirementByUserId } from '@/services/requirements/get';
 import { getSavedProperties, getPaginatedProperties } from '@/services/properties';
 import { isAgencyLikeAccountType } from '@/services/accounts/type';
 import { AdminPropertyRow } from '@/components/manage/property-row';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { Activity, Bookmark, Home, Shield, Target } from 'lucide-react';
 import { AccountRefreshButton } from '@/components/manage/account-refresh-button';
 import { DeleteAccountButton } from '@/components/manage/delete-account-button';
@@ -238,12 +238,12 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
                   {ownedProperties.totalCount} total
                 </span>
               </CardTitle>
-              <ClientLink
+              <Link
                 href={propertiesHref}
                 className="text-sm font-medium text-primary hover:underline"
               >
                 View all
-              </ClientLink>
+              </Link>
             </div>
           </CardHeader>
           <CardContent>

@@ -2,6 +2,7 @@
 "use client";
 
 import type { Agent } from "@/types";
+import { Link } from "@neup/components/ui/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@neup/components/ui/card";
 import { Badge } from "@neup/components/ui/badge";
 import { Mail, Phone } from "lucide-react";
@@ -45,7 +46,7 @@ export function AgentResults({ agents }: { agents: Agent[] }) {
                                 {agent.contact.email && (
                                     <div className="flex items-center gap-2">
                                         <Mail className="h-4 w-4 text-muted-foreground"/>
-                                        <a href={`mailto:${agent.contact.email}`} className="hover:underline">{agent.contact.email}</a>
+                                        <Link href={`mailto:${agent.contact.email}`} className="hover:underline">{agent.contact.email}</Link>
                                     </div>
                                 )}
                                 {agent.contact.phone && (

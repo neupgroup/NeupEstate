@@ -7,7 +7,7 @@ import { Input } from '@neup/components/ui/input';
 import { Textarea } from '@neup/components/ui/textarea';
 import { Badge } from '@neup/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { createCompetitorAction, deleteCompetitorAction } from './actions';
 import type { Competitor } from './types';
 
@@ -89,7 +89,7 @@ export function CompetitionIndexClient({ initialCompetitors }: { initialCompetit
         <div className="rounded-lg border divide-y overflow-hidden">
           {competitors.map((competitor) => (
             <div key={competitor.id} className="group flex items-stretch justify-between gap-4 px-4 py-4 hover:bg-muted/5">
-              <ClientLink href={`/manage/intelligence/competition/${competitor.id}`} className="flex flex-1 items-center justify-between gap-4 min-w-0">
+              <Link href={`/manage/intelligence/competition/${competitor.id}`} className="flex flex-1 items-center justify-between gap-4 min-w-0">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 min-w-0">
                     <Globe className="h-4 w-4 text-primary shrink-0" />
@@ -101,7 +101,7 @@ export function CompetitionIndexClient({ initialCompetitors }: { initialCompetit
                   )}
                 </div>
                 <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
-              </ClientLink>
+              </Link>
 
               <Button
                 size="sm"

@@ -3,7 +3,7 @@ import { listInquiries } from '@/services/inquiry/list';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@neup/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { RelativeTime } from '@/components/manage/relative-time';
 import { InquiryStatusUpdater } from '@/components/manage/inquiry-status-updater';
 
@@ -36,9 +36,9 @@ export default async function InquiriesPage() {
                             {inquiries.map((inquiry) => (
                                 <TableRow key={inquiry.id}>
                                     <TableCell>
-                                        <ClientLink href={`/manage/properties/${inquiry.propertyId}/edit`} className="font-medium hover:underline block truncate max-w-xs">
+                                        <Link href={`/manage/properties/${inquiry.propertyId}/edit`} className="font-medium hover:underline block truncate max-w-xs">
                                             {inquiry.propertyTitle}
-                                        </ClientLink>
+                                        </Link>
                                         <span className="text-xs text-muted-foreground">Agent: {inquiry.agentName}</span>
                                     </TableCell>
                                     <TableCell className="max-w-md">

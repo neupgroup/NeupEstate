@@ -4,7 +4,7 @@ import { getSavedProperties } from "@/services/properties";
 import { PropertyCard } from "@/components/property-card";
 import { Alert, AlertDescription, AlertTitle } from "@neup/components/ui/alert";
 import { Heart, AlertCircle } from "lucide-react";
-import { ClientLink } from "@/components/client-link";
+import { Link } from "@neup/components/ui/link";
 import { getAccountId as getServerAccountId } from '@/services/auth/account';
 
 export default async function SavedFavouritesPage() {
@@ -43,9 +43,9 @@ export default async function SavedFavouritesPage() {
               <AlertDescription>
                   You haven't saved any properties yet. Click the heart icon on any listing to add it to this list.
                    <br />
-                  <ClientLink href="/search" className="text-primary font-semibold hover:underline mt-2 inline-block">
+                  <Link href="/search" className="text-primary font-semibold hover:underline mt-2 inline-block">
                      Start Browsing
-                  </ClientLink>
+                  </Link>
               </AlertDescription>
           </Alert>
         )}

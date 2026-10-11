@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { Link } from "@neup/components/ui/link";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { cn } from "@neup/core/utils";
 

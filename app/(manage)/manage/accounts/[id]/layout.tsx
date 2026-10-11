@@ -7,7 +7,7 @@ import { isAgencyLikeAccountType } from '@/services/accounts/type';
 import { prisma } from '@neup/core/database/prisma';
 import { requireAuth } from '@/services/auth/account';
 import { logger } from "@neup/logica/logger";
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { Badge } from '@neup/components/ui/badge';
 import { ChevronLeft, User, ShieldAlert, CalendarDays, Clock, BadgeCheck } from 'lucide-react';
 import { requirePagePermission } from '@/services/permissions';
@@ -54,13 +54,13 @@ export default async function ManageAccountLayout({
 
   return (
     <div className="space-y-6">
-      <ClientLink
+      <Link
         href="/manage/accounts"
         className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
       >
         <ChevronLeft className="h-4 w-4" />
         Back to Accounts
-      </ClientLink>
+      </Link>
 
       <div className="rounded-3xl border bg-card/80 p-6 shadow-sm md:p-8">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">

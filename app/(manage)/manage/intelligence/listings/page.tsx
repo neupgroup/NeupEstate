@@ -1,5 +1,5 @@
 import { prisma } from '@neup/core/database/prisma';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { ListChecks } from 'lucide-react';
 import { requirePagePermission } from '@/services/permissions';
@@ -110,9 +110,9 @@ export default async function ListingsIntelligencePage({
       {listings.length === 0 && (
         <p className="text-sm text-muted-foreground">
           No converted property listings found yet. Convert crawled pages in{' '}
-          <ClientLink href="/manage/intelligence/competition" className="text-primary underline">
+          <Link href="/manage/intelligence/competition" className="text-primary underline">
             Competition
-          </ClientLink>
+          </Link>
           .
         </p>
       )}
@@ -129,13 +129,13 @@ export default async function ListingsIntelligencePage({
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-start gap-3 text-base leading-tight min-w-0">
                   <span className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-red-500" />
-                  <ClientLink
+                  <Link
                     href={`/manage/intelligence/listings/${listing.id}`}
                     data-listing-id={listing.id}
                     className="block min-w-0 flex-1 break-words hover:underline"
                   >
                     {formatListingTitle(listing.title)}
-                  </ClientLink>
+                  </Link>
                 </CardTitle>
                 <CardDescription className="pl-5 min-w-0 break-words">
                   by {summary.competitorName ?? 'Unknown competitor'}

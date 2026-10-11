@@ -11,7 +11,7 @@ import { prisma } from "@neup/core/database/prisma";
 import { Button } from "@neup/components/ui/button";
 import { LinkButton } from "@neup/components/ui/link-button";
 import { PropertyReviewRequests } from "@/components/manage/property-review-requests";
-import { ClientLink } from "@/components/client-link";
+import { Link } from "@neup/components/ui/link";
 import { AreaDisplayToggle } from "@/components/manage/area-display-toggle";
 import { FacingDisplayToggle } from "@/components/manage/facing-display-toggle";
 import { RoadAccessDisplayToggle } from "@/components/manage/road-access-display-toggle";
@@ -209,13 +209,13 @@ function Section({
                 <div className="flex items-center gap-2">
                     <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
                     {editHref ? (
-                        <ClientLink
+                        <Link
                             href={editHref}
                             aria-label={`Edit ${title}`}
                             className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                         >
                             <FilePenLine className="h-3.5 w-3.5" />
-                        </ClientLink>
+                        </Link>
                     ) : null}
                 </div>
                 {description && <p className="text-sm text-muted-foreground">{description}</p>}
@@ -620,7 +620,7 @@ function DocumentGroupCard({
             <div className="mt-4 space-y-2">
                 {urls.length > 0 ? (
                     urls.map((url, urlIndex) => (
-                        <a
+                        <Link
                             key={`${url.value}-${urlIndex}`}
                             href={url.value}
                             target="_blank"
@@ -629,7 +629,7 @@ function DocumentGroupCard({
                         >
                             <Link2 className="h-4 w-4 shrink-0 text-muted-foreground" />
                             <span className="truncate">{url.value}</span>
-                        </a>
+                        </Link>
                     ))
                 ) : (
                     <p className="text-sm text-muted-foreground">No document links.</p>
@@ -918,19 +918,19 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
 
     return (
         <div className="space-y-4 max-w-6xl mx-auto">
-            <ClientLink
+            <Link
                 href="/manage/properties"
                 className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
             >
                 <ChevronLeft className="h-4 w-4" />
                 Back to Properties
-            </ClientLink>
+            </Link>
 
             <div className="space-y-0">
                 <div className="flex items-start gap-2">
                     <h1 className="text-2xl font-semibold tracking-tight">{property.title}</h1>
                     {siteUrl && (
-                        <ClientLink
+                        <Link
                             href={siteUrl}
                             target="_blank"
                             rel="noreferrer"
@@ -938,7 +938,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                             className="mt-1 inline-flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                         >
                             <ExternalLink className="h-4 w-4" />
-                        </ClientLink>
+                        </Link>
                     )}
                 </div>
                 <p className="text-sm text-muted-foreground">{headerSubtitle}</p>
@@ -961,9 +961,9 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                         <div className="flex flex-wrap items-center gap-1">
                             <span>{reviewMessage}</span>
                             {canApproveProperty ? (
-                                <ClientLink href={`/manage/properties/${id}?mode=review`} className="inline-flex items-center rounded-full border border-current/20 px-2.5 py-1 text-xs font-medium underline underline-offset-2">
+                                <Link href={`/manage/properties/${id}?mode=review`} className="inline-flex items-center rounded-full border border-current/20 px-2.5 py-1 text-xs font-medium underline underline-offset-2">
                                     Open approval view
-                                </ClientLink>
+                                </Link>
                             ) : showCancelDraftAction ? (
                                 <form
                                     action={async () => {

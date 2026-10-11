@@ -1,4 +1,4 @@
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { RelativeTime } from '@/components/manage/relative-time';
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { Badge } from '@neup/components/ui/badge';
@@ -378,13 +378,13 @@ export default async function ManageReportPage({
   return (
     <div className="space-y-8">
       <div className="space-y-3">
-        <ClientLink
+        <Link
           href={selectedAgency ? `/manage/team?workingProfile=${encodeURIComponent(agencyAccountId)}` : '/manage/team'}
           className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to team management
-        </ClientLink>
+        </Link>
 
         <div className="flex flex-wrap items-center gap-3">
           <h2 className="text-2xl font-semibold leading-none tracking-tight">Report</h2>
@@ -571,7 +571,7 @@ export default async function ManageReportPage({
             {report.recentActivity.length > 0 ? (
               <div className="space-y-3">
                 {report.recentActivity.map((activity) => (
-                  <ClientLink
+                  <Link
                     key={activity.id}
                     href={activity.href}
                     className="block rounded-lg border p-3 transition-colors hover:bg-muted/40"
@@ -590,7 +590,7 @@ export default async function ManageReportPage({
                         <RelativeTime timestamp={activity.createdAt.toISOString()} />
                       </div>
                     </div>
-                  </ClientLink>
+                  </Link>
                 ))}
               </div>
             ) : (

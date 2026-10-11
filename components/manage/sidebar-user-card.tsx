@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { Link } from '@neup/components/ui/link';
 import { BadgeCheck } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@neup/components/ui/avatar';
 import { getInitials } from '@/components/account-display';

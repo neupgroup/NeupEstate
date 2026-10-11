@@ -4,7 +4,7 @@ import { getPromptById } from '@/services/intelligence/prompts';
 import { PromptEditForm } from '@/components/manage/prompt-edit-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { notFound } from 'next/navigation';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { buttonVariants } from '@neup/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { cn } from '@neup/core/utils';
@@ -21,10 +21,10 @@ export default async function EditPromptPage({ params }: { params: Promise<{ id:
 
     return (
         <div className="max-w-3xl mx-auto">
-             <ClientLink href="/manage/settings/ai-configuration" className={cn(buttonVariants({ variant: 'plain' }), 'mb-4')}>
+             <Link href="/manage/settings/ai-configuration" className={cn(buttonVariants({ variant: 'plain' }), 'mb-4')}>
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to AI Configuration
-            </ClientLink>
+            </Link>
             <Card>
                 <CardHeader>
                     <CardTitle>Edit Prompt</CardTitle>

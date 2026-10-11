@@ -22,7 +22,7 @@ import type { UpdateUserFormValues, Account, UserPreferences, Property } from '@
 import { UpdateUserSchema } from '@/types';
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { RelativeTime } from './relative-time';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { Skeleton } from '@neup/components/ui/skeleton';
 
 interface EditUserFormProps {
@@ -230,7 +230,7 @@ export function EditUserForm({ user, account }: EditUserFormProps) {
                                 <div className="space-y-2">
                                     {savedProperties.slice(0, 10).map(prop => (
                                         <div key={prop.id} className="p-2 border rounded-md text-sm">
-                                            <ClientLink href={`/manage/properties/${prop.id}/edit`} className="font-semibold hover:underline">{prop.title}</ClientLink>
+                                            <Link href={`/manage/properties/${prop.id}/edit`} className="font-semibold hover:underline">{prop.title}</Link>
                                             <p className="text-xs text-muted-foreground">{prop.location}</p>
                                         </div>
                                     ))}

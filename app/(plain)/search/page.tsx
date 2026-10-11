@@ -1,6 +1,7 @@
 
 import { Suspense } from "react";
-import { SearchSection, ClientLink, SafeImage } from "@/components/estate";
+import { SearchSection, SafeImage } from "@/components/estate";
+import { Link } from "@neup/components/ui/link";
 import { PopularCategories } from "@/components/home/popular-categories";
 import { Section } from "@/components/home/_components/section";
 import { SectionTitle } from "@/components/home/_components/section-title";
@@ -25,7 +26,7 @@ function FeaturedCollections() {
             </p>
             <div className="space-y-4">
                 {mockFeaturedCollections.map(collection => (
-                    <ClientLink href={`/saved/${collection.id}`} key={collection.id}>
+                    <Link href={`/saved/${collection.id}`} key={collection.id}>
                         <Card className="hover:border-primary transition-colors flex items-center">
                             <CardContent className="p-4 flex items-center gap-6 w-full">
                                 <SafeImage 
@@ -44,7 +45,7 @@ function FeaturedCollections() {
                                 </div>
                             </CardContent>
                         </Card>
-                    </ClientLink>
+                    </Link>
                 ))}
             </div>
         </Section>

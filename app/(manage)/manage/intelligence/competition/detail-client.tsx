@@ -6,7 +6,7 @@ import { Button } from '@neup/components/ui/button';
 import { Input } from '@neup/components/ui/input';
 import { Badge } from '@neup/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@neup/components/ui/card';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { addCompetitorSourceAction, deleteCompetitorSourceAction, saveCrawledCompetitorPageAction, updateCompetitorCrawlRulesAction } from './actions';
 import type { Competitor } from './types';
 import { useToast } from '@neup/core/hooks/useToast';
@@ -179,9 +179,9 @@ export function CompetitionDetailClient({
 
   return (
     <div className="space-y-6">
-      <ClientLink href="/manage/intelligence/competition" className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+      <Link href="/manage/intelligence/competition" className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
         <span>Back to Competition</span>
-      </ClientLink>
+      </Link>
 
       <div className="flex items-start justify-between gap-4">
         <div>

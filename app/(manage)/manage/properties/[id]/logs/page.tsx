@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@neup/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ClientLink } from "@/components/client-link";
+import { Link } from "@neup/components/ui/link";
 import { hasPermission } from "@/services/permissions";
 import { PERMISSIONS } from "@/services/permissions";
 import { PropertyReviewRequests } from "@/components/manage/property-review-requests";
@@ -498,10 +498,10 @@ export default async function PropertyLogsPage({ params }: PageProps) {
     <div className="mx-auto max-w-5xl space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="space-y-2">
-          <ClientLink href={`/manage/properties/${property.id}`} className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+          <Link href={`/manage/properties/${property.id}`} className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-4 w-4" />
             Back to property
-          </ClientLink>
+          </Link>
           <div>
             <h1 className="text-2xl font-semibold tracking-tight">Property Timeline</h1>
             <p className="text-sm text-muted-foreground">

@@ -8,7 +8,7 @@ import { Pagination } from "@/components/manage/pagination";
 import { AdminPropertySearch } from "@/components/manage/admin-property-search";
 import { parseAdminFilter } from "@/services/intelligence/parse-admin-filter-flow";
 import type { PropertyFilters } from "@/types";
-import { ClientLink } from "@/components/client-link";
+import { Link } from "@neup/components/ui/link";
 import { PERMISSIONS } from "@/services/permissions";
 import { getIdentity } from "@/services/neupid/get-identity";
 import { getAgencyAgentMapsByAgent } from "@/services/agencies/agent-maps/service";
@@ -275,7 +275,7 @@ export default async function ManagePropertiesPage({
       <div className="rounded-2xl border border-border overflow-hidden bg-card shadow-sm">
 
         {/* "List a Property" — always first, on every page */}
-        <ClientLink
+        <Link
           href="/manage/properties/create"
           className="flex items-center gap-4 px-5 py-4 hover:bg-muted/40 transition-colors group"
         >
@@ -290,7 +290,7 @@ export default async function ManagePropertiesPage({
               Add a new property to your listings
             </p>
           </div>
-        </ClientLink>
+        </Link>
 
         {/* Property rows */}
         {draftRows.length > 0 && (

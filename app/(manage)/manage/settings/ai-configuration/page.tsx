@@ -13,7 +13,7 @@ import { Skeleton } from '@neup/components/ui/skeleton';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@neup/components/ui/alert-dialog";
 import { useToast } from '@neup/core/hooks/useToast';
 import { deletePromptAction } from '@/services/content';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { cn } from '@neup/core/utils';
 
 export default function AiConfigurationPage() {
@@ -57,10 +57,10 @@ export default function AiConfigurationPage() {
                             {!isLoading && prompts.length === 0 && " Run an AI agent (e.g., perform a search) to seed the prompts here."}
                         </CardDescription>
                     </div>
-                     <ClientLink href="/manage/settings/ai-configuration/create" className={cn(buttonVariants())}>
+                     <Link href="/manage/settings/ai-configuration/create" className={cn(buttonVariants())}>
                         <PlusCircle className="mr-2 h-4 w-4" />
                         Create Prompt
-                    </ClientLink>
+                    </Link>
                 </CardHeader>
                 <CardContent>
                     {isLoading ? (
@@ -79,9 +79,9 @@ export default function AiConfigurationPage() {
                                             </div>
                                         </AccordionTrigger>
                                         <div className="flex items-center gap-1">
-                                            <ClientLink href={`/manage/settings/ai-configuration/${prompt.id}/edit`} className={cn(buttonVariants({ variant: 'plain', size: 'icon' }), 'h-8 w-8')}>
+                                            <Link href={`/manage/settings/ai-configuration/${prompt.id}/edit`} className={cn(buttonVariants({ variant: 'plain', size: 'icon' }), 'h-8 w-8')}>
                                                 <Pencil className="h-4 w-4" />
-                                            </ClientLink>
+                                            </Link>
                                             <AlertDialog>
                                                 <AlertDialogTrigger asChild>
                                                     <Button variant="plain" size="icon">

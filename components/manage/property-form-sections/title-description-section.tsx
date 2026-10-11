@@ -5,7 +5,7 @@ import { Control, useWatch } from "react-hook-form";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Bold, Building2, Italic, List, ListOrdered, Pilcrow, Underline, UserRound } from "lucide-react";
 import { CreatePropertyFormValues } from "@/types";
-import { ClientLink } from "@/components/client-link";
+import { Link } from "@neup/components/ui/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@neup/components/ui/avatar";
 import { Button } from "@neup/components/ui/button";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -208,7 +208,7 @@ export function TitleDescriptionSection({
                             ) : null}
 
                             {postingProfile ? (
-                                <ClientLink
+                                <Link
                                     href={postingProfileHref}
                                     aria-label={`Open accounts for ${postingProfile.name}`}
                                     className="block space-y-3 rounded-lg border border-slate-200 bg-white p-4 shadow-[0_2px_10px_rgba(15,23,42,0.05)] transition-colors hover:border-sky-200 hover:bg-sky-50/40"
@@ -222,7 +222,7 @@ export function TitleDescriptionSection({
                                             <p className="mt-0.5 text-xs font-medium text-slate-500">{postingProfile.label}</p>
                                         </div>
                                     </div>
-                                </ClientLink>
+                                </Link>
                             ) : null}
                         </div>
                     </div>

@@ -5,7 +5,7 @@ import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { AlertCircle, CalendarClock, User, Mail, Phone, Home, Clock } from 'lucide-react';
 import { RelativeTime } from '@/components/manage/relative-time';
 import { Badge } from '@neup/components/ui/badge';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 
 export default async function VisitRequestsPage() {
     const requests = await getVisitRequests();
@@ -47,9 +47,9 @@ export default async function VisitRequestsPage() {
                                         {req.phone && <div className="text-sm text-muted-foreground flex items-center gap-2"><Phone className="h-4 w-4" />{req.phone}</div>}
                                     </TableCell>
                                     <TableCell>
-                                        <a href={`/properties/${req.propertyId}`} target="_blank" rel="noopener noreferrer" className="font-medium hover:underline flex items-center gap-2">
+                                        <Link href={`/properties/${req.propertyId}`} target="_blank" rel="noopener noreferrer" className="font-medium hover:underline flex items-center gap-2">
                                             <Home className="h-4 w-4" /> {req.propertyTitle}
-                                        </a>
+                                        </Link>
                                     </TableCell>
                                     <TableCell>
                                         <Badge variant={req.status === 'new' ? 'default' : 'secondary'}>{req.status}</Badge>

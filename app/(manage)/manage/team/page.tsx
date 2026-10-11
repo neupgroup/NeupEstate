@@ -18,7 +18,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from '@neup/components/ui/avatar';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import {
   AlertCircle,
   ChevronRight,
@@ -244,7 +244,7 @@ export default async function ManageTeamPage({
             <h1 className="text-2xl font-semibold leading-none tracking-tight">
               Team{' '}
               <span className="text-muted-foreground">
-                (at <ClientLink href={switchHref} className="hover:underline">{agencyDisplayName}</ClientLink>)
+                (at <Link href={switchHref} className="hover:underline">{agencyDisplayName}</Link>)
               </span>
             </h1>
             <p className="mt-2 text-sm text-muted-foreground">
@@ -252,15 +252,15 @@ export default async function ManageTeamPage({
             </p>
             <p className="mt-2 text-sm text-muted-foreground">
               Default profile:{' '}
-              <ClientLink href={switchHref} className="hover:underline">
+              <Link href={switchHref} className="hover:underline">
                 {defaultProfileName}
-              </ClientLink>
+              </Link>
             </p>
           </div>
         </div>
 
         <div className="overflow-hidden rounded-xl border bg-card divide-y divide-border">
-          <ClientLink
+          <Link
             href={addMemberHref}
             className="flex w-full items-center justify-between gap-4 bg-primary/5 p-4 transition-colors hover:bg-primary/10"
           >
@@ -276,7 +276,7 @@ export default async function ManageTeamPage({
               </div>
             </div>
             <ChevronRight className="h-5 w-5 shrink-0 text-muted-foreground/50" />
-          </ClientLink>
+          </Link>
 
           {memberRows.map(({ member, account }) => {
             const displayName = account.displayName ?? account.id;
@@ -293,12 +293,12 @@ export default async function ManageTeamPage({
                     </Avatar>
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        <ClientLink
+                        <Link
                           href={memberAccessHref}
                           className="truncate text-base font-semibold hover:underline"
                         >
                           {displayName}
-                        </ClientLink>
+                        </Link>
                         {isCurrentAccount ? (
                           <Badge variant="outline" className="text-xs">
                             You

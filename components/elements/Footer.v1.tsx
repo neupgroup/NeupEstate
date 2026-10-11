@@ -1,7 +1,7 @@
 "use client";
 
 import { Facebook, Twitter, Instagram } from "lucide-react";
-import { ClientLink } from "@/components/client-link";
+import { Link } from "@neup/components/ui/link";
 
 export function FooterV1({ showManagePanelLink }: { showManagePanelLink: boolean }) {
   return (
@@ -17,21 +17,21 @@ export function FooterV1({ showManagePanelLink }: { showManagePanelLink: boolean
               Your modern solution to finding the perfect property. We simplify the search, so you can find home faster.
             </p>
             {showManagePanelLink && (
-              <ClientLink
+              <Link
                 href="/manage"
                 className="mt-4 inline-flex text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
               >
                 Manage Panel
-              </ClientLink>
+              </Link>
             )}
           </div>
 
           <div>
             <h4 className="mb-4 font-semibold">Quick Links</h4>
             <ul className="space-y-2 text-sm">
-              <li><ClientLink href="/search" className="text-muted-foreground transition-colors hover:text-primary">Listings</ClientLink></li>
-              <li><ClientLink href="/collections" className="text-muted-foreground transition-colors hover:text-primary">For You</ClientLink></li>
-              <li><ClientLink href="/agencies" className="text-muted-foreground transition-colors hover:text-primary">Agencies</ClientLink></li>
+              <li><Link href="/search" className="text-muted-foreground transition-colors hover:text-primary">Listings</Link></li>
+              <li><Link href="/collections" className="text-muted-foreground transition-colors hover:text-primary">For You</Link></li>
+              <li><Link href="/agencies" className="text-muted-foreground transition-colors hover:text-primary">Agencies</Link></li>
             </ul>
           </div>
 
@@ -41,16 +41,16 @@ export function FooterV1({ showManagePanelLink }: { showManagePanelLink: boolean
               <li>Email: contact.estate@neupgroup.com</li>
               <li>Phone: (977) 984-0710507</li>
               <li>Address: Maitidevi, Kathmandu</li>
-              <li><a href="https://neupgroup.com/sites/contact" className="text-muted-foreground transition-colors hover:text-primary">Contact</a></li>
+              <li><Link href="https://neupgroup.com/sites/contact" className="text-muted-foreground transition-colors hover:text-primary">Contact</Link></li>
             </ul>
           </div>
 
           <div>
             <h4 className="mb-4 font-semibold">Follow Us</h4>
             <div className="flex space-x-4">
-              <a href="https://facebook.com/neupestate" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook" className="text-muted-foreground transition-colors hover:text-primary"><Facebook className="h-5 w-5" /></a>
-              <a href="https://twitter.com/neupestate" target="_blank" rel="noopener noreferrer" aria-label="Twitter" title="Twitter" className="text-muted-foreground transition-colors hover:text-primary"><Twitter className="h-5 w-5" /></a>
-              <a href="https://instagram.com/neupestate" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram" className="text-muted-foreground transition-colors hover:text-primary"><Instagram className="h-5 w-5" /></a>
+              <Link href="https://facebook.com/neupestate" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook" className="text-muted-foreground transition-colors hover:text-primary"><Facebook className="h-5 w-5" /></Link>
+              <Link href="https://twitter.com/neupestate" target="_blank" rel="noopener noreferrer" aria-label="Twitter" title="Twitter" className="text-muted-foreground transition-colors hover:text-primary"><Twitter className="h-5 w-5" /></Link>
+              <Link href="https://instagram.com/neupestate" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram" className="text-muted-foreground transition-colors hover:text-primary"><Instagram className="h-5 w-5" /></Link>
             </div>
           </div>
         </div>

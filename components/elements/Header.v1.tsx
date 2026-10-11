@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@neup/components/ui/link";
 import { ExternalLink, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button, buttonVariants } from "@neup/components/ui/button";
@@ -176,7 +176,7 @@ export function HeaderV1({
               </Link>
             )}
 
-            <Button variant="plain" size="icon" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Toggle menu">
+            <Button className="md:hidden" variant="plain" size="icon" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Toggle menu">
               {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </div>

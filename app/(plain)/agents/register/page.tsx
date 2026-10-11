@@ -9,7 +9,7 @@ Public registration page for enrolling the current account as an agent without r
 import { UserCheck } from "lucide-react";
 import { getAuthenticatedMeData } from "@/services/auth/me";
 import { AgentRegisterForm } from "./register-form";
-import { ClientLink } from "@/components/client-link";
+import { Link } from "@neup/components/ui/link";
 
 export default async function AgentRegisterPage() {
   const me = await getAuthenticatedMeData();
@@ -46,35 +46,35 @@ export default async function AgentRegisterPage() {
           ) : isAgent ? (
             <div className="space-y-5 text-sm text-foreground">
               <div className="grid gap-3 sm:grid-cols-2">
-                <ClientLink
+                <Link
                   href="/manage/properties"
                   className="rounded-xl border border-border bg-background px-4 py-3 font-medium transition-colors hover:border-primary hover:text-primary"
                 >
                   Go to your properties
-                </ClientLink>
+                </Link>
 
-                <ClientLink
+                <Link
                   href="/agencies/register"
                   className="rounded-xl border border-border bg-background px-4 py-3 font-medium transition-colors hover:border-primary hover:text-primary"
                 >
                   Register an agency
-                </ClientLink>
+                </Link>
 
-                <a
+                <Link
                   href="https://neupgroup.com/site/realestate"
                   target="_blank"
                   rel="noreferrer"
                   className="rounded-xl border border-border bg-background px-4 py-3 font-medium transition-colors hover:border-primary hover:text-primary"
                 >
                   Get a website for yourself
-                </a>
+                </Link>
 
-                <ClientLink
+                <Link
                   href="/manage/dashboard"
                   className="rounded-xl border border-border bg-background px-4 py-3 font-medium transition-colors hover:border-primary hover:text-primary"
                 >
                   Go to your dashboard
-                </ClientLink>
+                </Link>
               </div>
             </div>
           ) : (

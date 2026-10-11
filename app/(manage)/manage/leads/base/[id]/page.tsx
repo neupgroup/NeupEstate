@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getBaseClientById } from '@/services/leads/search';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { Badge } from '@neup/components/ui/badge';
 import { ChevronLeft, Plus } from 'lucide-react';
 import { Button } from '@neup/components/ui/button';
@@ -15,9 +15,9 @@ export default async function BaseLeadClientPage({ params }: { params: Promise<{
 
     return (
         <div className="space-y-6">
-            <ClientLink href="/manage/leads/base" className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+            <Link href="/manage/leads/base" className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
                 <ChevronLeft className="h-4 w-4" /> Back to Base Leads
-            </ClientLink>
+            </Link>
 
             <div className="flex items-start justify-between gap-4">
                 <div className="space-y-2">
@@ -35,12 +35,12 @@ export default async function BaseLeadClientPage({ params }: { params: Promise<{
                         {client.source && <span className="text-xs text-muted-foreground border border-border rounded-full px-2 py-0.5">{client.source}</span>}
                     </div>
                 </div>
-                <ClientLink href="/manage/leads/add">
+                <Link href="/manage/leads/add">
                     <Button size="sm">
                         <Plus className="h-4 w-4 mr-1" />
                         New Lead
                     </Button>
-                </ClientLink>
+                </Link>
             </div>
 
             <div className="space-y-3">

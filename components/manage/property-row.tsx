@@ -6,7 +6,7 @@ import {
     CheckCircle, Clock, FileClock, Home, Archive,
     Building2, LandPlot, Store, Layers,
 } from "lucide-react";
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { getHiddenPriceLabel } from '@/services/properties/price-display';
 
 // ─── Status badge ─────────────────────────────────────────────────────────────
@@ -129,7 +129,7 @@ export function AdminPropertyRow({ property, draftKind }: { property: Property; 
     const priceLine = getPropertyPriceLine(property);
 
     return (
-        <ClientLink
+        <Link
             href={`/manage/properties/${property.id}`}
             className="flex items-center gap-4 px-5 py-4 hover:bg-muted/40 transition-colors group"
         >
@@ -155,7 +155,7 @@ export function AdminPropertyRow({ property, draftKind }: { property: Property; 
                 <StatusBadge property={property} />
                 {draftKind && <DraftIndicator kind={draftKind} isActive={property.isApproved} />}
             </div>
-        </ClientLink>
+        </Link>
     );
 }
 
@@ -203,7 +203,7 @@ export function AdminPropertyDraftRow({
             : 'Pending Changes';
 
     return (
-        <ClientLink
+        <Link
             href={href}
             className="flex items-center gap-4 px-5 py-4 hover:bg-muted/40 transition-colors group"
         >
@@ -224,7 +224,7 @@ export function AdminPropertyDraftRow({
                 <Clock className="mr-1 h-3 w-3" />
                 {badgeLabel}
             </Badge>
-        </ClientLink>
+        </Link>
     );
 }
 

@@ -1,6 +1,6 @@
 import { getMyLeads } from '@/services/leads/search';
 import { checkAuthenticationForWeb, getAccountIdFromJWT } from '@/services/neupid/check-auth-web';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { Badge } from '@neup/components/ui/badge';
 import { Button } from '@neup/components/ui/button';
 import { Plus } from 'lucide-react';
@@ -22,12 +22,12 @@ export default async function MyLeadsPage() {
                         {leads.length} lead{leads.length !== 1 ? 's' : ''}
                     </p>
                 </div>
-                <ClientLink href="/manage/leads/add">
+                <Link href="/manage/leads/add">
                     <Button size="sm">
                         <Plus className="h-4 w-4 mr-1" />
                         New Lead
                     </Button>
-                </ClientLink>
+                </Link>
             </div>
 
             {leads.length === 0 ? (
@@ -39,7 +39,7 @@ export default async function MyLeadsPage() {
                         const req = lead.requirements as Record<string, any> | null;
 
                         return (
-                            <ClientLink
+                            <Link
                                 key={lead.id}
                                 href={`/manage/leads/shared/${lead.id}`}
                                 className="block rounded-lg border border-border px-5 py-4 hover:border-primary hover:bg-primary/5 transition-colors"
@@ -79,7 +79,7 @@ export default async function MyLeadsPage() {
                                         <Badge variant="outline" className="capitalize">{lead.priority.toLowerCase()}</Badge>
                                     </div>
                                 </div>
-                            </ClientLink>
+                            </Link>
                         );
                     })}
                 </div>

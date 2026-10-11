@@ -5,7 +5,7 @@ import { useSearchParams, usePathname } from 'next/navigation';
 import { buttonVariants } from '@neup/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@neup/core/utils';
-import { ClientLink } from './client-link';
+import { Link } from '@neup/components/ui/link';
 
 interface PaginationProps {
   totalPages: number;
@@ -39,9 +39,9 @@ export function Pagination({ totalPages, currentPage }: PaginationProps) {
     
     if (startPage > 1) {
       pageNumbers.push(
-        <ClientLink href={createPageURL(1)} key="1" className={buttonVariants({ variant: 'plain', size: 'icon' })}>
+        <Link href={createPageURL(1)} key="1" className={buttonVariants({ variant: 'plain', size: 'icon' })}>
           1
-        </ClientLink>
+        </Link>
       );
       if (startPage > 2) {
           pageNumbers.push(<span key="start-ellipsis" className="px-2">...</span>);
@@ -50,7 +50,7 @@ export function Pagination({ totalPages, currentPage }: PaginationProps) {
 
     for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(
-        <ClientLink
+        <Link
           href={createPageURL(i)}
           key={i}
           className={cn(
@@ -61,9 +61,12 @@ export function Pagination({ totalPages, currentPage }: PaginationProps) {
             currentPage === i && 'pointer-events-none bg-accent'
           )}
           aria-disabled={currentPage === i}
+          onClick={(event) => {
+            if (currentPage === i) event.preventDefault();
+          }}
         >
           {i}
-        </ClientLink>
+        </Link>
       );
     }
 
@@ -72,9 +75,9 @@ export function Pagination({ totalPages, currentPage }: PaginationProps) {
             pageNumbers.push(<span key="end-ellipsis" className="px-2">...</span>);
         }
         pageNumbers.push(
-          <ClientLink href={createPageURL(totalPages)} key={totalPages} className={buttonVariants({ variant: 'plain', size: 'icon' })}>
+          <Link href={createPageURL(totalPages)} key={totalPages} className={buttonVariants({ variant: 'plain', size: 'icon' })}>
             {totalPages}
-          </ClientLink>
+          </Link>
         );
     }
 
@@ -83,29 +86,35 @@ export function Pagination({ totalPages, currentPage }: PaginationProps) {
 
   return (
     <div className="flex items-center justify-center space-x-1 py-4">
-      <ClientLink
+      <Link
         href={createPageURL(currentPage - 1)}
         className={cn(
           buttonVariants({ variant: 'outlined', size: 'icon' }),
           currentPage <= 1 && 'pointer-events-none opacity-50'
         )}
         aria-disabled={currentPage <= 1}
+        onClick={(event) => {
+          if (currentPage <= 1) event.preventDefault();
+        }}
       >
         <ChevronLeft className="h-4 w-4" />
         <span className="sr-only">Previous Page</span>
-      </ClientLink>
+      </Link>
       {renderPageNumbers()}
-      <ClientLink
+      <Link
         href={createPageURL(currentPage + 1)}
         className={cn(
           buttonVariants({ variant: 'outlined', size: 'icon' }),
           currentPage >= totalPages && 'pointer-events-none opacity-50'
         )}
         aria-disabled={currentPage >= totalPages}
+        onClick={(event) => {
+          if (currentPage >= totalPages) event.preventDefault();
+        }}
       >
         <ChevronRight className="h-4 w-4" />
         <span className="sr-only">Next Page</span>
-      </ClientLink>
+      </Link>
     </div>
   );
 }

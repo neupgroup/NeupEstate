@@ -2,7 +2,7 @@ import { requirePagePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permissions';
 import { prisma } from '@neup/core/database/prisma';
 import { logger } from "@neup/logica/logger";
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { Badge } from '@neup/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { ArrowLeft, BadgeInfo, CalendarDays, CircleDollarSign, ExternalLink, Images, Layers3, MapPin, Ruler, User } from 'lucide-react';
@@ -63,10 +63,10 @@ export default async function IntelligenceListingDetailPage({
     return (
       <div className="space-y-4">
         <div className="flex items-center justify-between gap-4">
-          <ClientLink href="/manage/intelligence/listings" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+          <Link href="/manage/intelligence/listings" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-4 w-4" />
             Back to listings
-          </ClientLink>
+          </Link>
         </div>
         <Card>
           <CardHeader>
@@ -113,10 +113,10 @@ export default async function IntelligenceListingDetailPage({
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between gap-4">
-        <ClientLink href="/manage/intelligence/listings" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+        <Link href="/manage/intelligence/listings" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
           <ArrowLeft className="h-4 w-4" />
           Back to listings
-        </ClientLink>
+        </Link>
         <Badge variant="secondary">Logged</Badge>
       </div>
 
@@ -162,9 +162,9 @@ export default async function IntelligenceListingDetailPage({
               </h3>
               <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {images.map((src) => (
-                  <a key={src} href={src} target="_blank" rel="noreferrer" className="group overflow-hidden rounded-xl border bg-muted">
+                  <Link key={src} href={src} target="_blank" rel="noreferrer" className="group overflow-hidden rounded-xl border bg-muted">
                     <img src={src} alt={title} className="h-56 w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
-                  </a>
+                  </Link>
                 ))}
               </div>
             </section>
@@ -228,9 +228,9 @@ export default async function IntelligenceListingDetailPage({
                   <div className="min-w-0">
                     <div className="text-muted-foreground">Source URL</div>
                     {listing.sourceUrl ? (
-                      <a href={listing.sourceUrl} target="_blank" rel="noreferrer" className="break-all text-primary underline">
+                      <Link href={listing.sourceUrl} target="_blank" rel="noreferrer" className="break-all text-primary underline">
                         {decodeMaybeEncodedText(listing.sourceUrl)}
-                      </a>
+                      </Link>
                     ) : (
                       <div>Not available</div>
                     )}

@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { ChevronLeft, ChevronDown, Plus, Trash2, Filter } from 'lucide-react';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Button } from '@neup/components/ui/button';
 import { Input } from '@neup/components/ui/input';
@@ -19,10 +19,10 @@ export function IntelligenceCriteriaClient({ criteria, competitors }: { criteria
   return (
     <div className="space-y-8">
       <div>
-        <ClientLink href="/manage/intelligence" className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+        <Link href="/manage/intelligence" className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
           <ChevronLeft className="h-4 w-4" />
           Back to Intelligence
-        </ClientLink>
+        </Link>
         <h2 className="flex items-center gap-2 text-2xl font-semibold tracking-tight">
           <Filter className="h-6 w-6" />
           Intelligence Criteria

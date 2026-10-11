@@ -12,7 +12,7 @@ import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { Loader2, Search, Bookmark, AlertCircle, ExternalLink, User } from 'lucide-react';
 import { Property, User as UserType } from '@/types';
 import { getSavedPropertiesForUser, getUsersBySavedProperty } from '@/services/properties/single/engage/view';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { RelativeTime } from './relative-time';
 import { type SavedPropertyEntry } from '@/services/properties';
 import { Label } from '@neup/components/ui/label';
@@ -93,7 +93,7 @@ export function SavedPropertiesDashboard({ initialSavedProperties }: { initialSa
                             <TableBody>
                                 {userPropertiesResult.map(prop => (
                                     <TableRow key={prop.id}>
-                                        <TableCell><ClientLink href={`/manage/properties/${prop.id}/edit`} className="hover:underline">{prop.title}</ClientLink></TableCell>
+                                        <TableCell><Link href={`/manage/properties/${prop.id}/edit`} className="hover:underline">{prop.title}</Link></TableCell>
                                         <TableCell>{prop.location}</TableCell>
                                     </TableRow>
                                 ))}
@@ -146,9 +146,9 @@ export function SavedPropertiesDashboard({ initialSavedProperties }: { initialSa
                                 {initialSavedProperties.map((item) => (
                                     <TableRow key={`${item.userId}-${item.propertyId}`}>
                                         <TableCell>
-                                            <ClientLink href={`/manage/properties/${item.propertyId}/edit`} className="font-medium hover:underline flex items-center gap-1">
+                                            <Link href={`/manage/properties/${item.propertyId}/edit`} className="font-medium hover:underline flex items-center gap-1">
                                                 {item.propertyTitle} <ExternalLink className="h-3 w-3" />
-                                            </ClientLink>
+                                            </Link>
                                         </TableCell>
                                         <TableCell>
                                             <div className="flex items-center gap-2">

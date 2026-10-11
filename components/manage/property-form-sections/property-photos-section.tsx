@@ -3,7 +3,7 @@
 
 import { Control, useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import { useEffect, useRef, useState } from "react";
-import Link from 'next/link';
+import { Link } from '@neup/components/ui/link';
 import { CreatePropertyFormValues } from "@/types";
 import { Input } from "@neup/components/ui/input";
 import { Button } from "@neup/components/ui/button";

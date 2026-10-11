@@ -1,4 +1,3 @@
-export { ClientLink } from "./ClientLink.v1";
 export { SafeImage } from "./SafeImage.v1";
 export { Pagination } from "./Pagination.v1";
 export { PropertyCard } from "./PropertyCard.v1";

@@ -11,7 +11,7 @@ import type { Requirement } from '@/types';
 import type { RequirementsFormValues } from '@/components/profile/user-requirements-form';
 import { Skeleton } from '@neup/components/ui/skeleton';
 import { Card, CardContent, CardHeader, CardTitle } from '@neup/components/ui/card';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 
 function ViewRequirements({ requirements, isLoading }: { requirements: Requirement[], isLoading: boolean }) {
@@ -42,12 +42,12 @@ function ViewRequirements({ requirements, isLoading }: { requirements: Requireme
           <CardHeader>
             <div className="flex justify-between items-center">
               <CardTitle>Requirement Profile #{index + 1}</CardTitle>
-              <ClientLink href={`/profile/requirements?id=${req.id}`}>
+              <Link href={`/profile/requirements?id=${req.id}`}>
                 <Button variant="outlined" size="sm">
                   <Plus className="mr-2 h-4 w-4" />
                   Edit
                 </Button>
-              </ClientLink>
+              </Link>
             </div>
           </CardHeader>
           <CardContent className="space-y-4 text-sm">
@@ -128,12 +128,12 @@ export function RequirementsSection({ accountId }: RequirementsSectionProps) {
               Let us know what you're looking for so we can provide better recommendations.
             </p>
           </div>
-          <ClientLink href="/profile/requirements">
+          <Link href="/profile/requirements">
             <Button>
               <Plus className="mr-2 h-4 w-4" />
               Add New Requirement
             </Button>
-          </ClientLink>
+          </Link>
         </div>
         <ViewRequirements requirements={requirements} isLoading={isLoadingRequirements} />
       </Section>

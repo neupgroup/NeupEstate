@@ -7,7 +7,7 @@ Renders the public property detail page with gallery, summary, pricing, and supp
 ::end
 */
 import { notFound, redirect } from 'next/navigation';
-import Link from 'next/link';
+import { Link } from '@neup/components/ui/link';
 import { getPropertyById, getProperties, getPropertyBySlug } from '@/services/properties';
 import { buildPublicAppUrl } from '@neup/core/helpers/link/url';
 import { logger } from "@neup/logica/logger";
@@ -590,7 +590,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
                               <h4 className="font-semibold">{doc.name}</h4>
                               <ul className="list-disc list-inside mt-1">
                                   {doc.urls.map((url: { value: string }) => (
-                                      <li key={url.value}><a href={url.value} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">{url.value}</a></li>
+                                      <li key={url.value}><Link href={url.value} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">{url.value}</Link></li>
                                   ))}
                               </ul>
                           </div>

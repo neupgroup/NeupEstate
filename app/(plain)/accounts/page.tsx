@@ -1,7 +1,7 @@
 import { requireAuth } from '@/services/auth/account';
 import { getBrandAccounts } from '@/services/neupid/get-brand-accounts';
 import { prisma } from '@neup/core/database/prisma';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
 import { BrandAccountCard, type AgencyManagementAccount } from '@/app/(manage)/manage/team/brand-account-card';
@@ -140,12 +140,12 @@ export default async function AccountsPage({
     <div className="container mx-auto space-y-6 px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto w-full max-w-3xl">
         {backPath ? (
-          <ClientLink
+          <Link
             href={backPath}
             className="mb-3 inline-flex text-sm text-muted-foreground transition-colors hover:text-foreground"
           >
             &lt; Go Back
-          </ClientLink>
+          </Link>
         ) : null}
         <h1 className="text-2xl font-semibold leading-none tracking-tight">Accounts</h1>
         <p className="mt-2 text-sm text-muted-foreground">

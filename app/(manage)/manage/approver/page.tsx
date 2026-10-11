@@ -10,7 +10,7 @@ import { CheckCircle, AlertCircle, Loader2, Bot, Wrench, CircleDashed, ShieldChe
 import { Input } from '@neup/components/ui/input';
 import { Label } from '@neup/components/ui/label';
 import type { PropertyAssuranceResult } from '@/types';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 
 type AgentResult = {
   propertyId: string;
@@ -194,14 +194,14 @@ export default function IntelligencePage() {
                                 </div>
                                 <div className="flex-grow min-w-0">
                                     <p className="text-xs text-muted-foreground">ID: {result.propertyId}</p>
-                                    <ClientLink
+                                    <Link
                                         href={result.kind === 'draft'
                                           ? `/manage/properties/create`
                                           : `/manage/properties/${result.propertyId}/edit`}
                                         className="text-lg font-semibold truncate hover:underline block"
                                     >
                                         {result.title}
-                                    </ClientLink>
+                                    </Link>
                                     <p className="text-sm text-muted-foreground break-words">
                                         <span className="font-medium capitalize">{result.status.replace('_', ' ')}</span>
                                         {result.reason && `: ${result.reason}`}

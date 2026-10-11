@@ -19,7 +19,7 @@ The component accepts already-loaded account data and does not fetch authenticat
 ::end
 */
 
-import Link from "next/link";
+import { Link } from "@neup/components/ui/link";
 import { BadgeCheck } from "lucide-react";
 import { getAccountDisplayName, getAccountHandle, type AccountDisplayUser } from "@/components/account-display";
 import { ProfileV1 } from "@/components/elements/Profile.v1";

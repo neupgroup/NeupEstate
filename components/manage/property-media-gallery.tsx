@@ -7,7 +7,7 @@ Renders a collage-style property photo gallery that links to the full-page galle
 */
 
 import type { ReactNode } from "react";
-import Link from "next/link";
+import { Link } from "@neup/components/ui/link";
 import { Grid2x2 } from "lucide-react";
 import { LinkButton } from "@neup/components/ui/link-button";
 

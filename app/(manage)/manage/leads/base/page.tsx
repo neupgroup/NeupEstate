@@ -3,7 +3,7 @@ import { checkAuthenticationForWeb } from '@/services/neupid/check-auth-web';
 import { getAccountIdFromJWT } from '@/services/neupid/check-auth-web';
 import { getAccountById } from '@/services/accounts/id/get';
 import { getAgencyAgentMapsByAgent } from '@/services/agencies/agent-maps/service';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { Badge } from '@neup/components/ui/badge';
 import { Button } from '@neup/components/ui/button';
 import { Plus } from 'lucide-react';
@@ -30,12 +30,12 @@ export default async function BaseLeadsPage() {
                         {visibleLeads.length} lead{visibleLeads.length !== 1 ? 's' : ''}
                     </p>
                 </div>
-                <ClientLink href="/manage/leads/add">
+                <Link href="/manage/leads/add">
                     <Button size="sm">
                         <Plus className="h-4 w-4 mr-1" />
                         New Lead
                     </Button>
-                </ClientLink>
+                </Link>
             </div>
 
             {visibleLeads.length === 0 ? (
@@ -47,7 +47,7 @@ export default async function BaseLeadsPage() {
                         const req = lead.requirements as Record<string, any> | null;
 
                         return (
-                            <ClientLink
+                            <Link
                                 key={lead.id}
                                 href={`/manage/leads/base/${lead.client.id}`}
                                 className="block rounded-lg border border-border px-5 py-4 hover:border-primary hover:bg-primary/5 transition-colors"
@@ -94,7 +94,7 @@ export default async function BaseLeadsPage() {
                                         <Badge variant="outline" className="capitalize">{lead.priority.toLowerCase()}</Badge>
                                     </div>
                                 </div>
-                            </ClientLink>
+                            </Link>
                         );
                     })}
                 </div>

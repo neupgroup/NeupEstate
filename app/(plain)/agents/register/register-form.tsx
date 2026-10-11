@@ -10,6 +10,7 @@ Client form for confirming agent terms before submitting the enrollment action.
 
 import { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Link } from "@neup/components/ui/link";
 import { Loader2, ShieldCheck } from "lucide-react";
 import { Checkbox } from "@neup/components/ui/checkbox";
 import { Label } from "@neup/components/ui/label";
@@ -52,14 +53,14 @@ export function AgentRegisterForm() {
             <p className="text-sm text-muted-foreground">
               Read all the terms and conditions and privacy policy for the agent at:
             </p>
-            <a
+            <Link
               href="https://neupgroup.com/legal/terms/estate/agents"
               target="_blank"
               rel="noreferrer"
               className="text-sm font-medium text-primary underline underline-offset-4"
             >
               https://neupgroup.com/legal/terms/estate/agents
-            </a>
+            </Link>
           </div>
         </div>
       </div>

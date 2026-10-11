@@ -1,6 +1,6 @@
 import { getBaseLeads, getMyLeads, getSharedLeads } from '@/services/leads/search';
 import { checkAuthenticationForWeb, getAccountIdFromJWT } from '@/services/neupid/check-auth-web';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { Button } from '@neup/components/ui/button';
 import { Badge } from '@neup/components/ui/badge';
 import { Plus, Flame, Users, Bell, Home } from 'lucide-react';
@@ -34,12 +34,12 @@ export default async function LeadsHomePage() {
                     </p>
                 </div>
                 <div className="flex items-center gap-2">
-                    <ClientLink href="/manage/leads/add">
+                    <Link href="/manage/leads/add">
                         <Button size="sm">
                             <Plus className="h-4 w-4 mr-1" />
                             New Lead
                         </Button>
-                    </ClientLink>
+                    </Link>
                 </div>
             </div>
 
@@ -47,7 +47,7 @@ export default async function LeadsHomePage() {
                 {cards.map((card) => {
                     const Icon = card.icon;
                     return (
-                        <ClientLink
+                        <Link
                             key={card.href}
                             href={card.href}
                             className="rounded-xl border border-border bg-card/40 p-5 hover:border-primary hover:bg-primary/5 transition-colors"
@@ -62,7 +62,7 @@ export default async function LeadsHomePage() {
                                 </div>
                                 <Badge variant="outline">{card.count}</Badge>
                             </div>
-                        </ClientLink>
+                        </Link>
                     );
                 })}
             </div>
@@ -73,18 +73,18 @@ export default async function LeadsHomePage() {
                     Quick links
                 </div>
                 <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                    <ClientLink href="/manage/leads/base" className="rounded-lg border border-border px-4 py-3 hover:border-primary hover:bg-primary/5 transition-colors">
+                    <Link href="/manage/leads/base" className="rounded-lg border border-border px-4 py-3 hover:border-primary hover:bg-primary/5 transition-colors">
                         Base Leads
-                    </ClientLink>
-                    <ClientLink href="/manage/leads/my" className="rounded-lg border border-border px-4 py-3 hover:border-primary hover:bg-primary/5 transition-colors">
+                    </Link>
+                    <Link href="/manage/leads/my" className="rounded-lg border border-border px-4 py-3 hover:border-primary hover:bg-primary/5 transition-colors">
                         My Leads
-                    </ClientLink>
-                    <ClientLink href="/manage/leads/shared" className="rounded-lg border border-border px-4 py-3 hover:border-primary hover:bg-primary/5 transition-colors">
+                    </Link>
+                    <Link href="/manage/leads/shared" className="rounded-lg border border-border px-4 py-3 hover:border-primary hover:bg-primary/5 transition-colors">
                         Shared Leads
-                    </ClientLink>
-                    <ClientLink href="/manage/leads/alerts" className="rounded-lg border border-border px-4 py-3 hover:border-primary hover:bg-primary/5 transition-colors">
+                    </Link>
+                    <Link href="/manage/leads/alerts" className="rounded-lg border border-border px-4 py-3 hover:border-primary hover:bg-primary/5 transition-colors">
                         Alerts
-                    </ClientLink>
+                    </Link>
                 </div>
             </div>
         </div>

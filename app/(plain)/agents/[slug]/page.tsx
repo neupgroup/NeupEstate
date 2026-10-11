@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation';
 import { getAgentBySlug } from '@/services/agents/agent/service';
 import { getPropertiesByAgent } from '@/services/properties';
 import { getReviewsByAgent } from '@/services/reviews';
-import { SafeImage, PropertyCard, ClientLink } from '@/components/estate';
+import { SafeImage, PropertyCard } from '@/components/estate';
+import { Link } from '@neup/components/ui/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { Mail, Home, Star, MessageSquare, Phone } from 'lucide-react';
@@ -66,12 +67,12 @@ export default async function AgentDetailPage({ params }: { params: Promise<{ sl
                             </div>
 
                             <div className="mt-auto pt-4">
-                                 <ClientLink href={`/agents/${agent.slug}/contact`}>
+                                 <Link href={`/agents/${agent.slug}/contact`}>
                                     <Button>
                                         <MessageSquare className="mr-2 h-4 w-4"/>
                                         Contact Now
                                     </Button>
-                                </ClientLink>
+                                </Link>
                             </div>
                         </div>
                     </CardContent>

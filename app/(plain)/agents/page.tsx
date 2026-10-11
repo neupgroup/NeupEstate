@@ -1,7 +1,8 @@
 import { getAgents } from "@/services/agents/agent/service";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@neup/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@neup/components/ui/alert";
-import { SafeImage, ClientLink } from "@/components/estate";
+import { SafeImage } from "@/components/estate";
+import { Link } from "@neup/components/ui/link";
 import { User, MapPin, AlertCircle, MessageSquare } from "lucide-react";
 import { Button } from "@neup/components/ui/button";
 import { GuestSigninBanner } from "@/components/layout/guest-signin-banner";
@@ -34,7 +35,7 @@ export default async function AgentsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {agents.map((agent) => (
               <Card key={agent.id} className="overflow-hidden card-hover-effect flex flex-col">
-                <ClientLink href={`/agents/${agent.slug}`}>
+                <Link href={`/agents/${agent.slug}`}>
                     <CardHeader className="p-0">
                         <SafeImage
                             src={agent.photoUrl ?? ''}
@@ -46,11 +47,11 @@ export default async function AgentsPage() {
                             fallbackSrc="https://placehold.co/400x300.png"
                         />
                     </CardHeader>
-                </ClientLink>
+                </Link>
                 <CardContent className="p-4 flex-grow flex flex-col">
-                    <ClientLink href={`/agents/${agent.slug}`}>
+                    <Link href={`/agents/${agent.slug}`}>
                         <CardTitle className="text-xl font-headline hover:underline">{agent.name}</CardTitle>
-                    </ClientLink>
+                    </Link>
                      {agent.location && (
                       <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
                         <MapPin className="h-3 w-3" />
@@ -64,12 +65,12 @@ export default async function AgentsPage() {
                     )}
                 </CardContent>
                 <CardFooter className="p-4 mt-auto bg-secondary/30">
-                    <ClientLink href={`/agents/${agent.slug}/contact`} className="w-full">
+                    <Link href={`/agents/${agent.slug}/contact`} className="w-full">
                         <Button variant="outlined">
                             <MessageSquare className="mr-2 h-4 w-4"/>
                             Contact Agent
                         </Button>
-                    </ClientLink>
+                    </Link>
                 </CardFooter>
               </Card>
             ))}

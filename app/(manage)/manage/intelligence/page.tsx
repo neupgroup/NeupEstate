@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Badge } from '@neup/components/ui/badge';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { BarChart2, TrendingUp, ListChecks, Swords, FileText, Bell } from 'lucide-react';
 import { TrackChangesButton } from './track-changes-button';
 import { requirePagePermission } from '@/services/permissions';
@@ -73,7 +73,7 @@ export default async function IntelligencePage() {
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-2">
         {sections.map((s) => (
-          <ClientLink key={s.href} href={s.href}>
+          <Link key={s.href} href={s.href}>
             <Card className="hover:border-primary transition-colors cursor-pointer h-full">
               <CardHeader className="flex flex-row items-center gap-4 pb-2">
                 {s.icon}
@@ -83,7 +83,7 @@ export default async function IntelligencePage() {
                 <CardDescription>{s.description}</CardDescription>
               </CardContent>
             </Card>
-          </ClientLink>
+          </Link>
         ))}
       </div>
 
@@ -98,9 +98,9 @@ export default async function IntelligencePage() {
           {alerts.length === 0 ? (
             <p className="text-sm text-muted-foreground">
               No alerts yet. Add criteria in the{' '}
-              <ClientLink href="/manage/intelligence/criteria" className="text-primary underline">
+              <Link href="/manage/intelligence/criteria" className="text-primary underline">
                 Criteria
-              </ClientLink>
+              </Link>
               {' '}page to start tracking matches.
             </p>
           ) : (

@@ -6,7 +6,7 @@ Renders the public property gallery grid and optionally the full-page selected-i
 ::end
 */
 
-import Link from "next/link";
+import { Link } from "@neup/components/ui/link";
 import { notFound, redirect } from "next/navigation";
 import { getPropertyById, getPropertyBySlug } from "@/services/properties";
 import { logger } from "@neup/logica/logger";

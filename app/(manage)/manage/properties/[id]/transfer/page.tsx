@@ -1,7 +1,7 @@
 import { forbidden, notFound } from "next/navigation";
 import { ArrowLeftRight, ShieldCheck } from "lucide-react";
 
-import { ClientLink } from "@/components/client-link";
+import { Link } from "@neup/components/ui/link";
 import { PropertyTransferForm } from "@/app/(manage)/manage/properties/[id]/transfer/property-transfer-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@neup/components/ui/card";
 import { getListingAgentOptionsAction } from '@/services/properties/drafts';
@@ -62,12 +62,12 @@ export default async function TransferPropertyPage({ params }: PageProps) {
 
   return (
     <div className="mx-auto max-w-5xl space-y-5">
-      <ClientLink
+      <Link
         href={`/manage/properties/${property.id}`}
         className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
       >
         Back to Property
-      </ClientLink>
+      </Link>
 
       <div className="space-y-1">
         <div className="flex items-center gap-2">

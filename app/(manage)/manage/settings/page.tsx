@@ -1,7 +1,7 @@
 
 
 import { Search } from 'lucide-react';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { Input } from '@neup/components/ui/input';
 
 export default function SettingsPage() {
@@ -28,12 +28,12 @@ export default function SettingsPage() {
             <div className="block px-4 py-3 font-medium opacity-50 cursor-not-allowed">
                 Pages Management
             </div>
-            <ClientLink href="/manage/team" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
+            <Link href="/manage/team" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
                 Team & Agency
-            </ClientLink>
-            <ClientLink href="/manage/settings/site/devlogs" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
+            </Link>
+            <Link href="/manage/settings/site/devlogs" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
                 Site Dev Logs
-            </ClientLink>
+            </Link>
         </div>
       </div>
 
@@ -44,9 +44,9 @@ export default function SettingsPage() {
           Manage user roles and access levels.
         </p>
         <div className="border rounded-lg overflow-hidden">
-          <ClientLink href="/manage/accounts" className="block px-4 py-3 hover:bg-muted/50 transition-colors font-medium">
+          <Link href="/manage/accounts" className="block px-4 py-3 hover:bg-muted/50 transition-colors font-medium">
               Users & Permissions
-          </ClientLink>
+          </Link>
         </div>
       </div>
 
@@ -95,21 +95,21 @@ export default function SettingsPage() {
           Manage AI agents and automation workflows.
         </p>
         <div className="border rounded-lg overflow-hidden">
-            <ClientLink href="/manage/approver" className="block px-4 py-3 hover:bg-muted/50 transition-colors font-medium">
+            <Link href="/manage/approver" className="block px-4 py-3 hover:bg-muted/50 transition-colors font-medium">
                 Intelligence Agents
-            </ClientLink>
-              <ClientLink href="/manage/automation" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
+            </Link>
+              <Link href="/manage/automation" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
                 Sitemap Automation
-            </ClientLink>
-            <ClientLink href="/manage/import" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
+            </Link>
+            <Link href="/manage/import" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
                 Manual Property Import
-            </ClientLink>
-             <ClientLink href="/manage/settings/ai-configuration" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
+            </Link>
+             <Link href="/manage/settings/ai-configuration" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
                 AI Prompt Management
-            </ClientLink>
-             <ClientLink href="/manage/settings/ai-models" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
+            </Link>
+             <Link href="/manage/settings/ai-models" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
                 AI Models
-            </ClientLink>
+            </Link>
         </div>
       </div>
 
@@ -120,12 +120,12 @@ export default function SettingsPage() {
           View system error logs or get help.
         </p>
         <div className="border rounded-lg overflow-hidden">
-            <ClientLink href="/manage/site/errors" className="block px-4 py-3 hover:bg-muted/50 transition-colors font-medium">
+            <Link href="/manage/site/errors" className="block px-4 py-3 hover:bg-muted/50 transition-colors font-medium">
                 Error Log
-            </ClientLink>
-            <ClientLink href="/manage/site/devlogs" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
+            </Link>
+            <Link href="/manage/site/devlogs" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
                 Request Dev Logs
-            </ClientLink>
+            </Link>
             <div className="block px-4 py-3 border-t font-medium opacity-50 cursor-not-allowed">
                 Request a Feature
             </div>

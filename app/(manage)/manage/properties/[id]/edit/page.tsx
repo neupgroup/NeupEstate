@@ -19,7 +19,7 @@ import { useToast } from '@neup/core/hooks/useToast';
 import { ExternalLink } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription } from '@neup/components/ui/card';
 import { Badge } from '@neup/components/ui/badge';
-import { ClientLink } from '@/components/client-link';
+import { Link } from '@neup/components/ui/link';
 import { ProgressivePropertySections } from '@/components/manage/progressive-property-sections';
 import { Skeleton } from '@neup/components/ui/skeleton';
 
@@ -981,7 +981,7 @@ export default function EditPropertyPage() {
                         <div className="flex flex-row sm:flex-col lg:flex-row gap-2 self-start sm:self-end" />
                     </div>
                     {property.isApproved && (
-                        <a
+                        <Link
                             href={`/properties/${property.slug || property.id}`}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -989,7 +989,7 @@ export default function EditPropertyPage() {
                         >
                             View on site
                             <ExternalLink className="h-4 w-4" />
-                        </a>
+                        </Link>
                     )}
 
                     <ProgressivePropertySections

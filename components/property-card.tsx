@@ -9,7 +9,7 @@ Reusable public property card used across homepage, search, saved, and collectio
 ::end
 */
 
-import Link from "next/link";
+import { Link } from "@neup/components/ui/link";
 import type { Property } from "@/types";
 import { Button } from "@neup/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@neup/components/ui/card";

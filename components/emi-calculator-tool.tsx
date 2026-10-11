@@ -19,7 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from '@neup/components/ui/table'
-import { ClientLink } from '@/components/client-link'
+import { Link } from '@neup/components/ui/link'
 
 const currencyFormatter = new Intl.NumberFormat('en-NP', {
   style: 'currency',
@@ -297,12 +297,12 @@ export function EmiCalculatorTool() {
                 </div>
               </div>
 
-              <ClientLink href="/mortgage/request" className="block">
+              <Link href="/mortgage/request" className="block">
                 <Button>
                   <Landmark className="mr-2 h-4 w-4" />
                   Request Mortgage Support
                 </Button>
-              </ClientLink>
+              </Link>
             </CardContent>
           </Card>
         </div>
