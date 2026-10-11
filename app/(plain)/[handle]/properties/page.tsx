@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { PropertyCard } from '@/components/property-card';
 import { getPublicAgencyAccountByNeupId } from '@/services/agencies/agency/service';
-import { getBridgePropertiesByAccount } from '@/services/properties';
+import { getBridgePropertiesByAccount } from '@/services/properties/list';
 import { AlertCircle, Home } from 'lucide-react';
 
 function resolveNeupId(handle: string) {
