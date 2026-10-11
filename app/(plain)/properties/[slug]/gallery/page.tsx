@@ -13,6 +13,7 @@ import { logger } from "@neup/logica/logger";
 import { PropertyGalleryFullPage } from "@/components/manage/property-gallery-full-page";
 import { Button } from "@neup/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import { getPropertySlugId } from '@/services/properties/slug';
 
 type PropertyGalleryPageProps = {
   params: Promise<{ slug: string }>;
@@ -58,14 +59,14 @@ export default async function PropertyGalleryPage({
     notFound();
   }
 
-  const propertySlug = property.slug || property.id;
+  const propertySlug = getPropertySlugId(property);
   const requestedImage = parseImageOrder(query.image);
   const fullPageMode = isFullPageMode(query.mode);
 
-  if (property.slug && property.slug !== slug) {
+  if (propertySlug !== slug) {
     const target = fullPageMode
-      ? `/properties/${property.slug}/gallery?mode=fullpage&image=${requestedImage}`
-      : `/properties/${property.slug}/gallery`;
+      ? `/properties/${propertySlug}/gallery?mode=fullpage&image=${requestedImage}`
+      : `/properties/${propertySlug}/gallery`;
     redirect(target);
   }
 

@@ -12,6 +12,7 @@ import { prisma } from '@neup/core/database/prisma';
 import { logger } from "@neup/logica/logger";
 import type { Property } from '@/types';
 import { PROPERTY_INCLUDE, type SavedPropertyEntry, hydratePropertyAccountLabels, mapRecord, onlyActive } from '../properties/shared';
+import { parsePropertySlugId } from './slug';
 
 
 
@@ -38,9 +39,10 @@ export async function getPropertyById(id: string, opts: { includeInactive?: bool
  */
 export async function getPropertyBySlug(slug: string, opts: { includeInactive?: boolean } = {}): Promise<Property | null> {
   try {
-    const loggerResponse = await logger().type('property.get.slug.called').data({ slug, includeInactive: Boolean(opts.includeInactive) }).log();
-    if (!loggerResponse.ok) console.error('[property.get.slug] Logger request failed.', loggerResponse.status, loggerResponse.body);
-    const record = await prisma.property.findFirst({ where: { slug }, include: PROPERTY_INCLUDE });
+    const parsed = parsePropertySlugId(slug);
+    const record = parsed
+      ? await prisma.property.findUnique({ where: { id: parsed.id }, include: PROPERTY_INCLUDE })
+      : await prisma.property.findFirst({ where: { slug }, include: PROPERTY_INCLUDE });
     if (record) {
       const [p] = await hydratePropertyAccountLabels([mapRecord(record)]);
       return opts.includeInactive ? p : (p.isApproved ? p : null);

@@ -14,7 +14,6 @@ import type { CreatePropertyInput, ExtractedPropertyData, UpdatePropertyInput } 
 import { areaValueToSqft } from '@/types';
 import { mapPurposeToEnum, mapStatusToEnum, mapTypeToEnum } from '@/inapp/database/adapters';
 import slugify from 'slugify';
-import { randomBytes } from 'crypto';
 import { getPropertyById } from '../properties/view';
 import { PROPERTY_TYPE, type PropertyTypeValue } from './shared';
 
@@ -127,11 +126,8 @@ function buildCoreData(d: Partial<CreatePropertyInput> & Record<string, any>) {
 
 ::private
 
-Generates a non-empty property slug for write operations before the initial
-insert. Prisma requires `property.slug` at create time, so both manual and
-import-based creation paths first use a title slug and then fall back to
-`title` plus a 12-character mixed-case alphanumeric suffix to reduce collision
-risk.
+Generates a non-empty display slug for write operations before the initial
+insert. Slugs may repeat; public URLs pair the slug with the property ID.
 
 ::private end
 ::end
@@ -141,34 +137,14 @@ risk.
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-function buildPropertySlug(input: { slug?: string | null; title?: string | null }, withSuffix = false): string {
+function buildPropertySlug(input: { slug?: string | null; title?: string | null }): string {
   const explicitSlug = typeof input.slug === 'string' ? input.slug.trim() : '';
   if (explicitSlug) {
     return explicitSlug.substring(0, 120);
   }
 
   const baseSlug = slugify(input.title ?? 'property', { lower: true, strict: true, trim: true }) || 'property';
-  if (!withSuffix) {
-    return baseSlug.substring(0, 120);
-  }
-
-  const suffix = randomBytes(18)
-    .toString('base64')
-    .replace(/[^a-zA-Z0-9]/g, '')
-    .substring(0, 12);
-  const joined = `${baseSlug}-${suffix || 'propertysuffix'}`;
-  return joined.substring(0, 120);
-}
-
-
-
-/**
- * isUniqueConstraintError handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
- *
- * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
- */
-function isUniqueConstraintError(error: unknown): error is { code: 'P2002' } {
-  return Boolean(error && typeof error === 'object' && 'code' in error && error.code === 'P2002');
+  return baseSlug.substring(0, 120);
 }
 
 
@@ -179,21 +155,8 @@ function isUniqueConstraintError(error: unknown): error is { code: 'P2002' } {
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
 export async function createPropertyRecordWithGeneratedSlug(data: Record<string, any>) {
-  const primarySlug = buildPropertySlug(data);
-
-  try {
-    return await prisma.property.create({
-      data: { ...data, slug: primarySlug } as any,
-    });
-  } catch (error) {
-    const fallbackSlug = buildPropertySlug(data, true);
-    if (isUniqueConstraintError(error)) {
-      return prisma.property.create({
-        data: { ...data, slug: fallbackSlug } as any,
-      });
-    }
-    throw error;
-  }
+  const slug = buildPropertySlug(data);
+  return prisma.property.create({ data: { ...data, slug } as any });
 }
 
 

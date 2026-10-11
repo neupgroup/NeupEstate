@@ -1,4 +1,5 @@
 import { prisma } from '@neup/core/database/prisma';
+import { getPropertySlugId } from '@/services/properties/slug';
 
 const PUBLIC_BASE_URL = 'https://neupgroup.com/estate';
 const PAGE_SIZE = 50_000;
@@ -17,12 +18,12 @@ function sitemapResponse(urls: string[]): Response {
 async function propertySitemap(page: number): Promise<Response> {
   const rows = await prisma.property.findMany({
     where: { isApproved: true, isDeleted: false },
-    select: { slug: true },
+    select: { id: true, slug: true },
     orderBy: { id: 'asc' },
     skip: (page - 1) * PAGE_SIZE,
     take: PAGE_SIZE,
   });
-  return sitemapResponse(rows.map(({ slug }) => `${PUBLIC_BASE_URL}/properties/${encodeURIComponent(slug)}`));
+  return sitemapResponse(rows.map((property) => `${PUBLIC_BASE_URL}/properties/${encodeURIComponent(getPropertySlugId(property))}`));
 }
 
 async function agentSitemap(page: number): Promise<Response> {

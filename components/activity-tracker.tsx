@@ -4,6 +4,7 @@ import { useEffect, useRef, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import type { PropertyActivityEvent } from '@/types';
 import { makeAppPath } from '@neup/core/appconfig';
+import { parsePropertySlugId } from '@/services/properties/slug';
 
 const ACTIVE_TIME_INTERVAL = 5000;
 const INACTIVITY_TIMEOUT = 60000;
@@ -21,7 +22,8 @@ export function ActivityTracker() {
         activeDuration: 0,
     });
 
-    const propertyId = pathname.startsWith('/properties/') ? pathname.split('/')[2] : undefined;
+    const propertyPathValue = pathname.startsWith('/properties/') ? pathname.split('/')[2] : undefined;
+    const propertyId = propertyPathValue ? parsePropertySlugId(propertyPathValue)?.id ?? propertyPathValue : undefined;
 
     const sendData = useCallback(async () => {
         const now = Date.now();

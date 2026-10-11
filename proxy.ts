@@ -102,6 +102,12 @@ export default async function proxy(request: NextRequest) {
     return redirectToNeupStart(request, pathname);
   }
 
+  if (pathname.startsWith('/manage') && payload?.aid && !searchParams.has('account')) {
+    const selectedAccountUrl = request.nextUrl.clone();
+    selectedAccountUrl.searchParams.set('account', payload.aid);
+    return NextResponse.redirect(selectedAccountUrl);
+  }
+
   return pass();
 }
 

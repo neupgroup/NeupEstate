@@ -16,6 +16,7 @@ import { AreaDisplayToggle } from "@/components/manage/area-display-toggle";
 import { FacingDisplayToggle } from "@/components/manage/facing-display-toggle";
 import { RoadAccessDisplayToggle } from "@/components/manage/road-access-display-toggle";
 import { PropertyMediaGallery } from "@/components/manage/property-media-gallery";
+import { getPropertySlugId } from '@/services/properties/slug';
 import { ArrowLeftRight, Bath, BedDouble, Bike, Building2, CalendarDays, CarFront, ChefHat, ChevronLeft, ExternalLink, FilePenLine, FileText, Layers3, Link2, PenSquare, Sofa, SquareUserRound, Tag, UserRound, UtensilsCrossed } from "lucide-react";
 
 type PageProps = {
@@ -841,7 +842,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
     const editUrl = isCreationDraftView
         ? `/manage/properties/${creationDraft!.id}/edit`
         : `/manage/properties/${property.id}/edit`;
-    const siteUrl = resolvedProperty?.slug ? `/properties/${resolvedProperty.slug}` : null;
+    const siteUrl = resolvedProperty ? `/properties/${getPropertySlugId(resolvedProperty)}` : null;
     const hasLocation = hasLocationValue(property.structuredLocation) || hasLocationValue(property.location) || hasLocationValue(property.latitude) || hasLocationValue(property.longitude);
     const locationSummary = formatLocationSummary({
         structuredLocation: property.structuredLocation,
@@ -987,7 +988,7 @@ export default async function ViewPropertyPage({ params, searchParams }: PagePro
                 <PropertyMediaGallery
                     images={property.images ?? []}
                     title={property.title}
-                    propertySlug={property.slug || property.id}
+                    propertySlug={getPropertySlugId(property)}
                 />
             </div>
 

@@ -24,6 +24,7 @@ import type { Property } from '@/types';
 import { areaValueToSqft } from '@/types';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { getHiddenPriceLabel } from '@/services/properties/price-display';
+import { getPropertySlugId } from '@/services/properties/slug';
 import { PropertyMediaGallery } from '@/components/manage/property-media-gallery';
 import { getLocation } from '@/services/properties/create/location';
 
@@ -207,7 +208,7 @@ export async function generateMetadata(
   const title = `${property.title} | ${siteName}`;
   const description = stripHtml(property.description).substring(0, 160);
   const imageUrl = Array.isArray(property.images) && property.images.length > 0 ? property.images[0] : 'https://placehold.co/1200x630.png';
-  const propertyUrl = buildPublicAppUrl(undefined, `/properties/${property.slug || property.id}`);
+  const propertyUrl = buildPublicAppUrl(undefined, `/properties/${getPropertySlugId(property)}`);
 
   return {
     title,
@@ -242,7 +243,7 @@ export async function generateStaticParams() {
     // Only generate static pages for approved properties that have a slug
     const approvedProperties = properties.filter(p => p.isApproved && p.slug);
     return approvedProperties.map((property) => ({
-      slug: property.slug!,
+      slug: getPropertySlugId(property),
     }));
   } catch (e) {
     await logger().type('generateStaticParams for PropertyDetailPage').data({ error: String(e), details: {} }).log();
@@ -272,7 +273,7 @@ const DetailItem = ({ label, value }: { label: string, value: React.ReactNode })
 );
 
 function generateSchema(property: Property) {
-    const slugOrId = property.slug || property.id;
+    const slugOrId = getPropertySlugId(property);
     const propertyUrl = buildPublicAppUrl(undefined, `/properties/${slugOrId}`);
     const mapLocation = getLocation(property);
     const showExactMapLocation = mapLocation?.mode === 'exact';
@@ -370,8 +371,9 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
 
   // Redirect to the canonical URL if a slug exists and the current URL doesn't match.
   // This handles both old ID-based links and outdated slugs.
-  if (property.slug && property.slug !== slug) {
-    return redirect(`/properties/${property.slug}`);
+  const canonicalSlugId = getPropertySlugId(property);
+  if (canonicalSlugId !== slug) {
+    return redirect(`/properties/${canonicalSlugId}`);
   }
 
   const renderIssues: RenderIssue[] = [];
@@ -474,7 +476,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
             <PropertyMediaGallery
               images={safeImages}
               title={property.title}
-              propertySlug={property.slug || property.id}
+              propertySlug={getPropertySlugId(property)}
             />
           </div>
           <div className="property-detail-title space-y-2">

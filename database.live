@@ -320,7 +320,7 @@ Fields:
 Table: property, Model: Property
 Fields:
 > id: text PK, NOT NULL;
-> slug: text NOT NULL, UNIQUE property_slug_key(slug);
+> slug: text NOT NULL, INDEX property_slug_idx(slug);
 > title: varchar(255) NOT NULL;
 > description: text NOT NULL;
 > coverImage: varchar(255) NOT NULL;

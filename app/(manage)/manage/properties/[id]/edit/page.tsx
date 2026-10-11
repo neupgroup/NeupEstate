@@ -10,6 +10,7 @@ import { createPropertyAction, getCurrentPropertyCreateDraftAction, saveProperty
 import { cancelPropertyChangeDraftAction } from '@/services/properties/single/review';
 import { getCurrentAccountId } from '@/services/identity';
 import { getPropertyById } from "@/services/properties/view";
+import { getPropertySlugId } from '@/services/properties/slug';
 import { listAccounts } from "@/services/accounts/list";
 import { useAgencyCustomization } from '@/inapp/agency-customization/use-agency-customization';
 
@@ -982,7 +983,7 @@ export default function EditPropertyPage() {
                     </div>
                     {property.isApproved && (
                         <Link
-                            href={`/properties/${property.slug || property.id}`}
+                            href={`/properties/${getPropertySlugId(property)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-2 text-sm text-primary hover:underline"

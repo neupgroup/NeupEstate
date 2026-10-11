@@ -22,6 +22,7 @@ import { SafeImage } from "./safe-image";
 import { isSaved, save } from '@/services/properties/single/engage/save';
 import { useToast } from "@neup/core/hooks/useToast";
 import { getClientAccountId } from '@/services/auth/client';
+import { getPropertySlugId } from '@/services/properties/slug';
 
 interface PropertyCardProps {
   property: Property;
@@ -48,7 +49,7 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
   const { toast } = useToast();
   
   const imageUrl = property.images && property.images.length > 0 ? property.images[0] : null;
-  const slugOrId = property.slug || property.id;
+  const slugOrId = getPropertySlugId(property);
 
   useEffect(() => {
     setIsMounted(true);

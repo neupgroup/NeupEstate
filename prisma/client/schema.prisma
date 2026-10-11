@@ -98,7 +98,7 @@ model Activity {
 
 model Property {
   id                 String          @id @default(cuid())
-  slug               String          @unique
+  slug               String
   title              String          @db.VarChar(255)
   description        String
   coverImage         String          @db.VarChar(255)
@@ -150,6 +150,7 @@ model Property {
   @@index([type])
   @@index([purpose])
   @@index([status])
+  @@index([slug], map: "property_slug_idx")
   @@index([agency])
   @@index([agent])
   @@map("property")
