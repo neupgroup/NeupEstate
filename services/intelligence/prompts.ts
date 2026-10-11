@@ -62,7 +62,7 @@ async function resolveModelId(model?: string): Promise<string> {
  * It also resolves the final model name, using the system default if no specific model is set.
  * @param promptId The unique identifier for the prompt.
  * @param defaultPrompt The default prompt object supplied by the AI flow.
- * @returns The full prompt configuration object, including the Genkit-ready model name.
+ * @returns The full prompt configuration object, including the Google AI model name.
  */
 export async function getPrompt(promptId: string, defaultPrompt: Omit<Prompt, 'id'>): Promise<Prompt> {
     let promptData: Prompt = {

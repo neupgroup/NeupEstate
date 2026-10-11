@@ -4,7 +4,7 @@
 'use server';
 
 /**
- * @fileOverview Implements natural language property search using Genkit.
+ * @fileOverview Implements natural language property search using Google AI.
  *
  * - naturalLanguagePropertySearch - A function that handles the natural language property search.
  * - NaturalLanguageSearchInput - The input type for the naturalLanguagePropertySearch function.

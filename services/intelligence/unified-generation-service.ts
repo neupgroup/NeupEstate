@@ -3,15 +3,12 @@
 'use server';
 
 /**
- * @fileOverview A unified service for generating text from various AI providers.
+ * @fileOverview A shared service for generating structured text with Google AI.
  *
- * This service abstracts the provider-specific logic for making AI calls.
- * The main entry point is the `generateText` function, which routes requests
- * to the appropriate provider based on the 'provider' parameter.
+ * The generateText entry point compiles prompts, calls the Gemini REST API,
+ * and validates the returned JSON.
  */
 
-import { googleAI } from '@genkit-ai/google-genai';
-import { genkit } from 'genkit';
 import * as Handlebars from 'handlebars';
 import { logger } from "@neup/logica/logger";
 import { z } from 'zod';
@@ -78,15 +75,45 @@ export async function generateText<T>(options: GenerateTextInput): Promise<T> {
         const resolvedModel = resolveGoogleModel(modelIdentifier);
         console.log(`Requesting response from model: ${resolvedModel}`);
 
-        const ai = genkit({
-            plugins: [googleAI({ apiKey: getGoogleAiApiKey() })],
-        });
-        const result = await ai.generate({
-            model: googleAI.model(resolvedModel),
-            prompt: withJsonOutputInstruction(compiledPrompt),
-        });
-
-        generatedJsonString = result.text;
+        const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(resolvedModel)}:generateContent`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-goog-api-key': getGoogleAiApiKey(),
+                },
+                body: JSON.stringify({
+                    contents: [{ role: 'user', parts: [{ text: withJsonOutputInstruction(compiledPrompt) }] }],
+                    generationConfig: { responseMimeType: 'application/json' },
+                }),
+                signal: AbortSignal.timeout(120_000),
+            },
+        );
+        if (!response.ok) {
+            throw new Error(`Google AI request failed (HTTP ${response.status}).`);
+        }
+        const result = await response.json() as {
+            candidates?: Array<{
+                content?: { parts?: Array<{ text?: string; thought?: boolean }> };
+                finishReason?: string;
+            }>;
+            promptFeedback?: { blockReason?: string };
+        };
+        const candidate = result.candidates?.[0];
+        if (result.promptFeedback?.blockReason) {
+            throw new Error(`Google AI blocked the prompt: ${result.promptFeedback.blockReason}.`);
+        }
+        if (candidate?.finishReason && candidate.finishReason !== 'STOP') {
+            throw new Error(`Google AI generation ended with ${candidate.finishReason}.`);
+        }
+        generatedJsonString = candidate?.content?.parts
+            ?.filter((part) => !part.thought)
+            .map((part) => part.text ?? '')
+            .join('') ?? '';
+        if (!generatedJsonString.trim()) {
+            throw new Error('Google AI returned no text.');
+        }
 
     } catch (error: any) {
         // Log the full error object for detailed debugging, including raw API responses.

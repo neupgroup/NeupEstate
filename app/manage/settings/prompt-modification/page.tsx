@@ -15,7 +15,7 @@ import { PromptEditForm } from '@/components/manage/prompt-edit-form';
 // A hardcoded mapping of prompt IDs to models. This can be made dynamic later.
 const promptModelMapping: Record<string, string> = {
     'naturalLanguageSearchPrompt': 'gemini-2.5-flash-lite',
-    'extractPropertyPrompt': 'Default Model', // Uses the default from genkit.ts
+    'extractPropertyPrompt': 'Default Model', // Uses the configured default model
     'recommendPropertiesPrompt': 'Default Model',
     'parseAdminFilterPrompt': 'Default Model',
     'propertyApprovalPrompt': 'Default Model',
