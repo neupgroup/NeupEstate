@@ -1,7 +1,7 @@
 
 import { notFound } from 'next/navigation';
 import { getAgentBySlug } from '@/services/agents/agent/service';
-import { getPropertiesByAgent } from '@/services/properties';
+import { getPropertiesByAgent } from '@/services/properties/list';
 import { getReviewsByAgent } from '@/services/reviews';
 import { SafeImage, PropertyCard } from '@/components/estate';
 import { Link } from '@neup/components/ui/link';
