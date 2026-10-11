@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@neup/components/ui/card";
-import { getProperties } from "@/services/properties";
+import { getProperties } from "@/services/properties/list";
 import { getAccounts } from "@/services/accounts/id/lookup";
 import { getAgencyAgentMapsByAgent } from "@/services/agencies/agent-maps/service";
 import { getAccountIdFromJWT } from "@/services/neupid/check-auth-web";
