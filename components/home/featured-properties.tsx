@@ -1,4 +1,4 @@
-import { getFeaturedProperties } from "@/services/properties";
+import { getFeaturedProperties } from "@/services/properties/list";
 import { PropertyCard } from "@/components/estate";
 import { Section } from "@/components/home/_components/section";
 import { SectionTitle } from "@/components/home/_components/section-title";
