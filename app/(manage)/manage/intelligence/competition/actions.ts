@@ -11,7 +11,7 @@ import {
   upsertCompetitorPage,
   type Competitor,
 } from '@/services/competitors/service';
-import { crawlSitemap } from '@/services/crawl/sitemap';
+import { crawlSitemap } from '@/services/crawl/sitemap-crawl';
 import { crawlLinks } from '@/services/crawl/links';
 import { fetchPageSourceCode } from '@/services/crawl/fetch-page-source';
 import { extractVisibleHtml } from '@/services/crawl/visible-html';

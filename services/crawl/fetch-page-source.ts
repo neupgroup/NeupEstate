@@ -1,5 +1,3 @@
-'use server';
-
 import { logger } from "@neup/logica/logger";
 
 export async function fetchPageSourceCode(url: string): Promise<string> {

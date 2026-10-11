@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { crawlSitemap } from '@/services/crawl/sitemap';
+import { crawlSitemap } from '@/services/crawl/sitemap-crawl';
 
 const getHandler = async (request: NextRequest) => {
   const url = request.nextUrl.searchParams.get('url');

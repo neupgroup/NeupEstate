@@ -1,6 +1,6 @@
 'use server';
 
-import { crawlSitemap } from '@/services/crawl/sitemap';
+import { crawlSitemap } from '@/services/crawl/sitemap-crawl';
 import { crawlLinks } from '@/services/crawl/links';
 import { getCompetitorById, getCompetitorPages, upsertCompetitorPage } from '@/services/competitors/service';
 import { fetchPageSourceCode } from '@/services/crawl/fetch-page-source';
