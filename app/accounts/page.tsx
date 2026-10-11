@@ -4,8 +4,8 @@ import { prisma } from '@neup/core/database/prisma';
 import { Link } from '@neup/components/ui/link';
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
-import { BrandAccountCard, type AgencyManagementAccount } from '@/app/(manage)/manage/team/brand-account-card';
-import { syncBrandAccountsToLocalAccounts } from '@/app/(manage)/manage/team/account-actions';
+import { BrandAccountCard, type AgencyManagementAccount } from '@/app/manage/team/brand-account-card';
+import { syncBrandAccountsToLocalAccounts } from '@/app/manage/team/account-actions';
 import { isAgencyLikeAccountType } from '@/services/accounts/type';
 
 type SearchParams = Record<string, string | string[] | undefined>;

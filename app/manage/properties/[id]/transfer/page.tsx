@@ -2,7 +2,7 @@ import { forbidden, notFound } from "next/navigation";
 import { ArrowLeftRight, ShieldCheck } from "lucide-react";
 
 import { Link } from "@neup/components/ui/link";
-import { PropertyTransferForm } from "@/app/(manage)/manage/properties/[id]/transfer/property-transfer-form";
+import { PropertyTransferForm } from "@/app/manage/properties/[id]/transfer/property-transfer-form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@neup/components/ui/card";
 import { getListingAgentOptionsAction } from '@/services/properties/drafts';
 import { hasPermission } from "@/services/permissions";
