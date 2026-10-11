@@ -1,11 +1,12 @@
 import React from 'react'
 
-export default function Page({ params }: { params: { id: string } }) {
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   return (
     <div>
       <h1>Competition Sources</h1>
-      <p>Competition ID: {params.id}</p>
-      <p>Route: /manage/intelligence/competition/{params.id}/sources</p>
+      <p>Competition ID: {id}</p>
+      <p>Route: /manage/intelligence/competition/{id}/sources</p>
     </div>
   )
 }

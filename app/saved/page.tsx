@@ -20,7 +20,7 @@ function getMockUserRequirements(): PropertyFilters {
 }
 
 
-export function RecommendedProperties() {
+function RecommendedProperties() {
   const [properties, setProperties] = useState<Property[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
