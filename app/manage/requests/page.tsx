@@ -2,7 +2,7 @@
 import { getPropertyRequests } from '@/services/inquiry/property-requests';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@neup/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
-import { AlertCircle, User, MapPin, Home, DollarSign, BedDouble, Bath } from 'lucide-react';
+import { AlertCircle, User, MapPin, Home, DollarSign, BedDouble, Bath, ClipboardList } from 'lucide-react';
 import { RelativeTime } from '@/components/manage/relative-time';
 import { Badge } from '@neup/components/ui/badge';
 
@@ -11,13 +11,16 @@ export default async function PropertyRequestsPage() {
 
     return (
         <div className="space-y-6">
-            <div>
-                <h2 className="text-2xl font-semibold leading-none tracking-tight">
-                    Property Requests
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                    {requests.length} {requests.length === 1 ? 'request' : 'requests'} received. Newest first.
-                </p>
+            <div className="flex flex-col items-start gap-3">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/15 text-primary">
+                    <ClipboardList aria-hidden="true" className="h-6 w-6" />
+                </span>
+                <div>
+                    <h1 className="text-2xl font-semibold tracking-tight">Property Requests</h1>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                        {requests.length} {requests.length === 1 ? 'request' : 'requests'} received. Newest first.
+                    </p>
+                </div>
             </div>
             <div>
                 {requests.length > 0 ? (

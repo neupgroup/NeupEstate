@@ -9,7 +9,7 @@ import { Input } from '@neup/components/ui/input';
 import { Button } from '@neup/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@neup/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
-import { Loader2, Search, Bookmark, AlertCircle, ExternalLink, User } from 'lucide-react';
+import { Loader2, Search, Bookmark, AlertCircle, ExternalLink, User, Clock3, History, ArrowUpRight } from 'lucide-react';
 import { Property, User as UserType } from '@/types';
 import { getSavedPropertiesForUser, getUsersBySavedProperty } from '@/services/properties/single/engage/view';
 import { Link } from '@neup/components/ui/link';
@@ -35,58 +35,67 @@ export function SavedPropertiesDashboard({ initialSavedProperties }: { initialSa
     const [userPropertiesResult, setUserPropertiesResult] = useState<Property[] | null>(null);
     const [propertyUsersResult, setPropertyUsersResult] = useState<UserType[] | null>(null);
 
-    const userForm = useForm<{ userId: string }>({ defaultValues: { userId: '' } });
-    const propertyForm = useForm<{ propertyId: string }>({ defaultValues: { propertyId: '' } });
+    const searchForm = useForm<{ query: string }>({ defaultValues: { query: '' } });
+    const [searchMode, setSearchMode] = useState<'by' | 'for' | null>(null);
+    const [searchValue, setSearchValue] = useState('');
+    const [searchError, setSearchError] = useState('');
 
-    const handleUserSearch = (data: { userId: string }) => {
+    const handleSavedActivitySearch = ({ query }: { query: string }) => {
+        const match = query.trim().match(/^(by|for):\s*(\S+)$/i);
         setUserPropertiesResult(null);
-        startUserSearchTransition(async () => {
-            const properties = await getSavedPropertiesForUser(data.userId);
-            setUserPropertiesResult(properties);
-        });
-    };
-
-    const handlePropertySearch = (data: { propertyId: string }) => {
         setPropertyUsersResult(null);
-        startPropertySearchTransition(async () => {
-            const users = await getUsersBySavedProperty(data.propertyId);
-            setPropertyUsersResult(users);
-        });
+        setSearchError('');
+
+        if (!match) {
+            setSearchMode(null);
+            setSearchValue('');
+            setSearchError('Use by:<userId> to find their saved properties, or for:<propertyId> to find everyone who saved a property.');
+            return;
+        }
+
+        const [, mode, value] = match;
+        setSearchMode(mode.toLowerCase() as 'by' | 'for');
+        setSearchValue(value);
+        if (mode.toLowerCase() === 'by') {
+            startUserSearchTransition(async () => setUserPropertiesResult(await getSavedPropertiesForUser(value)));
+        } else {
+            startPropertySearchTransition(async () => setPropertyUsersResult(await getUsersBySavedProperty(value)));
+        }
     };
 
     return (
         <div className="space-y-6 max-w-6xl mx-auto">
-            <Card>
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2"><Bookmark /> Saved Properties Management</CardTitle>
-                    <CardDescription>
+            <header className="flex flex-col items-start gap-3">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/15 text-primary">
+                    <Bookmark aria-hidden="true" className="h-6 w-6" />
+                </span>
+                <div>
+                    <h1 className="text-2xl font-semibold tracking-tight">Saved Properties Management</h1>
+                    <p className="mt-1 text-sm text-muted-foreground">
                         View recent activity and query saved property data across users.
-                    </CardDescription>
+                    </p>
+                </div>
+            </header>
+            <Card>
+                <CardHeader className="pb-3">
+                    <div className="flex items-start gap-3">
+                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><Search aria-hidden="true" className="h-5 w-5" /></span>
+                        <div><CardTitle>Search saved activity</CardTitle><CardDescription className="mt-1">Search in this format: by:<span className="font-medium">userId</span> or for:<span className="font-medium">propertyId</span>.</CardDescription></div>
+                    </div>
                 </CardHeader>
-                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                     <form onSubmit={userForm.handleSubmit(handleUserSearch)} className="space-y-2">
-                        <Label htmlFor="userId">Find properties saved by user</Label>
-                        <div className="flex gap-2">
-                            <Input id="userId" placeholder="Enter User ID" {...userForm.register("userId")} />
-                            <Button htmlType="submit" disabled={isSearchingUser}>
-                                {isSearchingUser ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
-                            </Button>
-                        </div>
+                <CardContent>
+                    <form onSubmit={searchForm.handleSubmit(handleSavedActivitySearch)} className="flex gap-2">
+                        <Input id="savedActivityQuery" aria-label="Search saved activity" placeholder="by:userId or for:propertyId" {...searchForm.register('query')} />
+                        <Button htmlType="submit" disabled={isSearchingUser || isSearchingProperty} aria-label="Search">
+                            {isSearchingUser || isSearchingProperty ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+                        </Button>
                     </form>
-                     <form onSubmit={propertyForm.handleSubmit(handlePropertySearch)} className="space-y-2">
-                        <Label htmlFor="propertyId">Find users who saved property</Label>
-                        <div className="flex gap-2">
-                            <Input id="propertyId" placeholder="Enter Property ID" {...propertyForm.register("propertyId")} />
-                            <Button htmlType="submit" disabled={isSearchingProperty}>
-                                 {isSearchingProperty ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
-                            </Button>
-                        </div>
-                    </form>
+                    {searchError && <p role="alert" className="mt-2 text-sm text-destructive">{searchError}</p>}
                 </CardContent>
             </Card>
 
             {userPropertiesResult && (
-                <SearchResultDisplay title={`Properties Saved by User ${userForm.getValues("userId")}`}>
+                <SearchResultDisplay title={`Properties saved by ${searchMode === 'by' ? searchValue : 'user'}`}>
                     {userPropertiesResult.length > 0 ? (
                         <Table>
                             <TableHeader><TableRow><TableHead>Property</TableHead><TableHead>Location</TableHead></TableRow></TableHeader>
@@ -106,7 +115,7 @@ export function SavedPropertiesDashboard({ initialSavedProperties }: { initialSa
             )}
 
             {propertyUsersResult && (
-                 <SearchResultDisplay title={`Users Who Saved Property ${propertyForm.getValues("propertyId")}`}>
+                 <SearchResultDisplay title={`Saves for property ${searchValue}`}>
                     {propertyUsersResult.length > 0 ? (
                          <Table>
                             <TableHeader><TableRow><TableHead>User</TableHead><TableHead>Email</TableHead></TableRow></TableHeader>
@@ -127,10 +136,14 @@ export function SavedPropertiesDashboard({ initialSavedProperties }: { initialSa
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Latest Saved Properties</CardTitle>
-                    <CardDescription>
-                        Showing the 20 most recently saved properties across all users.
-                    </CardDescription>
+                    <div className="flex items-start gap-3">
+                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><History aria-hidden="true" className="h-5 w-5" /></span>
+                        <div>
+                            <CardTitle>Latest saved properties</CardTitle>
+                            <CardDescription className="mt-1">Showing the 20 most recently saved properties across all users.</CardDescription>
+                        </div>
+                        <span className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground"><Clock3 className="h-3.5 w-3.5" />{initialSavedProperties.length}</span>
+                    </div>
                 </CardHeader>
                 <CardContent>
                     {initialSavedProperties.length > 0 ? (
@@ -146,8 +159,8 @@ export function SavedPropertiesDashboard({ initialSavedProperties }: { initialSa
                                 {initialSavedProperties.map((item) => (
                                     <TableRow key={`${item.userId}-${item.propertyId}`}>
                                         <TableCell>
-                                            <Link href={`/manage/properties/${item.propertyId}/edit`} className="font-medium hover:underline flex items-center gap-1">
-                                                {item.propertyTitle} <ExternalLink className="h-3 w-3" />
+                                            <Link href={`/manage/properties/${item.propertyId}/edit`} className="group/link flex items-center gap-1 font-medium hover:text-primary hover:underline">
+                                                {item.propertyTitle} <ArrowUpRight className="h-3 w-3 opacity-60 group-hover/link:opacity-100" />
                                             </Link>
                                         </TableCell>
                                         <TableCell>

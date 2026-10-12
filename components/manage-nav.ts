@@ -1,6 +1,5 @@
 import type { ComponentType } from "react";
 import {
-  Activity,
   Banknote,
   BarChart2,
   Bell,
@@ -65,7 +64,6 @@ export const manageNav: ManageNavItem[] = [
   { type: "link", href: "/manage/report", label: "Report", icon: FileBarChart },
   { type: "link", href: "/manage/team", label: "Team", icon: Users },
   { type: "link", href: "/manage/accounts", label: "Users", icon: UserCog },
-  { type: "link", href: "/manage/site", label: "Site", icon: Activity },
   { type: "link", href: "/manage/settings", label: "Settings", icon: Settings },
   { type: "link", href: "/manage/support", label: "Support", icon: LifeBuoy },
 ];
