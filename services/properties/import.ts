@@ -16,6 +16,7 @@ and one-to-many data, plus root-level many-to-one and many-to-many lookups.
 import type { ExtractedPropertyData } from '@/types';
 import { addProperty } from '@/services/properties/update';
 import { logger } from "@neup/logica/logger";
+import { areaValueToSqm } from '@/types';
 
 type JsonObject = Record<string, unknown>;
 type RelationshipType = '1-to-1' | '1-to-n' | 'n-to-1' | 'n-to-n';
@@ -270,7 +271,7 @@ function normalizePropertyData(data: Record<string, unknown>): ExtractedProperty
   const category = Array.isArray(data.categories) ? data.categories[0] : data.category;
   const type = Array.isArray(data.types) ? data.types[0] : data.type;
   const purpose = Array.isArray(data.purposes) ? data.purposes[0] : data.purpose;
-  const areaValue = isObject(data.area) ? data.area.sqft : data.area;
+  const areaValue = isObject(data.area) ? areaValueToSqm(data.area as any) : data.area;
 
   return {
     isPropertyPage: true,

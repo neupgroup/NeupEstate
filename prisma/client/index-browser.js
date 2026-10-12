@@ -153,7 +153,6 @@ exports.Prisma.PropertyScalarFieldEnum = {
   currency: 'currency',
   displayPrice: 'displayPrice',
   displayPriceUnit: 'displayPriceUnit',
-  areaUnit: 'areaUnit',
   locationText: 'locationText',
   geoLocation: 'geoLocation',
   structuredLocation: 'structuredLocation',

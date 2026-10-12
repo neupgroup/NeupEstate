@@ -21,7 +21,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Card, CardContent, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { PropertyDetailRenderNotice } from '@/components/property-detail-render-notice';
 import type { Property } from '@/types';
-import { areaValueToSqft } from '@/types';
+import { areaValueToSqm } from '@/types';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { getHiddenPriceLabel } from '@/services/properties/price-display';
 import { getPropertySlugId } from '@/services/properties/slug';
@@ -112,15 +112,6 @@ function formatOptionalText(value: unknown): string {
   }
 
   return value == null ? 'N/A' : String(value);
-}
-
-function formatSummaryArea(area: number | null | undefined, areaUnit: string | null | undefined): string {
-  if (typeof area !== 'number' || Number.isNaN(area) || area <= 0) {
-    return 'N/A';
-  }
-
-  const normalizedUnit = typeof areaUnit === 'string' && areaUnit.trim().length > 0 ? areaUnit : 'sqft';
-  return `${area.toLocaleString()} ${normalizedUnit}`;
 }
 
 function hasPositiveValue(value: number | null | undefined): value is number {
@@ -320,8 +311,8 @@ function generateSchema(property: Property) {
             floorSize: {
                 '@type': 'QuantitativeValue',
                 value: property.area,
-                unitCode: property.areaUnit === 'sqft' ? 'FTK' : 'MTK', // FTK for square foot, MTK for square meter
-                unitText: property.areaUnit,
+                unitCode: 'MTK',
+                unitText: 'm²',
             }
         }),
         ...(property.bedrooms && { numberOfRooms: property.bedrooms }),
@@ -634,7 +625,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
               <div className="mt-6 border-t pt-6">
                   <h2 className="text-2xl font-headline font-semibold mb-4">Land Details</h2>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-2">
-                      {property.landDetails.area && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Area</p><p className="font-semibold">{areaValueToSqft(property.landDetails.area).toLocaleString()} {property.landDetails.areaUnit}</p></div>}
+                      {property.landDetails.area && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Area</p><p className="font-semibold">{areaValueToSqm(property.landDetails.area).toLocaleString()} m²</p></div>}
                       {property.landDetails.frontage && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Frontage</p><p className="font-semibold">{property.landDetails.frontage} ft</p></div>}
                       {property.landDetails.depth && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Depth</p><p className="font-semibold">{property.landDetails.depth} ft</p></div>}
                       {property.landDetails.facing && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Facing</p><p className="font-semibold">{property.landDetails.facing}</p></div>}
@@ -662,7 +653,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
                           {safePlots.map((plot) => (
                               <TableRow key={plot.id}>
                                   <TableCell className="font-medium">{plot.id}</TableCell>
-                                  <TableCell>{areaValueToSqft(plot.area).toLocaleString()} {plot.areaUnit}</TableCell>
+                                  <TableCell>{areaValueToSqm(plot.area).toLocaleString()} m²</TableCell>
                                   <TableCell>{plot.frontage ? `${plot.frontage} ft` : 'N/A'}</TableCell>
                                   <TableCell>{plot.zoning || 'N/A'}</TableCell>
                                   <TableCell>{plot.topography || 'N/A'}</TableCell>
@@ -677,7 +668,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
               <div className="mt-6 border-t pt-6">
                   <h2 className="text-2xl font-headline font-semibold mb-4">Apartment Building Details</h2>
                    <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-2">
-                      {(property.apartmentDetails as any).buildingArea && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Building Area</p><p className="font-semibold">{(property.apartmentDetails as any).buildingArea} {(property.apartmentDetails as any).areaUnit}</p></div>}
+                      {(property.apartmentDetails as any).buildingArea && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Building Area</p><p className="font-semibold">{(property.apartmentDetails as any).buildingArea} m²</p></div>}
                       {property.apartmentDetails.furnishing && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Furnishing</p><p className="font-semibold">{property.apartmentDetails.furnishing}</p></div>}
                       {(property.apartmentDetails as any).buildStart && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Built</p><p className="font-semibold">{(property.apartmentDetails as any).buildStart} - {(property.apartmentDetails as any).buildCompleted}</p></div>}
                   </div>
@@ -695,7 +686,7 @@ export default async function PropertyDetailPage({ params }: { params: Promise<{
                               </CardHeader>
                               <CardContent>
                                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                      {unit.area && <div className="flex items-center gap-2"><SquareGanttChart className="h-4 w-4 text-muted-foreground" /> {areaValueToSqft(unit.area).toLocaleString()} {unit.areaUnit}</div>}
+                                      {unit.area && <div className="flex items-center gap-2"><SquareGanttChart className="h-4 w-4 text-muted-foreground" /> {areaValueToSqm(unit.area).toLocaleString()} m²</div>}
                                       {unit.furnishing && <div className="flex items-center gap-2"><Box className="h-4 w-4 text-muted-foreground" /> {unit.furnishing}</div>}
                                       {unit.bedrooms && <div className="flex items-center gap-2"><BedDouble className="h-4 w-4 text-muted-foreground" /> {unit.bedrooms} Beds</div>}
                                       {unit.bathrooms && <div className="flex items-center gap-2"><Bath className="h-4 w-4 text-muted-foreground" /> {unit.bathrooms} Baths</div>}

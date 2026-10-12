@@ -47,9 +47,7 @@ const FIELD_LABELS: Record<string, string> = {
     type: "Property nature",
     types: "Property nature",
     area: "Area",
-    areaUnit: "Area unit",
     "landDetails.area": "Land area",
-    "landDetails.areaUnit": "Land area unit",
     "landDetails.facing": "Land facing",
     "pricing.currency": "Currency",
     "pricing.basis": "Price basis",
@@ -210,7 +208,7 @@ export function ProgressivePropertySections({
             section: "specifics",
             title: "Property Specifics",
             description: "Enter the size, age, floors, and structural details.",
-            fields: ["area", "areaUnit", "buildStart", "buildCompleted", "facing", "landDetails.facing", "floors", "onFloor", "landDetails", "plots", "apartmentUnits"],
+            fields: ["area", "buildStart", "buildCompleted", "facing", "landDetails.facing", "floors", "onFloor", "landDetails", "plots", "apartmentUnits"],
             render: () => <PropertySpecificsSection control={form.control} category={category} fieldChangeNotes={fieldChangeNotes} />,
         },
         ...(categories.includes("Land") ? [] : [{

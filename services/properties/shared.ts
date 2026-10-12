@@ -118,7 +118,6 @@ export const BRIDGE_PROPERTY_FIELDS = [
   'bedrooms',
   'bathrooms',
   'area',
-  'areaUnit',
   'facing',
   'buildStart',
   'buildCompleted',
@@ -160,7 +159,7 @@ export const BRIDGE_PROPERTY_FIELDS = [
 
 export const DEFAULT_BRIDGE_PROPERTY_FIELDS = [
   'id', 'title', 'purpose', 'category', 'type', 'price',
-  'location', 'area', 'areaUnit', 'bedrooms', 'bathrooms', 'images',
+  'location', 'area', 'bedrooms', 'bathrooms', 'images',
 ] as const satisfies readonly BridgePropertyField[];
 
 export const BRIDGE_PROPERTY_DEFAULT_LIMIT = 10;
@@ -265,7 +264,6 @@ export function getSpecificsValue(property: Property, path: string[]): unknown {
     },
     space: {
       area: property.area,
-      areaUnit: property.areaUnit,
       floors: property.floors,
       onFloor: property.onFloor,
       roadAccess: property.roadAccess,
@@ -302,8 +300,7 @@ export function getPropertyDetailsValue(property: Property): Record<string, unkn
       rooms: getSpecificsValue(property, ['rooms']),
       space: {
         area: property.area,
-        areaUnit: property.areaUnit,
-      },
+        },
     },
   };
 }
@@ -497,7 +494,6 @@ export function mapRecord(record: any): Property {
     bedrooms,
     bathrooms,
     area,
-    areaUnit:         record.areaUnit || undefined,
     facing,
     purpose,
     purposes:         [purpose],

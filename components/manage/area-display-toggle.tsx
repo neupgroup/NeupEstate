@@ -3,15 +3,15 @@
 import { useMemo, useState } from "react";
 import { MoveDiagonal } from "lucide-react";
 
-type SystemKey = "sqft" | "sqm" | "aana" | "bigha";
+type SystemKey = "sqm" | "sqft" | "aana" | "bigha";
 
-const ORDER: SystemKey[] = ["sqft", "sqm", "aana", "bigha"];
+const ORDER: SystemKey[] = ["sqm", "sqft", "aana", "bigha"];
 
 const SQFT_PER: Record<SystemKey, number> = {
-    sqft: 1,
-    sqm: 10.7639,
-    aana: 342.25,
-    bigha: 72900,
+    sqm: 1,
+    sqft: 0.092903,
+    aana: 31.8,
+    bigha: 6772.63,
 };
 
 function formatNumber(value: number) {
@@ -19,16 +19,16 @@ function formatNumber(value: number) {
     return Number.isInteger(rounded) ? String(rounded) : String(rounded);
 }
 
-function formatAanaSystem(sqft: number) {
-    if (sqft <= 0) return "Not set";
-    let remaining = sqft;
-    const ropani = Math.floor(remaining / 5476);
-    remaining -= ropani * 5476;
-    const aana = Math.floor(remaining / 342.25);
-    remaining -= aana * 342.25;
-    const paisa = Math.floor(remaining / 85.56);
-    remaining -= paisa * 85.56;
-    const daam = Math.floor(remaining / 21.39);
+function formatAanaSystem(sqm: number) {
+    if (sqm <= 0) return "Not set";
+    let remaining = sqm;
+    const ropani = Math.floor(remaining / 508.72);
+    remaining -= ropani * 508.72;
+    const aana = Math.floor(remaining / 31.8);
+    remaining -= aana * 31.8;
+    const paisa = Math.floor(remaining / 7.95);
+    remaining -= paisa * 7.95;
+    const daam = Math.floor(remaining / 1.9875);
     const parts = [
         ["ropani", ropani],
         ["aana", aana],
@@ -43,14 +43,14 @@ function formatAanaSystem(sqft: number) {
         .join(" ");
 }
 
-function formatBighaSystem(sqft: number) {
-    if (sqft <= 0) return "Not set";
-    let remaining = sqft;
-    const bigha = Math.floor(remaining / 72900);
-    remaining -= bigha * 72900;
-    const kattha = Math.floor(remaining / 3645);
-    remaining -= kattha * 3645;
-    const dhur = Math.floor(remaining / 182.25);
+function formatBighaSystem(sqm: number) {
+    if (sqm <= 0) return "Not set";
+    let remaining = sqm;
+    const bigha = Math.floor(remaining / 6772.63);
+    remaining -= bigha * 6772.63;
+    const kattha = Math.floor(remaining / 338.63);
+    remaining -= kattha * 338.63;
+    const dhur = Math.floor(remaining / 16.93);
     const parts = [
         ["bigha", bigha],
         ["kattha", kattha],
@@ -73,7 +73,7 @@ export function AreaDisplayToggle({ value }: { value?: number | null }) {
         if (!area) return "Not set";
         if (system === "aana") return formatAanaSystem(area);
         if (system === "bigha") return formatBighaSystem(area);
-        return `${formatNumber(area / SQFT_PER[system])} ${system}`;
+        return `${formatNumber(area / SQFT_PER[system])} ${system === "sqm" ? "m²" : system}`;
     }, [value, system]);
 
     return (

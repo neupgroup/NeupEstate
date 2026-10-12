@@ -10,7 +10,7 @@ import { createPropertyDraftRequest, editUncreatedPropertyDraftRequest } from '@
 import { rewritePropertyDetails } from '@/services/intelligence/rewrite-property-details-flow';
 import { logger } from "@neup/logica/logger";
 import type { CreatePropertyInput, UpdatePropertyInput, CreatePropertyFormValues, UpdatePropertyFormValues, RewritePropertyDetailsOutput, LandDetails, PlotDetails, ApartmentUnit } from "@/types";
-import { UpdatePropertySchema, areaValueToSqft } from "@/types";
+import { UpdatePropertySchema, areaValueToSqm } from "@/types";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { hasPermission, requirePermission } from '@/services/permissions';
@@ -956,17 +956,17 @@ export async function updatePropertyAction(
         poojaRooms: validatedData.poojaRooms ?? 0,
         storeRooms: validatedData.storeRooms ?? 0,
       },
-      area: areaValueToSqft(validatedData.area),
+      area: areaValueToSqm(validatedData.area),
       amenities: validatedData.amenities?.split(',').map(a => a.trim()).filter(Boolean) || [],
       images: validatedData.images?.filter(img => img.trim() !== '') || [],
       pricing,
       owners: normalizeOwnerEntries(validatedData.owners),
       landDetails: validatedData.landDetails ? {
         ...validatedData.landDetails,
-        area: areaValueToSqft(validatedData.landDetails.area),
+        area: areaValueToSqm(validatedData.landDetails.area),
       } as unknown as LandDetails : undefined,
-      plots: validatedData.plots?.map(p => ({ ...p, area: areaValueToSqft(p.area) })) as unknown as PlotDetails[],
-      apartmentUnits: validatedData.apartmentUnits?.map(u => ({ ...u, area: areaValueToSqft(u.area) })) as unknown as ApartmentUnit[],
+      plots: validatedData.plots?.map(p => ({ ...p, area: areaValueToSqm(p.area) })) as unknown as PlotDetails[],
+      apartmentUnits: validatedData.apartmentUnits?.map(u => ({ ...u, area: areaValueToSqm(u.area) })) as unknown as ApartmentUnit[],
     };
     await updatePropertyService(id, serviceInput);
     revalidatePath('/manage/properties');

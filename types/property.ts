@@ -36,7 +36,6 @@ export const PropertyPurposeSchema = z.preprocess(
 export const PropertyPurposesSchema = z.array(z.enum(PropertyPurposeOptions)).min(1, "Please select at least one purpose.");
 export const PropertyCategorySchema = z.enum(['House', 'Bungalow', 'Villa', 'Multiplex', 'Land', 'Apartment', 'Penthouse', 'Commercial Space', 'Shop Space', 'Flat']);
 export const PropertyUsageTypeSchema = z.enum(['Residential', 'Semi-Commercial', 'Commercial', 'Industrial', 'Agricultural']);
-export const AreaUnitSchema = z.enum(['sqft', 'sqm', 'aana', 'ropani', 'bigha', 'dhur']);
 export const LandFacingSchema = z.enum(['North', 'South', 'East', 'West', 'North-East', 'North-West', 'South-East', 'South-West']);
 
 // Area value schema — matches the nested shape written by AreaInput
@@ -56,20 +55,19 @@ export const AreaValueSchema = z.object({
 }).optional();
 export type AreaValue = z.infer<typeof AreaValueSchema>;
 
-/** Convert an AreaValue object to a single sqft number for storage */
-export function areaValueToSqft(v: AreaValue | number | undefined | null): number {
+/** Convert entered area values to square metres for storage. */
+export function areaValueToSqm(v: AreaValue | number | undefined | null): number {
     if (v == null) return 0;
     if (typeof v === 'number') return v;
-    // Conversion factors to sqft
-    const ropani = (v.ropani ?? 0) * 5476;
-    const aana   = (v.aana   ?? 0) * 342.25;
-    const paisa  = (v.paisa  ?? 0) * 85.56;
-    const daam   = (v.daam   ?? 0) * 21.39;
-    const bigha  = (v.bigha  ?? 0) * 72900;
-    const kattha = (v.kattha ?? 0) * 3645;
-    const dhur   = (v.dhur   ?? 0) * 182.25;
-    const sqft   = (v.sqft   ?? 0);
-    const sqm    = (v.sqm    ?? 0) * 10.7639;
+    const ropani = (v.ropani ?? 0) * 508.72;
+    const aana   = (v.aana   ?? 0) * 31.8;
+    const paisa  = (v.paisa  ?? 0) * 7.95;
+    const daam   = (v.daam   ?? 0) * 1.9875;
+    const bigha  = (v.bigha  ?? 0) * 6772.63;
+    const kattha = (v.kattha ?? 0) * 338.63;
+    const dhur   = (v.dhur   ?? 0) * 16.93;
+    const sqft   = (v.sqft   ?? 0) * 0.092903;
+    const sqm    = (v.sqm    ?? 0);
     return ropani + aana + paisa + daam + bigha + kattha + dhur + sqft + sqm;
 }
 
@@ -79,7 +77,6 @@ export const LandZoningSchema = z.enum(['Residential', 'Commercial', 'Industrial
 export const LandTopographySchema = z.enum(['Flat', 'Hilly', 'Sloped']);
 export const LandDetailsSchema = z.object({
     area: AreaValueSchema,
-    areaUnit: AreaUnitSchema.optional(),
     frontage: z.coerce.number({invalid_type_error: "Frontage must be a number"}).optional(),
     depth: z.coerce.number({invalid_type_error: "Depth must be a number"}).optional(),
     facing: LandFacingSchema.optional(),
@@ -91,7 +88,6 @@ export type LandDetails = z.infer<typeof LandDetailsSchema>;
 export const PlotDetailsSchema = z.object({
     id: z.string().min(1, "Plot ID is required."),
     area: AreaValueSchema,
-    areaUnit: AreaUnitSchema.optional(),
     frontage: z.coerce.number({invalid_type_error: "Frontage must be a number"}).optional(),
     depth: z.coerce.number({invalid_type_error: "Depth must be a number"}).optional(),
     zoning: LandZoningSchema.optional(),
@@ -109,7 +105,6 @@ export type ApartmentDetails = z.infer<typeof ApartmentDetailsSchema>;
 export const ApartmentUnitSchema = z.object({
     id: z.string().min(1, "Unit ID is required."),
     area: AreaValueSchema,
-    areaUnit: AreaUnitSchema.optional(),
     onFloor: z.coerce.number().optional(),
     furnishing: FurnishingStatusSchema.optional(),
     bedrooms: z.coerce.number().optional(),
@@ -300,7 +295,6 @@ export interface Property {
     bedrooms: number;
     bathrooms: number;
     area: number;
-    areaUnit?: z.infer<typeof AreaUnitSchema>;
     facing?: z.infer<typeof LandFacingSchema>;
     buildStart?: number;
     buildCompleted?: number;
@@ -369,7 +363,6 @@ export const CreatePropertySchema = z.object({
 
     // Property Details
     area: AreaValueSchema,
-    areaUnit: AreaUnitSchema.optional(),
     facing: LandFacingSchema.optional(),
     buildStart: emptyStringToUndefinedInt,
     buildCompleted: emptyStringToUndefinedInt,

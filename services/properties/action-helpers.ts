@@ -251,8 +251,7 @@ export function mapPropertyToCreateFormValues(property: Property): Partial<Creat
     storeRooms: property.storeRooms,
     carParkingSpots: property.carParkingSpots,
     bikeParkingSpots: property.bikeParkingSpots,
-    area: property.area ? { sqft: property.area } : undefined,
-    areaUnit: property.areaUnit,
+    area: property.area ? { sqm: property.area } : undefined,
     facing: property.facing,
     buildStart: property.buildStart,
     buildCompleted: property.buildCompleted,
@@ -272,21 +271,21 @@ export function mapPropertyToCreateFormValues(property: Property): Partial<Creat
       ...property.landDetails,
       area: property.landDetails.area != null
         ? (typeof property.landDetails.area === 'number'
-          ? { sqft: property.landDetails.area }
+          ? { sqm: property.landDetails.area }
           : property.landDetails.area)
         : undefined,
     } : {},
     plots: (property.plots ?? []).map((plot: any) => ({
       ...plot,
       area: plot.area != null
-        ? (typeof plot.area === 'number' ? { sqft: plot.area } : plot.area)
+        ? (typeof plot.area === 'number' ? { sqm: plot.area } : plot.area)
         : undefined,
     })),
     apartmentDetails: property.apartmentDetails || {},
     apartmentUnits: (property.apartmentUnits ?? []).map((unit: any) => ({
       ...unit,
       area: unit.area != null
-        ? (typeof unit.area === 'number' ? { sqft: unit.area } : unit.area)
+        ? (typeof unit.area === 'number' ? { sqm: unit.area } : unit.area)
         : undefined,
     })),
     structuredLocation: property.structuredLocation || {},

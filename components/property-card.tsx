@@ -115,7 +115,7 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
     property.bedrooms ? `${property.bedrooms} Beds` : null,
     property.bathrooms ? `${property.bathrooms} Baths` : null,
     typeof property.area === "number" && property.area > 0
-      ? `${property.area.toLocaleString()} ${property.areaUnit === "sqft" ? "SqFt" : property.areaUnit || "SqFt"}`
+      ? `${property.area.toLocaleString()} m²`
       : null,
   ].filter((item): item is string => Boolean(item));
   

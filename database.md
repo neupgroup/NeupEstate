@@ -533,7 +533,6 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - currency varchar(10) NOT NULL
 - displayPrice numeric(18,2) NOT NULL
 - displayPriceUnit varchar(24) NOT NULL
-- areaUnit varchar(64) NOT NULL
 - locationText varchar(255) NOT NULL
 - geoLocation varchar(63) NOT NULL
 - structuredLocation text NOT NULL

@@ -1,5 +1,5 @@
 import { prisma } from '@neup/core/database/prisma';
-import { CreatePropertySchema, areaValueToSqft, type ApartmentUnit, type CreatePropertyFormValues, type CreatePropertyInput, type LandDetails, type PlotDetails } from '@/types';
+import { CreatePropertySchema, areaValueToSqm, type ApartmentUnit, type CreatePropertyFormValues, type CreatePropertyInput, type LandDetails, type PlotDetails } from '@/types';
 import { resolvePropertyCreateContext, type PropertyCreateContext } from '@/services/properties/create/context';
 import { cleanPricing, firstPositivePrice, formatLocationString, normalizeOwnerEntries } from '@/services/properties/action-helpers';
 import { logger } from '@neup/logica/logger';
@@ -27,11 +27,11 @@ export async function submitPropertyCreation(input: CreatePropertyFormValues, co
   const serviceInput: CreatePropertyInput = {
     ...validatedData, purpose: purposes[0], purposes, location: formatLocationString(validatedData.structuredLocation), price,
     details: { priceDisplayMode, showMap: validatedData.showMap ?? true, showOwnerInformation: validatedData.showOwnerInformation ?? true, isPrivate: validatedData.isPrivate ?? false },
-    area: areaValueToSqft(validatedData.area), amenities: validatedData.amenities?.split(',').map((item) => item.trim()).filter(Boolean) || [],
+    area: areaValueToSqm(validatedData.area), amenities: validatedData.amenities?.split(',').map((item) => item.trim()).filter(Boolean) || [],
     images: validatedData.images?.filter((image) => image.trim() !== '') || [], pricing: cleanPricing(validatedData.pricing), owners: normalizeOwnerEntries(validatedData.owners),
-    landDetails: validatedData.landDetails ? { ...validatedData.landDetails, area: areaValueToSqft(validatedData.landDetails.area) } as unknown as LandDetails : undefined,
-    plots: validatedData.plots?.map((plot) => ({ ...plot, area: areaValueToSqft(plot.area) })) as unknown as PlotDetails[],
-    apartmentUnits: validatedData.apartmentUnits?.map((unit) => ({ ...unit, area: areaValueToSqft(unit.area) })) as unknown as ApartmentUnit[],
+    landDetails: validatedData.landDetails ? { ...validatedData.landDetails, area: areaValueToSqm(validatedData.landDetails.area) } as unknown as LandDetails : undefined,
+    plots: validatedData.plots?.map((plot) => ({ ...plot, area: areaValueToSqm(plot.area) })) as unknown as PlotDetails[],
+    apartmentUnits: validatedData.apartmentUnits?.map((unit) => ({ ...unit, area: areaValueToSqm(unit.area) })) as unknown as ApartmentUnit[],
     agency: postingContext.postingAgencyId, agent: validatedData.listingAgentAccountId?.trim() || postingContext.propertyAgentId,
   };
   const existingDraft = await prisma.propertyChange.findFirst({ where: { accountId: actorId, status: { in: ['creation_draft', 'creation_pending', 'creating'] }, isApproved: null }, orderBy: { modifiedOn: 'desc' } });

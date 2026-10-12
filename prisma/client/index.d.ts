@@ -9074,7 +9074,6 @@ export namespace Prisma {
     currency: string | null
     displayPrice: Decimal | null
     displayPriceUnit: string | null
-    areaUnit: string | null
     locationText: string | null
     geoLocation: string | null
     structuredLocation: string | null
@@ -9100,7 +9099,6 @@ export namespace Prisma {
     currency: string | null
     displayPrice: Decimal | null
     displayPriceUnit: string | null
-    areaUnit: string | null
     locationText: string | null
     geoLocation: string | null
     structuredLocation: string | null
@@ -9126,7 +9124,6 @@ export namespace Prisma {
     currency: number
     displayPrice: number
     displayPriceUnit: number
-    areaUnit: number
     locationText: number
     geoLocation: number
     structuredLocation: number
@@ -9172,7 +9169,6 @@ export namespace Prisma {
     currency?: true
     displayPrice?: true
     displayPriceUnit?: true
-    areaUnit?: true
     locationText?: true
     geoLocation?: true
     structuredLocation?: true
@@ -9198,7 +9194,6 @@ export namespace Prisma {
     currency?: true
     displayPrice?: true
     displayPriceUnit?: true
-    areaUnit?: true
     locationText?: true
     geoLocation?: true
     structuredLocation?: true
@@ -9224,7 +9219,6 @@ export namespace Prisma {
     currency?: true
     displayPrice?: true
     displayPriceUnit?: true
-    areaUnit?: true
     locationText?: true
     geoLocation?: true
     structuredLocation?: true
@@ -9347,7 +9341,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -9402,7 +9395,6 @@ export namespace Prisma {
     currency?: boolean
     displayPrice?: boolean
     displayPriceUnit?: boolean
-    areaUnit?: boolean
     locationText?: boolean
     geoLocation?: boolean
     structuredLocation?: boolean
@@ -9454,7 +9446,6 @@ export namespace Prisma {
     currency?: boolean
     displayPrice?: boolean
     displayPriceUnit?: boolean
-    areaUnit?: boolean
     locationText?: boolean
     geoLocation?: boolean
     structuredLocation?: boolean
@@ -9490,7 +9481,6 @@ export namespace Prisma {
     currency?: boolean
     displayPrice?: boolean
     displayPriceUnit?: boolean
-    areaUnit?: boolean
     locationText?: boolean
     geoLocation?: boolean
     structuredLocation?: boolean
@@ -9526,7 +9516,6 @@ export namespace Prisma {
     currency?: boolean
     displayPrice?: boolean
     displayPriceUnit?: boolean
-    areaUnit?: boolean
     locationText?: boolean
     geoLocation?: boolean
     structuredLocation?: boolean
@@ -9550,7 +9539,7 @@ export namespace Prisma {
     customId?: boolean
   }
 
-  export type PropertyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "title" | "description" | "coverImage" | "type" | "purpose" | "status" | "currency" | "displayPrice" | "displayPriceUnit" | "areaUnit" | "locationText" | "geoLocation" | "structuredLocation" | "agency" | "agent" | "details" | "pricing" | "roadAccessDetails" | "distancing" | "earnings" | "landDetails" | "plots" | "apartmentDetails" | "metaTags" | "amenities" | "createdAt" | "updatedAt" | "isFeatured" | "isApproved" | "isDeleted" | "customId", ExtArgs["result"]["property"]>
+  export type PropertyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "title" | "description" | "coverImage" | "type" | "purpose" | "status" | "currency" | "displayPrice" | "displayPriceUnit" | "locationText" | "geoLocation" | "structuredLocation" | "agency" | "agent" | "details" | "pricing" | "roadAccessDetails" | "distancing" | "earnings" | "landDetails" | "plots" | "apartmentDetails" | "metaTags" | "amenities" | "createdAt" | "updatedAt" | "isFeatured" | "isApproved" | "isDeleted" | "customId", ExtArgs["result"]["property"]>
   export type PropertyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     media?: boolean | Property$mediaArgs<ExtArgs>
     houseDetail?: boolean | Property$houseDetailArgs<ExtArgs>
@@ -9603,7 +9592,6 @@ export namespace Prisma {
       currency: string
       displayPrice: Prisma.Decimal
       displayPriceUnit: string
-      areaUnit: string
       locationText: string
       geoLocation: string
       structuredLocation: string
@@ -10074,7 +10062,6 @@ export namespace Prisma {
     readonly currency: FieldRef<"Property", 'String'>
     readonly displayPrice: FieldRef<"Property", 'Decimal'>
     readonly displayPriceUnit: FieldRef<"Property", 'String'>
-    readonly areaUnit: FieldRef<"Property", 'String'>
     readonly locationText: FieldRef<"Property", 'String'>
     readonly geoLocation: FieldRef<"Property", 'String'>
     readonly structuredLocation: FieldRef<"Property", 'String'>
@@ -68690,7 +68677,6 @@ export namespace Prisma {
     currency: 'currency',
     displayPrice: 'displayPrice',
     displayPriceUnit: 'displayPriceUnit',
-    areaUnit: 'areaUnit',
     locationText: 'locationText',
     geoLocation: 'geoLocation',
     structuredLocation: 'structuredLocation',
@@ -69895,7 +69881,6 @@ export namespace Prisma {
     currency?: StringFilter<"Property"> | string
     displayPrice?: DecimalFilter<"Property"> | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFilter<"Property"> | string
-    areaUnit?: StringFilter<"Property"> | string
     locationText?: StringFilter<"Property"> | string
     geoLocation?: StringFilter<"Property"> | string
     structuredLocation?: StringFilter<"Property"> | string
@@ -69946,7 +69931,6 @@ export namespace Prisma {
     currency?: SortOrder
     displayPrice?: SortOrder
     displayPriceUnit?: SortOrder
-    areaUnit?: SortOrder
     locationText?: SortOrder
     geoLocation?: SortOrder
     structuredLocation?: SortOrder
@@ -70000,7 +69984,6 @@ export namespace Prisma {
     currency?: StringFilter<"Property"> | string
     displayPrice?: DecimalFilter<"Property"> | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFilter<"Property"> | string
-    areaUnit?: StringFilter<"Property"> | string
     locationText?: StringFilter<"Property"> | string
     geoLocation?: StringFilter<"Property"> | string
     structuredLocation?: StringFilter<"Property"> | string
@@ -70051,7 +70034,6 @@ export namespace Prisma {
     currency?: SortOrder
     displayPrice?: SortOrder
     displayPriceUnit?: SortOrder
-    areaUnit?: SortOrder
     locationText?: SortOrder
     geoLocation?: SortOrder
     structuredLocation?: SortOrder
@@ -70095,7 +70077,6 @@ export namespace Prisma {
     currency?: StringWithAggregatesFilter<"Property"> | string
     displayPrice?: DecimalWithAggregatesFilter<"Property"> | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringWithAggregatesFilter<"Property"> | string
-    areaUnit?: StringWithAggregatesFilter<"Property"> | string
     locationText?: StringWithAggregatesFilter<"Property"> | string
     geoLocation?: StringWithAggregatesFilter<"Property"> | string
     structuredLocation?: StringWithAggregatesFilter<"Property"> | string
@@ -74114,7 +74095,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -74165,7 +74145,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -74216,7 +74195,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -74267,7 +74245,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -74318,7 +74295,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -74354,7 +74330,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -74390,7 +74365,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -79026,7 +79000,6 @@ export namespace Prisma {
     currency?: SortOrder
     displayPrice?: SortOrder
     displayPriceUnit?: SortOrder
-    areaUnit?: SortOrder
     locationText?: SortOrder
     geoLocation?: SortOrder
     structuredLocation?: SortOrder
@@ -79066,7 +79039,6 @@ export namespace Prisma {
     currency?: SortOrder
     displayPrice?: SortOrder
     displayPriceUnit?: SortOrder
-    areaUnit?: SortOrder
     locationText?: SortOrder
     geoLocation?: SortOrder
     structuredLocation?: SortOrder
@@ -79092,7 +79064,6 @@ export namespace Prisma {
     currency?: SortOrder
     displayPrice?: SortOrder
     displayPriceUnit?: SortOrder
-    areaUnit?: SortOrder
     locationText?: SortOrder
     geoLocation?: SortOrder
     structuredLocation?: SortOrder
@@ -86520,7 +86491,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -86570,7 +86540,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -86625,7 +86594,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -86675,7 +86643,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -86741,7 +86708,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -86791,7 +86757,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -86852,7 +86817,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -86902,7 +86866,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -86952,7 +86915,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -87002,7 +86964,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -87068,7 +87029,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -87118,7 +87078,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -87168,7 +87127,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -87218,7 +87176,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -87284,7 +87241,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -87334,7 +87290,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -87384,7 +87339,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -87434,7 +87388,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -87500,7 +87453,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -87550,7 +87502,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -87600,7 +87551,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -87650,7 +87600,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -87716,7 +87665,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -87766,7 +87714,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -87816,7 +87763,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -87866,7 +87812,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -87932,7 +87877,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -87982,7 +87926,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -88032,7 +87975,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -88082,7 +88024,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -88148,7 +88089,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -88198,7 +88138,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -88248,7 +88187,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -88298,7 +88236,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -88397,7 +88334,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -88447,7 +88383,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -88536,7 +88471,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -88586,7 +88520,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -88652,7 +88585,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -88702,7 +88634,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -88752,7 +88683,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -88802,7 +88732,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -89080,7 +89009,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -89130,7 +89058,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -89897,7 +89824,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -89947,7 +89873,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -90013,7 +89938,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -90063,7 +89987,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -90113,7 +90036,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -90163,7 +90085,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -90229,7 +90150,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -90279,7 +90199,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -90329,7 +90248,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -90379,7 +90297,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -90445,7 +90362,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -90495,7 +90411,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -92821,7 +92736,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -92871,7 +92785,6 @@ export namespace Prisma {
     currency: string
     displayPrice: Decimal | DecimalJsLike | number | string
     displayPriceUnit: string
-    areaUnit: string
     locationText: string
     geoLocation: string
     structuredLocation: string
@@ -92976,7 +92889,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
@@ -93026,7 +92938,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    areaUnit?: StringFieldUpdateOperationsInput | string
     locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string

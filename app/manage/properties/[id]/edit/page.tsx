@@ -33,7 +33,6 @@ const DEFAULT_DRAFT_PROPERTY_VALUES: UpdatePropertyFormValues = {
     area: undefined,
     bedrooms: 1,
     bathrooms: 1,
-    areaUnit: 'sqft',
     kitchens: 1,
     diningRooms: 0,
     livingRooms: 1,
@@ -120,7 +119,6 @@ function mapCreationDraftToEditableProperty(id: string, data: Record<string, any
         bedrooms: extractDraftNumber(data.bedrooms),
         bathrooms: extractDraftNumber(data.bathrooms),
         area: extractDraftNumber(data.area),
-        areaUnit: data.areaUnit,
         facing: data.facing,
         buildStart: data.buildStart,
         buildCompleted: data.buildCompleted,
@@ -238,7 +236,6 @@ export default function EditPropertyPage() {
             "type",
             "types",
             "area",
-            "areaUnit",
             "landDetails",
             "plots",
             "apartmentUnits",
@@ -603,8 +600,8 @@ export default function EditPropertyPage() {
                 storeRooms: propertyData.storeRooms,
                 carParkingSpots: propertyData.carParkingSpots,
                 bikeParkingSpots: propertyData.bikeParkingSpots,
-                // area is stored as a sqft number in the DB — wrap it back into AreaValue shape
-                area: propertyData.area ? { sqft: propertyData.area } : undefined,
+                // area is stored in square metres — wrap it back into AreaValue shape
+                area: propertyData.area ? { sqm: propertyData.area } : undefined,
                 purpose: propertyData.purpose,
                 purposes: propertyData.purposes?.length ? propertyData.purposes : [propertyData.purpose],
                 categories: propertyData.category ? [propertyData.category] : [],
@@ -622,24 +619,24 @@ export default function EditPropertyPage() {
                 roadAccess: propertyData.roadAccess ?? undefined,
                 landDetails: propertyData.landDetails ? {
                     ...propertyData.landDetails,
-                    // landDetails.area is also stored as a sqft number — wrap it back
+                    // landDetails.area is also stored in square metres — wrap it back
                     area: propertyData.landDetails.area != null
                         ? (typeof propertyData.landDetails.area === 'number'
-                            ? { sqft: propertyData.landDetails.area }
+                            ? { sqm: propertyData.landDetails.area }
                             : propertyData.landDetails.area)
                         : undefined,
                 } : {},
                 plots: (propertyData.plots ?? []).map((p: any) => ({
                     ...p,
                     area: p.area != null
-                        ? (typeof p.area === 'number' ? { sqft: p.area } : p.area)
+                        ? (typeof p.area === 'number' ? { sqm: p.area } : p.area)
                         : undefined,
                 })),
                 apartmentDetails: propertyData.apartmentDetails || {},
                 apartmentUnits: (propertyData.apartmentUnits ?? []).map((u: any) => ({
                     ...u,
                     area: u.area != null
-                        ? (typeof u.area === 'number' ? { sqft: u.area } : u.area)
+                        ? (typeof u.area === 'number' ? { sqm: u.area } : u.area)
                         : undefined,
                 })),
                 structuredLocation: propertyData.structuredLocation || {},
@@ -652,7 +649,6 @@ export default function EditPropertyPage() {
                 earnings: propertyData.earnings || {},
                 owners: propertyData.owners || [],
                 documents: propertyData.documents || [],
-                areaUnit: propertyData.areaUnit,
                 facing: propertyData.facing,
                 buildStart: propertyData.buildStart,
                 buildCompleted: propertyData.buildCompleted,

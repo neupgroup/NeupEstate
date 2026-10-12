@@ -11,7 +11,7 @@ Property create and mutation services that persist core property fields, details
 import { prisma } from '@neup/core/database/prisma';
 import { logger } from "@neup/logica/logger";
 import type { CreatePropertyInput, ExtractedPropertyData, UpdatePropertyInput } from '@/types';
-import { areaValueToSqft } from '@/types';
+import { areaValueToSqm } from '@/types';
 import { mapPurposeToEnum, mapStatusToEnum, mapTypeToEnum } from '@/inapp/database/adapters';
 import slugify from 'slugify';
 import { getPropertyById } from '../properties/view';
@@ -99,7 +99,6 @@ function buildCoreData(d: Partial<CreatePropertyInput> & Record<string, any>) {
     currency:          truncate(d.pricing?.currency ?? 'NPR', 10),
     displayPrice:      d.price ?? 0,
     displayPriceUnit:  truncate(d.pricing?.basis ?? '', 24),
-    areaUnit:          truncate(d.areaUnit ?? '', 64),
     locationText:      truncate(d.location ?? '', 255),
     geoLocation:       truncate(geo, 63),
     structuredLocation: d.structuredLocation ? JSON.stringify(d.structuredLocation) : '',
@@ -263,7 +262,7 @@ export async function resolveMergedPropertyData(id: string, patch: Partial<Creat
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
 export async function upsertDetailTable(propertyId: string, type: PropertyTypeValue, d: any) {
-  const area = areaValueToSqft(d.area);
+  const area = areaValueToSqm(d.area);
   if (type === PROPERTY_TYPE.HOUSE) {
     await prisma.propertyHouseDetail.upsert({
       where: { propertyId },
