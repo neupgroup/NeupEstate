@@ -1,6 +1,6 @@
 const UPLOAD_ENDPOINTS = [
-  "https://cdn.neupgroup.com/bridge/api/v1/upload",
-  "https://cdn.neupgroup.com/bridge/api/v1/upload.php",
+  "https://cdn.neupgroup.com/bridge/api.v1/upload",
+  "https://cdn.neupgroup.com/bridge/api.v1/upload.php",
 ];
 
 type UploadPropertyMediaOptions = {
@@ -11,7 +11,7 @@ type UploadPropertyMediaOptions = {
 };
 
 function stripExtension(filename: string): string {
-  return filename.replace(/\.[^.]+@base/, "");
+  return filename.replace(/\.[^.]+$/, "");
 }
 
 async function parseUploadError(response: Response): Promise<string> {
@@ -65,6 +65,9 @@ export async function uploadPropertyMediaFile(options: UploadPropertyMediaOption
       }
 
       const payload = await response.json();
+      if (payload && typeof payload === "object" && payload.success === false) {
+        throw new Error(typeof payload.message === "string" ? payload.message : "Upload failed.");
+      }
       if (!payload || typeof payload !== "object" || payload.success !== true || typeof payload.url !== "string") {
         throw new Error("Upload completed but the server did not return a file URL.");
       }
