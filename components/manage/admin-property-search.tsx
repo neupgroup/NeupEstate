@@ -70,6 +70,8 @@ export function AdminPropertySearch() {
         const account = searchParams.get('account');
         if (brand) params.set('brand', brand);
         if (account) params.set('account', account);
+        const scope = searchParams.get('scope');
+        if (scope) params.set('scope', scope);
     }
 
     function buildParams(overrides: Record<string, string | undefined> = {}): string {

@@ -104,23 +104,3 @@ export async function cancelPropertyChangeDraftAction(changeId: string): Promise
     return { success: true };
   } catch (error) { await logger().type(`cancelPropertyChangeDraftAction ${changeId}`).data({ error: String(error), details: {} }).log(); return { success: false, error: error instanceof Error ? error.message : 'Failed to cancel property change draft.' }; }
 }
-
-
-
-/**
- * reviewPropertyChangeAction handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
- *
- * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
- */
-export async function reviewPropertyChangeAction(input: { changeId: string; propertyId?: string | null; approve: boolean; acceptedFields?: string[] }): Promise<{ success: boolean; error?: string; propertyId?: string | null }> {
-  try {
-    await requirePermission(PERMISSIONS.manage.propertyReviewApprove);
-    const accountId = await requireIdentity();
-    const request = await prisma.propertyChange.findFirst({ where: { id: input.changeId, ...(input.propertyId ? { propertyId: input.propertyId } : {}), isApproved: null } });
-    if (!request) return { success: false, error: 'Pending request not found.' };
-    if (!input.approve) { await prisma.propertyChange.update({ where: { id: request.id }, data: { isApproved: false, modifiedOn: new Date() } }); return { success: true, propertyId: request.propertyId }; }
-    if (request.status === 'deleting' && request.propertyId) await deleteProperty({ propertyId: request.propertyId }, { actorAccountId: accountId });
-    await prisma.propertyChange.update({ where: { id: request.id }, data: { isApproved: true, modifiedOn: new Date() } });
-    return { success: true, propertyId: request.propertyId };
-  } catch (error) { await logger().type(`reviewPropertyChangeAction ${input.propertyId}/${input.changeId}`).data({ error: String(error), details: {} }).log(); return { success: false, error: error instanceof Error ? error.message : 'Failed to review property change.' }; }
-}

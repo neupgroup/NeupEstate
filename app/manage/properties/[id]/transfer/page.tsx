@@ -1,4 +1,4 @@
-import { forbidden, notFound } from "next/navigation";
+import { notFound } from "next/navigation";
 import { ArrowLeftRight, ShieldCheck } from "lucide-react";
 
 import { Link } from "@neup/components/ui/link";
@@ -27,8 +27,8 @@ function getPropertyAgencyId(property: Awaited<ReturnType<typeof getPropertyById
 
 `/manage/properties/[id]/transfer` is a focused listing-transfer page for an
 existing property. It changes the listing agency and listing agent through a
-pending property-change request. It returns 404 for a missing property and 403
-for an authenticated account without the required permissions.
+pending property-change request. It returns 404 for a missing property or an authenticated account without
+the required permissions.
 
 ::private end
 ::end
@@ -39,7 +39,7 @@ export default async function TransferPropertyPage({ params }: PageProps) {
     hasPermission(PERMISSIONS.manage.propertySelfUpdate),
     hasPermission(PERMISSIONS.manage.propertySelfTransfer),
   ]);
-  if (!canUpdate || !canTransfer) forbidden();
+  if (!canUpdate || !canTransfer) notFound();
 
   const { id } = await params;
   const property = await getPropertyById(id, { includeInactive: true });

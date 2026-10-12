@@ -55,6 +55,8 @@ The `brand=<accountId>` URL param scopes the feed to listings whose property
 scopes the feed to listings whose property `agent` field matches that agent
 account. Non-root users can only request brands they are mapped to or their own
 account.
+`scope=all` requires `root.properties.view` and removes account/brand listing
+filters while retaining those URL parameters for account-management context.
 
 ::private end
 ::end
@@ -72,13 +74,24 @@ export default async function ManagePropertiesPage({
   const canViewAllProperties = await hasPermission(PERMISSIONS.root.propertiesView);
   const canViewAllAwaitingReviews = await hasPermission(PERMISSIONS.manage.propertyReviewView);
 
+  const isAllPropertiesView = sp.scope === 'all';
+  if (isAllPropertiesView && !canViewAllProperties) notFound();
+  const scopeHref = (scope: 'account' | 'all') => {
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(sp)) {
+      if (value !== undefined && key !== 'page' && key !== 'scope') params.set(key, value);
+    }
+    params.set('scope', scope);
+    return `/manage/properties?${params.toString()}`;
+  };
+
   const currentPage   = Number(sp.page) || 1;
   const query         = sp.q        || '';
   const statusParam   = sp.status   || '';
   const sellerTypeParam = sp.sellerType || '';
   const fromAgencyParam = sp.fromAgency || '';
-  const brandParam    = sp.brand?.trim() || '';
-  const accountParam  = sp.account?.trim() || '';
+  const brandParam    = isAllPropertiesView ? '' : sp.brand?.trim() || '';
+  const accountParam  = isAllPropertiesView ? '' : sp.account?.trim() || '';
   const purposeParam  = normalizePurposeFilter(sp.purpose);
   const propertyTypeParam = normalizePropertyTypeFilter(sp.propertyType);
   const locationParam = sp.location || '';
@@ -267,6 +280,21 @@ export default async function ManagePropertiesPage({
             : `${totalCount} ${countLabel} total`}
         </p>
       </div>
+
+      {canViewAllProperties && (
+        <nav aria-label="Property scope" className="flex gap-2">
+          {(['account', 'all'] as const).map((scope) => (
+            <Link
+              key={scope}
+              href={scopeHref(scope)}
+              aria-current={(scope === 'all') === isAllPropertiesView ? 'page' : undefined}
+              className={`rounded-full border px-4 py-2 text-sm ${(scope === 'all') === isAllPropertiesView ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'}`}
+            >
+              {scope === 'all' ? 'All properties' : 'Account properties'}
+            </Link>
+          ))}
+        </nav>
+      )}
 
       {/* Search */}
       <AdminPropertySearch />
