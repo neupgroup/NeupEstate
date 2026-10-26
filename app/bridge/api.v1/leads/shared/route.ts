@@ -7,6 +7,44 @@ Returns shared leads visible to the authenticated account. Supports limit and
 offset pagination. Agency accounts and agency admins can view all records;
 other accounts see leads assigned to them.
 
+Example request:
+```http
+GET /bridge/api.v1/leads/shared?limit=10&offset=0
+```
+
+Example response:
+```json
+{
+  "data": [
+    {
+      "id": "cm_sharedlead456",
+      "baseLeadId": "cm_baselead123",
+      "type": "BUYER",
+      "requirements": { "purpose": "Sale", "location": "Kathmandu" },
+      "priority": "MEDIUM",
+      "owner": "account_123",
+      "createdAt": "2026-10-27T08:15:00.000Z",
+      "updatedAt": "2026-10-27T08:15:00.000Z",
+      "client": {
+        "id": "cm_baselead123",
+        "belongsTo": "account_123",
+        "firstName": "Asha",
+        "lastName": "Sharma",
+        "contact": { "email": "asha@example.com", "phone": "+9779800000000" },
+        "contacts": [
+          { "id": "cm_contact789", "clientId": "cm_baselead123", "type": "email", "value": "asha@example.com" },
+          { "id": "cm_contact790", "clientId": "cm_baselead123", "type": "phone", "value": "+9779800000000" }
+        ],
+        "source": "website",
+        "createdAt": "2026-10-27T08:00:00.000Z",
+        "updatedAt": "2026-10-27T08:00:00.000Z"
+      }
+    }
+  ],
+  "pagination": { "limit": 10, "offset": 0, "total": 1, "hasMore": false }
+}
+```
+
 ::public end
 ::end
 */
