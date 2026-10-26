@@ -48,8 +48,8 @@ Content-Type: application/json
 
 Supported activityType values are follow_up, visit, meeting, and remarks.
 follow_up requires followUpMethod (phone call, whatsapp, or email). All types
-require non-empty remarks. Non-remarks activities require activityOn. A visit
-may include propertyId.
+require non-empty remarks. activityOn is optional and defaults to the current
+server time when omitted. A visit may include propertyId.
 
 POST example response:
 ```json
@@ -192,9 +192,6 @@ export async function POST(request: NextRequest, context: RouteContext) {
     if (activityOn !== undefined && (typeof activityOn !== 'string' || !activityOn.trim() || Number.isNaN(Date.parse(activityOn)))) {
       return NextResponse.json({ success: false, error: 'activityOn must be a valid date when provided.' }, { status: 400 });
     }
-    if (activityType !== 'remarks' && activityOn === undefined) {
-      return NextResponse.json({ success: false, error: 'A valid activityOn date is required for this activityType.' }, { status: 400 });
-    }
     if (activityType === 'follow_up' && (typeof followUpMethod !== 'string' || !followUpMethods.includes(followUpMethod as FollowUpMethod))) {
       return NextResponse.json({ success: false, error: 'followUpMethod must be phone call, whatsapp, or email for follow_up activities.' }, { status: 400 });
     }
@@ -207,7 +204,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
     const activityId = await createLeadActivity({
       leadId: id,
       activityType: activityType as LeadActivityType,
-      activityOn: typeof activityOn === 'string' ? activityOn : undefined,
+      activityOn: typeof activityOn === 'string' ? activityOn : new Date().toISOString(),
       followUpMethod: typeof followUpMethod === 'string' ? followUpMethod as FollowUpMethod : undefined,
       propertyId: typeof propertyId === 'string' ? propertyId : undefined,
       remarks,
