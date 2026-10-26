@@ -20,6 +20,40 @@ import { requireIdentity } from '@/services/properties/action-helpers';
 export const dynamic = 'force-dynamic';
 type Context = { params: Promise<{ id: string }> };
 
+/**
+ * GET /bridge/api.v1/requirements/[id]
+ * Fetch one requirement by ID. No request body or query parameters are used.
+ * Example: GET /bridge/api.v1/requirements/requirement_id
+ * Response: { "data": { "id": "requirement_id", "userId": "account_id", "purpose": "Rent", "propertyType": ["Apartment"], "minBudget": 10000, "maxBudget": 50000, "location": "Kathmandu", "paymentMethod": ["Full Cash"], "requiredTime": "within 3 months", "urgency": "within 3 months", "loan": false, "createdAt": "2026-01-01T00:00:00.000Z", "updatedAt": "2026-01-01T00:00:00.000Z" } }
+ *
+ * PATCH /bridge/api.v1/requirements/[id]
+ * Update an owned requirement. JSON fields use the same format and enum values
+ * as POST /bridge/api.v1/requirements. All fields are optional; `userId` is
+ * ignored and ownership cannot be changed.
+ * Example JSON body:
+ * {
+ *   "purpose": "Rent",
+ *   "propertyType": ["Apartment"],
+ *   "minBudget": 10000,
+ *   "maxBudget": 50000,
+ *   "location": "Kathmandu",
+ *   "paymentMethod": ["Full Cash"],
+ *   "requiredTime": "within 3 months",
+ *   "urgency": "within 3 months",
+ *   "loan": false
+ * }
+ * Success: { "success": true, "data": { "id": "requirement_id", ... } }
+ *
+ * DELETE /bridge/api.v1/requirements/[id]
+ * Delete an owned requirement. No request body or query parameters are used.
+ * Example: DELETE /bridge/api.v1/requirements/requirement_id
+ * Response: { "success": true, "id": "requirement_id" }
+ *
+ * Errors: 400 includes `details` for invalid JSON or field values; 401 means
+ * authentication is required; 404 means the requirement is missing or not
+ * owned by the authenticated account.
+ */
+
 function isUnauthorized(error: unknown): boolean {
   return error instanceof Error && 'code' in error && error.code === 'UNAUTHENTICATED';
 }
