@@ -138,6 +138,7 @@ Fields:
 Table: base_lead, Model: BaseLead
 Fields:
 > id: text PK, NOT NULL;
+> belongsTo: text NOT NULL, references account.id;
 > firstName: text NOT NULL;
 > lastName: text NOT NULL;
 > contact: jsonb NOT NULL;

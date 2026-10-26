@@ -22,9 +22,14 @@ import { PERMISSIONS } from '@/services/permission-names';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
+  let stage = 'permission-check';
   try {
     await requirePermission(PERMISSIONS.manage.selfLeadView);
+
+    stage = 'identity-resolution';
     const accountId = await requireIdentity();
+
+    stage = 'account-and-agency-lookup';
     const [account, agencyLinks] = await Promise.all([
       getAccountById(accountId),
       getAgencyAgentMapsByAgent(accountId),
@@ -37,6 +42,8 @@ export async function GET(request: NextRequest) {
     const limit = Number.isSafeInteger(requestedLimit) && requestedLimit > 0 ? Math.min(requestedLimit, 25) : 10;
     const offset = Number.isSafeInteger(requestedOffset) && requestedOffset >= 0 ? requestedOffset : 0;
     const where = canViewAll ? {} : { owner: accountId };
+
+    stage = 'shared-leads-query';
     const [leads, total] = await Promise.all([
       prisma.sharedLeads.findMany({
         where,
@@ -47,6 +54,8 @@ export async function GET(request: NextRequest) {
       }),
       prisma.sharedLeads.count({ where }),
     ]);
+
+    stage = 'response-mapping';
     const data = leads.map(({ baseLead, ...lead }) => {
       const legacy = baseLead.contact && typeof baseLead.contact === 'object'
         ? baseLead.contact as Record<string, unknown>
@@ -65,7 +74,18 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     const unauthenticated = error instanceof Error && 'code' in error && error.code === 'UNAUTHENTICATED';
     const denied = error instanceof Error && error.message.startsWith('Permission denied:');
-    await logger().type('bridge/api.v1/leads/shared:GET').data({ error: String(error), details: {} }).log();
+    const errorDetails = error instanceof Error
+      ? { name: error.name, message: error.message, stack: error.stack, cause: error.cause }
+      : { value: String(error) };
+    try {
+      await logger()
+        .type('bridge/api.v1/leads/shared:GET')
+        .data({ endpoint: '/bridge/api.v1/leads/shared', stage, error: errorDetails })
+        .error();
+    } catch (loggingError) {
+      console.error('[bridge/api.v1/leads/shared:GET] Logica error reporting failed', loggingError);
+      console.error('[bridge/api.v1/leads/shared:GET] Request failed', { stage, error: errorDetails });
+    }
     const status = unauthenticated ? 401 : denied ? 403 : 500;
     return NextResponse.json({ success: false, error: status === 401 ? 'Authentication required.' : status === 403 ? 'Forbidden.' : 'Internal server error.' }, { status });
   }
