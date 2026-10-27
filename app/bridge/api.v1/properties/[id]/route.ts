@@ -5,18 +5,21 @@
 ::public
 
 GET returns the detailed public payload for one approved property. The `id`
-path parameter identifies the property. `property.agent` is an array containing
-the main agent, and `property.supportingAgents` is an array of supporting agents.
-Agent, supporting agent, and agency objects include `id` by default. Select
-fields with nested includes:
-`?include=agent(id,name,image),supportingAgents(name,image),agency(name,image)`.
-Bare `agent`, `supportingAgents`, or `agency` selects that relation with its
-default `id` field; `agent(*)`, `supportingAgents(*)`, or `agency(*)` selects
-all documented fields for that relation.
+path parameter identifies the property. `property.listingAgent` is an array
+containing the listing owner, and `property.supportingAgents` is an array of
+supporting agents. Agent and agency objects always include `id`. Select fields
+with nested includes:
+`?include=agents(id,name,image),agency(name,image)` selects both agent arrays;
+`?include=agent(id,name,image)` is an alias for the listing agent and returns
+that data under `listingAgent`;
+`?include=listingAgent` selects only the listing agent ID, and
+`?include=supportingAgents` selects only supporting agent IDs. `agents(*)`
+selects all documented fields for both agent arrays. If `include` is omitted,
+both agent arrays are returned with `id` only.
 For agents, `displayName` is an alias for `name` and `displayImage` is an alias
 for `image`; responses always use the output keys `name` and `image`.
 Example response:
-`{"success":true,"property":{"id":"property-id","agent":[{"id":"account-id","name":"Agent Name","image":"https://example.com/agent.jpg"}],"supportingAgents":[{"id":"supporting-account-id","name":"Supporting Agent","image":"https://example.com/supporting-agent.jpg"}],"agency":{"id":"agency-id","name":"Agency Name","image":"https://example.com/logo.jpg"}}}`.
+`{"success":true,"property":{"id":"property-id","listingAgent":[{"id":"account-id","name":"Agent Name","image":"https://example.com/agent.jpg"}],"supportingAgents":[{"id":"supporting-account-id","name":"Supporting Agent","image":"https://example.com/supporting-agent.jpg"}],"agency":{"id":"agency-id","name":"Agency Name","image":"https://example.com/logo.jpg"}}}`.
 
 PATCH submits an edit request for the property identified by `id`. The body
 may include `accountId`, posting context fields, and a `property` or `data`
@@ -70,17 +73,19 @@ function splitInclude(value: string): string[] {
   return parts;
 }
 
-function parsePropertyIncludes(value?: string | null): { fields?: string[]; agent?: string[]; supportingAgents?: string[]; agency?: string[] } {
-  if (!value) return {};
+function parsePropertyIncludes(value?: string | null): { fields?: string[]; listingAgent?: string[]; supportingAgents?: string[]; agency?: string[] } {
+  if (!value) return { listingAgent: ['id'], supportingAgents: ['id'] };
   const propertyFields: string[] = [];
-  let agent: string[] | undefined;
+  let listingAgent: string[] | undefined;
   let supportingAgents: string[] | undefined;
   let agency: string[] | undefined;
+  let agentSelectionProvided = false;
   for (const selection of splitInclude(value)) {
     const match = /^([A-Za-z][A-Za-z0-9_.]*)(?:\((.*)\))?$/.exec(selection);
     if (!match) throw new Error(`Invalid include selection: ${selection}`);
     const [, field, nested] = match;
-    if (field === 'agent' || field === 'supportingAgents' || field === 'agency') {
+    if (field === 'agents' || field === 'agent' || field === 'listingAgent' || field === 'supportingAgents' || field === 'agency') {
+      if (field !== 'agency') agentSelectionProvided = true;
       const selectedFields = nested === undefined ? [] : nested === '*'
         ? [...AGENT_FIELDS]
         : splitInclude(nested);
@@ -91,7 +96,10 @@ function parsePropertyIncludes(value?: string | null): { fields?: string[]; agen
         throw new Error(`Unsupported ${field} include field.`);
       }
       const normalized = [...new Set(['id', ...selectedFields])];
-      if (field === 'agent') agent = [...new Set([...(agent ?? []), ...normalized])];
+      if (field === 'agents') {
+        listingAgent = [...new Set([...(listingAgent ?? []), ...normalized])];
+        supportingAgents = [...new Set([...(supportingAgents ?? []), ...normalized])];
+      } else if (field === 'agent' || field === 'listingAgent') listingAgent = [...new Set([...(listingAgent ?? []), ...normalized])];
       else if (field === 'supportingAgents') supportingAgents = [...new Set([...(supportingAgents ?? []), ...normalized])];
       else agency = [...new Set([...(agency ?? []), ...normalized])];
       continue;
@@ -99,7 +107,11 @@ function parsePropertyIncludes(value?: string | null): { fields?: string[]; agen
     if (nested !== undefined) throw new Error(`Nested includes are not supported for ${field}.`);
     propertyFields.push(field);
   }
-  return { fields: propertyFields.length ? propertyFields : undefined, agent, supportingAgents, agency };
+  if (!agentSelectionProvided) {
+    listingAgent = ['id'];
+    supportingAgents = ['id'];
+  }
+  return { fields: propertyFields.length ? propertyFields : undefined, listingAgent, supportingAgents, agency };
 }
 
 /* ::neup.documentation::bridge-properties-id-get-handler
@@ -122,13 +134,18 @@ const getHandler = async (req: NextRequest, context: Context) => {
     if (!property) return Response.json({ success: false, error: 'Property not found.' }, { status: 404 });
     const supportingAgentIds = (property.details as any)?.supportingAgents ?? [];
     const propertyFields = { ...property };
+    delete propertyFields.agent;
     delete propertyFields.listingAgent;
     delete propertyFields.listingAgentId;
     delete propertyFields.listingAgentImage;
     const responseProperty = {
       ...propertyFields,
-      agent: await getMainAgent(typeof property.listingAgentId === 'string' ? property.listingAgentId : null, includes.agent),
-      supportingAgents: await getSupportingAgents(Array.isArray(supportingAgentIds) ? supportingAgentIds : [], includes.supportingAgents),
+      ...(includes.listingAgent ? {
+        listingAgent: await getMainAgent(typeof property.listingAgentId === 'string' ? property.listingAgentId : null, includes.listingAgent),
+      } : {}),
+      ...(includes.supportingAgents ? {
+        supportingAgents: await getSupportingAgents(Array.isArray(supportingAgentIds) ? supportingAgentIds : [], includes.supportingAgents),
+      } : {}),
       ...(includes.agency ? { agency: await getPropertyAgency(typeof property.agency?.id === 'string' ? property.agency.id : null, includes.agency) } : {}),
     };
     return Response.json({ success: true, property: responseProperty });
