@@ -7,8 +7,14 @@
 GET returns the detailed public payload for one approved property. The `id`
 path parameter identifies the property. `property.agent` is an array containing
 the main agent, and `property.supportingAgents` is an array of supporting agents.
-Both always include `id`; `include=name,displayImage` adds those account fields.
-Example: `{"success":true,"property":{"id":"property-id","agent":[{"id":"account-id","name":"Agent Name","displayImage":"https://example.com/agent.jpg"}],"supportingAgents":[]}}`.
+Agent and agency objects include `id` by default. Select fields with nested
+includes: `?include=agent(id,name,image),agency(name,image)`. Bare `agent` or
+`agency` selects the relation with its default `id` field; `agent(*)` or
+`agency(*)` selects all documented fields for that relation.
+For agents, `displayName` is an alias for `name` and `displayImage` is an alias
+for `image`; responses always use the output keys `name` and `image`.
+Example response:
+`{"success":true,"property":{"id":"property-id","agent":[{"id":"account-id","name":"Agent Name","image":"https://example.com/agent.jpg"}],"agency":{"id":"agency-id","name":"Agency Name","image":"https://example.com/logo.jpg"},"supportingAgents":[]}}`.
 
 PATCH submits an edit request for the property identified by `id`. The body
 may include `accountId`, posting context fields, and a `property` or `data`
@@ -29,11 +35,68 @@ import { NextRequest } from 'next/server';
 import { getProperty } from '@/services/properties/single/get';
 import { updateProperty } from '@/services/properties/single/update';
 import { deleteProperty } from '@/services/properties/single/delete';
-import { getMainAgent, getSupportingAgents } from '@/services/properties/agents';
+import { getMainAgent, getPropertyAgency, getSupportingAgents } from '@/services/properties/agents';
 import { logger } from "@neup/logica/logger";
 
 export const dynamic = 'force-dynamic';
 type Context = { params: Promise<{ id: string }> };
+
+const AGENT_FIELDS = ['id', 'name', 'image'] as const;
+const AGENT_FIELD_ALIASES = ['displayName', 'displayImage'] as const;
+
+function splitInclude(value: string): string[] {
+  const parts: string[] = [];
+  let depth = 0;
+  let start = 0;
+  for (let index = 0; index < value.length; index += 1) {
+    const character = value[index];
+    if (character === '(') depth += 1;
+    else if (character === ')') {
+      depth -= 1;
+      if (depth < 0) throw new Error('Malformed include expression.');
+    } else if (character === ',' && depth === 0) {
+      const part = value.slice(start, index).trim();
+      if (!part) throw new Error('Malformed include expression.');
+      parts.push(part);
+      start = index + 1;
+    }
+  }
+  if (depth !== 0) throw new Error('Malformed include expression.');
+  const tail = value.slice(start).trim();
+  if (!tail) throw new Error('Malformed include expression.');
+  parts.push(tail);
+  return parts;
+}
+
+function parsePropertyIncludes(value?: string | null): { fields?: string[]; agent?: string[]; agency?: string[] } {
+  if (!value) return {};
+  const propertyFields: string[] = [];
+  let agent: string[] | undefined;
+  let agency: string[] | undefined;
+  for (const selection of splitInclude(value)) {
+    const match = /^([A-Za-z][A-Za-z0-9_.]*)(?:\((.*)\))?$/.exec(selection);
+    if (!match) throw new Error(`Invalid include selection: ${selection}`);
+    const [, field, nested] = match;
+    if (field === 'agent' || field === 'agency') {
+      const selectedFields = nested === undefined ? [] : nested === '*'
+        ? [...AGENT_FIELDS]
+        : splitInclude(nested);
+      if (selectedFields.some((name) =>
+        !AGENT_FIELDS.includes(name as typeof AGENT_FIELDS[number]) &&
+        !AGENT_FIELD_ALIASES.includes(name as typeof AGENT_FIELD_ALIASES[number])
+      )) {
+        throw new Error(`Unsupported ${field} include field.`);
+      }
+      const normalized = [...new Set(['id', ...selectedFields])];
+      if (field === 'agent') agent = [...new Set([...(agent ?? []), ...normalized])];
+      else agency = [...new Set([...(agency ?? []), ...normalized])];
+      continue;
+    }
+    if (nested !== undefined) throw new Error(`Nested includes are not supported for ${field}.`);
+    propertyFields.push(field);
+  }
+  return { fields: propertyFields.length ? propertyFields : undefined, agent, agency };
+}
 
 /* ::neup.documentation::bridge-properties-id-get-handler
 ::function GET property details by id
@@ -43,10 +106,16 @@ const getHandler = async (req: NextRequest, context: Context) => {
     const routeId = (await context.params).id?.trim();
     const propertyId = routeId || req.nextUrl.searchParams.get('propertyId')?.trim() || req.headers.get('propertyId')?.trim();
     const propertyCode = req.nextUrl.searchParams.get('propertyCode')?.trim() || req.nextUrl.searchParams.get('property_code')?.trim() || req.nextUrl.searchParams.get('customId')?.trim() || req.headers.get('propertyCode')?.trim() || req.headers.get('property_code')?.trim() || req.headers.get('customId')?.trim();
-    const fields = (req.nextUrl.searchParams.get('include') || req.nextUrl.searchParams.get('fields'))?.split(',').map((value) => value.trim()).filter(Boolean);
+    const includeParam = req.nextUrl.searchParams.get('include') ?? req.nextUrl.searchParams.get('fields');
+    let includes: ReturnType<typeof parsePropertyIncludes>;
+    try {
+      includes = parsePropertyIncludes(includeParam);
+    } catch (error) {
+      return Response.json({ success: false, error: error instanceof Error ? error.message : 'Invalid include expression.' }, { status: 400 });
+    }
+    const fields = includes.fields;
     const property = await getProperty({ propertyId, propertyCode, fields });
     if (!property) return Response.json({ success: false, error: 'Property not found.' }, { status: 404 });
-    const include = fields ?? [];
     const supportingAgentIds = (property.details as any)?.supportingAgents ?? [];
     const propertyFields = { ...property };
     delete propertyFields.listingAgent;
@@ -54,8 +123,9 @@ const getHandler = async (req: NextRequest, context: Context) => {
     delete propertyFields.listingAgentImage;
     const responseProperty = {
       ...propertyFields,
-      agent: await getMainAgent(typeof property.listingAgentId === 'string' ? property.listingAgentId : null, include),
-      supportingAgents: await getSupportingAgents(Array.isArray(supportingAgentIds) ? supportingAgentIds : [], include),
+      agent: await getMainAgent(typeof property.listingAgentId === 'string' ? property.listingAgentId : null, includes.agent),
+      supportingAgents: await getSupportingAgents(Array.isArray(supportingAgentIds) ? supportingAgentIds : [], includes.agent),
+      ...(includes.agency ? { agency: await getPropertyAgency(typeof property.agency?.id === 'string' ? property.agency.id : null, includes.agency) } : {}),
     };
     return Response.json({ success: true, property: responseProperty });
   }
