@@ -61,6 +61,7 @@ export async function getPaginatedProperties(opts: {
   agentAccountId?: string;
   agencyIds?: string[];
   excludeArchived?: boolean;
+  statuses?: string[];
   orderBy?: 'newestFirst' | 'oldestFirst';
 } = {}): Promise<{ properties: Property[]; totalCount: number }> {
   try {
@@ -79,6 +80,36 @@ export async function getPaginatedProperties(opts: {
     if (filters.id) where.id = filters.id;
     if (filters.ids?.length) where.id = { in: filters.ids };
     if (filters.status) where.status = mapStatusToEnum(filters.status);
+    if (opts.statuses?.length) {
+      const normalizedStatuses = [...new Set(opts.statuses.map((status) => status.trim().toLowerCase().replace(/[\s-]+/g, '_')))];
+      const statusValues = normalizedStatuses
+        .filter((status) => status !== 'rejected' && status !== 'draft' && status !== 'drafts')
+        .map((status) => mapStatusToEnum(status));
+      const statusConditions: any[] = [];
+      if (statusValues.length) statusConditions.push({ status: { in: [...new Set(statusValues)] } });
+
+      const exceptionalStatusQueries: Promise<Array<{ id: string }>>[] = [];
+      if (normalizedStatuses.includes('rejected')) {
+        exceptionalStatusQueries.push(prisma.$queryRaw<Array<{ id: string }>>`
+          SELECT "id" FROM "property" WHERE "status"::text = 'REJECTED'
+        `);
+      }
+      if (normalizedStatuses.includes('draft') || normalizedStatuses.includes('drafts')) {
+        exceptionalStatusQueries.push(prisma.$queryRaw<Array<{ id: string }>>`
+          SELECT "id" FROM "property" WHERE "status"::text IN ('DRAFT', 'DRAFTS')
+        `);
+      }
+      if (exceptionalStatusQueries.length) {
+        const exceptionalRows = (await Promise.all(exceptionalStatusQueries)).flat();
+        const exceptionalIds = exceptionalRows.map((row) => row.id);
+        if (exceptionalIds.length) statusConditions.push({ id: { in: exceptionalIds } });
+      }
+
+      if (normalizedStatuses.includes('draft') || normalizedStatuses.includes('drafts')) {
+        statusConditions.push({ status: PROPERTY_STATUS.AWAITING_CREATION });
+      }
+      andClauses.push({ OR: statusConditions.length ? statusConditions : [{ id: { in: [] } }] });
+    }
     if (filters.isOwnerListing === true) where.agency = null;
     if (filters.isOwnerListing === false) where.agency = { not: null };
     if (filters.purpose?.length) where.purpose = { in: filters.purpose.map(mapPurposeToEnum) };
@@ -497,7 +528,7 @@ export async function getBridgePropertiesByAccount(opts: BridgePropertyQuery): P
   }
 }
 
-export type ListPropertiesInput = { limit: number; offset: number; filters: PropertyFilters; agencyId?: string; agentId?: string; orderBy: 'newestFirst' | 'oldestFirst'; fields?: string[] };
+export type ListPropertiesInput = { limit: number; offset: number; filters: PropertyFilters; agencyId?: string; agentId?: string; orderBy: 'newestFirst' | 'oldestFirst'; fields?: string[]; statuses?: string[] };
 
 
 
@@ -512,6 +543,7 @@ export async function listProperties(input: ListPropertiesInput): Promise<Bridge
     limit: input.limit,
     offset: input.offset,
     filters: input.filters,
+    statuses: input.statuses,
     includeInactive: true,
     agencyIds: input.agencyId ? [input.agencyId] : undefined,
     agentAccountId: input.agentId,
