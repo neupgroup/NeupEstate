@@ -5,21 +5,19 @@
 ::public
 
 GET returns the detailed public payload for one approved property. The `id`
-path parameter identifies the property. `property.listingAgent` is an array
-containing the listing owner, and `property.supportingAgents` is an array of
-supporting agents. Agent and agency objects always include `id`. Select fields
-with nested includes:
-`?include=agents(id,name,image),agency(name,image)` selects both agent arrays;
-`?include=agent(id,name,image)` is an alias for the listing agent and returns
-that data under `listingAgent`;
-`?include=listingAgent` selects only the listing agent ID, and
-`?include=supportingAgents` selects only supporting agent IDs. `agents(*)`
-selects all documented fields for both agent arrays. If `include` is omitted,
-both agent arrays are returned with `id` only.
-For agents, `displayName` is an alias for `name` and `displayImage` is an alias
-for `image`; responses always use the output keys `name` and `image`.
+path parameter identifies the property. Use `representatives.*` to return the
+listing owner, agents, agency, and property owners. Select a subset with
+`representatives.listingOwner`, `representatives.agents`,
+`representatives.agent`, `representatives.agency`, or
+`representatives.owners`. `representatives.agents` includes supporting agents
+and includes the listing owner when that account is an agent;
+`representatives.agent` includes only the listing owner when that account is an
+agent. Representative entries include `id`, a `type`, and available names and
+images. Agent entries also include a `role` identifying the listing owner or a
+supporting agent. Example request:
+`GET /bridge/api.v1/properties/property-id?include=representatives.*`.
 Example response:
-`{"success":true,"property":{"id":"property-id","listingAgent":[{"id":"account-id","name":"Agent Name","image":"https://example.com/agent.jpg"}],"supportingAgents":[{"id":"supporting-account-id","name":"Supporting Agent","image":"https://example.com/supporting-agent.jpg"}],"agency":{"id":"agency-id","name":"Agency Name","image":"https://example.com/logo.jpg"}}}`.
+`{"success":true,"property":{"id":"property-id","representatives":[{"id":"account-id","type":"agent","role":"listingOwner","name":"Agent Name","image":"https://example.com/agent.jpg"},{"id":"supporting-account-id","type":"agent","role":"supportingAgent","name":"Supporting Agent","image":"https://example.com/supporting-agent.jpg"},{"id":"agency-id","type":"agency","name":"Agency Name","image":"https://example.com/logo.jpg"},{"id":"owner-id","type":"owner","name":"Property Owner","isPrimaryOwner":true}]}}`.
 
 PATCH submits an edit request for the property identified by `id`. The body
 may include `accountId`, posting context fields, and a `property` or `data`
@@ -40,14 +38,30 @@ import { NextRequest } from 'next/server';
 import { getProperty } from '@/services/properties/single/get';
 import { updateProperty } from '@/services/properties/single/update';
 import { deleteProperty } from '@/services/properties/single/delete';
-import { getMainAgent, getPropertyAgency, getSupportingAgents } from '@/services/properties/agents';
+import { getPropertyAgentRepresentatives } from '@/services/properties/representatives/agents';
+import { getPropertyAgencyRepresentative } from '@/services/properties/representatives/agencies';
+import { getPropertyOwnerRepresentatives } from '@/services/properties/representatives/owners';
 import { logger } from "@neup/logica/logger";
 
 export const dynamic = 'force-dynamic';
 type Context = { params: Promise<{ id: string }> };
 
-const AGENT_FIELDS = ['id', 'name', 'image'] as const;
-const AGENT_FIELD_ALIASES = ['displayName', 'displayImage'] as const;
+type PropertyRepresentativeSelection = {
+  all: boolean;
+  listingOwner: boolean;
+  agents: boolean;
+  agent: boolean;
+  agency: boolean;
+  owners: boolean;
+};
+const EMPTY_REPRESENTATIVE_SELECTION: PropertyRepresentativeSelection = {
+  all: false,
+  listingOwner: false,
+  agents: false,
+  agent: false,
+  agency: false,
+  owners: false,
+};
 
 function splitInclude(value: string): string[] {
   const parts: string[] = [];
@@ -73,45 +87,33 @@ function splitInclude(value: string): string[] {
   return parts;
 }
 
-function parsePropertyIncludes(value?: string | null): { fields?: string[]; listingAgent?: string[]; supportingAgents?: string[]; agency?: string[] } {
-  if (!value) return { listingAgent: ['id'], supportingAgents: ['id'] };
+function parsePropertyIncludes(value?: string | null): { fields?: string[]; representatives: PropertyRepresentativeSelection } {
+  if (!value) return { representatives: EMPTY_REPRESENTATIVE_SELECTION };
   const propertyFields: string[] = [];
-  let listingAgent: string[] | undefined;
-  let supportingAgents: string[] | undefined;
-  let agency: string[] | undefined;
-  let agentSelectionProvided = false;
+  const representatives = { ...EMPTY_REPRESENTATIVE_SELECTION };
   for (const selection of splitInclude(value)) {
+    if (selection === 'representatives.*') {
+      representatives.all = true;
+      continue;
+    }
+    if (selection.startsWith('representatives.')) {
+      const representative = selection.slice('representatives.'.length) as Exclude<keyof PropertyRepresentativeSelection, 'all'>;
+      if (!['listingOwner', 'agents', 'agent', 'agency', 'owners'].includes(representative)) {
+        throw new Error(`Unsupported representative selection: ${representative}`);
+      }
+      representatives[representative] = true;
+      continue;
+    }
+    if (/^(agent|agents|listingAgent|supportingAgents|agency)(?:\.|\(|$)/.test(selection)) {
+      throw new Error(`Legacy include '${selection.split(/[.(]/, 1)[0]}' is no longer supported. Use representatives.*.`);
+    }
     const match = /^([A-Za-z][A-Za-z0-9_.]*)(?:\((.*)\))?$/.exec(selection);
     if (!match) throw new Error(`Invalid include selection: ${selection}`);
     const [, field, nested] = match;
-    if (field === 'agents' || field === 'agent' || field === 'listingAgent' || field === 'supportingAgents' || field === 'agency') {
-      if (field !== 'agency') agentSelectionProvided = true;
-      const selectedFields = nested === undefined ? [] : nested === '*'
-        ? [...AGENT_FIELDS]
-        : splitInclude(nested);
-      if (selectedFields.some((name) =>
-        !AGENT_FIELDS.includes(name as typeof AGENT_FIELDS[number]) &&
-        !AGENT_FIELD_ALIASES.includes(name as typeof AGENT_FIELD_ALIASES[number])
-      )) {
-        throw new Error(`Unsupported ${field} include field.`);
-      }
-      const normalized = [...new Set(['id', ...selectedFields])];
-      if (field === 'agents') {
-        listingAgent = [...new Set([...(listingAgent ?? []), ...normalized])];
-        supportingAgents = [...new Set([...(supportingAgents ?? []), ...normalized])];
-      } else if (field === 'agent' || field === 'listingAgent') listingAgent = [...new Set([...(listingAgent ?? []), ...normalized])];
-      else if (field === 'supportingAgents') supportingAgents = [...new Set([...(supportingAgents ?? []), ...normalized])];
-      else agency = [...new Set([...(agency ?? []), ...normalized])];
-      continue;
-    }
     if (nested !== undefined) throw new Error(`Nested includes are not supported for ${field}.`);
     propertyFields.push(field);
   }
-  if (!agentSelectionProvided) {
-    listingAgent = ['id'];
-    supportingAgents = ['id'];
-  }
-  return { fields: propertyFields.length ? propertyFields : undefined, listingAgent, supportingAgents, agency };
+  return { fields: propertyFields.length ? propertyFields : undefined, representatives };
 }
 
 /* ::neup.documentation::bridge-properties-id-get-handler
@@ -129,7 +131,10 @@ const getHandler = async (req: NextRequest, context: Context) => {
     } catch (error) {
       return Response.json({ success: false, error: error instanceof Error ? error.message : 'Invalid include expression.' }, { status: 400 });
     }
-    const fields = includes.fields;
+    const fields = [...new Set([
+      ...(includes.fields ?? []),
+      ...(includes.representatives.all || includes.representatives.owners ? ['owners'] : []),
+    ])];
     const property = await getProperty({ propertyId, propertyCode, fields });
     if (!property) return Response.json({ success: false, error: 'Property not found.' }, { status: 404 });
     const supportingAgentIds = (property.details as any)?.supportingAgents ?? [];
@@ -138,15 +143,29 @@ const getHandler = async (req: NextRequest, context: Context) => {
     delete propertyFields.listingAgent;
     delete propertyFields.listingAgentId;
     delete propertyFields.listingAgentImage;
+    delete propertyFields.supportingAgents;
+    delete propertyFields.agency;
+    delete propertyFields.owner;
+    delete propertyFields.owners;
+    const { representatives: representativeSelection } = includes;
+    const [agentRepresentatives, agencyRepresentatives, ownerRepresentatives] = await Promise.all([
+      getPropertyAgentRepresentatives({
+        listingOwnerId: typeof property.listingAgentId === 'string' ? property.listingAgentId : null,
+        supportingAgentIds: Array.isArray(supportingAgentIds) ? supportingAgentIds : [],
+        includeListingOwner: representativeSelection.all || representativeSelection.listingOwner,
+        includeAgents: representativeSelection.all || representativeSelection.agents || representativeSelection.agent,
+        includeSupportingAgents: representativeSelection.all || representativeSelection.agents,
+      }),
+      representativeSelection.all || representativeSelection.agency
+        ? getPropertyAgencyRepresentative(property.isOwnerListing === false && property.agency?.id !== 'unknown' ? property.agency?.id : null)
+        : Promise.resolve([]),
+      representativeSelection.all || representativeSelection.owners
+        ? Promise.resolve(getPropertyOwnerRepresentatives(Array.isArray(property.owners) ? property.owners : []))
+        : Promise.resolve([]),
+    ]);
     const responseProperty = {
       ...propertyFields,
-      ...(includes.listingAgent ? {
-        listingAgent: await getMainAgent(typeof property.listingAgentId === 'string' ? property.listingAgentId : null, includes.listingAgent),
-      } : {}),
-      ...(includes.supportingAgents ? {
-        supportingAgents: await getSupportingAgents(Array.isArray(supportingAgentIds) ? supportingAgentIds : [], includes.supportingAgents),
-      } : {}),
-      ...(includes.agency ? { agency: await getPropertyAgency(typeof property.agency?.id === 'string' ? property.agency.id : null, includes.agency) } : {}),
+      representatives: [...agentRepresentatives, ...agencyRepresentatives, ...ownerRepresentatives],
     };
     return Response.json({ success: true, property: responseProperty });
   }
