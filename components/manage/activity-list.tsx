@@ -106,15 +106,23 @@ function formatFollowUpMethod(method: string) {
     return formatActivityType(method);
 }
 
-function formatLocalDateTime(value: string | Date) {
+function formatActivityDateTime(value: string | Date, useLocalTime: boolean) {
     const date = value instanceof Date ? value : new Date(value);
-    return date.toLocaleString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-        hour: 'numeric',
-        minute: '2-digit',
-    });
+    if (Number.isNaN(date.getTime())) return '';
+
+    // Use UTC for SSR and the matching first client render, then local time after hydration.
+    const getMonth = useLocalTime ? date.getMonth.bind(date) : date.getUTCMonth.bind(date);
+    const getDate = useLocalTime ? date.getDate.bind(date) : date.getUTCDate.bind(date);
+    const getFullYear = useLocalTime ? date.getFullYear.bind(date) : date.getUTCFullYear.bind(date);
+    const getHours = useLocalTime ? date.getHours.bind(date) : date.getUTCHours.bind(date);
+    const getMinutes = useLocalTime ? date.getMinutes.bind(date) : date.getUTCMinutes.bind(date);
+    const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][getMonth()];
+    const hours = getHours();
+    const hour = hours % 12 || 12;
+    const minute = String(getMinutes()).padStart(2, '0');
+    const meridiem = hours < 12 ? 'AM' : 'PM';
+
+    return `${month} ${getDate()}, ${getFullYear()} at ${hour}:${minute} ${meridiem}`;
 }
 
 function toLocalInputValue(date: Date) {
@@ -371,6 +379,11 @@ function ActivityComposer({
 export function ActivityList({ activities, leads = [], showLead = false, leadId, properties = [] }: ActivityListProps) {
     const leadMap = useMemo(() => Object.fromEntries(leads.map((lead) => [lead.id, lead])), [leads]);
     const propertiesMap = useMemo(() => new Map(properties.map((property) => [property.id, property])), [properties]);
+    const [hasHydrated, setHasHydrated] = useState(false);
+
+    useEffect(() => {
+        setHasHydrated(true);
+    }, []);
 
     if (activities.length === 0) {
         return (
@@ -419,7 +432,7 @@ export function ActivityList({ activities, leads = [], showLead = false, leadId,
                                         <div className="min-w-0">
                                             <p className="font-semibold">{formatActivityType(activityType)}</p>
                                             <p className="text-xs text-muted-foreground">
-                                                {formatLocalDateTime(activity.activityOn)} · by {activity.activityBy}
+                                                {formatActivityDateTime(activity.activityOn, hasHydrated)} · by {activity.activityBy}
                                             </p>
                                         </div>
                                         <Badge variant="outline" className="capitalize">
