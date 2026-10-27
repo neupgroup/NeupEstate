@@ -157,10 +157,7 @@ export const BRIDGE_PROPERTY_FIELDS = [
   'documents',
 ] as const satisfies readonly BridgePropertyField[];
 
-export const DEFAULT_BRIDGE_PROPERTY_FIELDS = [
-  'id', 'title', 'purpose', 'category', 'type', 'price',
-  'location', 'area', 'bedrooms', 'bathrooms', 'images',
-] as const satisfies readonly BridgePropertyField[];
+export const DEFAULT_BRIDGE_PROPERTY_FIELDS = BRIDGE_PROPERTY_FIELDS;
 
 export const BRIDGE_PROPERTY_DEFAULT_LIMIT = 10;
 export const BRIDGE_PROPERTY_MAX_LIMIT = 15;

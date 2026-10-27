@@ -512,6 +512,7 @@ export async function listProperties(input: ListPropertiesInput): Promise<Bridge
     limit: input.limit,
     offset: input.offset,
     filters: input.filters,
+    includeInactive: true,
     agencyIds: input.agencyId ? [input.agencyId] : undefined,
     agentAccountId: input.agentId,
     orderBy: input.orderBy,

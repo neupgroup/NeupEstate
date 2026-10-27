@@ -4,18 +4,21 @@
 
 ::public
 
-GET returns active properties in a paginated response. It accepts `limit` and
-`offset` (or `page`), plus `query` for term lookup, `agency` or `agent` for ownership
-filtering, and `orderBy=newestFirst|oldestFirst` for creation/update order.
+GET returns properties of every status in a paginated response. It does not
+filter by status. Each property includes all supported fields, including the
+`status` field.
+
+It accepts `limit` and `offset` (or `page`), plus `query` for term lookup,
+`agency` or `agent` for ownership filtering, and `orderBy=newestFirst|oldestFirst`
+for creation/update order.
 The limit defaults to 25 and is capped at 100; explicit offset takes precedence over page.
 Additional property filters such as `location`, `purpose`, `category`,
 `minPrice`, `maxPrice`, `minBedrooms`, and `maxBedrooms` are supported.
-Use `include` to request optional fields. Defaults include title, purpose,
-category, price, location, area, bedrooms, bathrooms, and images.
+All supported property fields are returned by default, including `status`.
+`include` (or `fields`) may be used to select a subset of those fields.
 
 GET response fields include `success`, `properties`, `totalCount`, `page`,
-`limit`, `totalPages`, and `appliedFilters`. Properties are limited to active
-approved listings by default.
+`limit`, `totalPages`, and `appliedFilters`.
 
 POST creates a property submission as an awaiting-review draft. The request
 body must include `accountId` and a `property` object, or the equivalent
@@ -50,7 +53,7 @@ const getHandler = async (req: NextRequest) => {
     const number = (key: string, fallback: number) => { const value = Number(q.get(key)); return Number.isInteger(value) && value >= 0 ? value : fallback; };
     const split = (key: string) => q.get(key)?.split(',').map((value) => value.trim()).filter(Boolean);
     const value = (key: string) => q.get(key) || undefined;
-    const parsed = PropertyFiltersSchema.omit({ status: true }).safeParse({ searchTerm: q.get('search') || q.get('q') || q.get('query') || undefined, id: value('id'), ids: split('ids'), minPrice: value('minPrice'), maxPrice: value('maxPrice'), location: value('location'), purpose: split('purpose'), category: split('category'), type: split('type'), minArea: value('minArea'), maxArea: value('maxArea'), agencyName: value('agencyName'), listingAgent: value('listingAgent'), isOwnerListing: q.get('isOwnerListing') === 'true' ? true : q.get('isOwnerListing') === 'false' ? false : undefined, postedAfter: value('postedAfter'), postedBefore: value('postedBefore'), minFloors: value('minFloors'), maxFloors: value('maxFloors'), minRoadAccess: value('minRoadAccess'), maxRoadAccess: value('maxRoadAccess'), bedrooms: value('bedrooms'), bathrooms: value('bathrooms'), listingBy: split('listingBy'), kitchens: value('kitchens'), diningRooms: value('diningRooms'), livingRooms: value('livingRooms'), carParkingSpots: value('carParkingSpots'), bikeParkingSpots: value('bikeParkingSpots'), tags: split('tags'), minBedrooms: value('minBedrooms'), maxBedrooms: value('maxBedrooms'), minBathrooms: value('minBathrooms'), maxBathrooms: value('maxBathrooms'), minKitchens: value('minKitchens'), maxKitchens: value('maxKitchens'), minDiningRooms: value('minDiningRooms'), maxDiningRooms: value('maxDiningRooms'), minLivingRooms: value('minLivingRooms'), maxLivingRooms: value('maxLivingRooms'), minCarParkingSpots: value('minCarParkingSpots'), maxCarParkingSpots: value('maxCarParkingSpots'), minBikeParkingSpots: value('minBikeParkingSpots'), maxBikeParkingSpots: value('maxBikeParkingSpots') });
+    const parsed = PropertyFiltersSchema.omit({ status: true }).safeParse({ searchTerm: q.get('search') || q.get('q') || q.get('query') || undefined, id: value('id'), ids: split('ids'), minPrice: value('minPrice'), maxPrice: value('maxPrice'), location: value('location'), purpose: split('purpose'), category: split('category'), type: split('type'), minArea: value('minArea'), maxArea: value('maxArea'), agencyName: value('agencyName'), listingAgent: value('listingAgent'), isOwnerListing: q.get('isOwnerListing') === 'true' ? true : q.get('isOwnerListing') === 'false' ? false : undefined, postedAfter: value('postedAfter'), postedBefore: value('postedBefore'), minFloors: value('minFloors'), maxFloors: value('maxFloors'), minRoadAccess: value('minRoadAccess'), maxRoadAccess: value('maxRoadAccess'), bedrooms: value('bedrooms'), bathrooms: value('bathrooms'), listingBy: split('listingBy'), kitchens: value('kitchens'), diningRooms: value('diningRooms'), livingRooms: value('livingRooms'), carParkingSpots: value('carParkingSpots'), bikeParkingSpots: value('bikeParkingSpots'), tags: split('tags'), minBedrooms: value('minBedrooms'), maxBedrooms: value('maxBedrooms'), minBathrooms: value('minBathrooms'), maxBathrooms: value('maxBathrooms'), minKitchens: value('minKitchens'), maxKitchens: value('maxKitchens'), minDiningRooms: value('minDiningRooms'), maxDiningRooms: value('maxDiningRooms'), minLivingRooms: value('minLivingRooms'), maxLivingRooms: value('maxLivingRooms'), minCarParkingSpots: value('minCarParkingSpots'), maxCarParkingSpots: value('maxCarParkingSpots'), minBikeParkingSpots: value('minBikeParkingSpots') });
     if (!parsed.success) return Response.json({ success: false, error: 'Invalid search filters.', details: parsed.error.flatten().fieldErrors }, { status: 400 });
     const limit = Math.min(Math.max(number('limit', 25), 1), 100); const offset = q.has('offset') ? number('offset', 0) : (Math.max(number('page', 1), 1) - 1) * limit;
     const fields = (q.get('include') || q.get('fields'))?.split(',').map((value) => value.trim()).filter(Boolean);

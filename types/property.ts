@@ -311,7 +311,7 @@ export interface Property {
     isOwnerListing?: boolean;
     isFeatured?: boolean;
     isApproved?: boolean;
-    status?: 'AWAITING_DELETION' | 'PENDING' | 'ACTIVE' | 'SOLD' | 'RENTED' | 'ARCHIVED';
+    status?: 'AWAITING_CREATION' | 'AWAITING_DELETION' | 'PENDING' | 'ACTIVE' | 'SOLD' | 'RENTED' | 'ARCHIVED';
     createdAt?: string; // ISO 8601 date string
     updatedAt?: string; // ISO 8601 date string
     embedding?: number[];

@@ -124,6 +124,7 @@ export function mapStatusToEnum(value?: string | null): PropertyStatus {
     case 'archived':
       return PROPERTY_STATUS.ARCHIVED;
     case 'pending':
+      return PROPERTY_STATUS.PENDING;
     default:
       return PROPERTY_STATUS.PENDING;
   }
