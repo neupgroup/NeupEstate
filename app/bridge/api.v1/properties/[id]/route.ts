@@ -5,8 +5,10 @@
 ::public
 
 GET returns the detailed public payload for one approved property. The `id`
-path parameter identifies the property. Optional `include` may select additional
-returned property fields.
+path parameter identifies the property. `property.agent` is an array containing
+the main agent, and `property.supportingAgents` is an array of supporting agents.
+Both always include `id`; `include=name,displayImage` adds those account fields.
+Example: `{"success":true,"property":{"id":"property-id","agent":[{"id":"account-id","name":"Agent Name","displayImage":"https://example.com/agent.jpg"}],"supportingAgents":[]}}`.
 
 PATCH submits an edit request for the property identified by `id`. The body
 may include `accountId`, posting context fields, and a `property` or `data`
@@ -27,6 +29,7 @@ import { NextRequest } from 'next/server';
 import { getProperty } from '@/services/properties/single/get';
 import { updateProperty } from '@/services/properties/single/update';
 import { deleteProperty } from '@/services/properties/single/delete';
+import { getMainAgent, getSupportingAgents } from '@/services/properties/agents';
 import { logger } from "@neup/logica/logger";
 
 export const dynamic = 'force-dynamic';
@@ -42,7 +45,19 @@ const getHandler = async (req: NextRequest, context: Context) => {
     const propertyCode = req.nextUrl.searchParams.get('propertyCode')?.trim() || req.nextUrl.searchParams.get('property_code')?.trim() || req.nextUrl.searchParams.get('customId')?.trim() || req.headers.get('propertyCode')?.trim() || req.headers.get('property_code')?.trim() || req.headers.get('customId')?.trim();
     const fields = (req.nextUrl.searchParams.get('include') || req.nextUrl.searchParams.get('fields'))?.split(',').map((value) => value.trim()).filter(Boolean);
     const property = await getProperty({ propertyId, propertyCode, fields });
-    return property ? Response.json({ success: true, property }) : Response.json({ success: false, error: 'Property not found.' }, { status: 404 });
+    if (!property) return Response.json({ success: false, error: 'Property not found.' }, { status: 404 });
+    const include = fields ?? [];
+    const supportingAgentIds = (property.details as any)?.supportingAgents ?? [];
+    const propertyFields = { ...property };
+    delete propertyFields.listingAgent;
+    delete propertyFields.listingAgentId;
+    delete propertyFields.listingAgentImage;
+    const responseProperty = {
+      ...propertyFields,
+      agent: await getMainAgent(typeof property.listingAgentId === 'string' ? property.listingAgentId : null, include),
+      supportingAgents: await getSupportingAgents(Array.isArray(supportingAgentIds) ? supportingAgentIds : [], include),
+    };
+    return Response.json({ success: true, property: responseProperty });
   }
   catch (err) {
     await logger().type('bridge/api.v1/properties/[id]:GET').data({ error: String(err), details: {} }).log();
