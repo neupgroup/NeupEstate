@@ -9,8 +9,8 @@ parameter to return only matching statuses, for example
 `?status=drafts,pending,rejected,active`. Supported values are `drafts`,
 `pending`, `rejected`, `active`, `sold`, `rented`, `archived`,
 `awaiting_creation`, and `awaiting_deletion`; `draft` and `approved` are also
-accepted aliases. If omitted, no status filter is applied. Each property
-includes all supported fields, including `status`.
+accepted aliases. If omitted, the endpoint returns only `active` properties.
+Each property includes all supported fields, including `status`.
 
 It accepts `limit` and `offset` (or `page`), plus `query` for term lookup,
 `agency` or `agent` for ownership filtering, and `orderBy=newestFirst|oldestFirst`
@@ -21,8 +21,8 @@ Additional property filters such as `location`, `purpose`, `category`,
 All supported property fields are returned by default, including `status`.
 `include` (or `fields`) may be used to select a subset of those fields.
 
-Example request: `GET /bridge/api.v1/properties?status=drafts,pending&limit=25`.
-Example response: `{"success":true,"properties":[{"id":"property-id","status":"PENDING"}],"totalCount":1,"limit":25,"offset":0,"page":1,"totalPages":1,"appliedFilters":{"status":["drafts","pending"]}}`.
+Example request: `GET /bridge/api.v1/properties` returns active properties by default. `GET /bridge/api.v1/properties?status=rejected&limit=25` returns rejected properties only.
+Example response for `status=rejected`: `{"success":true,"properties":[{"id":"property-id","status":"REJECTED"}],"totalCount":1,"limit":25,"offset":0,"page":1,"totalPages":1,"appliedFilters":{"status":["rejected"]}}`.
 
 GET response fields include `success`, `properties`, `totalCount`, `page`,
 `limit`, `totalPages`, and `appliedFilters`.
@@ -65,12 +65,13 @@ const getHandler = async (req: NextRequest) => {
     if (requestedStatuses && (!requestedStatuses.length || requestedStatuses.some((status) => !status || !allowedStatuses.has(status)))) {
       return Response.json({ success: false, error: 'Invalid status filter.', allowedStatuses: [...allowedStatuses] }, { status: 400 });
     }
+    const statuses = requestedStatuses ?? ['active'];
     const parsed = PropertyFiltersSchema.omit({ status: true }).safeParse({ searchTerm: q.get('search') || q.get('q') || q.get('query') || undefined, id: value('id'), ids: split('ids'), minPrice: value('minPrice'), maxPrice: value('maxPrice'), location: value('location'), purpose: split('purpose'), category: split('category'), type: split('type'), minArea: value('minArea'), maxArea: value('maxArea'), agencyName: value('agencyName'), listingAgent: value('listingAgent'), isOwnerListing: q.get('isOwnerListing') === 'true' ? true : q.get('isOwnerListing') === 'false' ? false : undefined, postedAfter: value('postedAfter'), postedBefore: value('postedBefore'), minFloors: value('minFloors'), maxFloors: value('maxFloors'), minRoadAccess: value('minRoadAccess'), maxRoadAccess: value('maxRoadAccess'), bedrooms: value('bedrooms'), bathrooms: value('bathrooms'), listingBy: split('listingBy'), kitchens: value('kitchens'), diningRooms: value('diningRooms'), livingRooms: value('livingRooms'), carParkingSpots: value('carParkingSpots'), bikeParkingSpots: value('bikeParkingSpots'), tags: split('tags'), minBedrooms: value('minBedrooms'), maxBedrooms: value('maxBedrooms'), minBathrooms: value('minBathrooms'), maxBathrooms: value('maxBathrooms'), minKitchens: value('minKitchens'), maxKitchens: value('maxKitchens'), minDiningRooms: value('minDiningRooms'), maxDiningRooms: value('maxDiningRooms'), minLivingRooms: value('minLivingRooms'), maxLivingRooms: value('maxLivingRooms'), minCarParkingSpots: value('minCarParkingSpots'), maxCarParkingSpots: value('maxCarParkingSpots'), minBikeParkingSpots: value('minBikeParkingSpots') });
     if (!parsed.success) return Response.json({ success: false, error: 'Invalid search filters.', details: parsed.error.flatten().fieldErrors }, { status: 400 });
     const limit = Math.min(Math.max(number('limit', 25), 1), 100); const offset = q.has('offset') ? number('offset', 0) : (Math.max(number('page', 1), 1) - 1) * limit;
     const fields = (q.get('include') || q.get('fields'))?.split(',').map((value) => value.trim()).filter(Boolean);
-    const result = await listProperties({ limit, offset, filters: parsed.data, statuses: requestedStatuses, agencyId: q.get('agency') || undefined, agentId: q.get('agent') || undefined, fields, orderBy: q.get('orderBy') === 'oldestFirst' ? 'oldestFirst' : 'newestFirst' });
-    return Response.json({ success: true, properties: result.properties, totalCount: result.totalCount, limit, offset, page: Math.floor(offset / limit) + 1, totalPages: Math.ceil(result.totalCount / limit), appliedFilters: { ...parsed.data, ...(requestedStatuses ? { status: requestedStatuses } : {}) } }, { status: 200 });
+    const result = await listProperties({ limit, offset, filters: parsed.data, statuses, agencyId: q.get('agency') || undefined, agentId: q.get('agent') || undefined, fields, orderBy: q.get('orderBy') === 'oldestFirst' ? 'oldestFirst' : 'newestFirst' });
+    return Response.json({ success: true, properties: result.properties, totalCount: result.totalCount, limit, offset, page: Math.floor(offset / limit) + 1, totalPages: Math.ceil(result.totalCount / limit), appliedFilters: { ...parsed.data, status: statuses } }, { status: 200 });
   }
   catch (err) {
     await logger().type('bridge/api.v1/properties:GET').data({ error: String(err), details: {} }).log();
