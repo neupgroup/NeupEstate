@@ -123,7 +123,7 @@ export async function getPaginatedProperties(opts: {
       andClauses.push({ type: { in: categories } });
     }
     if (filters.agencyName) where.agency = { contains: filters.agencyName, mode: 'insensitive' };
-    if (filters.listingAgent) where.agent = { contains: filters.listingAgent, mode: 'insensitive' };
+    if (filters.listingAgent) where.listingOwner = { contains: filters.listingAgent, mode: 'insensitive' };
     if (filters.minBedrooms != null || filters.maxBedrooms != null) {
       where.bedrooms = {
         ...(Number.isFinite(filters.minBedrooms) ? { gte: filters.minBedrooms } : {}),
@@ -133,7 +133,7 @@ export async function getPaginatedProperties(opts: {
     if (Number.isFinite(filters.minPrice)) where.displayPrice = { ...where.displayPrice, gte: filters.minPrice };
     if (Number.isFinite(filters.maxPrice)) where.displayPrice = { ...where.displayPrice, lte: filters.maxPrice };
     if (opts.ownerAccountId) where.owners = { some: { ownerClientId: opts.ownerAccountId } };
-    if (opts.agentAccountId) ownershipClauses.push({ agent: opts.agentAccountId });
+    if (opts.agentAccountId) ownershipClauses.push({ listingOwner: opts.agentAccountId });
     if (opts.agencyIds?.length) ownershipClauses.push({ agency: { in: opts.agencyIds } });
     if (ownershipClauses.length > 0) {
       andClauses.push({ OR: ownershipClauses });
@@ -477,7 +477,7 @@ export async function getAwaitingReviewItems(
  */
 export async function getPropertiesByAgent(agentId: string, opts: { includeInactive?: boolean } = {}): Promise<Property[]> {
   try {
-    const where: any = { agent: agentId };
+    const where: any = { listingOwner: agentId };
     if (!opts.includeInactive) where.status = PROPERTY_STATUS.ACTIVE;
     const records = await prisma.property.findMany({ where, orderBy: { updatedAt: 'desc' }, include: PROPERTY_INCLUDE });
     return hydratePropertyAccountLabels(records.map(mapRecord));
@@ -498,7 +498,7 @@ export async function getBridgePropertiesByAccount(opts: BridgePropertyQuery): P
     const where: any = {};
 
     if (opts.agencyId) where.agency = opts.agencyId;
-    if (opts.agentId) where.agent = opts.agentId;
+    if (opts.agentId) where.listingOwner = opts.agentId;
     if (!opts.includeInactive) where.status = PROPERTY_STATUS.ACTIVE;
 
     const [totalCount, records] = await Promise.all([

@@ -157,7 +157,7 @@ exports.Prisma.PropertyScalarFieldEnum = {
   geoLocation: 'geoLocation',
   structuredLocation: 'structuredLocation',
   agency: 'agency',
-  agent: 'agent',
+  listingOwner: 'listingOwner',
   details: 'details',
   pricing: 'pricing',
   roadAccessDetails: 'roadAccessDetails',

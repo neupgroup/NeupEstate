@@ -441,6 +441,8 @@ export type CreatePropertyInput =
     location: string;
     area: number;
     agency?: string | null;
+    listingOwner?: string | null;
+    /** @deprecated Use listingOwner for persisted property ownership. */
     agent?: string | null;
     amenities: string[];
     images: string[];

@@ -115,14 +115,14 @@ async function getAgencyReportData(agencyAccountId: string) {
       isDeleted: false,
       OR: [
         { agency: agencyAccountId },
-        { agent: { in: memberIds } },
+        { listingOwner: { in: memberIds } },
       ],
     },
     select: {
       id: true,
       slug: true,
       title: true,
-      agent: true,
+      listingOwner: true,
       status: true,
       isApproved: true,
       createdAt: true,
@@ -235,8 +235,8 @@ async function getAgencyReportData(agencyAccountId: string) {
   }
 
   for (const property of properties) {
-    if (!property.agent) continue;
-    const agentSummary = agentSummaryMap.get(property.agent);
+    if (!property.listingOwner) continue;
+    const agentSummary = agentSummaryMap.get(property.listingOwner);
     if (!agentSummary) continue;
 
     agentSummary.listings += 1;
@@ -249,8 +249,8 @@ async function getAgencyReportData(agencyAccountId: string) {
 
   for (const inquiry of inquiries) {
     const property = propertyById.get(inquiry.propertyId);
-    if (!property?.agent) continue;
-    const agentSummary = agentSummaryMap.get(property.agent);
+    if (!property?.listingOwner) continue;
+    const agentSummary = agentSummaryMap.get(property.listingOwner);
     if (agentSummary) {
       agentSummary.inquiries += 1;
     }
@@ -277,7 +277,7 @@ async function getAgencyReportData(agencyAccountId: string) {
       id: `property-${property.id}`,
       kind: 'property' as const,
       title: property.title,
-      meta: `${property.type} · ${property.purpose} · ${memberNameMap.get(property.agent || '') ?? 'Unassigned'}`,
+      meta: `${property.type} · ${property.purpose} · ${memberNameMap.get(property.listingOwner || '') ?? 'Unassigned'}`,
       createdAt: property.createdAt,
       href: `/manage/properties/${property.id}`,
     })),

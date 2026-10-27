@@ -9078,7 +9078,7 @@ export namespace Prisma {
     geoLocation: string | null
     structuredLocation: string | null
     agency: string | null
-    agent: string | null
+    listingOwner: string | null
     createdAt: Date | null
     updatedAt: Date | null
     isFeatured: boolean | null
@@ -9103,7 +9103,7 @@ export namespace Prisma {
     geoLocation: string | null
     structuredLocation: string | null
     agency: string | null
-    agent: string | null
+    listingOwner: string | null
     createdAt: Date | null
     updatedAt: Date | null
     isFeatured: boolean | null
@@ -9128,7 +9128,7 @@ export namespace Prisma {
     geoLocation: number
     structuredLocation: number
     agency: number
-    agent: number
+    listingOwner: number
     details: number
     pricing: number
     roadAccessDetails: number
@@ -9173,7 +9173,7 @@ export namespace Prisma {
     geoLocation?: true
     structuredLocation?: true
     agency?: true
-    agent?: true
+    listingOwner?: true
     createdAt?: true
     updatedAt?: true
     isFeatured?: true
@@ -9198,7 +9198,7 @@ export namespace Prisma {
     geoLocation?: true
     structuredLocation?: true
     agency?: true
-    agent?: true
+    listingOwner?: true
     createdAt?: true
     updatedAt?: true
     isFeatured?: true
@@ -9223,7 +9223,7 @@ export namespace Prisma {
     geoLocation?: true
     structuredLocation?: true
     agency?: true
-    agent?: true
+    listingOwner?: true
     details?: true
     pricing?: true
     roadAccessDetails?: true
@@ -9345,7 +9345,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency: string | null
-    agent: string | null
+    listingOwner: string | null
     details: JsonValue | null
     pricing: JsonValue | null
     roadAccessDetails: JsonValue | null
@@ -9399,7 +9399,7 @@ export namespace Prisma {
     geoLocation?: boolean
     structuredLocation?: boolean
     agency?: boolean
-    agent?: boolean
+    listingOwner?: boolean
     details?: boolean
     pricing?: boolean
     roadAccessDetails?: boolean
@@ -9450,7 +9450,7 @@ export namespace Prisma {
     geoLocation?: boolean
     structuredLocation?: boolean
     agency?: boolean
-    agent?: boolean
+    listingOwner?: boolean
     details?: boolean
     pricing?: boolean
     roadAccessDetails?: boolean
@@ -9485,7 +9485,7 @@ export namespace Prisma {
     geoLocation?: boolean
     structuredLocation?: boolean
     agency?: boolean
-    agent?: boolean
+    listingOwner?: boolean
     details?: boolean
     pricing?: boolean
     roadAccessDetails?: boolean
@@ -9520,7 +9520,7 @@ export namespace Prisma {
     geoLocation?: boolean
     structuredLocation?: boolean
     agency?: boolean
-    agent?: boolean
+    listingOwner?: boolean
     details?: boolean
     pricing?: boolean
     roadAccessDetails?: boolean
@@ -9539,7 +9539,7 @@ export namespace Prisma {
     customId?: boolean
   }
 
-  export type PropertyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "title" | "description" | "coverImage" | "type" | "purpose" | "status" | "currency" | "displayPrice" | "displayPriceUnit" | "locationText" | "geoLocation" | "structuredLocation" | "agency" | "agent" | "details" | "pricing" | "roadAccessDetails" | "distancing" | "earnings" | "landDetails" | "plots" | "apartmentDetails" | "metaTags" | "amenities" | "createdAt" | "updatedAt" | "isFeatured" | "isApproved" | "isDeleted" | "customId", ExtArgs["result"]["property"]>
+  export type PropertyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "title" | "description" | "coverImage" | "type" | "purpose" | "status" | "currency" | "displayPrice" | "displayPriceUnit" | "locationText" | "geoLocation" | "structuredLocation" | "agency" | "listingOwner" | "details" | "pricing" | "roadAccessDetails" | "distancing" | "earnings" | "landDetails" | "plots" | "apartmentDetails" | "metaTags" | "amenities" | "createdAt" | "updatedAt" | "isFeatured" | "isApproved" | "isDeleted" | "customId", ExtArgs["result"]["property"]>
   export type PropertyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     media?: boolean | Property$mediaArgs<ExtArgs>
     houseDetail?: boolean | Property$houseDetailArgs<ExtArgs>
@@ -9596,7 +9596,7 @@ export namespace Prisma {
       geoLocation: string
       structuredLocation: string
       agency: string | null
-      agent: string | null
+      listingOwner: string | null
       details: Prisma.JsonValue | null
       pricing: Prisma.JsonValue | null
       roadAccessDetails: Prisma.JsonValue | null
@@ -10066,7 +10066,7 @@ export namespace Prisma {
     readonly geoLocation: FieldRef<"Property", 'String'>
     readonly structuredLocation: FieldRef<"Property", 'String'>
     readonly agency: FieldRef<"Property", 'String'>
-    readonly agent: FieldRef<"Property", 'String'>
+    readonly listingOwner: FieldRef<"Property", 'String'>
     readonly details: FieldRef<"Property", 'Json'>
     readonly pricing: FieldRef<"Property", 'Json'>
     readonly roadAccessDetails: FieldRef<"Property", 'Json'>
@@ -68681,7 +68681,7 @@ export namespace Prisma {
     geoLocation: 'geoLocation',
     structuredLocation: 'structuredLocation',
     agency: 'agency',
-    agent: 'agent',
+    listingOwner: 'listingOwner',
     details: 'details',
     pricing: 'pricing',
     roadAccessDetails: 'roadAccessDetails',
@@ -69885,7 +69885,7 @@ export namespace Prisma {
     geoLocation?: StringFilter<"Property"> | string
     structuredLocation?: StringFilter<"Property"> | string
     agency?: StringNullableFilter<"Property"> | string | null
-    agent?: StringNullableFilter<"Property"> | string | null
+    listingOwner?: StringNullableFilter<"Property"> | string | null
     details?: JsonNullableFilter<"Property">
     pricing?: JsonNullableFilter<"Property">
     roadAccessDetails?: JsonNullableFilter<"Property">
@@ -69935,7 +69935,7 @@ export namespace Prisma {
     geoLocation?: SortOrder
     structuredLocation?: SortOrder
     agency?: SortOrderInput | SortOrder
-    agent?: SortOrderInput | SortOrder
+    listingOwner?: SortOrderInput | SortOrder
     details?: SortOrderInput | SortOrder
     pricing?: SortOrderInput | SortOrder
     roadAccessDetails?: SortOrderInput | SortOrder
@@ -69988,7 +69988,7 @@ export namespace Prisma {
     geoLocation?: StringFilter<"Property"> | string
     structuredLocation?: StringFilter<"Property"> | string
     agency?: StringNullableFilter<"Property"> | string | null
-    agent?: StringNullableFilter<"Property"> | string | null
+    listingOwner?: StringNullableFilter<"Property"> | string | null
     details?: JsonNullableFilter<"Property">
     pricing?: JsonNullableFilter<"Property">
     roadAccessDetails?: JsonNullableFilter<"Property">
@@ -70038,7 +70038,7 @@ export namespace Prisma {
     geoLocation?: SortOrder
     structuredLocation?: SortOrder
     agency?: SortOrderInput | SortOrder
-    agent?: SortOrderInput | SortOrder
+    listingOwner?: SortOrderInput | SortOrder
     details?: SortOrderInput | SortOrder
     pricing?: SortOrderInput | SortOrder
     roadAccessDetails?: SortOrderInput | SortOrder
@@ -70081,7 +70081,7 @@ export namespace Prisma {
     geoLocation?: StringWithAggregatesFilter<"Property"> | string
     structuredLocation?: StringWithAggregatesFilter<"Property"> | string
     agency?: StringNullableWithAggregatesFilter<"Property"> | string | null
-    agent?: StringNullableWithAggregatesFilter<"Property"> | string | null
+    listingOwner?: StringNullableWithAggregatesFilter<"Property"> | string | null
     details?: JsonNullableWithAggregatesFilter<"Property">
     pricing?: JsonNullableWithAggregatesFilter<"Property">
     roadAccessDetails?: JsonNullableWithAggregatesFilter<"Property">
@@ -74099,7 +74099,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -74149,7 +74149,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -74199,7 +74199,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -74249,7 +74249,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -74299,7 +74299,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -74334,7 +74334,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -74369,7 +74369,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -79004,7 +79004,7 @@ export namespace Prisma {
     geoLocation?: SortOrder
     structuredLocation?: SortOrder
     agency?: SortOrder
-    agent?: SortOrder
+    listingOwner?: SortOrder
     details?: SortOrder
     pricing?: SortOrder
     roadAccessDetails?: SortOrder
@@ -79043,7 +79043,7 @@ export namespace Prisma {
     geoLocation?: SortOrder
     structuredLocation?: SortOrder
     agency?: SortOrder
-    agent?: SortOrder
+    listingOwner?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isFeatured?: SortOrder
@@ -79068,7 +79068,7 @@ export namespace Prisma {
     geoLocation?: SortOrder
     structuredLocation?: SortOrder
     agency?: SortOrder
-    agent?: SortOrder
+    listingOwner?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isFeatured?: SortOrder
@@ -86495,7 +86495,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -86544,7 +86544,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -86598,7 +86598,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -86647,7 +86647,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -86712,7 +86712,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -86761,7 +86761,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -86821,7 +86821,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -86870,7 +86870,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -86919,7 +86919,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -86968,7 +86968,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -87033,7 +87033,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -87082,7 +87082,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -87131,7 +87131,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -87180,7 +87180,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -87245,7 +87245,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -87294,7 +87294,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -87343,7 +87343,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -87392,7 +87392,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -87457,7 +87457,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -87506,7 +87506,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -87555,7 +87555,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -87604,7 +87604,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -87669,7 +87669,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -87718,7 +87718,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -87767,7 +87767,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -87816,7 +87816,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -87881,7 +87881,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -87930,7 +87930,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -87979,7 +87979,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -88028,7 +88028,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -88093,7 +88093,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -88142,7 +88142,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -88191,7 +88191,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -88240,7 +88240,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -88338,7 +88338,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -88387,7 +88387,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -88475,7 +88475,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -88524,7 +88524,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -88589,7 +88589,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -88638,7 +88638,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -88687,7 +88687,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -88736,7 +88736,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -89013,7 +89013,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -89062,7 +89062,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -89828,7 +89828,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -89877,7 +89877,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -89942,7 +89942,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -89991,7 +89991,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90040,7 +90040,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90089,7 +90089,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90154,7 +90154,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90203,7 +90203,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90252,7 +90252,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90301,7 +90301,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90366,7 +90366,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90415,7 +90415,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -92740,7 +92740,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -92789,7 +92789,7 @@ export namespace Prisma {
     geoLocation: string
     structuredLocation: string
     agency?: string | null
-    agent?: string | null
+    listingOwner?: string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -92893,7 +92893,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -92942,7 +92942,7 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     structuredLocation?: StringFieldUpdateOperationsInput | string
     agency?: NullableStringFieldUpdateOperationsInput | string | null
-    agent?: NullableStringFieldUpdateOperationsInput | string | null
+    listingOwner?: NullableStringFieldUpdateOperationsInput | string | null
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue

@@ -112,7 +112,7 @@ model Property {
   geoLocation        String          @db.VarChar(63)
   structuredLocation String
   agency             String?
-  agent              String?
+  listingOwner       String?
   details            Json?
   pricing            Json?
   roadAccessDetails  Json?
@@ -151,7 +151,7 @@ model Property {
   @@index([status])
   @@index([slug], map: "property_slug_idx")
   @@index([agency])
-  @@index([agent])
+  @@index([listingOwner], map: "property_listing_owner_idx")
   @@map("property")
 }
 

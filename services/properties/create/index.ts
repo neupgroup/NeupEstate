@@ -32,7 +32,7 @@ export async function submitPropertyCreation(input: CreatePropertyFormValues, co
     landDetails: validatedData.landDetails ? { ...validatedData.landDetails, area: areaValueToSqm(validatedData.landDetails.area) } as unknown as LandDetails : undefined,
     plots: validatedData.plots?.map((plot) => ({ ...plot, area: areaValueToSqm(plot.area) })) as unknown as PlotDetails[],
     apartmentUnits: validatedData.apartmentUnits?.map((unit) => ({ ...unit, area: areaValueToSqm(unit.area) })) as unknown as ApartmentUnit[],
-    agency: postingContext.postingAgencyId, agent: validatedData.listingAgentAccountId?.trim() || postingContext.propertyAgentId,
+    agency: postingContext.postingAgencyId, listingOwner: validatedData.listingAgentAccountId?.trim() || postingContext.propertyAgentId,
   };
   const existingDraft = await prisma.propertyChange.findFirst({ where: { accountId: actorId, status: { in: ['creation_draft', 'creation_pending', 'creating'] }, isApproved: null }, orderBy: { modifiedOn: 'desc' } });
   const data = { ...serviceInput, postingAgencyId: postingContext.postingAgencyId, createdById: postingContext.createdById, createdForId: postingContext.createdForId, workingProfileId: postingContext.workingProfileId, transferToId: postingContext.transferToId, created_by: postingContext.createdById, transfer_to: postingContext.transferToId, workingProfileType: postingContext.profileType } as any;

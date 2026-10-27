@@ -335,7 +335,7 @@ Fields:
 > geoLocation: varchar(63) NOT NULL;
 > structuredLocation: text NOT NULL;
 > agency: text;
-> agent: text;
+> listingOwner: text, INDEX property_listing_owner_idx(listingOwner);
 > pricing: jsonb;
 > roadAccessDetails: jsonb;
 > distancing: jsonb;

@@ -259,7 +259,7 @@ async function getPropertyIdsForAccounts(accountIds: string[], agencyId?: string
       isDeleted: false,
       OR: [
         agencyId ? { agency: agencyId } : {},
-        accountIds.length ? { agent: { in: accountIds } } : {},
+        accountIds.length ? { listingOwner: { in: accountIds } } : {},
       ].filter((filter) => Object.keys(filter).length > 0),
     },
     select: { id: true },
