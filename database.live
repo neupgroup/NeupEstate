@@ -17,6 +17,8 @@ Fields:
 > accessed_on: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > displayImage: text;
 > displayName: text;
+> cover_image: text;
+> bio: text;
 > neup_id: text UNIQUE account_neupId_key(neup_id); account_neup_id_key(neup_id);
 > connectionId: text;
 > working_profile: text references account.id;

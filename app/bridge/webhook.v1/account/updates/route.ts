@@ -42,6 +42,8 @@ type AccountUpdatePayload = {
   profile?: {
     displayName?: string;
     displayImage?: string;
+    coverImage?: string | null;
+    bio?: string | null;
     gender?: string;
     dateOfBirth?: string;
   };
@@ -56,6 +58,8 @@ type SupportedChangedField =
   | "neupId"
   | "displayName"
   | "displayImage"
+  | "coverImage"
+  | "bio"
   | "gender"
   | "dateOfBirth"
   | "role"
@@ -145,6 +149,8 @@ function isValidPayload(input: unknown): input is AccountUpdatePayload {
     "neupId",
     "displayName",
     "displayImage",
+    "coverImage",
+    "bio",
     "gender",
     "dateOfBirth",
     "role",
@@ -291,6 +297,12 @@ async function persistAccountUpdate(
     ...(hasChangedField("displayImage") && typeof payload.profile?.displayImage === "string"
       ? { displayImage: payload.profile.displayImage }
       : {}),
+    ...(hasChangedField("coverImage") && (typeof payload.profile?.coverImage === "string" || payload.profile?.coverImage === null)
+      ? { coverImage: payload.profile.coverImage }
+      : {}),
+    ...(hasChangedField("bio") && (typeof payload.profile?.bio === "string" || payload.profile?.bio === null)
+      ? { bio: payload.profile.bio }
+      : {}),
     ...(hasChangedField("accountType") && typeof payload.account.accountType === "string"
       ? { accountType: payload.account.accountType }
       : {}),
@@ -319,6 +331,14 @@ async function persistAccountUpdate(
       displayImage:
         hasChangedField("displayImage") && typeof payload.profile?.displayImage === "string"
           ? payload.profile.displayImage
+          : null,
+      coverImage:
+        hasChangedField("coverImage") && (typeof payload.profile?.coverImage === "string" || payload.profile?.coverImage === null)
+          ? payload.profile.coverImage
+          : null,
+      bio:
+        hasChangedField("bio") && (typeof payload.profile?.bio === "string" || payload.profile?.bio === null)
+          ? payload.profile.bio
           : null,
       connectionId,
       createdOn: new Date(),

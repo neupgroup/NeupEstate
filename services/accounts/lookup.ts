@@ -15,10 +15,10 @@ export type AccountInfo = {
 
 export type AccountLookupMeta = {
   request: {
-    method: 'POST';
+    method: 'GET' | 'POST';
     url: string;
-    headers: Record<string, string>;
-    body: Record<string, string>;
+    headers?: Record<string, string>;
+    body?: Record<string, string>;
   };
   response?: {
     status: number;
@@ -164,7 +164,7 @@ export async function getAccountInformation(
       meta: {
         request: {
           method: 'POST',
-          url: '/bridge/api.v1/accounts/lookup',
+          url: '/bridge/api.v1/accounts',
           headers: { 'Content-Type': 'application/json' },
           body: {},
         },
@@ -174,13 +174,8 @@ export async function getAccountInformation(
 
   const meta: AccountLookupMeta = {
     request: {
-      method: 'POST',
-      url: '/bridge/api.v1/accounts/lookup',
-      headers: { 'Content-Type': 'application/json' },
-      body: {
-        accountId,
-        fields: ACCOUNT_LOOKUP_FIELDS.join(','),
-      },
+      method: 'GET',
+      url: `/bridge/api.v1/accounts/${encodeURIComponent(accountId)}`,
     },
   };
 

@@ -62,7 +62,7 @@ export function HeaderV1({
     const resolveSelectedProfile = async () => {
       try {
         const response = await fetch(
-          `/bridge/api.v1/accounts/lookup?accountId=${encodeURIComponent(profileIdToShow)}`,
+          `/bridge/api.v1/accounts/${encodeURIComponent(profileIdToShow)}`,
           {
             cache: "no-store",
             signal: controller.signal,
@@ -76,8 +76,8 @@ export function HeaderV1({
 
         const data = await response.json();
         const nextName =
-          typeof data?.account?.displayName === "string" && data.account.displayName.trim()
-            ? data.account.displayName.trim()
+          typeof data?.profile?.name === "string" && data.profile.name.trim()
+            ? data.profile.name.trim()
             : profileIdToShow;
 
         setSelectedProfileName(nextName);

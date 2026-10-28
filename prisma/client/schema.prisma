@@ -66,6 +66,8 @@ model Account {
   accessedOn                      DateTime                 @default(now()) @map("accessed_on")
   displayName                     String? // denormalized from NeupID — set on first create
   displayImage                    String? // denormalized from NeupID — set on first create
+  coverImage                      String?                  @map("cover_image")
+  bio                             String?
   connectionId                    String?
   workingProfile                  String?                  @map("working_profile")
   accessRows                      AccountAccess[]

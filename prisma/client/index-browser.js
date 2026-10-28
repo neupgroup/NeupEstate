@@ -128,6 +128,8 @@ exports.Prisma.AccountScalarFieldEnum = {
   accessedOn: 'accessedOn',
   displayName: 'displayName',
   displayImage: 'displayImage',
+  coverImage: 'coverImage',
+  bio: 'bio',
   connectionId: 'connectionId',
   workingProfile: 'workingProfile'
 };
