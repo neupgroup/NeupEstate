@@ -801,21 +801,6 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - divergence: model PropertyView maps to table property_views
 - divergence based on fields: database has 7 fields; Prisma model has 7 persisted scalar fields; difference 0
 
-### public.reacted_properties (ReactedProperty)
-
-- purpose: Tracks property reactions such as liked, disliked, or reported.
-- usage: Used by reaction flows, account deletion cleanup, and property engagement analytics.
-
-- id text PK, NOT NULL
-- trackedId text NOT NULL
-- propertyId text NOT NULL, FK reacted_properties_propertyId_fkey -> public.property(id)
-- onType text NOT NULL
-- reaction Reaction NOT NULL
-- reactedAt timestamp(3) NOT NULL, default CURRENT_TIMESTAMP
-
-- divergence: model ReactedProperty maps to table reacted_properties
-- divergence based on fields: database has 6 fields; Prisma model has 6 persisted scalar fields; difference 0
-
 ### public.requirements (Requirement)
 
 - purpose: Stores saved/search property requirements for a user.

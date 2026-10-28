@@ -35,12 +35,6 @@ enum PropertyStatus {
   ARCHIVED
 }
 
-enum Reaction {
-  Liked
-  Disliked
-  Reported
-}
-
 enum PropertyCompetitionStatus {
   VERIFIED
   UNVERIFIED
@@ -150,7 +144,6 @@ model Property {
   links              PropertyLink[]           @relation("PrimaryLinks")
   linkedBy           PropertyLink[]           @relation("SecondaryLinks")
   savedBy            SavedProperty[]
-  reactions          ReactedProperty[]
   views              PropertyView[]
   competitionMaps    PropertyCompetitionMap[]
   representatives    PropertyRepresentative[]
@@ -503,7 +496,7 @@ model Requirement {
 }
 
 // ============================================================================
-// Saved, Reacted, Views
+// Favourites and Views
 // ============================================================================
 
 model SavedProperty {
@@ -517,21 +510,6 @@ model SavedProperty {
   @@index([accountId])
   @@index([propertyId])
   @@map("saved_property")
-}
-
-model ReactedProperty {
-  id         String   @id @default(cuid())
-  trackedId  String
-  propertyId String
-  onType     String
-  reaction   Reaction
-  reactedAt  DateTime @default(now())
-
-  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-
-  @@index([trackedId])
-  @@index([propertyId])
-  @@map("reacted_properties")
 }
 
 model PropertyView {

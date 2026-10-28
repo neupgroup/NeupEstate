@@ -129,11 +129,6 @@ export type Requirement = $Result.DefaultSelection<Prisma.$RequirementPayload>
  */
 export type SavedProperty = $Result.DefaultSelection<Prisma.$SavedPropertyPayload>
 /**
- * Model ReactedProperty
- * 
- */
-export type ReactedProperty = $Result.DefaultSelection<Prisma.$ReactedPropertyPayload>
-/**
  * Model PropertyView
  * 
  */
@@ -330,15 +325,6 @@ export const PropertyStatus: {
 export type PropertyStatus = (typeof PropertyStatus)[keyof typeof PropertyStatus]
 
 
-export const Reaction: {
-  Liked: 'Liked',
-  Disliked: 'Disliked',
-  Reported: 'Reported'
-};
-
-export type Reaction = (typeof Reaction)[keyof typeof Reaction]
-
-
 export const PropertyCompetitionStatus: {
   VERIFIED: 'VERIFIED',
   UNVERIFIED: 'UNVERIFIED',
@@ -390,10 +376,6 @@ export const PropertyPurpose: typeof $Enums.PropertyPurpose
 export type PropertyStatus = $Enums.PropertyStatus
 
 export const PropertyStatus: typeof $Enums.PropertyStatus
-
-export type Reaction = $Enums.Reaction
-
-export const Reaction: typeof $Enums.Reaction
 
 export type PropertyCompetitionStatus = $Enums.PropertyCompetitionStatus
 
@@ -761,16 +743,6 @@ export class PrismaClient<
     * ```
     */
   get savedProperty(): Prisma.SavedPropertyDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.reactedProperty`: Exposes CRUD operations for the **ReactedProperty** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more ReactedProperties
-    * const reactedProperties = await prisma.reactedProperty.findMany()
-    * ```
-    */
-  get reactedProperty(): Prisma.ReactedPropertyDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.propertyView`: Exposes CRUD operations for the **PropertyView** model.
@@ -1548,7 +1520,6 @@ export namespace Prisma {
     Review: 'Review',
     Requirement: 'Requirement',
     SavedProperty: 'SavedProperty',
-    ReactedProperty: 'ReactedProperty',
     PropertyView: 'PropertyView',
     BaseLead: 'BaseLead',
     ClientContact: 'ClientContact',
@@ -1596,7 +1567,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "account" | "activity" | "property" | "propertyLog" | "propertyLink" | "propertyMedia" | "propertyHouseDetail" | "propertyApartmentDetail" | "propertyLandDetail" | "propertyCommercialDetail" | "propertyPrice" | "propertyOwner" | "propertyRepresentative" | "propertyDocument" | "propertyChange" | "agency" | "agencyMap" | "agencyAgentMap" | "agencyCustomization" | "agent" | "review" | "requirement" | "savedProperty" | "reactedProperty" | "propertyView" | "baseLead" | "clientContact" | "clientLink" | "sharedLeads" | "leadActivity" | "conversation" | "message" | "siteContent" | "userPreference" | "propertyRequest" | "mortgageRequest" | "salesRequest" | "visitRequest" | "problem" | "sitemapEntry" | "inquiry" | "newsletterSubscription" | "authzRole" | "application" | "accountAccess" | "roleCapability" | "authzAccountAccessGrant" | "authzAssetsAccessGrant" | "competitor" | "competitorSource" | "competitorPage" | "competitorListing" | "propertyCompetitionMap" | "competitorTracking" | "intelligenceMapping" | "intelligenceAlert"
+      modelProps: "account" | "activity" | "property" | "propertyLog" | "propertyLink" | "propertyMedia" | "propertyHouseDetail" | "propertyApartmentDetail" | "propertyLandDetail" | "propertyCommercialDetail" | "propertyPrice" | "propertyOwner" | "propertyRepresentative" | "propertyDocument" | "propertyChange" | "agency" | "agencyMap" | "agencyAgentMap" | "agencyCustomization" | "agent" | "review" | "requirement" | "savedProperty" | "propertyView" | "baseLead" | "clientContact" | "clientLink" | "sharedLeads" | "leadActivity" | "conversation" | "message" | "siteContent" | "userPreference" | "propertyRequest" | "mortgageRequest" | "salesRequest" | "visitRequest" | "problem" | "sitemapEntry" | "inquiry" | "newsletterSubscription" | "authzRole" | "application" | "accountAccess" | "roleCapability" | "authzAccountAccessGrant" | "authzAssetsAccessGrant" | "competitor" | "competitorSource" | "competitorPage" | "competitorListing" | "propertyCompetitionMap" | "competitorTracking" | "intelligenceMapping" | "intelligenceAlert"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3299,80 +3270,6 @@ export namespace Prisma {
           count: {
             args: Prisma.SavedPropertyCountArgs<ExtArgs>
             result: $Utils.Optional<SavedPropertyCountAggregateOutputType> | number
-          }
-        }
-      }
-      ReactedProperty: {
-        payload: Prisma.$ReactedPropertyPayload<ExtArgs>
-        fields: Prisma.ReactedPropertyFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.ReactedPropertyFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ReactedPropertyPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.ReactedPropertyFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ReactedPropertyPayload>
-          }
-          findFirst: {
-            args: Prisma.ReactedPropertyFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ReactedPropertyPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.ReactedPropertyFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ReactedPropertyPayload>
-          }
-          findMany: {
-            args: Prisma.ReactedPropertyFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ReactedPropertyPayload>[]
-          }
-          create: {
-            args: Prisma.ReactedPropertyCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ReactedPropertyPayload>
-          }
-          createMany: {
-            args: Prisma.ReactedPropertyCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.ReactedPropertyCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ReactedPropertyPayload>[]
-          }
-          delete: {
-            args: Prisma.ReactedPropertyDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ReactedPropertyPayload>
-          }
-          update: {
-            args: Prisma.ReactedPropertyUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ReactedPropertyPayload>
-          }
-          deleteMany: {
-            args: Prisma.ReactedPropertyDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.ReactedPropertyUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.ReactedPropertyUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ReactedPropertyPayload>[]
-          }
-          upsert: {
-            args: Prisma.ReactedPropertyUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ReactedPropertyPayload>
-          }
-          aggregate: {
-            args: Prisma.ReactedPropertyAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateReactedProperty>
-          }
-          groupBy: {
-            args: Prisma.ReactedPropertyGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ReactedPropertyGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ReactedPropertyCountArgs<ExtArgs>
-            result: $Utils.Optional<ReactedPropertyCountAggregateOutputType> | number
           }
         }
       }
@@ -5875,7 +5772,6 @@ export namespace Prisma {
     review?: ReviewOmit
     requirement?: RequirementOmit
     savedProperty?: SavedPropertyOmit
-    reactedProperty?: ReactedPropertyOmit
     propertyView?: PropertyViewOmit
     baseLead?: BaseLeadOmit
     clientContact?: ClientContactOmit
@@ -6144,7 +6040,6 @@ export namespace Prisma {
     links: number
     linkedBy: number
     savedBy: number
-    reactions: number
     views: number
     competitionMaps: number
     representatives: number
@@ -6159,7 +6054,6 @@ export namespace Prisma {
     links?: boolean | PropertyCountOutputTypeCountLinksArgs
     linkedBy?: boolean | PropertyCountOutputTypeCountLinkedByArgs
     savedBy?: boolean | PropertyCountOutputTypeCountSavedByArgs
-    reactions?: boolean | PropertyCountOutputTypeCountReactionsArgs
     views?: boolean | PropertyCountOutputTypeCountViewsArgs
     competitionMaps?: boolean | PropertyCountOutputTypeCountCompetitionMapsArgs
     representatives?: boolean | PropertyCountOutputTypeCountRepresentativesArgs
@@ -6230,13 +6124,6 @@ export namespace Prisma {
    */
   export type PropertyCountOutputTypeCountSavedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SavedPropertyWhereInput
-  }
-
-  /**
-   * PropertyCountOutputType without action
-   */
-  export type PropertyCountOutputTypeCountReactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ReactedPropertyWhereInput
   }
 
   /**
@@ -9589,7 +9476,6 @@ export namespace Prisma {
     links?: boolean | Property$linksArgs<ExtArgs>
     linkedBy?: boolean | Property$linkedByArgs<ExtArgs>
     savedBy?: boolean | Property$savedByArgs<ExtArgs>
-    reactions?: boolean | Property$reactionsArgs<ExtArgs>
     views?: boolean | Property$viewsArgs<ExtArgs>
     competitionMaps?: boolean | Property$competitionMapsArgs<ExtArgs>
     representatives?: boolean | Property$representativesArgs<ExtArgs>
@@ -9709,7 +9595,6 @@ export namespace Prisma {
     links?: boolean | Property$linksArgs<ExtArgs>
     linkedBy?: boolean | Property$linkedByArgs<ExtArgs>
     savedBy?: boolean | Property$savedByArgs<ExtArgs>
-    reactions?: boolean | Property$reactionsArgs<ExtArgs>
     views?: boolean | Property$viewsArgs<ExtArgs>
     competitionMaps?: boolean | Property$competitionMapsArgs<ExtArgs>
     representatives?: boolean | Property$representativesArgs<ExtArgs>
@@ -9733,7 +9618,6 @@ export namespace Prisma {
       links: Prisma.$PropertyLinkPayload<ExtArgs>[]
       linkedBy: Prisma.$PropertyLinkPayload<ExtArgs>[]
       savedBy: Prisma.$SavedPropertyPayload<ExtArgs>[]
-      reactions: Prisma.$ReactedPropertyPayload<ExtArgs>[]
       views: Prisma.$PropertyViewPayload<ExtArgs>[]
       competitionMaps: Prisma.$PropertyCompetitionMapPayload<ExtArgs>[]
       representatives: Prisma.$PropertyRepresentativePayload<ExtArgs>[]
@@ -10175,7 +10059,6 @@ export namespace Prisma {
     links<T extends Property$linksArgs<ExtArgs> = {}>(args?: Subset<T, Property$linksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     linkedBy<T extends Property$linkedByArgs<ExtArgs> = {}>(args?: Subset<T, Property$linkedByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     savedBy<T extends Property$savedByArgs<ExtArgs> = {}>(args?: Subset<T, Property$savedByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedPropertyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    reactions<T extends Property$reactionsArgs<ExtArgs> = {}>(args?: Subset<T, Property$reactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReactedPropertyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     views<T extends Property$viewsArgs<ExtArgs> = {}>(args?: Subset<T, Property$viewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     competitionMaps<T extends Property$competitionMapsArgs<ExtArgs> = {}>(args?: Subset<T, Property$competitionMapsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyCompetitionMapPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     representatives<T extends Property$representativesArgs<ExtArgs> = {}>(args?: Subset<T, Property$representativesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyRepresentativePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -10896,30 +10779,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SavedPropertyScalarFieldEnum | SavedPropertyScalarFieldEnum[]
-  }
-
-  /**
-   * Property.reactions
-   */
-  export type Property$reactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ReactedProperty
-     */
-    select?: ReactedPropertySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ReactedProperty
-     */
-    omit?: ReactedPropertyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReactedPropertyInclude<ExtArgs> | null
-    where?: ReactedPropertyWhereInput
-    orderBy?: ReactedPropertyOrderByWithRelationInput | ReactedPropertyOrderByWithRelationInput[]
-    cursor?: ReactedPropertyWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ReactedPropertyScalarFieldEnum | ReactedPropertyScalarFieldEnum[]
   }
 
   /**
@@ -33451,1082 +33310,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: SavedPropertyInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model ReactedProperty
-   */
-
-  export type AggregateReactedProperty = {
-    _count: ReactedPropertyCountAggregateOutputType | null
-    _min: ReactedPropertyMinAggregateOutputType | null
-    _max: ReactedPropertyMaxAggregateOutputType | null
-  }
-
-  export type ReactedPropertyMinAggregateOutputType = {
-    id: string | null
-    trackedId: string | null
-    propertyId: string | null
-    onType: string | null
-    reaction: $Enums.Reaction | null
-    reactedAt: Date | null
-  }
-
-  export type ReactedPropertyMaxAggregateOutputType = {
-    id: string | null
-    trackedId: string | null
-    propertyId: string | null
-    onType: string | null
-    reaction: $Enums.Reaction | null
-    reactedAt: Date | null
-  }
-
-  export type ReactedPropertyCountAggregateOutputType = {
-    id: number
-    trackedId: number
-    propertyId: number
-    onType: number
-    reaction: number
-    reactedAt: number
-    _all: number
-  }
-
-
-  export type ReactedPropertyMinAggregateInputType = {
-    id?: true
-    trackedId?: true
-    propertyId?: true
-    onType?: true
-    reaction?: true
-    reactedAt?: true
-  }
-
-  export type ReactedPropertyMaxAggregateInputType = {
-    id?: true
-    trackedId?: true
-    propertyId?: true
-    onType?: true
-    reaction?: true
-    reactedAt?: true
-  }
-
-  export type ReactedPropertyCountAggregateInputType = {
-    id?: true
-    trackedId?: true
-    propertyId?: true
-    onType?: true
-    reaction?: true
-    reactedAt?: true
-    _all?: true
-  }
-
-  export type ReactedPropertyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ReactedProperty to aggregate.
-     */
-    where?: ReactedPropertyWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ReactedProperties to fetch.
-     */
-    orderBy?: ReactedPropertyOrderByWithRelationInput | ReactedPropertyOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: ReactedPropertyWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ReactedProperties from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ReactedProperties.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned ReactedProperties
-    **/
-    _count?: true | ReactedPropertyCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: ReactedPropertyMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: ReactedPropertyMaxAggregateInputType
-  }
-
-  export type GetReactedPropertyAggregateType<T extends ReactedPropertyAggregateArgs> = {
-        [P in keyof T & keyof AggregateReactedProperty]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateReactedProperty[P]>
-      : GetScalarType<T[P], AggregateReactedProperty[P]>
-  }
-
-
-
-
-  export type ReactedPropertyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ReactedPropertyWhereInput
-    orderBy?: ReactedPropertyOrderByWithAggregationInput | ReactedPropertyOrderByWithAggregationInput[]
-    by: ReactedPropertyScalarFieldEnum[] | ReactedPropertyScalarFieldEnum
-    having?: ReactedPropertyScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: ReactedPropertyCountAggregateInputType | true
-    _min?: ReactedPropertyMinAggregateInputType
-    _max?: ReactedPropertyMaxAggregateInputType
-  }
-
-  export type ReactedPropertyGroupByOutputType = {
-    id: string
-    trackedId: string
-    propertyId: string
-    onType: string
-    reaction: $Enums.Reaction
-    reactedAt: Date
-    _count: ReactedPropertyCountAggregateOutputType | null
-    _min: ReactedPropertyMinAggregateOutputType | null
-    _max: ReactedPropertyMaxAggregateOutputType | null
-  }
-
-  type GetReactedPropertyGroupByPayload<T extends ReactedPropertyGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<ReactedPropertyGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof ReactedPropertyGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], ReactedPropertyGroupByOutputType[P]>
-            : GetScalarType<T[P], ReactedPropertyGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type ReactedPropertySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    trackedId?: boolean
-    propertyId?: boolean
-    onType?: boolean
-    reaction?: boolean
-    reactedAt?: boolean
-    property?: boolean | PropertyDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["reactedProperty"]>
-
-  export type ReactedPropertySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    trackedId?: boolean
-    propertyId?: boolean
-    onType?: boolean
-    reaction?: boolean
-    reactedAt?: boolean
-    property?: boolean | PropertyDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["reactedProperty"]>
-
-  export type ReactedPropertySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    trackedId?: boolean
-    propertyId?: boolean
-    onType?: boolean
-    reaction?: boolean
-    reactedAt?: boolean
-    property?: boolean | PropertyDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["reactedProperty"]>
-
-  export type ReactedPropertySelectScalar = {
-    id?: boolean
-    trackedId?: boolean
-    propertyId?: boolean
-    onType?: boolean
-    reaction?: boolean
-    reactedAt?: boolean
-  }
-
-  export type ReactedPropertyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "trackedId" | "propertyId" | "onType" | "reaction" | "reactedAt", ExtArgs["result"]["reactedProperty"]>
-  export type ReactedPropertyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    property?: boolean | PropertyDefaultArgs<ExtArgs>
-  }
-  export type ReactedPropertyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    property?: boolean | PropertyDefaultArgs<ExtArgs>
-  }
-  export type ReactedPropertyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    property?: boolean | PropertyDefaultArgs<ExtArgs>
-  }
-
-  export type $ReactedPropertyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "ReactedProperty"
-    objects: {
-      property: Prisma.$PropertyPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      trackedId: string
-      propertyId: string
-      onType: string
-      reaction: $Enums.Reaction
-      reactedAt: Date
-    }, ExtArgs["result"]["reactedProperty"]>
-    composites: {}
-  }
-
-  type ReactedPropertyGetPayload<S extends boolean | null | undefined | ReactedPropertyDefaultArgs> = $Result.GetResult<Prisma.$ReactedPropertyPayload, S>
-
-  type ReactedPropertyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<ReactedPropertyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ReactedPropertyCountAggregateInputType | true
-    }
-
-  export interface ReactedPropertyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ReactedProperty'], meta: { name: 'ReactedProperty' } }
-    /**
-     * Find zero or one ReactedProperty that matches the filter.
-     * @param {ReactedPropertyFindUniqueArgs} args - Arguments to find a ReactedProperty
-     * @example
-     * // Get one ReactedProperty
-     * const reactedProperty = await prisma.reactedProperty.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends ReactedPropertyFindUniqueArgs>(args: SelectSubset<T, ReactedPropertyFindUniqueArgs<ExtArgs>>): Prisma__ReactedPropertyClient<$Result.GetResult<Prisma.$ReactedPropertyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one ReactedProperty that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {ReactedPropertyFindUniqueOrThrowArgs} args - Arguments to find a ReactedProperty
-     * @example
-     * // Get one ReactedProperty
-     * const reactedProperty = await prisma.reactedProperty.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends ReactedPropertyFindUniqueOrThrowArgs>(args: SelectSubset<T, ReactedPropertyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ReactedPropertyClient<$Result.GetResult<Prisma.$ReactedPropertyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first ReactedProperty that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ReactedPropertyFindFirstArgs} args - Arguments to find a ReactedProperty
-     * @example
-     * // Get one ReactedProperty
-     * const reactedProperty = await prisma.reactedProperty.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends ReactedPropertyFindFirstArgs>(args?: SelectSubset<T, ReactedPropertyFindFirstArgs<ExtArgs>>): Prisma__ReactedPropertyClient<$Result.GetResult<Prisma.$ReactedPropertyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first ReactedProperty that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ReactedPropertyFindFirstOrThrowArgs} args - Arguments to find a ReactedProperty
-     * @example
-     * // Get one ReactedProperty
-     * const reactedProperty = await prisma.reactedProperty.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends ReactedPropertyFindFirstOrThrowArgs>(args?: SelectSubset<T, ReactedPropertyFindFirstOrThrowArgs<ExtArgs>>): Prisma__ReactedPropertyClient<$Result.GetResult<Prisma.$ReactedPropertyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more ReactedProperties that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ReactedPropertyFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all ReactedProperties
-     * const reactedProperties = await prisma.reactedProperty.findMany()
-     * 
-     * // Get first 10 ReactedProperties
-     * const reactedProperties = await prisma.reactedProperty.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const reactedPropertyWithIdOnly = await prisma.reactedProperty.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends ReactedPropertyFindManyArgs>(args?: SelectSubset<T, ReactedPropertyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReactedPropertyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a ReactedProperty.
-     * @param {ReactedPropertyCreateArgs} args - Arguments to create a ReactedProperty.
-     * @example
-     * // Create one ReactedProperty
-     * const ReactedProperty = await prisma.reactedProperty.create({
-     *   data: {
-     *     // ... data to create a ReactedProperty
-     *   }
-     * })
-     * 
-     */
-    create<T extends ReactedPropertyCreateArgs>(args: SelectSubset<T, ReactedPropertyCreateArgs<ExtArgs>>): Prisma__ReactedPropertyClient<$Result.GetResult<Prisma.$ReactedPropertyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many ReactedProperties.
-     * @param {ReactedPropertyCreateManyArgs} args - Arguments to create many ReactedProperties.
-     * @example
-     * // Create many ReactedProperties
-     * const reactedProperty = await prisma.reactedProperty.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends ReactedPropertyCreateManyArgs>(args?: SelectSubset<T, ReactedPropertyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many ReactedProperties and returns the data saved in the database.
-     * @param {ReactedPropertyCreateManyAndReturnArgs} args - Arguments to create many ReactedProperties.
-     * @example
-     * // Create many ReactedProperties
-     * const reactedProperty = await prisma.reactedProperty.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many ReactedProperties and only return the `id`
-     * const reactedPropertyWithIdOnly = await prisma.reactedProperty.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends ReactedPropertyCreateManyAndReturnArgs>(args?: SelectSubset<T, ReactedPropertyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReactedPropertyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a ReactedProperty.
-     * @param {ReactedPropertyDeleteArgs} args - Arguments to delete one ReactedProperty.
-     * @example
-     * // Delete one ReactedProperty
-     * const ReactedProperty = await prisma.reactedProperty.delete({
-     *   where: {
-     *     // ... filter to delete one ReactedProperty
-     *   }
-     * })
-     * 
-     */
-    delete<T extends ReactedPropertyDeleteArgs>(args: SelectSubset<T, ReactedPropertyDeleteArgs<ExtArgs>>): Prisma__ReactedPropertyClient<$Result.GetResult<Prisma.$ReactedPropertyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one ReactedProperty.
-     * @param {ReactedPropertyUpdateArgs} args - Arguments to update one ReactedProperty.
-     * @example
-     * // Update one ReactedProperty
-     * const reactedProperty = await prisma.reactedProperty.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends ReactedPropertyUpdateArgs>(args: SelectSubset<T, ReactedPropertyUpdateArgs<ExtArgs>>): Prisma__ReactedPropertyClient<$Result.GetResult<Prisma.$ReactedPropertyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more ReactedProperties.
-     * @param {ReactedPropertyDeleteManyArgs} args - Arguments to filter ReactedProperties to delete.
-     * @example
-     * // Delete a few ReactedProperties
-     * const { count } = await prisma.reactedProperty.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends ReactedPropertyDeleteManyArgs>(args?: SelectSubset<T, ReactedPropertyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more ReactedProperties.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ReactedPropertyUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many ReactedProperties
-     * const reactedProperty = await prisma.reactedProperty.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends ReactedPropertyUpdateManyArgs>(args: SelectSubset<T, ReactedPropertyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more ReactedProperties and returns the data updated in the database.
-     * @param {ReactedPropertyUpdateManyAndReturnArgs} args - Arguments to update many ReactedProperties.
-     * @example
-     * // Update many ReactedProperties
-     * const reactedProperty = await prisma.reactedProperty.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more ReactedProperties and only return the `id`
-     * const reactedPropertyWithIdOnly = await prisma.reactedProperty.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends ReactedPropertyUpdateManyAndReturnArgs>(args: SelectSubset<T, ReactedPropertyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReactedPropertyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one ReactedProperty.
-     * @param {ReactedPropertyUpsertArgs} args - Arguments to update or create a ReactedProperty.
-     * @example
-     * // Update or create a ReactedProperty
-     * const reactedProperty = await prisma.reactedProperty.upsert({
-     *   create: {
-     *     // ... data to create a ReactedProperty
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the ReactedProperty we want to update
-     *   }
-     * })
-     */
-    upsert<T extends ReactedPropertyUpsertArgs>(args: SelectSubset<T, ReactedPropertyUpsertArgs<ExtArgs>>): Prisma__ReactedPropertyClient<$Result.GetResult<Prisma.$ReactedPropertyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of ReactedProperties.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ReactedPropertyCountArgs} args - Arguments to filter ReactedProperties to count.
-     * @example
-     * // Count the number of ReactedProperties
-     * const count = await prisma.reactedProperty.count({
-     *   where: {
-     *     // ... the filter for the ReactedProperties we want to count
-     *   }
-     * })
-    **/
-    count<T extends ReactedPropertyCountArgs>(
-      args?: Subset<T, ReactedPropertyCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], ReactedPropertyCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a ReactedProperty.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ReactedPropertyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends ReactedPropertyAggregateArgs>(args: Subset<T, ReactedPropertyAggregateArgs>): Prisma.PrismaPromise<GetReactedPropertyAggregateType<T>>
-
-    /**
-     * Group by ReactedProperty.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ReactedPropertyGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends ReactedPropertyGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ReactedPropertyGroupByArgs['orderBy'] }
-        : { orderBy?: ReactedPropertyGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, ReactedPropertyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetReactedPropertyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the ReactedProperty model
-   */
-  readonly fields: ReactedPropertyFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for ReactedProperty.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__ReactedPropertyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    property<T extends PropertyDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PropertyDefaultArgs<ExtArgs>>): Prisma__PropertyClient<$Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the ReactedProperty model
-   */
-  interface ReactedPropertyFieldRefs {
-    readonly id: FieldRef<"ReactedProperty", 'String'>
-    readonly trackedId: FieldRef<"ReactedProperty", 'String'>
-    readonly propertyId: FieldRef<"ReactedProperty", 'String'>
-    readonly onType: FieldRef<"ReactedProperty", 'String'>
-    readonly reaction: FieldRef<"ReactedProperty", 'Reaction'>
-    readonly reactedAt: FieldRef<"ReactedProperty", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * ReactedProperty findUnique
-   */
-  export type ReactedPropertyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ReactedProperty
-     */
-    select?: ReactedPropertySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ReactedProperty
-     */
-    omit?: ReactedPropertyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReactedPropertyInclude<ExtArgs> | null
-    /**
-     * Filter, which ReactedProperty to fetch.
-     */
-    where: ReactedPropertyWhereUniqueInput
-  }
-
-  /**
-   * ReactedProperty findUniqueOrThrow
-   */
-  export type ReactedPropertyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ReactedProperty
-     */
-    select?: ReactedPropertySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ReactedProperty
-     */
-    omit?: ReactedPropertyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReactedPropertyInclude<ExtArgs> | null
-    /**
-     * Filter, which ReactedProperty to fetch.
-     */
-    where: ReactedPropertyWhereUniqueInput
-  }
-
-  /**
-   * ReactedProperty findFirst
-   */
-  export type ReactedPropertyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ReactedProperty
-     */
-    select?: ReactedPropertySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ReactedProperty
-     */
-    omit?: ReactedPropertyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReactedPropertyInclude<ExtArgs> | null
-    /**
-     * Filter, which ReactedProperty to fetch.
-     */
-    where?: ReactedPropertyWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ReactedProperties to fetch.
-     */
-    orderBy?: ReactedPropertyOrderByWithRelationInput | ReactedPropertyOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ReactedProperties.
-     */
-    cursor?: ReactedPropertyWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ReactedProperties from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ReactedProperties.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ReactedProperties.
-     */
-    distinct?: ReactedPropertyScalarFieldEnum | ReactedPropertyScalarFieldEnum[]
-  }
-
-  /**
-   * ReactedProperty findFirstOrThrow
-   */
-  export type ReactedPropertyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ReactedProperty
-     */
-    select?: ReactedPropertySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ReactedProperty
-     */
-    omit?: ReactedPropertyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReactedPropertyInclude<ExtArgs> | null
-    /**
-     * Filter, which ReactedProperty to fetch.
-     */
-    where?: ReactedPropertyWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ReactedProperties to fetch.
-     */
-    orderBy?: ReactedPropertyOrderByWithRelationInput | ReactedPropertyOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ReactedProperties.
-     */
-    cursor?: ReactedPropertyWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ReactedProperties from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ReactedProperties.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ReactedProperties.
-     */
-    distinct?: ReactedPropertyScalarFieldEnum | ReactedPropertyScalarFieldEnum[]
-  }
-
-  /**
-   * ReactedProperty findMany
-   */
-  export type ReactedPropertyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ReactedProperty
-     */
-    select?: ReactedPropertySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ReactedProperty
-     */
-    omit?: ReactedPropertyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReactedPropertyInclude<ExtArgs> | null
-    /**
-     * Filter, which ReactedProperties to fetch.
-     */
-    where?: ReactedPropertyWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ReactedProperties to fetch.
-     */
-    orderBy?: ReactedPropertyOrderByWithRelationInput | ReactedPropertyOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing ReactedProperties.
-     */
-    cursor?: ReactedPropertyWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ReactedProperties from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ReactedProperties.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ReactedProperties.
-     */
-    distinct?: ReactedPropertyScalarFieldEnum | ReactedPropertyScalarFieldEnum[]
-  }
-
-  /**
-   * ReactedProperty create
-   */
-  export type ReactedPropertyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ReactedProperty
-     */
-    select?: ReactedPropertySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ReactedProperty
-     */
-    omit?: ReactedPropertyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReactedPropertyInclude<ExtArgs> | null
-    /**
-     * The data needed to create a ReactedProperty.
-     */
-    data: XOR<ReactedPropertyCreateInput, ReactedPropertyUncheckedCreateInput>
-  }
-
-  /**
-   * ReactedProperty createMany
-   */
-  export type ReactedPropertyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many ReactedProperties.
-     */
-    data: ReactedPropertyCreateManyInput | ReactedPropertyCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * ReactedProperty createManyAndReturn
-   */
-  export type ReactedPropertyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ReactedProperty
-     */
-    select?: ReactedPropertySelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the ReactedProperty
-     */
-    omit?: ReactedPropertyOmit<ExtArgs> | null
-    /**
-     * The data used to create many ReactedProperties.
-     */
-    data: ReactedPropertyCreateManyInput | ReactedPropertyCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReactedPropertyIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * ReactedProperty update
-   */
-  export type ReactedPropertyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ReactedProperty
-     */
-    select?: ReactedPropertySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ReactedProperty
-     */
-    omit?: ReactedPropertyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReactedPropertyInclude<ExtArgs> | null
-    /**
-     * The data needed to update a ReactedProperty.
-     */
-    data: XOR<ReactedPropertyUpdateInput, ReactedPropertyUncheckedUpdateInput>
-    /**
-     * Choose, which ReactedProperty to update.
-     */
-    where: ReactedPropertyWhereUniqueInput
-  }
-
-  /**
-   * ReactedProperty updateMany
-   */
-  export type ReactedPropertyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update ReactedProperties.
-     */
-    data: XOR<ReactedPropertyUpdateManyMutationInput, ReactedPropertyUncheckedUpdateManyInput>
-    /**
-     * Filter which ReactedProperties to update
-     */
-    where?: ReactedPropertyWhereInput
-    /**
-     * Limit how many ReactedProperties to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * ReactedProperty updateManyAndReturn
-   */
-  export type ReactedPropertyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ReactedProperty
-     */
-    select?: ReactedPropertySelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the ReactedProperty
-     */
-    omit?: ReactedPropertyOmit<ExtArgs> | null
-    /**
-     * The data used to update ReactedProperties.
-     */
-    data: XOR<ReactedPropertyUpdateManyMutationInput, ReactedPropertyUncheckedUpdateManyInput>
-    /**
-     * Filter which ReactedProperties to update
-     */
-    where?: ReactedPropertyWhereInput
-    /**
-     * Limit how many ReactedProperties to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReactedPropertyIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * ReactedProperty upsert
-   */
-  export type ReactedPropertyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ReactedProperty
-     */
-    select?: ReactedPropertySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ReactedProperty
-     */
-    omit?: ReactedPropertyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReactedPropertyInclude<ExtArgs> | null
-    /**
-     * The filter to search for the ReactedProperty to update in case it exists.
-     */
-    where: ReactedPropertyWhereUniqueInput
-    /**
-     * In case the ReactedProperty found by the `where` argument doesn't exist, create a new ReactedProperty with this data.
-     */
-    create: XOR<ReactedPropertyCreateInput, ReactedPropertyUncheckedCreateInput>
-    /**
-     * In case the ReactedProperty was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<ReactedPropertyUpdateInput, ReactedPropertyUncheckedUpdateInput>
-  }
-
-  /**
-   * ReactedProperty delete
-   */
-  export type ReactedPropertyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ReactedProperty
-     */
-    select?: ReactedPropertySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ReactedProperty
-     */
-    omit?: ReactedPropertyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReactedPropertyInclude<ExtArgs> | null
-    /**
-     * Filter which ReactedProperty to delete.
-     */
-    where: ReactedPropertyWhereUniqueInput
-  }
-
-  /**
-   * ReactedProperty deleteMany
-   */
-  export type ReactedPropertyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ReactedProperties to delete
-     */
-    where?: ReactedPropertyWhereInput
-    /**
-     * Limit how many ReactedProperties to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * ReactedProperty without action
-   */
-  export type ReactedPropertyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ReactedProperty
-     */
-    select?: ReactedPropertySelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ReactedProperty
-     */
-    omit?: ReactedPropertyOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ReactedPropertyInclude<ExtArgs> | null
   }
 
 
@@ -70238,18 +69021,6 @@ export namespace Prisma {
   export type SavedPropertyScalarFieldEnum = (typeof SavedPropertyScalarFieldEnum)[keyof typeof SavedPropertyScalarFieldEnum]
 
 
-  export const ReactedPropertyScalarFieldEnum: {
-    id: 'id',
-    trackedId: 'trackedId',
-    propertyId: 'propertyId',
-    onType: 'onType',
-    reaction: 'reaction',
-    reactedAt: 'reactedAt'
-  };
-
-  export type ReactedPropertyScalarFieldEnum = (typeof ReactedPropertyScalarFieldEnum)[keyof typeof ReactedPropertyScalarFieldEnum]
-
-
   export const PropertyViewScalarFieldEnum: {
     id: 'id',
     accountId: 'accountId',
@@ -70898,20 +69669,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Reaction'
-   */
-  export type EnumReactionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Reaction'>
-    
-
-
-  /**
-   * Reference to a field of type 'Reaction[]'
-   */
-  export type ListEnumReactionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Reaction[]'>
-    
-
-
-  /**
    * Reference to a field of type 'LeadType'
    */
   export type EnumLeadTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LeadType'>
@@ -71200,7 +69957,6 @@ export namespace Prisma {
     links?: PropertyLinkListRelationFilter
     linkedBy?: PropertyLinkListRelationFilter
     savedBy?: SavedPropertyListRelationFilter
-    reactions?: ReactedPropertyListRelationFilter
     views?: PropertyViewListRelationFilter
     competitionMaps?: PropertyCompetitionMapListRelationFilter
     representatives?: PropertyRepresentativeListRelationFilter
@@ -71249,7 +70005,6 @@ export namespace Prisma {
     links?: PropertyLinkOrderByRelationAggregateInput
     linkedBy?: PropertyLinkOrderByRelationAggregateInput
     savedBy?: SavedPropertyOrderByRelationAggregateInput
-    reactions?: ReactedPropertyOrderByRelationAggregateInput
     views?: PropertyViewOrderByRelationAggregateInput
     competitionMaps?: PropertyCompetitionMapOrderByRelationAggregateInput
     representatives?: PropertyRepresentativeOrderByRelationAggregateInput
@@ -71301,7 +70056,6 @@ export namespace Prisma {
     links?: PropertyLinkListRelationFilter
     linkedBy?: PropertyLinkListRelationFilter
     savedBy?: SavedPropertyListRelationFilter
-    reactions?: ReactedPropertyListRelationFilter
     views?: PropertyViewListRelationFilter
     competitionMaps?: PropertyCompetitionMapListRelationFilter
     representatives?: PropertyRepresentativeListRelationFilter
@@ -72842,66 +71596,6 @@ export namespace Prisma {
     accountId?: StringWithAggregatesFilter<"SavedProperty"> | string
     propertyId?: StringWithAggregatesFilter<"SavedProperty"> | string
     savedAt?: DateTimeWithAggregatesFilter<"SavedProperty"> | Date | string
-  }
-
-  export type ReactedPropertyWhereInput = {
-    AND?: ReactedPropertyWhereInput | ReactedPropertyWhereInput[]
-    OR?: ReactedPropertyWhereInput[]
-    NOT?: ReactedPropertyWhereInput | ReactedPropertyWhereInput[]
-    id?: StringFilter<"ReactedProperty"> | string
-    trackedId?: StringFilter<"ReactedProperty"> | string
-    propertyId?: StringFilter<"ReactedProperty"> | string
-    onType?: StringFilter<"ReactedProperty"> | string
-    reaction?: EnumReactionFilter<"ReactedProperty"> | $Enums.Reaction
-    reactedAt?: DateTimeFilter<"ReactedProperty"> | Date | string
-    property?: XOR<PropertyScalarRelationFilter, PropertyWhereInput>
-  }
-
-  export type ReactedPropertyOrderByWithRelationInput = {
-    id?: SortOrder
-    trackedId?: SortOrder
-    propertyId?: SortOrder
-    onType?: SortOrder
-    reaction?: SortOrder
-    reactedAt?: SortOrder
-    property?: PropertyOrderByWithRelationInput
-  }
-
-  export type ReactedPropertyWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: ReactedPropertyWhereInput | ReactedPropertyWhereInput[]
-    OR?: ReactedPropertyWhereInput[]
-    NOT?: ReactedPropertyWhereInput | ReactedPropertyWhereInput[]
-    trackedId?: StringFilter<"ReactedProperty"> | string
-    propertyId?: StringFilter<"ReactedProperty"> | string
-    onType?: StringFilter<"ReactedProperty"> | string
-    reaction?: EnumReactionFilter<"ReactedProperty"> | $Enums.Reaction
-    reactedAt?: DateTimeFilter<"ReactedProperty"> | Date | string
-    property?: XOR<PropertyScalarRelationFilter, PropertyWhereInput>
-  }, "id">
-
-  export type ReactedPropertyOrderByWithAggregationInput = {
-    id?: SortOrder
-    trackedId?: SortOrder
-    propertyId?: SortOrder
-    onType?: SortOrder
-    reaction?: SortOrder
-    reactedAt?: SortOrder
-    _count?: ReactedPropertyCountOrderByAggregateInput
-    _max?: ReactedPropertyMaxOrderByAggregateInput
-    _min?: ReactedPropertyMinOrderByAggregateInput
-  }
-
-  export type ReactedPropertyScalarWhereWithAggregatesInput = {
-    AND?: ReactedPropertyScalarWhereWithAggregatesInput | ReactedPropertyScalarWhereWithAggregatesInput[]
-    OR?: ReactedPropertyScalarWhereWithAggregatesInput[]
-    NOT?: ReactedPropertyScalarWhereWithAggregatesInput | ReactedPropertyScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"ReactedProperty"> | string
-    trackedId?: StringWithAggregatesFilter<"ReactedProperty"> | string
-    propertyId?: StringWithAggregatesFilter<"ReactedProperty"> | string
-    onType?: StringWithAggregatesFilter<"ReactedProperty"> | string
-    reaction?: EnumReactionWithAggregatesFilter<"ReactedProperty"> | $Enums.Reaction
-    reactedAt?: DateTimeWithAggregatesFilter<"ReactedProperty"> | Date | string
   }
 
   export type PropertyViewWhereInput = {
@@ -75483,7 +74177,6 @@ export namespace Prisma {
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyCreateNestedManyWithoutPropertyInput
     views?: PropertyViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeCreateNestedManyWithoutPropertyInput
@@ -75532,7 +74225,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyUncheckedCreateNestedManyWithoutPropertyInput
     views?: PropertyViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeUncheckedCreateNestedManyWithoutPropertyInput
@@ -75581,7 +74273,6 @@ export namespace Prisma {
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUpdateManyWithoutPropertyNestedInput
@@ -75630,7 +74321,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -77293,68 +75983,6 @@ export namespace Prisma {
     accountId?: StringFieldUpdateOperationsInput | string
     propertyId?: StringFieldUpdateOperationsInput | string
     savedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ReactedPropertyCreateInput = {
-    id?: string
-    trackedId: string
-    onType: string
-    reaction: $Enums.Reaction
-    reactedAt?: Date | string
-    property: PropertyCreateNestedOneWithoutReactionsInput
-  }
-
-  export type ReactedPropertyUncheckedCreateInput = {
-    id?: string
-    trackedId: string
-    propertyId: string
-    onType: string
-    reaction: $Enums.Reaction
-    reactedAt?: Date | string
-  }
-
-  export type ReactedPropertyUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    trackedId?: StringFieldUpdateOperationsInput | string
-    onType?: StringFieldUpdateOperationsInput | string
-    reaction?: EnumReactionFieldUpdateOperationsInput | $Enums.Reaction
-    reactedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    property?: PropertyUpdateOneRequiredWithoutReactionsNestedInput
-  }
-
-  export type ReactedPropertyUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    trackedId?: StringFieldUpdateOperationsInput | string
-    propertyId?: StringFieldUpdateOperationsInput | string
-    onType?: StringFieldUpdateOperationsInput | string
-    reaction?: EnumReactionFieldUpdateOperationsInput | $Enums.Reaction
-    reactedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ReactedPropertyCreateManyInput = {
-    id?: string
-    trackedId: string
-    propertyId: string
-    onType: string
-    reaction: $Enums.Reaction
-    reactedAt?: Date | string
-  }
-
-  export type ReactedPropertyUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    trackedId?: StringFieldUpdateOperationsInput | string
-    onType?: StringFieldUpdateOperationsInput | string
-    reaction?: EnumReactionFieldUpdateOperationsInput | $Enums.Reaction
-    reactedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ReactedPropertyUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    trackedId?: StringFieldUpdateOperationsInput | string
-    propertyId?: StringFieldUpdateOperationsInput | string
-    onType?: StringFieldUpdateOperationsInput | string
-    reaction?: EnumReactionFieldUpdateOperationsInput | $Enums.Reaction
-    reactedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PropertyViewCreateInput = {
@@ -80351,12 +78979,6 @@ export namespace Prisma {
     none?: SavedPropertyWhereInput
   }
 
-  export type ReactedPropertyListRelationFilter = {
-    every?: ReactedPropertyWhereInput
-    some?: ReactedPropertyWhereInput
-    none?: ReactedPropertyWhereInput
-  }
-
   export type PropertyViewListRelationFilter = {
     every?: PropertyViewWhereInput
     some?: PropertyViewWhereInput
@@ -80390,10 +79012,6 @@ export namespace Prisma {
   }
 
   export type SavedPropertyOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ReactedPropertyOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -81542,50 +80160,6 @@ export namespace Prisma {
     accountId?: SortOrder
     propertyId?: SortOrder
     savedAt?: SortOrder
-  }
-
-  export type EnumReactionFilter<$PrismaModel = never> = {
-    equals?: $Enums.Reaction | EnumReactionFieldRefInput<$PrismaModel>
-    in?: $Enums.Reaction[] | ListEnumReactionFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Reaction[] | ListEnumReactionFieldRefInput<$PrismaModel>
-    not?: NestedEnumReactionFilter<$PrismaModel> | $Enums.Reaction
-  }
-
-  export type ReactedPropertyCountOrderByAggregateInput = {
-    id?: SortOrder
-    trackedId?: SortOrder
-    propertyId?: SortOrder
-    onType?: SortOrder
-    reaction?: SortOrder
-    reactedAt?: SortOrder
-  }
-
-  export type ReactedPropertyMaxOrderByAggregateInput = {
-    id?: SortOrder
-    trackedId?: SortOrder
-    propertyId?: SortOrder
-    onType?: SortOrder
-    reaction?: SortOrder
-    reactedAt?: SortOrder
-  }
-
-  export type ReactedPropertyMinOrderByAggregateInput = {
-    id?: SortOrder
-    trackedId?: SortOrder
-    propertyId?: SortOrder
-    onType?: SortOrder
-    reaction?: SortOrder
-    reactedAt?: SortOrder
-  }
-
-  export type EnumReactionWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Reaction | EnumReactionFieldRefInput<$PrismaModel>
-    in?: $Enums.Reaction[] | ListEnumReactionFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Reaction[] | ListEnumReactionFieldRefInput<$PrismaModel>
-    not?: NestedEnumReactionWithAggregatesFilter<$PrismaModel> | $Enums.Reaction
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumReactionFilter<$PrismaModel>
-    _max?: NestedEnumReactionFilter<$PrismaModel>
   }
 
   export type PropertyViewCountOrderByAggregateInput = {
@@ -83637,13 +82211,6 @@ export namespace Prisma {
     connect?: SavedPropertyWhereUniqueInput | SavedPropertyWhereUniqueInput[]
   }
 
-  export type ReactedPropertyCreateNestedManyWithoutPropertyInput = {
-    create?: XOR<ReactedPropertyCreateWithoutPropertyInput, ReactedPropertyUncheckedCreateWithoutPropertyInput> | ReactedPropertyCreateWithoutPropertyInput[] | ReactedPropertyUncheckedCreateWithoutPropertyInput[]
-    connectOrCreate?: ReactedPropertyCreateOrConnectWithoutPropertyInput | ReactedPropertyCreateOrConnectWithoutPropertyInput[]
-    createMany?: ReactedPropertyCreateManyPropertyInputEnvelope
-    connect?: ReactedPropertyWhereUniqueInput | ReactedPropertyWhereUniqueInput[]
-  }
-
   export type PropertyViewCreateNestedManyWithoutPropertyInput = {
     create?: XOR<PropertyViewCreateWithoutPropertyInput, PropertyViewUncheckedCreateWithoutPropertyInput> | PropertyViewCreateWithoutPropertyInput[] | PropertyViewUncheckedCreateWithoutPropertyInput[]
     connectOrCreate?: PropertyViewCreateOrConnectWithoutPropertyInput | PropertyViewCreateOrConnectWithoutPropertyInput[]
@@ -83743,13 +82310,6 @@ export namespace Prisma {
     connectOrCreate?: SavedPropertyCreateOrConnectWithoutPropertyInput | SavedPropertyCreateOrConnectWithoutPropertyInput[]
     createMany?: SavedPropertyCreateManyPropertyInputEnvelope
     connect?: SavedPropertyWhereUniqueInput | SavedPropertyWhereUniqueInput[]
-  }
-
-  export type ReactedPropertyUncheckedCreateNestedManyWithoutPropertyInput = {
-    create?: XOR<ReactedPropertyCreateWithoutPropertyInput, ReactedPropertyUncheckedCreateWithoutPropertyInput> | ReactedPropertyCreateWithoutPropertyInput[] | ReactedPropertyUncheckedCreateWithoutPropertyInput[]
-    connectOrCreate?: ReactedPropertyCreateOrConnectWithoutPropertyInput | ReactedPropertyCreateOrConnectWithoutPropertyInput[]
-    createMany?: ReactedPropertyCreateManyPropertyInputEnvelope
-    connect?: ReactedPropertyWhereUniqueInput | ReactedPropertyWhereUniqueInput[]
   }
 
   export type PropertyViewUncheckedCreateNestedManyWithoutPropertyInput = {
@@ -83959,20 +82519,6 @@ export namespace Prisma {
     deleteMany?: SavedPropertyScalarWhereInput | SavedPropertyScalarWhereInput[]
   }
 
-  export type ReactedPropertyUpdateManyWithoutPropertyNestedInput = {
-    create?: XOR<ReactedPropertyCreateWithoutPropertyInput, ReactedPropertyUncheckedCreateWithoutPropertyInput> | ReactedPropertyCreateWithoutPropertyInput[] | ReactedPropertyUncheckedCreateWithoutPropertyInput[]
-    connectOrCreate?: ReactedPropertyCreateOrConnectWithoutPropertyInput | ReactedPropertyCreateOrConnectWithoutPropertyInput[]
-    upsert?: ReactedPropertyUpsertWithWhereUniqueWithoutPropertyInput | ReactedPropertyUpsertWithWhereUniqueWithoutPropertyInput[]
-    createMany?: ReactedPropertyCreateManyPropertyInputEnvelope
-    set?: ReactedPropertyWhereUniqueInput | ReactedPropertyWhereUniqueInput[]
-    disconnect?: ReactedPropertyWhereUniqueInput | ReactedPropertyWhereUniqueInput[]
-    delete?: ReactedPropertyWhereUniqueInput | ReactedPropertyWhereUniqueInput[]
-    connect?: ReactedPropertyWhereUniqueInput | ReactedPropertyWhereUniqueInput[]
-    update?: ReactedPropertyUpdateWithWhereUniqueWithoutPropertyInput | ReactedPropertyUpdateWithWhereUniqueWithoutPropertyInput[]
-    updateMany?: ReactedPropertyUpdateManyWithWhereWithoutPropertyInput | ReactedPropertyUpdateManyWithWhereWithoutPropertyInput[]
-    deleteMany?: ReactedPropertyScalarWhereInput | ReactedPropertyScalarWhereInput[]
-  }
-
   export type PropertyViewUpdateManyWithoutPropertyNestedInput = {
     create?: XOR<PropertyViewCreateWithoutPropertyInput, PropertyViewUncheckedCreateWithoutPropertyInput> | PropertyViewCreateWithoutPropertyInput[] | PropertyViewUncheckedCreateWithoutPropertyInput[]
     connectOrCreate?: PropertyViewCreateOrConnectWithoutPropertyInput | PropertyViewCreateOrConnectWithoutPropertyInput[]
@@ -84165,20 +82711,6 @@ export namespace Prisma {
     update?: SavedPropertyUpdateWithWhereUniqueWithoutPropertyInput | SavedPropertyUpdateWithWhereUniqueWithoutPropertyInput[]
     updateMany?: SavedPropertyUpdateManyWithWhereWithoutPropertyInput | SavedPropertyUpdateManyWithWhereWithoutPropertyInput[]
     deleteMany?: SavedPropertyScalarWhereInput | SavedPropertyScalarWhereInput[]
-  }
-
-  export type ReactedPropertyUncheckedUpdateManyWithoutPropertyNestedInput = {
-    create?: XOR<ReactedPropertyCreateWithoutPropertyInput, ReactedPropertyUncheckedCreateWithoutPropertyInput> | ReactedPropertyCreateWithoutPropertyInput[] | ReactedPropertyUncheckedCreateWithoutPropertyInput[]
-    connectOrCreate?: ReactedPropertyCreateOrConnectWithoutPropertyInput | ReactedPropertyCreateOrConnectWithoutPropertyInput[]
-    upsert?: ReactedPropertyUpsertWithWhereUniqueWithoutPropertyInput | ReactedPropertyUpsertWithWhereUniqueWithoutPropertyInput[]
-    createMany?: ReactedPropertyCreateManyPropertyInputEnvelope
-    set?: ReactedPropertyWhereUniqueInput | ReactedPropertyWhereUniqueInput[]
-    disconnect?: ReactedPropertyWhereUniqueInput | ReactedPropertyWhereUniqueInput[]
-    delete?: ReactedPropertyWhereUniqueInput | ReactedPropertyWhereUniqueInput[]
-    connect?: ReactedPropertyWhereUniqueInput | ReactedPropertyWhereUniqueInput[]
-    update?: ReactedPropertyUpdateWithWhereUniqueWithoutPropertyInput | ReactedPropertyUpdateWithWhereUniqueWithoutPropertyInput[]
-    updateMany?: ReactedPropertyUpdateManyWithWhereWithoutPropertyInput | ReactedPropertyUpdateManyWithWhereWithoutPropertyInput[]
-    deleteMany?: ReactedPropertyScalarWhereInput | ReactedPropertyScalarWhereInput[]
   }
 
   export type PropertyViewUncheckedUpdateManyWithoutPropertyNestedInput = {
@@ -84708,24 +83240,6 @@ export namespace Prisma {
     upsert?: PropertyUpsertWithoutSavedByInput
     connect?: PropertyWhereUniqueInput
     update?: XOR<XOR<PropertyUpdateToOneWithWhereWithoutSavedByInput, PropertyUpdateWithoutSavedByInput>, PropertyUncheckedUpdateWithoutSavedByInput>
-  }
-
-  export type PropertyCreateNestedOneWithoutReactionsInput = {
-    create?: XOR<PropertyCreateWithoutReactionsInput, PropertyUncheckedCreateWithoutReactionsInput>
-    connectOrCreate?: PropertyCreateOrConnectWithoutReactionsInput
-    connect?: PropertyWhereUniqueInput
-  }
-
-  export type EnumReactionFieldUpdateOperationsInput = {
-    set?: $Enums.Reaction
-  }
-
-  export type PropertyUpdateOneRequiredWithoutReactionsNestedInput = {
-    create?: XOR<PropertyCreateWithoutReactionsInput, PropertyUncheckedCreateWithoutReactionsInput>
-    connectOrCreate?: PropertyCreateOrConnectWithoutReactionsInput
-    upsert?: PropertyUpsertWithoutReactionsInput
-    connect?: PropertyWhereUniqueInput
-    update?: XOR<XOR<PropertyUpdateToOneWithWhereWithoutReactionsInput, PropertyUpdateWithoutReactionsInput>, PropertyUncheckedUpdateWithoutReactionsInput>
   }
 
   export type PropertyCreateNestedOneWithoutViewsInput = {
@@ -86230,23 +84744,6 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedEnumReactionFilter<$PrismaModel = never> = {
-    equals?: $Enums.Reaction | EnumReactionFieldRefInput<$PrismaModel>
-    in?: $Enums.Reaction[] | ListEnumReactionFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Reaction[] | ListEnumReactionFieldRefInput<$PrismaModel>
-    not?: NestedEnumReactionFilter<$PrismaModel> | $Enums.Reaction
-  }
-
-  export type NestedEnumReactionWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Reaction | EnumReactionFieldRefInput<$PrismaModel>
-    in?: $Enums.Reaction[] | ListEnumReactionFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Reaction[] | ListEnumReactionFieldRefInput<$PrismaModel>
-    not?: NestedEnumReactionWithAggregatesFilter<$PrismaModel> | $Enums.Reaction
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumReactionFilter<$PrismaModel>
-    _max?: NestedEnumReactionFilter<$PrismaModel>
-  }
-
   export type NestedEnumLeadTypeFilter<$PrismaModel = never> = {
     equals?: $Enums.LeadType | EnumLeadTypeFieldRefInput<$PrismaModel>
     in?: $Enums.LeadType[] | ListEnumLeadTypeFieldRefInput<$PrismaModel>
@@ -87624,32 +86121,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ReactedPropertyCreateWithoutPropertyInput = {
-    id?: string
-    trackedId: string
-    onType: string
-    reaction: $Enums.Reaction
-    reactedAt?: Date | string
-  }
-
-  export type ReactedPropertyUncheckedCreateWithoutPropertyInput = {
-    id?: string
-    trackedId: string
-    onType: string
-    reaction: $Enums.Reaction
-    reactedAt?: Date | string
-  }
-
-  export type ReactedPropertyCreateOrConnectWithoutPropertyInput = {
-    where: ReactedPropertyWhereUniqueInput
-    create: XOR<ReactedPropertyCreateWithoutPropertyInput, ReactedPropertyUncheckedCreateWithoutPropertyInput>
-  }
-
-  export type ReactedPropertyCreateManyPropertyInputEnvelope = {
-    data: ReactedPropertyCreateManyPropertyInput | ReactedPropertyCreateManyPropertyInput[]
-    skipDuplicates?: boolean
-  }
-
   export type PropertyViewCreateWithoutPropertyInput = {
     id?: string
     accountId: string
@@ -88074,34 +86545,6 @@ export namespace Prisma {
     savedAt?: DateTimeFilter<"SavedProperty"> | Date | string
   }
 
-  export type ReactedPropertyUpsertWithWhereUniqueWithoutPropertyInput = {
-    where: ReactedPropertyWhereUniqueInput
-    update: XOR<ReactedPropertyUpdateWithoutPropertyInput, ReactedPropertyUncheckedUpdateWithoutPropertyInput>
-    create: XOR<ReactedPropertyCreateWithoutPropertyInput, ReactedPropertyUncheckedCreateWithoutPropertyInput>
-  }
-
-  export type ReactedPropertyUpdateWithWhereUniqueWithoutPropertyInput = {
-    where: ReactedPropertyWhereUniqueInput
-    data: XOR<ReactedPropertyUpdateWithoutPropertyInput, ReactedPropertyUncheckedUpdateWithoutPropertyInput>
-  }
-
-  export type ReactedPropertyUpdateManyWithWhereWithoutPropertyInput = {
-    where: ReactedPropertyScalarWhereInput
-    data: XOR<ReactedPropertyUpdateManyMutationInput, ReactedPropertyUncheckedUpdateManyWithoutPropertyInput>
-  }
-
-  export type ReactedPropertyScalarWhereInput = {
-    AND?: ReactedPropertyScalarWhereInput | ReactedPropertyScalarWhereInput[]
-    OR?: ReactedPropertyScalarWhereInput[]
-    NOT?: ReactedPropertyScalarWhereInput | ReactedPropertyScalarWhereInput[]
-    id?: StringFilter<"ReactedProperty"> | string
-    trackedId?: StringFilter<"ReactedProperty"> | string
-    propertyId?: StringFilter<"ReactedProperty"> | string
-    onType?: StringFilter<"ReactedProperty"> | string
-    reaction?: EnumReactionFilter<"ReactedProperty"> | $Enums.Reaction
-    reactedAt?: DateTimeFilter<"ReactedProperty"> | Date | string
-  }
-
   export type PropertyViewUpsertWithWhereUniqueWithoutPropertyInput = {
     where: PropertyViewWhereUniqueInput
     update: XOR<PropertyViewUpdateWithoutPropertyInput, PropertyViewUncheckedUpdateWithoutPropertyInput>
@@ -88217,7 +86660,6 @@ export namespace Prisma {
     changes?: PropertyChangeCreateNestedManyWithoutPropertyInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyCreateNestedManyWithoutPropertyInput
     views?: PropertyViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeCreateNestedManyWithoutPropertyInput
@@ -88265,7 +86707,6 @@ export namespace Prisma {
     changes?: PropertyChangeUncheckedCreateNestedManyWithoutPropertyInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyUncheckedCreateNestedManyWithoutPropertyInput
     views?: PropertyViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeUncheckedCreateNestedManyWithoutPropertyInput
@@ -88318,7 +86759,6 @@ export namespace Prisma {
     changes?: PropertyChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyCreateNestedManyWithoutPropertyInput
     views?: PropertyViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeCreateNestedManyWithoutPropertyInput
@@ -88366,7 +86806,6 @@ export namespace Prisma {
     changes?: PropertyChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyUncheckedCreateNestedManyWithoutPropertyInput
     views?: PropertyViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeUncheckedCreateNestedManyWithoutPropertyInput
@@ -88430,7 +86869,6 @@ export namespace Prisma {
     changes?: PropertyChangeUpdateManyWithoutPropertyNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUpdateManyWithoutPropertyNestedInput
@@ -88478,7 +86916,6 @@ export namespace Prisma {
     changes?: PropertyChangeUncheckedUpdateManyWithoutPropertyNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -88537,7 +86974,6 @@ export namespace Prisma {
     changes?: PropertyChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUpdateManyWithoutPropertyNestedInput
@@ -88585,7 +87021,6 @@ export namespace Prisma {
     changes?: PropertyChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -88633,7 +87068,6 @@ export namespace Prisma {
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyCreateNestedManyWithoutPropertyInput
     views?: PropertyViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeCreateNestedManyWithoutPropertyInput
@@ -88681,7 +87115,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyUncheckedCreateNestedManyWithoutPropertyInput
     views?: PropertyViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeUncheckedCreateNestedManyWithoutPropertyInput
@@ -88745,7 +87178,6 @@ export namespace Prisma {
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUpdateManyWithoutPropertyNestedInput
@@ -88793,7 +87225,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -88841,7 +87272,6 @@ export namespace Prisma {
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyCreateNestedManyWithoutPropertyInput
     views?: PropertyViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeCreateNestedManyWithoutPropertyInput
@@ -88889,7 +87319,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyUncheckedCreateNestedManyWithoutPropertyInput
     views?: PropertyViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeUncheckedCreateNestedManyWithoutPropertyInput
@@ -88953,7 +87382,6 @@ export namespace Prisma {
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUpdateManyWithoutPropertyNestedInput
@@ -89001,7 +87429,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -89049,7 +87476,6 @@ export namespace Prisma {
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyCreateNestedManyWithoutPropertyInput
     views?: PropertyViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeCreateNestedManyWithoutPropertyInput
@@ -89097,7 +87523,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyUncheckedCreateNestedManyWithoutPropertyInput
     views?: PropertyViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeUncheckedCreateNestedManyWithoutPropertyInput
@@ -89161,7 +87586,6 @@ export namespace Prisma {
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUpdateManyWithoutPropertyNestedInput
@@ -89209,7 +87633,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -89257,7 +87680,6 @@ export namespace Prisma {
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyCreateNestedManyWithoutPropertyInput
     views?: PropertyViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeCreateNestedManyWithoutPropertyInput
@@ -89305,7 +87727,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyUncheckedCreateNestedManyWithoutPropertyInput
     views?: PropertyViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeUncheckedCreateNestedManyWithoutPropertyInput
@@ -89369,7 +87790,6 @@ export namespace Prisma {
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUpdateManyWithoutPropertyNestedInput
@@ -89417,7 +87837,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -89465,7 +87884,6 @@ export namespace Prisma {
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyCreateNestedManyWithoutPropertyInput
     views?: PropertyViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeCreateNestedManyWithoutPropertyInput
@@ -89513,7 +87931,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyUncheckedCreateNestedManyWithoutPropertyInput
     views?: PropertyViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeUncheckedCreateNestedManyWithoutPropertyInput
@@ -89577,7 +87994,6 @@ export namespace Prisma {
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUpdateManyWithoutPropertyNestedInput
@@ -89625,7 +88041,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -89673,7 +88088,6 @@ export namespace Prisma {
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyCreateNestedManyWithoutPropertyInput
     views?: PropertyViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeCreateNestedManyWithoutPropertyInput
@@ -89721,7 +88135,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyUncheckedCreateNestedManyWithoutPropertyInput
     views?: PropertyViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeUncheckedCreateNestedManyWithoutPropertyInput
@@ -89785,7 +88198,6 @@ export namespace Prisma {
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUpdateManyWithoutPropertyNestedInput
@@ -89833,7 +88245,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -89881,7 +88292,6 @@ export namespace Prisma {
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyCreateNestedManyWithoutPropertyInput
     views?: PropertyViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeCreateNestedManyWithoutPropertyInput
@@ -89929,7 +88339,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyUncheckedCreateNestedManyWithoutPropertyInput
     views?: PropertyViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeUncheckedCreateNestedManyWithoutPropertyInput
@@ -90026,7 +88435,6 @@ export namespace Prisma {
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUpdateManyWithoutPropertyNestedInput
@@ -90074,7 +88482,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -90162,7 +88569,6 @@ export namespace Prisma {
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyCreateNestedManyWithoutPropertyInput
     views?: PropertyViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
   }
@@ -90210,7 +88616,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyUncheckedCreateNestedManyWithoutPropertyInput
     views?: PropertyViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
   }
@@ -90333,7 +88738,6 @@ export namespace Prisma {
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
   }
@@ -90381,7 +88785,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
   }
@@ -90493,7 +88896,6 @@ export namespace Prisma {
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyCreateNestedManyWithoutPropertyInput
     views?: PropertyViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeCreateNestedManyWithoutPropertyInput
@@ -90541,7 +88943,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyUncheckedCreateNestedManyWithoutPropertyInput
     views?: PropertyViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeUncheckedCreateNestedManyWithoutPropertyInput
@@ -90605,7 +89006,6 @@ export namespace Prisma {
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUpdateManyWithoutPropertyNestedInput
@@ -90653,7 +89053,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -90701,7 +89100,6 @@ export namespace Prisma {
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyCreateNestedManyWithoutPropertyInput
     views?: PropertyViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeCreateNestedManyWithoutPropertyInput
@@ -90749,7 +89147,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyUncheckedCreateNestedManyWithoutPropertyInput
     views?: PropertyViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeUncheckedCreateNestedManyWithoutPropertyInput
@@ -91049,7 +89446,6 @@ export namespace Prisma {
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUpdateManyWithoutPropertyNestedInput
@@ -91097,7 +89493,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -91910,7 +90305,6 @@ export namespace Prisma {
     changes?: PropertyChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
-    reactions?: ReactedPropertyCreateNestedManyWithoutPropertyInput
     views?: PropertyViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeCreateNestedManyWithoutPropertyInput
@@ -91958,7 +90352,6 @@ export namespace Prisma {
     changes?: PropertyChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
-    reactions?: ReactedPropertyUncheckedCreateNestedManyWithoutPropertyInput
     views?: PropertyViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeUncheckedCreateNestedManyWithoutPropertyInput
@@ -92022,7 +90415,6 @@ export namespace Prisma {
     changes?: PropertyChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
-    reactions?: ReactedPropertyUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUpdateManyWithoutPropertyNestedInput
@@ -92070,215 +90462,6 @@ export namespace Prisma {
     changes?: PropertyChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
-    reactions?: ReactedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
-    views?: PropertyViewUncheckedUpdateManyWithoutPropertyNestedInput
-    competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
-    representatives?: PropertyRepresentativeUncheckedUpdateManyWithoutPropertyNestedInput
-  }
-
-  export type PropertyCreateWithoutReactionsInput = {
-    id?: string
-    slug: string
-    title: string
-    description: string
-    coverImage: string
-    type: $Enums.PropertyType
-    purpose: $Enums.PropertyPurpose
-    status?: $Enums.PropertyStatus
-    currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
-    locationText: string
-    geoLocation: string
-    structuredLocation: string
-    details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
-    roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
-    distancing?: NullableJsonNullValueInput | InputJsonValue
-    earnings?: NullableJsonNullValueInput | InputJsonValue
-    landDetails?: NullableJsonNullValueInput | InputJsonValue
-    plots?: NullableJsonNullValueInput | InputJsonValue
-    apartmentDetails?: NullableJsonNullValueInput | InputJsonValue
-    metaTags?: PropertyCreatemetaTagsInput | string[]
-    amenities?: PropertyCreateamenitiesInput | string[]
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    isFeatured?: boolean
-    isApproved?: boolean
-    isDeleted?: boolean
-    customId?: string | null
-    media?: PropertyMediaCreateNestedManyWithoutPropertyInput
-    houseDetail?: PropertyHouseDetailCreateNestedOneWithoutPropertyInput
-    apartmentDetail?: PropertyApartmentDetailCreateNestedOneWithoutPropertyInput
-    landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
-    commercialDetail?: PropertyCommercialDetailCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceCreateNestedManyWithoutPropertyInput
-    owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
-    documents?: PropertyDocumentCreateNestedManyWithoutPropertyInput
-    changes?: PropertyChangeCreateNestedManyWithoutPropertyInput
-    links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
-    linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
-    views?: PropertyViewCreateNestedManyWithoutPropertyInput
-    competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
-    representatives?: PropertyRepresentativeCreateNestedManyWithoutPropertyInput
-  }
-
-  export type PropertyUncheckedCreateWithoutReactionsInput = {
-    id?: string
-    slug: string
-    title: string
-    description: string
-    coverImage: string
-    type: $Enums.PropertyType
-    purpose: $Enums.PropertyPurpose
-    status?: $Enums.PropertyStatus
-    currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
-    locationText: string
-    geoLocation: string
-    structuredLocation: string
-    details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
-    roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
-    distancing?: NullableJsonNullValueInput | InputJsonValue
-    earnings?: NullableJsonNullValueInput | InputJsonValue
-    landDetails?: NullableJsonNullValueInput | InputJsonValue
-    plots?: NullableJsonNullValueInput | InputJsonValue
-    apartmentDetails?: NullableJsonNullValueInput | InputJsonValue
-    metaTags?: PropertyCreatemetaTagsInput | string[]
-    amenities?: PropertyCreateamenitiesInput | string[]
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    isFeatured?: boolean
-    isApproved?: boolean
-    isDeleted?: boolean
-    customId?: string | null
-    media?: PropertyMediaUncheckedCreateNestedManyWithoutPropertyInput
-    houseDetail?: PropertyHouseDetailUncheckedCreateNestedOneWithoutPropertyInput
-    apartmentDetail?: PropertyApartmentDetailUncheckedCreateNestedOneWithoutPropertyInput
-    landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
-    commercialDetail?: PropertyCommercialDetailUncheckedCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceUncheckedCreateNestedManyWithoutPropertyInput
-    owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
-    documents?: PropertyDocumentUncheckedCreateNestedManyWithoutPropertyInput
-    changes?: PropertyChangeUncheckedCreateNestedManyWithoutPropertyInput
-    links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
-    linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
-    views?: PropertyViewUncheckedCreateNestedManyWithoutPropertyInput
-    competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
-    representatives?: PropertyRepresentativeUncheckedCreateNestedManyWithoutPropertyInput
-  }
-
-  export type PropertyCreateOrConnectWithoutReactionsInput = {
-    where: PropertyWhereUniqueInput
-    create: XOR<PropertyCreateWithoutReactionsInput, PropertyUncheckedCreateWithoutReactionsInput>
-  }
-
-  export type PropertyUpsertWithoutReactionsInput = {
-    update: XOR<PropertyUpdateWithoutReactionsInput, PropertyUncheckedUpdateWithoutReactionsInput>
-    create: XOR<PropertyCreateWithoutReactionsInput, PropertyUncheckedCreateWithoutReactionsInput>
-    where?: PropertyWhereInput
-  }
-
-  export type PropertyUpdateToOneWithWhereWithoutReactionsInput = {
-    where?: PropertyWhereInput
-    data: XOR<PropertyUpdateWithoutReactionsInput, PropertyUncheckedUpdateWithoutReactionsInput>
-  }
-
-  export type PropertyUpdateWithoutReactionsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
-    type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
-    purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
-    status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
-    currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    locationText?: StringFieldUpdateOperationsInput | string
-    geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
-    details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
-    roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
-    distancing?: NullableJsonNullValueInput | InputJsonValue
-    earnings?: NullableJsonNullValueInput | InputJsonValue
-    landDetails?: NullableJsonNullValueInput | InputJsonValue
-    plots?: NullableJsonNullValueInput | InputJsonValue
-    apartmentDetails?: NullableJsonNullValueInput | InputJsonValue
-    metaTags?: PropertyUpdatemetaTagsInput | string[]
-    amenities?: PropertyUpdateamenitiesInput | string[]
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isApproved?: BoolFieldUpdateOperationsInput | boolean
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: PropertyMediaUpdateManyWithoutPropertyNestedInput
-    houseDetail?: PropertyHouseDetailUpdateOneWithoutPropertyNestedInput
-    apartmentDetail?: PropertyApartmentDetailUpdateOneWithoutPropertyNestedInput
-    landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
-    commercialDetail?: PropertyCommercialDetailUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUpdateManyWithoutPropertyNestedInput
-    owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
-    documents?: PropertyDocumentUpdateManyWithoutPropertyNestedInput
-    changes?: PropertyChangeUpdateManyWithoutPropertyNestedInput
-    links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
-    linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
-    views?: PropertyViewUpdateManyWithoutPropertyNestedInput
-    competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
-    representatives?: PropertyRepresentativeUpdateManyWithoutPropertyNestedInput
-  }
-
-  export type PropertyUncheckedUpdateWithoutReactionsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
-    type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
-    purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
-    status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
-    currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    locationText?: StringFieldUpdateOperationsInput | string
-    geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
-    details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
-    roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
-    distancing?: NullableJsonNullValueInput | InputJsonValue
-    earnings?: NullableJsonNullValueInput | InputJsonValue
-    landDetails?: NullableJsonNullValueInput | InputJsonValue
-    plots?: NullableJsonNullValueInput | InputJsonValue
-    apartmentDetails?: NullableJsonNullValueInput | InputJsonValue
-    metaTags?: PropertyUpdatemetaTagsInput | string[]
-    amenities?: PropertyUpdateamenitiesInput | string[]
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isApproved?: BoolFieldUpdateOperationsInput | boolean
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: PropertyMediaUncheckedUpdateManyWithoutPropertyNestedInput
-    houseDetail?: PropertyHouseDetailUncheckedUpdateOneWithoutPropertyNestedInput
-    apartmentDetail?: PropertyApartmentDetailUncheckedUpdateOneWithoutPropertyNestedInput
-    landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
-    commercialDetail?: PropertyCommercialDetailUncheckedUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUncheckedUpdateManyWithoutPropertyNestedInput
-    owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
-    documents?: PropertyDocumentUncheckedUpdateManyWithoutPropertyNestedInput
-    changes?: PropertyChangeUncheckedUpdateManyWithoutPropertyNestedInput
-    links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
-    linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -92327,7 +90510,6 @@ export namespace Prisma {
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeCreateNestedManyWithoutPropertyInput
   }
@@ -92375,7 +90557,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeUncheckedCreateNestedManyWithoutPropertyInput
   }
@@ -92439,7 +90620,6 @@ export namespace Prisma {
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUpdateManyWithoutPropertyNestedInput
   }
@@ -92487,7 +90667,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUncheckedUpdateManyWithoutPropertyNestedInput
   }
@@ -94859,7 +93038,6 @@ export namespace Prisma {
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyCreateNestedManyWithoutPropertyInput
     views?: PropertyViewCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeCreateNestedManyWithoutPropertyInput
   }
@@ -94907,7 +93085,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
     savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
-    reactions?: ReactedPropertyUncheckedCreateNestedManyWithoutPropertyInput
     views?: PropertyViewUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: PropertyRepresentativeUncheckedCreateNestedManyWithoutPropertyInput
   }
@@ -95010,7 +93187,6 @@ export namespace Prisma {
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUpdateManyWithoutPropertyNestedInput
   }
@@ -95058,7 +93234,6 @@ export namespace Prisma {
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
-    reactions?: ReactedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
     views?: PropertyViewUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: PropertyRepresentativeUncheckedUpdateManyWithoutPropertyNestedInput
   }
@@ -96396,14 +94571,6 @@ export namespace Prisma {
     savedAt?: Date | string
   }
 
-  export type ReactedPropertyCreateManyPropertyInput = {
-    id?: string
-    trackedId: string
-    onType: string
-    reaction: $Enums.Reaction
-    reactedAt?: Date | string
-  }
-
   export type PropertyViewCreateManyPropertyInput = {
     id?: string
     accountId: string
@@ -96612,30 +94779,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     accountId?: StringFieldUpdateOperationsInput | string
     savedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ReactedPropertyUpdateWithoutPropertyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    trackedId?: StringFieldUpdateOperationsInput | string
-    onType?: StringFieldUpdateOperationsInput | string
-    reaction?: EnumReactionFieldUpdateOperationsInput | $Enums.Reaction
-    reactedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ReactedPropertyUncheckedUpdateWithoutPropertyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    trackedId?: StringFieldUpdateOperationsInput | string
-    onType?: StringFieldUpdateOperationsInput | string
-    reaction?: EnumReactionFieldUpdateOperationsInput | $Enums.Reaction
-    reactedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ReactedPropertyUncheckedUpdateManyWithoutPropertyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    trackedId?: StringFieldUpdateOperationsInput | string
-    onType?: StringFieldUpdateOperationsInput | string
-    reaction?: EnumReactionFieldUpdateOperationsInput | $Enums.Reaction
-    reactedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PropertyViewUpdateWithoutPropertyInput = {

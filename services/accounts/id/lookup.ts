@@ -408,7 +408,6 @@ export async function deleteAccountAndData(id: string): Promise<void> {
       prisma.requirement.deleteMany({ where: { userId: id } }),
       prisma.savedProperty.deleteMany({ where: { accountId: id } }),
       prisma.propertyView.deleteMany({ where: { accountId: id } }),
-      prisma.reactedProperty.deleteMany({ where: { trackedId: id } }),
       prisma.userPreference.deleteMany({ where: { accountId: id } }),
       prisma.activity.deleteMany({ where: { accountId: id } }),
       prisma.clientLink.deleteMany({ where: { trackerId: id } }),

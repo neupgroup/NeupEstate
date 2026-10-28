@@ -401,15 +401,6 @@ exports.Prisma.SavedPropertyScalarFieldEnum = {
   savedAt: 'savedAt'
 };
 
-exports.Prisma.ReactedPropertyScalarFieldEnum = {
-  id: 'id',
-  trackedId: 'trackedId',
-  propertyId: 'propertyId',
-  onType: 'onType',
-  reaction: 'reaction',
-  reactedAt: 'reactedAt'
-};
-
 exports.Prisma.PropertyViewScalarFieldEnum = {
   id: 'id',
   accountId: 'accountId',
@@ -827,12 +818,6 @@ exports.PropertyRepresentativeRole = exports.$Enums.PropertyRepresentativeRole =
   listingOwner_propertyOwner: 'listingOwner_propertyOwner'
 };
 
-exports.Reaction = exports.$Enums.Reaction = {
-  Liked: 'Liked',
-  Disliked: 'Disliked',
-  Reported: 'Reported'
-};
-
 exports.LeadType = exports.$Enums.LeadType = {
   BUYER: 'BUYER',
   SELLER: 'SELLER',
@@ -877,7 +862,6 @@ exports.Prisma.ModelName = {
   Review: 'Review',
   Requirement: 'Requirement',
   SavedProperty: 'SavedProperty',
-  ReactedProperty: 'ReactedProperty',
   PropertyView: 'PropertyView',
   BaseLead: 'BaseLead',
   ClientContact: 'ClientContact',

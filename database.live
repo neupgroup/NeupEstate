@@ -520,15 +520,6 @@ Fields:
 > timeViewed: integer NOT NULL;
 > viewedOn: text NOT NULL;
 
-Table: reacted_properties, Model: ReactedProperty
-Fields:
-> id: text PK, NOT NULL;
-> trackedId: text NOT NULL;
-> propertyId: text NOT NULL, references property.id;
-> onType: text NOT NULL;
-> reaction: Reaction NOT NULL;
-> reactedAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
-
 Table: requirements, Model: Requirement
 Fields:
 > id: text PK, NOT NULL;
