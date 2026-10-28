@@ -9,13 +9,20 @@ export type AgentRepresentative = {
 };
 
 export async function getPropertyAgentRepresentatives(input: {
+  propertyId: string;
   listingOwnerId?: string | null;
   supportingAgentIds?: Array<string | { id?: string }>;
   includeListingOwner?: boolean;
   includeAgents?: boolean;
   includeSupportingAgents?: boolean;
 }): Promise<AgentRepresentative[]> {
-  const listingOwnerId = input.listingOwnerId?.trim() || '';
+  const propertyRepresentatives = await prisma.propertyRepresentative.findMany({
+    where: { propertyId: input.propertyId, role: { in: ['listingOwner', 'listingParty'] } },
+    include: { representative: { select: { id: true, accountType: true, displayName: true, displayImage: true } } },
+  });
+  const listingOwner = propertyRepresentatives.find((entry) => entry.role === 'listingOwner' && entry.representative.accountType === 'individual.agent');
+  const listingOwnerAccount = listingOwner?.representative;
+  const listingOwnerId = listingOwnerAccount?.id || input.listingOwnerId?.trim() || '';
   const supportingAgentIds = [...new Set((input.supportingAgentIds ?? [])
     .map((agent) => typeof agent === 'string' ? agent : agent.id ?? '')
     .map((id) => id.trim())
@@ -41,7 +48,7 @@ export async function getPropertyAgentRepresentatives(input: {
     ...agentRecords.map((agent) => agent.userId).filter((id): id is string => Boolean(id)),
     ...acceptedAgentLinks.map((link) => link.agentId),
   ]);
-  const listingOwnerIsAgent = listingOwnerId ? mappedAgentIds.has(listingOwnerId) : false;
+  const listingOwnerIsAgent = Boolean(listingOwnerAccount) || (listingOwnerId ? mappedAgentIds.has(listingOwnerId) : false);
 
   const accountIds = [...new Set([
     ...(input.includeListingOwner && listingOwnerId ? [listingOwnerId] : []),
@@ -55,6 +62,7 @@ export async function getPropertyAgentRepresentatives(input: {
       })
     : [];
   const accountById = new Map(accounts.map((account) => [account.id, account]));
+  if (listingOwnerAccount) accountById.set(listingOwnerAccount.id, listingOwnerAccount);
   const representatives: AgentRepresentative[] = [];
 
   if (input.includeListingOwner && listingOwnerId && !(input.includeAgents && listingOwnerIsAgent)) {

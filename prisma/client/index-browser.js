@@ -156,8 +156,6 @@ exports.Prisma.PropertyScalarFieldEnum = {
   locationText: 'locationText',
   geoLocation: 'geoLocation',
   structuredLocation: 'structuredLocation',
-  agency: 'agency',
-  listingOwner: 'listingOwner',
   details: 'details',
   pricing: 'pricing',
   roadAccessDetails: 'roadAccessDetails',
@@ -276,6 +274,14 @@ exports.Prisma.PropertyOwnerScalarFieldEnum = {
   propertyId: 'propertyId',
   ownerClientId: 'ownerClientId',
   isPrimaryOwner: 'isPrimaryOwner'
+};
+
+exports.Prisma.PropertyRepresentativeScalarFieldEnum = {
+  id: 'id',
+  propertyId: 'propertyId',
+  representativeId: 'representativeId',
+  role: 'role',
+  status: 'status'
 };
 
 exports.Prisma.PropertyDocumentScalarFieldEnum = {
@@ -812,6 +818,13 @@ exports.PropertyStatus = exports.$Enums.PropertyStatus = {
   ARCHIVED: 'ARCHIVED'
 };
 
+exports.PropertyRepresentativeRole = exports.$Enums.PropertyRepresentativeRole = {
+  propertyOwner: 'propertyOwner',
+  listingOwner: 'listingOwner',
+  listingParty: 'listingParty',
+  listingOwner_propertyOwner: 'listingOwner_propertyOwner'
+};
+
 exports.Reaction = exports.$Enums.Reaction = {
   Liked: 'Liked',
   Disliked: 'Disliked',
@@ -851,6 +864,7 @@ exports.Prisma.ModelName = {
   PropertyCommercialDetail: 'PropertyCommercialDetail',
   PropertyPrice: 'PropertyPrice',
   PropertyOwner: 'PropertyOwner',
+  PropertyRepresentative: 'PropertyRepresentative',
   PropertyDocument: 'PropertyDocument',
   PropertyChange: 'PropertyChange',
   Agency: 'Agency',

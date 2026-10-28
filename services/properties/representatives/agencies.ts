@@ -7,21 +7,24 @@ export type AgencyRepresentative = {
   image: string | null;
 };
 
-export async function getPropertyAgencyRepresentative(agencyId?: string | null): Promise<AgencyRepresentative[]> {
-  const id = agencyId?.trim();
-  if (!id || id === 'unknown') return [];
-
-  const agency = await prisma.agency.findUnique({
-    where: { id },
-    select: { id: true, name: true, logoUrl: true },
+export async function getPropertyAgencyRepresentative(propertyId?: string | null): Promise<AgencyRepresentative[]> {
+  const id = propertyId?.trim();
+  if (!id) return [];
+  const entry = await prisma.propertyRepresentative.findFirst({
+    where: {
+      propertyId: id,
+      role: 'listingOwner',
+      representative: { accountType: { in: ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'] } },
+    },
+    include: { representative: { select: { id: true, displayName: true, displayImage: true } } },
   });
-  const account = agency ? null : await prisma.account.findUnique({
-    where: { id },
-    select: { id: true, displayName: true, displayImage: true },
-  });
-
+  if (!entry) return [];
+  const [agency, account] = await Promise.all([
+    prisma.agency.findUnique({ where: { id: entry.representative.id }, select: { name: true, logoUrl: true } }),
+    prisma.account.findUnique({ where: { id: entry.representative.id }, select: { displayName: true, displayImage: true } }),
+  ]);
   return [{
-    id,
+    id: entry.representative.id,
     type: 'agency',
     name: agency?.name ?? account?.displayName ?? null,
     image: agency?.logoUrl ?? account?.displayImage ?? null,

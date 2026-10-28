@@ -102,8 +102,6 @@ function buildCoreData(d: Partial<CreatePropertyInput> & Record<string, any>) {
     locationText:      truncate(d.location ?? '', 255),
     geoLocation:       truncate(geo, 63),
     structuredLocation: d.structuredLocation ? JSON.stringify(d.structuredLocation) : '',
-    agency:            d.agency ?? null,
-    listingOwner:      d.listingOwner !== undefined ? d.listingOwner : d.agent ?? null,
     isFeatured:        d.isFeatured ?? false,
     isApproved:        d.isApproved ?? false,
     amenities:         Array.isArray(d.amenities) ? d.amenities : [],
@@ -230,25 +228,22 @@ function normalizePropertyAgent(value: unknown): string | null | undefined {
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
 export async function resolveMergedPropertyData(id: string, patch: Partial<CreatePropertyInput> & Record<string, any>) {
-  const [current, currentRecord] = await Promise.all([
-    getPropertyById(id, { includeInactive: true }),
-    prisma.property.findUnique({ where: { id }, select: { agency: true, listingOwner: true } }),
-  ]);
+  const current = await getPropertyById(id, { includeInactive: true });
 
-  if (!current || !currentRecord) {
+  if (!current) {
     throw new Error('Property not found.');
   }
 
   const merged = deepMergePropertyData(current as Record<string, any>, patch) as Partial<CreatePropertyInput> & Record<string, any>;
 
-  // `getPropertyById()` returns a display object for `agency`; Prisma expects the scalar FK value.
-  merged.agency = normalizePropertyAgency(patch.agency) ?? currentRecord.agency;
+  const currentAgencyId = current.agency?.id && current.agency.id !== 'unknown' ? current.agency.id : null;
+  merged.agency = patch.agency !== undefined ? normalizePropertyAgency(patch.agency) : currentAgencyId;
   if ('listingOwner' in patch) {
     merged.listingOwner = normalizePropertyAgent(patch.listingOwner);
   } else if ('listingAgentAccountId' in patch) {
     merged.listingOwner = normalizePropertyAgent(patch.listingAgentAccountId);
   } else {
-    merged.listingOwner = currentRecord.listingOwner;
+    merged.listingOwner = current.listingAgentId ?? null;
   }
   if (patch.owner !== undefined && patch.owners === undefined) {
     merged.owners = normalizePropertyOwners(patch.owner);
@@ -407,6 +402,20 @@ export async function replacePropertyOwners(propertyId: string, owners: CreatePr
   });
 }
 
+async function replacePropertyRepresentatives(propertyId: string, agencyId?: string | null, listingOwnerId?: string | null) {
+  const representativeIds = [...new Set([agencyId, listingOwnerId].filter((id): id is string => Boolean(id?.trim())).map((id) => id.trim()))];
+  await prisma.propertyRepresentative.deleteMany({ where: { propertyId, role: 'listingOwner' } });
+  if (!representativeIds.length) return;
+  await prisma.propertyRepresentative.createMany({
+    data: representativeIds.map((representativeId) => ({
+      propertyId,
+      representativeId,
+      role: 'listingOwner',
+      status: null,
+    })),
+  });
+}
+
 
 
 /**
@@ -418,6 +427,7 @@ export async function createPropertyRecord(d: CreatePropertyInput & { creatorId?
   try {
     const coreData = buildCoreData({ ...d, status: 'approved', isApproved: true });
     const created = await createPropertyRecordWithGeneratedSlug(coreData);
+    await replacePropertyRepresentatives(created.id, d.agency, d.listingOwner ?? d.agent);
     if (!created.slug) await prisma.property.update({ where: { id: created.id }, data: { slug: created.id } });
     await upsertDetailTable(created.id, created.type, d);
     await upsertMedia(created.id, d.images ?? []);
@@ -440,6 +450,7 @@ export async function addProperty(d: Omit<ExtractedPropertyData, 'embedding'>): 
     const { isPropertyPage: _, ...rest } = d as any;
     const coreData = buildCoreData({ ...rest, status: 'pending', isApproved: false });
     const created = await createPropertyRecordWithGeneratedSlug(coreData);
+    await replacePropertyRepresentatives(created.id, rest.agency, rest.listingOwner ?? rest.agent);
     if (!created.slug) await prisma.property.update({ where: { id: created.id }, data: { slug: created.id } });
     await upsertDetailTable(created.id, created.type, rest);
     await upsertMedia(created.id, rest.images ?? []);
@@ -459,6 +470,7 @@ export async function updateProperty(id: string, d: UpdatePropertyInput): Promis
     const merged = await resolveMergedPropertyData(id, d as Partial<CreatePropertyInput> & Record<string, any>);
     const coreData = buildCoreData(merged);
     await prisma.property.update({ where: { id }, data: coreData as any });
+    await replacePropertyRepresentatives(id, merged.agency, merged.listingOwner);
     await upsertDetailTable(id, mapTypeToEnum((merged as any).category ?? merged.categories?.[0]), merged);
     if (merged.images !== undefined) await upsertMedia(id, merged.images ?? []);
     await replacePropertyOwners(id, merged.owners);

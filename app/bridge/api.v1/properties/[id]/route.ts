@@ -150,6 +150,7 @@ const getHandler = async (req: NextRequest, context: Context) => {
     const { representatives: representativeSelection } = includes;
     const [agentRepresentatives, agencyRepresentatives, ownerRepresentatives] = await Promise.all([
       getPropertyAgentRepresentatives({
+        propertyId: property.id ?? routeId,
         listingOwnerId: typeof property.listingAgentId === 'string' ? property.listingAgentId : null,
         supportingAgentIds: Array.isArray(supportingAgentIds) ? supportingAgentIds : [],
         includeListingOwner: representativeSelection.all || representativeSelection.listingOwner,
@@ -157,7 +158,7 @@ const getHandler = async (req: NextRequest, context: Context) => {
         includeSupportingAgents: representativeSelection.all || representativeSelection.agents,
       }),
       representativeSelection.all || representativeSelection.agency
-        ? getPropertyAgencyRepresentative(property.isOwnerListing === false && property.agency?.id !== 'unknown' ? property.agency?.id : null)
+        ? getPropertyAgencyRepresentative(property.id)
         : Promise.resolve([]),
       representativeSelection.all || representativeSelection.owners
         ? Promise.resolve(getPropertyOwnerRepresentatives(Array.isArray(property.owners) ? property.owners : []))

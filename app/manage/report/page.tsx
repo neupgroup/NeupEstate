@@ -114,15 +114,18 @@ async function getAgencyReportData(agencyAccountId: string) {
     where: {
       isDeleted: false,
       OR: [
-        { agency: agencyAccountId },
-        { listingOwner: { in: memberIds } },
+        { representatives: { some: { role: 'listingOwner', representativeId: agencyAccountId } } },
+        { representatives: { some: { role: 'listingOwner', representativeId: { in: memberIds } } } },
       ],
     },
     select: {
       id: true,
       slug: true,
       title: true,
-      listingOwner: true,
+      representatives: {
+        where: { role: 'listingOwner', representativeId: { in: memberIds.filter((id) => id !== agencyAccountId) } },
+        select: { representativeId: true },
+      },
       status: true,
       isApproved: true,
       createdAt: true,
@@ -235,8 +238,9 @@ async function getAgencyReportData(agencyAccountId: string) {
   }
 
   for (const property of properties) {
-    if (!property.listingOwner) continue;
-    const agentSummary = agentSummaryMap.get(property.listingOwner);
+    const listingOwnerId = property.representatives[0]?.representativeId;
+    if (!listingOwnerId) continue;
+    const agentSummary = agentSummaryMap.get(listingOwnerId);
     if (!agentSummary) continue;
 
     agentSummary.listings += 1;
@@ -249,8 +253,9 @@ async function getAgencyReportData(agencyAccountId: string) {
 
   for (const inquiry of inquiries) {
     const property = propertyById.get(inquiry.propertyId);
-    if (!property?.listingOwner) continue;
-    const agentSummary = agentSummaryMap.get(property.listingOwner);
+    const listingOwnerId = property?.representatives[0]?.representativeId;
+    if (!listingOwnerId) continue;
+    const agentSummary = agentSummaryMap.get(listingOwnerId);
     if (agentSummary) {
       agentSummary.inquiries += 1;
     }
@@ -277,7 +282,7 @@ async function getAgencyReportData(agencyAccountId: string) {
       id: `property-${property.id}`,
       kind: 'property' as const,
       title: property.title,
-      meta: `${property.type} · ${property.purpose} · ${memberNameMap.get(property.listingOwner || '') ?? 'Unassigned'}`,
+      meta: `${property.type} · ${property.purpose} · ${memberNameMap.get(property.representatives[0]?.representativeId || '') ?? 'Unassigned'}`,
       createdAt: property.createdAt,
       href: `/manage/properties/${property.id}`,
     })),

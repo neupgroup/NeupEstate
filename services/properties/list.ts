@@ -110,8 +110,13 @@ export async function getPaginatedProperties(opts: {
       }
       andClauses.push({ OR: statusConditions.length ? statusConditions : [{ id: { in: [] } }] });
     }
-    if (filters.isOwnerListing === true) where.agency = null;
-    if (filters.isOwnerListing === false) where.agency = { not: null };
+    const agencyAccountTypes = ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'];
+    if (filters.isOwnerListing === true) {
+      andClauses.push({ representatives: { none: { role: 'listingOwner', representative: { accountType: { in: agencyAccountTypes } } } } });
+    }
+    if (filters.isOwnerListing === false) {
+      andClauses.push({ representatives: { some: { role: 'listingOwner', representative: { accountType: { in: agencyAccountTypes } } } } });
+    }
     if (filters.purpose?.length) where.purpose = { in: filters.purpose.map(mapPurposeToEnum) };
     if (filters.category?.length) where.type = { in: filters.category.map(mapTypeToEnum) };
     // Match the same usage classification exposed by mapRecord.
@@ -122,8 +127,12 @@ export async function getPaginatedProperties(opts: {
       ];
       andClauses.push({ type: { in: categories } });
     }
-    if (filters.agencyName) where.agency = { contains: filters.agencyName, mode: 'insensitive' };
-    if (filters.listingAgent) where.listingOwner = { contains: filters.listingAgent, mode: 'insensitive' };
+    if (filters.agencyName) {
+      andClauses.push({ representatives: { some: { role: 'listingOwner', representative: { accountType: { in: agencyAccountTypes }, displayName: { contains: filters.agencyName, mode: 'insensitive' } } } } });
+    }
+    if (filters.listingAgent) {
+      andClauses.push({ representatives: { some: { role: 'listingOwner', representative: { accountType: { notIn: agencyAccountTypes }, displayName: { contains: filters.listingAgent, mode: 'insensitive' } } } } });
+    }
     if (filters.minBedrooms != null || filters.maxBedrooms != null) {
       where.bedrooms = {
         ...(Number.isFinite(filters.minBedrooms) ? { gte: filters.minBedrooms } : {}),
@@ -133,8 +142,8 @@ export async function getPaginatedProperties(opts: {
     if (Number.isFinite(filters.minPrice)) where.displayPrice = { ...where.displayPrice, gte: filters.minPrice };
     if (Number.isFinite(filters.maxPrice)) where.displayPrice = { ...where.displayPrice, lte: filters.maxPrice };
     if (opts.ownerAccountId) where.owners = { some: { ownerClientId: opts.ownerAccountId } };
-    if (opts.agentAccountId) ownershipClauses.push({ listingOwner: opts.agentAccountId });
-    if (opts.agencyIds?.length) ownershipClauses.push({ agency: { in: opts.agencyIds } });
+    if (opts.agentAccountId) ownershipClauses.push({ representatives: { some: { role: 'listingOwner', representativeId: opts.agentAccountId } } });
+    if (opts.agencyIds?.length) ownershipClauses.push({ representatives: { some: { role: 'listingOwner', representativeId: { in: opts.agencyIds } } } });
     if (ownershipClauses.length > 0) {
       andClauses.push({ OR: ownershipClauses });
     }
@@ -477,7 +486,7 @@ export async function getAwaitingReviewItems(
  */
 export async function getPropertiesByAgent(agentId: string, opts: { includeInactive?: boolean } = {}): Promise<Property[]> {
   try {
-    const where: any = { listingOwner: agentId };
+    const where: any = { representatives: { some: { role: 'listingOwner', representativeId: agentId, representative: { accountType: 'individual.agent' } } } };
     if (!opts.includeInactive) where.status = PROPERTY_STATUS.ACTIVE;
     const records = await prisma.property.findMany({ where, orderBy: { updatedAt: 'desc' }, include: PROPERTY_INCLUDE });
     return hydratePropertyAccountLabels(records.map(mapRecord));
@@ -496,9 +505,11 @@ export async function getBridgePropertiesByAccount(opts: BridgePropertyQuery): P
     const offset = Math.max(0, opts.offset ?? 0);
     const fields = resolveBridgePropertyFields(opts.fields);
     const where: any = {};
+    const representativeFilters: any[] = [];
 
-    if (opts.agencyId) where.agency = opts.agencyId;
-    if (opts.agentId) where.listingOwner = opts.agentId;
+    if (opts.agencyId) representativeFilters.push({ representatives: { some: { role: 'listingOwner', representativeId: opts.agencyId, representative: { accountType: { in: ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'] } } } } });
+    if (opts.agentId) representativeFilters.push({ representatives: { some: { role: 'listingOwner', representativeId: opts.agentId, representative: { accountType: 'individual.agent' } } } });
+    if (representativeFilters.length) where.AND = representativeFilters;
     if (!opts.includeInactive) where.status = PROPERTY_STATUS.ACTIVE;
 
     const [totalCount, records] = await Promise.all([

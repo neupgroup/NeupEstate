@@ -334,8 +334,6 @@ Fields:
 > locationText: varchar(255) NOT NULL;
 > geoLocation: varchar(63) NOT NULL;
 > structuredLocation: text NOT NULL;
-> agency: text;
-> listingOwner: text, INDEX property_listing_owner_idx(listingOwner);
 > pricing: jsonb;
 > roadAccessDetails: jsonb;
 > distancing: jsonb;
@@ -475,6 +473,14 @@ Fields:
 > property_id: text NOT NULL, UNIQUE property_owner_property_id_owner_client_id_key(property_id, owner_client_id), references property.id;
 > owner_client_id: text NOT NULL, UNIQUE property_owner_property_id_owner_client_id_key(property_id, owner_client_id), references base_lead.id;
 > is_primary_owner: boolean NOT NULL, default: false;
+
+Table: property_representatives, Model: PropertyRepresentative
+Fields:
+> id: text PK, NOT NULL;
+> property_id: text NOT NULL, INDEX property_representatives_property_id_idx(property_id), references property.id;
+> representative_id: text NOT NULL, INDEX property_representatives_representative_id_idx(representative_id), references account.id;
+> role: enum(propertyOwner, listingOwner, listingParty, listingOwner.propertyOwner) NOT NULL;
+> status: text;
 
 Table: property_price, Model: PropertyPrice
 Fields:

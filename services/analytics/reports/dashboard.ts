@@ -254,13 +254,14 @@ async function buildContext(level: AnalyticsLevel, accountId: string, requestedW
 async function getPropertyIdsForAccounts(accountIds: string[], agencyId?: string): Promise<string[]> {
   if (!accountIds.length && !agencyId) return [];
 
+  const ownershipFilters: Prisma.PropertyWhereInput[] = [];
+  if (agencyId) ownershipFilters.push({ representatives: { some: { role: 'listingOwner', representativeId: agencyId } } });
+  if (accountIds.length) ownershipFilters.push({ representatives: { some: { role: 'listingOwner', representativeId: { in: accountIds } } } });
+
   const properties = await prisma.property.findMany({
     where: {
       isDeleted: false,
-      OR: [
-        agencyId ? { agency: agencyId } : {},
-        accountIds.length ? { listingOwner: { in: accountIds } } : {},
-      ].filter((filter) => Object.keys(filter).length > 0),
+      OR: ownershipFilters,
     },
     select: { id: true },
   });

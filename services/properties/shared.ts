@@ -107,6 +107,13 @@ export const PROPERTY_INCLUDE = {
     orderBy: [{ isPrimaryOwner: 'desc' as const }, { id: 'asc' as const }],
   },
   documents:       true,
+  representatives: {
+    include: {
+      representative: {
+        select: { id: true, accountType: true, displayName: true, displayImage: true },
+      },
+    },
+  },
 };
 
 export const BRIDGE_PROPERTY_FIELDS = [
@@ -435,6 +442,13 @@ export function mapRecord(record: any): Property {
   const price = firstPrice ? Number(firstPrice.price) : Number(record.displayPrice ?? 0);
 
   const { latitude, longitude } = parseGeoLocation(record.geoLocation);
+  const representatives = (record.representatives ?? [])
+    .filter((entry: any) => entry.role === 'listingOwner' && entry.representative)
+    .map((entry: any) => entry.representative);
+  const agencyRepresentative = representatives.find((account: any) =>
+    ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'].includes(account.accountType),
+  );
+  const listingAgentRepresentative = representatives.find((account: any) => account.id !== agencyRepresentative?.id);
 
   const house      = record.houseDetail;
   const apartment  = record.apartmentDetail;
@@ -498,10 +512,10 @@ export function mapRecord(record: any): Property {
     type:             record.type === PROPERTY_TYPE.COMMERCIAL ? 'Commercial' : 'Residential',
     images,
     amenities:        normalizeStringArray(record.amenities),
-    agency:           { id: record.agency || 'unknown', name: record.agency || 'Owner', logoUrl: 'https://placehold.co/200x80.png' },
-    listingAgent:     record.listingOwner || undefined,
-    listingAgentId:   record.listingOwner || undefined,
-    isOwnerListing:   !record.agency,
+    agency:           agencyRepresentative ? { id: agencyRepresentative.id, name: agencyRepresentative.displayName || agencyRepresentative.id, logoUrl: agencyRepresentative.displayImage || 'https://placehold.co/200x80.png' } : { id: 'unknown', name: 'Owner', logoUrl: 'https://placehold.co/200x80.png' },
+    listingAgent:     listingAgentRepresentative?.id,
+    listingAgentId:   listingAgentRepresentative?.id,
+    isOwnerListing:   !agencyRepresentative,
     isFeatured:       Boolean(record.isFeatured),
     isApproved:       Boolean(record.isApproved),
     status:           record.status as Property['status'],
@@ -551,21 +565,29 @@ export async function hydratePropertyAccountLabels(properties: Property[]): Prom
 
   if (!accountIds.length) return properties;
 
-  const accounts = await prisma.account.findMany({
-    where: { id: { in: accountIds } },
-    select: { id: true, displayName: true, displayImage: true },
-  });
+  const [accounts, agencies] = await Promise.all([
+    prisma.account.findMany({
+      where: { id: { in: accountIds } },
+      select: { id: true, displayName: true, displayImage: true },
+    }),
+    prisma.agency.findMany({
+      where: { id: { in: accountIds } },
+      select: { id: true, name: true, logoUrl: true },
+    }),
+  ]);
   const nameById = new Map(accounts.map((account) => [
     account.id,
     account.displayName?.trim() || account.id,
   ]));
   const imageById = new Map(accounts.map((account) => [account.id, account.displayImage]));
+  const agencyById = new Map(agencies.map((agency) => [agency.id, agency]));
 
   return properties.map((property) => ({
     ...property,
     agency: property.agency ? {
       ...property.agency,
-      name: nameById.get(property.agency.id) || property.agency.name,
+      name: agencyById.get(property.agency.id)?.name || nameById.get(property.agency.id) || property.agency.name,
+      logoUrl: agencyById.get(property.agency.id)?.logoUrl || imageById.get(property.agency.id) || property.agency.logoUrl,
     } : property.agency,
     listingAgent: property.listingAgent
       ? (nameById.get(property.listingAgent) || property.listingAgent)

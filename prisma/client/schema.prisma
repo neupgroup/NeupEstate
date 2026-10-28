@@ -47,34 +47,42 @@ enum PropertyCompetitionStatus {
   DECLINED
 }
 
+enum PropertyRepresentativeRole {
+  propertyOwner
+  listingOwner
+  listingParty
+  listingOwner_propertyOwner @map("listingOwner.propertyOwner")
+}
+
 // ============================================================================
 // Account & Activity
 // ============================================================================
 
 model Account {
-  id                              String                @id // ssid from NeupID Silent SSO
-  neupId                          String?               @unique @map("neup_id")
+  id                              String                   @id // ssid from NeupID Silent SSO
+  neupId                          String?                  @unique @map("neup_id")
   accountType                     String
-  createdOn                       DateTime              @default(now()) @map("created_on")
-  accessedOn                      DateTime              @default(now()) @map("accessed_on")
+  createdOn                       DateTime                 @default(now()) @map("created_on")
+  accessedOn                      DateTime                 @default(now()) @map("accessed_on")
   displayName                     String? // denormalized from NeupID — set on first create
   displayImage                    String? // denormalized from NeupID — set on first create
   connectionId                    String?
-  workingProfile                  String?               @map("working_profile")
+  workingProfile                  String?                  @map("working_profile")
   accessRows                      AccountAccess[]
-  workingProfileAccount           Account?              @relation("AccountWorkingProfile", fields: [workingProfile], references: [id], onDelete: SetNull)
-  workingProfileOf                Account[]             @relation("AccountWorkingProfile")
-  developedApplications           Application[]         @relation("ApplicationDeveloper")
-  agencyAgentMapAsAgency          AgencyAgentMap[]      @relation("AgencyAgentMapAgency")
-  agencyAgentMapAsAgent           AgencyAgentMap[]      @relation("AgencyAgentMapAgent")
-  baseLeadsBelongingTo            BaseLead[]            @relation("BaseLeadBelongsTo")
-  ownedSharedLeads                SharedLeads[]         @relation("SharedLeadsOwner")
+  workingProfileAccount           Account?                 @relation("AccountWorkingProfile", fields: [workingProfile], references: [id], onDelete: SetNull)
+  workingProfileOf                Account[]                @relation("AccountWorkingProfile")
+  developedApplications           Application[]            @relation("ApplicationDeveloper")
+  agencyAgentMapAsAgency          AgencyAgentMap[]         @relation("AgencyAgentMapAgency")
+  agencyAgentMapAsAgent           AgencyAgentMap[]         @relation("AgencyAgentMapAgent")
+  baseLeadsBelongingTo            BaseLead[]               @relation("BaseLeadBelongsTo")
+  ownedSharedLeads                SharedLeads[]            @relation("SharedLeadsOwner")
   intelligenceMappings            IntelligenceMapping[]
   intelligenceAlerts              IntelligenceAlert[]
   propertyChanges                 PropertyChange[]
-  createdPropertyChanges          PropertyChange[]      @relation("PropertyChangeCreatedBy")
-  propertyChangesForProfile       PropertyChange[]      @relation("PropertyChangeCreatedFor")
-  propertyChangesByWorkingProfile PropertyChange[]      @relation("PropertyChangeWorkingProfile")
+  createdPropertyChanges          PropertyChange[]         @relation("PropertyChangeCreatedBy")
+  propertyChangesForProfile       PropertyChange[]         @relation("PropertyChangeCreatedFor")
+  propertyChangesByWorkingProfile PropertyChange[]         @relation("PropertyChangeWorkingProfile")
+  propertyRepresentatives         PropertyRepresentative[]
 
   @@index([workingProfile])
   @@map("account")
@@ -111,8 +119,6 @@ model Property {
   locationText       String          @db.VarChar(255)
   geoLocation        String          @db.VarChar(63)
   structuredLocation String
-  agency             String?
-  listingOwner       String?
   details            Json?
   pricing            Json?
   roadAccessDetails  Json?
@@ -145,13 +151,12 @@ model Property {
   reactions        ReactedProperty[]
   views            PropertyView[]
   competitionMaps  PropertyCompetitionMap[]
+  representatives  PropertyRepresentative[]
 
   @@index([type])
   @@index([purpose])
   @@index([status])
   @@index([slug], map: "property_slug_idx")
-  @@index([agency])
-  @@index([listingOwner], map: "property_listing_owner_idx")
   @@map("property")
 }
 
@@ -299,6 +304,21 @@ model PropertyOwner {
   @@index([propertyId])
   @@index([ownerClientId])
   @@map("property_owner")
+}
+
+model PropertyRepresentative {
+  id               String                     @id @default(cuid())
+  propertyId       String                     @map("property_id")
+  representativeId String                     @map("representative_id")
+  role             PropertyRepresentativeRole
+  status           String?
+
+  property       Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  representative Account  @relation(fields: [representativeId], references: [id], onDelete: Cascade)
+
+  @@index([propertyId])
+  @@index([representativeId])
+  @@map("property_representatives")
 }
 
 model PropertyDocument {

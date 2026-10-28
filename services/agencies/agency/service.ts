@@ -74,7 +74,9 @@ async function getAgencyCounts(accountId: string) {
     }),
     prisma.property.count({
       where: {
-        agency: accountId,
+        representatives: {
+          some: { role: 'listingOwner', representativeId: accountId },
+        },
       },
     }),
   ]);
@@ -163,12 +165,13 @@ export async function getPublicAgencyAccounts({
             },
             _count: { agentId: true },
           }),
-          prisma.property.groupBy({
-            by: ['agency'],
+          prisma.propertyRepresentative.groupBy({
+            by: ['representativeId'],
             where: {
-              agency: { in: agencyIds },
+              role: 'listingOwner',
+              representativeId: { in: agencyIds },
             },
-            _count: { id: true },
+            _count: { propertyId: true },
           }),
         ])
       : [[], []];
@@ -178,8 +181,7 @@ export async function getPublicAgencyAccounts({
     );
     const propertyCountMap = new Map(
       propertyCounts
-        .filter((entry): entry is typeof entry & { agency: string } => Boolean(entry.agency))
-        .map((entry) => [entry.agency, entry._count.id]),
+        .map((entry) => [entry.representativeId, entry._count.propertyId]),
     );
 
     return records.map((record) =>
