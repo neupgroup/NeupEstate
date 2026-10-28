@@ -479,18 +479,100 @@ export async function getAwaitingReviewItems(
 
 
 
-/**
- * getPropertiesByAgent handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
- *
- * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
- */
-export async function getPropertiesByAgent(agentId: string, opts: { includeInactive?: boolean } = {}): Promise<Property[]> {
+type AccountPropertyCollection = 'account' | 'listed' | 'saved' | 'owned' | 'beingWorked';
+
+function normalizeAccountPropertyPage(offset = 0, limit = 20) {
+  return {
+    offset: Number.isSafeInteger(offset) && offset >= 0 ? offset : 0,
+    limit: Number.isSafeInteger(limit) && limit > 0 ? Math.min(limit, 100) : 20,
+  };
+}
+
+async function listAccountProperties(
+  accountId: string,
+  offset: number,
+  limit: number,
+  collection: AccountPropertyCollection,
+): Promise<Property[]> {
+  const page = normalizeAccountPropertyPage(offset, limit);
   try {
-    const where: any = { representatives: { some: { role: 'listingOwner', representativeId: agentId, representative: { accountType: 'individual.agent' } } } };
-    if (!opts.includeInactive) where.status = PROPERTY_STATUS.ACTIVE;
-    const records = await prisma.property.findMany({ where, orderBy: { updatedAt: 'desc' }, include: PROPERTY_INCLUDE });
+    if (collection === 'saved') {
+      const saved = await prisma.savedProperty.findMany({
+        where: { accountId, property: { isApproved: true, isDeleted: false } },
+        orderBy: { savedAt: 'desc' },
+        distinct: ['propertyId'],
+        skip: page.offset,
+        take: page.limit,
+        include: { property: { include: PROPERTY_INCLUDE } },
+      });
+      const properties = saved.map((entry) => entry.property).filter(Boolean).map(mapRecord).filter(onlyActive);
+      return hydratePropertyAccountLabels(properties);
+    }
+
+    const representativeRoles = collection === 'listed'
+      ? ['listingOwner', 'listingOwner_propertyOwner']
+      : collection === 'owned'
+        ? ['propertyOwner', 'listingOwner_propertyOwner']
+        : collection === 'beingWorked'
+          ? ['listingParty']
+          : undefined;
+    const relation = representativeRoles
+      ? { representatives: { some: { representativeId: accountId, role: { in: representativeRoles } } } }
+      : { representatives: { some: { representativeId: accountId } } };
+    const where: any = { isDeleted: false, ...relation };
+    if (collection === 'listed') where.status = PROPERTY_STATUS.ACTIVE;
+    if (collection === 'owned') {
+      where.OR = [
+        relation,
+        { owners: { some: { ownerClient: { belongsTo: accountId } } } },
+      ];
+      delete where.representatives;
+    }
+    if (collection === 'beingWorked') {
+      where.OR = [
+        relation,
+        { changes: { some: { accountId, isApproved: null, status: { in: ['changing', 'deleting'] } } } },
+      ];
+      delete where.representatives;
+    }
+
+    const records = await prisma.property.findMany({
+      where,
+      orderBy: { updatedAt: 'desc' },
+      skip: page.offset,
+      take: page.limit,
+      include: PROPERTY_INCLUDE,
+    });
     return hydratePropertyAccountLabels(records.map(mapRecord));
-  } catch (e) { await logger().type(`getPropertiesByAgent ${agentId}`).data({ error: String(e), details: {} }).log(); return []; }
+  } catch (error) {
+    await logger().type(`getProperties${collection} ${accountId}`).data({ error: String(error), details: {} }).log();
+    return [];
+  }
+}
+
+/** Lists properties represented by an account in any role. */
+export function getPropertiesByAccount(accountId: string, offset = 0, limit = 20): Promise<Property[]> {
+  return listAccountProperties(accountId, offset, limit, 'account');
+}
+
+/** Lists active properties where the account is a listing owner. */
+export function getPropertiesListed(accountId: string, offset = 0, limit = 20): Promise<Property[]> {
+  return listAccountProperties(accountId, offset, limit, 'listed');
+}
+
+/** Lists active properties saved by the account. */
+export function getPropertiesSaved(accountId: string, offset = 0, limit = 20): Promise<Property[]> {
+  return listAccountProperties(accountId, offset, limit, 'saved');
+}
+
+/** Lists properties the account represents as owner or owns through its client records. */
+export function getPropertiesOwned(accountId: string, offset = 0, limit = 20): Promise<Property[]> {
+  return listAccountProperties(accountId, offset, limit, 'owned');
+}
+
+/** Lists properties assigned to the account as a listing party or with an open change request. */
+export function getPropertiesBeingWorked(accountId: string, offset = 0, limit = 20): Promise<Property[]> {
+  return listAccountProperties(accountId, offset, limit, 'beingWorked');
 }
 
 

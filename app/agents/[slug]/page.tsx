@@ -1,7 +1,7 @@
 
 import { notFound } from 'next/navigation';
 import { getAgentBySlug } from '@/services/agents/agent/service';
-import { getPropertiesByAgent } from '@/services/properties/list';
+import { getPropertiesListed } from '@/services/properties/list';
 import { getReviewsByAgent } from '@/services/reviews';
 import { SafeImage, PropertyCard } from '@/components/estate';
 import { Link } from '@neup/components/ui/link';
@@ -29,7 +29,7 @@ export default async function AgentDetailPage({ params }: { params: Promise<{ sl
     }
 
     const [properties, reviews] = await Promise.all([
-        getPropertiesByAgent(agent.id),
+        getPropertiesListed(agent.id),
         getReviewsByAgent(agent.id)
     ]);
     
