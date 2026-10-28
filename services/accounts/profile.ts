@@ -107,7 +107,4 @@ export async function getAccountProfile(id: string) {
   };
 }
 
-export function isSupportedAccountProfileType(value: string): value is AccountProfileType {
-  return value === 'independentAgent' || value === 'agency' || value === 'companyAgent';
-}
 

@@ -551,28 +551,28 @@ async function listAccountProperties(
 }
 
 /** Lists properties represented by an account in any role. */
-export function getPropertiesByAccount(accountId: string, offset = 0, limit = 20): Promise<Property[]> {
-  return listAccountProperties(accountId, offset, limit, 'account');
+export async function getPropertiesByAccount(accountId: string, offset = 0, limit = 20): Promise<Property[]> {
+  return await listAccountProperties(accountId, offset, limit, 'account');
 }
 
 /** Lists active properties where the account is a listing owner. */
-export function getPropertiesListed(accountId: string, offset = 0, limit = 20): Promise<Property[]> {
-  return listAccountProperties(accountId, offset, limit, 'listed');
+export async function getPropertiesListed(accountId: string, offset = 0, limit = 20): Promise<Property[]> {
+  return await listAccountProperties(accountId, offset, limit, 'listed');
 }
 
 /** Lists active properties saved by the account. */
-export function getPropertiesSaved(accountId: string, offset = 0, limit = 20): Promise<Property[]> {
-  return listAccountProperties(accountId, offset, limit, 'saved');
+export async function getPropertiesSaved(accountId: string, offset = 0, limit = 20): Promise<Property[]> {
+  return await listAccountProperties(accountId, offset, limit, 'saved');
 }
 
 /** Lists properties the account represents as owner or owns through its client records. */
-export function getPropertiesOwned(accountId: string, offset = 0, limit = 20): Promise<Property[]> {
-  return listAccountProperties(accountId, offset, limit, 'owned');
+export async function getPropertiesOwned(accountId: string, offset = 0, limit = 20): Promise<Property[]> {
+  return await listAccountProperties(accountId, offset, limit, 'owned');
 }
 
 /** Lists properties assigned to the account as a listing party or with an open change request. */
-export function getPropertiesBeingWorked(accountId: string, offset = 0, limit = 20): Promise<Property[]> {
-  return listAccountProperties(accountId, offset, limit, 'beingWorked');
+export async function getPropertiesBeingWorked(accountId: string, offset = 0, limit = 20): Promise<Property[]> {
+  return await listAccountProperties(accountId, offset, limit, 'beingWorked');
 }
 
 

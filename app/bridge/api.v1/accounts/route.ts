@@ -9,9 +9,13 @@ Lists public account profiles by account category. Optional pagination uses
 */
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@neup/logica/logger';
-import { isSupportedAccountProfileType, listAccountProfiles } from '@/services/accounts/profile';
+import { listAccountProfiles, type AccountProfileType } from '@/services/accounts/profile';
 
 export const dynamic = 'force-dynamic';
+
+function isSupportedAccountProfileType(value: string): value is AccountProfileType {
+  return value === 'independentAgent' || value === 'agency' || value === 'companyAgent';
+}
 
 export async function GET(request: NextRequest) {
   const params = request.nextUrl.searchParams;
