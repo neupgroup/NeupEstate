@@ -7,6 +7,7 @@ import { User, MapPin, AlertCircle, MessageSquare } from "lucide-react";
 import { Button } from "@neup/components/ui/button";
 import { GuestSigninBanner } from "@/components/layout/guest-signin-banner";
 import { getAuthenticatedMeData } from "@/services/auth/me";
+import { NeupidMentions } from "@/components/neupid-mentions";
 
 export const dynamic = "force-dynamic";
 
@@ -60,7 +61,7 @@ export default async function AgentsPage() {
                     )}
                      {agent.about && (
                         <p className="text-sm text-muted-foreground mt-4 flex-grow">
-                           {agent.about.substring(0, 100)}{agent.about.length > 100 && '...'}
+                           <NeupidMentions text={`${agent.about.substring(0, 100)}${agent.about.length > 100 ? '...' : ''}`} />
                         </p>
                     )}
                 </CardContent>
