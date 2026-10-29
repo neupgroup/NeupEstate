@@ -46,10 +46,21 @@ Content-Type: application/json
 }
 ```
 
-Supported activityType values are follow_up, visit, meeting, and remarks.
-follow_up requires followUpMethod (phone call, whatsapp, or email). All types
-require non-empty remarks. activityOn is optional and defaults to the current
-server time when omitted. A visit may include propertyId.
+Request fields:
+- `activityType` (required): `follow_up`, `visit`, `meeting`, or `remarks`.
+- `followUpMethod` (required for `follow_up`): `phone call`, `whatsapp`, or `email`.
+- `activityOn` (optional): a date/time string accepted by JavaScript `Date.parse`,
+  preferably an ISO 8601 timestamp with timezone, such as `2026-10-27T08:15:00.000Z`.
+  When omitted, the server records the current time.
+- `remarks` (required): non-empty string describing what happened. There is no
+  separate purpose field; include the reason or purpose in these remarks.
+- `propertyId` (optional): non-empty string, intended for associating a visit
+  with a property.
+
+`activityBy` is derived from the authenticated account and must not be sent.
+`followUpMethod` accepts a JSON string from the listed values, not a number or
+object. `propertyId` is a string; `activityOn` is a date string. For non-follow-up
+activity types, `followUpMethod` is not required.
 
 POST example response:
 ```json
@@ -75,35 +86,19 @@ POST example response:
 ::end
 */
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@neup/core/database/prisma';
 import { logger } from '@neup/logica/logger';
 import { requireIdentity } from '@/services/properties/action-helpers';
-import { getAccountById } from '@/services/accounts/id/get';
-import { getAgencyAgentMapsByAgent } from '@/services/agencies/agent-maps/service';
 import { requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';
-import { createLeadActivity, type LeadActivityType } from '@/services/leads/activity/create';
+import { addLeadActivity, getLeadActivities, getVisibleLead, type FollowUpMethod } from '@neup/logica/estate/lead/activity';
+import type { LeadActivityType } from '@/services/leads/activity/create';
 
 export const dynamic = 'force-dynamic';
 
 type RouteContext = { params: Promise<{ id: string }> };
-type FollowUpMethod = 'phone call' | 'whatsapp' | 'email';
 
 const activityTypes: LeadActivityType[] = ['follow_up', 'visit', 'meeting', 'remarks'];
 const followUpMethods: FollowUpMethod[] = ['phone call', 'whatsapp', 'email'];
-
-async function getVisibleLead(leadId: string, accountId: string) {
-  const [lead, account, agencyLinks] = await Promise.all([
-    prisma.sharedLeads.findUnique({ where: { id: leadId }, select: { id: true, owner: true } }),
-    getAccountById(accountId),
-    getAgencyAgentMapsByAgent(accountId),
-  ]);
-  if (!lead) return null;
-
-  const canViewAll = ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'].includes(account?.account_type ?? '')
-    || agencyLinks.some((link) => link.status === 'accepted' && link.isAdmin);
-  return canViewAll || lead.owner === accountId ? lead : null;
-}
 
 function errorResponse(error: unknown) {
   const unauthenticated = error instanceof Error && 'code' in error && error.code === 'UNAUTHENTICATED';
@@ -140,10 +135,7 @@ export async function GET(_request: NextRequest, context: RouteContext) {
     if (!lead) return NextResponse.json({ success: false, error: 'Lead not found.' }, { status: 404 });
 
     stage = 'activity-query';
-    const data = await prisma.leadActivity.findMany({
-      where: { leadId: id },
-      orderBy: { activityOn: 'desc' },
-    });
+    const data = await getLeadActivities(id);
     return NextResponse.json({ data });
   } catch (error) {
     const failure = errorResponse(error);
@@ -200,18 +192,15 @@ export async function POST(request: NextRequest, context: RouteContext) {
     }
 
     stage = 'activity-creation';
-    const account = await prisma.account.findUnique({ where: { id: accountId }, select: { displayName: true } });
-    const activityId = await createLeadActivity({
+    const data = await addLeadActivity({
       leadId: id,
+      accountId,
       activityType: activityType as LeadActivityType,
       activityOn: typeof activityOn === 'string' ? activityOn : new Date().toISOString(),
       followUpMethod: typeof followUpMethod === 'string' ? followUpMethod as FollowUpMethod : undefined,
       propertyId: typeof propertyId === 'string' ? propertyId : undefined,
       remarks,
-      activityBy: account?.displayName?.trim() || accountId,
     });
-
-    const data = await prisma.leadActivity.findUnique({ where: { id: activityId } });
     return NextResponse.json({ success: true, data }, { status: 201 });
   } catch (error) {
     const failure = errorResponse(error);
