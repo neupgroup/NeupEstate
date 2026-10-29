@@ -29,7 +29,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 ### public.account (Account)
 
 - purpose: Canonical local account/profile record for NeupID users, agencies, agents, and working-profile context.
-- usage: Used across auth, account management, agency/team flows, bridge account lookup/webhooks, saved/viewed/reacted cleanup, and authorization through `account_access`.
+- usage: Used across auth, account management, agency/team flows, bridge account lookup/webhooks, saved/viewed cleanup, and authorization through `account_access`.
 
 - id text PK, NOT NULL
 - accountType text NOT NULL
@@ -520,7 +520,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 ### public.property (Property)
 
 - purpose: Main real-estate listing table containing searchable/display listing data, status, location, pricing, and structured details.
-- usage: Used across property listing/detail pages, bridge property APIs, agency stats, draft approval, saved/reacted/viewed flows, and competitor mapping.
+- usage: Used across property listing/detail pages, bridge property APIs, agency stats, draft approval, saved/viewed flows, and competitor mapping.
 
 - id text PK, NOT NULL
 - slug text NOT NULL, UNIQUE property_slug_key(slug)

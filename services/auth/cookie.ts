@@ -43,6 +43,11 @@ export function getAuthCookieClient(): string | null {
  */
 export async function getAuthCookieServer(): Promise<string | null> {
   try {
+    const { headers } = await import('next/headers');
+    const headerStore = await headers();
+    const authHeader = headerStore.get('x-auth')?.trim();
+    if (authHeader) return authHeader;
+
     const { cookies } = await import('next/headers');
     const store = await cookies();
     return store.get(COOKIE_NAME)?.value ?? null;

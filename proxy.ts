@@ -57,6 +57,7 @@ function redirectToNeupStart(request: NextRequest, pathname: string): NextRespon
 export default async function proxy(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
   const requestHeaders = new Headers(request.headers);
+  // Only propagate a trusted x-auth token after verifying the session cookie.
   requestHeaders.set('x-next-pathname', pathname);
   const pass = () => NextResponse.next({ request: { headers: requestHeaders } });
 
@@ -92,6 +93,7 @@ export default async function proxy(request: NextRequest) {
   // Forward the verified account ID downstream so server components can use
   // it without re-parsing the JWT (signature already verified here).
   if (payload?.aid) {
+    requestHeaders.set('x-auth', raw!.trim());
     requestHeaders.set('x-account-id', payload.aid);
     if (payload.nid) requestHeaders.set('x-account-nid', payload.nid);
     requestHeaders.set('x-account-guest', payload.guest === 1 || payload.guest === true ? '1' : '0');
