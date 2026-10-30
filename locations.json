@@ -1,0 +1,3178 @@
+{
+  "koshi": {
+    "taplejung": [
+      {
+        "name": "Phungling",
+        "type": "municipality"
+      },
+      {
+        "name": "Aathrai Triveni",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Maiwa Khola",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Meringden",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Mikwa Khola",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Pathibhara Yangwarak",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Phaktanglung",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sidingwa",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sirijangha",
+        "type": "rural_municipality"
+      }
+    ],
+    "panchthar": [
+      {
+        "name": "Phidim",
+        "type": "municipality"
+      },
+      {
+        "name": "Hilihang",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Kummayak",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Miklajung",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Phalelung",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Phalgunanda",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Tumwewa",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Yangwarak",
+        "type": "rural_municipality"
+      }
+    ],
+    "ilam": [
+      {
+        "name": "Ilam",
+        "type": "municipality"
+      },
+      {
+        "name": "Deumai",
+        "type": "municipality"
+      },
+      {
+        "name": "Mai",
+        "type": "municipality"
+      },
+      {
+        "name": "Suryodaya",
+        "type": "municipality"
+      },
+      {
+        "name": "Chulachuli",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Fakfokathum",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Maijogmai",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Mangsebung",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Rong",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sandakpur",
+        "type": "rural_municipality"
+      }
+    ],
+    "jhapa": [
+      {
+        "name": "Mechinagar",
+        "type": "municipality"
+      },
+      {
+        "name": "Damak",
+        "type": "municipality"
+      },
+      {
+        "name": "Birtamod",
+        "type": "municipality"
+      },
+      {
+        "name": "Bhadrapur",
+        "type": "municipality"
+      },
+      {
+        "name": "Arjundhara",
+        "type": "municipality"
+      },
+      {
+        "name": "Gauradaha",
+        "type": "municipality"
+      },
+      {
+        "name": "Kankai",
+        "type": "municipality"
+      },
+      {
+        "name": "Shivasatakshi",
+        "type": "municipality"
+      },
+      {
+        "name": "Barhadashi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Buddhashanti",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Gauriganj",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Haldibari",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Jhapa",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Kachankawal",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Kamal",
+        "type": "rural_municipality"
+      }
+    ],
+    "morang": [
+      {
+        "name": "Biratnagar",
+        "type": "metropolitan_city"
+      },
+      {
+        "name": "Belbari",
+        "type": "municipality"
+      },
+      {
+        "name": "Letang",
+        "type": "municipality"
+      },
+      {
+        "name": "Pathari-Shanishchare",
+        "type": "municipality"
+      },
+      {
+        "name": "Rangeli",
+        "type": "municipality"
+      },
+      {
+        "name": "Ratuwamai",
+        "type": "municipality"
+      },
+      {
+        "name": "Sunwarshi",
+        "type": "municipality"
+      },
+      {
+        "name": "Sundarharaicha",
+        "type": "municipality"
+      },
+      {
+        "name": "Urlabari",
+        "type": "municipality"
+      },
+      {
+        "name": "Budhiganga",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Dhanapalthan",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Gramthan",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Jahada",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Kanepokhari",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Katahari",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Kerabari",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Miklajung",
+        "type": "rural_municipality"
+      }
+    ],
+    "sunsari": [
+      {
+        "name": "Dharan",
+        "type": "sub_metropolitan_city"
+      },
+      {
+        "name": "Itahari",
+        "type": "sub_metropolitan_city"
+      },
+      {
+        "name": "Inaruwa",
+        "type": "municipality"
+      },
+      {
+        "name": "Duhabi",
+        "type": "municipality"
+      },
+      {
+        "name": "Ramdhuni",
+        "type": "municipality"
+      },
+      {
+        "name": "Barahachhetra",
+        "type": "municipality"
+      },
+      {
+        "name": "Koshi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Gadhi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Dewangunj",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Barju",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bhokraha Narsingh",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Harinagar",
+        "type": "rural_municipality"
+      }
+    ],
+    "dhankuta": [
+      {
+        "name": "Dhankuta",
+        "type": "municipality"
+      },
+      {
+        "name": "Mahalaxmi",
+        "type": "municipality"
+      },
+      {
+        "name": "Pakhribas",
+        "type": "municipality"
+      },
+      {
+        "name": "Chaubise",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Chhathar Jorpati",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sahidbhumi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sangurigadhi",
+        "type": "rural_municipality"
+      }
+    ],
+    "terhathum": [
+      {
+        "name": "Myanglung",
+        "type": "municipality"
+      },
+      {
+        "name": "Laligurans",
+        "type": "municipality"
+      },
+      {
+        "name": "Aathrai",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Chhathar",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Phedap",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Menchhayayem",
+        "type": "rural_municipality"
+      }
+    ],
+    "sankhuwasabha": [
+      {
+        "name": "Chainpur",
+        "type": "municipality"
+      },
+      {
+        "name": "Dharmadevi",
+        "type": "municipality"
+      },
+      {
+        "name": "Khandbari",
+        "type": "municipality"
+      },
+      {
+        "name": "Madi",
+        "type": "municipality"
+      },
+      {
+        "name": "Panchkhapan",
+        "type": "municipality"
+      },
+      {
+        "name": "Bhotkhola",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Chichila",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Makalu",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sabhapokhari",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Silichong",
+        "type": "rural_municipality"
+      }
+    ],
+    "bhojpur": [
+      {
+        "name": "Bhojpur",
+        "type": "municipality"
+      },
+      {
+        "name": "Shadanand",
+        "type": "municipality"
+      },
+      {
+        "name": "Aamchok",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Arun",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Hatuwagadhi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Pauwadungma",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Ramprasad Rai",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Salpasilichho",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Tyamke Maiyum",
+        "type": "rural_municipality"
+      }
+    ],
+    "solukhumbu": [
+      {
+        "name": "Solu Dudhkunda",
+        "type": "municipality"
+      },
+      {
+        "name": "Khumbu Pasanglhamu",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Likhu Pike",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Maha Kulung",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Mapya Dudhkoshi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Necha Salyan",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sotang",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Thulung Dudhkoshi",
+        "type": "rural_municipality"
+      }
+    ],
+    "okhaldhunga": [
+      {
+        "name": "Siddhicharan",
+        "type": "municipality"
+      },
+      {
+        "name": "Champadevi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Chisankhugadhi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Khiji Demba",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Likhu",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Manebhanjyang",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Molung",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sunkoshi",
+        "type": "rural_municipality"
+      }
+    ],
+    "khotang": [
+      {
+        "name": "Diktel Rupakot Majhuwagadhi",
+        "type": "municipality"
+      },
+      {
+        "name": "Halesi Tuwachung",
+        "type": "municipality"
+      },
+      {
+        "name": "Aiselukharka",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Barahpokhari",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Diprung Chuichumma",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Jantedhunga",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Kepilasgadhi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Khotehang",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Rawa Besi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sakela",
+        "type": "rural_municipality"
+      }
+    ],
+    "udayapur": [
+      {
+        "name": "Belaka",
+        "type": "municipality"
+      },
+      {
+        "name": "Chaudandigadhi",
+        "type": "municipality"
+      },
+      {
+        "name": "Katari",
+        "type": "municipality"
+      },
+      {
+        "name": "Triyuga",
+        "type": "municipality"
+      },
+      {
+        "name": "Limchungbung",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Rautamai",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Tapli",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Udayapurgadhi",
+        "type": "rural_municipality"
+      }
+    ]
+  },
+  "madhesh": {
+    "saptari": [
+      {
+        "name": "Rajbiraj",
+        "type": "municipality"
+      },
+      {
+        "name": "Kanchanrup",
+        "type": "municipality"
+      },
+      {
+        "name": "Dakneshwori",
+        "type": "municipality"
+      },
+      {
+        "name": "Bodebarsain",
+        "type": "municipality"
+      },
+      {
+        "name": "Khadak",
+        "type": "municipality"
+      },
+      {
+        "name": "Shambhunath",
+        "type": "municipality"
+      },
+      {
+        "name": "Surunga",
+        "type": "municipality"
+      },
+      {
+        "name": "Hanumannagar Kankalini",
+        "type": "municipality"
+      },
+      {
+        "name": "Saptakoshi",
+        "type": "municipality"
+      },
+      {
+        "name": "Tilathi Koiladi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Rupani",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Balan-Bihul",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bishnupur",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Chhinnamasta",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Mahadeva",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Tirahut",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Rajgadh",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Agnisair Krishna Savaran",
+        "type": "rural_municipality"
+      }
+    ],
+    "siraha": [
+      {
+        "name": "Siraha",
+        "type": "municipality"
+      },
+      {
+        "name": "Lahan",
+        "type": "municipality"
+      },
+      {
+        "name": "Dhangadhimai",
+        "type": "municipality"
+      },
+      {
+        "name": "Golbazar",
+        "type": "municipality"
+      },
+      {
+        "name": "Mirchaiya",
+        "type": "municipality"
+      },
+      {
+        "name": "Kalyanpur",
+        "type": "municipality"
+      },
+      {
+        "name": "Karjanha",
+        "type": "municipality"
+      },
+      {
+        "name": "Sukhipur",
+        "type": "municipality"
+      },
+      {
+        "name": "Arnama",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Aurahi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bariyarpatti",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bhagwanpur",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bishnupur",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Lakshmipur Patari",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Naraha",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Navarajpur",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sakhuwanankarkatti",
+        "type": "rural_municipality"
+      }
+    ],
+    "dhanusha": [
+      {
+        "name": "Janakpurdham",
+        "type": "sub_metropolitan_city"
+      },
+      {
+        "name": "Chhireshwarnath",
+        "type": "municipality"
+      },
+      {
+        "name": "Ganeshman Charnath",
+        "type": "municipality"
+      },
+      {
+        "name": "Dhanusadham",
+        "type": "municipality"
+      },
+      {
+        "name": "Nagarain",
+        "type": "municipality"
+      },
+      {
+        "name": "Bideha",
+        "type": "municipality"
+      },
+      {
+        "name": "Mithila",
+        "type": "municipality"
+      },
+      {
+        "name": "Shahidnagar",
+        "type": "municipality"
+      },
+      {
+        "name": "Sabaila",
+        "type": "municipality"
+      },
+      {
+        "name": "Kamala",
+        "type": "municipality"
+      },
+      {
+        "name": "Mithila Bihari",
+        "type": "municipality"
+      },
+      {
+        "name": "Hansapur",
+        "type": "municipality"
+      },
+      {
+        "name": "Janaknandini",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bateshwar",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Mukhiyapatti Musharniya",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Lakshminiya",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Aurahi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Dhanauji",
+        "type": "rural_municipality"
+      }
+    ],
+    "mahottari": [
+      {
+        "name": "Jaleshwar",
+        "type": "municipality"
+      },
+      {
+        "name": "Bardibas",
+        "type": "municipality"
+      },
+      {
+        "name": "Gaushala",
+        "type": "municipality"
+      },
+      {
+        "name": "Loharpatti",
+        "type": "municipality"
+      },
+      {
+        "name": "Ramgopalpur",
+        "type": "municipality"
+      },
+      {
+        "name": "Manara Shiswa",
+        "type": "municipality"
+      },
+      {
+        "name": "Matihani",
+        "type": "municipality"
+      },
+      {
+        "name": "Bhangaha",
+        "type": "municipality"
+      },
+      {
+        "name": "Balwa",
+        "type": "municipality"
+      },
+      {
+        "name": "Aurahi",
+        "type": "municipality"
+      },
+      {
+        "name": "Ekdara",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Mahottari",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Pipara",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Samsi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sonama",
+        "type": "rural_municipality"
+      }
+    ],
+    "sarlahi": [
+      {
+        "name": "Malangwa",
+        "type": "municipality"
+      },
+      {
+        "name": "Lalbandi",
+        "type": "municipality"
+      },
+      {
+        "name": "Hariwan",
+        "type": "municipality"
+      },
+      {
+        "name": "Haripur",
+        "type": "municipality"
+      },
+      {
+        "name": "Haripurwa",
+        "type": "municipality"
+      },
+      {
+        "name": "Ishworpur",
+        "type": "municipality"
+      },
+      {
+        "name": "Barahathwa",
+        "type": "municipality"
+      },
+      {
+        "name": "Balara",
+        "type": "municipality"
+      },
+      {
+        "name": "Godaita",
+        "type": "municipality"
+      },
+      {
+        "name": "Bagmati",
+        "type": "municipality"
+      },
+      {
+        "name": "Kabilasi",
+        "type": "municipality"
+      },
+      {
+        "name": "Basbariya",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bishnu",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Brahampuri",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Chakraghatta",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Chandranagar",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Dhankaul",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Kaudena",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Parsa",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Ramnagar",
+        "type": "rural_municipality"
+      }
+    ],
+    "rauthat": [
+      {
+        "name": "Gaur",
+        "type": "municipality"
+      },
+      {
+        "name": "Chandrapur",
+        "type": "municipality"
+      },
+      {
+        "name": "Garuda",
+        "type": "municipality"
+      },
+      {
+        "name": "Baudhimai",
+        "type": "municipality"
+      },
+      {
+        "name": "Brindaban",
+        "type": "municipality"
+      },
+      {
+        "name": "Dewahi Gonahi",
+        "type": "municipality"
+      },
+      {
+        "name": "Gadhimai",
+        "type": "municipality"
+      },
+      {
+        "name": "Gujara",
+        "type": "municipality"
+      },
+      {
+        "name": "Ishanath",
+        "type": "municipality"
+      },
+      {
+        "name": "Katahariya",
+        "type": "municipality"
+      },
+      {
+        "name": "Madhav Narayan",
+        "type": "municipality"
+      },
+      {
+        "name": "Maulapur",
+        "type": "municipality"
+      },
+      {
+        "name": "Paroha",
+        "type": "municipality"
+      },
+      {
+        "name": "Phatuwa Bijayapur",
+        "type": "municipality"
+      },
+      {
+        "name": "Rajdevi",
+        "type": "municipality"
+      },
+      {
+        "name": "Rajpur",
+        "type": "municipality"
+      },
+      {
+        "name": "Durga Bhagwati",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Yamunamai",
+        "type": "rural_municipality"
+      }
+    ],
+    "bara": [
+      {
+        "name": "Kalaiya",
+        "type": "sub_metropolitan_city"
+      },
+      {
+        "name": "Jitpur Simara",
+        "type": "sub_metropolitan_city"
+      },
+      {
+        "name": "Kolhabi",
+        "type": "municipality"
+      },
+      {
+        "name": "Nijgadh",
+        "type": "municipality"
+      },
+      {
+        "name": "Mahagadhimai",
+        "type": "municipality"
+      },
+      {
+        "name": "Simraungadh",
+        "type": "municipality"
+      },
+      {
+        "name": "Pacharauta",
+        "type": "municipality"
+      },
+      {
+        "name": "Pheta",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bishrampur",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Prasauni",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Adarsh Kotwal",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Karaiyamai",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Devtal",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Parwanipur",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Baragadhi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Suwarna",
+        "type": "rural_municipality"
+      }
+    ],
+    "parsa": [
+      {
+        "name": "Birgunj",
+        "type": "metropolitan_city"
+      },
+      {
+        "name": "Bahudarmai",
+        "type": "municipality"
+      },
+      {
+        "name": "Parsagadhi",
+        "type": "municipality"
+      },
+      {
+        "name": "Pokhariya",
+        "type": "municipality"
+      },
+      {
+        "name": "Bindabasini",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Dhobini",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Chhipaharmai",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Jagarnathpur",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Jirabhawani",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Kalikamai",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Pakaha Mainpur",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Paterwa Sugauli",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sakhuwa Prasauni",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Thori",
+        "type": "rural_municipality"
+      }
+    ]
+  },
+  "bagmati": {
+    "dolakha": [
+      {
+        "name": "Bhimeshwar",
+        "type": "municipality"
+      },
+      {
+        "name": "Jiri",
+        "type": "municipality"
+      },
+      {
+        "name": "Kalinchok",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Gaurishankar",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Tamakoshi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Melung",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bigu",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Baiteshwar",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Shailung",
+        "type": "rural_municipality"
+      }
+    ],
+    "ramechhap": [
+      {
+        "name": "Manthali",
+        "type": "municipality"
+      },
+      {
+        "name": "Ramechhap",
+        "type": "municipality"
+      },
+      {
+        "name": "Umakunda",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Khandadevi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Gokulganga",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Doramba Shailung",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Likhu Tamakoshi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sunapati",
+        "type": "rural_municipality"
+      }
+    ],
+    "sindhuli": [
+      {
+        "name": "Kamalamai",
+        "type": "municipality"
+      },
+      {
+        "name": "Dudhauli",
+        "type": "municipality"
+      },
+      {
+        "name": "Golanjor",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Ghyanglekh",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Tinpatan",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Phikkal",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Marin",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sunkoshi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Hariharpurgadhi",
+        "type": "rural_municipality"
+      }
+    ],
+    "sindhupalchok": [
+      {
+        "name": "Chautara Sangachokgadhi",
+        "type": "municipality"
+      },
+      {
+        "name": "Melamchi",
+        "type": "municipality"
+      },
+      {
+        "name": "Barhabise",
+        "type": "municipality"
+      },
+      {
+        "name": "Jugal",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Tripurasundari",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Panchpokhari Thangpal",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Balephi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bhotekoshi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Indrawati",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Lisankhu Pakhar",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sunkoshi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Helambu",
+        "type": "rural_municipality"
+      }
+    ],
+    "kavrepalanchok": [
+      {
+        "name": "Dhulikhel",
+        "type": "municipality"
+      },
+      {
+        "name": "Namobuddha",
+        "type": "municipality"
+      },
+      {
+        "name": "Panauti",
+        "type": "municipality"
+      },
+      {
+        "name": "Panchkhal",
+        "type": "municipality"
+      },
+      {
+        "name": "Banepa",
+        "type": "municipality"
+      },
+      {
+        "name": "Mandan Deupur",
+        "type": "municipality"
+      },
+      {
+        "name": "Khanikhola",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Chaurideurali",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Temal",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bethanchok",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bhumlu",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Mahabharat",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Roshi",
+        "type": "rural_municipality"
+      }
+    ],
+    "kathmandu": [
+      {
+        "name": "Kathmandu",
+        "type": "metropolitan_city"
+      },
+      {
+        "name": "Kirtipur",
+        "type": "municipality"
+      },
+      {
+        "name": "Gokarneshwar",
+        "type": "municipality"
+      },
+      {
+        "name": "Chandragiri",
+        "type": "municipality"
+      },
+      {
+        "name": "Tokha",
+        "type": "municipality"
+      },
+      {
+        "name": "Tarakeshwar",
+        "type": "municipality"
+      },
+      {
+        "name": "Dakshinkali",
+        "type": "municipality"
+      },
+      {
+        "name": "Nagarjun",
+        "type": "municipality"
+      },
+      {
+        "name": "Budhanilkantha",
+        "type": "municipality"
+      },
+      {
+        "name": "Shankharapur",
+        "type": "municipality"
+      },
+      {
+        "name": "Kageshwari Manohara",
+        "type": "municipality"
+      }
+    ],
+    "bhaktapur": [
+      {
+        "name": "Bhaktapur",
+        "type": "municipality"
+      },
+      {
+        "name": "Madhyapur Thimi",
+        "type": "municipality"
+      },
+      {
+        "name": "Suryabinayak",
+        "type": "municipality"
+      },
+      {
+        "name": "Changunarayan",
+        "type": "municipality"
+      }
+    ],
+    "lalitpur": [
+      {
+        "name": "Lalitpur",
+        "type": "metropolitan_city"
+      },
+      {
+        "name": "Godawari",
+        "type": "municipality"
+      },
+      {
+        "name": "Mahalaxmi",
+        "type": "municipality"
+      },
+      {
+        "name": "Konjyosom",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bagmati",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Mahankal",
+        "type": "rural_municipality"
+      }
+    ],
+    "nuwakot": [
+      {
+        "name": "Bidur",
+        "type": "municipality"
+      },
+      {
+        "name": "Belkotgadhi",
+        "type": "municipality"
+      },
+      {
+        "name": "Kakani",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Kispang",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Tadi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Tarakeshwar",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Dupcheshwar",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Panchakanya",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Myagang",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Likhu",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Shivapuri",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Suryagadhi",
+        "type": "rural_municipality"
+      }
+    ],
+    "rasuwa": [
+      {
+        "name": "Uttargaya",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Kalika",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Gosaikunda",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Naukunda",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Amachhodingmo",
+        "type": "rural_municipality"
+      }
+    ],
+    "dhading": [
+      {
+        "name": "Nilkantha",
+        "type": "municipality"
+      },
+      {
+        "name": "Dhunibesi",
+        "type": "municipality"
+      },
+      {
+        "name": "Khaniyabas",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Gangajamuna",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Gajuri",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Galchhi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Jwalamukhi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Tripurasundari",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Thakre",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Netrawati Dabjong",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Benighat Rorang",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Rubi Valley",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Siddhalek",
+        "type": "rural_municipality"
+      }
+    ],
+    "makwanpur": [
+      {
+        "name": "Hetauda",
+        "type": "sub_metropolitan_city"
+      },
+      {
+        "name": "Thaha",
+        "type": "municipality"
+      },
+      {
+        "name": "Indrasarowar",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Kailash",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bakaiya",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bagmati",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bhimfedi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Makawanpurgadhi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Manahari",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Raksirang",
+        "type": "rural_municipality"
+      }
+    ],
+    "chitwan": [
+      {
+        "name": "Bharatpur",
+        "type": "metropolitan_city"
+      },
+      {
+        "name": "Ratnanagar",
+        "type": "municipality"
+      },
+      {
+        "name": "Khairahani",
+        "type": "municipality"
+      },
+      {
+        "name": "Kalika",
+        "type": "municipality"
+      },
+      {
+        "name": "Rapti",
+        "type": "municipality"
+      },
+      {
+        "name": "Madi",
+        "type": "municipality"
+      },
+      {
+        "name": "Ichchhakamana",
+        "type": "rural_municipality"
+      }
+    ]
+  },
+  "gandaki": {
+    "gorkha": [
+      {
+        "name": "Gorkha",
+        "type": "municipality"
+      },
+      {
+        "name": "Palungtar",
+        "type": "municipality"
+      },
+      {
+        "name": "Barpak Sulikot",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Siranchok",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Ajirkot",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Dharche",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Aarughat",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Gandaki",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bhimsen Thapa",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sahid Lakhan",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Chum Nubri",
+        "type": "rural_municipality"
+      }
+    ],
+    "manang": [
+      {
+        "name": "Chame",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Nason",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Narpa Bhumi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Manang Ngisyang",
+        "type": "rural_municipality"
+      }
+    ],
+    "mustang": [
+      {
+        "name": "Gharpajhong",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Thasang",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Lomanthang",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Lo-Ghekar Damodarkunda",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Baragung Muktichhetra",
+        "type": "rural_municipality"
+      }
+    ],
+    "myagdi": [
+      {
+        "name": "Beni",
+        "type": "municipality"
+      },
+      {
+        "name": "Annapurna",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Dhaulagiri",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Mangala",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Malika",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Raghuganga",
+        "type": "rural_municipality"
+      }
+    ],
+    "kaski": [
+      {
+        "name": "Pokhara",
+        "type": "metropolitan_city"
+      },
+      {
+        "name": "Annapurna",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Machhapuchchhre",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Madi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Rupa",
+        "type": "rural_municipality"
+      }
+    ],
+    "lamjung": [
+      {
+        "name": "Besisahar",
+        "type": "municipality"
+      },
+      {
+        "name": "Madhyanepal",
+        "type": "municipality"
+      },
+      {
+        "name": "Rainas",
+        "type": "municipality"
+      },
+      {
+        "name": "Sundarbazar",
+        "type": "municipality"
+      },
+      {
+        "name": "Dordi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Dudhpokhari",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Kwholasothar",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Marsyangdi",
+        "type": "rural_municipality"
+      }
+    ],
+    "tanahun": [
+      {
+        "name": "Bhanu",
+        "type": "municipality"
+      },
+      {
+        "name": "Bhimad",
+        "type": "municipality"
+      },
+      {
+        "name": "Shuklagandaki",
+        "type": "municipality"
+      },
+      {
+        "name": "Vyas",
+        "type": "municipality"
+      },
+      {
+        "name": "Anbu Khaireni",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bandipur",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Devghat",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Ghiring",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Myagde",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Rishing",
+        "type": "rural_municipality"
+      }
+    ],
+    "nawalpur": [
+      {
+        "name": "Devchuli",
+        "type": "municipality"
+      },
+      {
+        "name": "Gaindakot",
+        "type": "municipality"
+      },
+      {
+        "name": "Kawasoti",
+        "type": "municipality"
+      },
+      {
+        "name": "Madhyabindu",
+        "type": "municipality"
+      },
+      {
+        "name": "Baudikali",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Binayi Tribeni",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bulingtar",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Hupsekot",
+        "type": "rural_municipality"
+      }
+    ],
+    "syangja": [
+      {
+        "name": "Bhirkot",
+        "type": "municipality"
+      },
+      {
+        "name": "Chapakot",
+        "type": "municipality"
+      },
+      {
+        "name": "Galyang",
+        "type": "municipality"
+      },
+      {
+        "name": "Putalibazar",
+        "type": "municipality"
+      },
+      {
+        "name": "Waling",
+        "type": "municipality"
+      },
+      {
+        "name": "Aandhikhola",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Arjun Chaupari",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Biruwa",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Harinas",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Kaligandaki",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Phedikhola",
+        "type": "rural_municipality"
+      }
+    ],
+    "parbat": [
+      {
+        "name": "Kushma",
+        "type": "municipality"
+      },
+      {
+        "name": "Phalewas",
+        "type": "municipality"
+      },
+      {
+        "name": "Bihadi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Jaljala",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Mahashila",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Modi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Paiyun",
+        "type": "rural_municipality"
+      }
+    ],
+    "baglung": [
+      {
+        "name": "Baglung",
+        "type": "municipality"
+      },
+      {
+        "name": "Dhorpatan",
+        "type": "municipality"
+      },
+      {
+        "name": "Galkot",
+        "type": "municipality"
+      },
+      {
+        "name": "Jaimini",
+        "type": "municipality"
+      },
+      {
+        "name": "Badigad",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bareng",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Kathekhola",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Nisikhola",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Taman Khola",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Tara Khola",
+        "type": "rural_municipality"
+      }
+    ]
+  },
+  "lumbini": {
+    "nawalparasi_west": [
+      {
+        "name": "Bardaghat",
+        "type": "municipality"
+      },
+      {
+        "name": "Ramgram",
+        "type": "municipality"
+      },
+      {
+        "name": "Sunwal",
+        "type": "municipality"
+      },
+      {
+        "name": "Palhinandan",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Pratappur",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sarawal",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Susta",
+        "type": "rural_municipality"
+      }
+    ],
+    "rupandehi": [
+      {
+        "name": "Butwal",
+        "type": "sub_metropolitan_city"
+      },
+      {
+        "name": "Siddharthanagar",
+        "type": "municipality"
+      },
+      {
+        "name": "Lumbini Sanskritik",
+        "type": "municipality"
+      },
+      {
+        "name": "Devdaha",
+        "type": "municipality"
+      },
+      {
+        "name": "Sainamaina",
+        "type": "municipality"
+      },
+      {
+        "name": "Tilottama",
+        "type": "municipality"
+      },
+      {
+        "name": "Gaidahawa",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Kanchan",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Kotahimai",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Marchawari",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Mayadevi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Omsatiya",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Rohini",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sammarimai",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Siyari",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Shuddhodhan",
+        "type": "rural_municipality"
+      }
+    ],
+    "kapilvastu": [
+      {
+        "name": "Kapilvastu",
+        "type": "municipality"
+      },
+      {
+        "name": "Banganga",
+        "type": "municipality"
+      },
+      {
+        "name": "Buddhabhumi",
+        "type": "municipality"
+      },
+      {
+        "name": "Maharajgunj",
+        "type": "municipality"
+      },
+      {
+        "name": "Krishnanagar",
+        "type": "municipality"
+      },
+      {
+        "name": "Shivaraj",
+        "type": "municipality"
+      },
+      {
+        "name": "Mayadevi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bijaynagar",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Shuddhodhan",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Yashodhara",
+        "type": "rural_municipality"
+      }
+    ],
+    "palpa": [
+      {
+        "name": "Tansen",
+        "type": "municipality"
+      },
+      {
+        "name": "Rampur",
+        "type": "municipality"
+      },
+      {
+        "name": "Baganaskali",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Mathagadhi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Nisdi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Purbakhola",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Rainadevi Chhahara",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Rambha",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Ribdikot",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Tinau",
+        "type": "rural_municipality"
+      }
+    ],
+    "arghakhanchi": [
+      {
+        "name": "Sandhikharka",
+        "type": "municipality"
+      },
+      {
+        "name": "Sitganga",
+        "type": "municipality"
+      },
+      {
+        "name": "Bhumikasthan",
+        "type": "municipality"
+      },
+      {
+        "name": "Chhatradev",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Malarani",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Panini",
+        "type": "rural_municipality"
+      }
+    ],
+    "gulmi": [
+      {
+        "name": "Resunga",
+        "type": "municipality"
+      },
+      {
+        "name": "Musikot",
+        "type": "municipality"
+      },
+      {
+        "name": "Isma",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Kaligandaki",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Gulmidarbar",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Satyawati",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Chandrakot",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Ruru",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Chhatrakot",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Dhurkot",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Madane",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Malika",
+        "type": "rural_municipality"
+      }
+    ],
+    "pyuthan": [
+      {
+        "name": "Pyuthan",
+        "type": "municipality"
+      },
+      {
+        "name": "Swargadwari",
+        "type": "municipality"
+      },
+      {
+        "name": "Airawati",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Gaumukhi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Jhimruk",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Mallarani",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Mandavi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Naubahini",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sarumarani",
+        "type": "rural_municipality"
+      }
+    ],
+    "rolpa": [
+      {
+        "name": "Rolpa",
+        "type": "municipality"
+      },
+      {
+        "name": "Triveni",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Gangadev",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Lungri",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Madi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Parivartan",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Runtigadhi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sunchhahari",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sunilsmriti",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Thabang",
+        "type": "rural_municipality"
+      }
+    ],
+    "rukum_east": [
+      {
+        "name": "Sisne",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bhume",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Putha Uttarganga",
+        "type": "rural_municipality"
+      }
+    ],
+    "banke": [
+      {
+        "name": "Nepalgunj",
+        "type": "sub_metropolitan_city"
+      },
+      {
+        "name": "Kohalpur",
+        "type": "municipality"
+      },
+      {
+        "name": "Baijanath",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Duduwa",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Janaki",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Khajura",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Narainapur",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Rapti Sonari",
+        "type": "rural_municipality"
+      }
+    ],
+    "bardiya": [
+      {
+        "name": "Gulariya",
+        "type": "municipality"
+      },
+      {
+        "name": "Rajapur",
+        "type": "municipality"
+      },
+      {
+        "name": "Madhuwan",
+        "type": "municipality"
+      },
+      {
+        "name": "Thakurbaba",
+        "type": "municipality"
+      },
+      {
+        "name": "Bansgadhi",
+        "type": "municipality"
+      },
+      {
+        "name": "Barbardiya",
+        "type": "municipality"
+      },
+      {
+        "name": "Badhaiyatal",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Geruwa",
+        "type": "rural_municipality"
+      }
+    ],
+    "dang": [
+      {
+        "name": "Ghorahi",
+        "type": "sub_metropolitan_city"
+      },
+      {
+        "name": "Tulsipur",
+        "type": "sub_metropolitan_city"
+      },
+      {
+        "name": "Lamahi",
+        "type": "municipality"
+      },
+      {
+        "name": "Babai",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Banglachuli",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Dangisharan",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Gadhawa",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Rajpur",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Rapti",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Shantinagar",
+        "type": "rural_municipality"
+      }
+    ]
+  },
+  "karnali": {
+    "rukum_west": [
+      {
+        "name": "Aathabisakot",
+        "type": "municipality"
+      },
+      {
+        "name": "Chaurjahari",
+        "type": "municipality"
+      },
+      {
+        "name": "Musikot",
+        "type": "municipality"
+      },
+      {
+        "name": "Sanibheri",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Banfikot",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Tribeni",
+        "type": "rural_municipality"
+      }
+    ],
+    "salyan": [
+      {
+        "name": "Banagad Kupinde",
+        "type": "municipality"
+      },
+      {
+        "name": "Bagachaur",
+        "type": "municipality"
+      },
+      {
+        "name": "Sharada",
+        "type": "municipality"
+      },
+      {
+        "name": "Kapurakot",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Kalimati",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Kumakh",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Chhatreshwori",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Siddha Kumakh",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Tribeni",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Darma",
+        "type": "rural_municipality"
+      }
+    ],
+    "dolpa": [
+      {
+        "name": "Thuli Bheri",
+        "type": "municipality"
+      },
+      {
+        "name": "Tripurasundari",
+        "type": "municipality"
+      },
+      {
+        "name": "Kaike",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Chharka Tangasong",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Jagadulla",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Dolpo Buddha",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Mudkechula",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "She Phoksundo",
+        "type": "rural_municipality"
+      }
+    ],
+    "jumla": [
+      {
+        "name": "Chandannath",
+        "type": "municipality"
+      },
+      {
+        "name": "Kanakasundari",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Guthichaur",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Tatopani",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Tila",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Patarasi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sinja",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Hima",
+        "type": "rural_municipality"
+      }
+    ],
+    "mugu": [
+      {
+        "name": "Chhayannath Rara",
+        "type": "municipality"
+      },
+      {
+        "name": "Khatyad",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Mugum Karmarong",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Soru",
+        "type": "rural_municipality"
+      }
+    ],
+    "humla": [
+      {
+        "name": "Adanchuli",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Kharpunath",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Chankheli",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Tanjakot",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Namkha",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sarkegad",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Simkot",
+        "type": "rural_municipality"
+      }
+    ],
+    "jajarkot": [
+      {
+        "name": "Chhedagad",
+        "type": "municipality"
+      },
+      {
+        "name": "Nalagad",
+        "type": "municipality"
+      },
+      {
+        "name": "Bheri",
+        "type": "municipality"
+      },
+      {
+        "name": "Kuse",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Junichande",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Barekot",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Shivalaya",
+        "type": "rural_municipality"
+      }
+    ],
+    "dailekh": [
+      {
+        "name": "Aathabis",
+        "type": "municipality"
+      },
+      {
+        "name": "Chamunda Bindrasaini",
+        "type": "municipality"
+      },
+      {
+        "name": "Dullu",
+        "type": "municipality"
+      },
+      {
+        "name": "Narayan",
+        "type": "municipality"
+      },
+      {
+        "name": "Gurans",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Thantikandh",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Dungeshwar",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Naumule",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bhagawatimai",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bhairabi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Mahabu",
+        "type": "rural_municipality"
+      }
+    ],
+    "surkhet": [
+      {
+        "name": "Gurbhakot",
+        "type": "municipality"
+      },
+      {
+        "name": "Panchapuri",
+        "type": "municipality"
+      },
+      {
+        "name": "Birendranagar",
+        "type": "municipality"
+      },
+      {
+        "name": "Bheriganga",
+        "type": "municipality"
+      },
+      {
+        "name": "Lekabeshi",
+        "type": "municipality"
+      },
+      {
+        "name": "Chingad",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Chaukune",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Barahatal",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Simta",
+        "type": "rural_municipality"
+      }
+    ],
+    "kalikot": [
+      {
+        "name": "Khandachakra",
+        "type": "municipality"
+      },
+      {
+        "name": "Tilagupha",
+        "type": "municipality"
+      },
+      {
+        "name": "Raskot",
+        "type": "municipality"
+      },
+      {
+        "name": "Shubh Kalika",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Naraharinath",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Pachalajharana",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Palata",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Mahabai",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sanni Tribeni",
+        "type": "rural_municipality"
+      }
+    ]
+  },
+  "sudurpashchim": {
+    "bajura": [
+      {
+        "name": "Badimalika",
+        "type": "municipality"
+      },
+      {
+        "name": "Triveni",
+        "type": "municipality"
+      },
+      {
+        "name": "Budhiganga",
+        "type": "municipality"
+      },
+      {
+        "name": "Budhinanda",
+        "type": "municipality"
+      },
+      {
+        "name": "Gaumul",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Himali",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Jagannath",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Swamikartik Khapar",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Chhededaha",
+        "type": "rural_municipality"
+      }
+    ],
+    "bajhang": [
+      {
+        "name": "Jaya Prithvi",
+        "type": "municipality"
+      },
+      {
+        "name": "Bungal",
+        "type": "municipality"
+      },
+      {
+        "name": "Talkot",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Masta",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Khaptad Chhanna",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Thalara",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bitthadchir",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Kedarsyu",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Durgathali",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Chhabis Pathibhera",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Surma",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Saipal",
+        "type": "rural_municipality"
+      }
+    ],
+    "doti": [
+      {
+        "name": "Dipayal Silgadhi",
+        "type": "municipality"
+      },
+      {
+        "name": "Shikhar",
+        "type": "municipality"
+      },
+      {
+        "name": "Purbichauki",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Badikedar",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Jorayal",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Sayal",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Aadarsha",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "K.I. Singh",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bogtan Phudsil",
+        "type": "rural_municipality"
+      }
+    ],
+    "achham": [
+      {
+        "name": "Mangalsen",
+        "type": "municipality"
+      },
+      {
+        "name": "Sanfebagar",
+        "type": "municipality"
+      },
+      {
+        "name": "Kamalbazar",
+        "type": "municipality"
+      },
+      {
+        "name": "Panchadewal Binayak",
+        "type": "municipality"
+      },
+      {
+        "name": "Chaurpati",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Mellekh",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bannigadhi Jayagadh",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Ramaroshan",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Dhakari",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Turmakhand",
+        "type": "rural_municipality"
+      }
+    ],
+    "darchula": [
+      {
+        "name": "Mahakali",
+        "type": "municipality"
+      },
+      {
+        "name": "Shailyashikhar",
+        "type": "municipality"
+      },
+      {
+        "name": "Duhun",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Naugad",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Apihimal",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Marma",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Malikarjun",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Lekam",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Byas",
+        "type": "rural_municipality"
+      }
+    ],
+    "baitadi": [
+      {
+        "name": "Dasharathchand",
+        "type": "municipality"
+      },
+      {
+        "name": "Patan",
+        "type": "municipality"
+      },
+      {
+        "name": "Melauli",
+        "type": "municipality"
+      },
+      {
+        "name": "Purchaudi",
+        "type": "municipality"
+      },
+      {
+        "name": "Sigas",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Shivanath",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Pancheshwar",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Dogadakedar",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Dilasaini",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Surnaya",
+        "type": "rural_municipality"
+      }
+    ],
+    "dadeldhura": [
+      {
+        "name": "Amargadhi",
+        "type": "municipality"
+      },
+      {
+        "name": "Parashuram",
+        "type": "municipality"
+      },
+      {
+        "name": "Aalital",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Ganyapadhura",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Nawadurga",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Ajaymeru",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bhageshwar",
+        "type": "rural_municipality"
+      }
+    ],
+    "kanchanpur": [
+      {
+        "name": "Bhimdatta",
+        "type": "municipality"
+      },
+      {
+        "name": "Punarbas",
+        "type": "municipality"
+      },
+      {
+        "name": "Bedkot",
+        "type": "municipality"
+      },
+      {
+        "name": "Mahakali",
+        "type": "municipality"
+      },
+      {
+        "name": "Shuklaphanta",
+        "type": "municipality"
+      },
+      {
+        "name": "Krishnapur",
+        "type": "municipality"
+      },
+      {
+        "name": "Belauri",
+        "type": "municipality"
+      },
+      {
+        "name": "Beldandi",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Laljhadi",
+        "type": "rural_municipality"
+      }
+    ],
+    "kailali": [
+      {
+        "name": "Dhangadhi",
+        "type": "sub_metropolitan_city"
+      },
+      {
+        "name": "Tikapur",
+        "type": "municipality"
+      },
+      {
+        "name": "Lamki Chuha",
+        "type": "municipality"
+      },
+      {
+        "name": "Ghodaghodi",
+        "type": "municipality"
+      },
+      {
+        "name": "Bhajani",
+        "type": "municipality"
+      },
+      {
+        "name": "Godawari",
+        "type": "municipality"
+      },
+      {
+        "name": "Gauriganga",
+        "type": "municipality"
+      },
+      {
+        "name": "Janaki",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Bardagoriya",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Mohanyal",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Kailari",
+        "type": "rural_municipality"
+      },
+      {
+        "name": "Chure",
+        "type": "rural_municipality"
+      }
+    ]
+  }
+}

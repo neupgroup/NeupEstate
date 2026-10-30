@@ -48,6 +48,22 @@ enum PropertyRepresentativeRole {
   listingOwner_propertyOwner @map("listingOwner.propertyOwner")
 }
 
+model Location {
+  id         String     @id @default(uuid()) @db.Uuid
+  title      String
+  type       String
+  childOf    String?    @db.Uuid @map("child_of")
+  postalCode String?    @map("postal_code")
+  status     String     @default("active")
+  parent     Location?  @relation("LocationHierarchy", fields: [childOf], references: [id], onDelete: SetNull)
+  children   Location[] @relation("LocationHierarchy")
+
+  @@index([childOf], map: "locations_child_of_idx")
+  @@index([type], map: "locations_type_idx")
+  @@index([status], map: "locations_status_idx")
+  @@map("locations")
+}
+
 // ============================================================================
 // Account & Activity
 // ============================================================================

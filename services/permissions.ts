@@ -49,6 +49,11 @@ type ManageLayoutPermissionState = {
   canNotificationView: boolean;
 };
 
+const PLATFORM_WIDE_PERMISSIONS = new Set([
+  PERMISSIONS.manage.selfLeadView,
+  PERMISSIONS.manage.selfLeadAddActivity,
+]);
+
 function getCurrentAppId(): string {
   const appId = process.env.NEUP_APP_ID?.trim();
   if (!appId) {
@@ -132,13 +137,14 @@ export async function getCurrentAccountPermissionNames(): Promise<string[]> {
 
 export async function hasPermission(permission: PermissionName | string): Promise<boolean> {
   const appId = getCurrentAppId();
+  const requestedPermission = normalizePermissionName(permission, appId);
+  if (!requestedPermission) return false;
+  if (PLATFORM_WIDE_PERMISSIONS.has(requestedPermission)) return true;
+
   const [currentAppPermissions, currentAccountPermissions] = await Promise.all([
     getCurrentAppPermissionNames(),
     getCurrentAccountPermissionNames(),
   ]);
-
-  const requestedPermission = normalizePermissionName(permission, appId);
-  if (!requestedPermission) return false;
 
   const currentAppPermissionSet = toPermissionSet(currentAppPermissions);
   if (!currentAppPermissionSet.has(requestedPermission)) {

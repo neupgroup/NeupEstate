@@ -16,6 +16,7 @@ export const PERMISSIONS = {
     dashboardView: 'dashboard.view',
     intelligenceListingsView: 'manage.intelligence.listings.view',
     notificationView: 'manage.notification.view',
+    locationsManage: 'manage.locations.manage',
     propertyCollectionSelfView: 'manage.property_collection.self.view',
     propertyReviewApprove: 'manage.property.review.approve',
     propertyReviewView: 'manage.property.review.view',
