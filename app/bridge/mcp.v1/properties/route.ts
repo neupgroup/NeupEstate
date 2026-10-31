@@ -9,7 +9,8 @@ Clients initialize the MCP connection and list tools at this URL, then call
 `property_creation_requirements` to guide a multi-step conversation and
 `submit_property_creation` after collecting a complete property payload.
 Submission creates or refreshes an awaiting-review draft and returns its
-requestId. Provide accountId and property data to the submit tool; an optional
+requestId. Send a valid Neup auth token in the `x-auth` header on every MCP
+request. The authenticated account owns the request; an optional
 workingProfileId selects an accessible posting profile.
 
 ::public end
@@ -26,6 +27,9 @@ by the existing property creation service.
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { WebStandardStreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js';
 import { z } from 'zod';
+import { logica } from '@neup/logica';
+import { hasPermission } from '@/services/permissions';
+import { PERMISSIONS } from '@/services/permission-names';
 import { submitPropertyCreation } from '@/services/properties/create';
 import type { CreatePropertyFormValues } from '@/types';
 
@@ -39,13 +43,13 @@ const propertyCreationRequirements = {
   workflow: 'Collect these fields over as many conversational steps as needed, then submit the complete property object once.',
 };
 
-/* Creates a property scoped MCP server with the property creation tools. */
-function createPropertiesMcpServer(): McpServer {
+/* Creates the property MCP tools scoped to the verified account. */
+function createPropertiesMcpServer(actorAccountId: string): McpServer {
   const server = new McpServer(
     { name: 'neupestate-properties', version: '1.0.0' },
     {
       capabilities: { tools: {} },
-      instructions: 'Help users gather the required property details conversationally. Submit only after collecting the complete property payload and accountId.',
+      instructions: 'Help users gather the required property details conversationally. Submit only after collecting the complete property payload. The authenticated account from x-auth is used as the actor.',
     },
   );
 
@@ -67,18 +71,20 @@ function createPropertiesMcpServer(): McpServer {
     'submit_property_creation',
     {
       title: 'Submit property for review',
-      description: 'Validates a complete property payload and creates or refreshes the account’s awaiting-review property draft. First collect the required property details, accountId, and optional accessible workingProfileId. The property object uses the property creation form fields: title, description, purpose or purposes, categories, types, area, bedrooms, bathrooms, and optional pricing, location, images, ownership, and property-specific details.',
+      description: 'Validates a complete property payload and creates or refreshes the authenticated account’s awaiting-review property draft. First collect the required property details and optional accessible workingProfileId. The property object uses the property creation form fields: title, description, purpose or purposes, categories, types, area, bedrooms, bathrooms, and optional pricing, location, images, ownership, and property-specific details.',
       inputSchema: {
-        accountId: z.string().trim().min(1).describe('Account ID that owns this property creation request.'),
         property: z.record(z.unknown()).describe('Complete property form payload. It is validated against the application property creation schema.'),
         workingProfileId: z.string().trim().min(1).optional().describe('Optional agency or working profile ID the account is authorized to use.'),
       },
       annotations: { readOnlyHint: false, destructiveHint: false, openWorldHint: false },
     },
-    async ({ accountId, property, workingProfileId }) => {
+    async ({ property, workingProfileId }) => {
       try {
+        if (!(await hasPermission(PERMISSIONS.manage.propertySelfCreate))) {
+          return { content: [{ type: 'text', text: 'Permission denied: property creation is not allowed for this account.' }], isError: true };
+        }
         const result = await submitPropertyCreation(property as CreatePropertyFormValues, {
-          actorAccountId: accountId,
+          actorAccountId,
           workingProfileId,
         });
         const response = { success: true, requestId: result.requestId, status: 'awaiting review' };
@@ -96,9 +102,29 @@ function createPropertiesMcpServer(): McpServer {
   return server;
 }
 
+/* Verifies the required x-auth token and returns its authenticated account ID. */
+async function getVerifiedActorAccountId(request: Request): Promise<string | null> {
+  const token = request.headers.get('x-auth')?.trim();
+  if (!token) return null;
+
+  try {
+    const verification = await logica.account.auth.verify(token);
+    if (!verification?.valid) return null;
+    const actorAccountId = verification.payload?.aid;
+    return typeof actorAccountId === 'string' && actorAccountId.trim() ? actorAccountId.trim() : null;
+  } catch {
+    return null;
+  }
+}
+
 /* Handles one stateless MCP Streamable HTTP request. */
 async function handlePropertiesMcpRequest(request: Request): Promise<Response> {
-  const server = createPropertiesMcpServer();
+  const actorAccountId = await getVerifiedActorAccountId(request);
+  if (!actorAccountId) {
+    return Response.json({ error: 'Unauthorized. Provide a valid Neup auth token in the x-auth header.' }, { status: 401 });
+  }
+
+  const server = createPropertiesMcpServer(actorAccountId);
   const transport = new WebStandardStreamableHTTPServerTransport({ sessionIdGenerator: undefined });
   await server.connect(transport);
   return transport.handleRequest(request);

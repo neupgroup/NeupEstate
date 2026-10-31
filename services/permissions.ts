@@ -49,7 +49,7 @@ type ManageLayoutPermissionState = {
   canNotificationView: boolean;
 };
 
-const PLATFORM_WIDE_PERMISSIONS = new Set([
+const PLATFORM_WIDE_PERMISSIONS = new Set<string>([
   PERMISSIONS.manage.selfLeadView,
   PERMISSIONS.manage.selfLeadAddActivity,
 ]);
