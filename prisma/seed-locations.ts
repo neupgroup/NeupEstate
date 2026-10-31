@@ -1,95 +1,114 @@
+import 'dotenv/config';
 import { randomUUID } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from './client';
+import { Prisma, PrismaClient } from './client/index.js';
 
 type Municipality = { name: string; type: string };
 type LocationData = Record<string, Record<string, Municipality[]>>;
+type LocationRow = { id: string; title: string; type: string; childOf: string | null };
+type LocationTransaction = Prisma.TransactionClient;
 
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) throw new Error('DATABASE_URL is required.');
 
-const adapter = new PrismaPg({ connectionString });
+const adapter = new PrismaPg(connectionString);
 const prisma = new PrismaClient({ adapter });
 
+// Converts JSON keys and district identifiers into readable location titles.
 function titleCase(value: string): string {
   return value.split(/[-_\s]+/).filter(Boolean).map((part) => part[0].toUpperCase() + part.slice(1)).join(' ');
 }
 
+// Keeps imported location types consistent with the camelCase management vocabulary.
 function normalizeType(type: string): string {
-  return type.replaceAll('_', '');
+  return type.replace(/_([a-z])/g, (_, letter: string) => letter.toUpperCase());
 }
 
-async function importLocations(): Promise<void> {
-  const filePath = path.join(process.cwd(), 'locations.json');
-  const source = JSON.parse(await readFile(filePath, 'utf8')) as LocationData;
+// Builds the country, province, district, and municipality rows from source JSON.
+function buildLocationRows(source: LocationData): LocationRow[] {
+  const rows: LocationRow[] = [];
+  const countryId = randomUUID();
+  rows.push({ id: countryId, title: 'Nepal', type: 'country', childOf: null });
 
-  await prisma.$transaction(async (transaction) => {
-    const countryId = randomUUID();
-    await transaction.location.upsert({
-      where: { id: countryId },
-      update: {},
-      create: { id: countryId, title: 'Nepal', type: 'country', status: 'active' },
-    });
+  for (const [provinceName, districts] of Object.entries(source)) {
+    const provinceId = randomUUID();
+    rows.push({ id: provinceId, title: titleCase(provinceName), type: 'province', childOf: countryId });
 
-    const existingNepal = await transaction.location.findFirst({
-      where: { title: 'Nepal', type: 'country' },
-    });
-    const nepalId = existingNepal?.id ?? countryId;
-
-    for (const [provinceName, districts] of Object.entries(source)) {
-      const provinceTitle = titleCase(provinceName);
-      const province = await transaction.location.upsert({
-        where: { id: await getStableLocationId(transaction, provinceTitle, 'province', nepalId) },
-        update: { title: provinceTitle, status: 'active' },
-        create: { id: randomUUID(), title: provinceTitle, type: 'province', childOf: nepalId, status: 'active' },
-      });
-
-      for (const [districtName, municipalities] of Object.entries(districts)) {
-        const districtTitle = titleCase(districtName);
-        const district = await upsertByNaturalKey(transaction, districtTitle, 'area', province.id);
-        for (const municipality of municipalities) {
-          await upsertByNaturalKey(transaction, municipality.name, normalizeType(municipality.type), district.id);
-        }
+    for (const [districtName, municipalities] of Object.entries(districts)) {
+      const districtId = randomUUID();
+      rows.push({ id: districtId, title: titleCase(districtName), type: 'area', childOf: provinceId });
+      for (const municipality of municipalities) {
+        rows.push({
+          id: randomUUID(),
+          title: municipality.name,
+          type: normalizeType(municipality.type),
+          childOf: districtId,
+        });
       }
     }
-  });
-}
-
-async function getStableLocationId(
-  transaction: PrismaClient,
-  title: string,
-  type: string,
-  parentId: string,
-): Promise<string> {
-  const location = await transaction.location.findFirst({ where: { title, type, childOf: parentId } });
-  return location?.id ?? randomUUID();
-}
-
-async function upsertByNaturalKey(
-  transaction: PrismaClient,
-  title: string,
-  type: string,
-  childOf: string,
-): Promise<{ id: string }> {
-  const existing = await transaction.location.findFirst({ where: { title, type, childOf } });
-  if (existing) {
-    return transaction.location.update({
-      where: { id: existing.id },
-      data: { status: 'active' },
-      select: { id: true },
-    });
   }
-  return transaction.location.create({
-    data: { id: randomUUID(), title, type, childOf, status: 'active' },
-    select: { id: true },
-  });
+  return rows;
 }
 
-importLocations()
-  .catch((error: unknown) => {
-    console.error(error);
-    process.exitCode = 1;
-  })
-  .finally(async () => prisma.$disconnect());
+// Creates new rows and reactivates matching records in a short bulk transaction.
+async function importLocations(): Promise<number> {
+  const filePath = path.join(process.cwd(), 'locations.json');
+  const source = JSON.parse(await readFile(filePath, 'utf8')) as LocationData;
+  const inputRows = buildLocationRows(source);
+
+  return prisma.$transaction(async (transaction: LocationTransaction) => {
+    const existingRows = await transaction.location.findMany({
+      select: { id: true, title: true, type: true, childOf: true },
+    });
+    const existingByKey = new Map(existingRows.map((row) => [locationKey(row.title, row.type, row.childOf), row]));
+    const idsByInputId = new Map<string, string>();
+    const pendingRows: Array<LocationRow & { postalCode: null; status: string }> = [];
+    const existingIds: string[] = [];
+
+    for (const inputRow of inputRows) {
+      const resolvedParentId = inputRow.childOf ? idsByInputId.get(inputRow.childOf) : null;
+      const key = locationKey(inputRow.title, inputRow.type, resolvedParentId ?? null);
+      const existing = existingByKey.get(key);
+      if (existing) {
+        idsByInputId.set(inputRow.id, existing.id);
+        existingIds.push(existing.id);
+        continue;
+      }
+
+      const id = randomUUID();
+      idsByInputId.set(inputRow.id, id);
+      pendingRows.push({ ...inputRow, id, childOf: resolvedParentId ?? null, postalCode: null, status: 'active' });
+      existingByKey.set(key, { ...inputRow, id });
+    }
+
+    if (existingIds.length) {
+      await transaction.location.updateMany({ where: { id: { in: existingIds } }, data: { status: 'active' } });
+    }
+    if (pendingRows.length) {
+      await transaction.location.createMany({ data: pendingRows });
+    }
+    return inputRows.length;
+  }, { timeout: 30000 });
+}
+
+// Creates a stable lookup key from a location and its parent.
+function locationKey(title: string, type: string, childOf: string | null): string {
+  return JSON.stringify([title, type, childOf]);
+}
+
+// Runs the location import and closes the database connection afterward.
+async function main(): Promise<void> {
+  try {
+    const processedCount = await importLocations();
+    console.log(`Processed ${processedCount} Nepal location records.`);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+void main().catch((error: unknown) => {
+  console.error('Location import failed:', error);
+  process.exitCode = 1;
+});
