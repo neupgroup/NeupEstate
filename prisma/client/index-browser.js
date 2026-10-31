@@ -120,6 +120,15 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.LocationScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  type: 'type',
+  childOf: 'childOf',
+  postalCode: 'postalCode',
+  status: 'status'
+};
+
 exports.Prisma.AccountScalarFieldEnum = {
   id: 'id',
   neupId: 'neupId',
@@ -839,6 +848,7 @@ exports.PropertyCompetitionStatus = exports.$Enums.PropertyCompetitionStatus = {
 };
 
 exports.Prisma.ModelName = {
+  Location: 'Location',
   Account: 'Account',
   Activity: 'Activity',
   Property: 'Property',
