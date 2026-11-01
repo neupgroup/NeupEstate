@@ -6,7 +6,7 @@ import { PERMISSIONS } from '@/services/permission-names';
 import { mcpError, mcpSuccess, type McpToolServer } from '../_shared';
 
 /* Registers a tool that creates a shared lead owned by the authenticated account. */
-export function registerAddLeadTool(server: McpToolServer, actorAccountId: string): void {
+export function registerAddLeadTool(server: McpToolServer, actorAccountId: string, format?: string): void {
   server.registerTool('add_lead', {
     title: 'Add lead', description: 'Creates a shared lead for the authenticated account, either for an existing client owned by the account or a new client.',
     inputSchema: {
@@ -28,7 +28,7 @@ export function registerAddLeadTool(server: McpToolServer, actorAccountId: strin
         return mcpError('firstName and lastName are required when creating a new client.');
       }
       const leadId = await createLead({ ...input, belongsTo: actorAccountId, assignedTo: actorAccountId });
-      return mcpSuccess({ success: true, leadId });
+      return mcpSuccess({ success: true, leadId }, format);
     } catch (error) { return mcpError(error, 'Failed to create lead.'); }
   });
 }

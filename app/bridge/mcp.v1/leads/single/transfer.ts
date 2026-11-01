@@ -19,7 +19,7 @@ async function getAcceptedOrganizationMembers(actorAccountId: string): Promise<{
 }
 
 /* Registers a tool that transfers a lead to an accepted member of the actor's organization. */
-export function registerTransferLeadTool(server: McpToolServer, actorAccountId: string): void {
+export function registerTransferLeadTool(server: McpToolServer, actorAccountId: string, format?: string): void {
   server.registerTool('transfer_shared_lead', {
     title: 'Transfer shared lead', description: 'Transfers a lead owned by the authenticated account to an accepted member of its organization. Organization administrators can transfer organization leads.',
     inputSchema: { leadId: z.string().trim().min(1), targetAccountId: z.string().trim().min(1) },
@@ -32,7 +32,7 @@ export function registerTransferLeadTool(server: McpToolServer, actorAccountId: 
       if (!lead || !accountIds.includes(lead.owner) || (!canManage && lead.owner !== actorAccountId)) return mcpError('Lead not found or not transferable by this account.');
       if (!accountIds.includes(targetAccountId)) return mcpError('Target account is not an accepted member of your organization.');
       const updated = await prisma.sharedLeads.update({ where: { id: leadId }, data: { owner: targetAccountId } });
-      return mcpSuccess({ success: true, data: updated });
+      return mcpSuccess({ success: true, data: updated }, format);
     } catch (error) { return mcpError(error, 'Failed to transfer lead.'); }
   });
 }

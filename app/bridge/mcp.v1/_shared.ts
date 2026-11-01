@@ -1,8 +1,14 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
 /* Formats successful tool data as MCP text and structured content. */
-export function mcpSuccess(value: Record<string, unknown>) {
-  return { content: [{ type: 'text' as const, text: JSON.stringify(value) }], structuredContent: value };
+export function mcpSuccess(value: Record<string, unknown>, format?: string) {
+  const response = format === undefined ? value : { ...value, format };
+  return { content: [{ type: 'text' as const, text: JSON.stringify(response) }], structuredContent: response };
+}
+
+/* Reads the optional public response format from the MCP request URL. */
+export function getMcpFormat(request: Request): string | undefined {
+  return new URL(request.url).searchParams.get('format') ?? undefined;
 }
 
 /* Formats a tool error as MCP content. */

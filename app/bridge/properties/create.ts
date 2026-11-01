@@ -18,7 +18,7 @@ import { requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';
 
 /* Registers the property draft creation tool for the authenticated account. */
-export function registerPropertyCreateTool(server: McpServer, actorAccountId: string): void {
+export function registerPropertyCreateTool(server: McpServer, actorAccountId: string, format?: string): void {
   server.registerTool('create_property', {
     title: 'Create property draft',
     description: 'Validates the complete property form and creates or refreshes the authenticated account’s awaiting-review draft. Collect the required property details before submitting.',
@@ -38,7 +38,8 @@ export function registerPropertyCreateTool(server: McpServer, actorAccountId: st
         actorAccountId,
         workingProfileId,
       });
-      const response = { success: true, requestId: result.requestId, status: 'awaiting review' };
+      const data = { success: true, requestId: result.requestId, status: 'awaiting review' };
+      const response = format === undefined ? data : { ...data, format };
       return {
         content: [{ type: 'text', text: JSON.stringify(response) }],
         structuredContent: response,

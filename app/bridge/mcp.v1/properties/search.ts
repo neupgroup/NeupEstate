@@ -4,7 +4,7 @@ import { getPaginatedProperties } from '@/services/properties/list';
 import { mcpError, mcpSuccess, type McpToolServer } from '../_shared';
 
 /* Registers a bounded search tool for active property listings. */
-export function registerSearchPropertiesTool(server: McpToolServer): void {
+export function registerSearchPropertiesTool(server: McpToolServer, format?: string): void {
   server.registerTool('search_properties', {
     title: 'Search properties', description: 'Searches active listings by text, location, purpose, category, usage type, price, and bedroom count.',
     inputSchema: {
@@ -18,7 +18,7 @@ export function registerSearchPropertiesTool(server: McpToolServer): void {
   }, async ({ page, pageSize, ...filters }) => {
     try {
       const result = await getPaginatedProperties({ filters, page, limit: pageSize });
-      return mcpSuccess({ data: result.properties, pagination: { page, pageSize, total: result.totalCount, hasMore: page * pageSize < result.totalCount }, appliedFilters: filters });
+      return mcpSuccess({ data: result.properties, pagination: { page, pageSize, total: result.totalCount, hasMore: page * pageSize < result.totalCount }, appliedFilters: filters }, format);
     } catch (error) { return mcpError(error, 'Failed to search properties.'); }
   });
 }

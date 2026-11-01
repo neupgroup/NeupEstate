@@ -19,7 +19,7 @@ const activityPayloadSchema = z.object({
 });
 
 /* Registers a tool that adds an activity payload to a visible shared lead. */
-export function registerAddActivityTool(server: McpToolServer, actorAccountId: string): void {
+export function registerAddActivityTool(server: McpToolServer, actorAccountId: string, format?: string): void {
   server.registerTool('add_shared_lead_activity', {
     title: 'Add lead activity', description: 'Adds an activity to a shared lead the authenticated account can access. Normalize natural language dates to ISO datetime before calling. A date-only value means noon UTC. Accepted date tokens: today, tomorrow, in3days, 12amtoday, 12pmtoday, inXdays (X is a non-negative integer), in3hours, and in30minutes; tokens must be lowercase. For a follow up, set activityType to follow_up and provide followUpMethod.',
     inputSchema: { leadId: z.string().trim().min(1), activity: activityPayloadSchema },
@@ -34,7 +34,7 @@ export function registerAddActivityTool(server: McpToolServer, actorAccountId: s
         followUpMethod: activity.followUpMethod as FollowUpMethod | undefined,
         propertyId: activity.propertyId, remarks: activity.remarks,
       });
-      return mcpSuccess({ data });
+      return mcpSuccess({ data }, format);
     } catch (error) { return mcpError(error, 'Failed to add lead activity.'); }
   });
 }

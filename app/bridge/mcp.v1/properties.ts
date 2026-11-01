@@ -17,9 +17,10 @@ import { getPaginatedProperties, getPropertiesSaved } from '@/services/propertie
 import { requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';
 import { prisma } from '@neup/core/database/prisma';
+import { mcpSuccess } from './_shared';
 
 /* Registers property search and saved-property tools on the shared MCP server. */
-export function registerPropertyTools(server: McpServer, actorAccountId: string): void {
+export function registerPropertyTools(server: McpServer, actorAccountId: string, format?: string): void {
   server.registerTool('search_properties', {
     title: 'Search properties',
     description: 'Searches active properties by text, location, purpose, category, usage type, price, and bedroom count. Returns at most 50 results per page.',
@@ -40,7 +41,7 @@ export function registerPropertyTools(server: McpServer, actorAccountId: string)
   }, async ({ page, pageSize, ...filters }) => {
     try {
       const result = await getPaginatedProperties({ filters, page, limit: pageSize });
-      return toolSuccess({
+      return mcpSuccess({
         data: result.properties,
         pagination: {
           page,
@@ -49,7 +50,7 @@ export function registerPropertyTools(server: McpServer, actorAccountId: string)
           hasMore: page * pageSize < result.totalCount,
         },
         appliedFilters: filters,
-      });
+      }, format);
     } catch (error) {
       return toolFailure(error, 'Failed to search properties.');
     }
@@ -71,19 +72,14 @@ export function registerPropertyTools(server: McpServer, actorAccountId: string)
         getPropertiesSaved(actorAccountId, offset, limit),
         prisma.savedProperty.count({ where }),
       ]);
-      return toolSuccess({
+      return mcpSuccess({
         data,
         pagination: { limit, offset, total, hasMore: offset + data.length < total },
-      });
+      }, format);
     } catch (error) {
       return toolFailure(error, 'Failed to list saved properties.');
     }
   });
-}
-
-/* Formats successful MCP results as text and structured content. */
-function toolSuccess(value: Record<string, unknown>) {
-  return { content: [{ type: 'text' as const, text: JSON.stringify(value) }], structuredContent: value };
 }
 
 /* Converts a thrown search or permission failure into an MCP tool error. */

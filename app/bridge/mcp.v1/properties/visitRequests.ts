@@ -7,7 +7,7 @@ import { PERMISSIONS } from '@/services/permission-names';
 import { mcpError, mcpSuccess, type McpToolServer } from '../_shared';
 
 /* Registers visit request submission and account-scoped request listing tools. */
-export function registerVisitRequestTools(server: McpToolServer, actorAccountId: string): void {
+export function registerVisitRequestTools(server: McpToolServer, actorAccountId: string, format?: string): void {
   server.registerTool('create_visit_request', {
     title: 'Request a property visit',
     description: 'Submits a visit request for an approved property. Provide contact information and a preferred date; normalize other natural language dates to YYYY-MM-DD before calling. Accepted lowercase date tokens are today, tomorrow, in3days, 12amtoday, 12pmtoday, inXdays (X is a non-negative integer), in3hours, and in30minutes. For 12amtoday or 12pmtoday, use 00:00 or 12:00 as preferred_time. The property’s listing agent is resolved by the existing service.',
@@ -30,7 +30,7 @@ export function registerVisitRequestTools(server: McpToolServer, actorAccountId:
         return mcpError(JSON.stringify({ error: 'Invalid visit request.', details: parsed.error.flatten().fieldErrors }));
       }
       const requestId = await createVisitRequest(parsed.data);
-      return mcpSuccess({ success: true, requestId, status: 'new' });
+      return mcpSuccess({ success: true, requestId, status: 'new' }, format);
     } catch (error) { return mcpError(error, 'Failed to submit visit request.'); }
   });
 
@@ -56,7 +56,7 @@ export function registerVisitRequestTools(server: McpToolServer, actorAccountId:
         preferred_time: preferredTime ?? undefined,
         createdAt: createdAt.toISOString(),
       }));
-      return mcpSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } });
+      return mcpSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } }, format);
     } catch (error) { return mcpError(error, 'Failed to list visit requests.'); }
   });
 }

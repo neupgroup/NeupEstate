@@ -6,7 +6,7 @@ import { PERMISSIONS } from '@/services/permission-names';
 import { mcpError, mcpSuccess, type McpToolServer } from '../_shared';
 
 /* Registers a tool that lists leads assigned to the actor's accepted agency teammates. */
-export function registerViewMyTeamTool(server: McpToolServer, actorAccountId: string): void {
+export function registerViewMyTeamTool(server: McpToolServer, actorAccountId: string, format?: string): void {
   server.registerTool('view_my_team_leads', {
     title: 'View my team leads', description: 'Lists leads assigned to agents in the authenticated account’s accepted agency teams.',
     inputSchema: { limit: z.number().int().min(1).max(25).default(10), offset: z.number().int().min(0).default(0) },
@@ -23,7 +23,7 @@ export function registerViewMyTeamTool(server: McpToolServer, actorAccountId: st
         prisma.sharedLeads.findMany({ where, include: { baseLead: { include: { contacts: true } } }, orderBy: { createdAt: 'desc' }, skip: offset, take: limit }),
         prisma.sharedLeads.count({ where }),
       ]);
-      return mcpSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } });
+      return mcpSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } }, format);
     } catch (error) { return mcpError(error, 'Failed to list team leads.'); }
   });
 }

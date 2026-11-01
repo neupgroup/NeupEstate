@@ -23,7 +23,7 @@ async function getOrganizationAccountIds(actorAccountId: string): Promise<string
 }
 
 /* Registers a tool that lists shared leads created or assigned within the actor's organization. */
-export function registerViewMyOrganizationTool(server: McpToolServer, actorAccountId: string): void {
+export function registerViewMyOrganizationTool(server: McpToolServer, actorAccountId: string, format?: string): void {
   server.registerTool('view_my_organization_leads', {
     title: 'View my organization leads', description: 'Lists leads assigned to organization members or created from clients belonging to an organization member.',
     inputSchema: { limit: z.number().int().min(1).max(25).default(10), offset: z.number().int().min(0).default(0) },
@@ -37,7 +37,7 @@ export function registerViewMyOrganizationTool(server: McpToolServer, actorAccou
         prisma.sharedLeads.findMany({ where, include: { baseLead: { include: { contacts: true } } }, orderBy: { createdAt: 'desc' }, skip: offset, take: limit }),
         prisma.sharedLeads.count({ where }),
       ]);
-      return mcpSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } });
+      return mcpSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } }, format);
     } catch (error) { return mcpError(error, 'Failed to list organization leads.'); }
   });
 }

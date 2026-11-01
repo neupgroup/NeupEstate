@@ -6,7 +6,7 @@ import { PERMISSIONS } from '@/services/permission-names';
 import { mcpError, mcpSuccess, type McpToolServer } from '../_shared';
 
 /* Registers a tool for listing saved active properties belonging to the actor. */
-export function registerSavedPropertiesTool(server: McpToolServer, actorAccountId: string): void {
+export function registerSavedPropertiesTool(server: McpToolServer, actorAccountId: string, format?: string): void {
   server.registerTool('list_my_saved_properties', {
     title: 'List my saved properties', description: 'Lists active properties saved by the authenticated account, newest saved first.',
     inputSchema: { limit: z.number().int().min(1).max(100).default(25), offset: z.number().int().min(0).default(0) },
@@ -18,7 +18,7 @@ export function registerSavedPropertiesTool(server: McpToolServer, actorAccountI
         getPropertiesSaved(actorAccountId, offset, limit),
         prisma.savedProperty.count({ where: { accountId: actorAccountId } }),
       ]);
-      return mcpSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } });
+      return mcpSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } }, format);
     } catch (error) { return mcpError(error, 'Failed to list saved properties.'); }
   });
 }

@@ -34,6 +34,7 @@ import { registerViewMyOrganizationTool } from './leads/view_myOrganization';
 import { registerViewActivityTool } from './leads/single/viewActivity';
 import { registerAddActivityTool } from './leads/single/addActivity';
 import { registerTransferLeadTool } from './leads/single/transfer';
+import { getMcpFormat } from './_shared';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -54,7 +55,7 @@ async function canViewAllTeamLeads(actorAccountId: string): Promise<boolean> {
 }
 
 /* Creates the MCP server and registers account-scoped listing and lead tools. */
-function createMcpServer(actorAccountId: string): McpServer {
+function createMcpServer(actorAccountId: string, format?: string): McpServer {
   const server = new McpServer({ name: 'neupestate', version: '1.0.0' }, {
     capabilities: { tools: {} },
     instructions: 'Add activities to leads the authenticated account can access; view its saved properties and team leads; and browse platform accounts, agents, and agencies. The account is determined by x-auth.',
@@ -73,7 +74,7 @@ function createMcpServer(actorAccountId: string): McpServer {
         prisma.sharedLeads.findMany({ where, include: { baseLead: { include: { contacts: true } } }, orderBy: { createdAt: 'desc' }, skip: offset, take: limit }),
         prisma.sharedLeads.count({ where }),
       ]);
-      return toolSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } });
+      return toolSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } }, format);
     } catch (error) { return toolFailure(error, 'Failed to list team leads.'); }
   });
 
@@ -95,7 +96,7 @@ function createMcpServer(actorAccountId: string): McpServer {
       const data = accounts.map(({ id, neupId, accountType, displayName, displayImage, createdOn }) => ({
         id, neupId, type: accountType, name: displayName, image: displayImage, createdAt: createdOn.toISOString(),
       }));
-      return toolSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } });
+      return toolSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } }, format);
     } catch (error) { return toolFailure(error, 'Failed to list platform accounts.'); }
   });
 
@@ -111,7 +112,7 @@ function createMcpServer(actorAccountId: string): McpServer {
   }, async ({ limit, offset, ...filters }) => {
     try {
       const [data, total] = await Promise.all([getAgents({ limit, offset, filters }), getAgentCount(filters)]);
-      return toolSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } });
+      return toolSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } }, format);
     } catch (error) { return toolFailure(error, 'Failed to list agents.'); }
   });
 
@@ -130,29 +131,30 @@ function createMcpServer(actorAccountId: string): McpServer {
         getPublicAgencyAccounts({ limit, offset, filters }),
         getPublicAgencyAccountCount(filters),
       ]);
-      return toolSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } });
+      return toolSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } }, format);
     } catch (error) { return toolFailure(error, 'Failed to list agencies.'); }
   });
 
-  registerPropertyTools(server, actorAccountId);
-  registerViewPropertyTool(server);
-  registerAddPropertyTool(server, actorAccountId);
-  registerPropertyUpdateTool(server, actorAccountId);
-  registerVisitRequestTools(server, actorAccountId);
-  registerAddLeadTool(server, actorAccountId);
-  registerViewMineTool(server, actorAccountId);
-  registerViewMyTeamTool(server, actorAccountId);
-  registerViewMyOrganizationTool(server, actorAccountId);
-  registerViewActivityTool(server, actorAccountId);
-  registerAddActivityTool(server, actorAccountId);
-  registerTransferLeadTool(server, actorAccountId);
+  registerPropertyTools(server, actorAccountId, format);
+  registerViewPropertyTool(server, format);
+  registerAddPropertyTool(server, actorAccountId, format);
+  registerPropertyUpdateTool(server, actorAccountId, format);
+  registerVisitRequestTools(server, actorAccountId, format);
+  registerAddLeadTool(server, actorAccountId, format);
+  registerViewMineTool(server, actorAccountId, format);
+  registerViewMyTeamTool(server, actorAccountId, format);
+  registerViewMyOrganizationTool(server, actorAccountId, format);
+  registerViewActivityTool(server, actorAccountId, format);
+  registerAddActivityTool(server, actorAccountId, format);
+  registerTransferLeadTool(server, actorAccountId, format);
 
   return server;
 }
 
 /* Formats a successful result as MCP text and structured content. */
-function toolSuccess(value: unknown) {
-  return { content: [{ type: 'text' as const, text: JSON.stringify(value) }], structuredContent: value as Record<string, unknown> };
+function toolSuccess(value: unknown, format?: string) {
+  const response = format === undefined ? value : { ...(value as Record<string, unknown>), format };
+  return { content: [{ type: 'text' as const, text: JSON.stringify(response) }], structuredContent: response as Record<string, unknown> };
 }
 
 /* Formats a validation or visibility error as an MCP tool error. */
@@ -180,7 +182,7 @@ async function getVerifiedActorAccountId(request: Request): Promise<string | nul
 async function handleMcpRequest(request: Request): Promise<Response> {
   const actorAccountId = await getVerifiedActorAccountId(request);
   if (!actorAccountId) return Response.json({ error: 'Unauthorized. Provide a valid Neup auth token in the x-auth header.' }, { status: 401 });
-  const server = createMcpServer(actorAccountId);
+  const server = createMcpServer(actorAccountId, getMcpFormat(request));
   const transport = new WebStandardStreamableHTTPServerTransport({ sessionIdGenerator: undefined });
   await server.connect(transport);
   return transport.handleRequest(request);
