@@ -15,30 +15,28 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { WebStandardStreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js';
 import { prisma } from '@neup/core/database/prisma';
 import { logica } from '@neup/logica';
-import { addLeadActivity, getVisibleLead, type FollowUpMethod } from '@neup/logica/estate/lead/activity';
 import { z } from 'zod';
 import { requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';
-import { getPropertiesSaved } from '@/services/properties/list';
 import { getAgents, getAgentCount } from '@/services/agents/agent/service';
 import { getPublicAgencyAccounts, getPublicAgencyAccountCount } from '@/services/agencies/agency/service';
 import { getAccountById } from '@/services/accounts/id/get';
 import { getAgencyAgentMapsByAgent } from '@/services/agencies/agent-maps/service';
+import { registerPropertyTools } from './properties';
+import { registerViewPropertyTool } from './properties/single/view';
+import { registerAddPropertyTool } from './properties/addProperty';
+import { registerPropertyUpdateTool } from '../properties/update';
+import { registerVisitRequestTools } from './properties/visitRequests';
+import { registerAddLeadTool } from './leads/add';
+import { registerViewMineTool } from './leads/view_mine';
+import { registerViewMyTeamTool } from './leads/view_myTeam';
+import { registerViewMyOrganizationTool } from './leads/view_myOrganization';
+import { registerViewActivityTool } from './leads/single/viewActivity';
+import { registerAddActivityTool } from './leads/single/addActivity';
+import { registerTransferLeadTool } from './leads/single/transfer';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
-
-const activitySchema = z.object({
-  activityType: z.enum(['follow_up', 'visit', 'meeting', 'remarks']),
-  activityOn: z.string().datetime().optional(),
-  followUpMethod: z.enum(['phone call', 'whatsapp', 'email']).optional(),
-  propertyId: z.string().trim().min(1).optional(),
-  remarks: z.string().trim().min(1),
-}).superRefine((activity, context) => {
-  if (activity.activityType === 'follow_up' && !activity.followUpMethod) {
-    context.addIssue({ code: 'custom', path: ['followUpMethod'], message: 'Required for follow_up activities.' });
-  }
-});
 
 const paginationInput = {
   limit: z.number().int().min(1).max(100).default(25),
@@ -60,49 +58,6 @@ function createMcpServer(actorAccountId: string): McpServer {
   const server = new McpServer({ name: 'neupestate', version: '1.0.0' }, {
     capabilities: { tools: {} },
     instructions: 'Add activities to leads the authenticated account can access; view its saved properties and team leads; and browse platform accounts, agents, and agencies. The account is determined by x-auth.',
-  });
-
-  server.registerTool('add_shared_lead_activity', {
-    title: 'Add activity to shared lead',
-    description: 'Adds an activity to a shared lead visible to the authenticated account. Provide the lead ID and activity payload. followUpMethod is required for follow_up activities.',
-    inputSchema: {
-      leadId: z.string().trim().min(1),
-      activity: activitySchema,
-    },
-    annotations: { readOnlyHint: false, destructiveHint: false, openWorldHint: false },
-  }, async ({ leadId, activity }) => {
-    try {
-      await requirePermission(PERMISSIONS.manage.selfLeadAddActivity);
-      const visibleLead = await getVisibleLead(leadId, actorAccountId);
-      if (!visibleLead) return toolError('Lead not found or not visible to this account.');
-      const result = await addLeadActivity({
-        leadId,
-        accountId: actorAccountId,
-        activityType: activity.activityType,
-        activityOn: activity.activityOn ?? new Date().toISOString(),
-        followUpMethod: activity.followUpMethod as FollowUpMethod | undefined,
-        propertyId: activity.propertyId,
-        remarks: activity.remarks,
-      });
-      return toolSuccess(result);
-    } catch (error) { return toolFailure(error, 'Failed to add lead activity.'); }
-  });
-
-  server.registerTool('list_my_saved_properties', {
-    title: 'List my saved properties',
-    description: 'Lists active properties saved by the authenticated account, newest saved first. Maximum 100 per page.',
-    inputSchema: paginationInput,
-    annotations: { readOnlyHint: true, openWorldHint: false },
-  }, async ({ limit, offset }) => {
-    try {
-      await requirePermission(PERMISSIONS.public.propertySave);
-      const where = { accountId: actorAccountId };
-      const [data, total] = await Promise.all([
-        getPropertiesSaved(actorAccountId, offset, limit),
-        prisma.savedProperty.count({ where }),
-      ]);
-      return toolSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } });
-    } catch (error) { return toolFailure(error, 'Failed to list saved properties.'); }
   });
 
   server.registerTool('list_team_leads', {
@@ -178,6 +133,19 @@ function createMcpServer(actorAccountId: string): McpServer {
       return toolSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } });
     } catch (error) { return toolFailure(error, 'Failed to list agencies.'); }
   });
+
+  registerPropertyTools(server, actorAccountId);
+  registerViewPropertyTool(server);
+  registerAddPropertyTool(server, actorAccountId);
+  registerPropertyUpdateTool(server, actorAccountId);
+  registerVisitRequestTools(server, actorAccountId);
+  registerAddLeadTool(server, actorAccountId);
+  registerViewMineTool(server, actorAccountId);
+  registerViewMyTeamTool(server, actorAccountId);
+  registerViewMyOrganizationTool(server, actorAccountId);
+  registerViewActivityTool(server, actorAccountId);
+  registerAddActivityTool(server, actorAccountId);
+  registerTransferLeadTool(server, actorAccountId);
 
   return server;
 }
