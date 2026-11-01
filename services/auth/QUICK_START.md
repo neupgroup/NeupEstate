@@ -237,7 +237,7 @@ import { getAccountFromCookie } from '@/services/account/cookie-account';
 
 export default async function Page() {
   const store = await cookies();
-  const raw = store.get('auth_account')?.value ?? null;
+  const raw = store.get('auth')?.value ?? null;
   const result = await getAccountFromCookie(raw);
   
   if (!result.success) {
@@ -266,7 +266,7 @@ export default async function Page() {
 
 When you call `requireAuth()`:
 
-1. ✅ Reads `auth_account` cookie
+1. ✅ Reads `auth` cookie
 2. ✅ Validates JWT format
 3. ✅ Decodes payload
 4. ✅ Checks required fields (aid, sid, skey)

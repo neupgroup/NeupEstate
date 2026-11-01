@@ -1,11 +1,11 @@
 # Authentication Service
 
-Centralized authentication service for handling `auth_account` JWT cookie verification and account information retrieval.
+Centralized authentication service for handling `auth` JWT cookie verification and account information retrieval.
 
 ## Overview
 
 This service provides a unified interface for:
-1. Reading the `auth_account` cookie (client and server)
+1. Reading the `auth` cookie (client and server)
 2. Verifying JWT signatures using the RSA public key
 3. Extracting account information (aid, sid, skey, nid, guest status)
 
@@ -187,7 +187,7 @@ const payload = decodeAuthJWT(token);
 
 ## Verification Process
 
-1. **Cookie Reading**: Reads `auth_account` cookie from Next.js server context
+1. **Cookie Reading**: Reads `auth` cookie from Next.js server context
 2. **Token Validation**: Checks token format and required fields
 3. **Expiry Check**: Verifies token hasn't expired
 4. **Signature Verification**: Uses the bundled NeupID public key at `logica/neupid/public.key`

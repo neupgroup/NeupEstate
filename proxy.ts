@@ -6,7 +6,7 @@ import { logica } from '@neup/logica';
 /**
  * proxy.ts — Next.js Edge Proxy
  *
- * auth_account cookie is verified through the shared NeupID token helper.
+ * auth cookie is verified through the shared NeupID token helper.
  *
  * Rules:
  *   1. /bridge/*       → always pass through
@@ -86,8 +86,8 @@ export default async function proxy(request: NextRequest) {
   // The account switch page must stay reachable.
   if (switchPaths.has(pathname.replace(/\/$/, ''))) return pass();
 
-  // Read and verify the auth_account JWT.
-  const raw = request.cookies.get('auth_account')?.value;
+  // Read and verify the auth JWT.
+  const raw = request.cookies.get('auth')?.value;
   const verification = raw ? await verifyJwt(raw.trim()) : { payload: null, reason: 'missing_token' };
   const payload = verification.payload;
   // Forward the verified account ID downstream so server components can use

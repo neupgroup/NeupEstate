@@ -7,7 +7,7 @@
  * ::public
  *
  * This route is invoked after the upstream auth bridge completes authentication
- * and sets the `auth_account` cookie on the client.
+ * and sets the `auth` cookie on the client.
  *
  * Behavior:
  * - reads the authenticated account from the bridge cookie

@@ -152,11 +152,11 @@ async function verifyAuthToken(token: string | null | undefined): Promise<AuthTo
 // ─── Server-side (verified) ──────────────────────────────────────────────────
 
 /**
- * Gets and verifies the authenticated account from the auth_account cookie.
+ * Gets and verifies the authenticated account from the auth cookie.
  * This is the primary authentication function for server-side code.
  *
  * Flow:
- *  1. Reads the auth_account cookie from Next.js server context
+ *  1. Reads the auth cookie from Next.js server context
  *  2. Verifies the token through logica NeupID helpers
  *  3. Checks required app fields (aid)
  *  4. Returns success: true with verified account, or success: false with reason
@@ -203,7 +203,7 @@ export async function getAuthenticatedAccount(): Promise<AuthResult> {
 }
 
 /**
- * Gets the account ID (aid) from the verified auth_account cookie.
+ * Gets the account ID (aid) from the verified auth cookie.
  * Returns null if the cookie is missing, invalid, or verification fails.
  *
  * @returns Account ID or null
@@ -214,7 +214,7 @@ export async function getAccountId(): Promise<string | null> {
 }
 
 /**
- * Gets the session triplet (aid, sid, skey) from the verified auth_account cookie.
+ * Gets the session triplet (aid, sid, skey) from the verified auth cookie.
  * Returns null if any required field is missing or verification fails.
  *
  * @returns Session triplet or null
@@ -342,7 +342,7 @@ export async function requireRegisteredAuth(request?: { url?: string; nextUrl?: 
 // ─── Client-side (unverified, decode only) ───────────────────────────────────
 
 /**
- * Gets the account data from the auth_account cookie (client-side).
+ * Gets the account data from the auth cookie (client-side).
  * 
  * WARNING: This only decodes the JWT without verifying the signature.
  * Do NOT use this for security-critical decisions.

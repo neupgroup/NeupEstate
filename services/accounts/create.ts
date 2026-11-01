@@ -8,7 +8,7 @@
  * ::public
  *
  * Call this from server-side entry points such as layouts and auth callbacks.
- * The service reads the current `auth_account` cookie, creates or reuses the
+ * The service reads the current `auth` cookie, creates or reuses the
  * upstream application connection, then upserts the local account row.
  *
  * ::public end

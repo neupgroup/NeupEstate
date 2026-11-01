@@ -2,6 +2,7 @@
  * bridge.ts
  *
  * URL builders and helpers for Neup.Account bridge API endpoints.
+ * API requests carry the session token in the x-auth header.
  *
  * IMPORTANT: This app only READS cookies. All cookie modifications
  * (setting, expiring, refreshing) are handled by Neup.Account bridge.
@@ -85,7 +86,7 @@ export function buildAccessUrl(): string {
 export async function fetchWhoami(token: string) {
   const url = buildWhoamiUrl();
   const headers = {
-    'Authorization': `Bearer ${token}`,
+    'x-auth': token,
     'Content-Type': 'application/json',
   };
   let response: Response;
@@ -117,7 +118,7 @@ export async function fetchWhoami(token: string) {
 export async function fetchAccessInfo(token: string) {
   const url = buildAccessUrl();
   const headers = {
-    'Authorization': `Bearer ${token}`,
+    'x-auth': token,
     'Content-Type': 'application/json',
   };
   let response: Response;

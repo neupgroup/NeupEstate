@@ -9,7 +9,7 @@
  *   path as the post-login redirect target. Returns void.
  *
  * getAccountIdFromJWT()
- *   Reads the accountId (aid) from the auth_account JWT cookie.
+ *   Reads the accountId (aid) from the auth JWT cookie.
  *   Returns null if no valid session exists.
  *   Call checkAuthenticationForWeb() first if you need the auth guard.
  *

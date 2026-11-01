@@ -6,8 +6,8 @@
 
 #### Core Services
 - **`services/auth/cookie.ts`** - Centralized cookie reading service
-  - `getAuthCookieClient()` - Read auth_account cookie from browser
-  - `getAuthCookieServer()` - Read auth_account cookie from Next.js server context
+  - `getAuthCookieClient()` - Read auth cookie from browser
+  - `getAuthCookieServer()` - Read auth cookie from Next.js server context
 
 - **`services/auth/jwt.ts`** - JWT verification and decoding service
   - `verifyAuthJWT()` - Verify JWT signature using RSA public key (RS256)

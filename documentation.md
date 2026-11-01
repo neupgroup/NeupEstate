@@ -952,7 +952,7 @@ may contain:
 
 All routes in this folder use JSON request and response bodies.
 
-All protected endpoints require bearer authentication.
+All protected endpoints require the `x-auth` header containing the Neup auth token.
 
 ## Shared Errors
 
@@ -1213,7 +1213,7 @@ async function getAccount(accountId: string): Promise<Account> {
 ::neup.documentation::create-account
 ::api POST /api/accounts
 ::title Create Account
-::authentication bearer
+::authentication x-auth
 ::owner Accounts Team
 
 ::public
@@ -1587,7 +1587,7 @@ Detailed private implementation notes.
 ::neup.documentation::api-id
 ::api METHOD /api/path
 ::title API Title
-::authentication bearer
+::authentication x-auth
 
 Short shared description.
 
@@ -2245,7 +2245,7 @@ Content:
 ::neup.documentation::create-account
 ::title Account Creation
 ::api POST /api/v1/accounts
-::authentication bearer
+::authentication x-auth
 
 ::public
 

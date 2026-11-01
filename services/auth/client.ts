@@ -1,14 +1,14 @@
 /**
  * client.ts
  *
- * Browser-only helpers for reading unverified auth_account cookie data.
+ * Browser-only helpers for reading unverified auth cookie data.
  *
  * ::neup.documentation::auth-client-cookie-helpers
  * ::title Auth Client Cookie Helpers
  *
  * ::public
  *
- * Provides browser-only helpers for reading and decoding the `auth_account` cookie without importing server auth modules.
+ * Provides browser-only helpers for reading and decoding the `auth` cookie without importing server auth modules.
  *
  * ::public end
  *
@@ -32,7 +32,7 @@ type AuthAccountPayload = {
   [claim: string]: unknown;
 };
 
-const COOKIE_NAME = 'auth_account';
+const COOKIE_NAME = 'auth';
 
 function decodeClientToken(token: string): AuthAccountPayload | null {
   const parts = token.trim().split('.');

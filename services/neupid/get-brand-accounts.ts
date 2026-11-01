@@ -53,7 +53,7 @@ function getRequiredEnv(name: 'NEUP_APP_ID' | 'NEUP_APP_SECRET'): string {
 
 /**
  * Fetches accessible accounts from NeupID API.
- * Requires authentication via auth_account cookie.
+ * Requires authentication via auth cookie.
  *
  * @returns BrandAccountsResponse with list of accessible accounts
  */

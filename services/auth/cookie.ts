@@ -1,13 +1,13 @@
 /**
  * cookie.ts
  *
- * Centralized cookie reading service for auth_account cookie.
+ * Centralized cookie reading service for auth cookie and trusted server auth header.
  * Handles both client-side and server-side cookie access.
  */
 
 import { logger } from '@neup/logica/logger';
 
-const COOKIE_NAME = 'auth_account';
+const COOKIE_NAME = 'auth';
 
 // ─── Client-side cookie reading ──────────────────────────────────────────────
 
@@ -26,7 +26,7 @@ function readCookieClient(name: string): string | null {
 }
 
 /**
- * Reads the auth_account cookie value from the browser.
+ * Reads the auth cookie value from the browser.
  * Returns null if not found or if running on the server.
  */
 export function getAuthCookieClient(): string | null {
@@ -36,7 +36,7 @@ export function getAuthCookieClient(): string | null {
 // ─── Server-side cookie reading ──────────────────────────────────────────────
 
 /**
- * Reads the auth_account cookie value from Next.js server context.
+ * Reads the auth cookie value from Next.js server context.
  * Returns null if not found.
  * 
  * Must be called from Server Components, Route Handlers, or Server Actions.

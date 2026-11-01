@@ -1,10 +1,10 @@
 /**
  * get-identity.ts
  *
- * Server-side identity resolution from the auth_account JWT cookie.
+ * Server-side identity resolution from the auth JWT cookie.
  * Now uses the centralized auth service for JWT verification.
  *
- * Cookie name : auth_account (singular, set by NeupID on the shared domain)
+ * Cookie name : auth (set by NeupID on the shared domain)
  *
  * JWT payload shape:
  *   { aid, sid, skey, nid?, guest? }
@@ -33,7 +33,7 @@ export type IdentityResult =
   | { authenticated: false; reason: string };
 
 /**
- * Resolves the current identity from the auth_account JWT cookie.
+ * Resolves the current identity from the auth JWT cookie.
  *
  * @param cookieValue - Optional raw cookie value (for Route Handlers that
  *   need to pass it manually). When omitted, reads from the Next.js store.
