@@ -1,6 +1,5 @@
 
 import type { Metadata } from 'next';
-import { Outfit } from 'next/font/google';
 import './globals.css';
 import { cn } from '@neup/core/utils';
 import SharedRootLayout from '@neup/components/layout/RootLayout';
@@ -9,12 +8,6 @@ import { ActivityTracker } from '@/components/activity-tracker';
 import { createAccount } from '@/services/accounts/create';
 import { getAuthenticatedMeData } from '@/services/auth/me';
 import { canShowManagePanelLink } from '@/services/permissions';
-
-const outfit = Outfit({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700', '800'],
-  variable: '--font-outfit',
-});
 
 export const dynamic = 'force-dynamic';
 
@@ -51,10 +44,21 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body
         className={cn(
           'min-h-screen bg-background font-sans antialiased flex flex-col',
-          outfit.variable
         )}
       >
         <ActivityTracker />

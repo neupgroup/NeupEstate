@@ -70,6 +70,12 @@ export async function createAccount(): Promise<void> {
       return;
     }
 
+    const existingAccount = await prisma.account.findUnique({
+      where: { id: authResult.account.aid },
+      select: { connectionId: true },
+    });
+    if (existingAccount?.connectionId) return;
+
     const connectionResponse = await logica.account(authResult.account.aid).connection.create({
       authAccountToken: authCookie,
       appId: getRequiredEnv('NEUP_APP_ID'),
@@ -91,11 +97,6 @@ export async function createAccount(): Promise<void> {
     }
 
     const seed = await getLocalAccountSeed(authResult.account.aid, connectionId);
-    const existing = await prisma.account.findUnique({
-      where: { id: seed.id },
-      select: { accountType: true },
-    });
-
     await prisma.account.upsert({
       where: { id: seed.id },
       create: {

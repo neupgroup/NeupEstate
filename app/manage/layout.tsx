@@ -1,5 +1,4 @@
 import { ManageSidebar } from '@/components/manage/manage-sidebar';
-import { createAccount } from '@/services/accounts/create';
 import { getManageLayoutPermissionState } from '@/services/permissions';
 
 export default async function ManageLayout({
@@ -7,8 +6,6 @@ export default async function ManageLayout({
 }: {
   children: React.ReactNode;
 }) {
-  await createAccount();
-
   const {
     canDashboard,
     canAnalytics,

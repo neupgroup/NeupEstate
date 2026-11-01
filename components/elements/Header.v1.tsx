@@ -9,7 +9,7 @@ import { isActivePublicHrefV1 } from "@/components/logic/PublicNavSelection.v1";
 import { appendManageProfileParamV1, getLongestMatchingManageNavHrefV1 } from "@/components/logic/ManageNavSelection.v1";
 import { manageNav } from "@/components/manage-nav";
 import { ProfileV1 } from "@/components/elements/Profile.v1";
-import { AccountDisplayTabV1 } from "@/components/elements/AccountDisplayTab.v1";
+import { Userbar } from "@neup/components/element/userbar";
 import type { SessionUser } from "@neup/core/providers/session";
 
 const publicNavLinks = [
@@ -40,6 +40,8 @@ export function HeaderV1({
   const activeProfileName = user?.workingProfileDisplayName?.trim() || null;
   const [selectedProfileName, setSelectedProfileName] = useState<string | null>(activeProfileName);
   const logoProfileName = selectedProfileName?.trim() || null;
+  const profileName = effectiveUser?.displayName?.trim() || "User";
+  const profileHandle = effectiveUser?.neupId?.trim() || effectiveUser?.accountId?.trim() || "";
 
   useEffect(() => {
     const normalizedSelectedProfile = selectedProfile?.trim() || null;
@@ -148,7 +150,7 @@ export function HeaderV1({
   return (
     <>
       <header className="sticky top-0 z-50 w-full bg-card shadow-md">
-        <div className="container flex h-16 items-center px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-16 w-full max-w-[1440px] items-center px-8">
           <div className="flex-1 justify-start flex">
             <Link href="/" className="flex items-center gap-2">
               <img src="https://cdn.neupgroup.com/neupestate/logo.png" alt="Neup.Estate Logo" className="h-9 w-9 object-contain" />
@@ -167,7 +169,13 @@ export function HeaderV1({
 
           <div className="flex flex-1 items-center justify-end space-x-1.5">
             {effectiveUser && (
-              <AccountDisplayTabV1 user={effectiveUser} />
+              <Link href="/profile" aria-label="Open profile">
+                <Userbar
+                  displayName={profileName}
+                  displayImage={effectiveUser.displayImage}
+                  neupid={profileHandle}
+                />
+              </Link>
             )}
 
             {!effectiveUser && (
@@ -190,7 +198,19 @@ export function HeaderV1({
         )}
       >
         {effectiveUser && (
-          <AccountDisplayTabV1 user={effectiveUser} mobile onClick={() => setMenuOpen(false)} />
+          <Link
+            href="/profile"
+            aria-label="Open profile"
+            onClick={() => setMenuOpen(false)}
+            className="mx-3 mt-3 flex justify-start rounded-lg bg-secondary"
+          >
+            <Userbar
+              displayName={profileName}
+              displayImage={effectiveUser.displayImage}
+              neupid={profileHandle}
+              className="w-full justify-between pr-2"
+            />
+          </Link>
         )}
 
         <nav className="flex flex-col space-y-0.5 px-3 py-3">

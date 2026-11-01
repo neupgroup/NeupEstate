@@ -1,7 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@neup/components/ui/card";
-import { getProperties } from "@/services/properties/list";
-import { getAccounts } from "@/services/accounts/id/lookup";
+import { prisma } from '@neup/core/database/prisma';
 import { getAgencyAgentMapsByAgent } from "@/services/agencies/agent-maps/service";
 import { getAccountIdFromJWT } from "@/services/neupid/check-auth-web";
 import { Clock, DollarSign, CalendarCheck, Home } from "lucide-react";
@@ -10,17 +9,14 @@ import { requirePagePermission } from "@/services/permissions";
 import { PERMISSIONS } from '@/services/permission-names';;
 import { AgencyInvitationsCard } from "@/components/manage/agency-invitations-card";
 
+// Read dashboard totals with database counts instead of hydrating every property and relation.
 async function getStats() {
-    const allProperties = await getProperties({ includeInactive: true });
-    
-    const listedThisWeek = allProperties.filter(p => {
-        if (!p.createdAt) return false;
-        const sevenDaysAgo = new Date();
-        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-        return new Date(p.createdAt) >= sevenDaysAgo;
-    }).length;
-
-    const pendingCount = allProperties.filter(p => !p.isApproved).length;
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const [listedThisWeek, pendingCount] = await Promise.all([
+        prisma.property.count({ where: { createdAt: { gte: sevenDaysAgo } } }),
+        prisma.property.count({ where: { isApproved: false } }),
+    ]);
 
     // Placeholders for future data points that are not yet tracked
     const soldThisWeek = 0;
@@ -54,24 +50,26 @@ const StatCard = ({ title, value, icon, description }: { title: string, value: s
 
 export default async function ManageDashboardPage() {
     await requirePagePermission(PERMISSIONS.manage.dashboardView);
-    
-    const [stats, accountId, accounts] = await Promise.all([
+    const accountIdPromise = getAccountIdFromJWT();
+    const [stats, invitations] = await Promise.all([
         getStats(),
-        getAccountIdFromJWT(),
-        getAccounts(),
+        accountIdPromise.then(async (id) => id ? getAgencyAgentMapsByAgent(id) : []),
     ]);
 
-    const invitations = accountId
-        ? (await getAgencyAgentMapsByAgent(accountId)).filter((link) => link.status === 'invited').map((link) => {
-            const agency = accounts.find((account) => account.id === link.agencyId);
-            return {
-                id: link.id,
-                agencyId: link.agencyId,
-                agencyName: agency?.display_name ?? link.agencyId,
-                isAdmin: link.isAdmin,
-            };
+    const pendingInvitations = invitations.filter((link) => link.status === 'invited');
+    const agencyAccounts = pendingInvitations.length
+        ? await prisma.account.findMany({
+            where: { id: { in: pendingInvitations.map((link) => link.agencyId) } },
+            select: { id: true, displayName: true },
         })
         : [];
+    const agencyNames = new Map(agencyAccounts.map((account) => [account.id, account.displayName]));
+    const invitationCards = pendingInvitations.map((link) => ({
+        id: link.id,
+        agencyId: link.agencyId,
+        agencyName: agencyNames.get(link.agencyId) ?? link.agencyId,
+        isAdmin: link.isAdmin,
+    }));
 
     return (
         <div className="space-y-8">
@@ -108,7 +106,7 @@ export default async function ManageDashboardPage() {
                 />
             </div>
 
-            <AgencyInvitationsCard invitations={invitations} />
+            <AgencyInvitationsCard invitations={invitationCards} />
             
             <div>
                 <h2 className="text-2xl font-semibold tracking-tight">Schedule for the day</h2>
