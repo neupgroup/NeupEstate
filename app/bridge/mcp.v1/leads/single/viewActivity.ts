@@ -4,6 +4,11 @@ import { requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';
 import { mcpError, mcpSuccess, type McpToolServer } from '../../_shared';
 
+const responseFormats = {
+  nia: '```nia.estate.leads.viewActivity\n{payload}\n```',
+  chatgpt: '{payload}',
+};
+
 /* Registers a tool that returns a visible lead's activity timeline. */
 export function registerViewActivityTool(server: McpToolServer, actorAccountId: string, format?: string): void {
   server.registerTool('view_shared_lead_activity', {
@@ -14,7 +19,7 @@ export function registerViewActivityTool(server: McpToolServer, actorAccountId: 
     try {
       await requirePermission(PERMISSIONS.manage.selfLeadView);
       if (!await getVisibleLead(leadId, actorAccountId)) return mcpError('Lead not found or not visible to this account.');
-      return mcpSuccess({ leadId, data: await getLeadActivities(leadId) }, format);
+      return mcpSuccess({ leadId, data: await getLeadActivities(leadId) }, format, responseFormats);
     } catch (error) { return mcpError(error, 'Failed to view lead activity.'); }
   });
 }

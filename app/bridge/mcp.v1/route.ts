@@ -34,6 +34,7 @@ import { registerViewMyOrganizationTool } from './leads/view_myOrganization';
 import { registerViewActivityTool } from './leads/single/viewActivity';
 import { registerAddActivityTool } from './leads/single/addActivity';
 import { registerTransferLeadTool } from './leads/single/transfer';
+import { registerViewLeadTool } from './leads/single/view';
 import { getMcpFormat } from './_shared';
 
 export const dynamic = 'force-dynamic';
@@ -145,6 +146,7 @@ function createMcpServer(actorAccountId: string, format?: string): McpServer {
   registerViewMyTeamTool(server, actorAccountId, format);
   registerViewMyOrganizationTool(server, actorAccountId, format);
   registerViewActivityTool(server, actorAccountId, format);
+  registerViewLeadTool(server, actorAccountId, format);
   registerAddActivityTool(server, actorAccountId, format);
   registerTransferLeadTool(server, actorAccountId, format);
 

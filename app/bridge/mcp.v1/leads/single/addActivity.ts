@@ -4,6 +4,11 @@ import { requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';
 import { mcpError, mcpSuccess, type McpToolServer } from '../../_shared';
 
+const responseFormats = {
+  nia: '```nia.estate.leads.addActivity\n{payload}\n```',
+  chatgpt: '{payload}',
+};
+
 const activityPayloadSchema = z.object({
   activityType: z.enum(['follow_up', 'visit', 'meeting', 'remarks']),
   activityOn: z.string().trim().min(1).optional().describe(
@@ -34,7 +39,10 @@ export function registerAddActivityTool(server: McpToolServer, actorAccountId: s
         followUpMethod: activity.followUpMethod as FollowUpMethod | undefined,
         propertyId: activity.propertyId, remarks: activity.remarks,
       });
-      return mcpSuccess({ data }, format);
+      const selectedFormats = activity.activityType === 'follow_up'
+        ? { ...responseFormats, nia: '```nia.estate.leads.addFollowup\n{payload}\n```' }
+        : responseFormats;
+      return mcpSuccess({ data }, format, selectedFormats);
     } catch (error) { return mcpError(error, 'Failed to add lead activity.'); }
   });
 }

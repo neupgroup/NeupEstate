@@ -5,6 +5,11 @@ import { requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';
 import { mcpError, mcpSuccess, type McpToolServer } from '../_shared';
 
+const responseFormats = {
+  nia: '```nia.estate.leads.addLead\n{payload}\n```',
+  chatgpt: '{payload}',
+};
+
 /* Registers a tool that creates a shared lead owned by the authenticated account. */
 export function registerAddLeadTool(server: McpToolServer, actorAccountId: string, format?: string): void {
   server.registerTool('add_lead', {
@@ -28,7 +33,7 @@ export function registerAddLeadTool(server: McpToolServer, actorAccountId: strin
         return mcpError('firstName and lastName are required when creating a new client.');
       }
       const leadId = await createLead({ ...input, belongsTo: actorAccountId, assignedTo: actorAccountId });
-      return mcpSuccess({ success: true, leadId }, format);
+      return mcpSuccess({ success: true, leadId }, format, responseFormats);
     } catch (error) { return mcpError(error, 'Failed to create lead.'); }
   });
 }

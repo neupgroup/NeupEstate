@@ -6,6 +6,11 @@ import { requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';
 import { mcpError, mcpSuccess, type McpToolServer } from '../_shared';
 
+const responseFormats = {
+  nia: '```nia.estate.leads.viewLeads\n{payload}\n```',
+  chatgpt: '{payload}',
+};
+
 /* Resolves agency accounts and accepted members for the authenticated actor. */
 async function getOrganizationAccountIds(actorAccountId: string): Promise<string[]> {
   const account = await getAccountById(actorAccountId);
@@ -37,7 +42,7 @@ export function registerViewMyOrganizationTool(server: McpToolServer, actorAccou
         prisma.sharedLeads.findMany({ where, include: { baseLead: { include: { contacts: true } } }, orderBy: { createdAt: 'desc' }, skip: offset, take: limit }),
         prisma.sharedLeads.count({ where }),
       ]);
-      return mcpSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } }, format);
+      return mcpSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } }, format, responseFormats);
     } catch (error) { return mcpError(error, 'Failed to list organization leads.'); }
   });
 }
