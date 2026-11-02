@@ -1,6 +1,6 @@
 "use client";
 
-import { User } from "lucide-react";
+import { UserRound } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@neup/components/ui/avatar";
 import { getInitials } from "@/components/account-display";
 
@@ -22,7 +22,7 @@ export function ProfileV1({
         </>
       ) : (
         <AvatarFallback>
-          <User className="h-4 w-4" />
+          <UserRound className="h-4 w-4" />
         </AvatarFallback>
       )}
     </Avatar>

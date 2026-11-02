@@ -149,8 +149,8 @@ export function HeaderV1({
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full bg-card shadow-md">
-        <div className="mx-auto flex h-16 w-full max-w-[1440px] items-center px-8">
+      <header className="sticky top-0 z-50 h-16 w-full shrink-0 bg-white shadow-[0_2px_5px_color-mix(in_srgb,var(--foreground)_18%,transparent),0_8px_20px_color-mix(in_srgb,var(--foreground)_12%,transparent)]">
+        <div className="mx-auto flex h-full w-full max-w-[1440px] items-center px-4 md:px-8">
           <div className="flex-1 justify-start flex">
             <Link href="/" className="flex items-center gap-2">
               <img src="https://cdn.neupgroup.com/neupestate/logo.png" alt="Neup.Estate Logo" className="h-9 w-9 object-contain" />
