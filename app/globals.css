@@ -276,6 +276,39 @@
 
 }
 
+@keyframes bank-partners-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.bank-partners-marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.bank-partners-track {
+  display: flex;
+  width: max-content;
+  gap: 1rem;
+  animation: bank-partners-scroll 38s linear infinite;
+}
+
+.bank-partners-marquee:hover .bank-partners-track,
+.bank-partners-marquee:focus-within .bank-partners-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bank-partners-track {
+    animation: none;
+  }
+}
+
 :root {
   --font-outfit: 'Outfit', sans-serif;
   --font-jetbrains-mono: 'JetBrains Mono', monospace;
