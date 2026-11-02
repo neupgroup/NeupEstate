@@ -36,11 +36,12 @@ export function AccountDisplayTabV1({
 }) {
   const displayName = getAccountDisplayName(user.displayName);
   const handleText = getAccountHandle(user.neupId);
+  const profileHref = user.neupId?.trim() ? `/@${encodeURIComponent(user.neupId.trim())}` : '/profile';
 
   if (mobile) {
     return (
       <Link
-        href="/profile"
+        href={profileHref}
         onClick={onClick}
         className="mx-3 mt-3 flex shrink-0 items-center gap-3 rounded-lg bg-secondary p-2.5"
       >
@@ -58,7 +59,7 @@ export function AccountDisplayTabV1({
 
   return (
     <Link
-      href="/profile"
+      href={profileHref}
       onClick={onClick}
       className={cn("flex items-center gap-2 rounded-md px-1 py-1 transition-colors hover:bg-secondary/60")}
     >

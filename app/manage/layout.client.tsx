@@ -63,7 +63,7 @@ export function ManageLayoutClient({ children, profile, permissions }: ManageLay
           <Image src="https://cdn.neupgroup.com/neupestate/logo.png" alt="Neup.Estate Logo" width={36} height={36} unoptimized />
           <span className="font-headline text-lg font-bold">Neup.Estate</span>
         </Link>
-        <Link href="/profile" aria-label="Open profile" className="ml-auto">
+        <Link href={profile.neupId?.trim() ? `/@${encodeURIComponent(profile.neupId.trim())}` : '/profile'} aria-label="Open profile" className="ml-auto">
           <Userbar displayName={profile.displayName ?? 'User'} displayImage={profile.displayImage} neupid={profile.neupId ?? ''} />
         </Link>
         <details key={pathname} className="ml-2 md:hidden">

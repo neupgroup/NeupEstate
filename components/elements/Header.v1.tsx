@@ -43,6 +43,9 @@ export function HeaderV1({
   const logoProfileName = selectedProfileName?.trim() || null;
   const profileName = effectiveUser?.displayName?.trim() || "User";
   const profileHandle = effectiveUser?.neupId?.trim() || effectiveUser?.accountId?.trim() || "";
+  const profileHref = effectiveUser?.neupId?.trim()
+    ? `/@${encodeURIComponent(effectiveUser.neupId.trim())}`
+    : "/profile";
 
   useEffect(() => {
     const normalizedSelectedProfile = selectedProfile?.trim() || null;
@@ -169,7 +172,7 @@ export function HeaderV1({
 
           <div className="flex flex-1 items-center justify-end space-x-1.5">
             {effectiveUser && (
-              <Link href="/profile" aria-label="Open profile">
+              <Link href={profileHref} aria-label="Open profile">
                 <Userbar
                   displayName={profileName}
                   displayImage={effectiveUser.displayImage}
@@ -198,7 +201,7 @@ export function HeaderV1({
       >
         {effectiveUser && (
           <Link
-            href="/profile"
+            href={profileHref}
             aria-label="Open profile"
             onClick={() => setMenuOpen(false)}
             className="mx-3 mt-3 flex justify-start rounded-lg bg-secondary"

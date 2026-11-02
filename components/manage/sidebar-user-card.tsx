@@ -30,7 +30,7 @@ export function SidebarUserCard() {
 
   return (
     <Link
-      href="/profile"
+      href={user.neupId?.trim() ? `/@${encodeURIComponent(user.neupId.trim())}` : '/profile'}
       className="flex items-center gap-3 p-3 rounded-lg bg-background/60 hover:bg-background transition-colors group"
     >
       <Avatar className="h-9 w-9 flex-shrink-0">

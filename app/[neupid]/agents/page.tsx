@@ -8,11 +8,12 @@ import { getAgencyAgentAccountsByAgency } from '@/services/agencies/agent-maps/s
 import { AlertCircle, ArrowDown, Building2, Users } from 'lucide-react';
 import { SafeImage } from '@/components/safe-image';
 
-function resolveNeupId(handle: string) {
-  const decodedHandle = decodeURIComponent(handle);
-  if (!decodedHandle.startsWith('@')) return null;
-  const neupId = decodedHandle.slice(1).trim();
-  return neupId.length > 0 ? neupId : null;
+/** Extract the NeupID from the @prefixed dynamic route segment. */
+function resolveNeupId(routeNeupId: string) {
+  const decodedRouteNeupId = decodeURIComponent(routeNeupId);
+  if (!decodedRouteNeupId.startsWith('@')) return null;
+  const neupId = decodedRouteNeupId.slice(1).trim();
+  return neupId || null;
 }
 
 function getInitials(name: string) {
@@ -27,10 +28,10 @@ function getInitials(name: string) {
 export default async function PublicAgencyAgentsPage({
   params,
 }: {
-  params: Promise<{ handle: string }>;
+  params: Promise<{ neupid: string }>;
 }) {
-  const { handle } = await params;
-  const neupId = resolveNeupId(handle);
+  const { neupid: routeNeupId } = await params;
+  const neupId = resolveNeupId(routeNeupId);
   if (!neupId) notFound();
 
   const agency = await getPublicAgencyAccountByNeupId(neupId);

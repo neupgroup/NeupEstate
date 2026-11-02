@@ -118,6 +118,7 @@ export async function getAgencyAgentAccountsByAgency(agencyId: string): Promise<
     return accounts.filter(
       (account) =>
         agentIds.has(account.id) &&
+        links.some((link) => link.agentId === account.id && link.status === 'accepted') &&
         !['brand', 'brand.agency', 'subbrand', 'subbrand.agency'].includes(account.account_type),
     );
   } catch (e) {

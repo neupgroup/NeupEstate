@@ -1,32 +1,33 @@
 import { notFound } from 'next/navigation';
-import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { Card, CardContent } from '@neup/components/ui/card';
 import { Link } from '@neup/components/ui/link';
 import { PropertyCard } from '@/components/property-card';
 import { SafeImage } from '@/components/safe-image';
 import { getAccountProfileByNeupId } from '@/services/accounts/profile';
 import { getPropertiesByAccount } from '@/services/properties/list';
-import { AlertCircle, Building2, MapPin, MessageSquare, Phone, UserRound, Users } from 'lucide-react';
+import { getRequirementByUserId } from '@/services/requirements/get';
+import { getAgencyAgentAccountsByAgency } from '@/services/agencies/agent-maps/service';
+import { Building2, MessageSquare, Phone, UserRound, Users } from 'lucide-react';
 import { WhatsAppIcon } from '@/components/icons';
 
 const AGENCY_ACCOUNT_TYPES = ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'];
 
-/** Resolve an @handle route segment into a NeupID. */
-function resolveNeupId(handle: string) {
-  const decodedHandle = decodeURIComponent(handle);
-  if (!decodedHandle.startsWith('@')) return null;
-  const neupId = decodedHandle.slice(1).trim();
-  return neupId.length > 0 ? neupId : null;
+/** Extract the NeupID from the @prefixed dynamic route segment. */
+function resolveNeupId(routeNeupId: string) {
+  const decodedRouteNeupId = decodeURIComponent(routeNeupId);
+  if (!decodedRouteNeupId.startsWith('@')) return null;
+  const neupId = decodedRouteNeupId.slice(1).trim();
+  return neupId || null;
 }
 
 /** Render the public user profile, agency memberships, and active listings. */
 export default async function PublicAccountProfilePage({
   params,
 }: {
-  params: Promise<{ handle: string }>;
+  params: Promise<{ neupid: string }>;
 }) {
-  const { handle } = await params;
-  const neupId = resolveNeupId(handle);
+  const { neupid: routeNeupId } = await params;
+  const neupId = resolveNeupId(routeNeupId);
   if (!neupId) notFound();
 
   const account = await getAccountProfileByNeupId(neupId);
@@ -35,13 +36,18 @@ export default async function PublicAccountProfilePage({
   const profile = account.profile;
   const isAgency = AGENCY_ACCOUNT_TYPES.includes(profile.type);
   const isAgent = profile.type === 'individual.agent';
-  const accountProperties = await getPropertiesByAccount(profile.id, 0, 100);
+  const [accountProperties, accountRequirements, agencyAgents] = await Promise.all([
+    getPropertiesByAccount(profile.id, 0, 100),
+    getRequirementByUserId(profile.id),
+    isAgency ? getAgencyAgentAccountsByAgency(profile.id) : Promise.resolve([]),
+  ]);
   const properties = accountProperties.filter((property) => property.status === 'ACTIVE');
+  const requirements = accountRequirements ?? [];
 
   return (
     <main className="flex-1">
       <section className="bg-background">
-        <div className="container mx-auto grid gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1fr_1fr] lg:items-center lg:px-8 lg:py-20">
+        <div className="mx-auto grid w-full max-w-[1440px] gap-10 px-4 py-14 sm:px-6 md:px-8 lg:grid-cols-[1fr_1fr] lg:items-center lg:py-20">
           <div className="max-w-2xl">
             <div className="flex items-center gap-5">
               <SafeImage
@@ -156,9 +162,39 @@ export default async function PublicAccountProfilePage({
         </div>
       </section>
 
+      {requirements.length > 0 && (
+        <section aria-labelledby="profile-requirements-heading" className="bg-card py-12 lg:py-16">
+          <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-6 md:px-8">
+            <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <h2 id="profile-requirements-heading" className="text-3xl font-headline font-bold">Property requirements</h2>
+                <p className="mt-2 text-muted-foreground">Property preferences shared by {profile.name}.</p>
+              </div>
+              <Link href={`/@${encodeURIComponent(neupId)}/requirements`} className="font-medium text-primary hover:underline">View all requirements</Link>
+            </div>
+            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {requirements.slice(0, 3).map((requirement, index) => (
+                <Card key={requirement.id} className="bg-background text-card-foreground">
+                  <CardContent className="p-6">
+                    <p className="text-sm font-medium text-muted-foreground">Requirement {index + 1}</p>
+                    <p className="mt-2 text-xl font-semibold capitalize">{requirement.purpose || 'Property search'}</p>
+                    <dl className="mt-5 space-y-3 text-sm">
+                      <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Property type</dt><dd className="text-right">{requirement.propertyType?.join(', ') || 'Any'}</dd></div>
+                      <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Area</dt><dd className="text-right">{requirement.location || 'Any'}</dd></div>
+                      <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Budget</dt><dd className="text-right">{requirement.minBudget?.toLocaleString() || 'Any'} – {requirement.maxBudget?.toLocaleString() || 'Any'}</dd></div>
+                      <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Timeline</dt><dd className="text-right">{requirement.requiredTime || 'Flexible'}</dd></div>
+                    </dl>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {isAgent && account.agencies.length > 0 && (
-        <section aria-labelledby="agency-membership-heading" className="border-y border-border/60 bg-card px-4 py-10 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-7xl">
+        <section aria-labelledby="agency-membership-heading" className="border-y border-border/60 bg-card py-10">
+          <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-6 md:px-8">
             <h2 id="agency-membership-heading" className="text-2xl font-headline font-bold">Agency affiliation</h2>
             <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {account.agencies.map((agency) => (
@@ -181,30 +217,53 @@ export default async function PublicAccountProfilePage({
         </section>
       )}
 
-      <section id="profile-properties" className="bg-muted/20 px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-        <div className="container mx-auto">
-          <div className="mb-8 flex items-end justify-between gap-4">
-            <div>
-              <h2 className="text-3xl font-headline font-bold">Properties</h2>
-              <p className="mt-2 text-muted-foreground">Active properties represented by {profile.name}.</p>
+      {isAgency && agencyAgents.length > 0 && (
+        <section aria-labelledby="agency-agents-heading" className="border-y border-border/60 bg-card py-12 lg:py-16">
+          <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-6 md:px-8">
+            <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <h2 id="agency-agents-heading" className="text-3xl font-headline font-bold">Our Agents</h2>
+                <p className="mt-2 text-muted-foreground">Meet the agents on the {profile.name} team.</p>
+              </div>
+              <Link href={`/@${encodeURIComponent(neupId)}/agents`} className="font-medium text-primary hover:underline">View all agents</Link>
             </div>
-            <span className="hidden items-center gap-2 text-sm text-muted-foreground sm:inline-flex">
-              <MapPin className="h-4 w-4 text-primary" /> @{profile.neupid}
-            </span>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {agencyAgents.slice(0, 4).map((agent) => {
+                const displayName = agent.display_name?.trim() || agent.neup_id?.trim() || agent.id;
+                const agentHref = agent.neup_id?.trim() ? `/@${encodeURIComponent(agent.neup_id.trim())}` : null;
+                return (
+                  <Card key={agent.id} className="bg-background text-card-foreground">
+                    <CardContent className="flex items-center gap-4 p-4">
+                      <SafeImage src={agent.display_image || 'https://placehold.co/96x96.png'} alt={`${displayName} profile`} width={56} height={56} className="h-14 w-14 rounded-full border bg-white object-cover" fallbackSrc="https://placehold.co/96x96.png" />
+                      <div className="min-w-0">
+                        {agentHref ? <Link href={agentHref} className="font-semibold hover:underline">{displayName}</Link> : <p className="font-semibold">{displayName}</p>}
+                        <p className="mt-1 text-sm text-muted-foreground">Real estate agent</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
           </div>
-          {properties.length > 0 ? (
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {properties.map((property) => <PropertyCard key={property.id} property={property} />)}
+        </section>
+      )}
+
+      {properties.length > 0 && (
+        <section id="profile-properties" className="bg-muted/20 py-12 lg:py-16">
+          <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-6 md:px-8">
+            <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <h2 className="text-3xl font-headline font-bold">Properties</h2>
+                <p className="mt-2 text-muted-foreground">Active properties represented by {profile.name}.</p>
+              </div>
+              <Link href={`/@${encodeURIComponent(neupId)}/properties`} className="font-medium text-primary hover:underline">View all properties</Link>
             </div>
-          ) : (
-            <Alert>
-              <AlertCircle className="h-4 w-4" />
-              <AlertTitle>No Properties Found</AlertTitle>
-              <AlertDescription>This profile does not have any active properties yet.</AlertDescription>
-            </Alert>
-          )}
-        </div>
-      </section>
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {properties.slice(0, 8).map((property) => <PropertyCard key={property.id} property={property} />)}
+            </div>
+          </div>
+        </section>
+      )}
     </main>
   );
 }

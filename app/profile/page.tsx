@@ -1,20 +1,13 @@
-import { ServerProfileHeader } from './server-profile-header';
-import { RequirementsSection } from './requirements-section';
+import { redirect } from 'next/navigation';
 import { requireAuth } from '@/services/auth/account';
-import { GuestSigninBanner } from '@/components/layout/guest-signin-banner';
 import { getAuthenticatedMeData } from '@/services/auth/me';
 
+/** Redirect the legacy profile route to the signed-in user's public profile. */
 export default async function ProfilePage() {
-  // Single line - handles auth and redirects if not authenticated
-  const account = await requireAuth();
+  await requireAuth();
   const me = await getAuthenticatedMeData();
-  const showGuestBanner = me?.guest === true;
+  const neupId = me?.neupId?.trim();
 
-  return (
-    <div className="flex-1 bg-secondary/30">
-      <ServerProfileHeader />
-      {showGuestBanner && <GuestSigninBanner variant="inline" />}
-      <RequirementsSection accountId={account.aid} />
-    </div>
-  );
+  if (!neupId) redirect('/home');
+  redirect(`/@${encodeURIComponent(neupId)}`);
 }
