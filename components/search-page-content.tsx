@@ -123,6 +123,7 @@ export function SearchPageContent({ queryFromPath }: { queryFromPath: string }) 
                   size="icon"
                   variant="plain"
                   aria-label="Search"
+                  className="absolute right-1 top-1/2 h-8 w-8 -translate-y-1/2"
                 >
                   <Search className="h-4 w-4" />
                   <span className="sr-only">Search</span>
