@@ -3,6 +3,11 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
   basePath: '/estate',
 
+  // Redirect the former homepage while preserving query parameters and the base path.
+  async redirects() {
+    return [{ source: '/', destination: '/home', permanent: true }];
+  },
+
   turbopack: {
     root: process.cwd(),
   },

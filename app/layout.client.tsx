@@ -22,7 +22,7 @@ export function LayoutClient({
   const pathname = usePathname();
   const isAdminPage = pathname.startsWith("/manage");
   const shouldShowFooter = !isAdminPage;
-  const isHomePage = pathname === "/";
+  const isHomePage = pathname === "/home";
   const isCustomBannerPage = pathname === "/profile" || pathname === "/agents" || pathname.startsWith("/mortgage");
 
   return (

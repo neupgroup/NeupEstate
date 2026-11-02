@@ -1,4 +1,4 @@
-import { Card } from "@neup/components/ui/card";
+import { buttonVariants } from "@neup/components/styles/button";
 import { Link } from "@neup/components/ui/link";
 import { Home, Building, Briefcase, Sofa, LandPlot } from "lucide-react";
 import { Section } from "@/components/home/_components/section";
@@ -14,6 +14,7 @@ const categories = [
     { name: "Lands", icon: <LandPlot />, href: "/search/Land" },
 ];
 
+// Use theme-aware borders and text while preserving outlined button interactions.
 export function PopularCategories() {
   return (
     <Section>
@@ -23,11 +24,16 @@ export function PopularCategories() {
       </p>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
         {categories.map((category) => (
-          <Link href={category.href} key={category.name}>
-            <Card className="text-center p-4 card-hover-effect">
-              <div className="flex justify-center text-primary mb-2">{category.icon}</div>
-              <p className="font-semibold text-sm">{category.name}</p>
-            </Card>
+          <Link
+            href={category.href}
+            key={category.name}
+            className={buttonVariants({
+              variant: "outlined",
+              className: "h-auto w-full flex-col whitespace-normal rounded-lg border-border p-4 text-center text-foreground [&_svg]:size-6",
+            })}
+          >
+            {category.icon}
+            <span className="font-semibold text-sm">{category.name}</span>
           </Link>
         ))}
       </div>

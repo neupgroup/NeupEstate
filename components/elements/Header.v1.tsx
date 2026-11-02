@@ -152,7 +152,7 @@ export function HeaderV1({
     <>
       <SharedHeader>
           <div className="flex-1 justify-start flex">
-            <Link href="/" className="flex items-center gap-2">
+            <Link href="/home" className="flex items-center gap-2">
               <img src="https://cdn.neupgroup.com/neupestate/logo.png" alt="Neup.Estate Logo" className="h-9 w-9 object-contain" />
               <div className="flex min-w-0 flex-col">
                 <span className="font-headline text-lg font-bold leading-tight">Neup.Estate</span>

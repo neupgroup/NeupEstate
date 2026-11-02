@@ -1,6 +1,6 @@
 export function isActivePublicHrefV1(pathname: string, href: string) {
   if (!pathname || !href) return false;
-  if (href === "/") return pathname === "/";
+  if (href === "/home") return pathname === "/home";
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 

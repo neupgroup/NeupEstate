@@ -61,7 +61,7 @@ export type AccountInfo = {
 
 // ─── Constants ───────────────────────────────────────────────────────────
 
-const DEFAULT_REDIRECT_PATH = '/';
+const DEFAULT_REDIRECT_PATH = '/home';
 
 function decodeAccountAuthToken(token: string | null | undefined): AuthAccountPayload | null {
   if (!token) return null;

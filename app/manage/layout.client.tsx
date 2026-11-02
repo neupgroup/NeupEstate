@@ -59,7 +59,7 @@ export function ManageLayoutClient({ children, profile, permissions }: ManageLay
   return (
     <div className="min-h-screen w-full bg-[var(--background)] text-[var(--foreground)]">
       <HeaderV1>
-        <Link href="/" className="flex min-w-0 items-center gap-2">
+        <Link href="/home" className="flex min-w-0 items-center gap-2">
           <Image src="https://cdn.neupgroup.com/neupestate/logo.png" alt="Neup.Estate Logo" width={36} height={36} unoptimized />
           <span className="font-headline text-lg font-bold">Neup.Estate</span>
         </Link>

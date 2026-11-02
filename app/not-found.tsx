@@ -24,7 +24,7 @@ export default function NotFound() {
               Try a fresh search or return home.
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-              <LinkButton href="/" variant="solid" preIcon={<Home />}>Back to home</LinkButton>
+              <LinkButton href="/home" variant="solid" preIcon={<Home />}>Back to home</LinkButton>
               <LinkButton href="/properties" variant="outlined" preIcon={<Search />}>Browse properties</LinkButton>
             </div>
             <div className="mt-10 grid grid-cols-1 gap-4 text-sm text-muted-foreground sm:grid-cols-3">

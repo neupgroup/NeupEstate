@@ -6,7 +6,7 @@ function xmlEscape(value: string): string {
 
 export async function GET(request: Request) {
   const paths = [
-    '/',
+    '/home',
     '/accounts',
     '/agencies',
     '/agents',

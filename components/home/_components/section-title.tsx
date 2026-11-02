@@ -7,10 +7,10 @@ export const SectionTitle = ({ children, href, showMoreButton = false }: { child
     <div className="flex items-center gap-3">
         {href && showMoreButton ? (
              <Link href={href}>
-                <h2 className="text-3xl font-headline font-bold text-gray-800 hover:underline">{children}</h2>
+                <h2 className="text-3xl font-headline font-semibold text-gray-800 hover:underline">{children}</h2>
              </Link>
         ) : (
-            <h2 className="text-3xl font-headline font-bold text-gray-800">{children}</h2>
+            <h2 className="text-3xl font-headline font-semibold text-gray-800">{children}</h2>
         )}
     </div>
     {href && showMoreButton && (

@@ -286,6 +286,11 @@ body {
   font-family: var(--font-outfit);
 }
 
+/* Alternate visible homepage sections using the active theme's muted surface. */
+.home-sections > section:nth-of-type(even) {
+  background-color: color-mix(in srgb, var(--muted) 5%, var(--background));
+}
+
 /* Shared sidebar sizing and stacking beneath the header. */
 :root {
   --site-header-height: 4rem;

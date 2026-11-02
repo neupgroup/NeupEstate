@@ -25,7 +25,7 @@ export function SearchSection() {
             <div className="absolute inset-0 bg-black/60" />
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="text-center mb-8">
-                    <h1 className="text-5xl md:text-6xl font-extrabold text-white font-headline tracking-tight">Find Your Next Home</h1>
+                    <h1 className="text-5xl md:text-6xl font-semibold text-white font-headline tracking-tight">Find Your Next Home</h1>
                     <p className="mt-4 text-xl text-gray-200">The best place to find your dream property.</p>
                 </div>
                 

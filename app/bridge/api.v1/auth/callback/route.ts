@@ -56,7 +56,7 @@ function getRedirectTarget(request: NextRequest): string {
     return returnTo;
   }
 
-  return '/';
+  return '/home';
 }
 
 async function handleCallback(request: NextRequest) {

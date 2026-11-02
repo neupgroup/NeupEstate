@@ -8,9 +8,10 @@ type StartWithNeupEstateProps = {
     showCards?: boolean;
 };
 
+// Keep this section's background consistent with the homepage's alternating surfaces.
 export function StartWithNeupEstate({ showAgentCard = true, showCards = true }: StartWithNeupEstateProps) {
     return (
-        <Section className="bg-primary/5 border-t border-border">
+        <Section>
             <div className="text-center mb-10">
                 <h2 className="text-3xl font-headline font-bold">Start with NeupEstate</h2>
                 <p className="mt-2 text-muted-foreground max-w-xl mx-auto">
@@ -50,7 +51,7 @@ export function StartWithNeupEstate({ showAgentCard = true, showCards = true }: 
                     <div>
                         <h3 className="text-lg font-semibold font-headline">Create an Agency Profile</h3>
                         <p className="mt-1 text-sm text-muted-foreground">
-                            Establish your agency's presence on NeupEstate and manage your team and listings in one place.
+                            Establish your agency&apos;s presence on NeupEstate and manage your team and listings in one place.
                         </p>
                     </div>
                     <LinkButton
