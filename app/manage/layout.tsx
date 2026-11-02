@@ -1,7 +1,8 @@
-import { ManageSidebar } from '@/components/manage/manage-sidebar';
+import { getAuthenticatedMeData } from '@/services/auth/me';
 import { getManageLayoutPermissionState } from '@/services/permissions';
-import { Sidebar as SidebarLayout } from '@neup/components/layout/sidebar.v1';
+import { ManageLayoutClient } from './layout.client';
 
+// Load management permissions and profile data for the client layout.
 export default async function ManageLayout({
   children,
 }: {
@@ -14,51 +15,43 @@ export default async function ManageLayout({
     canPropertyView,
     canRootPropertiesView,
     canCollectionView,
-    canAccountsView,
     canLeadsHomeView,
     canLeadsBaseView,
     canLeadsMyView,
     canLeadsSharedView,
     canLeadsAlertsView,
     canReviewsView,
-    canAgentMapView,
     canNotificationView,
   } = await getManageLayoutPermissionState();
+  const user = await getAuthenticatedMeData();
 
-  const sidebar = (
-    <ManageSidebar
-      canDashboard={canDashboard}
-      canAnalytics={canAnalytics}
-      canIntelListings={canIntelListings}
-      canPropertyView={canPropertyView}
-      canRootPropertiesView={canRootPropertiesView}
-      canCollectionView={canCollectionView}
-      canAccountsView={canAccountsView}
-      canLeadsHomeView={canLeadsHomeView}
-      canLeadsBaseView={canLeadsBaseView}
-      canLeadsMyView={canLeadsMyView}
-      canLeadsSharedView={canLeadsSharedView}
-      canLeadsAlertsView={canLeadsAlertsView}
-      canReviewsView={canReviewsView}
-      canAgentMapView={canAgentMapView}
-      canNotificationView={canNotificationView}
-    />
-  );
+  const permissions = {
+    '/manage': canDashboard,
+    '/manage/analytics': canAnalytics,
+    '/manage/intelligence': canIntelListings,
+    '/manage/properties': canPropertyView || canRootPropertiesView,
+    '/manage/collection': canCollectionView,
+    '/manage/leads': canLeadsHomeView,
+    '/manage/leads/add': canLeadsHomeView,
+    '/manage/leads/base': canLeadsBaseView,
+    '/manage/leads/my': canLeadsMyView,
+    '/manage/leads/shared': canLeadsSharedView,
+    '/manage/leads/alerts': canLeadsAlertsView,
+    '/manage/reviews': canReviewsView,
+    '/manage/notifications': canNotificationView,
+  };
 
   return (
-    <div
-      className="min-h-screen w-full bg-white text-[var(--foreground)]"
-      style={{
-        '--site-header-height': '4rem',
-        '--layer-sidebar': 40,
-        '--layer-content': 0,
-        '--background': '#fff',
-        '--sidebar-background': '#fff',
-      } as React.CSSProperties}
+    <ManageLayoutClient
+      permissions={permissions}
+      profile={{
+        displayName: user?.displayName ?? null,
+        displayImage: user?.displayImage ?? null,
+        neupId: user?.neupId ?? null,
+        workingProfile: user?.workingProfile ?? null,
+      }}
     >
-      <SidebarLayout sidebar={sidebar}>
-        <div className="-mt-4 md:-mt-4">{children}</div>
-      </SidebarLayout>
-    </div>
+      {children}
+    </ManageLayoutClient>
   );
 }

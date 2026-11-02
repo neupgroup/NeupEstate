@@ -7,7 +7,8 @@ import { FooterLayoutV1 } from "@/components/layout/FooterLayout.v1";
 import { SessionProvider, type SessionUser } from "@neup/core/providers/session";
 import { GuestSigninBanner } from "@/components/layout/guest-signin-banner";
 
-export function ProvidersV1({
+// Supply session state and the public shell around route content.
+export function LayoutClient({
   children,
   initialUser,
   showManagePanelLink,
@@ -26,7 +27,7 @@ export function ProvidersV1({
 
   return (
     <SessionProvider initialUser={initialUser ?? null}>
-      <HeaderLayoutV1 />
+      {!isAdminPage && <HeaderLayoutV1 />}
       {showGuestBanner && !isAdminPage && !isHomePage && !isCustomBannerPage && <GuestSigninBanner variant="inline" />}
       {children}
       {shouldShowFooter && <FooterLayoutV1 showManagePanelLink={showManagePanelLink ?? false} />}

@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { cn } from '@neup/core/utils';
 import SharedRootLayout from '@neup/components/layout/RootLayout';
-import { Providers } from '@/components/layout/providers';
+import { LayoutClient } from './layout.client';
 import { ActivityTracker } from '@/components/activity-tracker';
 import { createAccount } from '@/services/accounts/create';
 import { getAuthenticatedMeData } from '@/services/auth/me';
@@ -62,13 +62,13 @@ export default async function RootLayout({
         )}
       >
         <ActivityTracker />
-        <Providers
+        <LayoutClient
           initialUser={initialUser}
           showManagePanelLink={canShowManagePanel}
           showGuestBanner={isGuestUser}
         >
           <SharedRootLayout>{children}</SharedRootLayout>
-        </Providers>
+        </LayoutClient>
       </body>
     </html>
   );

@@ -285,3 +285,10 @@ html,
 body {
   font-family: var(--font-outfit);
 }
+
+/* Shared sidebar sizing and stacking beneath the header. */
+:root {
+  --site-header-height: 4rem;
+  --layer-content: 0;
+  --layer-sidebar: 20;
+}
