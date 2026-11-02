@@ -70,7 +70,8 @@ export async function getAccountProfile(id: string) {
 
   if (!account) return null;
 
-  const [propertyCount, associatedAgencies] = await Promise.all([
+  const isAgencyAccount = AGENCY_ACCOUNT_TYPES.includes(account.accountType);
+  const [propertyCount, associatedAgencies, agentContact, agencyContact] = await Promise.all([
     prisma.property.count({
       where: {
         isDeleted: false,
@@ -79,6 +80,12 @@ export async function getAccountProfile(id: string) {
       },
     }),
     account.agencyAgentMapAsAgent.map(({ agency }) => agency),
+    account.accountType === 'individual.agent'
+      ? prisma.agent.findFirst({ where: { userId: id }, select: { email: true, phone: true } })
+      : Promise.resolve(null),
+    isAgencyAccount
+      ? prisma.agency.findUnique({ where: { id }, select: { contactEmail: true, contactPhone: true } })
+      : Promise.resolve(null),
   ]);
 
   const agencies = Array.from(
@@ -103,8 +110,22 @@ export async function getAccountProfile(id: string) {
       isVerified: account.accountType !== 'guest',
     },
     agencies,
+    contact: {
+      email: agentContact?.email ?? agencyContact?.contactEmail ?? null,
+      phone: agentContact?.phone ?? agencyContact?.contactPhone ?? null,
+    },
     properties: { count: propertyCount },
   };
+}
+
+/** Resolve a public account profile by its NeupID handle. */
+export async function getAccountProfileByNeupId(neupId: string) {
+  const account = await prisma.account.findUnique({
+    where: { neupId },
+    select: { id: true },
+  });
+
+  return account ? getAccountProfile(account.id) : null;
 }
 
 

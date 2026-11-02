@@ -50,9 +50,11 @@ export default async function AgentsPage() {
         </div>
         {agents.length > 0 ? (
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-            {agents.map((agent) => (
+            {agents.map((agent) => {
+              const profileHref = `/@${encodeURIComponent(agent.slug)}`;
+              return (
               <Card key={agent.id} className="overflow-hidden card-hover-effect flex flex-col bg-card text-card-foreground">
-                <Link href={`/agents/${agent.slug}`}>
+                <Link href={profileHref}>
                     <CardHeader className="p-0">
                         <SafeImage
                             src={agent.photoUrl ?? ''}
@@ -66,7 +68,7 @@ export default async function AgentsPage() {
                     </CardHeader>
                 </Link>
                 <CardContent className="p-4 flex-grow flex flex-col">
-                    <Link href={`/agents/${agent.slug}`}>
+                    <Link href={profileHref}>
                         <CardTitle className="text-xl font-headline hover:underline">{agent.name}</CardTitle>
                     </Link>
                      {agent.location && (
@@ -82,7 +84,7 @@ export default async function AgentsPage() {
                     )}
                 </CardContent>
                 <CardFooter className="mt-auto bg-muted/40 p-4">
-                    <Link href={`/agents/${agent.slug}/contact`} className="w-full">
+                    <Link href={profileHref} className="w-full">
                         <Button variant="outlined">
                             <MessageSquare className="mr-2 h-4 w-4"/>
                             Contact Agent
@@ -90,7 +92,8 @@ export default async function AgentsPage() {
                     </Link>
                 </CardFooter>
               </Card>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <Alert>

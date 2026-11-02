@@ -7,7 +7,7 @@ export function NeupidMentions({ text }: { text: string }) {
   return text.split(NEUPID_MENTION).map((part, index) => {
     if (index % 2 === 0) return part;
     return (
-      <Link key={`${part}-${index}`} href={`/agents/${encodeURIComponent(part)}`} className="font-medium text-primary hover:underline">
+      <Link key={`${part}-${index}`} href={`/@${encodeURIComponent(part)}`} className="font-medium text-primary hover:underline">
         @{part}
       </Link>
     );

@@ -28,13 +28,13 @@ async function propertySitemap(page: number): Promise<Response> {
 
 async function agentSitemap(page: number): Promise<Response> {
   const rows = await prisma.account.findMany({
-    where: { accountType: 'individual.agent' },
-    select: { neupId: true, id: true },
+    where: { accountType: 'individual.agent', neupId: { not: null } },
+    select: { neupId: true },
     orderBy: { id: 'asc' },
     skip: (page - 1) * PAGE_SIZE,
     take: PAGE_SIZE,
   });
-  return sitemapResponse(rows.map(({ neupId, id }) => `${PUBLIC_BASE_URL}/agents/${encodeURIComponent(neupId || id)}`));
+  return sitemapResponse(rows.flatMap(({ neupId }) => neupId ? [`${PUBLIC_BASE_URL}/@${encodeURIComponent(neupId)}`] : []));
 }
 
 async function agencySitemap(page: number): Promise<Response> {
