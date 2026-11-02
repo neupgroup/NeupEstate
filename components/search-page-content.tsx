@@ -79,12 +79,9 @@ export function SearchPageContent({ queryFromPath }: { queryFromPath: string }) 
 
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const currentParams = new URLSearchParams(searchParams.toString());
-    currentParams.set('page', '1');
-    
-    // When doing a new text search, we clear old filters from the URL to avoid confusion.
-    const newParams = new URLSearchParams();
-    newParams.set('page', currentParams.get('page')!);
+    // Keep sidebar filters when refining the text query, and reset pagination.
+    const newParams = new URLSearchParams(searchParams.toString());
+    newParams.set('page', '1');
 
     const filterParamsString = newParams.toString();
 
@@ -100,10 +97,10 @@ export function SearchPageContent({ queryFromPath }: { queryFromPath: string }) 
   return (
     <main className="mx-auto w-full max-w-[1440px] px-4 py-6 sm:px-6 md:px-8">
       <div className="grid items-start gap-8 md:grid-cols-[280px_minmax(0,1fr)] md:gap-0">
-        <aside className="hidden pr-6 md:sticky md:top-20 md:block md:self-start lg:pr-8">
+        <aside className="relative hidden pr-6 md:sticky md:top-20 md:block md:self-start lg:pr-8 before:absolute before:-right-px before:top-0 before:h-full before:w-px before:bg-border/70 before:content-['']">
           <SearchSidebar initialFilters={appliedFilters} />
         </aside>
-        <div className="min-w-0 space-y-8 md:border-l md:border-border/70 md:pl-8 lg:pl-10">
+        <div className="min-w-0 space-y-8 md:pl-8 lg:pl-10">
             <details className="md:hidden">
               <summary className="cursor-pointer px-1 py-2 font-semibold">Refine search</summary>
               <div className="pt-2">

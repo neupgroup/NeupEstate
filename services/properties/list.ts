@@ -130,14 +130,46 @@ export async function getPaginatedProperties(opts: {
     if (filters.agencyName) {
       andClauses.push({ representatives: { some: { role: 'listingOwner', representative: { accountType: { in: agencyAccountTypes }, displayName: { contains: filters.agencyName, mode: 'insensitive' } } } } });
     }
+    if (filters.listingBy?.length) {
+      const listingClauses: any[] = [];
+      if (filters.listingBy.includes('owners')) {
+        listingClauses.push({ representatives: { none: { role: 'listingOwner', representative: { accountType: { in: agencyAccountTypes } } } } });
+      }
+      if (filters.listingBy.includes('developers')) {
+        listingClauses.push({ representatives: { some: { role: 'listingOwner', representative: { accountType: { notIn: agencyAccountTypes } } } } });
+      }
+      if (filters.listingBy.includes('agencies')) {
+        listingClauses.push({ representatives: { some: { role: 'listingOwner', representative: { accountType: { in: agencyAccountTypes } } } } });
+      }
+      if (listingClauses.length) andClauses.push({ OR: listingClauses });
+    }
     if (filters.listingAgent) {
       andClauses.push({ representatives: { some: { role: 'listingOwner', representative: { accountType: { notIn: agencyAccountTypes }, displayName: { contains: filters.listingAgent, mode: 'insensitive' } } } } });
     }
-    if (filters.minBedrooms != null || filters.maxBedrooms != null) {
-      where.bedrooms = {
-        ...(Number.isFinite(filters.minBedrooms) ? { gte: filters.minBedrooms } : {}),
-        ...(Number.isFinite(filters.maxBedrooms) ? { lte: filters.maxBedrooms } : {}),
+    const detailRanges = [
+      ['bedrooms', filters.bedrooms, filters.minBedrooms, filters.maxBedrooms],
+      ['bathrooms', filters.bathrooms, filters.minBathrooms, filters.maxBathrooms],
+      ['kitchens', filters.kitchens, filters.minKitchens, filters.maxKitchens],
+      ['diningRooms', filters.diningRooms, filters.minDiningRooms, filters.maxDiningRooms],
+      ['livingRooms', filters.livingRooms, filters.minLivingRooms, filters.maxLivingRooms],
+      ['carParkingSpots', filters.carParkingSpots, filters.minCarParkingSpots, filters.maxCarParkingSpots],
+      ['bikeParkingSpots', filters.bikeParkingSpots, filters.minBikeParkingSpots, filters.maxBikeParkingSpots],
+    ] as const;
+    for (const [field, exact, minimum, maximum] of detailRanges) {
+      if (field === 'bedrooms' && (minimum != null || maximum != null)) continue;
+      const range: Record<string, number> = {
+        ...(Number.isFinite(minimum) ? { gte: minimum as number } : {}),
+        ...(Number.isFinite(maximum) ? { lte: maximum as number } : {}),
       };
+      if (Number.isFinite(exact)) range.equals = exact as number;
+      if (!Object.keys(range).length) continue;
+      andClauses.push({
+        OR: [
+          { houseDetail: { is: { [field]: range } } },
+          { apartmentDetail: { is: { [field]: range } } },
+          ...(field === 'carParkingSpots' ? [{ commercialDetail: { is: { parkingSpots: range } } }] : []),
+        ],
+      });
     }
     if (Number.isFinite(filters.minPrice)) where.displayPrice = { ...where.displayPrice, gte: filters.minPrice };
     if (Number.isFinite(filters.maxPrice)) where.displayPrice = { ...where.displayPrice, lte: filters.maxPrice };
@@ -163,6 +195,9 @@ export async function getPaginatedProperties(opts: {
           { structuredLocation: { contains: filters.location, mode: 'insensitive' } },
         ],
       });
+    }
+    if (filters.tags?.length) {
+      andClauses.push({ OR: filters.tags.map((tag) => ({ metaTags: { has: tag } })) });
     }
     if (andClauses.length > 0) {
       where.AND = andClauses;

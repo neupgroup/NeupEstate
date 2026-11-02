@@ -72,14 +72,14 @@ export async function searchProperties(
     const currentPage = Number(page) || 1;
     const limit = 18;
     
-    // Check if the input is already a structured filter from the recommendation engine
+    const normalizedFilters = normalizeSearchFilters(structuredFilters);
     const isStructuredRequest = typeof params === 'object' && !('q' in params) && Object.keys(structuredFilters).length > 0;
 
     let combinedFilters: PropertyFilters = {};
 
     if (isStructuredRequest) {
       // The request is already a structured filter object. Use it directly.
-      combinedFilters = structuredFilters;
+      combinedFilters = normalizedFilters;
     } else {
       // It's a regular search, likely with a text query `q`.
       let parsedQueryFilters: PropertyFilters = {};
@@ -110,16 +110,10 @@ export async function searchProperties(
       }
 
       // Merge AI-parsed filters with any specific filters from the sidebar
-      combinedFilters = { ...parsedQueryFilters, ...structuredFilters };
+      combinedFilters = { ...parsedQueryFilters, ...normalizedFilters };
     }
     
     // Type checking and sanitization
-    if (combinedFilters.minPrice) combinedFilters.minPrice = Number(combinedFilters.minPrice);
-    if (combinedFilters.maxPrice) combinedFilters.maxPrice = Number(combinedFilters.maxPrice);
-    if (combinedFilters.bedrooms) combinedFilters.bedrooms = Number(combinedFilters.bedrooms);
-    if (combinedFilters.bathrooms) combinedFilters.bathrooms = Number(combinedFilters.bathrooms);
-    // ... etc. for other number fields
-
     combinedFilters.status = 'approved';
 
     const { properties, totalCount } = await getPaginatedProperties({ filters: combinedFilters, page: currentPage, limit });
@@ -129,6 +123,43 @@ export async function searchProperties(
     await logger().type('searchProperties').data({ error: String(e), details: {} }).log();
     return { success: false, data: null, error: e.message || "An error occurred during the search." };
   }
+}
+
+/**
+ * Converts query-string and structured search values into the property filter shape.
+ * Comma-separated sidebar values are normalized to arrays, and numeric controls to numbers.
+ */
+function normalizeSearchFilters(filters: Record<string, unknown>): PropertyFilters {
+  const arrayFields = ['purpose', 'category', 'type', 'listingBy', 'tags'] as const;
+  const numberFields = [
+    'minPrice', 'maxPrice', 'minArea', 'maxArea', 'minFloors', 'maxFloors',
+    'minRoadAccess', 'maxRoadAccess', 'bedrooms', 'bathrooms', 'kitchens',
+    'diningRooms', 'livingRooms', 'carParkingSpots', 'bikeParkingSpots',
+    'minBedrooms', 'maxBedrooms', 'minBathrooms', 'maxBathrooms',
+    'minKitchens', 'maxKitchens', 'minDiningRooms', 'maxDiningRooms',
+    'minLivingRooms', 'maxLivingRooms', 'minCarParkingSpots',
+    'maxCarParkingSpots', 'minBikeParkingSpots', 'maxBikeParkingSpots',
+  ] as const;
+  const normalized: Record<string, unknown> = { ...filters };
+
+  for (const field of arrayFields) {
+    const value = filters[field];
+    if (Array.isArray(value)) {
+      normalized[field] = value.flatMap((item) => String(item).split(',')).map((item) => item.trim()).filter(Boolean);
+    } else if (typeof value === 'string') {
+      normalized[field] = value.split(',').map((item) => item.trim()).filter(Boolean);
+    }
+  }
+
+  for (const field of numberFields) {
+    const value = filters[field];
+    if (typeof value === 'string' && value.trim() !== '') {
+      const numberValue = Number(value);
+      if (Number.isFinite(numberValue)) normalized[field] = numberValue;
+    }
+  }
+
+  return normalized as PropertyFilters;
 }
 
 

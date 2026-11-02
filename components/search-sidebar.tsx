@@ -124,28 +124,31 @@ export function SearchSidebar({ initialFilters }: { initialFilters?: PropertyFil
   const [livingRooms, setLivingRooms] = useState<StepperState>({ count: 0, mode: 'any' });
   const [bikeParking, setBikeParking] = useState<StepperState>({ count: 0, mode: 'any' });
   const [carParking, setCarParking] = useState<StepperState>({ count: 0, mode: 'any' });
-  
+
   useEffect(() => {
-    if (initialFilters) {
-        setListingBy(initialFilters.listingBy || []);
-        setMinPrice(initialFilters.minPrice?.toString() || '');
-        setMaxPrice(initialFilters.maxPrice?.toString() || '');
-        setPurpose(initialFilters.purpose || []);
-        setCategory(initialFilters.category || []);
-        setUsageType(initialFilters.type || []);
-        setLocation(initialFilters.location || '');
-        setTags(initialFilters.tags || []);
+    const readArrayParam = (name: string) => searchParams.getAll(name).flatMap((value) => value.split(',')).filter(Boolean);
+    const readNumberParam = (name: string) => {
+      const value = searchParams.get(name);
+      return value && Number.isFinite(Number(value)) ? Number(value) : 0;
+    };
+    const filters = initialFilters ?? {};
+    setListingBy(filters.listingBy || readArrayParam('listingBy'));
+    setMinPrice(filters.minPrice?.toString() || searchParams.get('minPrice') || '');
+    setMaxPrice(filters.maxPrice?.toString() || searchParams.get('maxPrice') || '');
+    setPurpose(filters.purpose || readArrayParam('purpose'));
+    setCategory(filters.category || readArrayParam('category'));
+    setUsageType(filters.type || readArrayParam('type'));
+    setLocation(filters.location || searchParams.get('location') || '');
+    setTags(filters.tags || readArrayParam('tags'));
         
-        // This is a simplified reconstruction. A more robust solution would store mode in URL.
-        setBedrooms({ count: initialFilters.bedrooms || 0, mode: initialFilters.bedrooms ? 'exact' : 'any' });
-        setBathrooms({ count: initialFilters.bathrooms || 0, mode: initialFilters.bathrooms ? 'exact' : 'any' });
-        setKitchens({ count: initialFilters.kitchens || 0, mode: initialFilters.kitchens ? 'exact' : 'any' });
-        setDiningRooms({ count: initialFilters.diningRooms || 0, mode: initialFilters.diningRooms ? 'exact' : 'any' });
-        setLivingRooms({ count: initialFilters.livingRooms || 0, mode: initialFilters.livingRooms ? 'exact' : 'any' });
-        setBikeParking({ count: initialFilters.bikeParkingSpots || 0, mode: initialFilters.bikeParkingSpots ? 'exact' : 'any' });
-        setCarParking({ count: initialFilters.carParkingSpots || 0, mode: initialFilters.carParkingSpots ? 'exact' : 'any' });
-    }
-  }, [initialFilters]);
+    setBedrooms({ count: filters.bedrooms ?? readNumberParam('bedrooms'), mode: filters.bedrooms || searchParams.has('bedrooms') ? 'exact' : 'any' });
+    setBathrooms({ count: filters.bathrooms ?? readNumberParam('bathrooms'), mode: filters.bathrooms || searchParams.has('bathrooms') ? 'exact' : 'any' });
+    setKitchens({ count: filters.kitchens ?? readNumberParam('kitchens'), mode: filters.kitchens || searchParams.has('kitchens') ? 'exact' : 'any' });
+    setDiningRooms({ count: filters.diningRooms ?? readNumberParam('diningRooms'), mode: filters.diningRooms || searchParams.has('diningRooms') ? 'exact' : 'any' });
+    setLivingRooms({ count: filters.livingRooms ?? readNumberParam('livingRooms'), mode: filters.livingRooms || searchParams.has('livingRooms') ? 'exact' : 'any' });
+    setBikeParking({ count: filters.bikeParkingSpots ?? readNumberParam('bikeParkingSpots'), mode: filters.bikeParkingSpots || searchParams.has('bikeParkingSpots') ? 'exact' : 'any' });
+    setCarParking({ count: filters.carParkingSpots ?? readNumberParam('carParkingSpots'), mode: filters.carParkingSpots || searchParams.has('carParkingSpots') ? 'exact' : 'any' });
+  }, [initialFilters, searchParams]);
 
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -200,8 +203,9 @@ export function SearchSidebar({ initialFilters }: { initialFilters?: PropertyFil
     setStepperParams('carParkingSpots', carParking);
     
     const querySegment = pathname.split('?')[0];
+    const queryText = querySegment.startsWith('/search/') ? decodeURIComponent(querySegment.slice('/search/'.length)) : '';
     newParams.set('page', '1'); // Reset to page 1 on new filter application
-    router.push(`${querySegment}?${newParams.toString()}`);
+    router.push(`${queryText ? `/search/${encodeURIComponent(queryText)}` : '/search'}?${newParams.toString()}`);
   };
 
   return (
