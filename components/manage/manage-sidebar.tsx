@@ -51,11 +51,11 @@ export function ManageSidebar(props: Props) {
   };
 
   return (
-    <nav className="flex flex-col gap-1 pt-6 pb-4" aria-label="Management navigation">
+    <nav className="flex flex-col gap-1 px-0 py-6" aria-label="Management navigation">
       {manageNav.map((item, index) => {
         if (item.type === "heading") {
           return (
-            <Kicker key={`${item.label}-${index}`} className="mt-3 px-4 pb-1 first:mt-0">
+            <Kicker key={`${item.label}-${index}`} className="mt-3 px-2 pb-1 first:mt-0">
               {item.label}
             </Kicker>
           );
@@ -72,7 +72,7 @@ export function ManageSidebar(props: Props) {
             href={item.external ? item.href : appendManageProfileParamV1(item.href, { selectedProfile, workingProfile })}
             active={isActive}
             aria-current={isActive ? "page" : undefined}
-            className="px-4 py-2 text-left"
+            className="rounded-full px-2 py-2 text-left"
           >
             <Icon aria-hidden="true" />
             <span className="min-w-0 truncate">{item.label}</span>
