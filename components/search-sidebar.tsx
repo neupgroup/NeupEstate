@@ -3,15 +3,14 @@
 "use client";
 
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Label } from '@neup/components/ui/label';
 import { Input } from '@neup/components/ui/input';
 import { Button } from '@neup/components/ui/button';
-import { Minus, Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import type { PropertyFilters } from '@/types';
 import { Badge } from '@neup/components/ui/badge';
 import { PriceInput } from '@/components/ui/price-input';
+import { StepperControls } from '@neup/components/ui/stepperControls';
 
 type StepperMode = 'any' | 'exact' | 'more' | 'less';
 type StepperState = {
@@ -21,7 +20,7 @@ type StepperState = {
 
 // Sub-components for better organization
 const FilterSection = ({ title, children, className }: { title: string, children: React.ReactNode, className?: string }) => (
-    <div className={`space-y-3 border-t pt-4 ${className}`}>
+    <div className={`space-y-3 border-t pt-4 first:border-t-0 first:pt-0 ${className}`}>
         <Label className="font-semibold text-base">{title}</Label>
         {children}
     </div>
@@ -45,9 +44,9 @@ const ToggleButtonGroup = ({ options, value, onChange, multiSelect = true }: { o
                 <Button
                     key={option}
                     htmlType="button"
-                    variant={value.includes(option) ? 'solid' : 'outlined'}
+                    variant={value.includes(option) ? 'solid' : 'plain'}
                     onClick={() => handleToggle(option)}
-                    className="capitalize text-xs h-8"
+                    className={`h-9 w-full border px-2 text-[13px] capitalize ${value.includes(option) ? 'border-primary bg-primary text-primary-foreground hover:bg-primary/90' : 'border-border bg-background text-foreground hover:bg-muted'}`}
                 >
                     {option}
                 </Button>
@@ -94,20 +93,13 @@ const Stepper = ({ label, state, onChange }: { label: string, state: StepperStat
     }
 
     return (
-        <div className="flex items-center justify-between bg-secondary p-1 rounded-md">
-            <Button htmlType="button" variant="plain" size="icon" onClick={handleDecrement}>
-                <Minus className="h-4 w-4" />
-            </Button>
-            <Label 
-                className="flex-grow text-center text-sm font-medium tabular-nums cursor-pointer"
-                onClick={handleLabelClick}
-            >
-                {getLabelText()}
-            </Label>
-             <Button htmlType="button" variant="plain" size="icon" onClick={handleIncrement}>
-                <Plus className="h-4 w-4" />
-            </Button>
-        </div>
+        <StepperControls
+            label={label}
+            value={getLabelText()}
+            onDecrease={handleDecrement}
+            onIncrease={handleIncrement}
+            onValueClick={state.mode === 'any' ? undefined : handleLabelClick}
+        />
     );
 };
 
@@ -213,12 +205,8 @@ export function SearchSidebar({ initialFilters }: { initialFilters?: PropertyFil
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Refine Search</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="w-full">
+      <form onSubmit={handleSubmit} className="space-y-4">
           <FilterSection title="Property By">
             <ToggleButtonGroup options={['owners', 'developers', 'agencies']} value={listingBy} onChange={setListingBy} />
           </FilterSection>
@@ -269,10 +257,9 @@ export function SearchSidebar({ initialFilters }: { initialFilters?: PropertyFil
             )}
           </FilterSection>
 
-          <Button htmlType="submit">Apply Filters</Button>
-        </form>
-      </CardContent>
-    </Card>
+        <Button htmlType="submit" className="w-full">Apply Filters</Button>
+      </form>
+    </div>
   );
 }
 

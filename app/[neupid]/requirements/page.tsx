@@ -31,7 +31,7 @@ export default async function PublicAccountRequirementsPage({
   return (
     <main className="flex-1">
       <section className="bg-background">
-        <div className="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full max-w-[1440px] px-4 py-12 sm:px-6 md:px-8">
           <p className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-4 py-2 text-sm font-medium text-primary">
             <Search className="h-4 w-4" /> @{account.profile.neupid}
           </p>
@@ -41,8 +41,8 @@ export default async function PublicAccountRequirementsPage({
           </p>
         </div>
       </section>
-      <section className="bg-muted/20 px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-        <div className="mx-auto grid max-w-7xl gap-5 md:grid-cols-2 xl:grid-cols-3">
+      <section className="bg-muted/20 py-12 lg:py-16">
+        <div className="mx-auto grid w-full max-w-[1440px] gap-5 px-4 sm:px-6 md:grid-cols-2 md:px-8 xl:grid-cols-3">
           {requirements.map((requirement, index) => (
             <Card key={requirement.id} className="bg-card text-card-foreground">
               <CardContent className="p-6">

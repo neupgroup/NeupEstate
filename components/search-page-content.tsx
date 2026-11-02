@@ -98,14 +98,18 @@ export function SearchPageContent({ queryFromPath }: { queryFromPath: string }) 
   const totalPages = Math.ceil(totalCount / PROPERTIES_PER_PAGE);
 
   return (
-    <main className="flex-1">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
-          <aside className="lg:col-span-1 lg:sticky top-24">
-            <SearchSidebar initialFilters={appliedFilters} />
-          </aside>
-
-          <div className="lg:col-span-3 space-y-8">
+    <main className="mx-auto w-full max-w-[1440px] px-4 py-6 sm:px-6 md:px-8">
+      <div className="grid items-start gap-8 md:grid-cols-[280px_minmax(0,1fr)] md:gap-0">
+        <aside className="hidden pr-6 md:sticky md:top-20 md:block md:self-start lg:pr-8">
+          <SearchSidebar initialFilters={appliedFilters} />
+        </aside>
+        <div className="min-w-0 space-y-8 md:border-l md:border-border/70 md:pl-8 lg:pl-10">
+            <details className="md:hidden">
+              <summary className="cursor-pointer px-1 py-2 font-semibold">Refine search</summary>
+              <div className="pt-2">
+                <SearchSidebar initialFilters={appliedFilters} />
+              </div>
+            </details>
             <form onSubmit={handleSearchSubmit}>
               <div className="relative">
                 <Input
@@ -176,7 +180,6 @@ export function SearchPageContent({ queryFromPath }: { queryFromPath: string }) 
                 </div>
               )}
             </div>
-          </div>
         </div>
       </div>
     </main>
