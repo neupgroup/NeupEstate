@@ -4,7 +4,8 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Menu } from 'lucide-react';
-import { HeaderAddSidebarV1 } from '@neup/components/layout/header.addSidebar.v1';
+import { HeaderV1 } from '@neup/components/layout/header.v1';
+import { SidebarV1 } from '@neup/components/layout/sidebar.v1';
 import { Userbar } from '@neup/components/element/userbar';
 import { manageNav } from '@/components/manage-nav';
 import { appendWorkingProfileV1, getLongestMatchingManageNavHrefV1 } from '@/components/logic/ManageNavSelection.v1';
@@ -56,27 +57,25 @@ export function ManageLayoutClient({ children, profile, permissions }: ManageLay
   const navigation = <ManageNavigation permissions={permissions} workingProfile={profile.workingProfile} pathname={pathname} />;
 
   return (
-    <HeaderAddSidebarV1
-      header={
-        <>
-          <Link href="/" className="flex min-w-0 items-center gap-2">
-            <Image src="https://cdn.neupgroup.com/neupestate/logo.png" alt="Neup.Estate Logo" width={36} height={36} unoptimized />
-            <span className="font-headline text-lg font-bold">Neup.Estate</span>
-          </Link>
-          <Link href="/profile" aria-label="Open profile" className="ml-auto">
-            <Userbar displayName={profile.displayName ?? 'User'} displayImage={profile.displayImage} neupid={profile.neupId ?? ''} />
-          </Link>
-          <details key={pathname} className="ml-2 md:hidden">
-            <summary aria-label="Management menu" className="cursor-pointer list-none rounded-lg p-2"><Menu className="h-5 w-5" /></summary>
-            <div className="absolute inset-x-0 top-full max-h-[calc(100dvh-4rem)] overflow-y-auto border-b bg-background px-4 shadow-lg">
-              {navigation}
-            </div>
-          </details>
-        </>
-      }
-      sidebar={navigation}
-    >
-      {children}
-    </HeaderAddSidebarV1>
+    <div className="min-h-screen w-full bg-[var(--background)] text-[var(--foreground)]">
+      <HeaderV1>
+        <Link href="/" className="flex min-w-0 items-center gap-2">
+          <Image src="https://cdn.neupgroup.com/neupestate/logo.png" alt="Neup.Estate Logo" width={36} height={36} unoptimized />
+          <span className="font-headline text-lg font-bold">Neup.Estate</span>
+        </Link>
+        <Link href="/profile" aria-label="Open profile" className="ml-auto">
+          <Userbar displayName={profile.displayName ?? 'User'} displayImage={profile.displayImage} neupid={profile.neupId ?? ''} />
+        </Link>
+        <details key={pathname} className="ml-2 md:hidden">
+          <summary aria-label="Management menu" className="cursor-pointer list-none rounded-lg p-2"><Menu className="h-5 w-5" /></summary>
+          <div className="absolute inset-x-0 top-full max-h-[calc(100dvh-4rem)] overflow-y-auto border-b bg-background px-4 shadow-lg">
+            {navigation}
+          </div>
+        </details>
+      </HeaderV1>
+      <SidebarV1 sidebar={navigation}>
+        {children}
+      </SidebarV1>
+    </div>
   );
 }
