@@ -1,6 +1,7 @@
 "use server";
 
 import { parsePropertySearchQuery } from '@/services/intelligence/search-property-query';
+import { naturalLanguagePropertySearch as naturalLanguagePropertySearchFlow } from '@/services/intelligence/natural-language-property-search';
 import { recommendProperties as recommendPropertiesFlow } from "@/services/intelligence/ai-powered-recommendations";
 import { extractAndSaveProperty as extractAndSavePropertyFlow, type ExtractPropertyDetailsOutput } from "@/services/intelligence/extract-property-details-flow";
 import { getPaginatedProperties } from '@/services/properties/list';
@@ -68,48 +69,124 @@ export async function searchProperties(
 ): Promise<{ success: boolean; data: { properties: Property[]; totalCount: number, appliedFilters: PropertyFilters } | null; error: string | null }> {
   try {
     noStore(); // Dynamic search, should not be cached
-    const { q, page, ...structuredFilters } = params;
-    const currentPage = Number(page) || 1;
-    const limit = 18;
-    
+    const { q, page, limit: requestedLimit, statuses, orderBy, agencyId, agentId, ...structuredFilters } = params;
+    const currentPage = Math.max(1, Number(page) || 1);
+    const limit = Math.min(100, Math.max(1, Number(requestedLimit) || 18));
+    const offset = (currentPage - 1) * limit;
+    const candidateLimit = Math.min(2000, offset + limit);
     const normalizedFilters = normalizeSearchFilters(structuredFilters);
     const isStructuredRequest = typeof params === 'object' && !('q' in params) && Object.keys(structuredFilters).length > 0;
+    const normalizedStatuses = Array.isArray(statuses) ? statuses.map(String) : undefined;
+    const query = typeof q === 'string' ? q.trim() : '';
+    if (query && normalizedFilters.searchTerm === query) delete normalizedFilters.searchTerm;
+    const isRecordId = /^c[a-z0-9]{24}@base/.test(query);
 
-    let combinedFilters: PropertyFilters = {};
-
-    if (isStructuredRequest) {
-      // The request is already a structured filter object. Use it directly.
-      combinedFilters = normalizedFilters;
-    } else {
-      // It's a regular search, likely with a text query `q`.
-      let parsedQueryFilters: PropertyFilters = {};
-      const isRecordId = q && typeof q === 'string' && /^c[a-z0-9]{24}@base/.test(q as string);
-
-      if (isRecordId) {
-        parsedQueryFilters = { id: q as string };
-      } else if (q && typeof q === 'string') {
-        try {
-          parsedQueryFilters = await parsePropertySearchQuery(q);
-        } catch (e) {
-          console.error('Failed to parse property search query with Nia:', e);
-          parsedQueryFilters = { searchTerm: q as string };
-        }
-      }
-
-      // Merge AI-parsed filters with any specific filters from the sidebar
-      combinedFilters = { ...parsedQueryFilters, ...normalizedFilters };
+    if (!query || isStructuredRequest || isRecordId) {
+      const directFilters = isRecordId ? { ...normalizedFilters, id: query } : normalizedFilters;
+      if (!normalizedStatuses?.length) directFilters.status = 'approved';
+      const result = await searchPropertyBatch(directFilters, currentPage, limit, candidateLimit, normalizedStatuses, orderBy, agencyId, agentId);
+      return { success: true, data: { ...result, appliedFilters: directFilters }, error: null };
     }
-    
-    // Type checking and sanitization
-    combinedFilters.status = 'approved';
 
-    const { properties, totalCount } = await getPaginatedProperties({ filters: combinedFilters, page: currentPage, limit });
-    
-    return { success: true, data: { properties, totalCount, appliedFilters: combinedFilters }, error: null };
+    const directFilters: PropertyFilters = { ...normalizedFilters, searchTerm: query };
+    if (!normalizedStatuses?.length) directFilters.status = 'approved';
+    const directSearchPromise = searchPropertyBatch(directFilters, 1, candidateLimit, candidateLimit, normalizedStatuses, orderBy, agencyId, agentId);
+    const niaFiltersPromise = getNiaFiltersWithinSearchTimeout(query);
+    const [directResult, niaFilters] = await Promise.all([directSearchPromise, niaFiltersPromise]);
+
+    if (!niaFilters || Object.keys(niaFilters).length === 0) {
+      return { success: true, data: { ...paginateSearchBatch(directResult, currentPage, limit), appliedFilters: directFilters }, error: null };
+    }
+
+    const niaSearchFilters: PropertyFilters = { ...niaFilters, ...normalizedFilters };
+    if (!normalizedStatuses?.length) niaSearchFilters.status = 'approved';
+    const intersectionFilters: PropertyFilters = { ...niaSearchFilters, searchTerm: query };
+    const [niaResult, intersectionResult] = await Promise.all([
+      searchPropertyBatch(niaSearchFilters, 1, candidateLimit, candidateLimit, normalizedStatuses, orderBy, agencyId, agentId),
+      searchPropertyBatch(intersectionFilters, 1, 1, 1, normalizedStatuses, orderBy, agencyId, agentId),
+    ]);
+    const mergedResult = mergeSearchBatches(directResult, niaResult, intersectionResult.totalCount, currentPage, limit);
+    const appliedFilters = { ...niaSearchFilters, ...(query ? { searchTerm: query } : {}) };
+
+    return { success: true, data: { ...mergedResult, appliedFilters }, error: null };
   } catch (e: any) {
     await logger().type('searchProperties').data({ error: String(e), details: {} }).log();
     return { success: false, data: null, error: e.message || "An error occurred during the search." };
   }
+}
+
+type PropertySearchBatch = { properties: Property[]; totalCount: number };
+
+// Fetch one candidate set from the existing property query service.
+async function searchPropertyBatch(
+  filters: PropertyFilters,
+  page: number,
+  limit: number,
+  candidateLimit: number,
+  statuses?: string[],
+  orderBy?: 'newestFirst' | 'oldestFirst',
+  agencyId?: string,
+  agentId?: string,
+): Promise<PropertySearchBatch> {
+  return getPaginatedProperties({
+    filters,
+    page,
+    limit: page === 1 ? candidateLimit : limit,
+    statuses,
+    orderBy,
+    agencyIds: agencyId ? [agencyId] : undefined,
+    agentAccountId: agentId,
+  });
+}
+
+// Bound the Nia wait so an unavailable intelligence service cannot block text-search results.
+async function getNiaFiltersWithinSearchTimeout(query: string): Promise<PropertyFilters | null> {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<null>((resolve) => {
+    timeoutId = setTimeout(() => resolve(null), 12_000);
+  });
+  const niaSearch = parsePropertySearchQuery(query)
+    .catch((error) => {
+      console.error('Failed to parse property search query with Nia:', error);
+      return null;
+    });
+
+  try {
+    return await Promise.race([niaSearch, timeout]);
+  } finally {
+    if (timeoutId) clearTimeout(timeoutId);
+  }
+}
+
+// Return one page from a single search batch.
+function paginateSearchBatch(batch: PropertySearchBatch, page: number, limit: number): PropertySearchBatch {
+  const offset = (page - 1) * limit;
+  return { properties: batch.properties.slice(offset, offset + limit), totalCount: batch.totalCount };
+}
+
+// Merge direct and Nia matches, preserving direct-search order and removing duplicate property IDs.
+function mergeSearchBatches(
+  directResult: PropertySearchBatch,
+  niaResult: PropertySearchBatch,
+  overlapTotalCount: number,
+  page: number,
+  limit: number,
+): PropertySearchBatch {
+  const propertiesById = new Map<string, Property>();
+  for (const property of [...directResult.properties, ...niaResult.properties]) {
+    if (!propertiesById.has(property.id)) propertiesById.set(property.id, property);
+  }
+
+  const mergedProperties = [...propertiesById.values()];
+  const estimatedTotalCount = Math.max(
+    mergedProperties.length,
+    directResult.totalCount + niaResult.totalCount - overlapTotalCount,
+  );
+  const offset = (page - 1) * limit;
+  return {
+    properties: mergedProperties.slice(offset, offset + limit),
+    totalCount: estimatedTotalCount,
+  };
 }
 
 /**

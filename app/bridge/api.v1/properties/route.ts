@@ -15,6 +15,9 @@ Each property includes all supported fields, including `status`.
 It accepts `limit` and `offset` (or `page`), plus `query` for term lookup,
 `agency` or `agent` for ownership filtering, and `orderBy=newestFirst|oldestFirst`
 for creation/update order.
+Text searches run literal term matching alongside Nia filter parsing, merge the
+two result sets without duplicate properties, and keep literal results if Nia
+is unavailable.
 The limit defaults to 25 and is capped at 100; explicit offset takes precedence over page.
 Additional property filters such as `location`, `purpose`, `category`,
 `minPrice`, `maxPrice`, `minBedrooms`, and `maxBedrooms` are supported.
@@ -46,6 +49,7 @@ the bridge property service.
 import { NextRequest } from 'next/server';
 import { submitPropertyCreation } from '@/services/properties/create';
 import { listProperties } from '@/services/properties/list';
+import { searchProperties } from '@/services/properties/search';
 import { logger } from "@neup/logica/logger";
 import { PropertyFiltersSchema } from '@/types';
 
@@ -70,7 +74,60 @@ const getHandler = async (req: NextRequest) => {
     if (!parsed.success) return Response.json({ success: false, error: 'Invalid search filters.', details: parsed.error.flatten().fieldErrors }, { status: 400 });
     const limit = Math.min(Math.max(number('limit', 25), 1), 100); const offset = q.has('offset') ? number('offset', 0) : (Math.max(number('page', 1), 1) - 1) * limit;
     const fields = (q.get('include') || q.get('fields'))?.split(',').map((value) => value.trim()).filter(Boolean);
-    const result = await listProperties({ limit, offset, filters: parsed.data, statuses, agencyId: q.get('agency') || undefined, agentId: q.get('agent') || undefined, fields, orderBy: q.get('orderBy') === 'oldestFirst' ? 'oldestFirst' : 'newestFirst' });
+    const searchTerm = q.get('search') || q.get('q') || q.get('query');
+    const agencyId = q.get('agency') || undefined;
+    const agentId = q.get('agent') || undefined;
+
+    if (searchTerm) {
+      const result = await searchProperties({
+        ...parsed.data,
+        q: searchTerm,
+        page: Math.floor(offset / limit) + 1,
+        limit,
+        statuses,
+        orderBy: q.get('orderBy') === 'oldestFirst' ? 'oldestFirst' : 'newestFirst',
+        agencyId,
+        agentId,
+      });
+      if (!result.success || !result.data) {
+        return Response.json({ success: false, error: result.error || 'Property search failed.' }, { status: 500 });
+      }
+
+      let properties: unknown[] = result.data.properties;
+      if (fields?.length) {
+        const propertyIds = result.data.properties.map((property) => property.id);
+        const projected = await listProperties({
+          limit: Math.max(propertyIds.length, 1),
+          offset: 0,
+          filters: { ids: propertyIds },
+          statuses,
+          agencyId,
+          agentId,
+          fields: [...new Set([...fields, 'id'])],
+          orderBy: q.get('orderBy') === 'oldestFirst' ? 'oldestFirst' : 'newestFirst',
+        });
+        const projectedById = new Map(projected.properties.map((property) => [String(property.id), property]));
+        properties = propertyIds.flatMap((propertyId) => {
+          const property = projectedById.get(propertyId);
+          if (!property) return [];
+          if (!fields.includes('id')) delete property.id;
+          return [property];
+        });
+      }
+
+      return Response.json({
+        success: true,
+        properties,
+        totalCount: result.data.totalCount,
+        limit,
+        offset,
+        page: Math.floor(offset / limit) + 1,
+        totalPages: Math.ceil(result.data.totalCount / limit),
+        appliedFilters: { ...result.data.appliedFilters, status: statuses },
+      }, { status: 200 });
+    }
+
+    const result = await listProperties({ limit, offset, filters: parsed.data, statuses, agencyId, agentId, fields, orderBy: q.get('orderBy') === 'oldestFirst' ? 'oldestFirst' : 'newestFirst' });
     return Response.json({ success: true, properties: result.properties, totalCount: result.totalCount, limit, offset, page: Math.floor(offset / limit) + 1, totalPages: Math.ceil(result.totalCount / limit), appliedFilters: { ...parsed.data, status: statuses } }, { status: 200 });
   }
   catch (err) {
