@@ -1,6 +1,6 @@
 "use server";
 
-import { naturalLanguagePropertySearch as naturalLanguagePropertySearchFlow } from "@/services/intelligence/natural-language-property-search";
+import { parsePropertySearchQuery } from '@/services/intelligence/search-property-query';
 import { recommendProperties as recommendPropertiesFlow } from "@/services/intelligence/ai-powered-recommendations";
 import { extractAndSaveProperty as extractAndSavePropertyFlow, type ExtractPropertyDetailsOutput } from "@/services/intelligence/extract-property-details-flow";
 import { getPaginatedProperties } from '@/services/properties/list';
@@ -89,22 +89,9 @@ export async function searchProperties(
         parsedQueryFilters = { id: q as string };
       } else if (q && typeof q === 'string') {
         try {
-          const nlResult = await naturalLanguagePropertySearchFlow({ query: q });
-          if (nlResult.location) parsedQueryFilters.location = nlResult.location;
-          if (nlResult.minPrice) parsedQueryFilters.minPrice = nlResult.minPrice;
-          if (nlResult.maxPrice) parsedQueryFilters.maxPrice = nlResult.maxPrice;
-          if (nlResult.space?.bedroom) parsedQueryFilters.bedrooms = nlResult.space.bedroom;
-          if (nlResult.space?.bathroom) parsedQueryFilters.bathrooms = nlResult.space.bathroom;
-          // ... and so on for other fields
-          const searchTermParts = [];
-          if (nlResult.body) searchTermParts.push(nlResult.body);
-          if (nlResult.tags && nlResult.tags.length > 0) {
-            searchTermParts.push(...nlResult.tags);
-            parsedQueryFilters.tags = nlResult.tags;
-          }
-          if (searchTermParts.length > 0) parsedQueryFilters.searchTerm = searchTermParts.join(' ');
+          parsedQueryFilters = await parsePropertySearchQuery(q);
         } catch (e) {
-          console.error("Failed to parse natural language query:", e);
+          console.error('Failed to parse property search query with Nia:', e);
           parsedQueryFilters = { searchTerm: q as string };
         }
       }
