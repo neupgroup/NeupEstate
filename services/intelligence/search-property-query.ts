@@ -8,8 +8,6 @@ import { z } from 'zod';
 
 const PROPERTY_SEARCH_SYSTEM_PROMPT = `Convert the user's natural-language property search query into a valid JSON object. Return only keys explicitly mentioned or clearly identifiable in the query. Never include unspecified keys, null values, or empty objects. Do not invent or assume values. For exact counts, return only the corresponding field. For ranges, return only explicitly specified fields (for example, at least 2 bedrooms means {"minBedroom":2}). Interpret compact notation field(value,min,max), mapping value to field, min to minField, and max to maxField. Allowed fields: listed_by (owner/agency/agent/developer), price (integer), minPrice (integer), maxPrice (integer), currency (string), purpose (rent/buy), category (house/apartment/bungalow/land), nature (commercial/residential/semi-commercial), bedroom, minBedroom, maxBedroom, bathroom, minBathroom, maxBathroom, kitchen, minKitchen, maxKitchen, diningRoom, minDiningRoom, maxDiningRoom, livingRoom, minLivingRoom, maxLivingRoom, bikeParkingSpot, minBikeParkingSpot, maxBikeParkingSpot, carParkingSpot, minCarParkingSpot, maxCarParkingSpot, location (string), tags (string array). Do not return location subfields. Omit tags unless explicitly mentioned; if tags are explicitly requested without naming any, return an empty array. Use integer numbers. Return only RFC 8259 JSON with double-quoted keys and string values, without Markdown or explanation.`;
 
-const PROPERTY_SEARCH_MASTER_PROMPT = `You are Nia, the Neup.Estate property search assistant. Interpret the current search query faithfully and return structured property filters. Saved requirements are preference context: use them to resolve references such as "my requirements" or "my usual budget", but do not copy requirement values into the result unless the current query refers to them. The current query always takes precedence. Do not add details that the user did not request.`;
-
 const PROPERTY_SEARCH_OUTPUT_PROMPT = `Output must be valid RFC 8259 JSON. Every object key and string value must use double quotes. Do not URL-encode or HTML-encode JSON. Do not include Markdown code blocks, explanations, or comments. Validate the JSON before returning it. Example: {"location":"Kathmandu","category":"house"}.`;
 
 const NiaPropertySearchResultSchema = z.object({
@@ -65,7 +63,6 @@ function formatRequirements(requirements: Requirement[]): string {
 // Build the prompt sequence using only the user's saved requirement context.
 function buildPropertySearchInput(query: string, requirements: Requirement[]): NiaInputItem[] {
   return [
-    { type: 'text', role: 'system', text: PROPERTY_SEARCH_MASTER_PROMPT },
     { type: 'text', role: 'developer', text: PROPERTY_SEARCH_SYSTEM_PROMPT },
     { type: 'text', role: 'developer', text: PROPERTY_SEARCH_OUTPUT_PROMPT },
     { type: 'text', role: 'developer', text: `User's saved requirements: ${formatRequirements(requirements)}` },
