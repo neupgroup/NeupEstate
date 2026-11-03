@@ -3,7 +3,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { searchProperties } from '@/services/properties/search';
 import { searchAgentsByLocationAction } from '@/services/agents';
 import { PropertyCard } from "@/components/estate";
 import { Skeleton } from "@neup/components/ui/skeleton";
@@ -16,7 +15,7 @@ import { Button } from "@neup/components/ui/button";
 import { Pagination } from "@/components/estate";
 import { AgentResults } from "@/components/estate";
 
-const PROPERTIES_PER_PAGE = 18;
+const PROPERTIES_PER_PAGE = 15;
 
 export function SearchPageContent({ queryFromPath }: { queryFromPath: string }) {
   const router = useRouter();
@@ -35,13 +34,16 @@ export function SearchPageContent({ queryFromPath }: { queryFromPath: string }) 
   useEffect(() => {
     const fetchParams: { [key: string]: string | string[] } = {};
     searchParams.forEach((value, key) => {
-      if (value) {
+      if (value && key !== 'page') {
         fetchParams[key] = value;
       }
     });
 
+    fetchParams['offset'] = String((page - 1) * PROPERTIES_PER_PAGE);
+    fetchParams['limit'] = String(PROPERTIES_PER_PAGE);
+
     if (queryFromPath) {
-      fetchParams['q'] = queryFromPath;
+      fetchParams['query'] = queryFromPath;
     }
 
     async function fetchSearchResults() {
@@ -51,27 +53,40 @@ export function SearchPageContent({ queryFromPath }: { queryFromPath: string }) 
       setAgents([]);
       setTotalCount(0);
       
-      const result = await searchProperties(fetchParams);
-      if (result.success && result.data) {
-        setProperties(result.data.properties);
-        setTotalCount(result.data.totalCount);
-        setAppliedFilters(result.data.appliedFilters);
+      const searchUrl = new URL('/bridge/api.v1/properties/search', window.location.origin);
+      Object.entries(fetchParams).forEach(([key, value]) => {
+        searchUrl.searchParams.set(key, Array.isArray(value) ? value.join(',') : value);
+      });
 
-        if (result.data.appliedFilters.location) {
-          const agentResult = await searchAgentsByLocationAction(result.data.appliedFilters.location);
+      try {
+        const response = await fetch(searchUrl);
+        const result = await response.json();
+        if (!response.ok || !result.success) {
+          setError(result.error || "Failed to load search results.");
+          setIsLoading(false);
+          return;
+        }
+
+        setProperties(result.properties);
+        setTotalCount(result.totalCount);
+        setAppliedFilters(result.appliedFilters);
+
+        if (result.appliedFilters.location) {
+          const agentResult = await searchAgentsByLocationAction(result.appliedFilters.location);
           if (agentResult.success && agentResult.data) {
               setAgents(agentResult.data);
           }
         } else {
           setAgents([]);
         }
-      } else {
-        setError(result.error || "Failed to load search results.");
+      } catch {
+        setError("Failed to load search results.");
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     }
     fetchSearchResults();
-  }, [searchParams, queryFromPath]);
+  }, [searchParams, queryFromPath, page]);
 
   useEffect(() => {
     setSearchQuery(queryFromPath);

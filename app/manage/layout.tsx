@@ -29,6 +29,7 @@ export default async function ManageLayout({
     '/manage': canDashboard,
     '/manage/analytics': canAnalytics,
     '/manage/intelligence': canIntelListings,
+    '/manage/search/cache': canIntelListings,
     '/manage/properties': canPropertyView || canRootPropertiesView,
     '/manage/collection': canCollectionView,
     '/manage/leads': canLeadsHomeView,

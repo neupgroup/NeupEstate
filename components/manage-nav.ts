@@ -64,6 +64,7 @@ export const manageNav: ManageNavItem[] = [
   { type: "link", href: "/profile", label: "Profile", icon: UserRound },
   { type: "link", href: "/manage/customization", label: "Customization", icon: Settings },
   { type: "link", href: "/manage/report", label: "Report", icon: FileBarChart },
+  { type: "link", href: "/manage/search/cache", label: "Search Cache", icon: FileSearch },
   { type: "link", href: "/manage/team", label: "Team", icon: Users },
   { type: "link", href: "/manage/accounts", label: "Users", icon: UserCog },
   { type: "link", href: "/manage/settings", label: "Settings", icon: Settings },

@@ -157,12 +157,12 @@ function parseNiaSearchJson(outputText: string): NiaPropertySearchResult {
 
 // Ask Nia to parse a property query with the current account's saved requirements as context.
 export async function parsePropertySearchQuery(query: string): Promise<PropertyFilters> {
-  const accountId = await getAccountIdFromJWT();
-  const requirements = accountId ? (await getRequirementByUserId(accountId)) ?? [] : [];
   const title = buildNaturalSearchTitle(query);
   const cachedResult = await getCachedNaturalSearch(title);
   if (cachedResult) return mapNiaSearchResult(cachedResult);
 
+  const accountId = await getAccountIdFromJWT();
+  const requirements = accountId ? (await getRequirementByUserId(accountId)) ?? [] : [];
   const response = await createNiaResponse({
     model: 'auto',
     failover: true,
