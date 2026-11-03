@@ -1,6 +1,6 @@
 'use server';
 
-import { createNiaResponse, type NiaInputItem } from '@neup/intelligence/responses';
+import { createNiaResponse, type NiaInputItem } from '@neup/logica/intelligence/responses';
 import { getAccountIdFromJWT } from '@/services/neupid/check-auth-web';
 import { getRequirementByUserId } from '@/services/requirements/get';
 import type { PropertyFilters, Requirement } from '@/types';
