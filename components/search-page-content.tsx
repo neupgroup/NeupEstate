@@ -16,6 +16,7 @@ import { Pagination } from "@/components/estate";
 import { AgentResults } from "@/components/estate";
 
 const PROPERTIES_PER_PAGE = 15;
+const basePath = process.env.NEXT_PUBLIC_APP_BASEPATH ?? '';
 
 export function SearchPageContent({ queryFromPath }: { queryFromPath: string }) {
   const router = useRouter();
@@ -53,7 +54,7 @@ export function SearchPageContent({ queryFromPath }: { queryFromPath: string }) 
       setAgents([]);
       setTotalCount(0);
       
-      const searchUrl = new URL('/bridge/api.v1/properties/search', window.location.origin);
+      const searchUrl = new URL(`${basePath}/bridge/api.v1/properties/search`, window.location.origin);
       Object.entries(fetchParams).forEach(([key, value]) => {
         searchUrl.searchParams.set(key, Array.isArray(value) ? value.join(',') : value);
       });
