@@ -15,6 +15,7 @@ export const dynamic = 'force-dynamic';
 
 type Context = { params: Promise<{ id: string }> };
 
+// Return the requested resource collection or item for a GET request.
 export async function GET(_request: Request, context: Context) {
   try {
     const { id } = await context.params;

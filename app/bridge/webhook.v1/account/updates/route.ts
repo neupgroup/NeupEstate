@@ -78,6 +78,7 @@ type NormalizedAccountRole = {
   permissions: string[];
 };
 
+// Return a structured webhook error response with its HTTP status.
 function fail(error: string, reason?: string, status = 400) {
   return NextResponse.json(
     reason ? { success: false, error, reason } : { success: false, error },
@@ -85,14 +86,17 @@ function fail(error: string, reason?: string, status = 400) {
   );
 }
 
+// Read the configured application secret used to verify webhook requests.
 function getAppSecret(): string {
   return process.env.BRIDGE_APP_SECRET || process.env.NEUP_APP_SECRET || "";
 }
 
+// Compute the SHA-256 digest for a webhook signature input.
 function sha256(input: string): Buffer {
   return createHash("sha256").update(input, "utf8").digest();
 }
 
+// Verify the request signature using the configured webhook secret.
 function verifySignature(
   iv: string,
   tag: string,
@@ -111,6 +115,7 @@ function verifySignature(
   return timingSafeEqual(a, b);
 }
 
+// Decrypt the authenticated webhook payload envelope.
 function decryptEnvelope(ivB64: string, tagB64: string, dataB64: string, appSecret: string): string {
   const key = sha256(appSecret);
   const iv = Buffer.from(ivB64, "base64");
@@ -124,6 +129,7 @@ function decryptEnvelope(ivB64: string, tagB64: string, dataB64: string, appSecr
   return plain.toString("utf8");
 }
 
+// Write a structured webhook event log entry.
 function webhookLog(eventId: string | undefined, message: string, details?: Record<string, unknown>) {
   const prefix = `[bridge/webhook.v1/account/updates][eventId:${eventId ?? "unknown"}]`;
   if (details) {
@@ -133,6 +139,7 @@ function webhookLog(eventId: string | undefined, message: string, details?: Reco
   console.log(`${prefix} ${message}`);
 }
 
+// Validate that the encrypted webhook envelope contains its required fields.
 function isValidEnvelope(body: EncryptedEnvelope): body is Required<EncryptedEnvelope> {
   return (
     body.eventType === "account.updated" &&
@@ -143,6 +150,7 @@ function isValidEnvelope(body: EncryptedEnvelope): body is Required<EncryptedEnv
   );
 }
 
+// Validate the decoded account update payload before persistence.
 function isValidPayload(input: unknown): input is AccountUpdatePayload {
   const payload = input as AccountUpdatePayload;
   const allowedChangedFields: SupportedChangedField[] = [
@@ -178,12 +186,14 @@ function isValidPayload(input: unknown): input is AccountUpdatePayload {
   );
 }
 
+// Convert values to the JSON input representation accepted by Prisma.
 function normalizeJsonValue(value: unknown): Prisma.InputJsonValue | Prisma.NullableJsonNullValueInput | undefined {
   if (value === undefined) return undefined;
   if (value === null) return Prisma.JsonNull;
   return value as Prisma.InputJsonValue;
 }
 
+// Normalize role values from the webhook payload for database persistence.
 function normalizeRoleState(payload: AccountUpdatePayload): NormalizedAccountRole[] {
   if (Array.isArray(payload.account.roles)) {
     return payload.account.roles
@@ -234,6 +244,7 @@ function normalizeRoleState(payload: AccountUpdatePayload): NormalizedAccountRol
   return [];
 }
 
+// Persist the validated account changes and related role assignments.
 async function persistAccountUpdate(
   tx: Prisma.TransactionClient,
   payload: AccountUpdatePayload,
@@ -415,6 +426,7 @@ async function persistAccountUpdate(
   webhookLog(payload.eventId, "Finished persistence for this payload.");
 }
 
+// Validate and process the submitted request.
 const postHandler = async (req: NextRequest) => {
   webhookLog(undefined, "Received webhook request.");
   const appSecret = getAppSecret();
@@ -513,6 +525,7 @@ const postHandler = async (req: NextRequest) => {
   });
 };
 
+// Handle the GET request and return the requested resource.
 const getHandler = async (req: NextRequest) => {
   return NextResponse.json(
     {

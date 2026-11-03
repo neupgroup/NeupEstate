@@ -1,9 +1,11 @@
 const PUBLIC_BASE_URL = 'https://neupgroup.com/estate';
 
+// XmlEscape for this route.
 function xmlEscape(value: string): string {
   return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
 }
 
+// Handle the GET request and return the requested resource.
 export async function GET(request: Request) {
   const paths = [
     '/home',

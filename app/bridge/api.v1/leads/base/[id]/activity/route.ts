@@ -54,6 +54,7 @@ export const dynamic = 'force-dynamic';
 
 type RouteContext = { params: Promise<{ id: string }> };
 
+// Return the requested resource collection or item for a GET request.
 export async function GET(_request: NextRequest, context: RouteContext) {
   const endpoint = 'bridge/api.v1/leads/base/[id]/activity:GET';
   let stage = 'permission-check';

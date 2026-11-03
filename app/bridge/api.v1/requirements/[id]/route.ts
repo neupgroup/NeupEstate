@@ -54,10 +54,12 @@ type Context = { params: Promise<{ id: string }> };
  * owned by the authenticated account.
  */
 
+// Identify authentication failures so the route can return HTTP 401.
 function isUnauthorized(error: unknown): boolean {
   return error instanceof Error && 'code' in error && error.code === 'UNAUTHENTICATED';
 }
 
+// Return the requested resource collection or item for a GET request.
 export async function GET(_request: NextRequest, { params }: Context) {
   try {
     const { id } = await params;
@@ -70,6 +72,7 @@ export async function GET(_request: NextRequest, { params }: Context) {
   }
 }
 
+// Validate and apply the requested partial update.
 export async function PATCH(request: NextRequest, { params }: Context) {
   try {
     const userId = await requireIdentity();
@@ -96,6 +99,7 @@ export async function PATCH(request: NextRequest, { params }: Context) {
   }
 }
 
+// Validate and apply the requested deletion.
 export async function DELETE(_request: NextRequest, { params }: Context) {
   try {
     const userId = await requireIdentity();

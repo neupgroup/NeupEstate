@@ -46,6 +46,7 @@ import { buildHandshakeGrantUrl } from '@/services/auth/bridge';
 import { getSignedAccountInformation } from '@/services/accounts/lookup';
 import { prisma } from '@neup/core/database/prisma';
 
+// Read the requested agencies and return their filtered page with total count.
 const getHandler = async (request: NextRequest) => {
   // Verify authentication
   const authResult = await getAuthenticatedAccount();

@@ -25,15 +25,18 @@ export const dynamic = 'force-dynamic';
 type Context = { params: Promise<{ accountId: string; collection: string }> };
 const COLLECTIONS = ['by-account', 'listed', 'saved', 'owned', 'being-worked'] as const;
 
+// Parse bounded pagination values for the requested property collection.
 function pagination(request: NextRequest) {
   const requestedLimit = Number(request.nextUrl.searchParams.get('limit') ?? 20);
   const requestedOffset = Number(request.nextUrl.searchParams.get('offset') ?? 0);
   return {
+    // Cap account property pages at 100 records.
     limit: Number.isSafeInteger(requestedLimit) && requestedLimit > 0 ? Math.min(requestedLimit, 100) : 20,
     offset: Number.isSafeInteger(requestedOffset) && requestedOffset >= 0 ? requestedOffset : 0,
   };
 }
 
+// Return the requested resource collection or item for a GET request.
 export async function GET(request: NextRequest, context: Context) {
   try {
     const { accountId, collection } = await context.params;

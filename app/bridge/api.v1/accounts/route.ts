@@ -13,10 +13,12 @@ import { listAccountProfiles, type AccountProfileType } from '@/services/account
 
 export const dynamic = 'force-dynamic';
 
+// Check whether the requested account profile type is supported by this endpoint.
 function isSupportedAccountProfileType(value: string): value is AccountProfileType {
   return value === 'independentAgent' || value === 'agency' || value === 'companyAgent';
 }
 
+// Return the requested resource collection or item for a GET request.
 export async function GET(request: NextRequest) {
   const params = request.nextUrl.searchParams;
   const types = params.getAll('type');
@@ -36,6 +38,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    // Cap account-profile pages at 25 records.
     const limit = Math.min(requestedLimit, 25);
     const offset = requestedOffset;
     const result = await listAccountProfiles(types[0], offset, limit);

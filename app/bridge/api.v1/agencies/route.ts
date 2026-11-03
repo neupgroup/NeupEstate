@@ -16,11 +16,13 @@ import { logger } from "@neup/logica/logger";
 
 export const dynamic = 'force-dynamic';
 
+// Read the requested agencies and return their filtered page with total count.
 const getHandler = async (request: NextRequest) => {
   try {
     const params = request.nextUrl.searchParams;
     const requestedLimit = Number(params.get('limit') ?? 10);
     const requestedOffset = Number(params.get('offset') ?? 0);
+    // Keep agency pages within the documented maximum of 25 rows.
     const limit = Number.isSafeInteger(requestedLimit) && requestedLimit > 0 ? Math.min(requestedLimit, 25) : 10;
     const offset = Number.isSafeInteger(requestedOffset) && requestedOffset >= 0 ? requestedOffset : 0;
     const filters = {

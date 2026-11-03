@@ -57,16 +57,19 @@ import { PERMISSIONS } from '@/services/permission-names';
 
 export const dynamic = 'force-dynamic';
 
+// Read validated pagination values from the request URL.
 function getPagination(request: NextRequest) {
   const params = request.nextUrl.searchParams;
   const requestedLimit = Number(params.get('limit') ?? 10);
   const requestedOffset = Number(params.get('offset') ?? 0);
   return {
+    // Cap base-lead pages at 25 records.
     limit: Number.isSafeInteger(requestedLimit) && requestedLimit > 0 ? Math.min(requestedLimit, 25) : 10,
     offset: Number.isSafeInteger(requestedOffset) && requestedOffset >= 0 ? requestedOffset : 0,
   };
 }
 
+// Return the requested resource collection or item for a GET request.
 export async function GET(request: NextRequest) {
   try {
     await requirePermission(PERMISSIONS.manage.selfLeadView);
@@ -95,6 +98,7 @@ export async function GET(request: NextRequest) {
 
     const data = records.map(({ contacts, sharedLeads, contact, ...lead }) => {
       const legacy = contact && typeof contact === 'object' ? contact as Record<string, unknown> : {};
+      // Prefer the normalized contact value and fall back to the legacy value.
       const pick = (type: string, fallback: unknown) => contacts.find((entry) => entry.type.toLowerCase() === type)?.value ?? fallback ?? null;
       return {
         ...lead,

@@ -36,6 +36,7 @@ type RolePayload = {
   };
 };
 
+// Return a structured webhook error response with its HTTP status.
 function fail(error: string, reason?: string, status = 400) {
   return NextResponse.json(
     reason ? { success: false, error, reason } : { success: false, error },
@@ -43,14 +44,17 @@ function fail(error: string, reason?: string, status = 400) {
   );
 }
 
+// Read the configured application secret used to verify webhook requests.
 function getAppSecret(): string {
   return process.env.BRIDGE_APP_SECRET || process.env.NEUP_APP_SECRET || "";
 }
 
+// Compute the SHA-256 digest for a webhook signature input.
 function sha256(input: string): Buffer {
   return createHash("sha256").update(input, "utf8").digest();
 }
 
+// Verify the request signature using the configured webhook secret.
 function verifySignature(
   iv: string,
   tag: string,
@@ -69,6 +73,7 @@ function verifySignature(
   return timingSafeEqual(a, b);
 }
 
+// Decrypt the authenticated webhook payload envelope.
 function decryptEnvelope(ivB64: string, tagB64: string, dataB64: string, appSecret: string): string {
   const key = sha256(appSecret);
   const iv = Buffer.from(ivB64, "base64");
@@ -82,6 +87,7 @@ function decryptEnvelope(ivB64: string, tagB64: string, dataB64: string, appSecr
   return plain.toString("utf8");
 }
 
+// Validate that the encrypted webhook envelope contains its required fields.
 function isValidEnvelope(body: EncryptedEnvelope): body is Required<EncryptedEnvelope> {
   return (
     typeof body.eventType === "string" &&
@@ -92,10 +98,12 @@ function isValidEnvelope(body: EncryptedEnvelope): body is Required<EncryptedEnv
   );
 }
 
+// Check whether the webhook event name is a supported role event.
 function isRoleEventType(eventType: unknown): eventType is RoleEventType {
   return eventType === "role.updated" || eventType === "role.deleted";
 }
 
+// Validate the decoded role payload before persistence.
 function isValidRolePayload(input: unknown): input is RolePayload {
   const payload = input as RolePayload;
   const role = payload?.role;
@@ -137,6 +145,7 @@ function isValidRolePayload(input: unknown): input is RolePayload {
   );
 }
 
+// Resolve the role identifier from the role event payload.
 function getRoleId(payload: RolePayload): string | undefined {
   const candidate = payload.role?.id;
   if (typeof candidate !== "string") return undefined;
@@ -144,17 +153,20 @@ function getRoleId(payload: RolePayload): string | undefined {
   return trimmed.length > 0 ? trimmed : undefined;
 }
 
+// Map a role event type to its database action.
 function toAction(eventType: RoleEventType): RoleAction {
   if (eventType === "role.updated") return "updated_role";
   return "deleted_role";
 }
 
+// Convert values to the JSON input representation accepted by Prisma.
 function normalizeJsonValue(value: unknown): Prisma.InputJsonValue | Prisma.NullableJsonNullValueInput | undefined {
   if (value === undefined) return undefined;
   if (value === null) return Prisma.JsonNull;
   return value as Prisma.InputJsonValue;
 }
 
+// PersistRoleEvent for this route.
 async function persistRoleEvent(
   tx: Prisma.TransactionClient,
   payload: RolePayload,
@@ -204,6 +216,7 @@ async function persistRoleEvent(
   return existingRole ? "updated_role" : "created_role";
 }
 
+// Validate and process the submitted request.
 const postHandler = async (req: NextRequest) => {
   const appSecret = getAppSecret();
   if (!appSecret) {
@@ -269,6 +282,7 @@ const postHandler = async (req: NextRequest) => {
   return NextResponse.json({ success: true, actions });
 };
 
+// Handle the GET request and return the requested resource.
 const getHandler = async (req: NextRequest) => {
   return NextResponse.json(
     {

@@ -63,6 +63,7 @@ const EMPTY_REPRESENTATIVE_SELECTION: PropertyRepresentativeSelection = {
   owners: false,
 };
 
+// Split the include expression into its top-level selections.
 function splitInclude(value: string): string[] {
   const parts: string[] = [];
   let depth = 0;
@@ -87,6 +88,7 @@ function splitInclude(value: string): string[] {
   return parts;
 }
 
+// Validate property include selections and derive the requested fields.
 function parsePropertyIncludes(value?: string | null): { fields?: string[]; representatives: PropertyRepresentativeSelection } {
   if (!value) return { representatives: EMPTY_REPRESENTATIVE_SELECTION };
   const propertyFields: string[] = [];
@@ -116,6 +118,18 @@ function parsePropertyIncludes(value?: string | null): { fields?: string[]; repr
   return { fields: propertyFields.length ? propertyFields : undefined, representatives };
 }
 
+// Resolve a property code from supported query and header aliases.
+function readPropertyCode(request: NextRequest): string | undefined {
+  const params = request.nextUrl.searchParams;
+  const headers = request.headers;
+  return params.get('propertyCode')?.trim()
+    || params.get('property_code')?.trim()
+    || params.get('customId')?.trim()
+    || headers.get('propertyCode')?.trim()
+    || headers.get('property_code')?.trim()
+    || headers.get('customId')?.trim();
+}
+
 /* ::neup.documentation::bridge-properties-id-get-handler
 ::function GET property details by id
 ::end */
@@ -123,7 +137,7 @@ const getHandler = async (req: NextRequest, context: Context) => {
   try {
     const routeId = (await context.params).id?.trim();
     const propertyId = routeId || req.nextUrl.searchParams.get('propertyId')?.trim() || req.headers.get('propertyId')?.trim();
-    const propertyCode = req.nextUrl.searchParams.get('propertyCode')?.trim() || req.nextUrl.searchParams.get('property_code')?.trim() || req.nextUrl.searchParams.get('customId')?.trim() || req.headers.get('propertyCode')?.trim() || req.headers.get('property_code')?.trim() || req.headers.get('customId')?.trim();
+    const propertyCode = readPropertyCode(req);
     const includeParam = req.nextUrl.searchParams.get('include') ?? req.nextUrl.searchParams.get('fields');
     let includes: ReturnType<typeof parsePropertyIncludes>;
     try {
@@ -181,7 +195,8 @@ const getHandler = async (req: NextRequest, context: Context) => {
 ::end */
 const patchHandler = async (req: NextRequest, context: Context) => {
   try {
-    const body = await req.json().catch(() => ({})); const propertyId = (await context.params).id;
+    const body = await req.json().catch(() => ({}));
+    const propertyId = (await context.params).id;
     const accountId = typeof body?.accountId === 'string' ? body.accountId.trim() : req.headers.get('accountId')?.trim();
     const data = body?.property && typeof body.property === 'object' ? body.property : body?.data && typeof body.data === 'object' ? body.data : body;
     if (!accountId) return Response.json({ success: false, error: 'Provide accountId in the request body or headers.' }, { status: 400 });
@@ -197,6 +212,7 @@ const patchHandler = async (req: NextRequest, context: Context) => {
 export const GET = getHandler;
 export const PATCH = patchHandler;
 
+// Submit a property deletion request for the authenticated account.
 const deleteHandler = async (req: NextRequest, context: Context) => {
   try {
     const body = await req.json().catch(() => ({}));

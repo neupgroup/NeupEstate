@@ -65,20 +65,24 @@ export const dynamic = 'force-dynamic';
  * Validation failure: { "success": false, "error": "Invalid requirement.", "details": { "purpose": ["Invalid option"] } }
  */
 
+// Identify authentication failures so the route can return HTTP 401.
 function isUnauthorized(error: unknown): boolean {
   return error instanceof Error && 'code' in error && error.code === 'UNAUTHENTICATED';
 }
 
+// Read validated pagination values from the request URL.
 function getPagination(request: NextRequest) {
   const params = request.nextUrl.searchParams;
   const rawLimit = Number(params.get('limit') ?? 25);
   const rawOffset = Number(params.get('offset') ?? 0);
   return {
+    // Cap requirement pages at 100 records.
     limit: Number.isSafeInteger(rawLimit) && rawLimit > 0 ? Math.min(rawLimit, 100) : 25,
     offset: Number.isSafeInteger(rawOffset) && rawOffset >= 0 ? rawOffset : 0,
   };
 }
 
+// Return the requested resource collection or item for a GET request.
 export async function GET(request: NextRequest) {
   try {
     const params = request.nextUrl.searchParams;
@@ -101,6 +105,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
+// Validate and process the resource submitted in a POST request.
 export async function POST(request: NextRequest) {
   try {
     await requirePermission(PERMISSIONS.public.requirementCreate);

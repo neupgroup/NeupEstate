@@ -100,6 +100,7 @@ type RouteContext = { params: Promise<{ id: string }> };
 const activityTypes: LeadActivityType[] = ['follow_up', 'visit', 'meeting', 'remarks'];
 const followUpMethods: FollowUpMethod[] = ['phone call', 'whatsapp', 'email'];
 
+// Map known authorization errors to public HTTP error responses.
 function errorResponse(error: unknown) {
   const unauthenticated = error instanceof Error && 'code' in error && error.code === 'UNAUTHENTICATED';
   const denied = error instanceof Error && error.message.startsWith('Permission denied:');
@@ -111,6 +112,7 @@ function errorResponse(error: unknown) {
   return { details, response: NextResponse.json({ success: false, error: status === 401 ? 'Authentication required.' : status === 403 ? 'Forbidden.' : 'Internal server error.' }, { status }) };
 }
 
+// Log route errors with endpoint context and safe diagnostic details.
 async function logRouteError(endpoint: string, error: unknown, details: Record<string, unknown>) {
   try {
     await logger().type(endpoint).data({ ...details, error }).error();
@@ -120,6 +122,7 @@ async function logRouteError(endpoint: string, error: unknown, details: Record<s
   }
 }
 
+// Return the requested resource collection or item for a GET request.
 export async function GET(_request: NextRequest, context: RouteContext) {
   const endpoint = 'bridge/api.v1/leads/[id]/activity:GET';
   let stage = 'permission-check';
@@ -144,6 +147,7 @@ export async function GET(_request: NextRequest, context: RouteContext) {
   }
 }
 
+// Validate and process the resource submitted in a POST request.
 export async function POST(request: NextRequest, context: RouteContext) {
   const endpoint = 'bridge/api.v1/leads/[id]/activity:POST';
   let stage = 'permission-check';

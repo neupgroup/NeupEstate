@@ -43,6 +43,26 @@ import { logger } from "@neup/logica/logger";
 
 export const dynamic = 'force-dynamic';
 
+// Resolve the property identifier from supported query and body aliases.
+function readPropertyId(request: NextRequest, body: Record<string, unknown>): string {
+  return request.nextUrl.searchParams.get('property')?.trim()
+    || request.nextUrl.searchParams.get('property_id')?.trim()
+    || (typeof body.property === 'string' ? body.property.trim() : '')
+    || (typeof body.property_id === 'string' ? body.property_id.trim() : '');
+}
+
+// Build the optional contact fields accepted by the inquiry service.
+function buildInquiryContact(body: Record<string, unknown>, propertyId: string) {
+  return {
+    propertyId,
+    phone: typeof body.phone === 'string' ? body.phone : undefined,
+    email: typeof body.email === 'string' ? body.email : undefined,
+    message: typeof body.message === 'string' ? body.message : undefined,
+    name: typeof body.name === 'string' ? body.name : undefined,
+  };
+}
+
+// Create an inquiry from the bridge payload and refresh the management list.
 const postHandler = async (req: NextRequest) => {
   try {
     let body: Record<string, unknown> = {};
@@ -53,16 +73,12 @@ const postHandler = async (req: NextRequest) => {
       body = {};
     }
 
-    const propertyId =
-      req.nextUrl.searchParams.get('property')?.trim() ||
-      req.nextUrl.searchParams.get('property_id')?.trim() ||
-      (typeof body.property === 'string' ? body.property.trim() : '') ||
-      (typeof body.property_id === 'string' ? body.property_id.trim() : '');
+    const propertyId = readPropertyId(req, body);
 
     const inquiryId = await createInquiry(
       typeof body.account_id === 'string' ? body.account_id : undefined,
       "bridge",
-      { propertyId, phone: typeof body.phone === 'string' ? body.phone : undefined, email: typeof body.email === 'string' ? body.email : undefined, message: typeof body.message === 'string' ? body.message : undefined, name: typeof body.name === 'string' ? body.name : undefined },
+      buildInquiryContact(body, propertyId),
     );
 
     revalidatePath('/manage/inquiries');

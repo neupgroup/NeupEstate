@@ -16,6 +16,7 @@ import { logica } from '@neup/logica';
 
 export const dynamic = 'force-dynamic';
 
+// Validate and record activity events for the authenticated account.
 const postHandler = async (request: NextRequest) => {
   try {
     const body = await request.json();

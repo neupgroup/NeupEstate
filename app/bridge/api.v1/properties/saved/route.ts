@@ -26,16 +26,19 @@ export const dynamic = 'force-dynamic';
 
 const SavePropertySchema = z.object({ propertyId: z.string().min(1) });
 
+// Read validated pagination values from the request URL.
 function getPagination(request: NextRequest) {
   const params = request.nextUrl.searchParams;
   const requestedLimit = Number(params.get('limit') ?? 25);
   const requestedOffset = Number(params.get('offset') ?? 0);
   return {
+    // Cap saved-property pages at 100 records.
     limit: Number.isSafeInteger(requestedLimit) && requestedLimit > 0 ? Math.min(requestedLimit, 100) : 25,
     offset: Number.isSafeInteger(requestedOffset) && requestedOffset >= 0 ? requestedOffset : 0,
   };
 }
 
+// Resolve the requested saved-property account and enforce cross-account access.
 async function getTargetAccountId(request: NextRequest, currentAccountId: string): Promise<string | NextResponse> {
   const requestedAccount = request.nextUrl.searchParams.get('account');
   if (!requestedAccount) return NextResponse.json({ success: false, error: "account must be 'me' or an account ID." }, { status: 400 });
@@ -46,6 +49,7 @@ async function getTargetAccountId(request: NextRequest, currentAccountId: string
   return requestedAccount;
 }
 
+// Map known authorization errors to public HTTP error responses.
 function errorResponse(error: unknown) {
   const unauthorized = error instanceof Error && 'code' in error && error.code === 'UNAUTHENTICATED';
   const denied = error instanceof Error && error.message.startsWith('Permission denied:');

@@ -45,6 +45,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { logger } from "@neup/logica/logger";
 import { createAccount } from '@/services/accounts/create';
 
+// Resolve the validated post-authentication redirect destination.
 function getRedirectTarget(request: NextRequest): string {
   const redirectsTo = request.nextUrl.searchParams.get('redirectsTo');
   if (redirectsTo) {
@@ -59,6 +60,7 @@ function getRedirectTarget(request: NextRequest): string {
   return '/home';
 }
 
+// Process the authentication callback and return its response.
 async function handleCallback(request: NextRequest) {
   try {
     await createAccount();
@@ -72,10 +74,12 @@ async function handleCallback(request: NextRequest) {
   }
 }
 
+// Delegate GET callbacks to the shared authentication callback flow.
 const getHandler = async (req: NextRequest) => {
   return await handleCallback(req);
 };
 
+// Delegate POST callbacks to the shared authentication callback flow.
 const postHandler = async (req: NextRequest) => {
   return await handleCallback(req);
 };

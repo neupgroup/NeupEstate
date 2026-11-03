@@ -3,13 +3,16 @@ const PUBLIC_BASE_URL = 'https://neupgroup.com/estate';
 
 const PAGE_SIZE = 50_000;
 
+// XmlEscape for this route.
 function xmlEscape(value: string): string {
   return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
 }
 
+// Handle the GET request and return the requested resource.
 export async function GET(request: Request) {
   const propertyCount = await prisma.property.count({ where: { isApproved: true, isDeleted: false } });
 
+  // Divide the property count into sitemap-sized groups and keep one group for empty sites.
   const propertySitemaps = Array.from({ length: Math.max(1, Math.ceil(propertyCount / PAGE_SIZE)) }, (_, i) => `/sitemap/properties-${i + 1}.xml`);
 
   const entries = [

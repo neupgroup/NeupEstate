@@ -35,6 +35,7 @@ import { getAuthenticatedMeResponse } from '@/services/auth/me';
 
 export const dynamic = 'force-dynamic';
 
+// Read the requested agencies and return their filtered page with total count.
 const getHandler = async (req: NextRequest) => {
   return getAuthenticatedMeResponse(req);
 };

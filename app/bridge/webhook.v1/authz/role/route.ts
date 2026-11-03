@@ -56,15 +56,18 @@ class ScopeValidationError extends Error {}
 
 type UnknownRecord = Record<string, unknown>;
 
+// Determine whether Record is true.
 function isRecord(value: unknown): value is UnknownRecord {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 }
 
+// Normalize one capability scope token for authorization comparison.
 function normalizeScopeToken(value: string): string | null {
   const trimmed = value.trim();
   return trimmed.length > 0 ? trimmed : null;
 }
 
+// Split a capability scope string into normalized tokens.
 function splitScopeTokens(value: string): string[] {
   return Array.from(
     new Set(
@@ -76,6 +79,7 @@ function splitScopeTokens(value: string): string[] {
   );
 }
 
+// Add a supported capability scope token to the authorization set.
 function addAllowedScopeToken(set: Set<string>, value: string, keyPrefix?: string) {
   const token = normalizeScopeToken(value);
   if (!token) return;
@@ -86,6 +90,7 @@ function addAllowedScopeToken(set: Set<string>, value: string, keyPrefix?: strin
   }
 }
 
+// Collect all supported scope tokens from a capability structure.
 function collectAllowedScopeTokens(value: unknown, set: Set<string>, keyPrefix?: string) {
   if (typeof value === 'string') {
     for (const token of splitScopeTokens(value)) {
@@ -120,6 +125,7 @@ function collectAllowedScopeTokens(value: unknown, set: Set<string>, keyPrefix?:
   }
 }
 
+// Extract the normalized allowlisted scopes from a capability.
 function extractAllowedScopeTokens(capability: unknown): string[] {
   if (!isRecord(capability)) return [];
 
@@ -141,6 +147,7 @@ function extractAllowedScopeTokens(capability: unknown): string[] {
   return Array.from(tokens).sort();
 }
 
+// Ensure a requested role operation stays within the capability scope.
 async function validateRoleCapabilityScope(
   data: Record<string, unknown>,
   existingId?: string,
@@ -374,6 +381,7 @@ function missingField(field: string) {
   return NextResponse.json({ error: `Missing required field: \`${field}\`.` }, { status: 400 });
 }
 
+// Return a consistent error for an unsupported role operation.
 function unknownOperation(op: string) {
   return NextResponse.json(
     {

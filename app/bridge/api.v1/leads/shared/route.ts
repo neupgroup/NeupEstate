@@ -59,6 +59,7 @@ import { PERMISSIONS } from '@/services/permission-names';
 
 export const dynamic = 'force-dynamic';
 
+// Return the requested resource collection or item for a GET request.
 export async function GET(request: NextRequest) {
   let stage = 'permission-check';
   try {
@@ -77,6 +78,7 @@ export async function GET(request: NextRequest) {
     const params = request.nextUrl.searchParams;
     const requestedLimit = Number(params.get('limit') ?? 10);
     const requestedOffset = Number(params.get('offset') ?? 0);
+    // Cap shared-lead pages at 25 records.
     const limit = Number.isSafeInteger(requestedLimit) && requestedLimit > 0 ? Math.min(requestedLimit, 25) : 10;
     const offset = Number.isSafeInteger(requestedOffset) && requestedOffset >= 0 ? requestedOffset : 0;
     const where = canViewAll ? {} : { owner: accountId };
@@ -98,6 +100,7 @@ export async function GET(request: NextRequest) {
       const legacy = baseLead.contact && typeof baseLead.contact === 'object'
         ? baseLead.contact as Record<string, unknown>
         : {};
+      // Prefer the normalized contact value and fall back to the legacy value.
       const pick = (type: string, fallback: unknown) => baseLead.contacts.find((entry) => entry.type.toLowerCase() === type)?.value ?? fallback ?? null;
       return {
         ...lead,
