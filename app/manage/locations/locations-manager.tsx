@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@neup/components/ui/button';
 import { Input } from '@neup/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
@@ -21,9 +22,35 @@ const LOCATION_TYPES = [
 ];
 
 // Renders the location creation form and editable location records.
-export function LocationsManager({ locations }: { locations: LocationRow[] }) {
+export function LocationsManager({
+  locations,
+  allLocations,
+  totalLocations,
+  searchQuery,
+}: {
+  locations: LocationRow[];
+  allLocations: LocationRow[];
+  totalLocations: number;
+  searchQuery: string;
+}) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState('');
+  const [areaSearch, setAreaSearch] = useState(searchQuery);
+
+  // Applies the area search and resets pagination to its first page.
+  function searchAreas(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const params = new URLSearchParams(searchParams.toString());
+    const query = areaSearch.trim();
+    if (query) params.set('area', query);
+    else params.delete('area');
+    params.delete('page');
+    const queryString = params.toString();
+    router.push(queryString ? `${pathname}?${queryString}` : pathname);
+  }
 
   // Runs a server action and presents its result without leaving the page.
   function runAction(action: () => Promise<void>, successMessage: string) {
@@ -52,7 +79,7 @@ export function LocationsManager({ locations }: { locations: LocationRow[] }) {
         </select>
         <select name="childOf" defaultValue={location?.childOf ?? ''} className="h-10 rounded-md border border-input bg-background px-3 text-sm">
           <option value="">No parent</option>
-          {locations.filter((candidate) => candidate.id !== location?.id).map((candidate) => (
+          {allLocations.filter((candidate) => candidate.id !== location?.id).map((candidate) => (
             <option key={candidate.id} value={candidate.id}>{candidate.title} ({candidate.type})</option>
           ))}
         </select>
@@ -75,13 +102,24 @@ export function LocationsManager({ locations }: { locations: LocationRow[] }) {
         <CardContent><LocationFields /></CardContent>
       </Card>
       <Card>
-        <CardHeader><CardTitle>All locations</CardTitle><CardDescription>{locations.length} locations</CardDescription></CardHeader>
+        <CardHeader><CardTitle>All locations</CardTitle><CardDescription>Showing {locations.length} of {totalLocations} locations</CardDescription></CardHeader>
         <CardContent className="space-y-4">
+          <form onSubmit={searchAreas} className="flex flex-col gap-2 sm:flex-row">
+            <Input
+              type="search"
+              value={areaSearch}
+              onChange={(event) => setAreaSearch(event.target.value)}
+              placeholder="Search areas by name, type, or postal code"
+              aria-label="Search locations by name, type, or postal code"
+            />
+            <Button type="submit" variant="outline">Search</Button>
+          </form>
+          {locations.length === 0 && <p className="text-sm text-muted-foreground">No locations match this search.</p>}
           {locations.map((location) => (
             <div key={location.id} className="space-y-3 rounded-md border p-4">
               <LocationFields location={location} />
               <div className="flex items-center justify-between text-sm text-muted-foreground">
-                <span>{location.status}{location.childOf ? ` · Parent: ${locations.find((item) => item.id === location.childOf)?.title ?? 'Unknown'}` : ''}</span>
+                <span>{location.status}{location.childOf ? ` · Parent: ${allLocations.find((item) => item.id === location.childOf)?.title ?? 'Unknown'}` : ''}</span>
                 {location.status !== 'inactive' && (
                   <Button variant="outline" size="sm" disabled={isPending} onClick={() => runAction(() => setLocationInactiveAction(location.id), `${location.title} marked inactive.`)}>Mark inactive</Button>
                 )}
