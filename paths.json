@@ -1,0 +1,165 @@
+{
+  "version": 1,
+  "paths": [
+    {
+      "path": "/api/auth/me",
+      "methods": ["GET"],
+      "source": "app/api/auth/me/route.ts"
+    },
+    {
+      "path": "/api/auth/user",
+      "methods": ["GET"],
+      "source": "app/api/auth/user/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/accounts",
+      "methods": ["GET"],
+      "source": "app/bridge/api.v1/accounts/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/accounts/[id]",
+      "methods": ["GET"],
+      "source": "app/bridge/api.v1/accounts/[id]/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/activities",
+      "methods": ["POST"],
+      "source": "app/bridge/api.v1/activities/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/agencies",
+      "methods": ["GET"],
+      "source": "app/bridge/api.v1/agencies/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/agents",
+      "methods": ["GET"],
+      "source": "app/bridge/api.v1/agents/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/auth/callback",
+      "methods": ["GET", "POST"],
+      "source": "app/bridge/api.v1/auth/callback/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/auth/me",
+      "methods": ["GET"],
+      "source": "app/bridge/api.v1/auth/me/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/auth/user",
+      "methods": ["GET"],
+      "source": "app/bridge/api.v1/auth/user/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/crawl/links",
+      "methods": ["GET"],
+      "source": "app/bridge/api.v1/crawl/links/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/crawl/sitemap",
+      "methods": ["GET"],
+      "source": "app/bridge/api.v1/crawl/sitemap/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/inquiry",
+      "methods": ["POST"],
+      "source": "app/bridge/api.v1/inquiry/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/intelligence/property/[id]",
+      "methods": ["GET"],
+      "source": "app/bridge/api.v1/intelligence/property/[id]/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/leads/[id]/activity",
+      "methods": ["GET", "POST"],
+      "source": "app/bridge/api.v1/leads/[id]/activity/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/leads/base",
+      "methods": ["GET"],
+      "source": "app/bridge/api.v1/leads/base/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/leads/base/[id]/activity",
+      "methods": ["GET"],
+      "source": "app/bridge/api.v1/leads/base/[id]/activity/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/leads/shared",
+      "methods": ["GET"],
+      "source": "app/bridge/api.v1/leads/shared/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/properties",
+      "methods": ["GET", "POST"],
+      "source": "app/bridge/api.v1/properties/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/properties/[id]",
+      "methods": ["GET", "PATCH", "DELETE"],
+      "source": "app/bridge/api.v1/properties/[id]/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/properties/account/[accountId]/[collection]",
+      "methods": ["GET"],
+      "source": "app/bridge/api.v1/properties/account/[accountId]/[collection]/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/properties/saved",
+      "methods": ["GET", "POST", "DELETE"],
+      "source": "app/bridge/api.v1/properties/saved/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/properties/search",
+      "methods": ["GET", "POST"],
+      "source": "app/bridge/api.v1/properties/search/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/requirements",
+      "methods": ["GET", "POST"],
+      "source": "app/bridge/api.v1/requirements/route.ts"
+    },
+    {
+      "path": "/bridge/api.v1/requirements/[id]",
+      "methods": ["GET", "PATCH", "DELETE"],
+      "source": "app/bridge/api.v1/requirements/[id]/route.ts"
+    },
+    {
+      "path": "/bridge/mcp.v1",
+      "methods": ["GET", "POST", "DELETE"],
+      "source": "app/bridge/mcp.v1/route.ts"
+    },
+    {
+      "path": "/bridge/webhook.v1/account/updates",
+      "methods": ["GET", "POST"],
+      "source": "app/bridge/webhook.v1/account/updates/route.ts"
+    },
+    {
+      "path": "/bridge/webhook.v1/authz/role",
+      "methods": ["POST"],
+      "source": "app/bridge/webhook.v1/authz/role/route.ts"
+    },
+    {
+      "path": "/bridge/webhook.v1/roles",
+      "methods": ["GET", "POST"],
+      "source": "app/bridge/webhook.v1/roles/route.ts"
+    },
+    {
+      "path": "/sitemap.xml",
+      "methods": ["GET"],
+      "source": "app/sitemap.xml/route.ts"
+    },
+    {
+      "path": "/sitemap/[variable]",
+      "methods": ["GET"],
+      "source": "app/sitemap/[variable]/route.ts"
+    },
+    {
+      "path": "/sitemap/static.xml",
+      "methods": ["GET"],
+      "source": "app/sitemap/static.xml/route.ts"
+    }
+  ]
+}

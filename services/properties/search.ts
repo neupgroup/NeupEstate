@@ -69,11 +69,13 @@ export async function searchProperties(
 ): Promise<{ success: boolean; data: { properties: Property[]; totalCount: number, appliedFilters: PropertyFilters } | null; error: string | null }> {
   try {
     noStore(); // Dynamic search, should not be cached
-    const { q, page, limit: requestedLimit, statuses, orderBy, agencyId, agentId, ...structuredFilters } = params;
+    const { q, page, offset: requestedOffset, limit: requestedLimit, statuses, orderBy, agencyId, agentId, ...structuredFilters } = params;
     const currentPage = Math.max(1, Number(page) || 1);
     const limit = Math.min(100, Math.max(1, Number(requestedLimit) || 18));
-    const offset = (currentPage - 1) * limit;
-    const candidateLimit = Math.min(2000, offset + limit);
+    const offset = Number.isSafeInteger(Number(requestedOffset)) && Number(requestedOffset) >= 0
+      ? Number(requestedOffset)
+      : (currentPage - 1) * limit;
+    const candidateLimit = offset + limit;
     const normalizedFilters = normalizeSearchFilters(structuredFilters);
     const isStructuredRequest = typeof params === 'object' && !('q' in params) && Object.keys(structuredFilters).length > 0;
     const normalizedStatuses = Array.isArray(statuses) ? statuses.map(String) : undefined;
@@ -84,8 +86,8 @@ export async function searchProperties(
     if (!query || isStructuredRequest || isRecordId) {
       const directFilters = isRecordId ? { ...normalizedFilters, id: query } : normalizedFilters;
       if (!normalizedStatuses?.length) directFilters.status = 'approved';
-      const result = await searchPropertyBatch(directFilters, currentPage, limit, candidateLimit, normalizedStatuses, orderBy, agencyId, agentId);
-      return { success: true, data: { ...result, appliedFilters: directFilters }, error: null };
+      const result = await searchPropertyBatch(directFilters, 1, candidateLimit, candidateLimit, normalizedStatuses, orderBy, agencyId, agentId);
+      return { success: true, data: { ...paginateSearchBatch(result, offset, limit), appliedFilters: directFilters }, error: null };
     }
 
     const directFilters: PropertyFilters = { ...normalizedFilters, searchTerm: query };
@@ -95,7 +97,7 @@ export async function searchProperties(
     const [directResult, niaFilters] = await Promise.all([directSearchPromise, niaFiltersPromise]);
 
     if (!niaFilters || Object.keys(niaFilters).length === 0) {
-      return { success: true, data: { ...paginateSearchBatch(directResult, currentPage, limit), appliedFilters: directFilters }, error: null };
+      return { success: true, data: { ...paginateSearchBatch(directResult, offset, limit), appliedFilters: directFilters }, error: null };
     }
 
     const niaSearchFilters: PropertyFilters = { ...niaFilters, ...normalizedFilters };
@@ -105,7 +107,7 @@ export async function searchProperties(
       searchPropertyBatch(niaSearchFilters, 1, candidateLimit, candidateLimit, normalizedStatuses, orderBy, agencyId, agentId),
       searchPropertyBatch(intersectionFilters, 1, 1, 1, normalizedStatuses, orderBy, agencyId, agentId),
     ]);
-    const mergedResult = mergeSearchBatches(directResult, niaResult, intersectionResult.totalCount, currentPage, limit);
+    const mergedResult = mergeSearchBatches(directResult, niaResult, intersectionResult.totalCount, offset, limit);
     const appliedFilters = { ...niaSearchFilters, ...(query ? { searchTerm: query } : {}) };
 
     return { success: true, data: { ...mergedResult, appliedFilters }, error: null };
@@ -141,6 +143,8 @@ async function searchPropertyBatch(
 
 // Bound the Nia wait so an unavailable intelligence service cannot block text-search results.
 async function getNiaFiltersWithinSearchTimeout(query: string): Promise<PropertyFilters | null> {
+  if (!query.trim()) return null;
+
   let timeoutId: ReturnType<typeof setTimeout> | undefined;
   const timeout = new Promise<null>((resolve) => {
     timeoutId = setTimeout(() => resolve(null), 12_000);
@@ -159,8 +163,7 @@ async function getNiaFiltersWithinSearchTimeout(query: string): Promise<Property
 }
 
 // Return one page from a single search batch.
-function paginateSearchBatch(batch: PropertySearchBatch, page: number, limit: number): PropertySearchBatch {
-  const offset = (page - 1) * limit;
+function paginateSearchBatch(batch: PropertySearchBatch, offset: number, limit: number): PropertySearchBatch {
   return { properties: batch.properties.slice(offset, offset + limit), totalCount: batch.totalCount };
 }
 
@@ -169,7 +172,7 @@ function mergeSearchBatches(
   directResult: PropertySearchBatch,
   niaResult: PropertySearchBatch,
   overlapTotalCount: number,
-  page: number,
+  offset: number,
   limit: number,
 ): PropertySearchBatch {
   const propertiesById = new Map<string, Property>();
@@ -182,7 +185,6 @@ function mergeSearchBatches(
     mergedProperties.length,
     directResult.totalCount + niaResult.totalCount - overlapTotalCount,
   );
-  const offset = (page - 1) * limit;
   return {
     properties: mergedProperties.slice(offset, offset + limit),
     totalCount: estimatedTotalCount,

@@ -6,7 +6,8 @@
 Searches properties using text and/or structured filters. GET reads search
 parameters from the URL. POST reads filters, pagination, and ordering from a
 JSON body and rejects search parameters in the URL. Use POST when the encoded
-GET URL would exceed 2,000 bytes.
+GET URL would exceed 2,000 bytes. Pagination uses `offset` and `limit`; `limit`
+defaults to 15 and cannot exceed 15.
 
 ::public end
 ::end
@@ -27,18 +28,18 @@ const SEARCH_PARAMETERS = new Set([
   'maxBedrooms', 'minBathrooms', 'maxBathrooms', 'minKitchens', 'maxKitchens',
   'minDiningRooms', 'maxDiningRooms', 'minLivingRooms', 'maxLivingRooms',
   'minCarParkingSpots', 'maxCarParkingSpots', 'minBikeParkingSpots', 'maxBikeParkingSpots',
-  'limit', 'page', 'orderBy', 'agency', 'agent', 'include', 'fields',
+  'limit', 'offset', 'orderBy', 'agency', 'agent', 'include', 'fields',
 ]);
 
 const RESERVED_SEARCH_PARAMETERS = new Set([
-  'include', 'fields', 'orderBy', 'page', 'limit', 'agency', 'agent',
+  'include', 'fields', 'orderBy', 'limit', 'offset', 'agency', 'agent',
 ]);
 
 type SearchInput = {
   q?: string;
   filters?: Record<string, unknown>;
-  page?: number;
-  pageSize?: number;
+  offset?: number;
+  limit?: number;
   statuses?: string[];
   orderBy?: 'newestFirst' | 'oldestFirst';
   agencyId?: string;
@@ -72,8 +73,8 @@ function parseGetInput(request: NextRequest): { input?: SearchInput; response?: 
   const input: SearchInput = {
     q: params.get('q') ?? params.get('query') ?? params.get('search') ?? params.get('searchTerm') ?? params.get('search_term') ?? undefined,
     filters,
-    page: parseInteger(params.get('page'), 1),
-    pageSize: parseInteger(params.get('limit'), 25),
+    offset: parseInteger(params.get('offset'), 0),
+    limit: parseInteger(params.get('limit'), 15),
     statuses: parseList(params.get('status') ?? params.get('statuses')),
     orderBy: params.get('orderBy') === 'oldestFirst' ? 'oldestFirst' : 'newestFirst',
     agencyId: params.get('agency') ?? undefined,
@@ -96,10 +97,10 @@ function parseList(value: string | null): string[] | undefined {
 
 // Validate endpoint filters and call the shared property-search implementation.
 async function runSearch(input: SearchInput) {
-  const page = input.page ?? 1;
-  const pageSize = input.pageSize ?? 25;
-  if (!Number.isSafeInteger(page) || page < 1 || !Number.isSafeInteger(pageSize) || pageSize < 1 || pageSize > 100) {
-    return NextResponse.json({ success: false, error: 'page must be positive and pageSize must be between 1 and 100.' }, { status: 400 });
+  const offset = input.offset ?? 0;
+  const limit = input.limit ?? 15;
+  if (!Number.isSafeInteger(offset) || offset < 0 || !Number.isSafeInteger(limit) || limit < 1 || limit > 15) {
+    return NextResponse.json({ success: false, error: 'offset must be a non-negative integer and limit must be between 1 and 15.' }, { status: 400 });
   }
   if (input.orderBy && !['newestFirst', 'oldestFirst'].includes(input.orderBy)) {
     return NextResponse.json({ success: false, error: 'orderBy must be newestFirst or oldestFirst.' }, { status: 400 });
@@ -114,8 +115,8 @@ async function runSearch(input: SearchInput) {
   const result = await searchProperties({
     ...parsedFilters.data,
     ...(input.q !== undefined ? { q: input.q } : {}),
-    page,
-    limit: pageSize,
+    offset,
+    limit,
     statuses: input.statuses,
     orderBy: input.orderBy,
     agencyId: input.agencyId,
@@ -129,9 +130,9 @@ async function runSearch(input: SearchInput) {
     success: true,
     properties: result.data.properties,
     totalCount: result.data.totalCount,
-    page,
-    pageSize,
-    totalPages: Math.ceil(result.data.totalCount / pageSize),
+    offset,
+    limit,
+    hasMore: offset + result.data.properties.length < result.data.totalCount,
     appliedFilters: result.data.appliedFilters,
   });
 }
@@ -170,7 +171,7 @@ export async function POST(request: NextRequest) {
     }
 
     const bodyRecord = body as Record<string, unknown>;
-    const allowedBodyKeys = new Set(['q', 'filters', 'page', 'pageSize', 'statuses', 'orderBy', 'agencyId', 'agentId']);
+    const allowedBodyKeys = new Set(['q', 'filters', 'offset', 'limit', 'statuses', 'orderBy', 'agencyId', 'agentId']);
     const unknownKey = Object.keys(bodyRecord).find((key) => !allowedBodyKeys.has(key));
     if (unknownKey) return NextResponse.json({ success: false, error: `Unknown search field '${unknownKey}'.` }, { status: 400 });
     if (bodyRecord.q !== undefined && (typeof bodyRecord.q !== 'string' || bodyRecord.q.length > 500)) {
@@ -186,8 +187,8 @@ export async function POST(request: NextRequest) {
     const input: SearchInput = {
       q: bodyRecord.q as string | undefined,
       filters: bodyRecord.filters as Record<string, unknown> | undefined,
-      page: bodyRecord.page === undefined ? 1 : Number(bodyRecord.page),
-      pageSize: bodyRecord.pageSize === undefined ? 25 : Number(bodyRecord.pageSize),
+      offset: bodyRecord.offset === undefined ? 0 : Number(bodyRecord.offset),
+      limit: bodyRecord.limit === undefined ? 15 : Number(bodyRecord.limit),
       statuses: bodyRecord.statuses as string[] | undefined,
       orderBy: bodyRecord.orderBy as SearchInput['orderBy'],
       agencyId: bodyRecord.agencyId as string | undefined,
