@@ -1,6 +1,7 @@
 'use server';
 
 import { createNiaResponse, type NiaInputItem } from '@neup/logica/intelligence/responses';
+import { prisma } from '@neup/core/database/prisma';
 import { getAccountIdFromJWT } from '@/services/neupid/check-auth-web';
 import { getRequirementByUserId } from '@/services/requirements/get';
 import type { PropertyFilters, Requirement } from '@/types';
@@ -45,6 +46,35 @@ const NiaPropertySearchResultSchema = z.object({
 }).strip();
 
 type NiaPropertySearchResult = z.infer<typeof NiaPropertySearchResultSchema>;
+
+type NaturalSearchCacheValue = {
+  query: string;
+  result: NiaPropertySearchResult;
+};
+
+// Normalize the natural-language term used to look up a saved AI response.
+function buildNaturalSearchTitle(query: string): string {
+  return query.trim();
+}
+
+// Read and validate a cached structured response for the exact normalized query.
+async function getCachedNaturalSearch(title: string): Promise<NiaPropertySearchResult | null> {
+  const cachedSearch = await prisma.naturalSearch.findUnique({ where: { title } });
+  if (!cachedSearch || !cachedSearch.value || typeof cachedSearch.value !== 'object') return null;
+
+  const cachedValue = cachedSearch.value as unknown as NaturalSearchCacheValue;
+  const parsedResult = NiaPropertySearchResultSchema.safeParse(cachedValue.result);
+  return parsedResult.success ? parsedResult.data : null;
+}
+
+// Persist Nia's validated structured response for future reuse of the same query.
+async function saveNaturalSearch(title: string, value: NaturalSearchCacheValue): Promise<void> {
+  await prisma.naturalSearch.upsert({
+    where: { title },
+    create: { title, value: value as unknown as object },
+    update: { value: value as unknown as object },
+  });
+}
 
 // Keep only preference fields relevant to interpreting the current query.
 function formatRequirements(requirements: Requirement[]): string {
@@ -129,6 +159,10 @@ function parseNiaSearchJson(outputText: string): NiaPropertySearchResult {
 export async function parsePropertySearchQuery(query: string): Promise<PropertyFilters> {
   const accountId = await getAccountIdFromJWT();
   const requirements = accountId ? (await getRequirementByUserId(accountId)) ?? [] : [];
+  const title = buildNaturalSearchTitle(query);
+  const cachedResult = await getCachedNaturalSearch(title);
+  if (cachedResult) return mapNiaSearchResult(cachedResult);
+
   const response = await createNiaResponse({
     model: 'auto',
     failover: true,
@@ -145,6 +179,7 @@ export async function parsePropertySearchQuery(query: string): Promise<PropertyF
   }
 
   const parsedJson = parseNiaSearchJson(outputText);
+  await saveNaturalSearch(title, { query: query.trim(), result: parsedJson });
   const propertyFilters = mapNiaSearchResult(parsedJson);
   console.dir({ niaSearchJson: parsedJson, propertyFilters }, {
     depth: null,

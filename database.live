@@ -545,6 +545,15 @@ Fields:
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > updatedAt: timestamp(3) NOT NULL;
 
+Table: natural_searches, Model: NaturalSearch
+Fields:
+> id: text PK, NOT NULL, default: cuid();
+> title: text NOT NULL, UNIQUE natural_searches_title_key(title);
+> value: jsonb NOT NULL;
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+Indexes:
+> natural_searches_id_idx(id);
+
 Table: review, Model: Review
 Fields:
 > id: text PK, NOT NULL;

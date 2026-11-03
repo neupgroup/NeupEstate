@@ -129,6 +129,11 @@ export type Review = $Result.DefaultSelection<Prisma.$ReviewPayload>
  */
 export type Requirement = $Result.DefaultSelection<Prisma.$RequirementPayload>
 /**
+ * Model NaturalSearch
+ * 
+ */
+export type NaturalSearch = $Result.DefaultSelection<Prisma.$NaturalSearchPayload>
+/**
  * Model SavedProperty
  * 
  */
@@ -748,6 +753,16 @@ export class PrismaClient<
     * ```
     */
   get requirement(): Prisma.RequirementDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.naturalSearch`: Exposes CRUD operations for the **NaturalSearch** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more NaturalSearches
+    * const naturalSearches = await prisma.naturalSearch.findMany()
+    * ```
+    */
+  get naturalSearch(): Prisma.NaturalSearchDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.savedProperty`: Exposes CRUD operations for the **SavedProperty** model.
@@ -1535,6 +1550,7 @@ export namespace Prisma {
     Agent: 'Agent',
     Review: 'Review',
     Requirement: 'Requirement',
+    NaturalSearch: 'NaturalSearch',
     SavedProperty: 'SavedProperty',
     PropertyView: 'PropertyView',
     BaseLead: 'BaseLead',
@@ -1583,7 +1599,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "location" | "account" | "activity" | "property" | "propertyLog" | "propertyLink" | "propertyMedia" | "propertyHouseDetail" | "propertyApartmentDetail" | "propertyLandDetail" | "propertyCommercialDetail" | "propertyPrice" | "propertyOwner" | "propertyRepresentative" | "propertyDocument" | "propertyChange" | "agency" | "agencyMap" | "agencyAgentMap" | "agencyCustomization" | "agent" | "review" | "requirement" | "savedProperty" | "propertyView" | "baseLead" | "clientContact" | "clientLink" | "sharedLeads" | "leadActivity" | "conversation" | "message" | "siteContent" | "userPreference" | "propertyRequest" | "mortgageRequest" | "salesRequest" | "visitRequest" | "problem" | "sitemapEntry" | "inquiry" | "newsletterSubscription" | "authzRole" | "application" | "accountAccess" | "roleCapability" | "authzAccountAccessGrant" | "authzAssetsAccessGrant" | "competitor" | "competitorSource" | "competitorPage" | "competitorListing" | "propertyCompetitionMap" | "competitorTracking" | "intelligenceMapping" | "intelligenceAlert"
+      modelProps: "location" | "account" | "activity" | "property" | "propertyLog" | "propertyLink" | "propertyMedia" | "propertyHouseDetail" | "propertyApartmentDetail" | "propertyLandDetail" | "propertyCommercialDetail" | "propertyPrice" | "propertyOwner" | "propertyRepresentative" | "propertyDocument" | "propertyChange" | "agency" | "agencyMap" | "agencyAgentMap" | "agencyCustomization" | "agent" | "review" | "requirement" | "naturalSearch" | "savedProperty" | "propertyView" | "baseLead" | "clientContact" | "clientLink" | "sharedLeads" | "leadActivity" | "conversation" | "message" | "siteContent" | "userPreference" | "propertyRequest" | "mortgageRequest" | "salesRequest" | "visitRequest" | "problem" | "sitemapEntry" | "inquiry" | "newsletterSubscription" | "authzRole" | "application" | "accountAccess" | "roleCapability" | "authzAccountAccessGrant" | "authzAssetsAccessGrant" | "competitor" | "competitorSource" | "competitorPage" | "competitorListing" | "propertyCompetitionMap" | "competitorTracking" | "intelligenceMapping" | "intelligenceAlert"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3286,6 +3302,80 @@ export namespace Prisma {
           count: {
             args: Prisma.RequirementCountArgs<ExtArgs>
             result: $Utils.Optional<RequirementCountAggregateOutputType> | number
+          }
+        }
+      }
+      NaturalSearch: {
+        payload: Prisma.$NaturalSearchPayload<ExtArgs>
+        fields: Prisma.NaturalSearchFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.NaturalSearchFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NaturalSearchPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.NaturalSearchFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NaturalSearchPayload>
+          }
+          findFirst: {
+            args: Prisma.NaturalSearchFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NaturalSearchPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.NaturalSearchFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NaturalSearchPayload>
+          }
+          findMany: {
+            args: Prisma.NaturalSearchFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NaturalSearchPayload>[]
+          }
+          create: {
+            args: Prisma.NaturalSearchCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NaturalSearchPayload>
+          }
+          createMany: {
+            args: Prisma.NaturalSearchCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.NaturalSearchCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NaturalSearchPayload>[]
+          }
+          delete: {
+            args: Prisma.NaturalSearchDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NaturalSearchPayload>
+          }
+          update: {
+            args: Prisma.NaturalSearchUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NaturalSearchPayload>
+          }
+          deleteMany: {
+            args: Prisma.NaturalSearchDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.NaturalSearchUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.NaturalSearchUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NaturalSearchPayload>[]
+          }
+          upsert: {
+            args: Prisma.NaturalSearchUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$NaturalSearchPayload>
+          }
+          aggregate: {
+            args: Prisma.NaturalSearchAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateNaturalSearch>
+          }
+          groupBy: {
+            args: Prisma.NaturalSearchGroupByArgs<ExtArgs>
+            result: $Utils.Optional<NaturalSearchGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.NaturalSearchCountArgs<ExtArgs>
+            result: $Utils.Optional<NaturalSearchCountAggregateOutputType> | number
           }
         }
       }
@@ -5862,6 +5952,7 @@ export namespace Prisma {
     agent?: AgentOmit
     review?: ReviewOmit
     requirement?: RequirementOmit
+    naturalSearch?: NaturalSearchOmit
     savedProperty?: SavedPropertyOmit
     propertyView?: PropertyViewOmit
     baseLead?: BaseLeadOmit
@@ -33507,6 +33598,989 @@ export namespace Prisma {
      * Omit specific fields from the Requirement
      */
     omit?: RequirementOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model NaturalSearch
+   */
+
+  export type AggregateNaturalSearch = {
+    _count: NaturalSearchCountAggregateOutputType | null
+    _min: NaturalSearchMinAggregateOutputType | null
+    _max: NaturalSearchMaxAggregateOutputType | null
+  }
+
+  export type NaturalSearchMinAggregateOutputType = {
+    id: string | null
+    title: string | null
+    createdAt: Date | null
+  }
+
+  export type NaturalSearchMaxAggregateOutputType = {
+    id: string | null
+    title: string | null
+    createdAt: Date | null
+  }
+
+  export type NaturalSearchCountAggregateOutputType = {
+    id: number
+    title: number
+    value: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type NaturalSearchMinAggregateInputType = {
+    id?: true
+    title?: true
+    createdAt?: true
+  }
+
+  export type NaturalSearchMaxAggregateInputType = {
+    id?: true
+    title?: true
+    createdAt?: true
+  }
+
+  export type NaturalSearchCountAggregateInputType = {
+    id?: true
+    title?: true
+    value?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type NaturalSearchAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NaturalSearch to aggregate.
+     */
+    where?: NaturalSearchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NaturalSearches to fetch.
+     */
+    orderBy?: NaturalSearchOrderByWithRelationInput | NaturalSearchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: NaturalSearchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NaturalSearches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NaturalSearches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned NaturalSearches
+    **/
+    _count?: true | NaturalSearchCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: NaturalSearchMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: NaturalSearchMaxAggregateInputType
+  }
+
+  export type GetNaturalSearchAggregateType<T extends NaturalSearchAggregateArgs> = {
+        [P in keyof T & keyof AggregateNaturalSearch]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateNaturalSearch[P]>
+      : GetScalarType<T[P], AggregateNaturalSearch[P]>
+  }
+
+
+
+
+  export type NaturalSearchGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: NaturalSearchWhereInput
+    orderBy?: NaturalSearchOrderByWithAggregationInput | NaturalSearchOrderByWithAggregationInput[]
+    by: NaturalSearchScalarFieldEnum[] | NaturalSearchScalarFieldEnum
+    having?: NaturalSearchScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: NaturalSearchCountAggregateInputType | true
+    _min?: NaturalSearchMinAggregateInputType
+    _max?: NaturalSearchMaxAggregateInputType
+  }
+
+  export type NaturalSearchGroupByOutputType = {
+    id: string
+    title: string
+    value: JsonValue
+    createdAt: Date
+    _count: NaturalSearchCountAggregateOutputType | null
+    _min: NaturalSearchMinAggregateOutputType | null
+    _max: NaturalSearchMaxAggregateOutputType | null
+  }
+
+  type GetNaturalSearchGroupByPayload<T extends NaturalSearchGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<NaturalSearchGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof NaturalSearchGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], NaturalSearchGroupByOutputType[P]>
+            : GetScalarType<T[P], NaturalSearchGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type NaturalSearchSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    value?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["naturalSearch"]>
+
+  export type NaturalSearchSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    value?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["naturalSearch"]>
+
+  export type NaturalSearchSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    value?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["naturalSearch"]>
+
+  export type NaturalSearchSelectScalar = {
+    id?: boolean
+    title?: boolean
+    value?: boolean
+    createdAt?: boolean
+  }
+
+  export type NaturalSearchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "value" | "createdAt", ExtArgs["result"]["naturalSearch"]>
+
+  export type $NaturalSearchPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "NaturalSearch"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      title: string
+      value: Prisma.JsonValue
+      createdAt: Date
+    }, ExtArgs["result"]["naturalSearch"]>
+    composites: {}
+  }
+
+  type NaturalSearchGetPayload<S extends boolean | null | undefined | NaturalSearchDefaultArgs> = $Result.GetResult<Prisma.$NaturalSearchPayload, S>
+
+  type NaturalSearchCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<NaturalSearchFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: NaturalSearchCountAggregateInputType | true
+    }
+
+  export interface NaturalSearchDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['NaturalSearch'], meta: { name: 'NaturalSearch' } }
+    /**
+     * Find zero or one NaturalSearch that matches the filter.
+     * @param {NaturalSearchFindUniqueArgs} args - Arguments to find a NaturalSearch
+     * @example
+     * // Get one NaturalSearch
+     * const naturalSearch = await prisma.naturalSearch.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends NaturalSearchFindUniqueArgs>(args: SelectSubset<T, NaturalSearchFindUniqueArgs<ExtArgs>>): Prisma__NaturalSearchClient<$Result.GetResult<Prisma.$NaturalSearchPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one NaturalSearch that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {NaturalSearchFindUniqueOrThrowArgs} args - Arguments to find a NaturalSearch
+     * @example
+     * // Get one NaturalSearch
+     * const naturalSearch = await prisma.naturalSearch.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends NaturalSearchFindUniqueOrThrowArgs>(args: SelectSubset<T, NaturalSearchFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NaturalSearchClient<$Result.GetResult<Prisma.$NaturalSearchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first NaturalSearch that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NaturalSearchFindFirstArgs} args - Arguments to find a NaturalSearch
+     * @example
+     * // Get one NaturalSearch
+     * const naturalSearch = await prisma.naturalSearch.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends NaturalSearchFindFirstArgs>(args?: SelectSubset<T, NaturalSearchFindFirstArgs<ExtArgs>>): Prisma__NaturalSearchClient<$Result.GetResult<Prisma.$NaturalSearchPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first NaturalSearch that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NaturalSearchFindFirstOrThrowArgs} args - Arguments to find a NaturalSearch
+     * @example
+     * // Get one NaturalSearch
+     * const naturalSearch = await prisma.naturalSearch.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends NaturalSearchFindFirstOrThrowArgs>(args?: SelectSubset<T, NaturalSearchFindFirstOrThrowArgs<ExtArgs>>): Prisma__NaturalSearchClient<$Result.GetResult<Prisma.$NaturalSearchPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more NaturalSearches that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NaturalSearchFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all NaturalSearches
+     * const naturalSearches = await prisma.naturalSearch.findMany()
+     * 
+     * // Get first 10 NaturalSearches
+     * const naturalSearches = await prisma.naturalSearch.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const naturalSearchWithIdOnly = await prisma.naturalSearch.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends NaturalSearchFindManyArgs>(args?: SelectSubset<T, NaturalSearchFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NaturalSearchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a NaturalSearch.
+     * @param {NaturalSearchCreateArgs} args - Arguments to create a NaturalSearch.
+     * @example
+     * // Create one NaturalSearch
+     * const NaturalSearch = await prisma.naturalSearch.create({
+     *   data: {
+     *     // ... data to create a NaturalSearch
+     *   }
+     * })
+     * 
+     */
+    create<T extends NaturalSearchCreateArgs>(args: SelectSubset<T, NaturalSearchCreateArgs<ExtArgs>>): Prisma__NaturalSearchClient<$Result.GetResult<Prisma.$NaturalSearchPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many NaturalSearches.
+     * @param {NaturalSearchCreateManyArgs} args - Arguments to create many NaturalSearches.
+     * @example
+     * // Create many NaturalSearches
+     * const naturalSearch = await prisma.naturalSearch.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends NaturalSearchCreateManyArgs>(args?: SelectSubset<T, NaturalSearchCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many NaturalSearches and returns the data saved in the database.
+     * @param {NaturalSearchCreateManyAndReturnArgs} args - Arguments to create many NaturalSearches.
+     * @example
+     * // Create many NaturalSearches
+     * const naturalSearch = await prisma.naturalSearch.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many NaturalSearches and only return the `id`
+     * const naturalSearchWithIdOnly = await prisma.naturalSearch.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends NaturalSearchCreateManyAndReturnArgs>(args?: SelectSubset<T, NaturalSearchCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NaturalSearchPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a NaturalSearch.
+     * @param {NaturalSearchDeleteArgs} args - Arguments to delete one NaturalSearch.
+     * @example
+     * // Delete one NaturalSearch
+     * const NaturalSearch = await prisma.naturalSearch.delete({
+     *   where: {
+     *     // ... filter to delete one NaturalSearch
+     *   }
+     * })
+     * 
+     */
+    delete<T extends NaturalSearchDeleteArgs>(args: SelectSubset<T, NaturalSearchDeleteArgs<ExtArgs>>): Prisma__NaturalSearchClient<$Result.GetResult<Prisma.$NaturalSearchPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one NaturalSearch.
+     * @param {NaturalSearchUpdateArgs} args - Arguments to update one NaturalSearch.
+     * @example
+     * // Update one NaturalSearch
+     * const naturalSearch = await prisma.naturalSearch.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends NaturalSearchUpdateArgs>(args: SelectSubset<T, NaturalSearchUpdateArgs<ExtArgs>>): Prisma__NaturalSearchClient<$Result.GetResult<Prisma.$NaturalSearchPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more NaturalSearches.
+     * @param {NaturalSearchDeleteManyArgs} args - Arguments to filter NaturalSearches to delete.
+     * @example
+     * // Delete a few NaturalSearches
+     * const { count } = await prisma.naturalSearch.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends NaturalSearchDeleteManyArgs>(args?: SelectSubset<T, NaturalSearchDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NaturalSearches.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NaturalSearchUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many NaturalSearches
+     * const naturalSearch = await prisma.naturalSearch.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends NaturalSearchUpdateManyArgs>(args: SelectSubset<T, NaturalSearchUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more NaturalSearches and returns the data updated in the database.
+     * @param {NaturalSearchUpdateManyAndReturnArgs} args - Arguments to update many NaturalSearches.
+     * @example
+     * // Update many NaturalSearches
+     * const naturalSearch = await prisma.naturalSearch.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more NaturalSearches and only return the `id`
+     * const naturalSearchWithIdOnly = await prisma.naturalSearch.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends NaturalSearchUpdateManyAndReturnArgs>(args: SelectSubset<T, NaturalSearchUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NaturalSearchPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one NaturalSearch.
+     * @param {NaturalSearchUpsertArgs} args - Arguments to update or create a NaturalSearch.
+     * @example
+     * // Update or create a NaturalSearch
+     * const naturalSearch = await prisma.naturalSearch.upsert({
+     *   create: {
+     *     // ... data to create a NaturalSearch
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the NaturalSearch we want to update
+     *   }
+     * })
+     */
+    upsert<T extends NaturalSearchUpsertArgs>(args: SelectSubset<T, NaturalSearchUpsertArgs<ExtArgs>>): Prisma__NaturalSearchClient<$Result.GetResult<Prisma.$NaturalSearchPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of NaturalSearches.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NaturalSearchCountArgs} args - Arguments to filter NaturalSearches to count.
+     * @example
+     * // Count the number of NaturalSearches
+     * const count = await prisma.naturalSearch.count({
+     *   where: {
+     *     // ... the filter for the NaturalSearches we want to count
+     *   }
+     * })
+    **/
+    count<T extends NaturalSearchCountArgs>(
+      args?: Subset<T, NaturalSearchCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], NaturalSearchCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a NaturalSearch.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NaturalSearchAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends NaturalSearchAggregateArgs>(args: Subset<T, NaturalSearchAggregateArgs>): Prisma.PrismaPromise<GetNaturalSearchAggregateType<T>>
+
+    /**
+     * Group by NaturalSearch.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {NaturalSearchGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends NaturalSearchGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: NaturalSearchGroupByArgs['orderBy'] }
+        : { orderBy?: NaturalSearchGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, NaturalSearchGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNaturalSearchGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the NaturalSearch model
+   */
+  readonly fields: NaturalSearchFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for NaturalSearch.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__NaturalSearchClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the NaturalSearch model
+   */
+  interface NaturalSearchFieldRefs {
+    readonly id: FieldRef<"NaturalSearch", 'String'>
+    readonly title: FieldRef<"NaturalSearch", 'String'>
+    readonly value: FieldRef<"NaturalSearch", 'Json'>
+    readonly createdAt: FieldRef<"NaturalSearch", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * NaturalSearch findUnique
+   */
+  export type NaturalSearchFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NaturalSearch
+     */
+    select?: NaturalSearchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NaturalSearch
+     */
+    omit?: NaturalSearchOmit<ExtArgs> | null
+    /**
+     * Filter, which NaturalSearch to fetch.
+     */
+    where: NaturalSearchWhereUniqueInput
+  }
+
+  /**
+   * NaturalSearch findUniqueOrThrow
+   */
+  export type NaturalSearchFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NaturalSearch
+     */
+    select?: NaturalSearchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NaturalSearch
+     */
+    omit?: NaturalSearchOmit<ExtArgs> | null
+    /**
+     * Filter, which NaturalSearch to fetch.
+     */
+    where: NaturalSearchWhereUniqueInput
+  }
+
+  /**
+   * NaturalSearch findFirst
+   */
+  export type NaturalSearchFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NaturalSearch
+     */
+    select?: NaturalSearchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NaturalSearch
+     */
+    omit?: NaturalSearchOmit<ExtArgs> | null
+    /**
+     * Filter, which NaturalSearch to fetch.
+     */
+    where?: NaturalSearchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NaturalSearches to fetch.
+     */
+    orderBy?: NaturalSearchOrderByWithRelationInput | NaturalSearchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NaturalSearches.
+     */
+    cursor?: NaturalSearchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NaturalSearches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NaturalSearches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NaturalSearches.
+     */
+    distinct?: NaturalSearchScalarFieldEnum | NaturalSearchScalarFieldEnum[]
+  }
+
+  /**
+   * NaturalSearch findFirstOrThrow
+   */
+  export type NaturalSearchFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NaturalSearch
+     */
+    select?: NaturalSearchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NaturalSearch
+     */
+    omit?: NaturalSearchOmit<ExtArgs> | null
+    /**
+     * Filter, which NaturalSearch to fetch.
+     */
+    where?: NaturalSearchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NaturalSearches to fetch.
+     */
+    orderBy?: NaturalSearchOrderByWithRelationInput | NaturalSearchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for NaturalSearches.
+     */
+    cursor?: NaturalSearchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NaturalSearches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NaturalSearches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NaturalSearches.
+     */
+    distinct?: NaturalSearchScalarFieldEnum | NaturalSearchScalarFieldEnum[]
+  }
+
+  /**
+   * NaturalSearch findMany
+   */
+  export type NaturalSearchFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NaturalSearch
+     */
+    select?: NaturalSearchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NaturalSearch
+     */
+    omit?: NaturalSearchOmit<ExtArgs> | null
+    /**
+     * Filter, which NaturalSearches to fetch.
+     */
+    where?: NaturalSearchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of NaturalSearches to fetch.
+     */
+    orderBy?: NaturalSearchOrderByWithRelationInput | NaturalSearchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing NaturalSearches.
+     */
+    cursor?: NaturalSearchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` NaturalSearches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` NaturalSearches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of NaturalSearches.
+     */
+    distinct?: NaturalSearchScalarFieldEnum | NaturalSearchScalarFieldEnum[]
+  }
+
+  /**
+   * NaturalSearch create
+   */
+  export type NaturalSearchCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NaturalSearch
+     */
+    select?: NaturalSearchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NaturalSearch
+     */
+    omit?: NaturalSearchOmit<ExtArgs> | null
+    /**
+     * The data needed to create a NaturalSearch.
+     */
+    data: XOR<NaturalSearchCreateInput, NaturalSearchUncheckedCreateInput>
+  }
+
+  /**
+   * NaturalSearch createMany
+   */
+  export type NaturalSearchCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many NaturalSearches.
+     */
+    data: NaturalSearchCreateManyInput | NaturalSearchCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * NaturalSearch createManyAndReturn
+   */
+  export type NaturalSearchCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NaturalSearch
+     */
+    select?: NaturalSearchSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the NaturalSearch
+     */
+    omit?: NaturalSearchOmit<ExtArgs> | null
+    /**
+     * The data used to create many NaturalSearches.
+     */
+    data: NaturalSearchCreateManyInput | NaturalSearchCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * NaturalSearch update
+   */
+  export type NaturalSearchUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NaturalSearch
+     */
+    select?: NaturalSearchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NaturalSearch
+     */
+    omit?: NaturalSearchOmit<ExtArgs> | null
+    /**
+     * The data needed to update a NaturalSearch.
+     */
+    data: XOR<NaturalSearchUpdateInput, NaturalSearchUncheckedUpdateInput>
+    /**
+     * Choose, which NaturalSearch to update.
+     */
+    where: NaturalSearchWhereUniqueInput
+  }
+
+  /**
+   * NaturalSearch updateMany
+   */
+  export type NaturalSearchUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update NaturalSearches.
+     */
+    data: XOR<NaturalSearchUpdateManyMutationInput, NaturalSearchUncheckedUpdateManyInput>
+    /**
+     * Filter which NaturalSearches to update
+     */
+    where?: NaturalSearchWhereInput
+    /**
+     * Limit how many NaturalSearches to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * NaturalSearch updateManyAndReturn
+   */
+  export type NaturalSearchUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NaturalSearch
+     */
+    select?: NaturalSearchSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the NaturalSearch
+     */
+    omit?: NaturalSearchOmit<ExtArgs> | null
+    /**
+     * The data used to update NaturalSearches.
+     */
+    data: XOR<NaturalSearchUpdateManyMutationInput, NaturalSearchUncheckedUpdateManyInput>
+    /**
+     * Filter which NaturalSearches to update
+     */
+    where?: NaturalSearchWhereInput
+    /**
+     * Limit how many NaturalSearches to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * NaturalSearch upsert
+   */
+  export type NaturalSearchUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NaturalSearch
+     */
+    select?: NaturalSearchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NaturalSearch
+     */
+    omit?: NaturalSearchOmit<ExtArgs> | null
+    /**
+     * The filter to search for the NaturalSearch to update in case it exists.
+     */
+    where: NaturalSearchWhereUniqueInput
+    /**
+     * In case the NaturalSearch found by the `where` argument doesn't exist, create a new NaturalSearch with this data.
+     */
+    create: XOR<NaturalSearchCreateInput, NaturalSearchUncheckedCreateInput>
+    /**
+     * In case the NaturalSearch was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<NaturalSearchUpdateInput, NaturalSearchUncheckedUpdateInput>
+  }
+
+  /**
+   * NaturalSearch delete
+   */
+  export type NaturalSearchDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NaturalSearch
+     */
+    select?: NaturalSearchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NaturalSearch
+     */
+    omit?: NaturalSearchOmit<ExtArgs> | null
+    /**
+     * Filter which NaturalSearch to delete.
+     */
+    where: NaturalSearchWhereUniqueInput
+  }
+
+  /**
+   * NaturalSearch deleteMany
+   */
+  export type NaturalSearchDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which NaturalSearches to delete
+     */
+    where?: NaturalSearchWhereInput
+    /**
+     * Limit how many NaturalSearches to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * NaturalSearch without action
+   */
+  export type NaturalSearchDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the NaturalSearch
+     */
+    select?: NaturalSearchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the NaturalSearch
+     */
+    omit?: NaturalSearchOmit<ExtArgs> | null
   }
 
 
@@ -70270,6 +71344,16 @@ export namespace Prisma {
   export type RequirementScalarFieldEnum = (typeof RequirementScalarFieldEnum)[keyof typeof RequirementScalarFieldEnum]
 
 
+  export const NaturalSearchScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    value: 'value',
+    createdAt: 'createdAt'
+  };
+
+  export type NaturalSearchScalarFieldEnum = (typeof NaturalSearchScalarFieldEnum)[keyof typeof NaturalSearchScalarFieldEnum]
+
+
   export const SavedPropertyScalarFieldEnum: {
     id: 'id',
     accountId: 'accountId',
@@ -72868,6 +73952,53 @@ export namespace Prisma {
     loan?: BoolWithAggregatesFilter<"Requirement"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Requirement"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Requirement"> | Date | string
+  }
+
+  export type NaturalSearchWhereInput = {
+    AND?: NaturalSearchWhereInput | NaturalSearchWhereInput[]
+    OR?: NaturalSearchWhereInput[]
+    NOT?: NaturalSearchWhereInput | NaturalSearchWhereInput[]
+    id?: StringFilter<"NaturalSearch"> | string
+    title?: StringFilter<"NaturalSearch"> | string
+    value?: JsonFilter<"NaturalSearch">
+    createdAt?: DateTimeFilter<"NaturalSearch"> | Date | string
+  }
+
+  export type NaturalSearchOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    value?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NaturalSearchWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    title?: string
+    AND?: NaturalSearchWhereInput | NaturalSearchWhereInput[]
+    OR?: NaturalSearchWhereInput[]
+    NOT?: NaturalSearchWhereInput | NaturalSearchWhereInput[]
+    value?: JsonFilter<"NaturalSearch">
+    createdAt?: DateTimeFilter<"NaturalSearch"> | Date | string
+  }, "id" | "title">
+
+  export type NaturalSearchOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    value?: SortOrder
+    createdAt?: SortOrder
+    _count?: NaturalSearchCountOrderByAggregateInput
+    _max?: NaturalSearchMaxOrderByAggregateInput
+    _min?: NaturalSearchMinOrderByAggregateInput
+  }
+
+  export type NaturalSearchScalarWhereWithAggregatesInput = {
+    AND?: NaturalSearchScalarWhereWithAggregatesInput | NaturalSearchScalarWhereWithAggregatesInput[]
+    OR?: NaturalSearchScalarWhereWithAggregatesInput[]
+    NOT?: NaturalSearchScalarWhereWithAggregatesInput | NaturalSearchScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"NaturalSearch"> | string
+    title?: StringWithAggregatesFilter<"NaturalSearch"> | string
+    value?: JsonWithAggregatesFilter<"NaturalSearch">
+    createdAt?: DateTimeWithAggregatesFilter<"NaturalSearch"> | Date | string
   }
 
   export type SavedPropertyWhereInput = {
@@ -77325,6 +78456,55 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type NaturalSearchCreateInput = {
+    id?: string
+    title: string
+    value: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type NaturalSearchUncheckedCreateInput = {
+    id?: string
+    title: string
+    value: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type NaturalSearchUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NaturalSearchUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NaturalSearchCreateManyInput = {
+    id?: string
+    title: string
+    value: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type NaturalSearchUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type NaturalSearchUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    value?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type SavedPropertyCreateInput = {
     id?: string
     accountId: string
@@ -81623,6 +82803,25 @@ export namespace Prisma {
   export type RequirementSumOrderByAggregateInput = {
     minBudget?: SortOrder
     maxBudget?: SortOrder
+  }
+
+  export type NaturalSearchCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    value?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NaturalSearchMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type NaturalSearchMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type SavedPropertyCountOrderByAggregateInput = {

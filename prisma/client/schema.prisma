@@ -511,6 +511,16 @@ model Requirement {
   @@map("requirements")
 }
 
+model NaturalSearch {
+  id        String   @id @default(cuid())
+  title     String   @unique
+  value     Json     @db.JsonB
+  createdAt DateTime @default(now())
+
+  @@index([id])
+  @@map("natural_searches")
+}
+
 // ============================================================================
 // Favourites and Views
 // ============================================================================
