@@ -51,7 +51,7 @@ import { submitPropertyCreation } from '@/services/properties/create';
 import { listProperties } from '@/services/properties/list';
 import { searchProperties } from '@/services/properties/search';
 import { logger } from "@neup/logica/logger";
-import { PropertyFiltersSchema } from '@/types';
+import { CreatePropertySchema, PropertyFiltersSchema, type CreatePropertyFormValues } from '@/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -165,9 +165,9 @@ function readWorkingProfileId(body: Record<string, unknown>, request: NextReques
 }
 
 // Accept either a nested property object or top-level property fields.
-function readPropertySubmission(body: Record<string, unknown>): Record<string, unknown> {
+function readPropertySubmission(body: Record<string, unknown>): unknown {
   if (body.property && typeof body.property === 'object' && !Array.isArray(body.property)) {
-    return body.property as Record<string, unknown>;
+    return body.property;
   }
 
   const requestMetadata = ['accountId', 'workingProfileId', 'workingProfile', 'postingAgencyId'];
@@ -282,7 +282,15 @@ const postHandler = async (req: NextRequest) => {
     const workingProfileId = readWorkingProfileId(requestBody, req);
     const actorId = readActorAccountId(requestBody, req);
     const postingAgencyId = readPostingAgencyId(requestBody, req);
-    const property = readPropertySubmission(requestBody);
+    const parsedProperty = CreatePropertySchema.safeParse(readPropertySubmission(requestBody));
+    if (!parsedProperty.success) {
+      return Response.json({
+        success: false,
+        error: 'Invalid property.',
+        details: parsedProperty.error.flatten().fieldErrors,
+      }, { status: 400 });
+    }
+    const property: CreatePropertyFormValues = parsedProperty.data;
     if (!actorId) return Response.json({ success: false, error: 'Provide accountId in the request body or headers.' }, { status: 400 });
     const result = await submitPropertyCreation(property, {
       actorAccountId: actorId,
