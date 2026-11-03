@@ -1,5 +1,3 @@
-
-
 import { z } from 'zod';
 import { PropertyPurposeSchema, PropertyCategorySchema, PropertyUsageTypeSchema } from './property';
 

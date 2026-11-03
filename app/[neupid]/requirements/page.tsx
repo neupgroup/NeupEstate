@@ -53,7 +53,7 @@ export default async function PublicAccountRequirementsPage({
                   <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Area</dt><dd className="text-right">{requirement.location || 'Any'}</dd></div>
                   <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Budget</dt><dd className="text-right">{requirement.minBudget?.toLocaleString() || 'Any'} – {requirement.maxBudget?.toLocaleString() || 'Any'}</dd></div>
                   <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Timeline</dt><dd className="text-right">{requirement.requiredTime || 'Flexible'}</dd></div>
-                  {requirement.paymentMethod?.length > 0 && (
+                  {requirement.paymentMethod && requirement.paymentMethod.length > 0 && (
                     <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Payment</dt><dd className="text-right">{requirement.paymentMethod.join(', ')}</dd></div>
                   )}
                 </dl>
