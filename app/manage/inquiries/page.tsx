@@ -14,7 +14,7 @@ export default async function InquiriesPage() {
         <div className="space-y-6">
             <div>
                 <h2 className="text-2xl font-semibold leading-none tracking-tight">
-                    Property Inquiries
+                    Listing Inquiries
                 </h2>
                 <p className="text-sm text-muted-foreground">
                     {inquiries.length} {inquiries.length === 1 ? 'inquiry' : 'inquiries'} received. Newest first.
@@ -25,7 +25,7 @@ export default async function InquiriesPage() {
                      <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Property</TableHead>
+                                <TableHead>Listing</TableHead>
                                 <TableHead>Question</TableHead>
                                 <TableHead>Submitted By</TableHead>
                                 <TableHead>Date</TableHead>
@@ -36,7 +36,7 @@ export default async function InquiriesPage() {
                             {inquiries.map((inquiry) => (
                                 <TableRow key={inquiry.id}>
                                     <TableCell>
-                                        <Link href={`/manage/properties/${inquiry.propertyId}/edit`} className="font-medium hover:underline block truncate max-w-xs">
+                                        <Link href={`/manage/listings/${inquiry.propertyId}/edit`} className="font-medium hover:underline block truncate max-w-xs">
                                             {inquiry.propertyTitle}
                                         </Link>
                                         <span className="text-xs text-muted-foreground">Agent: {inquiry.agentName}</span>
@@ -64,7 +64,7 @@ export default async function InquiriesPage() {
                         <AlertCircle className="h-4 w-4" />
                         <AlertTitle>No Inquiries Found</AlertTitle>
                         <AlertDescription>
-                            No users have submitted questions about properties yet.
+                            No users have submitted questions about listings yet.
                         </AlertDescription>
                     </Alert>
                 )}

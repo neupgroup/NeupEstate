@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@neup/components/ui/card";
-import { getProperties } from "@/services/properties/list";
+import { getListings } from "@/services/listings/list";
 import { getAccounts } from "@/services/accounts/id/lookup";
 import { getAgencyAgentMapsByAgent } from "@/services/agencies/agent-maps/service";
 import { getAccountIdFromJWT } from "@/services/neupid/check-auth-web";
@@ -11,16 +11,16 @@ import { PERMISSIONS } from '@/services/permission-names';;
 import { AgencyInvitationsCard } from "@/components/manage/agency-invitations-card";
 
 async function getStats() {
-    const allProperties = await getProperties({ includeInactive: true });
+    const allListings = await getListings({ includeInactive: true });
     
-    const listedThisWeek = allProperties.filter(p => {
+    const listedThisWeek = allListings.filter(p => {
         if (!p.createdAt) return false;
         const sevenDaysAgo = new Date();
         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
         return new Date(p.createdAt) >= sevenDaysAgo;
     }).length;
 
-    const pendingCount = allProperties.filter(p => !p.isApproved).length;
+    const pendingCount = allListings.filter(p => !p.isApproved).length;
 
     // Placeholders for future data points that are not yet tracked
     const soldThisWeek = 0;

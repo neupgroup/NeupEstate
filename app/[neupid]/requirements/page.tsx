@@ -35,9 +35,9 @@ export default async function PublicAccountRequirementsPage({
           <p className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-4 py-2 text-sm font-medium text-primary">
             <Search className="h-4 w-4" /> @{account.profile.neupid}
           </p>
-          <h1 className="mt-5 text-4xl font-headline font-semibold tracking-tight sm:text-5xl">Property requirements</h1>
+          <h1 className="mt-5 text-4xl font-headline font-semibold tracking-tight sm:text-5xl">Listing requirements</h1>
           <p className="mt-4 max-w-2xl text-lg leading-8 text-muted-foreground">
-            Property preferences shared by {account.profile.name}.
+            Listing preferences shared by {account.profile.name}.
           </p>
         </div>
       </section>
@@ -49,7 +49,7 @@ export default async function PublicAccountRequirementsPage({
                 <p className="text-sm font-medium text-muted-foreground">Requirement {index + 1}</p>
                 <p className="mt-2 text-xl font-semibold capitalize">{requirement.purpose || 'Property search'}</p>
                 <dl className="mt-5 space-y-3 text-sm">
-                  <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Property type</dt><dd className="text-right">{requirement.propertyType?.join(', ') || 'Any'}</dd></div>
+                  <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Listing type</dt><dd className="text-right">{requirement.propertyType?.join(', ') || 'Any'}</dd></div>
                   <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Area</dt><dd className="text-right">{requirement.location || 'Any'}</dd></div>
                   <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Budget</dt><dd className="text-right">{requirement.minBudget?.toLocaleString() || 'Any'} – {requirement.maxBudget?.toLocaleString() || 'Any'}</dd></div>
                   <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Timeline</dt><dd className="text-right">{requirement.requiredTime || 'Flexible'}</dd></div>

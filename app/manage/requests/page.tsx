@@ -1,13 +1,13 @@
 
-import { getPropertyRequests } from '@/services/inquiry/property-requests';
+import { getListingRequests } from '@/services/inquiry/listing-requests';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@neup/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { AlertCircle, User, MapPin, Home, DollarSign, BedDouble, Bath, ClipboardList } from 'lucide-react';
 import { RelativeTime } from '@/components/manage/relative-time';
 import { Badge } from '@neup/components/ui/badge';
 
-export default async function PropertyRequestsPage() {
-    const requests = await getPropertyRequests();
+export default async function ListingRequestsPage() {
+    const requests = await getListingRequests();
 
     return (
         <div className="space-y-6">
@@ -16,7 +16,7 @@ export default async function PropertyRequestsPage() {
                     <ClipboardList aria-hidden="true" className="h-6 w-6" />
                 </span>
                 <div>
-                    <h1 className="text-2xl font-semibold tracking-tight">Property Requests</h1>
+                    <h1 className="text-2xl font-semibold tracking-tight">Listing Requests</h1>
                     <p className="mt-1 text-sm text-muted-foreground">
                         {requests.length} {requests.length === 1 ? 'request' : 'requests'} received. Newest first.
                     </p>
@@ -64,7 +64,7 @@ export default async function PropertyRequestsPage() {
                 ) : (
                     <Alert>
                         <AlertCircle className="h-4 w-4" />
-                        <AlertTitle>No Property Requests Found</AlertTitle>
+                        <AlertTitle>No Listing Requests Found</AlertTitle>
                         <AlertDescription>
                             No users have submitted a property request yet.
                         </AlertDescription>

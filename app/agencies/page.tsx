@@ -46,7 +46,7 @@ export default async function AgenciesPage() {
               const neupId = agency.neupId?.trim();
               const profileHref = neupId ? `/@${neupId}` : null;
               const agentsHref = neupId ? `/@${neupId}/agents` : null;
-              const propertiesHref = neupId ? `/@${neupId}/properties` : null;
+              const propertiesHref = neupId ? `/@${neupId}/listings` : null;
               return (
                 <Card key={agency.id} className="flex flex-col overflow-hidden bg-card text-card-foreground transition-shadow duration-300 hover:shadow-xl">
                   <CardHeader className="flex flex-row items-center gap-4 bg-muted/40 p-6">
@@ -86,10 +86,10 @@ export default async function AgenciesPage() {
                             href={propertiesHref}
                             className="hover:text-foreground hover:underline"
                           >
-                            {agency.propertyCount} properties
+                            {agency.propertyCount} listings
                           </Link>
                         ) : (
-                          <span>{agency.propertyCount} properties</span>
+                          <span>{agency.propertyCount} listings</span>
                         )}
                       </p>
                     </div>

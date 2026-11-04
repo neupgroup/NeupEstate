@@ -4,20 +4,20 @@
 import { Control, useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import { useEffect, useRef, useState } from "react";
 import { Link } from '@neup/components/ui/link';
-import { CreatePropertyFormValues } from "@/types";
+import { CreateListingFormValues } from "@/types";
 import { Input } from "@neup/components/ui/input";
 import { Button } from "@neup/components/ui/button";
 import { ImagePlus, GripVertical, RotateCcw, Trash2 } from "lucide-react";
 import { useToast } from "@neup/core/hooks/useToast";
-import { uploadPropertyMediaFile } from "./media-upload";
+import { uploadListingMediaFile } from "./media-upload";
 
-interface PropertyPhotosSectionProps {
-    control: Control<CreatePropertyFormValues>;
+interface ListingPhotosSectionProps {
+    control: Control<CreateListingFormValues>;
     fieldChangeNotes?: Partial<Record<string, string>>;
     previousImages?: string[];
 }
 
-function PropertyPreview({ src, alt }: { src: string; alt: string }) {
+function ListingPreview({ src, alt }: { src: string; alt: string }) {
     const [failed, setFailed] = useState(false);
 
     if (!src || failed) {
@@ -39,8 +39,8 @@ function PropertyPreview({ src, alt }: { src: string; alt: string }) {
     );
 }
 
-export function PropertyPhotosSection({ control, fieldChangeNotes, previousImages }: PropertyPhotosSectionProps) {
-    const { watch, getValues, setValue } = useFormContext<CreatePropertyFormValues>();
+export function ListingPhotosSection({ control, fieldChangeNotes, previousImages }: ListingPhotosSectionProps) {
+    const { watch, getValues, setValue } = useFormContext<CreateListingFormValues>();
     const { toast } = useToast();
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [isUploading, setIsUploading] = useState(false);
@@ -109,7 +109,7 @@ export function PropertyPhotosSection({ control, fieldChangeNotes, previousImage
             let firstErrorMessage: string | null = null;
             for (const file of selectedFiles) {
                 try {
-                    const url = await uploadPropertyMediaFile({
+                    const url = await uploadListingMediaFile({
                         file,
                         platform: "property",
                         contentIds: ["images"],
@@ -198,7 +198,7 @@ export function PropertyPhotosSection({ control, fieldChangeNotes, previousImage
                             >
                                 <div className="relative aspect-square bg-muted">
                                     <Link href={imageUrl || "#"} target="_blank" rel="noopener noreferrer" className="block h-full w-full">
-                                        <PropertyPreview src={imageUrl} alt={`Preview ${index + 1}`} />
+                                        <ListingPreview src={imageUrl} alt={`Preview ${index + 1}`} />
                                     </Link>
                                     <div className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 text-[11px] font-medium text-white">
                                         <GripVertical className="h-3.5 w-3.5" />
@@ -231,7 +231,7 @@ export function PropertyPhotosSection({ control, fieldChangeNotes, previousImage
                             aria-label={`Restore removed image ${index + 1}`}
                         >
                             <div className="relative aspect-square bg-muted">
-                                <PropertyPreview src={imageUrl} alt={`Removed preview ${index + 1}`} />
+                                <ListingPreview src={imageUrl} alt={`Removed preview ${index + 1}`} />
                                 <div className="absolute left-2 top-2 rounded-full bg-amber-500/95 px-2 py-1 text-[11px] font-semibold text-white shadow-sm">
                                     (removed)
                                 </div>

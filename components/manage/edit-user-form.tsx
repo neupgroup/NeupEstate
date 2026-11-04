@@ -7,7 +7,7 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { updateUserAction } from '@/services/accounts/id/update';
-import { getSavedPropertiesForUser } from '@/services/properties/single/engage/view';
+import { getSavedListingsForUser } from '@/services/listings/single/engage/view';
 import { getAccountPreferences } from '@/services/accounts/single/preferences';
 import { Button } from '@neup/components/ui/button';
 import { LinkButton } from '@neup/components/ui/link-button';
@@ -18,7 +18,7 @@ import { PhoneInput } from '@neup/components/ui/phone-input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@neup/core/hooks/useToast';
 import { Loader2, Pencil, Trash2, PlusCircle, Link2, Info, CalendarDays, Clock, UserCircle, Fingerprint, Activity, Hourglass, Bookmark, BarChart, Wifi } from 'lucide-react';
-import type { UpdateUserFormValues, Account, UserPreferences, Property } from '@/types';
+import type { UpdateUserFormValues, Account, UserPreferences, Listing } from '@/types';
 import { UpdateUserSchema } from '@/types';
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { RelativeTime } from './relative-time';
@@ -106,7 +106,7 @@ export function EditUserForm({ user, account }: EditUserFormProps) {
     const [isSaving, startSaveTransition] = useTransition();
     const [isEditing, setIsEditing] = useState(false);
     const [preferences, setPreferences] = useState<UserPreferences | null>(null);
-    const [savedProperties, setSavedProperties] = useState<Property[]>([]);
+    const [savedListings, setSavedListings] = useState<Listing[]>([]);
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
@@ -114,10 +114,10 @@ export function EditUserForm({ user, account }: EditUserFormProps) {
         async function loadData() {
             const [prefs, saved] = await Promise.all([
                 getAccountPreferences(user.id),
-                getSavedPropertiesForUser(user.id)
+                getSavedListingsForUser(user.id)
             ]);
             setPreferences(prefs);
-            setSavedProperties(saved);
+            setSavedListings(saved);
         }
         loadData();
     }, [user.id]);
@@ -225,21 +225,21 @@ export function EditUserForm({ user, account }: EditUserFormProps) {
                     </CardHeader>
                     <CardContent className="space-y-6">
                         <div>
-                             <h4 className="font-medium text-sm mb-2">Recent Saved Properties ({savedProperties.length})</h4>
-                             {savedProperties.length > 0 ? (
+                             <h4 className="font-medium text-sm mb-2">Recent Saved Listings ({savedListings.length})</h4>
+                             {savedListings.length > 0 ? (
                                 <div className="space-y-2">
-                                    {savedProperties.slice(0, 10).map(prop => (
+                                    {savedListings.slice(0, 10).map(prop => (
                                         <div key={prop.id} className="p-2 border rounded-md text-sm">
-                                            <Link href={`/manage/properties/${prop.id}/edit`} className="font-semibold hover:underline">{prop.title}</Link>
+                                            <Link href={`/manage/listings/${prop.id}/edit`} className="font-semibold hover:underline">{prop.title}</Link>
                                             <p className="text-xs text-muted-foreground">{prop.location}</p>
                                         </div>
                                     ))}
-                                    {savedProperties.length > 10 && (
+                                    {savedListings.length > 10 && (
                                          <LinkButton variant="outlined" href={`/manage/users/${user.id}/activity`}>View All Activity</LinkButton>
                                     )}
                                 </div>
                              ) : (
-                                <p className="text-sm text-muted-foreground">No properties saved yet.</p>
+                                <p className="text-sm text-muted-foreground">No listings saved yet.</p>
                              )}
                         </div>
                     </CardContent>

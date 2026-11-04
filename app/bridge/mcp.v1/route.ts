@@ -22,11 +22,11 @@ import { getAgents, getAgentCount } from '@/services/agents/agent/service';
 import { getPublicAgencyAccounts, getPublicAgencyAccountCount } from '@/services/agencies/agency/service';
 import { getAccountById } from '@/services/accounts/id/get';
 import { getAgencyAgentMapsByAgent } from '@/services/agencies/agent-maps/service';
-import { registerPropertyTools } from './properties';
-import { registerViewPropertyTool } from './properties/single/view';
-import { registerAddPropertyTool } from './properties/addProperty';
-import { registerPropertyUpdateTool } from '../properties/update';
-import { registerVisitRequestTools } from './properties/visitRequests';
+import { registerListingTools } from './listings';
+import { registerViewListingTool } from './listings/single/view';
+import { registerAddListingTool } from './listings/addListing';
+import { registerListingUpdateTool } from '../listings/update';
+import { registerVisitRequestTools } from './listings/visitRequests';
 import { registerAddLeadTool } from './leads/add';
 import { registerViewMineTool } from './leads/view_mine';
 import { registerViewMyTeamTool } from './leads/view_myTeam';
@@ -136,10 +136,10 @@ function createMcpServer(actorAccountId: string, format?: string): McpServer {
     } catch (error) { return toolFailure(error, 'Failed to list agencies.'); }
   });
 
-  registerPropertyTools(server, actorAccountId, format);
-  registerViewPropertyTool(server, format);
-  registerAddPropertyTool(server, actorAccountId, format);
-  registerPropertyUpdateTool(server, actorAccountId, format);
+  registerListingTools(server, actorAccountId, format);
+  registerViewListingTool(server, format);
+  registerAddListingTool(server, actorAccountId, format);
+  registerListingUpdateTool(server, actorAccountId, format);
   registerVisitRequestTools(server, actorAccountId, format);
   registerAddLeadTool(server, actorAccountId, format);
   registerViewMineTool(server, actorAccountId, format);

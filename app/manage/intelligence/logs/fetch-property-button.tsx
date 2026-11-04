@@ -7,7 +7,7 @@ import { Sparkles } from 'lucide-react';
 import { useToast } from '@neup/core/hooks/useToast';
 import { extractCompetitorListingAction } from '../listings/actions';
 
-export function FetchPropertyButton({
+export function FetchListingButton({
   competitorPageId,
   children,
 }: {

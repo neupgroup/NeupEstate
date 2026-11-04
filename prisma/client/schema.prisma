@@ -165,11 +165,11 @@ model Listing {
   competitionMaps  PropertyCompetitionMap[]
   representatives  ListingRepresentative[]
 
-  @@index([type], map: "listings_type_idx")
-  @@index([purpose], map: "listings_purpose_idx")
-  @@index([status], map: "listings_status_idx")
-  @@index([slug], map: "listings_slug_idx")
-  @@map("listings")
+  @@index([type], map: "property_type_idx")
+  @@index([purpose], map: "property_purpose_idx")
+  @@index([status], map: "property_status_idx")
+  @@index([slug], map: "property_slug_idx")
+  @@map("property")
 }
 
 model ListingsLog {
@@ -181,10 +181,10 @@ model ListingsLog {
   requestedOn DateTime  @default(now()) @map("requested_on")
   approvedOn  DateTime? @map("approved_on")
 
-  @@index([propertyId], map: "listings_logs_property_id_idx")
-  @@index([requestedBy], map: "listings_logs_requested_by_idx")
-  @@index([approvedBy], map: "listings_logs_approved_by_idx")
-  @@map("listings_logs")
+  @@index([propertyId], map: "property_log_property_id_idx")
+  @@index([requestedBy], map: "property_log_requested_by_idx")
+  @@index([approvedBy], map: "property_log_approved_by_idx")
+  @@map("property_log")
 }
 
 model PropertyLink {
@@ -211,12 +211,12 @@ model ListingMedia {
 
   property Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
-  @@index([propertyId], map: "listings_media_property_id_idx")
-  @@map("listings_media")
+  @@index([propertyId], map: "property_media_propertyId_idx")
+  @@map("property_media")
 }
 
 model ListingHouse {
-  propertyId       String  @id @unique(map: "listings_house_property_id_key")
+  propertyId       String  @id @unique(map: "property_house_detail_propertyId_key")
   bedrooms         Int
   bathrooms        Int
   floors           Int
@@ -233,11 +233,11 @@ model ListingHouse {
 
   property Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
-  @@map("listings_house")
+  @@map("property_house_detail")
 }
 
 model ListingApartment {
-  propertyId       String  @id @unique(map: "listings_apartment_property_id_key")
+  propertyId       String  @id @unique(map: "property_apartment_detail_propertyId_key")
   bedrooms         Int
   bathrooms        Int
   onFloor          Int
@@ -255,7 +255,7 @@ model ListingApartment {
 
   property Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
-  @@map("listings_apartment")
+  @@map("property_apartment_detail")
 }
 
 model PropertyLandDetail {
@@ -275,7 +275,7 @@ model PropertyLandDetail {
 }
 
 model ListingCommercial {
-  propertyId   String  @id @unique(map: "listings_commercial_property_id_key")
+  propertyId   String  @id @unique(map: "property_commercial_detail_propertyId_key")
   floor        Int
   washrooms    Int
   parkingSpots Int
@@ -285,7 +285,7 @@ model ListingCommercial {
 
   property Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
-  @@map("listings_commercial")
+  @@map("property_commercial_detail")
 }
 
 model PropertyPrice {
@@ -342,8 +342,8 @@ model ListingDocument {
 
   property Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
-  @@index([propertyId], map: "listing_documents_property_id_idx")
-  @@map("listing_documents")
+  @@index([propertyId], map: "property_document_propertyId_idx")
+  @@map("property_document")
 }
 
 model ListingChange {
@@ -365,15 +365,15 @@ model ListingChange {
   createdFor     Account? @relation("ListingChangeCreatedFor", fields: [createdForId], references: [id], onDelete: SetNull)
   workingProfile Account? @relation("ListingChangeWorkingProfile", fields: [workingProfileId], references: [id], onDelete: SetNull)
 
-  @@index([propertyId], map: "listing_changes_property_id_idx")
-  @@index([accountId], map: "listing_changes_account_id_idx")
-  @@index([createdById], map: "listing_changes_created_by_id_idx")
-  @@index([createdForId], map: "listing_changes_created_for_id_idx")
-  @@index([workingProfileId], map: "listing_changes_working_profile_id_idx")
-  @@index([status], map: "listing_changes_status_idx")
-  @@index([createdOn], map: "listing_changes_created_on_idx")
-  @@index([modifiedOn], map: "listing_changes_modified_on_idx")
-  @@map("listing_changes")
+  @@index([propertyId], map: "property_changes_property_id_idx")
+  @@index([accountId], map: "property_changes_account_id_idx")
+  @@index([createdById], map: "property_changes_created_by_id_idx")
+  @@index([createdForId], map: "property_changes_created_for_id_idx")
+  @@index([workingProfileId], map: "property_changes_working_profile_id_idx")
+  @@index([status], map: "property_changes_status_idx")
+  @@index([createdOn], map: "property_changes_createdOn_idx")
+  @@index([modifiedOn], map: "property_changes_modifiedOn_idx")
+  @@map("property_changes")
 }
 
 // ============================================================================
@@ -550,9 +550,9 @@ model ListingsView {
 
   property Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
-  @@index([accountId], map: "listings_views_account_id_idx")
-  @@index([propertyId], map: "listings_views_property_id_idx")
-  @@map("listings_views")
+  @@index([accountId], map: "property_views_accountId_idx")
+  @@index([propertyId], map: "property_views_propertyId_idx")
+  @@map("property_views")
 }
 
 // ============================================================================

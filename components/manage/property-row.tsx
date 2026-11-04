@@ -1,17 +1,17 @@
 "use client";
 
-import type { Property } from '@/types';
+import type { Listing } from '@/types';
 import { Badge } from "@neup/components/ui/badge";
 import {
     CheckCircle, Clock, FileClock, Home, Archive,
     Building2, LandPlot, Store, Layers,
 } from "lucide-react";
 import { Link } from '@neup/components/ui/link';
-import { getHiddenPriceLabel } from '@/services/properties/price-display';
+import { getHiddenPriceLabel } from '@/services/listings/price-display';
 
 // ─── Status badge ─────────────────────────────────────────────────────────────
 
-function StatusBadge({ property }: { property: Property }) {
+function StatusBadge({ property }: { property: Listing }) {
     const s = property.status;
     if (s === 'ACTIVE')   return <Badge variant="default"   className="shrink-0 text-[11px]"><CheckCircle className="mr-1 h-3 w-3" />Active</Badge>;
     if (s === 'AWAITING_DELETION') return <Badge variant="secondary" className="shrink-0 text-[11px]"><Clock className="mr-1 h-3 w-3" />Awaiting Deletion</Badge>;
@@ -35,7 +35,7 @@ poster name.
 ::private end
 ::end
 */
-function getPropertyByline(property: Property): string | null {
+function getListingByline(property: Listing): string | null {
     const posterName = property.listingAgent?.trim();
     if (!posterName) return null;
 
@@ -49,7 +49,7 @@ function getPropertyByline(property: Property): string | null {
 
 // ─── Thumbnail ────────────────────────────────────────────────────────────────
 
-function Thumbnail({ property }: { property: Property }) {
+function Thumbnail({ property }: { property: Listing }) {
     const cover = property.images?.[0];
 
     const Icon =
@@ -109,7 +109,7 @@ function formatBasisLabel(basis?: string) {
     }
 }
 
-function getPropertyPriceLine(property: Property) {
+function getListingPriceLine(property: Listing) {
     const hiddenPriceLabel = getHiddenPriceLabel(property);
     if (hiddenPriceLabel) return null;
 
@@ -124,13 +124,13 @@ function getPropertyPriceLine(property: Property) {
 
 // ─── Row ──────────────────────────────────────────────────────────────────────
 
-export function AdminPropertyRow({ property, draftKind }: { property: Property; draftKind?: 'creation_draft' | 'creation_pending' | 'changing' | 'deleting' }) {
-    const byline = getPropertyByline(property);
-    const priceLine = getPropertyPriceLine(property);
+export function AdminListingRow({ property, draftKind }: { property: Listing; draftKind?: 'creation_draft' | 'creation_pending' | 'changing' | 'deleting' }) {
+    const byline = getListingByline(property);
+    const priceLine = getListingPriceLine(property);
 
     return (
         <Link
-            href={`/manage/properties/${property.id}`}
+            href={`/manage/listings/${property.id}`}
             className="flex items-center gap-4 px-5 py-4 hover:bg-muted/40 transition-colors group"
         >
             <Thumbnail property={property} />
@@ -159,7 +159,7 @@ export function AdminPropertyRow({ property, draftKind }: { property: Property; 
     );
 }
 
-export function AdminPropertyDraftRow({
+export function AdminListingDraftRow({
     draft,
 }: {
     draft: {
@@ -178,7 +178,7 @@ export function AdminPropertyDraftRow({
     ::private
 
     Incomplete creation drafts reopen the create wizard. Once the request is
-    pending review, the row opens `/manage/properties/[id]` and uses the change
+    pending review, the row opens `/manage/listings/[id]` and uses the change
     id when no live property record exists yet.
 
     ::private end
@@ -190,10 +190,10 @@ export function AdminPropertyDraftRow({
         day: 'numeric',
     });
     const href = draft.status === 'creation_draft'
-        ? `/manage/properties/create?changeId=${draft.id}`
+        ? `/manage/listings/create?changeId=${draft.id}`
         : draft.propertyId
-            ? `/manage/properties/${draft.propertyId}`
-            : `/manage/properties/${draft.id}`;
+            ? `/manage/listings/${draft.propertyId}`
+            : `/manage/listings/${draft.id}`;
     const badgeLabel = draft.status === 'creation_draft'
         ? 'Incomplete'
         : draft.status === 'creation_pending'

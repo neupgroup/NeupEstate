@@ -9,8 +9,8 @@ Accepts property activity events for an authenticated user.
 ::end
 */
 import { NextRequest, NextResponse } from 'next/server';
-import { logPropertyViews } from '@/services/properties/single/views';
-import type { PropertyActivityEvent } from '@/types';
+import { logListingViews } from '@/services/listings/single/views';
+import type { ListingActivityEvent } from '@/types';
 import { getAuthCookieServer } from '@/services/auth/cookie';
 import { logica } from '@neup/logica';
 
@@ -22,7 +22,7 @@ const postHandler = async (request: NextRequest) => {
     const body = await request.json();
     const { propertyId, events } = body as {
       propertyId?: string;
-      events: PropertyActivityEvent[];
+      events: ListingActivityEvent[];
     };
 
     if (!events) {
@@ -40,7 +40,7 @@ const postHandler = async (request: NextRequest) => {
       return NextResponse.json({ success: false, error: 'Invalid token' }, { status: 401 });
     }
 
-    await logPropertyViews(userId, events, propertyId);
+    await logListingViews(userId, events, propertyId);
 
     return NextResponse.json({ message: 'Activity received.' }, { status: 202 });
   } catch (error) {

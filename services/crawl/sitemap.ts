@@ -3,7 +3,7 @@
 
 import { prisma } from '@neup/core/database/prisma';
 import type { Sitemap, SitemapLog } from '@/types';
-import { extractAndSaveProperty as extractAndSavePropertyFlow } from '@/services/intelligence/extract-property-details-flow';
+import { extractAndSaveListing as extractAndSaveListingFlow } from '@/services/intelligence/extract-listing-details-flow';
 import { logger } from '@neup/logica/logger';
 import { crawlSitemap } from '@/services/crawl/sitemap-crawl';
 
@@ -75,7 +75,7 @@ export async function getNewUrlsFromSitemap(sitemapId: string): Promise<{ sitema
 
 export async function processSitemapUrl(url: string): Promise<SitemapLog> {
     try {
-        const result = await extractAndSavePropertyFlow({ url, saveToDb: true });
+        const result = await extractAndSaveListingFlow({ url, saveToDb: true });
         if (result.propertyId && !result.error) {
             return {
                 status: 'success',

@@ -1,0 +1,608 @@
+/*
+::neup.documentation::property-service-shared
+
+Shared mapping, include, and normalization helpers for property service modules.
+
+::end
+*/
+
+import { prisma } from '@neup/core/database/prisma';
+import type { Listing } from '@/types';
+import { mapPurposeFromEnum, mapTypeFromEnum } from '@/inapp/database/adapters';
+
+export interface SavedListingEntry {
+  userId: string;
+  userName: string;
+  propertyId: string;
+  propertyTitle: string;
+  savedAt: string;
+}
+
+export interface ListingDraftSummary {
+  id: string;
+  propertyId?: string | null;
+  title: string;
+  location?: string;
+  category?: string;
+  status: 'creation_draft' | 'creation_pending' | 'changing' | 'deleting';
+  modifiedOn: string;
+}
+
+export interface AwaitingReviewItem {
+  id: string;
+  title: string;
+  location?: string;
+  category?: string;
+  kind: 'property' | 'draft';
+  propertyId?: string;
+  status?: string;
+  modifiedOn?: string;
+}
+
+
+
+/**
+ * normalizePropertyChangeStatus handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function normalizeListingChangeStatus(status: string | null | undefined): ListingDraftSummary['status'] | string {
+  if (status === 'creating') return 'creation_draft';
+  return status || 'creation_draft';
+}
+
+export type BridgeListingField = string;
+
+export interface BridgeListingQuery {
+  agencyId?: string;
+  agentId?: string;
+  fields?: string[];
+  limit?: number;
+  offset?: number;
+  includeInactive?: boolean;
+}
+
+export interface BridgeListingResult {
+  listings: Array<Partial<Listing> & Record<string, unknown>>;
+  totalCount: number;
+  limit: number;
+  offset: number;
+}
+
+export const PROPERTY_TYPE = {
+  HOUSE: 'HOUSE',
+  APARTMENT: 'APARTMENT',
+  LAND: 'LAND',
+  COMMERCIAL: 'COMMERCIAL',
+} as const;
+
+export type ListingTypeValue = typeof PROPERTY_TYPE[keyof typeof PROPERTY_TYPE];
+
+export const PROPERTY_STATUS = {
+  PENDING: 'PENDING',
+  ACTIVE: 'ACTIVE',
+  ARCHIVED: 'ARCHIVED',
+  AWAITING_CREATION: 'AWAITING_CREATION',
+} as const;
+
+export const PROPERTY_INCLUDE = {
+  media:           { where: { isDeleted: false }, orderBy: { sortOrder: 'asc' as const } },
+  houseDetail:     true,
+  apartmentDetail: true,
+  landDetail:      true,
+  commercialDetail: true,
+  prices:          true,
+  owners:          {
+    include: {
+      ownerClient: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          contact: true,
+          contacts: true,
+        },
+      },
+    },
+    orderBy: [{ isPrimaryOwner: 'desc' as const }, { id: 'asc' as const }],
+  },
+  documents:       true,
+  representatives: {
+    include: {
+      representative: {
+        select: { id: true, accountType: true, displayName: true, displayImage: true },
+      },
+    },
+  },
+};
+
+export const BRIDGE_PROPERTY_FIELDS = [
+  'id',
+  'title',
+  'description',
+  'price',
+  'location',
+  'bedrooms',
+  'bathrooms',
+  'area',
+  'facing',
+  'buildStart',
+  'buildCompleted',
+  'purpose',
+  'purposes',
+  'category',
+  'type',
+  'images',
+  'amenities',
+  'agency',
+  'listingAgent',
+  'isOwnerListing',
+  'isFeatured',
+  'isApproved',
+  'status',
+  'createdAt',
+  'updatedAt',
+  'floors',
+  'onFloor',
+  'roadAccess',
+  'kitchens',
+  'diningRooms',
+  'livingRooms',
+  'carParkingSpots',
+  'bikeParkingSpots',
+  'slug',
+  'landDetails',
+  'plots',
+  'apartmentDetails',
+  'apartmentUnits',
+  'structuredLocation',
+  'details',
+  'pricing',
+  'roadAccessDetails',
+  'distancing',
+  'earnings',
+  'documents',
+] as const satisfies readonly BridgeListingField[];
+
+export const DEFAULT_BRIDGE_PROPERTY_FIELDS = BRIDGE_PROPERTY_FIELDS;
+
+export const BRIDGE_PROPERTY_DEFAULT_LIMIT = 10;
+export const BRIDGE_PROPERTY_MAX_LIMIT = 15;
+
+
+
+/**
+ * resolveBridgeListingFields handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function resolveBridgeListingFields(fields?: string[]): BridgeListingField[] {
+  if (!fields?.length) return [...DEFAULT_BRIDGE_PROPERTY_FIELDS];
+
+  return [...DEFAULT_BRIDGE_PROPERTY_FIELDS, ...fields]
+    .map((field) => field.trim())
+    .filter(Boolean)
+    .filter((field, index, list) => list.indexOf(field) === index);
+}
+
+
+
+/**
+ * isRecord handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
+
+
+/**
+ * setNestedValue handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function setNestedValue(target: Record<string, unknown>, path: string[], value: unknown) {
+  let cursor = target;
+
+  for (const [index, segment] of path.entries()) {
+    if (!segment) return;
+    if (index === path.length - 1) {
+      cursor[segment] = value;
+      return;
+    }
+
+    const next = cursor[segment];
+    if (!isRecord(next)) {
+      cursor[segment] = {};
+    }
+    cursor = cursor[segment] as Record<string, unknown>;
+  }
+}
+
+
+
+/**
+ * normalizeBridgeFieldPath handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function normalizeBridgeFieldPath(field: BridgeListingField): string[] {
+  const path = field.split('.').map((part) => part.trim()).filter(Boolean);
+  return path[0] === 'property' ? path.slice(1) : path;
+}
+
+
+
+/**
+ * getSpecificsValue handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function getSpecificsValue(property: Listing, path: string[]): unknown {
+  if (path.length === 0) {
+    return {
+      rooms: getSpecificsValue(property, ['rooms']),
+      space: getSpecificsValue(property, ['space']),
+    };
+  }
+
+  const [segment, ...rest] = path;
+  const groups: Record<string, Record<string, unknown>> = {
+    rooms: {
+      bedrooms: property.bedrooms,
+      bathrooms: property.bathrooms,
+      kitchens: property.kitchens,
+      diningRooms: property.diningRooms,
+      livingRooms: property.livingRooms,
+      attachedBathrooms: property.attachedBathrooms,
+      homeOffices: property.homeOffices,
+      libraries: property.libraries,
+      studyRooms: property.studyRooms,
+      meetingRooms: property.meetingRooms,
+      guestRooms: property.guestRooms,
+      workersCabins: property.workersCabins,
+      poojaRooms: property.poojaRooms,
+      storeRooms: property.storeRooms,
+    },
+    space: {
+      area: property.area,
+      floors: property.floors,
+      onFloor: property.onFloor,
+      roadAccess: property.roadAccess,
+      facing: property.facing,
+      carParkingSpots: property.carParkingSpots,
+      bikeParkingSpots: property.bikeParkingSpots,
+    },
+  };
+
+  const value = groups[segment];
+  if (!value) return undefined;
+  if (rest.length === 0) return value;
+  return rest.reduce<unknown>((current, key) => (isRecord(current) ? current[key] : undefined), value);
+}
+
+
+
+/**
+ * getPropertyDetailsValue handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function getListingDetailsValue(property: Listing): Record<string, unknown> {
+  return {
+    landDetails: property.landDetails,
+    plots: property.plots,
+    apartmentDetails: property.apartmentDetails,
+    apartmentUnits: property.apartmentUnits,
+    details: property.details,
+    roadAccessDetails: property.roadAccessDetails,
+    distancing: property.distancing,
+    earnings: property.earnings,
+    specifics: {
+      rooms: getSpecificsValue(property, ['rooms']),
+      space: {
+        area: property.area,
+        },
+    },
+  };
+}
+
+
+
+/**
+ * getPropertySpacingValue handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function getListingSpacingValue(property: Listing): Record<string, unknown> {
+  return {
+    bedrooms: property.bedrooms,
+    bathrooms: property.bathrooms,
+    floors: property.floors,
+    onFloor: property.onFloor,
+    kitchens: property.kitchens,
+    diningRooms: property.diningRooms,
+    livingRooms: property.livingRooms,
+    carParkingSpots: property.carParkingSpots,
+    bikeParkingSpots: property.bikeParkingSpots,
+  };
+}
+
+
+
+/**
+ * getBridgeListingFieldValue handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function getBridgeListingFieldValue(property: Listing, path: string[]): unknown {
+  const [root, ...rest] = path;
+  if (!root) return undefined;
+
+  if (root === 'specifics') return getSpecificsValue(property, rest);
+  if (root === 'details' && rest.length === 0) return getListingDetailsValue(property);
+  if (root === 'spacing' && rest.length === 0) return getListingSpacingValue(property);
+
+  if (root === 'pricing' && property.pricing) {
+    const publicPricing = { ...(property.pricing as Record<string, unknown>) };
+    delete publicPricing.negotiable;
+    delete publicPricing.basisNegotiable;
+    delete publicPricing.basisNegotiablePrices;
+    return rest.reduce<unknown>((current, key) => (isRecord(current) ? current[key] : undefined), publicPricing);
+  }
+
+  if (root === 'structuredLocation' && property.structuredLocation) {
+    const publicLocation = { ...(property.structuredLocation as Record<string, unknown>) };
+    delete publicLocation.coordinates;
+    return rest.reduce<unknown>((current, key) => (isRecord(current) ? current[key] : undefined), publicLocation);
+  }
+
+  const value = (property as unknown as Record<string, unknown>)[root];
+  if (rest.length === 0) return value;
+  return rest.reduce<unknown>((current, key) => (isRecord(current) ? current[key] : undefined), value);
+}
+
+
+
+/**
+ * pickPropertyFields handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function pickListingFields(property: Listing, fields: BridgeListingField[]): Partial<Listing> & Record<string, unknown> {
+  return fields.reduce<Partial<Listing> & Record<string, unknown>>((picked, field) => {
+    const path = normalizeBridgeFieldPath(field);
+    const value = getBridgeListingFieldValue(property, path);
+
+    if (value !== undefined) {
+      setNestedValue(picked, path, value);
+    }
+
+    return picked;
+  }, {});
+}
+
+
+
+/**
+ * parseGeoLocation handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function parseGeoLocation(geo: string | null): { latitude?: number; longitude?: number } {
+  if (!geo) return {};
+  const [lat, lng] = geo.split(',').map(Number);
+  if (isNaN(lat) || isNaN(lng)) return {};
+  return { latitude: lat, longitude: lng };
+}
+
+
+
+/**
+ * parseStructuredLocation handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function parseStructuredLocation(raw: string | null): any {
+  if (!raw) return undefined;
+  try { return JSON.parse(raw); } catch { return undefined; }
+}
+
+
+
+/**
+ * normalizeStringArray handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function normalizeStringArray(value: unknown): string[] {
+  if (!value) return [];
+  if (Array.isArray(value)) return value.map(String).filter(Boolean);
+  if (typeof value === 'string') return value.split(',').map((s) => s.trim()).filter(Boolean);
+  return [];
+}
+
+
+
+/**
+ * mapRecord handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function mapRecord(record: any): Listing {
+  const purpose  = mapPurposeFromEnum(record.purpose) as Listing['purpose'];
+  const category = mapTypeFromEnum(record.type)       as Listing['category'];
+
+  const mediaImages: string[] = (record.media ?? []).map((m: any) => m.url).filter(Boolean);
+  const images = mediaImages;
+
+  const firstPrice = record.prices?.[0];
+  const price = firstPrice ? Number(firstPrice.price) : Number(record.displayPrice ?? 0);
+
+  const { latitude, longitude } = parseGeoLocation(record.geoLocation);
+  const representatives = (record.representatives ?? [])
+    .filter((entry: any) => entry.role === 'listingOwner' && entry.representative)
+    .map((entry: any) => entry.representative);
+  const agencyRepresentative = representatives.find((account: any) =>
+    ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'].includes(account.accountType),
+  );
+  const listingAgentRepresentative = representatives.find((account: any) => account.id !== agencyRepresentative?.id);
+
+  const house      = record.houseDetail;
+  const apartment  = record.apartmentDetail;
+  const land       = record.landDetail;
+  const commercial = record.commercialDetail;
+
+  let bedrooms = 0, bathrooms = 0, area = 0;
+  let floors: number | undefined, onFloor: number | undefined;
+  let kitchens: number | undefined, livingRooms: number | undefined;
+  let diningRooms: number | undefined, carParkingSpots: number | undefined;
+  let bikeParkingSpots: number | undefined, roadAccess: number | undefined;
+  let facing: string | undefined;
+
+  if (record.type === PROPERTY_TYPE.HOUSE && house) {
+    bedrooms = house.bedrooms; bathrooms = house.bathrooms;
+    floors = house.floors; kitchens = house.kitchens;
+    livingRooms = house.livingRooms; diningRooms = house.diningRooms;
+    carParkingSpots = house.carParkingSpots; bikeParkingSpots = house.bikeParkingSpots;
+    area = Number(house.area); facing = house.facing || undefined;
+    roadAccess = Number(house.roadAccess) || undefined;
+  } else if (record.type === PROPERTY_TYPE.APARTMENT && apartment) {
+    bedrooms = apartment.bedrooms; bathrooms = apartment.bathrooms;
+    onFloor = apartment.onFloor; floors = apartment.totalFloors;
+    carParkingSpots = apartment.carParkingSpots; bikeParkingSpots = apartment.bikeParkingSpots;
+    area = Number(apartment.superArea);
+  } else if (record.type === PROPERTY_TYPE.LAND && land) {
+    area = Number(land.area); facing = land.facing || undefined;
+    roadAccess = Number(land.roadAccess) || undefined;
+  } else if (record.type === PROPERTY_TYPE.COMMERCIAL && commercial) {
+    floors = commercial.floor; area = Number(commercial.usableArea);
+  }
+
+  const owners = record.owners?.length
+    ? record.owners.map((o: any) => ({
+        ownerClientId: o.ownerClientId,
+        isPrimaryOwner: Boolean(o.isPrimaryOwner),
+        clientName: [o.ownerClient?.firstName, o.ownerClient?.lastName].filter(Boolean).join(' ') || undefined,
+        clientEmail: o.ownerClient?.contacts?.find((contact: any) => contact.type?.toLowerCase() === 'email')?.value || o.ownerClient?.contact?.email || undefined,
+        clientPhone: o.ownerClient?.contacts?.find((contact: any) => contact.type?.toLowerCase() === 'phone')?.value || o.ownerClient?.contact?.phone || undefined,
+      }))
+    : undefined;
+
+  const documents = record.documents?.length
+    ? record.documents.map((d: any) => ({ name: d.name, urls: d.urls }))
+    : undefined;
+
+  return {
+    id:               record.id,
+    slug:             record.slug || record.id,
+    title:            record.title || 'Untitled Property',
+    description:      record.description || '',
+    price,
+    location:         record.locationText || 'Nepal',
+    bedrooms,
+    bathrooms,
+    area,
+    facing,
+    purpose,
+    purposes:         [purpose],
+    category,
+    type:             record.type === PROPERTY_TYPE.COMMERCIAL ? 'Commercial' : 'Residential',
+    images,
+    amenities:        normalizeStringArray(record.amenities),
+    agency:           agencyRepresentative ? { id: agencyRepresentative.id, name: agencyRepresentative.displayName || agencyRepresentative.id, logoUrl: agencyRepresentative.displayImage || 'https://placehold.co/200x80.png' } : { id: 'unknown', name: 'Owner', logoUrl: 'https://placehold.co/200x80.png' },
+    listingAgent:     listingAgentRepresentative?.id,
+    listingAgentId:   listingAgentRepresentative?.id,
+    isOwnerListing:   !agencyRepresentative,
+    isFeatured:       Boolean(record.isFeatured),
+    isApproved:       Boolean(record.isApproved),
+    status:           record.status as Listing['status'],
+    createdAt:        record.createdAt?.toISOString?.() || String(record.createdAt),
+    updatedAt:        record.updatedAt?.toISOString?.() || String(record.updatedAt),
+    floors, onFloor, roadAccess, latitude, longitude,
+    kitchens, diningRooms, livingRooms,
+    attachedBathrooms: typeof record.details?.attachedBathrooms === 'number' ? record.details.attachedBathrooms : undefined,
+    homeOffices: typeof record.details?.homeOffices === 'number' ? record.details.homeOffices : undefined,
+    libraries: typeof record.details?.libraries === 'number' ? record.details.libraries : undefined,
+    studyRooms: typeof record.details?.studyRooms === 'number' ? record.details.studyRooms : undefined,
+    meetingRooms: typeof record.details?.meetingRooms === 'number' ? record.details.meetingRooms : undefined,
+    guestRooms: typeof record.details?.guestRooms === 'number' ? record.details.guestRooms : undefined,
+    workersCabins: typeof record.details?.workersCabins === 'number' ? record.details.workersCabins : undefined,
+    poojaRooms: typeof record.details?.poojaRooms === 'number' ? record.details.poojaRooms : undefined,
+    storeRooms: typeof record.details?.storeRooms === 'number' ? record.details.storeRooms : undefined,
+    carParkingSpots, bikeParkingSpots,
+    metaTags:         normalizeStringArray(record.metaTags),
+    landDetails:      record.landDetails || undefined,
+    plots:            record.plots || undefined,
+    apartmentDetails: record.apartmentDetails || undefined,
+    structuredLocation: parseStructuredLocation(record.structuredLocation),
+    pricing:          record.pricing || undefined,
+    details:          record.details || undefined,
+    roadAccessDetails: record.roadAccessDetails || undefined,
+    distancing:       record.distancing || undefined,
+    earnings:         record.earnings || undefined,
+    owner:            owners?.[0],
+    owners,
+    documents,
+  } as Listing;
+}
+
+
+
+/**
+ * hydratePropertyAccountLabels handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export async function hydrateListingAccountLabels(listings: Listing[]): Promise<Listing[]> {
+  const accountIds = Array.from(new Set(
+    listings
+      .flatMap((property) => [property.agency?.id, property.listingAgent])
+      .filter((value): value is string => Boolean(value) && value !== 'unknown'),
+  ));
+
+  if (!accountIds.length) return listings;
+
+  const [accounts, agencies] = await Promise.all([
+    prisma.account.findMany({
+      where: { id: { in: accountIds } },
+      select: { id: true, displayName: true, displayImage: true },
+    }),
+    prisma.agency.findMany({
+      where: { id: { in: accountIds } },
+      select: { id: true, name: true, logoUrl: true },
+    }),
+  ]);
+  const nameById = new Map(accounts.map((account) => [
+    account.id,
+    account.displayName?.trim() || account.id,
+  ]));
+  const imageById = new Map(accounts.map((account) => [account.id, account.displayImage]));
+  const agencyById = new Map(agencies.map((agency) => [agency.id, agency]));
+
+  return listings.map((property) => ({
+    ...property,
+    agency: property.agency ? {
+      ...property.agency,
+      name: agencyById.get(property.agency.id)?.name || nameById.get(property.agency.id) || property.agency.name,
+      logoUrl: agencyById.get(property.agency.id)?.logoUrl || imageById.get(property.agency.id) || property.agency.logoUrl,
+    } : property.agency,
+    listingAgent: property.listingAgent
+      ? (nameById.get(property.listingAgent) || property.listingAgent)
+      : property.listingAgent,
+    listingAgentImage: property.listingAgentId
+      ? (imageById.get(property.listingAgentId) || undefined)
+      : undefined,
+  }));
+}
+
+
+
+/**
+ * onlyActive handles the property-service operation, including its input normalization, domain rules, persistence, and returned application value.
+ *
+ * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
+ */
+export function onlyActive(p: Listing) { return Boolean(p.isApproved); }

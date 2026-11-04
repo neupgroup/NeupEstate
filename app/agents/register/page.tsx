@@ -47,10 +47,10 @@ export default async function AgentRegisterPage() {
             <div className="space-y-5 text-sm text-foreground">
               <div className="grid gap-3 sm:grid-cols-2">
                 <Link
-                  href="/manage/properties"
+                  href="/manage/listings"
                   className="rounded-xl border border-border bg-background px-4 py-3 font-medium transition-colors hover:border-primary hover:text-primary"
                 >
-                  Go to your properties
+                  Go to your listings
                 </Link>
 
                 <Link

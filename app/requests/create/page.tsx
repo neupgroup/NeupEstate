@@ -1,6 +1,6 @@
 
 
-import { PropertyRequestForm } from '@/components/estate';
+import { ListingRequestForm } from '@/components/estate';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { FileSearch } from 'lucide-react';
 import { requirePagePermission } from '@/services/permissions';
@@ -14,14 +14,14 @@ export default async function CreateRequestPage() {
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                         <FileSearch />
-                        Post a Property Request
+                        Post a Listing Request
                     </CardTitle>
                     <CardDescription>
                         Can't find what you're looking for? Let us know your requirements, and we'll find the perfect property for you.
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <PropertyRequestForm />
+                    <ListingRequestForm />
                 </CardContent>
             </Card>
         </main>

@@ -2,7 +2,7 @@
 
 import { Control, useFieldArray, useFormContext } from "react-hook-form";
 import {
-    CreatePropertyFormValues,
+    CreateListingFormValues,
     LandTopographySchema,
     LandUsageSchema,
     LandZoningSchema,
@@ -19,8 +19,8 @@ import { YearPickerCard } from "@/components/ui/year-picker-card";
 import { RoadAccessCard } from "@/components/ui/road-access-card";
 import { PlusCircle, Trash2 } from "lucide-react";
 
-interface PropertySpecificsSectionProps {
-    control: Control<CreatePropertyFormValues>;
+interface ListingSpecificsSectionProps {
+    control: Control<CreateListingFormValues>;
     category: string | undefined;
     fieldChangeNotes?: Partial<Record<string, string>>;
 }
@@ -50,7 +50,7 @@ function Note({ text }: { text?: string }) {
 }
 
 function SelectionField({ name, label, options }: { name: string; label: string; options: readonly string[] }) {
-    const { watch, setValue } = useFormContext<CreatePropertyFormValues>();
+    const { watch, setValue } = useFormContext<CreateListingFormValues>();
     const value = (watch(name as any) as string | undefined) ?? "";
     return (
         <FormField name={name as any} render={() => (
@@ -69,7 +69,7 @@ function SelectionField({ name, label, options }: { name: string; label: string;
 }
 
 function FurnishingField({ name }: { name: string }) {
-    const { watch, setValue } = useFormContext<CreatePropertyFormValues>();
+    const { watch, setValue } = useFormContext<CreateListingFormValues>();
     const value = (watch(name as any) as string | undefined) ?? "";
     const options = [
         { value: "Furnished", label: "Furnished" },
@@ -122,7 +122,7 @@ function CompassField({ name, label, variant, note }: { name: string; label: str
     );
 }
 
-export function PropertySpecificsSection({ control, category, fieldChangeNotes }: PropertySpecificsSectionProps) {
+export function ListingSpecificsSection({ control, category, fieldChangeNotes }: ListingSpecificsSectionProps) {
     const { fields: plotFields, append: appendPlot, remove: removePlot } = useFieldArray({ control, name: "plots" });
     const { fields: unitFields, append: appendUnit, remove: removeUnit } = useFieldArray({ control, name: "apartmentUnits" });
 

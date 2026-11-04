@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useTransition } from "react";
 import { Control, UseFormSetValue, useFieldArray, useWatch } from "react-hook-form";
-import { CreatePropertyFormValues, User } from "@/types";
+import { CreateListingFormValues, User } from "@/types";
 import { searchClients } from "@/services/leads/search";
 import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@neup/components/ui/input";
@@ -30,8 +30,8 @@ function OwnerClientPicker({
     hasPrimaryOwner,
     makePrimary,
 }: {
-    control: Control<CreatePropertyFormValues>;
-    setValue: UseFormSetValue<CreatePropertyFormValues>;
+    control: Control<CreateListingFormValues>;
+    setValue: UseFormSetValue<CreateListingFormValues>;
     index: number;
     remove: (index: number) => void;
     isPrimary: boolean;
@@ -180,8 +180,8 @@ function OwnerClientPicker({
 }
 
 interface OwnerInfoSectionProps {
-    control: Control<CreatePropertyFormValues>;
-    setValue: UseFormSetValue<CreatePropertyFormValues>;
+    control: Control<CreateListingFormValues>;
+    setValue: UseFormSetValue<CreateListingFormValues>;
     users: User[];
     formErrors: any;
     fieldChangeNotes?: Partial<Record<string, string>>;

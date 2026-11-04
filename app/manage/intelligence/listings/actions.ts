@@ -39,7 +39,7 @@ export async function extractCompetitorListingAction(competitorPageId: string) {
       url: page.source,
     });
 
-    if (!result.isPropertyPage) {
+    if (!result.isListingPage) {
       return { success: false, error: 'This page does not appear to be a property page.' };
     }
 

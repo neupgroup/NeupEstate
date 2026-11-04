@@ -3,11 +3,11 @@
 import dynamic from "next/dynamic";
 import type { ComponentProps } from "react";
 
-const ClientPropertyMap = dynamic(
-  () => import("@/components/property-map").then((module) => module.PropertyMap),
+const ClientListingMap = dynamic(
+  () => import("@/components/property-map").then((module) => module.ListingMap),
   { ssr: false },
 );
 
-export function PropertyMapClient(props: ComponentProps<typeof ClientPropertyMap>) {
-  return <ClientPropertyMap {...props} />;
+export function ListingMapClient(props: ComponentProps<typeof ClientListingMap>) {
+  return <ClientListingMap {...props} />;
 }

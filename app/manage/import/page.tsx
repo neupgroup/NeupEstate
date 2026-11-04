@@ -3,7 +3,7 @@
 import { useMemo, useState, useTransition } from 'react';
 import { z } from 'zod';
 import { AlertCircle, CheckCircle2, Database, Eye, Loader2 } from 'lucide-react';
-import { importJsonPropertiesAction } from './actions';
+import { importJsonListingsAction } from './actions';
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { Button } from '@neup/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
@@ -47,7 +47,7 @@ const importFormSchema = z.object({
 });
 
 const exampleData = {
-  properties: [
+  listings: [
     {
       id: 'PIN-1001',
       name: 'House for sale in Lalitpur',
@@ -149,7 +149,7 @@ function setDryRun(structureJson: string, dryRun: boolean): string {
   return formatJson({ ...parsed, dryRun });
 }
 
-export default function ImportPropertiesPage() {
+export default function ImportListingsPage() {
   const [dataJson, setDataJson] = useState(formatJson(exampleData));
   const [structureJson, setStructureJson] = useState(formatJson(exampleStructure));
   const [result, setResult] = useState<ImportResult | null>(null);
@@ -181,7 +181,7 @@ export default function ImportPropertiesPage() {
     setStructureJson(nextStructureJson);
 
     startTransition(async () => {
-      const response = await importJsonPropertiesAction({
+      const response = await importJsonListingsAction({
         dataJson,
         structureJson: nextStructureJson,
       });
@@ -199,7 +199,7 @@ export default function ImportPropertiesPage() {
     <div className="mx-auto max-w-7xl space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold tracking-normal">Import Properties</h1>
+          <h1 className="text-2xl font-semibold tracking-normal">Import Listings</h1>
           <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
             Import property records from JSON by mapping source fields and relationships into the property structure.
           </p>
@@ -219,7 +219,7 @@ export default function ImportPropertiesPage() {
       <div className="grid gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Property JSON</CardTitle>
+            <CardTitle>Listing JSON</CardTitle>
             <CardDescription>Source data can be an array or an object with a collection path.</CardDescription>
           </CardHeader>
           <CardContent>
@@ -236,7 +236,7 @@ export default function ImportPropertiesPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Property Structure</CardTitle>
+            <CardTitle>Listing Structure</CardTitle>
             <CardDescription>Define fields, defaults, and relationship joins for the import.</CardDescription>
           </CardHeader>
           <CardContent>

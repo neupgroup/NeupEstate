@@ -1,7 +1,7 @@
 
 
-import { getSavedProperties } from "@/services/properties/view";
-import { PropertyCard } from "@/components/property-card";
+import { getSavedListings } from "@/services/listings/view";
+import { ListingCard } from "@/components/property-card";
 import { Alert, AlertDescription, AlertTitle } from "@neup/components/ui/alert";
 import { Heart, AlertCircle } from "lucide-react";
 import { Link } from "@neup/components/ui/link";
@@ -10,9 +10,9 @@ import { getAccountId as getServerAccountId } from '@/services/auth/account';
 export default async function SavedFavouritesPage() {
   const userId = await getServerAccountId();
   
-  let savedProperties: any[] = [];
+  let savedListings: any[] = [];
   if (userId) {
-    savedProperties = await getSavedProperties(userId);
+    savedListings = await getSavedListings(userId);
   }
 
   return (
@@ -21,19 +21,19 @@ export default async function SavedFavouritesPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <h1 className="text-4xl font-headline font-bold flex items-center gap-3">
             <Heart className="h-8 w-8 text-red-500" />
-            All Favourite Properties
+            All Favourite Listings
           </h1>
           <p className="mt-2 text-muted-foreground">
-            Your personal collection of properties you've saved.
+            Your personal collection of listings you've saved.
           </p>
         </div>
       </div>
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {savedProperties.length > 0 ? (
+        {savedListings.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {savedProperties.map((property) => (
-              <PropertyCard key={property.id} property={property} />
+            {savedListings.map((property) => (
+              <ListingCard key={property.id} property={property} />
             ))}
           </div>
         ) : (
@@ -41,7 +41,7 @@ export default async function SavedFavouritesPage() {
               <AlertCircle className="h-4 w-4" />
               <AlertTitle>No Saved Properties</AlertTitle>
               <AlertDescription>
-                  You haven't saved any properties yet. Click the heart icon on any listing to add it to this list.
+                  You haven't saved any listings yet. Click the heart icon on any listing to add it to this list.
                    <br />
                   <Link href="/search" className="text-primary font-semibold hover:underline mt-2 inline-block">
                      Start Browsing

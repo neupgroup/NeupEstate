@@ -11,14 +11,14 @@ Follow a domain-first, namespace-mirrored module structure.
    a module containing multiple responsibilities.
 
    Example:
-   logica.estate.properties.get
-   → logica/estate/properties/get.ts
+   logica.estate.listings.get
+   → logica/estate/listings/get.ts
 
 3. Use nouns for domain folders and verbs for operation files.
-   Examples: properties/, agent/, get.ts, create.ts, assign.ts.
+   Examples: listings/, agent/, get.ts, create.ts, assign.ts.
 
 4. Let the path provide context.
-   Use properties/get.ts, not properties/getProperties.ts.
+   Use listings/get.ts, not listings/getListings.ts.
    Avoid repeating the full namespace in local identifiers.
 
 5. Prefix internal implementation files with "_".
@@ -67,7 +67,7 @@ Follow these conventions when generating or modifying Neup code. Inspect existin
 Group code by the business concept it belongs to.
 
 * Use domains such as `estate`, `identity`, and `billing`.
-* Place property operations inside `estate/properties`.
+* Place property operations inside `estate/listings`.
 * Keep domain-specific validation, queries, and transformations close to their owner.
 * Create shared modules only when multiple domains actually need the same behavior.
 * Avoid broad dumping grounds such as `helpers.ts`, `common.ts`, and `utils.ts`.
@@ -78,10 +78,10 @@ Each namespace segment maps to a folder. A terminal operation maps to an undersc
 
 | Public API                             | Implementation                           |
 | -------------------------------------- | ---------------------------------------- |
-| `logica.estate.properties.get()`       | `logica/estate/properties/_get.ts`       |
-| `logica.estate.properties.list()`      | `logica/estate/properties/_list.ts`      |
-| `logica.estate.properties.filter()`    | `logica/estate/properties/_filter.ts`    |
-| `logica.estate.properties.type.list()` | `logica/estate/properties/type/_list.ts` |
+| `logica.estate.listings.get()`       | `logica/estate/listings/_get.ts`       |
+| `logica.estate.listings.list()`      | `logica/estate/listings/_list.ts`      |
+| `logica.estate.listings.filter()`    | `logica/estate/listings/_filter.ts`    |
+| `logica.estate.listings.type.list()` | `logica/estate/listings/type/_list.ts` |
 | `logica.estate.agent.get()`            | `logica/estate/agent/_get.ts`            |
 
 Use `index.ts` to assemble each public namespace.
@@ -108,7 +108,7 @@ Names must describe their meaning at the location where they appear.
 | `res`                               | `properties` or `response`, according to meaning |
 | `processData()`                     | `validateListing()`                              |
 | `flag`                              | `includeArchived`                                |
-| `estate.properties.getProperties()` | `estate.properties.list()`                       |
+| `estate.listings.getListings()` | `estate.listings.list()`                       |
 
 Use concise operation names inside a clear namespace. Use descriptive standalone names when that context is absent.
 
@@ -265,16 +265,16 @@ These control the request and are not resource filters.
 Prevent schema fields from conflicting with these reserved names.
 
 Example, shown before URL encoding:
-  GET /properties?type=house&agent(id)=agent_123&include=id,type,agent(id,name)&pageSize=50
+  GET /listings?type=house&agent(id)=agent_123&include=id,type,agent(id,name)&pageSize=50
 
 4. Long requests: switch from GET to POST
 
 Support:
-  GET /properties
-  POST /properties/search
+  GET /listings
+  POST /listings/search
 
 Use GET when the complete encoded URL is at most 2,000 bytes.
-Use POST /properties/search when it exceeds 2,000 bytes.
+Use POST /listings/search when it exceeds 2,000 bytes.
 
 This is our configurable project threshold, not a universal URL limit.
 Measure UTF-8 bytes after URL encoding, not unencoded character count.
@@ -291,7 +291,7 @@ For POST:
 - Never send a GET request body.
 
 Example:
-  POST /properties/search
+  POST /listings/search
 
   {
     "filters": {
@@ -306,8 +306,8 @@ Example:
 Normalize GET string values and POST JSON values against the same
 schema so equivalent requests produce identical results.
 
-POST /properties/search is read-only.
-POST /properties remains the resource-creation endpoint.
+POST /listings/search is read-only.
+POST /listings remains the resource-creation endpoint.
 
 If GET returns HTTP 414, retry the equivalent search once using POST.
 Do not automatically retry unrelated errors.
@@ -344,11 +344,11 @@ Do not manually concatenate or double-encode parameter values.
 Use endpoint-defined input sources. Do not choose the source based
 on whether the URL or body happens to contain a value.
 
-GET /properties:
+GET /listings:
 - Read filters, include, orderBy, pageSize, and pageToken from the URL.
 - Do not accept a request body.
 
-POST /properties/search:
+POST /listings/search:
 - Read filters, include, orderBy, pageSize, and pageToken from JSON.
 - Reject search-related URL parameters with HTTP 400.
 - Do not merge URL search parameters with the JSON body.
@@ -374,7 +374,7 @@ Missing and empty values:
 
 Long-URL conversion:
 - When the encoded URL exceeds 2,000 bytes, the client sends the
-  complete search request to POST /properties/search as JSON.
+  complete search request to POST /listings/search as JSON.
 - Remove all search parameters from the URL.
 - Preserve all filters, selections, sorting, and pagination values.
 - Use the same normalized request model for both transports.
@@ -383,7 +383,7 @@ These are our API's rules, not a claim that all Google APIs reject
 mixed query and body input.
 
 For example, this is invalid under your contract:
-POST /properties/search?type=house
+POST /listings/search?type=house
 Content-Type: application/json
 
 {

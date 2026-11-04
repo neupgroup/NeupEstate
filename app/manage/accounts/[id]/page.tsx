@@ -4,9 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@neup/components/ui/ca
 import { prisma } from '@neup/core/database/prisma';
 import { getAccountById } from '@/services/accounts/id/get';
 import { getRequirementByUserId } from '@/services/requirements/get';
-import { getSavedProperties, getPaginatedProperties } from '@/services/properties';
+import { getSavedListings, getPaginatedListings } from '@/services/listings';
 import { isAgencyLikeAccountType } from '@/services/accounts/type';
-import { AdminPropertyRow } from '@/components/manage/property-row';
+import { AdminListingRow } from '@/components/manage/property-row';
 import { Link } from '@neup/components/ui/link';
 import { Activity, Bookmark, Home, Shield, Target } from 'lucide-react';
 import { AccountRefreshButton } from '@/components/manage/account-refresh-button';
@@ -42,8 +42,8 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
   if (!account) notFound();
   const isBrandAccount = isAgencyLikeAccountType(account.account_type);
   const propertiesHref = isBrandAccount
-    ? `/manage/properties?brand=${encodeURIComponent(accountId)}`
-    : `/manage/properties?account=${encodeURIComponent(accountId)}`;
+    ? `/manage/listings?brand=${encodeURIComponent(accountId)}`
+    : `/manage/listings?account=${encodeURIComponent(accountId)}`;
   const accountRoles = await prisma.accountAccess.findMany({
     where: { accountId },
     select: {
@@ -69,10 +69,10 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
   const permissions = [...new Set(roles.flatMap((role) => normalizePermissions(role.permissions)))];
   const roleIds = roles.map((role) => role.id);
 
-  const [requirements, savedProperties, ownedProperties, recentActivity, remoteUsersResult] = await Promise.all([
+  const [requirements, savedListings, ownedListings, recentActivity, remoteUsersResult] = await Promise.all([
     getRequirementByUserId(accountId),
-    account?.registered ? getSavedProperties(accountId) : Promise.resolve([]),
-    getPaginatedProperties(
+    account?.registered ? getSavedListings(accountId) : Promise.resolve([]),
+    getPaginatedListings(
       isBrandAccount
         ? { agencyIds: [accountId], includeInactive: true, limit: 4 }
         : isAgentAccountType(account.account_type)
@@ -225,7 +225,7 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
 
       <section className="space-y-3">
         <div>
-          <h3 className="text-sm font-semibold">Properties</h3>
+          <h3 className="text-sm font-semibold">Listings</h3>
           <p className="text-xs text-muted-foreground">Listings linked to this account.</p>
         </div>
         <Card className="shadow-sm">
@@ -233,9 +233,9 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
             <div className="flex flex-wrap items-center justify-between gap-3">
               <CardTitle className="flex items-center gap-2 text-base">
                 <Home className="h-4 w-4" />
-                Properties
+                Listings
                 <span className="text-sm font-normal text-muted-foreground">
-                  {ownedProperties.totalCount} total
+                  {ownedListings.totalCount} total
                 </span>
               </CardTitle>
               <Link
@@ -247,12 +247,12 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
             </div>
           </CardHeader>
           <CardContent>
-            {ownedProperties.properties.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No properties linked to this account.</p>
+            {ownedListings.listings.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No listings linked to this account.</p>
             ) : (
               <div className="divide-y overflow-hidden rounded-lg border">
-                {ownedProperties.properties.map((property) => (
-                  <AdminPropertyRow key={property.id} property={property} />
+                {ownedListings.listings.map((property) => (
+                  <AdminListingRow key={property.id} property={property} />
                 ))}
               </div>
             )}
@@ -330,22 +330,22 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
       <section className="space-y-3">
         <div>
           <h3 className="text-sm font-semibold">Saved</h3>
-          <p className="text-xs text-muted-foreground">Properties bookmarked by the account.</p>
+          <p className="text-xs text-muted-foreground">Listings bookmarked by the account.</p>
         </div>
         <Card className="shadow-sm">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-base">
               <Bookmark className="h-4 w-4" />
-              Saved Properties
+              Saved Listings
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {savedProperties.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No saved properties.</p>
+            {savedListings.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No saved listings.</p>
             ) : (
               <div className="divide-y overflow-hidden rounded-lg border">
-                {savedProperties.map((property) => (
-                  <AdminPropertyRow key={property.id} property={property} />
+                {savedListings.map((property) => (
+                  <AdminListingRow key={property.id} property={property} />
                 ))}
               </div>
             )}

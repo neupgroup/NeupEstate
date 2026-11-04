@@ -19,7 +19,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@neup/core/database/prisma';
 import { logger } from '@neup/logica/logger';
 import { CreateRequirementSchema } from '@/types/requirements';
-import { requireIdentity } from '@/services/properties/action-helpers';
+import { requireIdentity } from '@/services/listings/action-helpers';
 import { requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';
 

@@ -5,7 +5,7 @@ import { Button } from '@neup/components/ui/button';
 import { Plus, AlertCircle } from 'lucide-react';
 import { Section } from '@/components/home/_components/section';
 import { SectionTitle } from '@/components/home/_components/section-title';
-import { RecommendedProperties } from "@/components/recommended-properties";
+import { RecommendedListings } from "@/components/recommended-properties";
 import { getRequirementByUserId } from '@/services/requirements/get';
 import type { Requirement } from '@/types';
 import type { RequirementsFormValues } from '@/components/profile/user-requirements-form';
@@ -53,7 +53,7 @@ function ViewRequirements({ requirements, isLoading }: { requirements: Requireme
           <CardContent className="space-y-4 text-sm">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
               <div><b>Looking to:</b> <span className="capitalize">{req.purpose}</span></div>
-              <div><b>Property Type:</b> <span className="capitalize">{Array.isArray(req.propertyType) ? req.propertyType.join(', ') : req.propertyType}</span></div>
+              <div><b>Listing Type:</b> <span className="capitalize">{Array.isArray(req.propertyType) ? req.propertyType.join(', ') : req.propertyType}</span></div>
               <div><b>Location:</b> {req.location}</div>
               <div><b>Budget:</b> ${req.minBudget?.toLocaleString() || 'Any'} - ${req.maxBudget?.toLocaleString() || 'Any'}</div>
               <div><b>Urgency:</b> <span className="capitalize">{req.requiredTime}</span></div>
@@ -90,12 +90,12 @@ function RecommendedForYouSection({ requirements }: { requirements: Requirement[
   return (
     <Section className="w-full py-12 bg-background">
       <SectionTitle>
-        <RecommendedProperties requirements={requirementsForClient} />
+        <RecommendedListings requirements={requirementsForClient} />
       </SectionTitle>
       <p className="mt-2 text-muted-foreground mb-6 max-w-2xl">
-        Based on your primary requirements, here are some properties you might love.
+        Based on your primary requirements, here are some listings you might love.
       </p>
-      <RecommendedProperties requirements={requirementsForClient} />
+      <RecommendedListings requirements={requirementsForClient} />
     </Section>
   );
 }

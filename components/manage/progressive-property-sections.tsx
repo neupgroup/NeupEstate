@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import type { AgencyCustomizationRule, CreatePropertyFormValues, User } from "@/types";
+import type { AgencyCustomizationRule, CreateListingFormValues, User } from "@/types";
 import { Button, buttonVariants } from "@neup/components/ui/button";
 import {
     AlertDialog,
@@ -18,24 +18,24 @@ import {
 } from "@neup/components/ui/alert-dialog";
 import { AlertCircle, ArrowLeft, CornerDownRight } from "lucide-react";
 import { BasicDetailsSection } from "@/components/manage/property-form-sections/basic-details-section";
-import { PropertySpecificsSection } from "@/components/manage/property-form-sections/property-specifics-section";
+import { ListingSpecificsSection } from "@/components/manage/property-form-sections/property-specifics-section";
 import { RoomsAndSpaceSection } from "@/components/manage/property-form-sections/rooms-and-space-section";
 import { FeaturesAmenitiesSection } from "@/components/manage/property-form-sections/features-amenities-section";
 import { PricingDetailsSection } from "@/components/manage/property-form-sections/pricing-details-section";
 import { LocationDetailsSection } from "@/components/manage/property-form-sections/location-details-section";
 import { OwnerInfoSection } from "@/components/manage/property-form-sections/owner-info-section";
-import { PropertyPhotosSection } from "@/components/manage/property-form-sections/property-photos-section";
-import { PropertyDocumentsSection } from "@/components/manage/property-form-sections/property-documents-section";
+import { ListingPhotosSection } from "@/components/manage/property-form-sections/property-photos-section";
+import { ListingDocumentsSection } from "@/components/manage/property-form-sections/property-documents-section";
 import { TitleDescriptionSection } from "@/components/manage/property-form-sections/title-description-section";
 import { cn } from "@neup/core/utils";
 import { evaluateAgencyCustomization } from "@/inapp/agency-customization/evaluate-agency-customization";
 
-type PropertyFormStep = {
+type ListingFormStep = {
     id: string;
     section: string;
     title: string;
     description: string;
-    fields: Array<keyof CreatePropertyFormValues | string>;
+    fields: Array<keyof CreateListingFormValues | string>;
     render: () => React.ReactElement | null;
 };
 
@@ -104,7 +104,7 @@ function formatFieldError(path: string, message: string): string {
     return `❌ ${label}: ${message}`;
 }
 
-function getShowPriceBasisError(values: CreatePropertyFormValues): string | null {
+function getShowPriceBasisError(values: CreateListingFormValues): string | null {
     const pricing = values.pricing;
     const priceDisplayMode = pricing?.priceDisplayMode || "show-price";
     if (priceDisplayMode !== "show-price") return null;
@@ -120,8 +120,8 @@ function getShowPriceBasisError(values: CreatePropertyFormValues): string | null
     return null;
 }
 
-interface ProgressivePropertySectionsProps {
-    form: UseFormReturn<CreatePropertyFormValues>;
+interface ProgressiveListingSectionsProps {
+    form: UseFormReturn<CreateListingFormValues>;
     users: User[];
     isEditForm: boolean;
     isSubmitting: boolean;
@@ -164,7 +164,7 @@ interface ProgressivePropertySectionsProps {
     listingAgentOptions?: Array<{ id: string; name: string; imageUrl?: string | null; agencyId?: string | null; agencyName?: string | null }>;
 }
 
-export function ProgressivePropertySections({
+export function ProgressiveListingSections({
     form,
     users,
     isEditForm,
@@ -183,7 +183,7 @@ export function ProgressivePropertySections({
     allowSectionJumping = true,
     canEditOwnership = true,
     listingAgentOptions = [],
-}: ProgressivePropertySectionsProps) {
+}: ProgressiveListingSectionsProps) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -194,7 +194,7 @@ export function ProgressivePropertySections({
     const categories = (form.watch("categories" as any) as unknown as string[]) || [];
     const category = categories[0] as string | undefined;
 
-    const steps = useMemo<PropertyFormStep[]>(() => [
+    const steps = useMemo<ListingFormStep[]>(() => [
         {
             id: "basics",
             section: "basic",
@@ -209,7 +209,7 @@ export function ProgressivePropertySections({
             title: "Property Specifics",
             description: "Enter the size, age, floors, and structural details.",
             fields: ["area", "buildStart", "buildCompleted", "facing", "landDetails.facing", "floors", "onFloor", "landDetails", "plots", "apartmentUnits"],
-            render: () => <PropertySpecificsSection control={form.control} category={category} fieldChangeNotes={fieldChangeNotes} />,
+            render: () => <ListingSpecificsSection control={form.control} category={category} fieldChangeNotes={fieldChangeNotes} />,
         },
         ...(categories.includes("Land") ? [] : [{
             id: "rooms",
@@ -218,7 +218,7 @@ export function ProgressivePropertySections({
             description: "Specify the number of rooms, parking, and other spaces.",
             fields: ["bedrooms", "bathrooms", "kitchens", "diningRooms", "livingRooms", "attachedBathrooms", "homeOffices", "libraries", "studyRooms", "meetingRooms", "guestRooms", "workersCabins", "poojaRooms", "storeRooms", "carParkingSpots", "bikeParkingSpots"],
             render: () => <RoomsAndSpaceSection control={form.control} category={category} fieldChangeNotes={fieldChangeNotes} />,
-        } satisfies PropertyFormStep]),
+        } satisfies ListingFormStep]),
         {
             id: "features",
             section: "ammenities",
@@ -250,14 +250,14 @@ export function ProgressivePropertySections({
             description: "Search and select one or more client owners for this property.",
             fields: ["owners"],
             render: () => <OwnerInfoSection control={form.control} setValue={form.setValue} users={users} formErrors={form.formState.errors} fieldChangeNotes={fieldChangeNotes} />,
-        } satisfies PropertyFormStep] : []),
+        } satisfies ListingFormStep] : []),
         {
             id: "photos",
             section: "photos",
             title: "Property Photos",
             description: "Upload photos that best represent the property.",
             fields: ["images"],
-            render: () => <PropertyPhotosSection control={form.control} fieldChangeNotes={fieldChangeNotes} previousImages={previousImages} />,
+            render: () => <ListingPhotosSection control={form.control} fieldChangeNotes={fieldChangeNotes} previousImages={previousImages} />,
         },
         {
             id: "documents",
@@ -265,7 +265,7 @@ export function ProgressivePropertySections({
             title: "Property Documents",
             description: "Attach ownership documents, blueprints, or legal papers.",
             fields: ["documents"],
-            render: () => <PropertyDocumentsSection control={form.control} fieldChangeNotes={fieldChangeNotes} />,
+            render: () => <ListingDocumentsSection control={form.control} fieldChangeNotes={fieldChangeNotes} />,
         },
         {
             id: "listing-profile",
@@ -384,7 +384,7 @@ export function ProgressivePropertySections({
         return [...new Set(messages)];
     }
 
-    function collectCustomStepErrors(step: PropertyFormStep): string[] {
+    function collectCustomStepErrors(step: ListingFormStep): string[] {
         const messages: string[] = [];
 
         if (step.id === "pricing") {
@@ -489,7 +489,7 @@ export function ProgressivePropertySections({
 
     function handleCancel() {
         if (pathname.endsWith("/create")) {
-            router.push("/manage/properties");
+            router.push("/manage/listings");
             return;
         }
 
@@ -498,7 +498,7 @@ export function ProgressivePropertySections({
             return;
         }
 
-        router.push("/manage/properties");
+        router.push("/manage/listings");
     }
 
     async function handleDropCreationDraft() {

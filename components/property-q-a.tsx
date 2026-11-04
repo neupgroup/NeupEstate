@@ -42,7 +42,7 @@ function getCookie(name: string): string | null {
 // --- End Cookie Helper Functions ---
 
 
-interface PropertyQAProps {
+interface ListingQAProps {
     propertyId: string;
     agentName?: string;
     agentImage?: string;
@@ -51,7 +51,7 @@ interface PropertyQAProps {
     flat?: boolean;
 }
 
-export function PropertyQA({ propertyId, agentName = "Property Agent", agentImage, agentPhone, agentEmail, flat = false }: PropertyQAProps) {
+export function ListingQA({ propertyId, agentName = "Property Agent", agentImage, agentPhone, agentEmail, flat = false }: ListingQAProps) {
     const { user } = useSession();
     const { toast } = useToast();
     const [isSubmitting, startSubmitting] = useTransition();

@@ -51,7 +51,7 @@ Example response:
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@neup/core/database/prisma';
 import { logger } from '@neup/logica/logger';
-import { requireIdentity } from '@/services/properties/action-helpers';
+import { requireIdentity } from '@/services/listings/action-helpers';
 import { getAccountById } from '@/services/accounts/id/get';
 import { getAgencyAgentMapsByAgent } from '@/services/agencies/agent-maps/service';
 import { requirePermission } from '@/services/permissions';

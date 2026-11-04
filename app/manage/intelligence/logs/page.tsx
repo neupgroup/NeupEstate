@@ -93,7 +93,7 @@ export default async function ListingsIntelligencePage({
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-2">
               <Badge variant="secondary" className="w-fit">Pipeline</Badge>
-              <CardTitle className="text-xl">Crawl and fetch properties</CardTitle>
+              <CardTitle className="text-xl">Crawl and fetch listings</CardTitle>
               <CardDescription className="max-w-3xl break-words">
                 Crawl the site, fetch the rendered HTML, capture the source HTML, collect the images, save the rendered HTML in the database, and then pass the page to AI to create a competitor listing.
               </CardDescription>

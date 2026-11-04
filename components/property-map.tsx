@@ -27,7 +27,7 @@ type SearchTarget = {
   zoom: number;
 };
 
-interface PropertyMapProps {
+interface ListingMapProps {
   center?: MapCenter | null;
   searchTargets?: SearchTarget[];
   approximate?: boolean;
@@ -142,7 +142,7 @@ async function findLocation(searchTarget: SearchTarget, signal: AbortSignal): Pr
   };
 }
 
-export function PropertyMap({ center, searchTargets, approximate = false }: PropertyMapProps) {
+export function ListingMap({ center, searchTargets, approximate = false }: ListingMapProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const markerRef = useRef<L.CircleMarker | L.Marker | null>(null);

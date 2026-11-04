@@ -44,7 +44,7 @@ type Lead = {
     priority: string;
 };
 
-type Property = {
+type Listing = {
     id: string;
     title: string;
     location?: string | null;
@@ -63,7 +63,7 @@ interface ActivityListProps {
     leads?: Lead[];
     showLead?: boolean;
     leadId?: string;
-    properties?: Property[];
+    listings?: Listing[];
 }
 
 const activityTypes = ['follow_up', 'visit', 'meeting', 'remarks'] as const;
@@ -138,7 +138,7 @@ function getActivityType(data: Record<string, any>) {
     return String(data.activityType ?? data.type ?? 'remarks');
 }
 
-function getPropertyLabel(data: Record<string, any>, propertiesMap: Map<string, Property>) {
+function getListingLabel(data: Record<string, any>, propertiesMap: Map<string, Listing>) {
     const propertyId = data.propertyId ? String(data.propertyId) : '';
     const propertyTitle = data.propertyTitle ? String(data.propertyTitle) : '';
     if (propertyTitle) return propertyTitle;
@@ -151,10 +151,10 @@ function getPropertyLabel(data: Record<string, any>, propertiesMap: Map<string, 
 
 function ActivityComposer({
     leadId,
-    properties,
+    listings,
 }: {
     leadId: string;
-    properties: Property[];
+    listings: Listing[];
 }) {
     const router = useRouter();
     const { toast } = useToast();
@@ -187,7 +187,7 @@ function ActivityComposer({
 
     const shouldShowWhen = activityType !== 'remarks';
     const shouldShowFollowUpMethod = activityType === 'follow_up';
-    const shouldShowProperty = activityType === 'visit';
+    const shouldShowListing = activityType === 'visit';
 
     function handleOpenChange(nextOpen: boolean) {
         setOpen(nextOpen);
@@ -314,13 +314,13 @@ function ActivityComposer({
                             />
                         )}
 
-                        {shouldShowProperty && (
+                        {shouldShowListing && (
                             <FormField
                                 control={form.control}
                                 name="propertyId"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Property (optional)</FormLabel>
+                                        <FormLabel>Listing (optional)</FormLabel>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <FormControl>
                                                 <SelectTrigger>
@@ -329,7 +329,7 @@ function ActivityComposer({
                                             </FormControl>
                                             <SelectContent>
                                                 <SelectItem value="__none__">No property</SelectItem>
-                                                {properties.map((property) => (
+                                                {listings.map((property) => (
                                                     <SelectItem key={property.id} value={property.id}>
                                                         {property.location ? `${property.title} (${property.location})` : property.title}
                                                     </SelectItem>
@@ -376,9 +376,9 @@ function ActivityComposer({
     );
 }
 
-export function ActivityList({ activities, leads = [], showLead = false, leadId, properties = [] }: ActivityListProps) {
+export function ActivityList({ activities, leads = [], showLead = false, leadId, listings = [] }: ActivityListProps) {
     const leadMap = useMemo(() => Object.fromEntries(leads.map((lead) => [lead.id, lead])), [leads]);
-    const propertiesMap = useMemo(() => new Map(properties.map((property) => [property.id, property])), [properties]);
+    const propertiesMap = useMemo(() => new Map(listings.map((property) => [property.id, property])), [listings]);
     const [hasHydrated, setHasHydrated] = useState(false);
 
     useEffect(() => {
@@ -393,7 +393,7 @@ export function ActivityList({ activities, leads = [], showLead = false, leadId,
                         <h3 className="text-base font-semibold">Activity history</h3>
                         <p className="text-sm text-muted-foreground">No activity recorded yet.</p>
                     </div>
-                    {leadId ? <ActivityComposer leadId={leadId} properties={properties} /> : null}
+                    {leadId ? <ActivityComposer leadId={leadId} listings={listings} /> : null}
                 </div>
                 <p className="text-sm text-muted-foreground py-12 text-center rounded-lg border">
                     No activity recorded yet.
@@ -411,7 +411,7 @@ export function ActivityList({ activities, leads = [], showLead = false, leadId,
                         {activities.length} event{activities.length !== 1 ? 's' : ''}
                     </p>
                 </div>
-                {leadId ? <ActivityComposer leadId={leadId} properties={properties} /> : null}
+                {leadId ? <ActivityComposer leadId={leadId} listings={listings} /> : null}
             </div>
 
             <div className="space-y-3">
@@ -419,7 +419,7 @@ export function ActivityList({ activities, leads = [], showLead = false, leadId,
                     const data = (activity.data ?? {}) as Record<string, any>;
                     const activityType = getActivityType(data);
                     const method = data.followUpMethod ? formatFollowUpMethod(String(data.followUpMethod)) : '';
-                    const propertyLabel = getPropertyLabel(data, propertiesMap);
+                    const propertyLabel = getListingLabel(data, propertiesMap);
                     const remarks = String(data.remarks ?? '').trim();
                     const lead = leadMap[activity.leadId];
 
@@ -449,7 +449,7 @@ export function ActivityList({ activities, leads = [], showLead = false, leadId,
                                         )}
                                         {propertyLabel && (
                                             <p>
-                                                <span className="text-muted-foreground">Property: </span>
+                                                <span className="text-muted-foreground">Listing: </span>
                                                 <span className="font-medium">{propertyLabel}</span>
                                             </p>
                                         )}

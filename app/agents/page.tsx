@@ -26,7 +26,7 @@ export default async function AgentsPage() {
               <UsersRound className="h-4 w-4" /> Local expertise, personal guidance
             </p>
             <h1 className="text-4xl font-headline font-bold tracking-tight sm:text-5xl lg:text-6xl">Find the right agent for your next move.</h1>
-            <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">Meet real estate professionals who can help you explore properties, understand your options, and move forward with confidence.</p>
+            <p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">Meet real estate professionals who can help you explore listings, understand your options, and move forward with confidence.</p>
             <Link href="#agent-listings" className="mt-8 inline-flex items-center gap-2 rounded-md bg-primary px-5 py-3 font-medium text-primary-foreground transition-colors hover:bg-primary/90">
               Explore our agents <ArrowDown className="h-4 w-4" />
             </Link>

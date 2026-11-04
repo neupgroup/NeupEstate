@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getLeadActivity } from '@/services/leads/activity/view';
-import { getProperties } from '@/services/properties/list';
+import { getListings } from '@/services/listings/list';
 import { Link } from '@neup/components/ui/link';
 import { ChevronLeft } from 'lucide-react';
 import { Badge } from '@neup/components/ui/badge';
@@ -8,9 +8,9 @@ import { ActivityList } from '@/components/manage/activity-list';
 
 export default async function SharedLeadPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const [{ lead, activities }, properties] = await Promise.all([
+    const [{ lead, activities }, listings] = await Promise.all([
         getLeadActivity(id),
-        getProperties({ includeInactive: true }),
+        getListings({ includeInactive: true }),
     ]);
 
     if (!lead) notFound();
@@ -20,7 +20,7 @@ export default async function SharedLeadPage({ params }: { params: Promise<{ id:
         ...activity,
         activityOn: activity.activityOn.toISOString(),
     }));
-    const serializedProperties = properties.map((property) => ({
+    const serializedListings = listings.map((property) => ({
         id: property.id,
         title: property.title,
         location: property.location || null,
@@ -49,7 +49,7 @@ export default async function SharedLeadPage({ params }: { params: Promise<{ id:
                 </p>
             </div>
 
-            <ActivityList activities={serializedActivities as any} leadId={lead.id} properties={serializedProperties} />
+            <ActivityList activities={serializedActivities as any} leadId={lead.id} listings={serializedListings} />
         </div>
     );
 }

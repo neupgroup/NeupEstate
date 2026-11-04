@@ -13,7 +13,7 @@ type SidebarProps = {
   canDashboard?: boolean;
   canAnalytics?: boolean;
   canIntelListings?: boolean;
-  canPropertyView?: boolean;
+  canListingView?: boolean;
   canCollectionView?: boolean;
   canLeadsHomeView?: boolean;
   canLeadsBaseView?: boolean;
@@ -39,7 +39,7 @@ export function SidebarT1(props: SidebarProps) {
     "/manage": props.canDashboard ?? true,
     "/manage/analytics": props.canAnalytics ?? true,
     "/manage/intelligence": props.canIntelListings ?? true,
-    "/manage/properties": props.canPropertyView ?? true,
+    "/manage/listings": props.canListingView ?? true,
     "/manage/collection": props.canCollectionView ?? true,
     "/manage/leads": props.canLeadsHomeView ?? true,
     "/manage/leads/add": props.canLeadsHomeView ?? true,

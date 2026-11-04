@@ -1,6 +1,6 @@
 import { prisma } from '@neup/core/database/prisma';
 import type { CreateInquiryFormValues } from '@/types';
-import { getPropertyById } from '@/services/properties/view';
+import { getListingById } from '@/services/listings/view';
 import { logger } from '@neup/logica/logger';
 
 export class InquiryServiceError extends Error { status: number; constructor(message: string, status: number) { super(message); this.name = 'InquiryServiceError'; this.status = status; } }
@@ -11,7 +11,7 @@ export async function createInquiry(accountId: string | undefined, type: Inquiry
   const propertyId = data.propertyId?.trim() || '';
   if (!propertyId) throw new InquiryServiceError('Property is required.', 400);
   try {
-    const property = await getPropertyById(propertyId, { includeInactive: type === 'bridge' });
+    const property = await getListingById(propertyId, { includeInactive: type === 'bridge' });
     if (!property) throw new InquiryServiceError('Property not found.', 404);
     const isBridge = type === 'bridge';
     const bridgeData = data as Extract<InquiryData, { message?: string }>;

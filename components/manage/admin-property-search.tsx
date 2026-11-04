@@ -45,7 +45,7 @@ link.
 ::private end
 ::end
 */
-export function AdminPropertySearch() {
+export function AdminListingSearch() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const pathname = usePathname();
@@ -61,7 +61,7 @@ export function AdminPropertySearch() {
     const [purpose, setPurpose]     = useState(searchParams.get('purpose') || '');
     const [sellerType, setSellerType] = useState(searchParams.get('sellerType') || '');
     const [fromAgency, setFromAgency] = useState(searchParams.get('fromAgency') || '');
-    const [propertyType, setPropertyType] = useState(searchParams.get('propertyType') || '');
+    const [propertyType, setListingType] = useState(searchParams.get('propertyType') || '');
     const [bedrooms, setBedrooms]   = useState(searchParams.get('minBedrooms') || '');
     const [bathrooms, setBathrooms] = useState(searchParams.get('minBathrooms') || '');
 
@@ -116,7 +116,7 @@ export function AdminPropertySearch() {
     function handleClear() {
         setQuery('');
         setMinPrice(''); setMaxPrice(''); setLocation('');
-        setStatus(''); setPurpose(''); setSellerType(''); setFromAgency(''); setPropertyType('');
+        setStatus(''); setPurpose(''); setSellerType(''); setFromAgency(''); setListingType('');
         setBedrooms(''); setBathrooms('');
         const p = new URLSearchParams();
         preserveScopedParams(p);
@@ -141,7 +141,7 @@ export function AdminPropertySearch() {
 
     function clearAdvanced() {
         setMinPrice(''); setMaxPrice(''); setLocation('');
-        setStatus(''); setPurpose(''); setSellerType(''); setFromAgency(''); setPropertyType('');
+        setStatus(''); setPurpose(''); setSellerType(''); setFromAgency(''); setListingType('');
         setBedrooms(''); setBathrooms('');
         navigate(buildParams({
             minPrice: '', maxPrice: '', location: '',
@@ -297,11 +297,11 @@ export function AdminPropertySearch() {
 
                         {/* Property type */}
                         <div className="space-y-1">
-                            <label className="text-xs font-medium text-muted-foreground">Property Type</label>
+                            <label className="text-xs font-medium text-muted-foreground">Listing Type</label>
                             <select
                                 title="Filter by property type"
                                 value={propertyType}
-                                onChange={e => setPropertyType(e.target.value)}
+                                onChange={e => setListingType(e.target.value)}
                                 className="w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                             >
                                 <option value="">Any</option>

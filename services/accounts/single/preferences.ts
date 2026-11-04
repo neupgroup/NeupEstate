@@ -1,7 +1,7 @@
 'use server';
 
 import { prisma } from '@neup/core/database/prisma';
-import type { Property, PropertyActivityEvent, UserPreferences } from '@/types';
+import type { Listing, ListingActivityEvent, UserPreferences } from '@/types';
 import { logger } from "@neup/logica/logger";
 
 
@@ -54,8 +54,8 @@ export async function getAccountPreferences(accountId: string): Promise<UserPref
 
 export async function updateAccountPreferences(
     accountId: string,
-    property: Property,
-    events: PropertyActivityEvent[]
+    property: Listing,
+    events: ListingActivityEvent[]
 ): Promise<void> {
 
     try {

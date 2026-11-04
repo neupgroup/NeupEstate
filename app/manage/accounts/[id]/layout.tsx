@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getAccountById } from '@/services/accounts/id/get';
 import { getRequirementByUserId } from '@/services/requirements/get';
-import { getSavedProperties, getPaginatedProperties } from '@/services/properties';
+import { getSavedListings, getPaginatedListings } from '@/services/listings';
 import { isAgencyLikeAccountType } from '@/services/accounts/type';
 import { prisma } from '@neup/core/database/prisma';
 import { requireAuth } from '@/services/auth/account';
@@ -34,10 +34,10 @@ export default async function ManageAccountLayout({
     notFound();
   }
 
-  const [requirements, savedProperties, ownedProperties, activityCount] = await Promise.all([
+  const [requirements, savedListings, ownedListings, activityCount] = await Promise.all([
     getRequirementByUserId(accountId),
-    account.registered ? getSavedProperties(accountId) : Promise.resolve([]),
-    getPaginatedProperties(
+    account.registered ? getSavedListings(accountId) : Promise.resolve([]),
+    getPaginatedListings(
       isAgencyLikeAccountType(account.account_type)
         ? { agencyIds: [accountId], includeInactive: true, limit: 1 }
         : isAgentAccountType(account.account_type)
@@ -125,8 +125,8 @@ export default async function ManageAccountLayout({
 
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:w-[440px]">
             {[
-              { label: 'Saved', value: savedProperties.length },
-              { label: 'Properties', value: ownedProperties.totalCount },
+              { label: 'Saved', value: savedListings.length },
+              { label: 'Properties', value: ownedListings.totalCount },
               { label: 'Requirements', value: requirements?.length ?? 0 },
               { label: 'Activity', value: activityCount },
             ].map((item) => (

@@ -3,11 +3,11 @@
 import { useEffect, useRef } from "react";
 import { useToast } from "@neup/core/hooks/useToast";
 
-type PropertyDetailRenderNoticeProps = {
+type ListingDetailRenderNoticeProps = {
   show: boolean;
 };
 
-export function PropertyDetailRenderNotice({ show }: PropertyDetailRenderNoticeProps) {
+export function ListingDetailRenderNotice({ show }: ListingDetailRenderNoticeProps) {
   const { toast } = useToast();
   const hasShownRef = useRef(false);
 

@@ -9,7 +9,7 @@
  */
 
 import {z} from 'zod';
-import { PropertyFiltersSchema, type PropertyFilters } from '@/types';
+import { ListingFiltersSchema, type ListingFilters } from '@/types';
 import { getPrompt } from '@/services/intelligence/prompts';
 import { generateText } from './unified-generation-service';
 
@@ -18,13 +18,13 @@ const AdminFilterInputSchema = z.object({
 });
 export type AdminFilterInput = z.infer<typeof AdminFilterInputSchema>;
 
-const AdminFilterOutputSchema = PropertyFiltersSchema.describe('The structured filter criteria parsed from the admin\'s query.');
+const AdminFilterOutputSchema = ListingFiltersSchema.describe('The structured filter criteria parsed from the admin\'s query.');
 
 const PromptInputSchema = AdminFilterInputSchema.extend({
   currentDate: z.string().describe("Today's date in ISO 8601 format."),
 });
 
-export async function parseAdminFilter(input: AdminFilterInput): Promise<PropertyFilters> {
+export async function parseAdminFilter(input: AdminFilterInput): Promise<ListingFilters> {
   return parseAdminFilterFlow(input);
 }
 
@@ -56,10 +56,10 @@ const defaultPrompt = {
 };
 
 
-async function parseAdminFilterFlow(input: AdminFilterInput): Promise<PropertyFilters> {
+async function parseAdminFilterFlow(input: AdminFilterInput): Promise<ListingFilters> {
     const promptConfig = await getPrompt(PROMPT_ID, defaultPrompt);
     const currentDate = new Date().toISOString();
-    return generateText<PropertyFilters>({
+    return generateText<ListingFilters>({
         model: promptConfig.model!,
         promptText: promptConfig.promptText,
         inputData: { ...input, currentDate },

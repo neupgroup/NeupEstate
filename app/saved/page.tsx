@@ -1,15 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { searchProperties } from '@/services/properties/search';
-import { PropertyCard } from "@/components/estate";
+import { searchListings } from '@/services/listings/search';
+import { ListingCard } from "@/components/estate";
 import { Skeleton } from "@neup/components/ui/skeleton";
-import type { Property, PropertyFilters } from "@/types";
+import type { Listing, ListingFilters } from "@/types";
 import { Alert, AlertDescription, AlertTitle } from "@neup/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
 // Mock function to get user requirements. In a real app, this would come from a service/DB.
-function getMockUserRequirements(): PropertyFilters {
+function getMockUserRequirements(): ListingFilters {
     return {
         purpose: ['Sale'],
         category: ['House', 'Apartment'],
@@ -20,8 +20,8 @@ function getMockUserRequirements(): PropertyFilters {
 }
 
 
-function RecommendedProperties() {
-  const [properties, setProperties] = useState<Property[]>([]);
+function RecommendedListings() {
+  const [listings, setListings] = useState<Listing[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [hasRequirements, setHasRequirements] = useState(false);
@@ -44,9 +44,9 @@ function RecommendedProperties() {
         
         setHasRequirements(true);
         
-        const searchResult = await searchProperties(requirements as any);
+        const searchResult = await searchListings(requirements as any);
         if (searchResult.success && searchResult.data) {
-          setProperties(searchResult.data.properties.slice(0, 3)); // Show top 3 recommendations
+          setListings(searchResult.data.listings.slice(0, 3)); // Show top 3 recommendations
         } else {
           setError(searchResult.error || "Failed to find properties matching recommendations.");
         }
@@ -99,7 +99,7 @@ function RecommendedProperties() {
     );
   }
   
-  if (properties.length === 0) {
+  if (listings.length === 0) {
     return (
         <Alert>
             <AlertCircle className="h-4 w-4" />
@@ -113,11 +113,11 @@ function RecommendedProperties() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {properties.map((property) => (
-        <PropertyCard key={property.id} property={property} />
+      {listings.map((property) => (
+        <ListingCard key={property.id} property={property} />
       ))}
     </div>
   );
 }
 
-export default RecommendedProperties;
+export default RecommendedListings;

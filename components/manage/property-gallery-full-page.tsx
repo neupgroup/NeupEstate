@@ -15,7 +15,7 @@ import { LinkButton } from "@neup/components/ui/link-button";
 
 type GalleryDirection = "next" | "previous";
 
-interface PropertyGalleryFullPageProps {
+interface ListingGalleryFullPageProps {
   images: string[];
   title: string;
   propertySlug: string;
@@ -63,12 +63,12 @@ function GalleryImage({
   );
 }
 
-export function PropertyGalleryFullPage({
+export function ListingGalleryFullPage({
   images,
   title,
   propertySlug,
   initialImage,
-}: PropertyGalleryFullPageProps) {
+}: ListingGalleryFullPageProps) {
   const [selectedIndex, setSelectedIndex] = useState(() =>
     clampImageIndex(initialImage - 1, images.length)
   );
@@ -88,7 +88,7 @@ export function PropertyGalleryFullPage({
 
   const selectedImage = visibleImages[selectedIndex] ?? visibleImages[0] ?? "";
   const selectedImageKey = `${selectedImage}-${selectedIndex}`;
-  const propertyHref = `/properties/${propertySlug}`;
+  const propertyHref = `/listings/${propertySlug}`;
   const isFirstImage = selectedIndex === 0;
   const isLastImage = selectedIndex === visibleImages.length - 1;
 
@@ -96,7 +96,7 @@ export function PropertyGalleryFullPage({
     if (loadedImageKey !== selectedImageKey) return;
 
     const timeoutId = window.setTimeout(() => {
-      const nextPath = `/properties/${propertySlug}/gallery?mode=fullpage&image=${selectedIndex + 1}`;
+      const nextPath = `/listings/${propertySlug}/gallery?mode=fullpage&image=${selectedIndex + 1}`;
 
       if (`${window.location.pathname}${window.location.search}` !== nextPath) {
         window.history.replaceState(window.history.state, "", nextPath);
@@ -108,9 +108,9 @@ export function PropertyGalleryFullPage({
     };
   }, [loadedImageKey, propertySlug, selectedImageKey, selectedIndex]);
 
-  const copyPropertyLink = useCallback(async () => {
+  const copyListingLink = useCallback(async () => {
     const url = new URL(
-      `/properties/${propertySlug}/gallery?mode=fullpage&image=${selectedIndex + 1}`,
+      `/listings/${propertySlug}/gallery?mode=fullpage&image=${selectedIndex + 1}`,
       window.location.origin
     ).toString();
 
@@ -210,7 +210,7 @@ export function PropertyGalleryFullPage({
           htmlType="button"
           variant="plain"
           size="icon"
-          onClick={copyPropertyLink}
+          onClick={copyListingLink}
           aria-label="Copy property link"
         >
           {copied ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}

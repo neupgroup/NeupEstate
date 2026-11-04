@@ -9,10 +9,10 @@ import { Suspense } from "react";
 import { SearchSection } from "@/components/estate";
 import { Skeleton } from "@neup/components/ui/skeleton";
 import { PopularCategories } from "@/components/home/popular-categories";
-import { FeaturedProperties } from "@/components/home/featured-properties";
-import { PropertyRequirementsCTA } from "@/components/home/property-requirements-cta";
-import { RecentProperties } from "@/components/home/recent-properties";
-import { PostPropertyCTA } from "@/components/home/post-property-cta";
+import { FeaturedListings } from "@/components/home/featured-properties";
+import { ListingRequirementsCTA } from "@/components/home/property-requirements-cta";
+import { RecentListings } from "@/components/home/recent-properties";
+import { PostListingCTA } from "@/components/home/post-property-cta";
 import { FeaturedAgencies } from "@/components/home/featured-agencies";
 import { CuratedForYouSection } from "@/components/home/curated-for-you";
 import { StartWithNeupEstate } from "@/components/home/start-with-neupestate";
@@ -49,17 +49,17 @@ export default async function Home() {
       <div className="home-sections">
         <PopularCategories />
         
-        <FeaturedProperties />
+        <FeaturedListings />
 
         <Suspense fallback={<SectionSkeleton />}>
           <CuratedForYouSection />
         </Suspense>
         
-        <PropertyRequirementsCTA />
+        <ListingRequirementsCTA />
 
-        <RecentProperties />
+        <RecentListings />
         
-        <PostPropertyCTA />
+        <PostListingCTA />
         
         <Suspense fallback={<SectionSkeleton />}>
           <FeaturedAgencies />

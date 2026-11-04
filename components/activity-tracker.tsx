@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
-import type { PropertyActivityEvent } from '@/types';
+import type { ListingActivityEvent } from '@/types';
 import { makeAppPath } from '@neup/core/appconfig';
-import { parsePropertySlugId } from '@/services/properties/slug';
+import { parseListingSlugId } from '@/services/listings/slug';
 
 const ACTIVE_TIME_INTERVAL = 5000;
 const INACTIVITY_TIMEOUT = 60000;
@@ -12,7 +12,7 @@ const GEOLOCATION_TIMEOUT = 120000;
 
 export function ActivityTracker() {
     const pathname = usePathname();
-    const activityEvents = useRef<PropertyActivityEvent[]>([]);
+    const activityEvents = useRef<ListingActivityEvent[]>([]);
     const lastActivityTime = useRef<number>(0);
     const permissionRequested = useRef(false);
 
@@ -22,8 +22,8 @@ export function ActivityTracker() {
         activeDuration: 0,
     });
 
-    const propertyPathValue = pathname.startsWith('/properties/') ? pathname.split('/')[2] : undefined;
-    const propertyId = propertyPathValue ? parsePropertySlugId(propertyPathValue)?.id ?? propertyPathValue : undefined;
+    const propertyPathValue = pathname.startsWith('/listings/') ? pathname.split('/')[2] : undefined;
+    const propertyId = propertyPathValue ? parseListingSlugId(propertyPathValue)?.id ?? propertyPathValue : undefined;
 
     const sendData = useCallback(async () => {
         const now = Date.now();
@@ -83,7 +83,7 @@ export function ActivityTracker() {
 
         sendData();
 
-        if (pathname.startsWith('/properties/')) {
+        if (pathname.startsWith('/listings/')) {
             requestGeolocation();
         }
     }, [pathname, sendData, requestGeolocation]);

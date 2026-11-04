@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import type { ComponentProps } from "react";
-import { PropertyQA } from "@/components/property-q-a";
+import { ListingQA } from "@/components/property-q-a";
 
-type ResponsivePropertyQAProps = ComponentProps<typeof PropertyQA>;
+type ResponsiveListingQAProps = ComponentProps<typeof ListingQA>;
 
-export function ResponsivePropertyQA(props: ResponsivePropertyQAProps) {
+export function ResponsiveListingQA(props: ResponsiveListingQAProps) {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -20,5 +20,5 @@ export function ResponsivePropertyQA(props: ResponsivePropertyQAProps) {
 
   if (!isMobile) return null;
 
-  return <PropertyQA {...props} flat />;
+  return <ListingQA {...props} flat />;
 }

@@ -110,7 +110,7 @@ async function getAgencyReportData(agencyAccountId: string) {
     memberAccounts.map((account) => [account.id, account.displayName || account.id]),
   );
 
-  const properties = await prisma.listing.findMany({
+  const listings = await prisma.listing.findMany({
     where: {
       isDeleted: false,
       OR: [
@@ -136,7 +136,7 @@ async function getAgencyReportData(agencyAccountId: string) {
     orderBy: { createdAt: 'desc' },
   });
 
-  const propertyIds = properties.map((property) => property.id);
+  const propertyIds = listings.map((property) => property.id);
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
@@ -180,10 +180,10 @@ async function getAgencyReportData(agencyAccountId: string) {
           },
           orderBy: { createdAt: 'desc' },
         }),
-        prisma.listingView.count({
+        prisma.listingsView.count({
           where: { propertyId: { in: propertyIds } },
         }),
-        prisma.listingView.count({
+        prisma.listingsView.count({
           where: {
             propertyId: { in: propertyIds },
             viewedAt: { gte: thirtyDaysAgo },
@@ -201,12 +201,12 @@ async function getAgencyReportData(agencyAccountId: string) {
       ])
     : [[], [], 0, 0, 0, 0];
 
-  const propertyById = new Map(properties.map((property) => [property.id, property]));
-  const newListings30 = properties.filter((property) => property.createdAt >= thirtyDaysAgo).length;
-  const activeListings = properties.filter((property) => property.status === 'ACTIVE').length;
-  const approvedListings = properties.filter((property) => property.isApproved).length;
-  const pendingListings = properties.filter((property) => !property.isApproved).length;
-  const totalListingValue = properties.reduce(
+  const propertyById = new Map(listings.map((property) => [property.id, property]));
+  const newListings30 = listings.filter((property) => property.createdAt >= thirtyDaysAgo).length;
+  const activeListings = listings.filter((property) => property.status === 'ACTIVE').length;
+  const approvedListings = listings.filter((property) => property.isApproved).length;
+  const pendingListings = listings.filter((property) => !property.isApproved).length;
+  const totalListingValue = listings.reduce(
     (sum, property) => sum + Number(property.displayPrice || 0),
     0,
   );
@@ -237,7 +237,7 @@ async function getAgencyReportData(agencyAccountId: string) {
     });
   }
 
-  for (const property of properties) {
+  for (const property of listings) {
     const listingOwnerId = property.representatives[0]?.representativeId;
     if (!listingOwnerId) continue;
     const agentSummary = agentSummaryMap.get(listingOwnerId);
@@ -278,13 +278,13 @@ async function getAgencyReportData(agencyAccountId: string) {
     .slice(0, 6);
 
   const recentActivity: ActivityItem[] = [
-    ...properties.slice(0, 4).map((property) => ({
+    ...listings.slice(0, 4).map((property) => ({
       id: `property-${property.id}`,
       kind: 'property' as const,
       title: property.title,
       meta: `${property.type} · ${property.purpose} · ${memberNameMap.get(property.representatives[0]?.representativeId || '') ?? 'Unassigned'}`,
       createdAt: property.createdAt,
-      href: `/manage/properties/${property.id}`,
+      href: `/manage/listings/${property.id}`,
     })),
     ...inquiries.slice(0, 4).map((inquiry) => ({
       id: `inquiry-${inquiry.id}`,
@@ -310,7 +310,7 @@ async function getAgencyReportData(agencyAccountId: string) {
     agencyAccountId,
     agencyName: agencyAccount?.displayName || agencyAccountId,
     totalMembers: memberIds.length,
-    properties,
+    listings,
     topAgents,
     recentActivity,
     totals: {
@@ -442,7 +442,7 @@ export default async function ManageReportPage({
         <StatCard
           title="Portfolio Value"
           value={formatCurrency(report.totals.totalListingValue)}
-          description={`${report.properties.length} tracked listing${report.properties.length === 1 ? '' : 's'}`}
+          description={`${report.listings.length} tracked listing${report.listings.length === 1 ? '' : 's'}`}
           icon={<Building2 className="h-4 w-4 text-muted-foreground" />}
         />
       </div>

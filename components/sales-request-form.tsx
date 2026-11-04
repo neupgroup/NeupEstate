@@ -4,7 +4,7 @@
 import { useTransition } from "react";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createSalesRequestAction } from '@/services/properties/single/engage/requests';
+import { createSalesRequestAction } from '@/services/listings/single/engage/requests';
 import { CreateSalesRequestSchema, type CreateSalesRequestFormValues } from "@/types";
 import { Button } from "@neup/components/ui/button";
 import { Textarea } from "@neup/components/ui/textarea";
@@ -56,8 +56,8 @@ export function SalesRequestForm() {
                     <FormField control={form.control} name="email" render={({ field }) => (<FormItem><FormLabel>Email Address</FormLabel><FormControl><Input type="email" placeholder="you@example.com" {...field} /></FormControl><FormMessage /></FormItem>)}/>
                     <FormField control={form.control} name="phone" render={({ field }) => (<FormItem><FormLabel>Phone Number</FormLabel><FormControl><Input placeholder="(123) 456-7890" {...field} /></FormControl><FormMessage /></FormItem>)}/>
                 </div>
-                <FormField control={form.control} name="propertyLocation" render={({ field }) => (<FormItem><FormLabel>Property Location</FormLabel><FormControl><Input placeholder="e.g., 123 Main St, Anytown USA" {...field} /></FormControl><FormMessage /></FormItem>)}/>
-                <FormField control={form.control} name="propertyType" render={({ field }) => (<FormItem><FormLabel>Property Type</FormLabel><FormControl><Input placeholder="e.g., 3-Bedroom House, Commercial Space" {...field} /></FormControl><FormMessage /></FormItem>)}/>
+                <FormField control={form.control} name="propertyLocation" render={({ field }) => (<FormItem><FormLabel>Listing Location</FormLabel><FormControl><Input placeholder="e.g., 123 Main St, Anytown USA" {...field} /></FormControl><FormMessage /></FormItem>)}/>
+                <FormField control={form.control} name="propertyType" render={({ field }) => (<FormItem><FormLabel>Listing Type</FormLabel><FormControl><Input placeholder="e.g., 3-Bedroom House, Commercial Space" {...field} /></FormControl><FormMessage /></FormItem>)}/>
                 <FormField control={form.control} name="remarks" render={({ field }) => (<FormItem><FormLabel>Remarks / More Details (Optional)</FormLabel><FormControl><Textarea rows={5} placeholder="Tell us more about your property. e.g., 'Renovated in 2022, has a large backyard...'" {...field} /></FormControl><FormMessage /></FormItem>)}/>
                 <Button htmlType="submit" disabled={isSubmitting}>
                     {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}

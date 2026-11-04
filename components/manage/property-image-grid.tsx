@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-function PropertyImageTile({ src, alt }: { src: string; alt: string }) {
+function ListingImageTile({ src, alt }: { src: string; alt: string }) {
   const [failed, setFailed] = React.useState(false);
 
   if (!src || failed) {
@@ -28,7 +28,7 @@ function PropertyImageTile({ src, alt }: { src: string; alt: string }) {
   );
 }
 
-export function PropertyImageGrid({
+export function ListingImageGrid({
   images,
   label,
   emptyLabel = "None",
@@ -43,7 +43,7 @@ export function PropertyImageGrid({
       {images.length ? (
         <div className="flex flex-wrap gap-2">
           {images.map((src, index) => (
-            <PropertyImageTile key={`${src}-${index}`} src={src} alt={`${label || "Image"} ${index + 1}`} />
+            <ListingImageTile key={`${src}-${index}`} src={src} alt={`${label || "Image"} ${index + 1}`} />
           ))}
         </div>
       ) : (

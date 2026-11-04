@@ -1,12 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { reviewPropertyChangeAction } from '@/services/properties/drafts';
+import { reviewListingChangeAction } from '@/services/listings/drafts';
 import { Button } from "@neup/components/ui/button";
 import { Checkbox } from "@neup/components/ui/checkbox";
 import { useToast } from "@neup/core/hooks/useToast";
-import type { Property } from "@/types";
-import { PropertyImageGrid } from "@/components/manage/property-image-grid";
+import type { Listing } from "@/types";
+import { ListingImageGrid } from "@/components/manage/property-image-grid";
 import { useRouter } from "next/navigation";
 
 type ReviewRequest = {
@@ -59,16 +59,16 @@ function normalizeImages(value: unknown): string[] {
   return value.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
 }
 
-export function PropertyReviewRequests({
+export function ListingReviewRequests({
   propertyId,
   requests,
   canApprove = false,
-  currentProperty,
+  currentListing,
 }: {
   propertyId?: string;
   requests: ReviewRequest[];
   canApprove?: boolean;
-  currentProperty?: Property | null;
+  currentListing?: Listing | null;
 }) {
   /*
   ::neup.documentation::property-review-requests-creation-drafts
@@ -96,7 +96,7 @@ export function PropertyReviewRequests({
 
   async function approve(request: ReviewRequest) {
     const acceptedFields = selection[request.id] ?? Object.keys(request.data ?? {});
-    const result = await reviewPropertyChangeAction({
+    const result = await reviewListingChangeAction({
       changeId: request.id,
       propertyId,
       approve: true,
@@ -107,11 +107,11 @@ export function PropertyReviewRequests({
     } else {
       toast({ name: "default", title: "Request approved" });
       if (request.status === "deleting") {
-        router.push("/manage/properties");
+        router.push("/manage/listings");
         return;
       }
       if (!propertyId && result.propertyId) {
-        router.replace(`/manage/properties/${result.propertyId}`);
+        router.replace(`/manage/listings/${result.propertyId}`);
         return;
       }
       window.location.reload();
@@ -119,7 +119,7 @@ export function PropertyReviewRequests({
   }
 
   async function reject(request: ReviewRequest) {
-    const result = await reviewPropertyChangeAction({
+    const result = await reviewListingChangeAction({
       changeId: request.id,
       propertyId,
       approve: false,
@@ -129,7 +129,7 @@ export function PropertyReviewRequests({
     } else {
       toast({ name: "default", title: "Request rejected" });
       if (!propertyId && !result.propertyId) {
-        router.push("/manage/properties");
+        router.push("/manage/listings");
         return;
       }
       window.location.reload();
@@ -171,8 +171,8 @@ export function PropertyReviewRequests({
                 const checked = selected.includes(field);
                 const nextValue = request.data?.[field];
                 const previousValue = field === "images"
-                  ? normalizeImages(currentProperty?.images)
-                  : getPathValue(currentProperty, field);
+                  ? normalizeImages(currentListing?.images)
+                  : getPathValue(currentListing, field);
                 const previousImages = field === "images" ? normalizeImages(previousValue) : [];
                 const nextImages = field === "images" ? normalizeImages(nextValue) : [];
                 const isImageField = field === "images";
@@ -205,7 +205,7 @@ export function PropertyReviewRequests({
                         <div className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Previous</div>
                         {isImageField ? (
                           <div className="mt-2">
-                            <PropertyImageGrid images={previousImages} label="Old images" />
+                            <ListingImageGrid images={previousImages} label="Old images" />
                           </div>
                         ) : (
                           <div className="mt-2 whitespace-pre-wrap break-words text-sm text-foreground">
@@ -218,7 +218,7 @@ export function PropertyReviewRequests({
                         <div className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">New</div>
                         {isImageField ? (
                           <div className="mt-2">
-                            <PropertyImageGrid images={nextImages} label="New images" />
+                            <ListingImageGrid images={nextImages} label="New images" />
                           </div>
                         ) : (
                           <div className="mt-2 whitespace-pre-wrap break-words text-sm text-foreground">

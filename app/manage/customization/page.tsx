@@ -144,7 +144,7 @@ export default async function ManageCustomizationPage({
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Settings2 className="h-4 w-4" />
-              Property Rules
+              Listing Rules
             </CardTitle>
             <CardDescription>
               Additional required and optional fields for property create and edit flows.
@@ -197,7 +197,7 @@ export default async function ManageCustomizationPage({
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="flex items-center justify-between rounded-lg border p-3">
-              <span className="text-sm text-muted-foreground">Property rule saved</span>
+              <span className="text-sm text-muted-foreground">Listing rule saved</span>
               <Badge variant={propertyCustomization ? 'default' : 'outline'}>
                 {propertyCustomization ? 'Yes' : 'No'}
               </Badge>

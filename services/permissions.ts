@@ -35,8 +35,8 @@ type ManageLayoutPermissionState = {
   canDashboard: boolean;
   canAnalytics: boolean;
   canIntelListings: boolean;
-  canPropertyView: boolean;
-  canRootPropertiesView: boolean;
+  canListingView: boolean;
+  canRootListingsView: boolean;
   canCollectionView: boolean;
   canAccountsView: boolean;
   canLeadsHomeView: boolean;
@@ -194,8 +194,8 @@ export async function getManageLayoutPermissionState(): Promise<ManageLayoutPerm
     canDashboard: has(PERMISSIONS.manage.dashboardView),
     canAnalytics: has(PERMISSIONS.manage.analyticsView),
     canIntelListings: has(PERMISSIONS.manage.intelligenceListingsView),
-    canPropertyView: has(PERMISSIONS.manage.propertySelfView),
-    canRootPropertiesView: has(PERMISSIONS.root.propertiesView),
+    canListingView: has(PERMISSIONS.manage.propertySelfView),
+    canRootListingsView: has(PERMISSIONS.root.listingsView),
     canCollectionView: has(PERMISSIONS.manage.propertyCollectionSelfView),
     canAccountsView: has(PERMISSIONS.manage.accountView),
     canLeadsHomeView: has(PERMISSIONS.manage.selfLeadView),

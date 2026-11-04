@@ -41,7 +41,7 @@ function FeaturedCollections() {
                                 <div className="flex-grow">
                                     <h3 className="text-xl font-semibold">{collection.name}</h3>
                                     <p className="text-muted-foreground text-sm mt-1">{collection.description}</p>
-                                    <p className="text-sm font-medium mt-2">{collection.propertyCount} properties</p>
+                                    <p className="text-sm font-medium mt-2">{collection.propertyCount} listings</p>
                                 </div>
                             </CardContent>
                         </Card>

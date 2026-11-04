@@ -13,7 +13,7 @@ const ExtractCompetitorListingInputSchema = z.object({
 export type ExtractCompetitorListingInput = z.infer<typeof ExtractCompetitorListingInputSchema>;
 
 const ExtractCompetitorListingOutputSchema = z.object({
-  isPropertyPage: z.boolean(),
+  isListingPage: z.boolean(),
   title: z.string().optional(),
   description: z.string().optional(),
   purpose: z.enum(['rental', 'sales']).optional(),

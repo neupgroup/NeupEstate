@@ -248,7 +248,7 @@ export async function GET(req: NextRequest) {
 ### POST Endpoint with Auth
 
 ```typescript
-// app/api/properties/favorite/route.ts
+// app/api/listings/favorite/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { getAccountId } from '@/services/auth';
 import { prisma } from '@neup/core/database/prisma';
@@ -339,7 +339,7 @@ export default async function DashboardPage() {
 ### Conditional Rendering
 
 ```typescript
-// app/properties/[id]/page.tsx
+// app/listings/[id]/page.tsx
 import { isAuthenticated, getAccountId } from '@/services/auth';
 import { SaveButton } from './save-button';
 import { LoginPrompt } from './login-prompt';

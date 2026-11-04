@@ -1,10 +1,10 @@
 import { notFound } from 'next/navigation';
 import { Card, CardContent } from '@neup/components/ui/card';
 import { Link } from '@neup/components/ui/link';
-import { PropertyCard } from '@/components/property-card';
+import { ListingCard } from '@/components/property-card';
 import { SafeImage } from '@/components/safe-image';
 import { getAccountProfileByNeupId } from '@/services/accounts/profile';
-import { getPropertiesByAccount } from '@/services/properties/list';
+import { getListingsByAccount } from '@/services/listings/list';
 import { getRequirementByUserId } from '@/services/requirements/get';
 import { getAgencyAgentAccountsByAgency } from '@/services/agencies/agent-maps/service';
 import { Building2, MessageSquare, Phone, UserRound, Users } from 'lucide-react';
@@ -36,12 +36,12 @@ export default async function PublicAccountProfilePage({
   const profile = account.profile;
   const isAgency = AGENCY_ACCOUNT_TYPES.includes(profile.type);
   const isAgent = profile.type === 'individual.agent';
-  const [accountProperties, accountRequirements, agencyAgents] = await Promise.all([
-    getPropertiesByAccount(profile.id, 0, 100),
+  const [accountListings, accountRequirements, agencyAgents] = await Promise.all([
+    getListingsByAccount(profile.id, 0, 100),
     getRequirementByUserId(profile.id),
     isAgency ? getAgencyAgentAccountsByAgency(profile.id) : Promise.resolve([]),
   ]);
-  const properties = accountProperties.filter((property) => property.status === 'ACTIVE');
+  const listings = accountListings.filter((property) => property.status === 'ACTIVE');
   const requirements = accountRequirements ?? [];
 
   return (
@@ -167,8 +167,8 @@ export default async function PublicAccountProfilePage({
           <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-6 md:px-8">
             <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
               <div>
-                <h2 id="profile-requirements-heading" className="text-3xl font-headline font-bold">Property requirements</h2>
-                <p className="mt-2 text-muted-foreground">Property preferences shared by {profile.name}.</p>
+                <h2 id="profile-requirements-heading" className="text-3xl font-headline font-bold">Listing requirements</h2>
+                <p className="mt-2 text-muted-foreground">Listing preferences shared by {profile.name}.</p>
               </div>
               <Link href={`/@${encodeURIComponent(neupId)}/requirements`} className="font-medium text-primary hover:underline">View all requirements</Link>
             </div>
@@ -179,7 +179,7 @@ export default async function PublicAccountProfilePage({
                     <p className="text-sm font-medium text-muted-foreground">Requirement {index + 1}</p>
                     <p className="mt-2 text-xl font-semibold capitalize">{requirement.purpose || 'Property search'}</p>
                     <dl className="mt-5 space-y-3 text-sm">
-                      <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Property type</dt><dd className="text-right">{requirement.propertyType?.join(', ') || 'Any'}</dd></div>
+                      <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Listing type</dt><dd className="text-right">{requirement.propertyType?.join(', ') || 'Any'}</dd></div>
                       <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Area</dt><dd className="text-right">{requirement.location || 'Any'}</dd></div>
                       <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Budget</dt><dd className="text-right">{requirement.minBudget?.toLocaleString() || 'Any'} – {requirement.maxBudget?.toLocaleString() || 'Any'}</dd></div>
                       <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Timeline</dt><dd className="text-right">{requirement.requiredTime || 'Flexible'}</dd></div>
@@ -248,18 +248,18 @@ export default async function PublicAccountProfilePage({
         </section>
       )}
 
-      {properties.length > 0 && (
+      {listings.length > 0 && (
         <section id="profile-properties" className="bg-muted/20 py-12 lg:py-16">
           <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-6 md:px-8">
             <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
               <div>
-                <h2 className="text-3xl font-headline font-bold">Properties</h2>
-                <p className="mt-2 text-muted-foreground">Active properties represented by {profile.name}.</p>
+                <h2 className="text-3xl font-headline font-bold">Listings</h2>
+                <p className="mt-2 text-muted-foreground">Active listings represented by {profile.name}.</p>
               </div>
-              <Link href={`/@${encodeURIComponent(neupId)}/properties`} className="font-medium text-primary hover:underline">View all properties</Link>
+              <Link href={`/@${encodeURIComponent(neupId)}/listings`} className="font-medium text-primary hover:underline">View all listings</Link>
             </div>
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {properties.slice(0, 8).map((property) => <PropertyCard key={property.id} property={property} />)}
+              {listings.slice(0, 8).map((property) => <ListingCard key={property.id} property={property} />)}
             </div>
           </div>
         </section>

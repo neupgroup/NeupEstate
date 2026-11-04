@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { naturalLanguagePropertySearch } from '@/services/properties/search';
+import { naturalLanguageListingSearch } from '@/services/listings/search';
 import type { NaturalLanguageSearchOutput } from '@/types';
 
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
@@ -35,7 +35,7 @@ export function NaturalLanguageSearchForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setSearchResult(null);
     startTransition(async () => {
-      const result = await naturalLanguagePropertySearch(values.query);
+      const result = await naturalLanguageListingSearch(values.query);
       if (result.success && result.data) {
         setSearchResult(result.data);
       } else {

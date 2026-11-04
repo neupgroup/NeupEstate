@@ -25,7 +25,7 @@ export default function NotFound() {
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <LinkButton href="/home" variant="solid" preIcon={<Home />}>Back to home</LinkButton>
-              <LinkButton href="/properties" variant="outlined" preIcon={<Search />}>Browse properties</LinkButton>
+              <LinkButton href="/listings" variant="outlined" preIcon={<Search />}>Browse listings</LinkButton>
             </div>
             <div className="mt-10 grid grid-cols-1 gap-4 text-sm text-muted-foreground sm:grid-cols-3">
               <Link className="hover:text-foreground" href="/search">

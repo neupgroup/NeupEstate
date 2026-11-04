@@ -10,11 +10,11 @@ import { Button } from '@neup/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@neup/components/ui/table";
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { Loader2, Search, Bookmark, AlertCircle, ExternalLink, User, Clock3, History, ArrowUpRight } from 'lucide-react';
-import { Property, User as UserType } from '@/types';
-import { getSavedPropertiesForUser, getUsersBySavedProperty } from '@/services/properties/single/engage/view';
+import { Listing, User as UserType } from '@/types';
+import { getSavedListingsForUser, getUsersBySavedListing } from '@/services/listings/single/engage/view';
 import { Link } from '@neup/components/ui/link';
 import { RelativeTime } from './relative-time';
-import { type SavedPropertyEntry } from '@/services/properties';
+import { type SavedListingEntry } from '@/services/listings';
 import { Label } from '@neup/components/ui/label';
 
 const SearchResultDisplay = ({ title, children }: { title: string, children: React.ReactNode }) => (
@@ -28,12 +28,12 @@ const SearchResultDisplay = ({ title, children }: { title: string, children: Rea
     </Card>
 );
 
-export function SavedPropertiesDashboard({ initialSavedProperties }: { initialSavedProperties: SavedPropertyEntry[] }) {
+export function SavedListingsDashboard({ initialSavedListings }: { initialSavedListings: SavedListingEntry[] }) {
     const [isSearchingUser, startUserSearchTransition] = useTransition();
-    const [isSearchingProperty, startPropertySearchTransition] = useTransition();
+    const [isSearchingListing, startListingSearchTransition] = useTransition();
 
-    const [userPropertiesResult, setUserPropertiesResult] = useState<Property[] | null>(null);
-    const [propertyUsersResult, setPropertyUsersResult] = useState<UserType[] | null>(null);
+    const [userListingsResult, setUserListingsResult] = useState<Listing[] | null>(null);
+    const [propertyUsersResult, setListingUsersResult] = useState<UserType[] | null>(null);
 
     const searchForm = useForm<{ query: string }>({ defaultValues: { query: '' } });
     const [searchMode, setSearchMode] = useState<'by' | 'for' | null>(null);
@@ -42,8 +42,8 @@ export function SavedPropertiesDashboard({ initialSavedProperties }: { initialSa
 
     const handleSavedActivitySearch = ({ query }: { query: string }) => {
         const match = query.trim().match(/^(by|for):\s*(\S+)$/i);
-        setUserPropertiesResult(null);
-        setPropertyUsersResult(null);
+        setUserListingsResult(null);
+        setListingUsersResult(null);
         setSearchError('');
 
         if (!match) {
@@ -57,9 +57,9 @@ export function SavedPropertiesDashboard({ initialSavedProperties }: { initialSa
         setSearchMode(mode.toLowerCase() as 'by' | 'for');
         setSearchValue(value);
         if (mode.toLowerCase() === 'by') {
-            startUserSearchTransition(async () => setUserPropertiesResult(await getSavedPropertiesForUser(value)));
+            startUserSearchTransition(async () => setUserListingsResult(await getSavedListingsForUser(value)));
         } else {
-            startPropertySearchTransition(async () => setPropertyUsersResult(await getUsersBySavedProperty(value)));
+            startListingSearchTransition(async () => setListingUsersResult(await getUsersBySavedListing(value)));
         }
     };
 
@@ -70,7 +70,7 @@ export function SavedPropertiesDashboard({ initialSavedProperties }: { initialSa
                     <Bookmark aria-hidden="true" className="h-6 w-6" />
                 </span>
                 <div>
-                    <h1 className="text-2xl font-semibold tracking-tight">Saved Properties Management</h1>
+                    <h1 className="text-2xl font-semibold tracking-tight">Saved Listings Management</h1>
                     <p className="mt-1 text-sm text-muted-foreground">
                         View recent activity and query saved property data across users.
                     </p>
@@ -86,30 +86,30 @@ export function SavedPropertiesDashboard({ initialSavedProperties }: { initialSa
                 <CardContent>
                     <form onSubmit={searchForm.handleSubmit(handleSavedActivitySearch)} className="flex gap-2">
                         <Input id="savedActivityQuery" aria-label="Search saved activity" placeholder="by:userId or for:propertyId" {...searchForm.register('query')} />
-                        <Button htmlType="submit" disabled={isSearchingUser || isSearchingProperty} aria-label="Search">
-                            {isSearchingUser || isSearchingProperty ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+                        <Button htmlType="submit" disabled={isSearchingUser || isSearchingListing} aria-label="Search">
+                            {isSearchingUser || isSearchingListing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
                         </Button>
                     </form>
                     {searchError && <p role="alert" className="mt-2 text-sm text-destructive">{searchError}</p>}
                 </CardContent>
             </Card>
 
-            {userPropertiesResult && (
+            {userListingsResult && (
                 <SearchResultDisplay title={`Properties saved by ${searchMode === 'by' ? searchValue : 'user'}`}>
-                    {userPropertiesResult.length > 0 ? (
+                    {userListingsResult.length > 0 ? (
                         <Table>
-                            <TableHeader><TableRow><TableHead>Property</TableHead><TableHead>Location</TableHead></TableRow></TableHeader>
+                            <TableHeader><TableRow><TableHead>Listing</TableHead><TableHead>Location</TableHead></TableRow></TableHeader>
                             <TableBody>
-                                {userPropertiesResult.map(prop => (
+                                {userListingsResult.map(prop => (
                                     <TableRow key={prop.id}>
-                                        <TableCell><Link href={`/manage/properties/${prop.id}/edit`} className="hover:underline">{prop.title}</Link></TableCell>
+                                        <TableCell><Link href={`/manage/listings/${prop.id}/edit`} className="hover:underline">{prop.title}</Link></TableCell>
                                         <TableCell>{prop.location}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
                         </Table>
                     ) : (
-                        <Alert><AlertCircle className="h-4 w-4" /><AlertTitle>No Results</AlertTitle><AlertDescription>This user has not saved any properties.</AlertDescription></Alert>
+                        <Alert><AlertCircle className="h-4 w-4" /><AlertTitle>No Results</AlertTitle><AlertDescription>This user has not saved any listings.</AlertDescription></Alert>
                     )}
                 </SearchResultDisplay>
             )}
@@ -139,27 +139,27 @@ export function SavedPropertiesDashboard({ initialSavedProperties }: { initialSa
                     <div className="flex items-start gap-3">
                         <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><History aria-hidden="true" className="h-5 w-5" /></span>
                         <div>
-                            <CardTitle>Latest saved properties</CardTitle>
-                            <CardDescription className="mt-1">Showing the 20 most recently saved properties across all users.</CardDescription>
+                            <CardTitle>Latest saved listings</CardTitle>
+                            <CardDescription className="mt-1">Showing the 20 most recently saved listings across all users.</CardDescription>
                         </div>
-                        <span className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground"><Clock3 className="h-3.5 w-3.5" />{initialSavedProperties.length}</span>
+                        <span className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground"><Clock3 className="h-3.5 w-3.5" />{initialSavedListings.length}</span>
                     </div>
                 </CardHeader>
                 <CardContent>
-                    {initialSavedProperties.length > 0 ? (
+                    {initialSavedListings.length > 0 ? (
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Property</TableHead>
+                                    <TableHead>Listing</TableHead>
                                     <TableHead>Saved By User</TableHead>
                                     <TableHead>Date</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {initialSavedProperties.map((item) => (
+                                {initialSavedListings.map((item) => (
                                     <TableRow key={`${item.userId}-${item.propertyId}`}>
                                         <TableCell>
-                                            <Link href={`/manage/properties/${item.propertyId}/edit`} className="group/link flex items-center gap-1 font-medium hover:text-primary hover:underline">
+                                            <Link href={`/manage/listings/${item.propertyId}/edit`} className="group/link flex items-center gap-1 font-medium hover:text-primary hover:underline">
                                                 {item.propertyTitle} <ArrowUpRight className="h-3 w-3 opacity-60 group-hover/link:opacity-100" />
                                             </Link>
                                         </TableCell>
@@ -181,7 +181,7 @@ export function SavedPropertiesDashboard({ initialSavedProperties }: { initialSa
                             <AlertCircle className="h-4 w-4" />
                             <AlertTitle>No Activity</AlertTitle>
                             <AlertDescription>
-                                No properties have been saved by any users yet.
+                                No listings have been saved by any users yet.
                             </AlertDescription>
                         </Alert>
                     )}

@@ -1,5 +1,5 @@
 
-import { RecommendedProperties } from "@/components/estate";
+import { RecommendedListings } from "@/components/estate";
 import { Wand2 } from "lucide-react";
 
 export default function CollectionsPage() {
@@ -12,13 +12,13 @@ export default function CollectionsPage() {
             Curated For You
           </h1>
           <p className="mt-2 text-muted-foreground">
-            Properties recommended based on your interests.
+            Listings recommended based on your interests.
           </p>
         </div>
       </div>
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <RecommendedProperties requirements={null} />
+        <RecommendedListings requirements={null} />
       </div>
     </main>
   );

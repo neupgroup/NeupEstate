@@ -31,8 +31,8 @@ export async function crawlCompetitorSourcesAction(competitorId: string) {
       return { success: false, error: 'Competitor not found' };
     }
 
-    const existingProperties = await getCompetitorPages(competitorId);
-    const existingUrls = new Set(existingProperties.map(p => p.source));
+    const existingListings = await getCompetitorPages(competitorId);
+    const existingUrls = new Set(existingListings.map(p => p.source));
 
     let discoveredCount = 0;
     let savedCount = 0;
@@ -67,7 +67,7 @@ export async function crawlCompetitorSourcesAction(competitorId: string) {
         // Save new URLs to database
         for (const url of urls) {
           discoveredCount++;
-          const existingPage = existingProperties.find((page) => page.source === url);
+          const existingPage = existingListings.find((page) => page.source === url);
           let visibleHtml = '';
 
           if (existingPage && isLoggedStatus(existingPage.lastLoggedStatus)) {

@@ -13,8 +13,8 @@ let requestCount = 0;
 const mocks = {
   'next/server': { NextResponse: { json: (body, options) => ({ body, ...options }) } },
   '@neup/core/database/prisma': { Prisma: { validator: () => (value) => value }, prisma: {} },
-  '@/types': { PropertyFiltersSchema: { omit: () => ({ safeParse: (data) => ({ success: true, data }) }) } },
-  '@/services/properties': { getPaginatedProperties: async (options) => { databaseOptions = options; return { properties: [], totalCount: 49 }; } },
+  '@/types': { ListingFiltersSchema: { omit: () => ({ safeParse: (data) => ({ success: true, data }) }) } },
+  '@/services/listings': { getPaginatedListings: async (options) => { databaseOptions = options; return { listings: [], totalCount: 49 }; } },
   '@/services/property-posting-context': {},
 };
 function load(filename) {
@@ -39,32 +39,32 @@ function load(filename) {
       requestCount += 1;
       requestedMethod = options?.method;
       requestedUrl = new URL(url);
-      return new Response(JSON.stringify({ success: true, properties: [] }), { status: 200 });
+      return new Response(JSON.stringify({ success: true, listings: [] }), { status: 200 });
     },
   }, { filename });
   return module.exports;
 }
 async function main() {
-  const { properties } = load('.neup/logica/estate/properties');
-  await properties.get({ limit: 12, page: 3, purpose: ['Sale', 'Rent'], type: 'House', nature: 'Residential', orderBy: 'oldestFirst' });
-  assert.equal(requestedUrl.pathname, '/estate/bridge/api.v1/properties');
+  const { listings } = load('.neup/logica/estate/listings');
+  await listings.get({ limit: 12, page: 3, purpose: ['Sale', 'Rent'], type: 'House', nature: 'Residential', orderBy: 'oldestFirst' });
+  assert.equal(requestedUrl.pathname, '/estate/bridge/api.v1/listings');
   for (const [key, value] of Object.entries({ limit: '12', offset: '24', purpose: 'Sale,Rent', category: 'House', type: 'Residential', orderBy: 'oldestFirst' })) {
     assert.equal(requestedUrl.searchParams.get(key), value, key);
   }
-  await properties.get({ limit: 1000, page: 4, offset: 7 });
+  await listings.get({ limit: 1000, page: 4, offset: 7 });
   assert.equal(requestedUrl.searchParams.get('limit'), '100');
   assert.equal(requestedUrl.searchParams.get('offset'), '7');
-  await properties.get({ limit: NaN, page: -1, offset: -1 });
+  await listings.get({ limit: NaN, page: -1, offset: -1 });
   assert.equal(requestedUrl.searchParams.get('limit'), '25');
   assert.equal(requestedUrl.searchParams.get('offset'), '0');
   for (const [scope, value, queryKey] of [['agency', 'agency-1', 'agency'], ['agent', 'agent-1', 'agent'], ['purpose', 'Sale', 'purpose'], ['type', 'House', 'category'], ['nature', 'Commercial', 'type']]) {
-    await properties[scope](value).get({ limit: 12, offset: 12 });
+    await listings[scope](value).get({ limit: 12, offset: 12 });
     assert.equal(requestedUrl.searchParams.get(queryKey), value);
     assert.equal(requestedUrl.searchParams.get('offset'), '12');
   }
   const before = requestCount;
   const filters = [{ type: 'House' }, { purpose: ['Sale'], agency: 'agency-1' }];
-  const base = properties.filter(filters);
+  const base = listings.filter(filters);
   const pageOne = base.paginate(0, 12);
   const pageTwo = base.paginate(12, 12);
   filters[1].purpose.push('Rent');
@@ -74,10 +74,10 @@ async function main() {
   assert.equal(requestedUrl.searchParams.get('purpose'), 'Sale');
   await pageOne.get();
   assert.equal(requestedUrl.searchParams.get('offset'), '0');
-  await properties.paginate(24, 12).filter({ purpose: 'Rent' }).get();
+  await listings.paginate(24, 12).filter({ purpose: 'Rent' }).get();
   assert.equal(requestedUrl.searchParams.get('offset'), '24');
   assert.equal(requestedUrl.searchParams.get('purpose'), 'Rent');
-  await properties.agency('locked-agency').filter({ agency: 'another', type: 'House' }).paginate(12, 12).get();
+  await listings.agency('locked-agency').filter({ agency: 'another', type: 'House' }).paginate(12, 12).get();
   assert.equal(requestedUrl.searchParams.get('agency'), 'locked-agency');
   for (const domain of ['agents', 'agencies']) {
     const collection = load(`.neup/logica/estate/${domain}`)[domain];
@@ -107,12 +107,12 @@ async function main() {
   for (const [key, value] of Object.entries({ agentId: 'agent-2', userId: 'user-1', status: 'pending' })) {
     assert.equal(requestedUrl.searchParams.get(key), value);
   }
-  const { handleBridgePropertySearch } = load('services/bridge-property-service.ts');
+  const { handleBridgeListingSearch } = load('services/bridge-listing-service.ts');
   for (const [query, limit, offset] of [
     ['limit=12&page=3', 12, 24], ['limit=12&page=3&offset=5', 12, 5],
     ['', 25, 0], ['limit=500&offset=100', 100, 100], ['limit=-2&page=-1&offset=bad', 25, 0],
   ]) {
-    const response = await handleBridgePropertySearch({ nextUrl: new URL(`https://example.test/properties?${query}`) });
+    const response = await handleBridgeListingSearch({ nextUrl: new URL(`https://example.test/listings?${query}`) });
     assert.equal(databaseOptions.limit, limit);
     assert.equal(databaseOptions.offset, offset);
     assert.equal(response.body.limit, limit);
@@ -128,13 +128,13 @@ async function main() {
   mocks['@/inapp/database/adapters'] = { mapTypeToEnum: (value) => value.toUpperCase() };
   mocks['./shared'] = {
     PROPERTY_STATUS: { ACTIVE: 'ACTIVE' }, PROPERTY_INCLUDE: {},
-    hydratePropertyAccountLabels: async (records) => records, mapRecord: (record) => record,
+    hydrateListingAccountLabels: async (records) => records, mapRecord: (record) => record,
   };
-  const { getPaginatedProperties } = load('services/properties/list.ts');
+  const { getPaginatedListings } = load('services/listings/list.ts');
   for (const [nature, categories] of [
     ['Commercial', ['COMMERCIAL']], ['Residential', ['HOUSE', 'APARTMENT', 'LAND']], ['Industrial', []],
   ]) {
-    await getPaginatedProperties({ limit: 12, offset: 24, filters: { category: ['House'], type: [nature] } });
+    await getPaginatedListings({ limit: 12, offset: 24, filters: { category: ['House'], type: [nature] } });
     assert.equal(prismaOptions.take, 12);
     assert.equal(prismaOptions.skip, 24);
     assert.equal(JSON.stringify(prismaOptions.where.type.in), JSON.stringify(['HOUSE']));
@@ -181,9 +181,9 @@ async function main() {
   const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, root);
   const samplePath = path.join(root, '__estate_fluent_typecheck__.ts');
   const source = `import { logica } from '@neup/logica';
-    logica.estate.properties.filter([{type: 'House'}, {purpose: ['Sale'], agent: 'a', agency: 'b'}]).paginate(0,12).get();
-    logica.estate.properties.paginate(0,12).filter({purpose: 'Sale'}).get();
-    logica.estate.properties.agency('id').filter({type: 'House'}).paginate(12,12).get();
+    logica.estate.listings.filter([{type: 'House'}, {purpose: ['Sale'], agent: 'a', agency: 'b'}]).paginate(0,12).get();
+    logica.estate.listings.paginate(0,12).filter({purpose: 'Sale'}).get();
+    logica.estate.listings.agency('id').filter({type: 'House'}).paginate(12,12).get();
     logica.estate.agents.filter([{agency: 'id'}, {name: 'Agent'}]).paginate(0,10).get();
     logica.estate.agencies.paginate(0,10).filter({agent: 'id'}).get();`;
   const host = ts.createCompilerHost(parsed.options);

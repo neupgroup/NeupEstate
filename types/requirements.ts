@@ -1,6 +1,6 @@
 
 import { z } from 'zod';
-import { PropertyPurposeSchema, PropertyCategorySchema } from './property';
+import { ListingPurposeSchema, ListingCategorySchema } from './listing';
 
 export const UrgencySchema = z.enum(['within a month', 'within 3 months', 'within 6 months', 'within a year', 'after a year']);
 export const PaymentMethodSchema = z.enum(['Full Cash', 'Mortgage Support', 'Exchange']);
@@ -22,11 +22,11 @@ export const RequirementSchema = z.object({
   minBudget: z.number().optional(),
   maxBudget: z.number().optional(),
   location: z.string().optional(),
-  propertyType: z.array(PropertyCategorySchema).optional(),
+  propertyType: z.array(ListingCategorySchema).optional(),
   urgency: UrgencySchema.optional(),
   paymentMethod: z.array(PaymentMethodSchema).optional(),
   requiredTime: UrgencySchema.optional(),
-  purpose: PropertyPurposeSchema.optional(),
+  purpose: ListingPurposeSchema.optional(),
   loan: z.boolean().default(false).optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
@@ -35,8 +35,8 @@ export type Requirement = z.infer<typeof RequirementSchema>;
 
 export const CreateRequirementSchema = z.object({
   userId: z.string().optional(),
-  purpose: PropertyPurposeSchema.optional(),
-  propertyType: z.array(PropertyCategorySchema).optional(),
+  purpose: ListingPurposeSchema.optional(),
+  propertyType: z.array(ListingCategorySchema).optional(),
   minBudget: emptyStringToUndefinedNumber,
   maxBudget: emptyStringToUndefinedNumber,
   location: z.string().optional(),

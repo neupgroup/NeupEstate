@@ -46,12 +46,12 @@ export default async function SalesRequestPage({ params }: { params: Promise<{ i
                 <section aria-labelledby="property-info" className="space-y-4">
                     <div className="grid grid-cols-[2.5rem_minmax(0,1fr)] items-start gap-x-3">
                         <span className="row-span-2 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"><Building2 aria-hidden="true" className="h-5 w-5" /></span>
-                        <h2 id="property-info" className="text-lg font-semibold leading-6">Property info</h2>
+                        <h2 id="property-info" className="text-lg font-semibold leading-6">Listing info</h2>
                         <p className="col-start-2 mt-1 text-sm leading-5 text-muted-foreground">Details about the property they are looking to sell.</p>
                     </div>
                     <dl className="grid grid-cols-1 gap-x-8 gap-y-5 border-l-2 border-primary/15 pl-4 text-sm sm:grid-cols-2 sm:pl-5">
-                        <div className="min-w-0"><dt className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground"><MapPin aria-hidden="true" className="h-4 w-4 shrink-0" />Property location</dt><dd className="break-words font-medium">{request.propertyLocation || 'Not provided'}</dd></div>
-                        <div className="min-w-0"><dt className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground"><Home aria-hidden="true" className="h-4 w-4 shrink-0" />Property type</dt><dd>{request.propertyType || 'Not provided'}</dd></div>
+                        <div className="min-w-0"><dt className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground"><MapPin aria-hidden="true" className="h-4 w-4 shrink-0" />Listing location</dt><dd className="break-words font-medium">{request.propertyLocation || 'Not provided'}</dd></div>
+                        <div className="min-w-0"><dt className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground"><Home aria-hidden="true" className="h-4 w-4 shrink-0" />Listing type</dt><dd>{request.propertyType || 'Not provided'}</dd></div>
                         <div className="min-w-0 sm:col-span-2"><dt className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-muted-foreground"><MessageSquare aria-hidden="true" className="h-4 w-4 shrink-0" />Remarks</dt><dd className="whitespace-pre-wrap break-words rounded-xl bg-muted/40 p-4 leading-relaxed">{request.remarks || 'No remarks'}</dd></div>
                     </dl>
                 </section>

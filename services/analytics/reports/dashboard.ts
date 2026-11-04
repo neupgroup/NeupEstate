@@ -140,7 +140,7 @@ function activityBelongsToScope(activity: ActivityRow, scope: AnalyticsSourceSco
   }
 
   if (scope === 'site.custom.via.api') {
-    return page.startsWith('/bridge/api.v1/properties') || page.startsWith('/bridge/api.v1/inquiry');
+    return page.startsWith('/bridge/api.v1/listings') || page.startsWith('/bridge/api.v1/inquiry');
   }
 
   return page.startsWith('/bridge') || page.startsWith('/api');
@@ -202,7 +202,7 @@ async function getAgencyContextAccountId(accountId: string, requestedWorkingProf
 
 async function buildContext(level: AnalyticsLevel, accountId: string, requestedWorkingProfile: string | null): Promise<AccountContext | null> {
   if (level === 'root') {
-    const canViewRoot = await hasPermission(PERMISSIONS.root.propertiesView);
+    const canViewRoot = await hasPermission(PERMISSIONS.root.listingsView);
     if (!canViewRoot) return null;
     return { level, label: 'Root', contextLabel: 'All agencies, accounts, and users' };
   }
@@ -212,7 +212,7 @@ async function buildContext(level: AnalyticsLevel, accountId: string, requestedW
       where: { id: accountId },
       select: { id: true, displayName: true },
     });
-    const propertyIds = await getPropertyIdsForAccounts([accountId]);
+    const propertyIds = await getListingIdsForAccounts([accountId]);
 
     return {
       level,
@@ -240,7 +240,7 @@ async function buildContext(level: AnalyticsLevel, accountId: string, requestedW
     ...agencyMembers.map((member) => member.accountId),
     ...agencyAgents.map((member) => member.agentId),
   ]));
-  const propertyIds = await getPropertyIdsForAccounts(accountIds, agencyAccountId);
+  const propertyIds = await getListingIdsForAccounts(accountIds, agencyAccountId);
 
   return {
     level,
@@ -251,14 +251,14 @@ async function buildContext(level: AnalyticsLevel, accountId: string, requestedW
   };
 }
 
-async function getPropertyIdsForAccounts(accountIds: string[], agencyId?: string): Promise<string[]> {
+async function getListingIdsForAccounts(accountIds: string[], agencyId?: string): Promise<string[]> {
   if (!accountIds.length && !agencyId) return [];
 
-  const ownershipFilters: Prisma.PropertyWhereInput[] = [];
+  const ownershipFilters: Prisma.ListingWhereInput[] = [];
   if (agencyId) ownershipFilters.push({ representatives: { some: { role: 'listingOwner', representativeId: agencyId } } });
   if (accountIds.length) ownershipFilters.push({ representatives: { some: { role: 'listingOwner', representativeId: { in: accountIds } } } });
 
-  const properties = await prisma.listing.findMany({
+  const listings = await prisma.listing.findMany({
     where: {
       isDeleted: false,
       OR: ownershipFilters,
@@ -266,14 +266,14 @@ async function getPropertyIdsForAccounts(accountIds: string[], agencyId?: string
     select: { id: true },
   });
 
-  return properties.map((property) => property.id);
+  return listings.map((property) => property.id);
 }
 
 function buildAccountFilter(context: AccountContext): Prisma.StringFilter | undefined {
   return context.accountIds?.length ? { in: context.accountIds } : undefined;
 }
 
-function buildPropertyFilter(context: AccountContext): Prisma.StringFilter | undefined {
+function buildListingFilter(context: AccountContext): Prisma.StringFilter | undefined {
   if (!context.accountIds) return undefined;
   return { in: context.propertyIds ?? [] };
 }
@@ -302,14 +302,14 @@ async function buildNativeScopeSummary(
   const dailyData = makeDailyData(from);
   const totals = makeEmptyTotals();
   const accountFilter = buildAccountFilter(context);
-  const propertyFilter = buildPropertyFilter(context);
+  const propertyFilter = buildListingFilter(context);
   const visitOrFilters = [
     propertyFilter ? { propertyId: propertyFilter } : null,
     accountFilter ? { agentId: accountFilter } : null,
   ].filter((filter): filter is NonNullable<typeof filter> => Boolean(filter));
-  const [activities, propertyViews, savedProperties, clientLinks, leads, inquiries, visits, properties] = await Promise.all([
+  const [activities, propertyViews, savedListings, clientLinks, leads, inquiries, visits, listings] = await Promise.all([
     getActivities(context, from, to),
-    prisma.listingView.findMany({
+    prisma.listingsView.findMany({
       where: {
         accountId: accountFilter,
         propertyId: propertyFilter,
@@ -373,7 +373,7 @@ async function buildNativeScopeSummary(
       totals.reach += 1;
       addDailyValue(dailyData, from, view.viewedAt, 'Reach');
     }
-    for (const saved of savedProperties) {
+    for (const saved of savedListings) {
       totals.interactions += 1;
       addDailyValue(dailyData, from, saved.savedAt, 'Interactions');
     }
@@ -390,7 +390,7 @@ async function buildNativeScopeSummary(
       totals.leads += 1;
       addDailyValue(dailyData, from, lead.createdAt, 'Leads');
     }
-    for (const property of properties) {
+    for (const property of listings) {
       totals.interactions += 1;
       addDailyValue(dailyData, from, property.createdAt, 'Interactions');
     }
@@ -408,8 +408,8 @@ async function buildApiScopeSummary(
 ): Promise<AnalyticsScopeSummary> {
   const dailyData = makeDailyData(from);
   const totals = makeEmptyTotals();
-  const propertyFilter = buildPropertyFilter(context);
-  const [inquiries, createdProperties] = await Promise.all([
+  const propertyFilter = buildListingFilter(context);
+  const [inquiries, createdListings] = await Promise.all([
     scope === 'site.custom.via.api'
       ? prisma.inquiry.findMany({
           where: {
@@ -436,7 +436,7 @@ async function buildApiScopeSummary(
     addDailyValue(dailyData, from, inquiry.createdAt, 'Inquiries');
   }
 
-  for (const property of createdProperties) {
+  for (const property of createdListings) {
     totals.leads += 1;
     addDailyValue(dailyData, from, property.createdAt, 'Leads');
   }

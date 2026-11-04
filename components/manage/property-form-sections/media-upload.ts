@@ -3,7 +3,7 @@ const UPLOAD_ENDPOINTS = [
   "https://cdn.neupgroup.com/bridge/api.v1/upload.php",
 ];
 
-type UploadPropertyMediaOptions = {
+type UploadListingMediaOptions = {
   file: File;
   platform: string;
   contentIds?: string[];
@@ -34,7 +34,7 @@ async function parseUploadError(response: Response): Promise<string> {
   }
 }
 
-export async function uploadPropertyMediaFile(options: UploadPropertyMediaOptions): Promise<string> {
+export async function uploadListingMediaFile(options: UploadListingMediaOptions): Promise<string> {
   const normalizedPlatform = options.platform.trim();
   if (!normalizedPlatform) {
     throw new Error("Upload platform is required.");

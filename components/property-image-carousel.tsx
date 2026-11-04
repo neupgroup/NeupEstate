@@ -9,12 +9,12 @@ import {
 } from "@neup/components/ui/carousel"
 import { SafeImage } from "./safe-image"
 
-interface PropertyImageCarouselProps {
+interface ListingImageCarouselProps {
   images: string[]
   title: string
 }
 
-export function PropertyImageCarousel({ images, title }: PropertyImageCarouselProps) {
+export function ListingImageCarousel({ images, title }: ListingImageCarouselProps) {
   return (
     <Carousel className="w-full rounded-lg overflow-hidden shadow-lg">
       <CarouselContent>

@@ -18,7 +18,7 @@ function formatApproximateCount(count: number): string {
 
 /** Load public marketplace totals used by the seller landing page. */
 async function getSellingPageStats() {
-    const [propertyCount, areaRecords, agentCount, ownerPropertyCount] = await Promise.all([
+    const [propertyCount, areaRecords, agentCount, ownerListingCount] = await Promise.all([
         prisma.listing.count({ where: ACTIVE_PROPERTY_FILTER }),
         prisma.listing.findMany({
             where: ACTIVE_PROPERTY_FILTER,
@@ -34,7 +34,7 @@ async function getSellingPageStats() {
         }),
     ]);
 
-    return { propertyCount, areaCount: areaRecords.length, agentCount, ownerPropertyCount };
+    return { propertyCount, areaCount: areaRecords.length, agentCount, ownerListingCount };
 }
 
 /** Render the property seller landing page and its sales request form. */
@@ -44,7 +44,7 @@ export default async function SellPage() {
         { label: 'Properties', value: formatApproximateCount(stats.propertyCount), icon: Home },
         { label: 'Areas', value: formatApproximateCount(stats.areaCount), icon: MapPinned },
         { label: 'Agents', value: formatApproximateCount(stats.agentCount), icon: UsersRound },
-        { label: 'Owner properties', value: formatApproximateCount(stats.ownerPropertyCount), icon: Landmark },
+        { label: 'Owner properties', value: formatApproximateCount(stats.ownerListingCount), icon: Landmark },
         { label: 'Apps and sites', value: '50+', icon: Globe2 },
     ];
 

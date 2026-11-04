@@ -1,11 +1,11 @@
 
 import { getRequirementByUserId } from "@/services/requirements/get";
-import { RecommendedProperties } from "@/components/estate";
+import { RecommendedListings } from "@/components/estate";
 import { Section } from "@/components/home/_components/section";
 import { SectionTitle } from "@/components/home/_components/section-title";
 import type { RequirementsFormValues } from "@/components/profile/user-requirements-form";
-import { getRecentProperties } from "@/services/properties/list";
-import { PropertyCard } from "@/components/property-card";
+import { getRecentListings } from "@/services/listings/list";
+import { ListingCard } from "@/components/property-card";
 
 // In a real app, you would get this from the user's session.
 const MOCK_USER_ID = "usr-1";
@@ -29,7 +29,7 @@ export async function CuratedForYouSection() {
         };
     }
 
-    const fallbackProperties = requirementsForClient ? [] : await getRecentProperties(4);
+    const fallbackListings = requirementsForClient ? [] : await getRecentListings(4);
 
     return (
         <Section>
@@ -42,11 +42,11 @@ export async function CuratedForYouSection() {
                     : "Discover some of our latest properties. Set your preferences to get personalized recommendations."}
             </p>
             {requirementsForClient ? (
-                <RecommendedProperties requirements={requirementsForClient} />
+                <RecommendedListings requirements={requirementsForClient} />
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {fallbackProperties.map((property) => (
-                        <PropertyCard key={property.id} property={property} />
+                    {fallbackListings.map((property) => (
+                        <ListingCard key={property.id} property={property} />
                     ))}
                 </div>
             )}

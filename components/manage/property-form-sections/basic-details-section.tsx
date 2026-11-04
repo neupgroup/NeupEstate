@@ -1,19 +1,19 @@
 "use client";
 
 import { Control, useFormContext } from "react-hook-form";
-import { CreatePropertyFormValues, PropertyCategorySchema, PropertyPurposeOptions, PropertyUsageTypeSchema } from "@/types";
+import { CreateListingFormValues, ListingCategorySchema, ListingPurposeOptions, ListingUsageTypeSchema } from "@/types";
 import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { SelectionCards } from "@/components/ui/selection-cards";
-import { deriveSelectionState, getDisabledNaturesByNature } from "@/services/properties/selection-logic";
+import { deriveSelectionState, getDisabledNaturesByNature } from "@/services/listings/selection-logic";
 import { useEffect } from "react";
 
 interface BasicDetailsSectionProps {
-    control: Control<CreatePropertyFormValues>;
+    control: Control<CreateListingFormValues>;
     fieldChangeNotes?: Partial<Record<'purposes' | 'categories' | 'types', string>>;
 }
 
 export function BasicDetailsSection({ control, fieldChangeNotes }: BasicDetailsSectionProps) {
-    const { watch, setValue } = useFormContext<CreatePropertyFormValues>();
+    const { watch, setValue } = useFormContext<CreateListingFormValues>();
     const selectedPurposes = watch("purposes") || [];
     const selectedCategories = (watch("categories" as any) as unknown as string[]) || [];
     const selectedTypes = (watch("types" as any) as unknown as string[]) || [];
@@ -72,9 +72,9 @@ export function BasicDetailsSection({ control, fieldChangeNotes }: BasicDetailsS
                 name="purposes"
                 render={() => (
                     <FormItem>
-                        <FormLabel className="text-base font-semibold">Property Purpose</FormLabel>
+                        <FormLabel className="text-base font-semibold">Listing Purpose</FormLabel>
                         <SelectionCards
-                            options={PropertyPurposeOptions}
+                            options={ListingPurposeOptions}
                             selected={selectedPurposes as string[]}
                             onToggle={togglePurpose}
                             disabled={disabledPurposes}
@@ -93,9 +93,9 @@ export function BasicDetailsSection({ control, fieldChangeNotes }: BasicDetailsS
                 name={"categories" as any}
                 render={() => (
                     <FormItem>
-                        <FormLabel className="text-base font-semibold">Property Type</FormLabel>
+                        <FormLabel className="text-base font-semibold">Listing Type</FormLabel>
                         <SelectionCards
-                            options={PropertyCategorySchema.options}
+                            options={ListingCategorySchema.options}
                             selected={selectedCategories}
                             onToggle={toggleCategory}
                             disabled={disabledCategories}
@@ -114,9 +114,9 @@ export function BasicDetailsSection({ control, fieldChangeNotes }: BasicDetailsS
                 name={"types" as any}
                 render={() => (
                     <FormItem>
-                        <FormLabel className="text-base font-semibold">Property Nature</FormLabel>
+                        <FormLabel className="text-base font-semibold">Listing Nature</FormLabel>
                         <SelectionCards
-                            options={PropertyUsageTypeSchema.options}
+                            options={ListingUsageTypeSchema.options}
                             selected={selectedTypes}
                             onToggle={toggleType}
                             disabled={allDisabledNatures}

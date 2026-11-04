@@ -102,7 +102,7 @@ export default function SettingsPage() {
                 Sitemap Automation
             </Link>
             <Link href="/manage/import" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
-                Manual Property Import
+                Manual Listing Import
             </Link>
              <Link href="/manage/settings/ai-configuration" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
                 AI Prompt Management

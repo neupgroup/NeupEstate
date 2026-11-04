@@ -14,9 +14,9 @@ before submit or step advance.
 ::end
 */
 
-import type { AgencyCustomizationRule, CreatePropertyFormValues } from '@/types';
+import type { AgencyCustomizationRule, CreateListingFormValues } from '@/types';
 
-type AgencyCustomizationValues = Partial<CreatePropertyFormValues> & Record<string, unknown>;
+type AgencyCustomizationValues = Partial<CreateListingFormValues> & Record<string, unknown>;
 
 function getValueAtPath(source: unknown, path: string): unknown {
   if (!source || typeof source !== 'object' || !path.trim()) return undefined;

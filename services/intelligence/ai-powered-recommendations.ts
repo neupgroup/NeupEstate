@@ -10,13 +10,13 @@
 
 import { z } from 'zod';
 import { getPrompt } from '@/services/intelligence/prompts';
-import type { RecommendPropertiesInput, RecommendPropertiesOutput } from '@/types';
-import { RecommendPropertiesInputSchema, RecommendPropertiesOutputSchema } from '@/types';
+import type { RecommendListingsInput, RecommendListingsOutput } from '@/types';
+import { RecommendListingsInputSchema, RecommendListingsOutputSchema } from '@/types';
 import { generateText } from './unified-generation-service';
 
 
-export async function recommendProperties(input: RecommendPropertiesInput): Promise<RecommendPropertiesOutput> {
-  return recommendPropertiesFlow(input);
+export async function recommendListings(input: RecommendListingsInput): Promise<RecommendListingsOutput> {
+  return recommendListingsFlow(input);
 }
 
 const PROMPT_ID = 'recommendPropertiesPrompt';
@@ -36,7 +36,7 @@ Your goal is to synthesize this data into a few (1 to 3) targeted search filter 
 **Instructions:**
 1.  **Analyze the Data**: Review the user's weighted preferences across all categories (location, property type, budget, etc.). Higher scores indicate stronger preferences.
 2.  **Identify Core Interests**: Determine the 1 to 3 most likely search intents. For example, a user might be looking for "a family house in Kathmandu" and also "commercial land for investment". These would be two separate filter objects.
-3.  **Construct Filter Objects**: For each identified interest, create a JSON object that matches the PropertyFilters schema.
+3.  **Construct Filter Objects**: For each identified interest, create a JSON object that matches the ListingFilters schema.
     *   **Location**: Use the highest-scored location.
     *   **Budget**: If budget ranges are present, select the one with the highest score and set \`minPrice\` and \`maxPrice\` accordingly.
     *   **Property Type/Category**: Select the highest-scored types and categories.
@@ -69,14 +69,14 @@ Now, analyze the provided user preference data and generate the search filters.`
 /**
  * This is now a lightweight wrapper that uses the new unified generation service.
  */
-async function recommendPropertiesFlow(input: RecommendPropertiesInput): Promise<RecommendPropertiesOutput> {
+async function recommendListingsFlow(input: RecommendListingsInput): Promise<RecommendListingsOutput> {
     const promptConfig = await getPrompt(PROMPT_ID, defaultPrompt);
 
-    const result = await generateText<RecommendPropertiesOutput>({
+    const result = await generateText<RecommendListingsOutput>({
         model: promptConfig.model!,
         promptText: promptConfig.promptText,
         inputData: { userPreferences: JSON.stringify(input, null, 2) },
-        outputSchema: RecommendPropertiesOutputSchema,
+        outputSchema: RecommendListingsOutputSchema,
     });
     
     return result;

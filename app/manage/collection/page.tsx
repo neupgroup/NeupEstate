@@ -10,10 +10,10 @@ export default async function CollectionPage() {
         <div className="space-y-6">
             <div>
                 <h2 className="text-2xl font-semibold leading-none tracking-tight">
-                   Property Collections
+                   Listing Collections
                 </h2>
                 <p className="text-sm text-muted-foreground">
-                    Manage and curate collections of properties.
+                    Manage and curate collections of listings.
                 </p>
             </div>
             <Alert>

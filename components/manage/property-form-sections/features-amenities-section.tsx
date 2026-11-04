@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-import { CreatePropertyFormValues } from "@/types";
+import { CreateListingFormValues } from "@/types";
 import { FormField, FormItem, FormMessage } from "@/components/ui/form";
 
 const AMENITY_GROUPS: { label: string; items: { name: string; emoji: string }[] }[] = [
@@ -109,7 +109,7 @@ interface FeaturesAmenitiesSectionProps {
 }
 
 export function FeaturesAmenitiesSection({ control, fieldChangeNotes, previousAmenities }: FeaturesAmenitiesSectionProps) {
-    const { watch, setValue } = useFormContext<CreatePropertyFormValues>();
+    const { watch, setValue } = useFormContext<CreateListingFormValues>();
 
     const raw = watch("amenities") || "";
     const selected: string[] = raw ? raw.split(",").map((s: string) => s.trim()).filter(Boolean) : [];

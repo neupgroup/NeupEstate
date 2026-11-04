@@ -190,7 +190,7 @@ export function UserRequirementsForm({ initialRequirements, onSave }: UserRequir
                     </div>
                     
                     <div className="space-y-2">
-                        <Label className="font-semibold">Property Type</Label>
+                        <Label className="font-semibold">Listing Type</Label>
                          <Controller
                             name="propertyType"
                             control={form.control}

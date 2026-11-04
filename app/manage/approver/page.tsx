@@ -2,14 +2,14 @@
 "use client";
 
 import { useState, useTransition } from 'react';
-import { getPendingPropertiesForAgent, getApprovedPropertiesForAgent, runPropertyApproval, runPropertyAmendment, runPropertyAssurance } from '@/services/automation';
+import { getPendingListingsForAgent, getApprovedListingsForAgent, runListingApproval, runListingAmendment, runListingAssurance } from '@/services/automation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Button } from '@neup/components/ui/button';
 import { useToast } from '@neup/core/hooks/useToast';
 import { CheckCircle, AlertCircle, Loader2, Bot, Wrench, CircleDashed, ShieldCheck, StepForward } from 'lucide-react';
 import { Input } from '@neup/components/ui/input';
 import { Label } from '@neup/components/ui/label';
-import type { PropertyAssuranceResult } from '@/types';
+import type { ListingAssuranceResult } from '@/types';
 import { Link } from '@neup/components/ui/link';
 
 type AgentResult = {
@@ -39,7 +39,7 @@ export default function IntelligencePage() {
 
         startAssuranceTransition(async () => {
             try {
-                const propertiesToProcess = await getPendingPropertiesForAgent(limit);
+                const propertiesToProcess = await getPendingListingsForAgent(limit);
                 if (propertiesToProcess.length === 0) {
                     toast({ name: "default", title: "No pending properties to process." });
                     return;
@@ -52,7 +52,7 @@ export default function IntelligencePage() {
                     setAssuranceResults(prev => prev.map(r => r.propertyId === prop.id ? { ...r, status: 'processing' } : r));
                     
                     try {
-                        const result: PropertyAssuranceResult = await runPropertyAssurance(prop.id);
+                        const result: ListingAssuranceResult = await runListingAssurance(prop.id);
                         setAssuranceResults(prev => prev.map(r => r.propertyId === prop.id
                             ? { ...r, status: result.assured ? 'assured' : 'failed', reason: result.reason, steps: result.steps }
                             : r
@@ -82,7 +82,7 @@ export default function IntelligencePage() {
 
         startApprovalTransition(async () => {
             try {
-                const propertiesToProcess = await getPendingPropertiesForAgent(limit);
+                const propertiesToProcess = await getPendingListingsForAgent(limit);
                 if (propertiesToProcess.length === 0) {
                     toast({ name: "default", title: "No pending properties to process." });
                     return;
@@ -95,7 +95,7 @@ export default function IntelligencePage() {
                     setApprovalResults(prev => prev.map(r => r.propertyId === prop.id ? { ...r, status: 'processing' } : r));
                     
                     try {
-                        const result = await runPropertyApproval(prop.id);
+                        const result = await runListingApproval(prop.id);
                         setApprovalResults(prev => prev.map(r => r.propertyId === prop.id
                             ? { ...r, status: result.approved ? 'approved' : 'skipped', reason: result.reason }
                             : r
@@ -125,7 +125,7 @@ export default function IntelligencePage() {
 
         startAmendmentTransition(async () => {
              try {
-                const propertiesToProcess = await getApprovedPropertiesForAgent(limit);
+                const propertiesToProcess = await getApprovedListingsForAgent(limit);
                  if (propertiesToProcess.length === 0) {
                     toast({ name: "default", title: "No suitable properties found to amend." });
                     return;
@@ -138,7 +138,7 @@ export default function IntelligencePage() {
                     setAmendmentResults(prev => prev.map(r => r.propertyId === prop.id ? { ...r, status: 'processing' } : r));
                     
                     try {
-                        const result = await runPropertyAmendment(prop.id);
+                        const result = await runListingAmendment(prop.id);
                         setAmendmentResults(prev => prev.map(r => r.propertyId === prop.id
                             ? { ...r, status: result.amended ? 'amended' : 'skipped', reason: result.reason }
                             : r
@@ -196,8 +196,8 @@ export default function IntelligencePage() {
                                     <p className="text-xs text-muted-foreground">ID: {result.propertyId}</p>
                                     <Link
                                         href={result.kind === 'draft'
-                                          ? `/manage/properties/create`
-                                          : `/manage/properties/${result.propertyId}/edit`}
+                                          ? `/manage/listings/create`
+                                          : `/manage/listings/${result.propertyId}/edit`}
                                         className="text-lg font-semibold truncate hover:underline block"
                                     >
                                         {result.title}
@@ -241,16 +241,16 @@ export default function IntelligencePage() {
             <div className="grid grid-cols-1 gap-6">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Property Approval Agent</CardTitle>
+                        <CardTitle>Listing Approval Agent</CardTitle>
                         <CardDescription>
-                            Verify and approve pending properties by checking their live source URL for consistency.
+                            Verify and approve pending listings by checking their live source URL for consistency.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <form action={handleRunApprovalAgent} className="space-y-4">
                              <div className="flex flex-col sm:flex-row items-center gap-4">
                                 <div className="grid w-full sm:w-40 items-center gap-1.5">
-                                    <Label htmlFor="approval-limit">Properties to process</Label>
+                                    <Label htmlFor="approval-limit">Listings to process</Label>
                                     <Input id="approval-limit" name="limit" type="number" defaultValue="50" min="1" max="1000" disabled={isAgentRunning} />
                                 </div>
                                 <div className="w-full sm:w-auto self-end">
@@ -276,16 +276,16 @@ export default function IntelligencePage() {
 
                 <Card>
                     <CardHeader>
-                        <CardTitle>Property Amendment Agent</CardTitle>
+                        <CardTitle>Listing Amendment Agent</CardTitle>
                         <CardDescription>
-                            Correct and enrich approved properties by checking their live source URL for updated details.
+                            Correct and enrich approved listings by checking their live source URL for updated details.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <form action={handleRunAmendmentAgent} className="space-y-4">
                              <div className="flex flex-col sm:flex-row items-center gap-4">
                                 <div className="grid w-full sm:w-40 items-center gap-1.5">
-                                    <Label htmlFor="amendment-limit">Properties to process</Label>
+                                    <Label htmlFor="amendment-limit">Listings to process</Label>
                                     <Input id="amendment-limit" name="limit" type="number" defaultValue="50" min="1" max="1000" disabled={isAgentRunning} />
                                 </div>
                                 <div className="w-full sm:w-auto self-end">
@@ -311,7 +311,7 @@ export default function IntelligencePage() {
 
                 <Card>
                     <CardHeader>
-                        <CardTitle>Property Assurance Agent</CardTitle>
+                        <CardTitle>Listing Assurance Agent</CardTitle>
                         <CardDescription>
                             A comprehensive agent that first amends a pending property with the latest live data, then verifies and approves it in one step.
                         </CardDescription>
@@ -320,7 +320,7 @@ export default function IntelligencePage() {
                         <form action={handleRunAssuranceAgent} className="space-y-4">
                              <div className="flex flex-col sm:flex-row items-center gap-4">
                                 <div className="grid w-full sm:w-40 items-center gap-1.5">
-                                    <Label htmlFor="assurance-limit">Properties to process</Label>
+                                    <Label htmlFor="assurance-limit">Listings to process</Label>
                                     <Input id="assurance-limit" name="limit" type="number" defaultValue="50" min="1" max="1000" disabled={isAgentRunning} />
                                 </div>
                                 <div className="w-full sm:w-auto self-end">

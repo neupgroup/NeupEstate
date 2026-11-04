@@ -11,8 +11,8 @@ type Props = {
   canDashboard: boolean;
   canAnalytics: boolean;
   canIntelListings: boolean;
-  canPropertyView: boolean;
-  canRootPropertiesView: boolean;
+  canListingView: boolean;
+  canRootListingsView: boolean;
   canCollectionView: boolean;
   canAccountsView: boolean;
   canLeadsHomeView: boolean;
@@ -37,7 +37,7 @@ export function ManageSidebar(props: Props) {
     "/manage": props.canDashboard,
     "/manage/analytics": props.canAnalytics,
     "/manage/intelligence": props.canIntelListings,
-    "/manage/properties": props.canPropertyView || props.canRootPropertiesView,
+    "/manage/listings": props.canListingView || props.canRootListingsView,
     "/manage/collection": props.canCollectionView,
     "/manage/accounts": props.canAccountsView,
     "/manage/leads": props.canLeadsHomeView,

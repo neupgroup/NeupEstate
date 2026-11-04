@@ -3,8 +3,8 @@ import { prisma } from '@neup/core/database/prisma';
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { Link } from '@neup/components/ui/link';
 import { Pagination } from '@/components/estate';
-import { PropertyCard } from '@/components/property-card';
-import { getPaginatedProperties } from '@/services/properties/list';
+import { ListingCard } from '@/components/property-card';
+import { getPaginatedListings } from '@/services/listings/list';
 import { AlertCircle, MapPin } from 'lucide-react';
 
 const PROPERTIES_PER_PAGE = 15;
@@ -44,7 +44,7 @@ function readPageNumber(value: string | string[] | undefined): number {
 }
 
 // Render active property listings associated with one verified location.
-export default async function LocationPropertiesPage({
+export default async function LocationListingsPage({
   params,
   searchParams,
 }: {
@@ -56,7 +56,7 @@ export default async function LocationPropertiesPage({
   if (!location) notFound();
 
   const requestedPage = readPageNumber(resolvedSearchParams?.page);
-  const results = await getPaginatedProperties({
+  const results = await getPaginatedListings({
     page: requestedPage,
     limit: PROPERTIES_PER_PAGE,
     filters: { location: location.title },
@@ -66,7 +66,7 @@ export default async function LocationPropertiesPage({
   const currentPage = Math.min(requestedPage, totalPages);
   const pageResults = currentPage === requestedPage
     ? results
-    : await getPaginatedProperties({
+    : await getPaginatedListings({
         page: currentPage,
         limit: PROPERTIES_PER_PAGE,
         filters: { location: location.title },
@@ -86,7 +86,7 @@ export default async function LocationPropertiesPage({
             {location.postalCode && <span className="text-muted-foreground">· {location.postalCode}</span>}
           </div>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-            Properties in {location.title}
+            Listings in {location.title}
           </h1>
           <p className="mt-3 text-muted-foreground">
             {results.totalCount} {results.totalCount === 1 ? 'property' : 'properties'} available in this location.
@@ -95,11 +95,11 @@ export default async function LocationPropertiesPage({
       </section>
 
       <section className="container mx-auto px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
-        {pageResults.properties.length ? (
+        {pageResults.listings.length ? (
           <>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {pageResults.properties.map((property) => (
-                <PropertyCard key={property.id} property={property} />
+              {pageResults.listings.map((property) => (
+                <ListingCard key={property.id} property={property} />
               ))}
             </div>
             {totalPages > 1 && <Pagination currentPage={currentPage} totalPages={totalPages} />}
@@ -107,10 +107,10 @@ export default async function LocationPropertiesPage({
         ) : (
           <Alert>
             <AlertCircle className="h-4 w-4" />
-            <AlertTitle>No properties found</AlertTitle>
+            <AlertTitle>No listings found</AlertTitle>
             <AlertDescription>
-              There are no active properties listed in {location.title} yet.{' '}
-              <Link href="/search" className="underline">Browse all properties</Link>.
+              There are no active listings listed in {location.title} yet.{' '}
+              <Link href="/search" className="underline">Browse all listings</Link>.
             </AlertDescription>
           </Alert>
         )}

@@ -1,5 +1,5 @@
 import { prisma } from '@neup/core/database/prisma';
-import { getPropertySlugId } from '@/services/properties/slug';
+import { getListingSlugId } from '@/services/listings/slug';
 
 const PUBLIC_BASE_URL = 'https://neupgroup.com/estate';
 const PAGE_SIZE = 50_000;
@@ -17,8 +17,8 @@ function sitemapResponse(urls: string[]): Response {
   });
 }
 
-// PropertySitemap for this route.
-async function propertySitemap(page: number): Promise<Response> {
+// ListingSitemap for this route.
+async function listingSitemap(page: number): Promise<Response> {
   const rows = await prisma.listing.findMany({
     where: { isApproved: true, isDeleted: false },
     select: { id: true, slug: true },
@@ -26,7 +26,7 @@ async function propertySitemap(page: number): Promise<Response> {
     skip: (page - 1) * PAGE_SIZE,
     take: PAGE_SIZE,
   });
-  return sitemapResponse(rows.map((property) => `${PUBLIC_BASE_URL}/properties/${encodeURIComponent(getPropertySlugId(property))}`));
+  return sitemapResponse(rows.map((property) => `${PUBLIC_BASE_URL}/listings/${encodeURIComponent(getListingSlugId(property))}`));
 }
 
 // AgentSitemap for this route.
@@ -56,14 +56,14 @@ async function agencySitemap(page: number): Promise<Response> {
 // Handle the GET request and return the requested resource.
 export async function GET(request: Request, { params }: { params: Promise<{ variable: string }> }) {
   const variable = (await params).variable;
-  const match = /^(properties|agents|agencies)-(\d+)\.xml$/.exec(variable);
+  const match = /^(listings|agents|agencies)-(\d+)\.xml$/.exec(variable);
   if (!match) return new Response('Not found', { status: 404 });
 
   const [, type, countText] = match;
   const page = Number(countText);
   if (!Number.isSafeInteger(page) || page < 1) return new Response('Not found', { status: 404 });
 
-  if (type === 'properties') return propertySitemap(page);
+  if (type === 'listings') return listingSitemap(page);
   if (type === 'agents') return agentSitemap(page);
   return agencySitemap(page);
 }

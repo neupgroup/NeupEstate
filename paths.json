@@ -67,9 +67,9 @@
       "source": "app/bridge/api.v1/inquiry/route.ts"
     },
     {
-      "path": "/bridge/api.v1/intelligence/property/[id]",
+      "path": "/bridge/api.v1/intelligence/listing/[id]",
       "methods": ["GET"],
-      "source": "app/bridge/api.v1/intelligence/property/[id]/route.ts"
+      "source": "app/bridge/api.v1/intelligence/listing/[id]/route.ts"
     },
     {
       "path": "/bridge/api.v1/leads/[id]/activity",
@@ -92,29 +92,29 @@
       "source": "app/bridge/api.v1/leads/shared/route.ts"
     },
     {
-      "path": "/bridge/api.v1/properties",
+      "path": "/bridge/api.v1/listings",
       "methods": ["GET", "POST"],
-      "source": "app/bridge/api.v1/properties/route.ts"
+      "source": "app/bridge/api.v1/listings/route.ts"
     },
     {
-      "path": "/bridge/api.v1/properties/[id]",
+      "path": "/bridge/api.v1/listings/[id]",
       "methods": ["GET", "PATCH", "DELETE"],
-      "source": "app/bridge/api.v1/properties/[id]/route.ts"
+      "source": "app/bridge/api.v1/listings/[id]/route.ts"
     },
     {
-      "path": "/bridge/api.v1/properties/account/[accountId]/[collection]",
+      "path": "/bridge/api.v1/listings/account/[accountId]/[collection]",
       "methods": ["GET"],
-      "source": "app/bridge/api.v1/properties/account/[accountId]/[collection]/route.ts"
+      "source": "app/bridge/api.v1/listings/account/[accountId]/[collection]/route.ts"
     },
     {
-      "path": "/bridge/api.v1/properties/saved",
+      "path": "/bridge/api.v1/listings/saved",
       "methods": ["GET", "POST", "DELETE"],
-      "source": "app/bridge/api.v1/properties/saved/route.ts"
+      "source": "app/bridge/api.v1/listings/saved/route.ts"
     },
     {
-      "path": "/bridge/api.v1/properties/search",
+      "path": "/bridge/api.v1/listings/search",
       "methods": ["GET", "POST"],
-      "source": "app/bridge/api.v1/properties/search/route.ts"
+      "source": "app/bridge/api.v1/listings/search/route.ts"
     },
     {
       "path": "/bridge/api.v1/requirements",

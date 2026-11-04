@@ -57,7 +57,7 @@ export function MarketAnalysis() {
             <CardContent>
                 <form action={formAction} className="space-y-4">
                     <div className="space-y-1.5">
-                        <Label htmlFor="query">Property Description</Label>
+                        <Label htmlFor="query">Listing Description</Label>
                         <Textarea
                             id="query"
                             name="query"

@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { RecommendedProperties } from '@/components/estate';
+import { RecommendedListings } from '@/components/estate';
 import { getAccountProfileByNeupId } from '@/services/accounts/profile';
 import { FolderOpen } from 'lucide-react';
 
@@ -31,7 +31,7 @@ export default async function PublicAccountCollectionsPage({
           <p className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-4 py-2 text-sm font-medium text-primary">
             <FolderOpen className="h-4 w-4" /> @{account.profile.neupid}
           </p>
-          <h1 className="mt-5 text-4xl font-headline font-semibold tracking-tight sm:text-5xl">Property collections</h1>
+          <h1 className="mt-5 text-4xl font-headline font-semibold tracking-tight sm:text-5xl">Listing collections</h1>
           <p className="mt-4 max-w-2xl text-lg leading-8 text-muted-foreground">
             Explore property recommendations from Neup.Estate.
           </p>
@@ -39,7 +39,7 @@ export default async function PublicAccountCollectionsPage({
       </section>
       <section className="bg-muted/20 px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
         <div className="container mx-auto">
-          <RecommendedProperties requirements={null} />
+          <RecommendedListings requirements={null} />
         </div>
       </section>
     </main>

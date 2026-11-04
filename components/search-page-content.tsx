@@ -4,9 +4,9 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { searchAgentsByLocationAction } from '@/services/agents';
-import { PropertyCard } from "@/components/estate";
+import { ListingCard } from "@/components/estate";
 import { Skeleton } from "@neup/components/ui/skeleton";
-import type { Property, PropertyFilters, Agent } from "@/types";
+import type { Listing, ListingFilters, Agent } from "@/types";
 import { Alert, AlertDescription, AlertTitle } from "@neup/components/ui/alert";
 import { AlertCircle, Search } from "lucide-react";
 import { SearchSidebar } from "@/components/estate";
@@ -25,11 +25,11 @@ export function SearchPageContent({ queryFromPath }: { queryFromPath: string }) 
   const page = Number(searchParams.get("page")) || 1;
   const [searchQuery, setSearchQuery] = useState(queryFromPath);
 
-  const [properties, setProperties] = useState<Property[]>([]);
+  const [listings, setListings] = useState<Listing[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [appliedFilters, setAppliedFilters] = useState<PropertyFilters | undefined>(undefined);
+  const [appliedFilters, setAppliedFilters] = useState<ListingFilters | undefined>(undefined);
   const [agents, setAgents] = useState<Agent[]>([]);
 
   useEffect(() => {
@@ -50,11 +50,11 @@ export function SearchPageContent({ queryFromPath }: { queryFromPath: string }) 
     async function fetchSearchResults() {
       setIsLoading(true);
       setError(null);
-      setProperties([]);
+      setListings([]);
       setAgents([]);
       setTotalCount(0);
       
-      const searchUrl = new URL(`${basePath}/bridge/api.v1/properties/search`, window.location.origin);
+      const searchUrl = new URL(`${basePath}/bridge/api.v1/listings/search`, window.location.origin);
       Object.entries(fetchParams).forEach(([key, value]) => {
         searchUrl.searchParams.set(key, Array.isArray(value) ? value.join(',') : value);
       });
@@ -68,7 +68,7 @@ export function SearchPageContent({ queryFromPath }: { queryFromPath: string }) 
           return;
         }
 
-        setProperties(result.properties);
+        setListings(result.listings);
         setTotalCount(result.totalCount);
         setAppliedFilters(result.appliedFilters);
 
@@ -175,11 +175,11 @@ export function SearchPageContent({ queryFromPath }: { queryFromPath: string }) 
                   <AlertTitle>Error</AlertTitle>
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
-              ) : properties.length > 0 ? (
+              ) : listings.length > 0 ? (
                 <div className="space-y-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                        {properties.map((property) => (
-                            <PropertyCard key={property.id} property={property} />
+                        {listings.map((property) => (
+                            <ListingCard key={property.id} property={property} />
                         ))}
                     </div>
                     {totalPages > 1 && <Pagination currentPage={page} totalPages={totalPages} />}
@@ -187,7 +187,7 @@ export function SearchPageContent({ queryFromPath }: { queryFromPath: string }) 
                 </div>
               ) : (
                 <div className="text-center py-16 border-2 border-dashed rounded-lg">
-                  <h2 className="text-2xl font-semibold">No properties found</h2>
+                  <h2 className="text-2xl font-semibold">No listings found</h2>
                   <p className="mt-2 text-muted-foreground">
                     Try adjusting your search query or filters.
                   </p>

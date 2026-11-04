@@ -134,7 +134,7 @@ export async function crawlCompetitorSourcesAction(
 
             try {
               const listingResult = await extractCompetitorListing({ url });
-              if (listingResult.isPropertyPage && pageId) {
+              if (listingResult.isListingPage && pageId) {
                 await upsertCompetitorListing({
                   competitorId,
                   competitorPageId: pageId,

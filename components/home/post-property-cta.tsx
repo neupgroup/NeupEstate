@@ -9,7 +9,7 @@ import { LinkButton } from "@neup/components/ui/link-button";
 import { Home } from "lucide-react";
 import { Section } from "@/components/home/_components/section";
 
-export function PostPropertyCTA() {
+export function PostListingCTA() {
     return (
         <Section>
             <div className="max-w-2xl text-left">
@@ -19,7 +19,7 @@ export function PostPropertyCTA() {
                   </p>
                   <div className="mt-6">
                       <LinkButton href="/sell" size="lg" preIcon={<Home />}>
-                          Post Your Property
+                          Post Your Listing
                       </LinkButton>
                   </div>
               </div>

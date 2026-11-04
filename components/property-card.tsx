@@ -10,22 +10,22 @@ Reusable public property card used across homepage, search, saved, and collectio
 */
 
 import { Link } from "@neup/components/ui/link";
-import type { Property } from "@/types";
+import type { Listing } from "@/types";
 import { Button } from "@neup/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@neup/components/ui/card";
 import { Badge } from "@neup/components/ui/badge";
 import { Heart, Star, MapPin } from "lucide-react";
 import { useState, useTransition, useEffect } from "react";
 import { cn } from "@neup/core/utils";
-import { getHiddenPriceLabel, getPrimaryCurrency, getPrimaryPrice, getPrimaryPricingSuffix } from "@/services/properties/price-display";
+import { getHiddenPriceLabel, getPrimaryCurrency, getPrimaryPrice, getPrimaryPricingSuffix } from "@/services/listings/price-display";
 import { SafeImage } from "./safe-image";
-import { isSaved, save } from '@/services/properties/single/engage/save';
+import { isSaved, save } from '@/services/listings/single/engage/save';
 import { useToast } from "@neup/core/hooks/useToast";
 import { getClientAccountId } from '@/services/auth/client';
-import { getPropertySlugId } from '@/services/properties/slug';
+import { getListingSlugId } from '@/services/listings/slug';
 
-interface PropertyCardProps {
-  property: Property;
+interface ListingCardProps {
+  property: Listing;
   propertyCount?: number;
   reviewCount?: number;
   rating?: number;
@@ -39,7 +39,7 @@ const FALLBACK_IMAGES = [
 ];
 
 
-export function PropertyCard({ property, propertyCount, reviewCount, rating }: PropertyCardProps) {
+export function ListingCard({ property, propertyCount, reviewCount, rating }: ListingCardProps) {
   const [isFavorited, setIsFavorited] = useState(false);
   const [isCheckingFavorite, setIsCheckingFavorite] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
@@ -49,7 +49,7 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
   const { toast } = useToast();
   
   const imageUrl = property.images && property.images.length > 0 ? property.images[0] : null;
-  const slugOrId = getPropertySlugId(property);
+  const slugOrId = getListingSlugId(property);
 
   useEffect(() => {
     setIsMounted(true);
@@ -122,7 +122,7 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
   return (
     <Card className="group card-hover-effect flex h-full flex-col overflow-hidden rounded-2xl border border-border/80 bg-card shadow-sm">
       <CardHeader className="relative block p-0">
-        <Link href={`/properties/${slugOrId}`} className="block overflow-hidden">
+        <Link href={`/listings/${slugOrId}`} className="block overflow-hidden">
           <SafeImage
             src={imageUrl || fallbackImage || "https://placehold.co/600x400.png"}
             alt={property.title}
@@ -194,7 +194,7 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
                 ) : null}
                 {propertyCount !== undefined ? (
                   <div className="rounded-full bg-muted px-2 py-1 text-[11px] font-medium text-muted-foreground">
-                    {propertyCount} Properties
+                    {propertyCount} Listings
                   </div>
                 ) : null}
               </div>
@@ -202,7 +202,7 @@ export function PropertyCard({ property, propertyCount, reviewCount, rating }: P
           </div>
 
           <CardTitle className="line-clamp-2 text-base font-headline leading-snug text-foreground">
-            <Link href={`/properties/${slugOrId}`} className="transition-colors hover:text-primary">
+            <Link href={`/listings/${slugOrId}`} className="transition-colors hover:text-primary">
             {property.title}
             </Link>
           </CardTitle>

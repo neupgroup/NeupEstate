@@ -2,7 +2,7 @@ import { LinkButton } from "@neup/components/ui/link-button";
 import { FileSearch } from "lucide-react";
 import { Section } from "@/components/home/_components/section";
 
-export function PropertyRequirementsCTA() {
+export function ListingRequirementsCTA() {
     return (
          <Section>
           <div className="max-w-2xl text-left">

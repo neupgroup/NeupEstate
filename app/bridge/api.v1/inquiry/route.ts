@@ -44,7 +44,7 @@ import { logger } from "@neup/logica/logger";
 export const dynamic = 'force-dynamic';
 
 // Resolve the property identifier from supported query and body aliases.
-function readPropertyId(request: NextRequest, body: Record<string, unknown>): string {
+function readListingId(request: NextRequest, body: Record<string, unknown>): string {
   return request.nextUrl.searchParams.get('property')?.trim()
     || request.nextUrl.searchParams.get('property_id')?.trim()
     || (typeof body.property === 'string' ? body.property.trim() : '')
@@ -73,7 +73,7 @@ const postHandler = async (req: NextRequest) => {
       body = {};
     }
 
-    const propertyId = readPropertyId(req, body);
+    const propertyId = readListingId(req, body);
 
     const inquiryId = await createInquiry(
       typeof body.account_id === 'string' ? body.account_id : undefined,

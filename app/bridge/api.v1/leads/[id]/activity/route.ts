@@ -87,7 +87,7 @@ POST example response:
 */
 import { NextRequest, NextResponse } from 'next/server';
 import { logger } from '@neup/logica/logger';
-import { requireIdentity } from '@/services/properties/action-helpers';
+import { requireIdentity } from '@/services/listings/action-helpers';
 import { requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';
 import { addLeadActivity, getLeadActivities, getVisibleLead, type FollowUpMethod } from '@neup/logica/estate/lead/activity';

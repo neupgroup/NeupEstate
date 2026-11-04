@@ -5,8 +5,8 @@
 import { useTransition } from "react";
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createPropertyRequestAction } from '@/services/properties/single/engage/requests';
-import { CreatePropertyRequestSchema, type CreatePropertyRequestFormValues, PropertyCategorySchema } from "@/types";
+import { createListingRequestAction } from '@/services/listings/single/engage/requests';
+import { CreateListingRequestSchema, type CreateListingRequestFormValues, ListingCategorySchema } from "@/types";
 import { Button } from "@neup/components/ui/button";
 import { Textarea } from "@neup/components/ui/textarea";
 import { Input } from "@neup/components/ui/input";
@@ -15,12 +15,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from "@neup/core/hooks/useToast";
 import { Loader2, Send } from "lucide-react";
 
-export function PropertyRequestForm() {
+export function ListingRequestForm() {
     const { toast } = useToast();
     const [isSubmitting, startSubmitting] = useTransition();
     
-    const form = useForm<CreatePropertyRequestFormValues>({
-        resolver: zodResolver(CreatePropertyRequestSchema),
+    const form = useForm<CreateListingRequestFormValues>({
+        resolver: zodResolver(CreateListingRequestSchema),
         defaultValues: {
             name: "",
             email: "",
@@ -33,9 +33,9 @@ export function PropertyRequestForm() {
         },
     });
 
-    const onSubmit = (values: CreatePropertyRequestFormValues) => {
+    const onSubmit = (values: CreateListingRequestFormValues) => {
         startSubmitting(async () => {
-            const result = await createPropertyRequestAction(values);
+            const result = await createListingRequestAction(values);
             if (result.success) {
                 toast({ name: "default",
                     title: "Request Submitted",
@@ -62,10 +62,10 @@ export function PropertyRequestForm() {
                     <FormField control={form.control} name="location" render={({ field }) => (<FormItem><FormLabel>Preferred Location (Optional)</FormLabel><FormControl><Input placeholder="e.g., Downtown, Brooklyn" {...field} /></FormControl><FormMessage /></FormItem>)}/>
                     <FormField control={form.control} name="propertyType" render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Property Type (Optional)</FormLabel>
+                            <FormLabel>Listing Type (Optional)</FormLabel>
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                                 <FormControl><SelectTrigger><SelectValue placeholder="Any Type" /></SelectTrigger></FormControl>
-                                <SelectContent>{PropertyCategorySchema.options.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
+                                <SelectContent>{ListingCategorySchema.options.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}</SelectContent>
                             </Select>
                             <FormMessage />
                         </FormItem>

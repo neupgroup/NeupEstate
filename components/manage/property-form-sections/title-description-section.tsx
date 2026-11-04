@@ -4,7 +4,7 @@ import * as React from "react";
 import { Control, useWatch } from "react-hook-form";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Bold, Building2, Italic, List, ListOrdered, Pilcrow, Underline, UserRound } from "lucide-react";
-import { CreatePropertyFormValues } from "@/types";
+import { CreateListingFormValues } from "@/types";
 import { Link } from "@neup/components/ui/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@neup/components/ui/avatar";
 import { Button } from "@neup/components/ui/button";
@@ -15,7 +15,7 @@ import { Switch } from "@/components/ui/switch";
 import { cn } from "@neup/core/utils";
 
 interface TitleDescriptionSectionProps {
-    control: Control<CreatePropertyFormValues>;
+    control: Control<CreateListingFormValues>;
     fieldChangeNotes?: Partial<Record<string, string>>;
     listingContext?: {
         name: string;

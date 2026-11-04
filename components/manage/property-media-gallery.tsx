@@ -11,7 +11,7 @@ import { Link } from "@neup/components/ui/link";
 import { Grid2x2 } from "lucide-react";
 import { LinkButton } from "@neup/components/ui/link-button";
 
-interface PropertyMediaGalleryProps {
+interface ListingMediaGalleryProps {
   images: string[];
   title: string;
   propertySlug: string;
@@ -48,11 +48,11 @@ function GalleryImage({
   );
 }
 
-export function PropertyMediaGallery({
+export function ListingMediaGallery({
   images,
   title,
   propertySlug,
-}: PropertyMediaGalleryProps) {
+}: ListingMediaGalleryProps) {
   const visibleImages = images.filter(
     (image) => typeof image === "string" && image.trim().length > 0
   );
@@ -66,8 +66,8 @@ export function PropertyMediaGallery({
   }
 
   const getGalleryHref = (index: number) =>
-    `/properties/${propertySlug}/gallery?mode=fullpage&image=${index + 1}`;
-  const galleryHref = `/properties/${propertySlug}/gallery`;
+    `/listings/${propertySlug}/gallery?mode=fullpage&image=${index + 1}`;
+  const galleryHref = `/listings/${propertySlug}/gallery`;
 
   const first = visibleImages[0];
   const second = visibleImages[1];

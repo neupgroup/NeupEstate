@@ -58,9 +58,9 @@ export default async function LocationsPage({
           <p className="inline-flex items-center gap-2 text-sm font-medium text-primary">
             <MapPin className="h-4 w-4" aria-hidden="true" /> Explore locations
           </p>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Find properties by location</h1>
+          <h1 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Find listings by location</h1>
           <p className="mt-3 max-w-2xl text-muted-foreground">
-            Choose an area to see active properties listed there.
+            Choose an area to see active listings listed there.
           </p>
           <form role="search" method="GET" className="mt-6 flex max-w-xl gap-2">
             <label className="sr-only" htmlFor="location-query">Search locations</label>

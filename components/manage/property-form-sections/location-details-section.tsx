@@ -2,12 +2,12 @@
 "use client";
 
 import { Control } from "react-hook-form";
-import { CreatePropertyFormValues } from "@/types";
+import { CreateListingFormValues } from "@/types";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@neup/components/ui/input";
 
 interface LocationDetailsSectionProps {
-    control: Control<CreatePropertyFormValues>;
+    control: Control<CreateListingFormValues>;
     fieldChangeNotes?: Partial<Record<string, string>>;
 }
 

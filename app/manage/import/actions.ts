@@ -15,14 +15,14 @@ non-preview imports.
 
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
-import { importPropertiesFromJson, type PropertyJsonImportStructure } from '@/services/properties/import';
+import { importListingsFromJson, type ListingJsonImportStructure } from '@/services/listings/import';
 import { logger } from "@neup/logica/logger";
 import { PERMISSIONS } from '@/services/permission-names';;
 import { requirePermission } from '@/services/permissions';;
 
-type ImportActionResult = Awaited<ReturnType<typeof importPropertiesFromJson>>;
+type ImportActionResult = Awaited<ReturnType<typeof importListingsFromJson>>;
 
-const ImportJsonPropertiesSchema = z.object({
+const ImportJsonListingsSchema = z.object({
   dataJson: z.string().min(2, 'Property JSON is required.'),
   structureJson: z.string().min(2, 'Property structure JSON is required.'),
 });
@@ -35,15 +35,15 @@ function parseJson(value: string, label: string): unknown {
   }
 }
 
-export async function importJsonPropertiesAction(input: {
+export async function importJsonListingsAction(input: {
   dataJson: string;
   structureJson: string;
 }): Promise<ImportActionResult> {
   try {
     await requirePermission(PERMISSIONS.manage.propertySelfCreate);
-    const validated = ImportJsonPropertiesSchema.parse(input);
+    const validated = ImportJsonListingsSchema.parse(input);
     const data = parseJson(validated.dataJson, 'Property data');
-    const structure = parseJson(validated.structureJson, 'Property structure') as PropertyJsonImportStructure;
+    const structure = parseJson(validated.structureJson, 'Property structure') as ListingJsonImportStructure;
 
     if (!structure || typeof structure !== 'object' || !('fields' in structure)) {
       return {
@@ -56,11 +56,11 @@ export async function importJsonPropertiesAction(input: {
       };
     }
 
-    const result = await importPropertiesFromJson(data, structure);
+    const result = await importListingsFromJson(data, structure);
 
     if (!result.dryRun && result.importedCount > 0) {
-      revalidatePath('/manage/properties');
-      revalidatePath('/properties');
+      revalidatePath('/manage/listings');
+      revalidatePath('/listings');
     }
 
     return result;

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Control, useFormContext } from "react-hook-form";
 import { Check, X } from "lucide-react";
-import { CreatePropertyFormValues, CurrencySchema } from "@/types";
+import { CreateListingFormValues, CurrencySchema } from "@/types";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@neup/components/ui/input";
 import { PriceInput } from "@/components/ui/price-input";
@@ -12,12 +12,12 @@ import { Switch } from "@/components/ui/switch";
 import { cn } from "@neup/core/utils";
 
 interface PricingDetailsSectionProps {
-    control: Control<CreatePropertyFormValues>;
+    control: Control<CreateListingFormValues>;
     fieldChangeNotes?: Partial<Record<string, string>>;
 }
 
 type BasisOption = {
-    value: NonNullable<CreatePropertyFormValues["pricing"]>["basis"];
+    value: NonNullable<CreateListingFormValues["pricing"]>["basis"];
     label: string;
     description: string;
     frequency?: boolean;
@@ -101,7 +101,7 @@ function getBasisOptions(categories: string[], purposes: string[]): BasisOption[
 }
 
 export function PricingDetailsSection({ control, fieldChangeNotes }: PricingDetailsSectionProps) {
-    const { watch, setValue, unregister } = useFormContext<CreatePropertyFormValues>();
+    const { watch, setValue, unregister } = useFormContext<CreateListingFormValues>();
     const [manuallyExpandedBasis, setManuallyExpandedBasis] = useState<string[]>([]);
     const categories = (watch("categories" as any) as unknown as string[]) || [];
     const purposes = watch("purposes") || [];

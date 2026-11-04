@@ -3,11 +3,11 @@
 
 import { useMemo } from "react";
 import { Control, useFormContext } from "react-hook-form";
-import { CreatePropertyFormValues } from "@/types";
+import { CreateListingFormValues } from "@/types";
 import { CounterCard } from "@/components/ui/counter-card";
 
 interface RoomsAndSpaceSectionProps {
-    control: Control<CreatePropertyFormValues>;
+    control: Control<CreateListingFormValues>;
     category: string | undefined;
     fieldChangeNotes?: Partial<Record<string, string>>;
 }
@@ -58,7 +58,7 @@ const ROOMS: RoomConfig[] = [
 const ROOM_KEYS = ROOMS.map((room) => room.key);
 
 export function RoomsAndSpaceSection({ category, fieldChangeNotes }: RoomsAndSpaceSectionProps) {
-    const { watch, setValue } = useFormContext<CreatePropertyFormValues>();
+    const { watch, setValue } = useFormContext<CreateListingFormValues>();
     const values = watch(ROOM_KEYS) as Array<number | undefined>;
 
     const active = useMemo(() => ROOMS.filter((room, index) => {

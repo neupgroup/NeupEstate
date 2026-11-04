@@ -3,18 +3,18 @@
 
 import { Control, useFieldArray, useFormContext } from "react-hook-form";
 import { useState } from "react";
-import { CreatePropertyFormValues } from "@/types";
+import { CreateListingFormValues } from "@/types";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Button } from "@neup/components/ui/button";
 import { Input } from "@neup/components/ui/input";
 import { PlusCircle, Trash2 } from "lucide-react";
 import { Label } from "@neup/components/ui/label";
 import { useToast } from "@neup/core/hooks/useToast";
-import { uploadPropertyMediaFile } from "./media-upload";
+import { uploadListingMediaFile } from "./media-upload";
 
 // Sub-component to handle nested useFieldArray
-function DocumentGroup({ control, index: docIndex, remove }: { control: Control<CreatePropertyFormValues>, index: number, remove: (index: number) => void }) {
-    const { getValues, setValue } = useFormContext<CreatePropertyFormValues>();
+function DocumentGroup({ control, index: docIndex, remove }: { control: Control<CreateListingFormValues>, index: number, remove: (index: number) => void }) {
+    const { getValues, setValue } = useFormContext<CreateListingFormValues>();
     const { toast } = useToast();
     const [isUploading, setIsUploading] = useState(false);
     const { fields: urlFields, append: appendUrl, remove: removeUrl } = useFieldArray({
@@ -32,7 +32,7 @@ function DocumentGroup({ control, index: docIndex, remove }: { control: Control<
             let firstErrorMessage: string | null = null;
             for (const file of selectedFiles) {
                 try {
-                    const url = await uploadPropertyMediaFile({
+                    const url = await uploadListingMediaFile({
                         file,
                         platform: "property",
                         contentIds: ["documents"],
@@ -139,12 +139,12 @@ function DocumentGroup({ control, index: docIndex, remove }: { control: Control<
     );
 }
 
-interface PropertyDocumentsSectionProps {
-    control: Control<CreatePropertyFormValues>;
+interface ListingDocumentsSectionProps {
+    control: Control<CreateListingFormValues>;
     fieldChangeNotes?: Partial<Record<string, string>>;
 }
 
-export function PropertyDocumentsSection({ control, fieldChangeNotes }: PropertyDocumentsSectionProps) {
+export function ListingDocumentsSection({ control, fieldChangeNotes }: ListingDocumentsSectionProps) {
     const { fields, append, remove } = useFieldArray({
         control,
         name: "documents"

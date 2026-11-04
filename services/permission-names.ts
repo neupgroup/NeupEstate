@@ -31,7 +31,7 @@ export const PERMISSIONS = {
     selfReviewsView: 'manage.self.reviews.view',
   },
   root: {
-    propertiesView: 'root.properties.view',
+    listingsView: 'root.listings.view',
     propertyLog: 'root.property.log',
   },
 } as const;

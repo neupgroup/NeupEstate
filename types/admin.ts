@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { PropertyPurposeSchema, PropertyCategorySchema, PropertyUsageTypeSchema } from './property';
+import { ListingPurposeSchema, ListingCategorySchema, ListingUsageTypeSchema } from './listing';
 
 export interface Sitemap {
   id: string;
@@ -15,7 +15,7 @@ export type SitemapLog = {
     updatedData?: any; // Using 'any' to avoid circular dependencies with AI types
 };
 
-export const PropertyFiltersSchema = z.object({
+export const ListingFiltersSchema = z.object({
   id: z.string().optional(),
   ids: z.array(z.string()).optional(),
   searchTerm: z.string().optional(),
@@ -32,9 +32,9 @@ export const PropertyFiltersSchema = z.object({
   minPrice: z.coerce.number().optional(),
   maxPrice: z.coerce.number().optional(),
   location: z.string().optional(),
-  purpose: z.array(PropertyPurposeSchema).optional(),
-  category: z.array(PropertyCategorySchema).optional(),
-  type: z.array(PropertyUsageTypeSchema).optional(),
+  purpose: z.array(ListingPurposeSchema).optional(),
+  category: z.array(ListingCategorySchema).optional(),
+  type: z.array(ListingUsageTypeSchema).optional(),
   minArea: z.coerce.number().optional(),
   maxArea: z.coerce.number().optional(),
   agencyName: z.string().optional(),
@@ -71,7 +71,7 @@ export const PropertyFiltersSchema = z.object({
   minBikeParkingSpots: z.coerce.number().optional(),
   maxBikeParkingSpots: z.coerce.number().optional(),
 });
-export type PropertyFilters = z.infer<typeof PropertyFiltersSchema>;
+export type ListingFilters = z.infer<typeof ListingFiltersSchema>;
 
 export interface Problem {
   id: string;

@@ -114,7 +114,7 @@ export async function getAccountProfile(id: string) {
       email: agentContact?.email ?? agencyContact?.contactEmail ?? null,
       phone: agentContact?.phone ?? agencyContact?.contactPhone ?? null,
     },
-    properties: { count: propertyCount },
+    listings: { count: propertyCount },
   };
 }
 

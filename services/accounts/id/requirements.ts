@@ -6,7 +6,7 @@ import type { CreateRequirementFormValues } from "@/types";
 import { CreateRequirementSchema } from "@/types";
 import { createRequirement } from "@/services/requirements/create";
 import { updateRequirement } from "@/services/requirements/update";
-import { requireIdentity } from "@/services/properties/action-helpers";
+import { requireIdentity } from "@/services/listings/action-helpers";
 import { PERMISSIONS } from '@/services/permission-names';;
 import { requirePermission } from '@/services/permissions';;
 import { logger } from "@neup/logica/logger";

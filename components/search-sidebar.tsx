@@ -7,7 +7,7 @@ import { Label } from '@neup/components/ui/label';
 import { Input } from '@neup/components/ui/input';
 import { Button } from '@neup/components/ui/button';
 import { useEffect, useState } from 'react';
-import type { PropertyFilters } from '@/types';
+import type { ListingFilters } from '@/types';
 import { Badge } from '@neup/components/ui/badge';
 import { PriceInput } from '@/components/ui/price-input';
 import { StepperControls } from '@neup/components/ui/stepperControls';
@@ -103,7 +103,7 @@ const Stepper = ({ label, state, onChange }: { label: string, state: StepperStat
     );
 };
 
-export function SearchSidebar({ initialFilters }: { initialFilters?: PropertyFilters }) {
+export function SearchSidebar({ initialFilters }: { initialFilters?: ListingFilters }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();

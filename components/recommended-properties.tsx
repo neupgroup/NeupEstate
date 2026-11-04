@@ -2,21 +2,21 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import { searchProperties } from '@/services/properties/search';
-import { PropertyCard } from "./property-card";
+import { searchListings } from '@/services/listings/search';
+import { ListingCard } from "./property-card";
 import { Skeleton } from "@neup/components/ui/skeleton";
-import type { Property, PropertyFilters } from "@/types";
+import type { Listing, ListingFilters } from "@/types";
 import { Alert, AlertDescription, AlertTitle } from "@neup/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { type RequirementsFormValues } from "@/components/profile/user-requirements-form";
 
 
-interface RecommendedPropertiesProps {
+interface RecommendedListingsProps {
   requirements: RequirementsFormValues | null;
 }
 
-export function RecommendedProperties({ requirements }: RecommendedPropertiesProps) {
-  const [properties, setProperties] = useState<Property[]>([]);
+export function RecommendedListings({ requirements }: RecommendedListingsProps) {
+  const [listings, setListings] = useState<Listing[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,7 +31,7 @@ export function RecommendedProperties({ requirements }: RecommendedPropertiesPro
         setIsLoading(true);
         setError(null);
         
-        const searchFilters: PropertyFilters = {};
+        const searchFilters: ListingFilters = {};
 
         if (requirements.purpose) {
             searchFilters.purpose = [requirements.purpose === 'Buy' ? 'Sale' : 'Rent'];
@@ -53,9 +53,9 @@ export function RecommendedProperties({ requirements }: RecommendedPropertiesPro
             searchFilters.location = searchLocation;
         }
 
-        const searchResult = await searchProperties(searchFilters as any);
+        const searchResult = await searchListings(searchFilters as any);
         if (searchResult.success && searchResult.data) {
-          setProperties(searchResult.data.properties.slice(0, 4)); // Show top 4 recommendations
+          setListings(searchResult.data.listings.slice(0, 4)); // Show top 4 recommendations
         } else {
           setError(searchResult.error || "Failed to find properties matching recommendations.");
         }
@@ -108,7 +108,7 @@ export function RecommendedProperties({ requirements }: RecommendedPropertiesPro
     );
   }
   
-  if (properties.length === 0) {
+  if (listings.length === 0) {
     return (
         <Alert>
             <AlertCircle className="h-4 w-4" />
@@ -122,8 +122,8 @@ export function RecommendedProperties({ requirements }: RecommendedPropertiesPro
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-      {properties.map((property) => (
-        <PropertyCard key={property.id} property={property} />
+      {listings.map((property) => (
+        <ListingCard key={property.id} property={property} />
       ))}
     </div>
   );

@@ -55,7 +55,7 @@ export type CompetitorListing = {
 export type CompetitorTracking = {
   id: string;
   competitorPageId: string;
-  ourPropertyId: string | null;
+  ourListingId: string | null;
 };
 
 // ── Competitors ──────────────────────────────────────────────────────────────
@@ -220,16 +220,16 @@ export async function getTrackingForCompetitorPage(
   return rows.map((r) => ({
     id: r.id,
     competitorPageId: r.competitorPageId,
-    ourPropertyId: r.ourPropertyId ?? null,
+    ourListingId: r.ourListingId ?? null,
   }));
 }
 
-export async function linkToOurProperty(
+export async function linkToOurListing(
   competitorPageId: string,
-  ourPropertyId: string,
+  ourListingId: string,
 ): Promise<string> {
   const row = await prisma.competitorTracking.create({
-    data: { competitorPageId, ourPropertyId },
+    data: { competitorPageId, ourListingId },
   });
   return row.id;
 }

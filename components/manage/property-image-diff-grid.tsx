@@ -39,7 +39,7 @@ function ImageDiffTile({ src, status }: { src: string; status: ImageStatus }) {
   );
 }
 
-export function PropertyImageDiffGrid({
+export function ListingImageDiffGrid({
   items,
   emptyLabel = "No image changes recorded",
 }: {
