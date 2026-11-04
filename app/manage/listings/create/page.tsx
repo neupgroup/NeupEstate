@@ -248,15 +248,15 @@ export default function CreateListingPage() {
         if (path.startsWith("amenities")) return "ammenities";
         if (path.startsWith("area") || path.startsWith("landDetails") || path.startsWith("plots") || path.startsWith("apartmentUnits")) return "specifics";
         if (path === "bedrooms" || path === "bathrooms" || path === "kitchens" || path === "diningRooms" || path === "livingRooms" || path === "attachedBathrooms" || path === "homeOffices" || path === "libraries" || path === "studyRooms" || path === "meetingRooms" || path === "guestRooms" || path === "workersCabins" || path === "poojaRooms" || path === "storeRooms" || path === "carParkingSpots" || path === "bikeParkingSpots") return "space";
-        if (path === "purposes" || path === "category" || path === "categories" || path === "type" || path === "types") return "basic";
+        if (path === "purpose" || path === "category" || path === "type" || path === "types") return "basic";
         return "basic";
     }
 
     function focusFirstErrorSection(errors: Record<string, any>) {
         const preferredOrder = [
-            "purposes",
+            "purpose",
             "category",
-            "categories",
+            "category",
             "type",
             "types",
             "area",

@@ -9,7 +9,7 @@ import { useEffect } from "react";
 
 interface BasicDetailsSectionProps {
     control: Control<CreateListingFormValues>;
-    fieldChangeNotes?: Partial<Record<'purposes' | 'categories' | 'types', string>>;
+    fieldChangeNotes?: Partial<Record<'purpose' | 'category' | 'types', string>>;
 }
 
 export function BasicDetailsSection({ control, fieldChangeNotes }: BasicDetailsSectionProps) {
@@ -72,8 +72,8 @@ export function BasicDetailsSection({ control, fieldChangeNotes }: BasicDetailsS
                             onToggle={togglePurpose}
                             disabled={disabledPurposes}
                         />
-                        {fieldChangeNotes?.purposes && (
-                            <p className="text-xs text-muted-foreground">{fieldChangeNotes.purposes}</p>
+                        {fieldChangeNotes?.purpose && (
+                            <p className="text-xs text-muted-foreground">{fieldChangeNotes.purpose}</p>
                         )}
                         <FormMessage />
                     </FormItem>
@@ -92,8 +92,8 @@ export function BasicDetailsSection({ control, fieldChangeNotes }: BasicDetailsS
                             onToggle={toggleCategory}
                             disabled={disabledCategories}
                         />
-                        {fieldChangeNotes?.categories && (
-                            <p className="text-xs text-muted-foreground">{fieldChangeNotes.categories}</p>
+                        {fieldChangeNotes?.category && (
+                            <p className="text-xs text-muted-foreground">{fieldChangeNotes.category}</p>
                         )}
                         <FormMessage />
                     </FormItem>

@@ -21,7 +21,7 @@ export async function getListingDrafts(accountId: string): Promise<ListingDraftS
     return drafts.map((draft) => {
       const data = draft.data && typeof draft.data === 'object' && !Array.isArray(draft.data) ? draft.data as Record<string, any> : {};
       const location = data.structuredLocation && typeof data.structuredLocation === 'object' ? [data.structuredLocation.street, data.structuredLocation.municipality, data.structuredLocation.district, data.structuredLocation.province].filter(Boolean).join(', ') : '';
-      return { id: draft.id, propertyId: draft.propertyId, title: String(data.title || draft.property?.title || 'Unfinished property draft'), location: String(data.location || location || draft.property?.locationText || ''), category: String((Array.isArray(data.categories) && data.categories[0]) || (Array.isArray(data.types) && data.types[0]) || (draft.property?.type ? mapTypeFromEnum(draft.property.type) : '') || (Array.isArray(data.purposes) && data.purposes[0]) || ''), status: normalizeListingChangeStatus(draft.status) as ListingDraftSummary['status'], modifiedOn: draft.modifiedOn.toISOString() };
+      return { id: draft.id, propertyId: draft.propertyId, title: String(data.title || draft.property?.title || 'Unfinished property draft'), location: String(data.location || location || draft.property?.locationText || ''), category: String(data.category || (draft.property?.type ? mapTypeFromEnum(draft.property.type) : '') || ''), status: normalizeListingChangeStatus(draft.status) as ListingDraftSummary['status'], modifiedOn: draft.modifiedOn.toISOString() };
     });
   } catch (error) {
     await logger().type(`getPropertyDrafts ${accountId}`).data({ error: String(error), details: {} }).log();

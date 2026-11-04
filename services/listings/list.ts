@@ -245,9 +245,6 @@ export async function getListingDrafts(accountId: string): Promise<ListingDraftS
       const data = (draft.data && typeof draft.data === 'object' && !Array.isArray(draft.data))
         ? draft.data as Record<string, any>
         : {};
-      const purposes = Array.isArray(data.purposes) ? data.purposes.filter(Boolean) : [];
-      const categories = Array.isArray(data.categories) ? data.categories.filter(Boolean) : [];
-      const types = Array.isArray(data.types) ? data.types.filter(Boolean) : [];
       const locationParts = data.structuredLocation && typeof data.structuredLocation === 'object'
         ? [
             data.structuredLocation.street,
@@ -262,7 +259,7 @@ export async function getListingDrafts(accountId: string): Promise<ListingDraftS
         propertyId: draft.propertyId,
         title: String(data.title || draft.property?.title || 'Unfinished property draft'),
         location: String(data.location || locationParts.join(', ') || draft.property?.locationText || ''),
-        category: String(categories[0] || types[0] || (draft.property?.type ? mapTypeFromEnum(draft.property.type) : '') || purposes[0] || ''),
+        category: String(data.category || (draft.property?.type ? mapTypeFromEnum(draft.property.type) : '') || ''),
         status: normalizeListingChangeStatus(draft.status) as ListingDraftSummary['status'],
         modifiedOn: draft.modifiedOn.toISOString(),
       };
@@ -433,9 +430,6 @@ export async function getAwaitingReviewItems(
       const data = (draft.data && typeof draft.data === 'object' && !Array.isArray(draft.data))
         ? draft.data as Record<string, any>
         : {};
-      const categories = Array.isArray(data.categories) ? data.categories.filter(Boolean) : [];
-      const types = Array.isArray(data.types) ? data.types.filter(Boolean) : [];
-      const purposes = Array.isArray(data.purposes) ? data.purposes.filter(Boolean) : [];
       const locationParts = data.structuredLocation && typeof data.structuredLocation === 'object'
         ? [
             data.structuredLocation.street,
@@ -450,7 +444,7 @@ export async function getAwaitingReviewItems(
         propertyId: draft.propertyId ?? undefined,
         title: String(data.title || draft.property?.title || 'Unfinished property draft'),
         location: String(data.location || locationParts.join(', ') || draft.property?.locationText || ''),
-        category: String(categories[0] || types[0] || purposes[0] || ''),
+        category: String(data.category || ''),
         kind: 'draft' as const,
         status: normalizeListingChangeStatus(draft.status),
         modifiedOn: draft.modifiedOn.toISOString(),

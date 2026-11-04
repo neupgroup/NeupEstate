@@ -41,9 +41,7 @@ type ListingFormStep = {
 
 const FIELD_LABELS: Record<string, string> = {
     purpose: "Property purpose",
-    purposes: "Property purpose",
     category: "Property type",
-    categories: "Property type",
     type: "Property nature",
     types: "Property nature",
     area: "Area",
@@ -365,7 +363,7 @@ export function ProgressiveListingSections({
 
         for (const field of fields) {
             const candidateFields = field === "category"
-                ? ["category", "categories"]
+                ? ["category"]
                 : field === "type"
                     ? ["type", "types"]
                     : [field];

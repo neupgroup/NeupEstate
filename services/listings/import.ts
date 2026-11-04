@@ -268,9 +268,9 @@ function resolveRelationship(
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
 function normalizeListingData(data: Record<string, unknown>): ExtractedListingData {
-  const category = Array.isArray(data.categories) ? data.categories[0] : data.category;
+  const category = data.category;
   const type = Array.isArray(data.types) ? data.types[0] : data.type;
-  const purpose = Array.isArray(data.purposes) ? data.purposes[0] : data.purpose;
+  const purpose = data.purpose;
   const areaValue = isObject(data.area) ? areaValueToSqm(data.area as any) : data.area;
 
   return {

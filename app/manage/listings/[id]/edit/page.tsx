@@ -101,8 +101,6 @@ function extractDraftNumber(value: unknown): number {
 }
 
 function mapCreationDraftToEditableListing(id: string, data: Record<string, any>): Listing {
-    const purposes = normalizeDraftStringArray(data.purpose).length ? normalizeDraftStringArray(data.purpose) : normalizeDraftStringArray(data.purposes);
-    const categories = normalizeDraftStringArray(data.category).length ? normalizeDraftStringArray(data.category) : normalizeDraftStringArray(data.categories);
     const types = normalizeDraftStringArray(data.types);
     const postingAgencyId = typeof data.postingAgencyId === 'string' && data.postingAgencyId.trim()
         ? data.postingAgencyId.trim()
@@ -120,8 +118,8 @@ function mapCreationDraftToEditableListing(id: string, data: Record<string, any>
         facing: data.facing,
         buildStart: data.buildStart,
         buildCompleted: data.buildCompleted,
-        purpose: (purposes[0] || 'Sale') as Listing['purpose'],
-        category: (categories[0] || 'House') as Listing['category'],
+        purpose: (data.purpose || 'Sale') as Listing['purpose'],
+        category: (data.category || 'House') as Listing['category'],
         type: (types[0] || 'Residential') as Listing['type'],
         images: normalizeDraftStringArray(data.images),
         amenities: typeof data.amenities === 'string' ? data.amenities.split(',').map((item) => item.trim()).filter(Boolean) : normalizeDraftStringArray(data.amenities),
@@ -221,15 +219,15 @@ export default function EditListingPage() {
         if (path.startsWith("amenities")) return "ammenities";
         if (path.startsWith("area") || path.startsWith("landDetails") || path.startsWith("plots") || path.startsWith("apartmentUnits")) return "specifics";
         if (path === "bedrooms" || path === "bathrooms" || path === "kitchens" || path === "diningRooms" || path === "livingRooms" || path === "attachedBathrooms" || path === "homeOffices" || path === "libraries" || path === "studyRooms" || path === "meetingRooms" || path === "guestRooms" || path === "workersCabins" || path === "poojaRooms" || path === "storeRooms" || path === "carParkingSpots" || path === "bikeParkingSpots") return "space";
-        if (path === "purposes" || path === "category" || path === "categories" || path === "type" || path === "types") return "basic";
+        if (path === "purpose" || path === "category" || path === "type" || path === "types") return "basic";
         return "basic";
     }
 
     function focusFirstErrorSection(errors: Record<string, any>) {
         const preferredOrder = [
-            "purposes",
+            "purpose",
             "category",
-            "categories",
+            "category",
             "type",
             "types",
             "area",
@@ -415,8 +413,8 @@ export default function EditListingPage() {
     }
 
     function prettifyPath(path: string): string {
-        if (path === 'purposes' || path === 'purpose') return 'Property purpose';
-        if (path === 'categories' || path === 'category') return 'Property type';
+        if (path === 'purpose') return 'Property purpose';
+        if (path === 'category') return 'Property type';
         if (path === 'types' || path === 'type') return 'Property nature';
         if (path === 'buildStart') return 'Build start year';
         if (path === 'buildCompleted') return 'Build end year';

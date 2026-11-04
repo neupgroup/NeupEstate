@@ -703,7 +703,6 @@ function mapCreationDraftToListing(change: {
     data: Record<string, any>;
 }) {
     const data = change.data ?? {};
-    const categories = normalizeStringArray(data.categories);
     const types = normalizeStringArray(data.types);
     const pricing = data.pricing && typeof data.pricing === "object" && !Array.isArray(data.pricing)
         ? data.pricing
@@ -725,8 +724,8 @@ function mapCreationDraftToListing(change: {
         title: firstNonEmptyString(data.title) ?? "Untitled draft property",
         description: firstNonEmptyString(data.description) ?? "",
         type: firstNonEmptyString(data.type, types[0]),
-        category: firstNonEmptyString(data.category, categories[0]),
-        purpose: Array.isArray(data.purpose) ? data.purpose[0] : data.purpose,
+        category: firstNonEmptyString(data.category),
+        purpose: firstNonEmptyString(data.purpose),
         location: firstNonEmptyString(data.location) ?? "",
         structuredLocation,
         area: extractAreaNumber(data.area),

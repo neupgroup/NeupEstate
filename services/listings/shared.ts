@@ -129,7 +129,6 @@ export const BRIDGE_PROPERTY_FIELDS = [
   'buildStart',
   'buildCompleted',
   'purpose',
-  'purposes',
   'category',
   'type',
   'images',

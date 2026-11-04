@@ -471,7 +471,7 @@ export async function updateListing(id: string, d: UpdateListingInput): Promise<
     const coreData = buildCoreData(merged);
     await prisma.listing.update({ where: { id }, data: coreData as any });
     await replaceListingRepresentatives(id, merged.agency, merged.listingOwner);
-    await upsertDetailTable(id, mapTypeToEnum((merged as any).category ?? merged.categories?.[0]), merged);
+    await upsertDetailTable(id, mapTypeToEnum(merged.category), merged);
     if (merged.images !== undefined) await upsertMedia(id, merged.images ?? []);
     await replaceListingOwners(id, merged.owners);
   } catch (e) { await logger().type(`updateProperty ${id}`).data({ error: String(e), details: {} }).log(); throw new Error('Failed to update property.'); }
