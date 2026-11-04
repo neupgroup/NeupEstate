@@ -26,6 +26,7 @@ export default async function ManageLocationsPage({
     ...(searchQuery ? {
       OR: [
         { title: { contains: searchQuery, mode: 'insensitive' as const } },
+        { slug: { contains: searchQuery, mode: 'insensitive' as const } },
         { type: { contains: searchQuery, mode: 'insensitive' as const } },
         { postalCode: { contains: searchQuery, mode: 'insensitive' as const } },
       ],
@@ -42,11 +43,11 @@ export default async function ManageLocationsPage({
       orderBy: [{ type: 'asc' }, { title: 'asc' }],
       skip: (currentPage - 1) * LOCATIONS_PER_PAGE,
       take: LOCATIONS_PER_PAGE,
-      select: { id: true, title: true, type: true, childOf: true, postalCode: true, status: true },
+      select: { id: true, title: true, slug: true, type: true, childOf: true, postalCode: true, status: true },
     }),
     prisma.location.findMany({
       orderBy: [{ type: 'asc' }, { title: 'asc' }],
-      select: { id: true, title: true, type: true, childOf: true, postalCode: true, status: true },
+      select: { id: true, title: true, slug: true, type: true, childOf: true, postalCode: true, status: true },
     }),
   ]);
   return (

@@ -51,6 +51,7 @@ enum PropertyRepresentativeRole {
 model Location {
   id         String     @id @default(uuid()) @db.Uuid
   title      String
+  slug       String?
   type       String
   childOf    String?    @db.Uuid @map("child_of")
   postalCode String?    @map("postal_code")

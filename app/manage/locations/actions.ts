@@ -13,6 +13,7 @@ const LOCATION_TYPES = new Set([
 // Validates the location fields submitted by the management form.
 function readLocationForm(formData: FormData) {
   const title = String(formData.get('title') ?? '').trim();
+  const slug = String(formData.get('slug') ?? '').trim();
   const type = String(formData.get('type') ?? '').trim();
   const childOf = String(formData.get('childOf') ?? '').trim();
   const postalCode = String(formData.get('postalCode') ?? '').trim();
@@ -20,7 +21,7 @@ function readLocationForm(formData: FormData) {
   if (!title) throw new Error('Title is required.');
   if (!LOCATION_TYPES.has(type)) throw new Error('Select a valid location type.');
   if (!status) throw new Error('Status is required.');
-  return { title, type, childOf: childOf || null, postalCode: postalCode || null, status };
+  return { title, slug: slug || null, type, childOf: childOf || null, postalCode: postalCode || null, status };
 }
 
 // Creates a location after verifying its optional parent.

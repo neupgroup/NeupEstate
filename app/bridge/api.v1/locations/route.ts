@@ -3,7 +3,7 @@
 ::api GET /bridge/api.v1/locations
 ::public
 
-Returns locations with their parent location. Supports exact `id`, `type`,
+Returns locations with their parent location. Supports exact `id`, `slug`, `type`,
 and `status` filters, case-insensitive `query` matching against title and
 postal code, and `limit`/`offset` pagination. Limit defaults to 50 and is
 capped at 100. This endpoint is public and read-only.
@@ -16,7 +16,7 @@ import { prisma } from '@neup/core/database/prisma';
 
 export const dynamic = 'force-dynamic';
 
-const ALLOWED_PARAMETERS = new Set(['id', 'type', 'status', 'query', 'limit', 'offset']);
+const ALLOWED_PARAMETERS = new Set(['id', 'slug', 'type', 'status', 'query', 'limit', 'offset']);
 const DEFAULT_LIMIT = 50;
 const MAX_LIMIT = 100;
 
@@ -50,16 +50,19 @@ export async function GET(request: NextRequest) {
 
   const limit = Math.min(requestedLimit, MAX_LIMIT);
   const id = params.get('id')?.trim();
+  const slug = params.get('slug')?.trim();
   const type = params.get('type')?.trim();
   const status = params.get('status')?.trim();
   const query = params.get('query')?.trim();
   const where = {
     ...(id ? { id } : {}),
+    ...(slug ? { slug } : {}),
     ...(type ? { type } : {}),
     ...(status ? { status } : {}),
     ...(query ? {
       OR: [
         { title: { contains: query, mode: 'insensitive' as const } },
+        { slug: { contains: query, mode: 'insensitive' as const } },
         { postalCode: { contains: query, mode: 'insensitive' as const } },
       ],
     } : {}),
@@ -75,6 +78,7 @@ export async function GET(request: NextRequest) {
         select: {
           id: true,
           title: true,
+          slug: true,
           type: true,
           childOf: true,
           postalCode: true,

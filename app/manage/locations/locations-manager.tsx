@@ -10,6 +10,7 @@ import { createLocationAction, setLocationInactiveAction, updateLocationAction }
 type LocationRow = {
   id: string;
   title: string;
+  slug: string | null;
   type: string;
   childOf: string | null;
   postalCode: string | null;
@@ -73,6 +74,7 @@ export function LocationsManager({
     return (
       <form action={(formData) => runAction(() => action(formData), location ? 'Location updated.' : 'Location added.')} className="grid gap-3 md:grid-cols-6">
         <Input name="title" defaultValue={location?.title} placeholder="Title" required />
+        <Input name="slug" defaultValue={location?.slug ?? ''} placeholder="Slug" />
         <select name="type" defaultValue={location?.type ?? ''} required className="h-10 rounded-md border border-input bg-background px-3 text-sm">
           <option value="" disabled>Type</option>
           {LOCATION_TYPES.map((type) => <option key={type} value={type}>{type}</option>)}

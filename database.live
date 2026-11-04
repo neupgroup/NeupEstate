@@ -2,6 +2,7 @@ Table: locations, Model: Location
 Fields:
 > id: uuid PK, NOT NULL, default: gen_random_uuid();
 > title: text NOT NULL;
+> slug: text;
 > type: text NOT NULL;
 > child_of: uuid references locations.id, ON DELETE SET NULL;
 > postal_code: text;
