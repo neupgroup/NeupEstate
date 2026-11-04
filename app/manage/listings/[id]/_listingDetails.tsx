@@ -81,22 +81,8 @@ function formatLocationSummary(property: {
     return parts.join(" > ");
 }
 
-function formatPurposeSummary(purposes: string[] | null | undefined) {
-    const uniquePurposes = Array.from(
-        new Set(
-            (purposes ?? [])
-                .map((entry) => entry?.trim())
-                .filter((entry): entry is string => Boolean(entry)),
-        ),
-    );
-
-    if (!uniquePurposes.length) return "No purpose";
-    if (uniquePurposes.length === 1) return `For ${uniquePurposes[0]}`;
-    if (uniquePurposes.length === 2) {
-        return `For ${uniquePurposes[0]} and ${uniquePurposes[1]}`;
-    }
-
-    return `For ${uniquePurposes.join(", ")}`;
+function formatPurposeSummary(purpose: string | null | undefined) {
+    return purpose?.trim() ? `For ${purpose.trim()}` : "No purpose";
 }
 
 function formatLocation(property: {
@@ -131,7 +117,7 @@ function formatNature(type?: string | null) {
 function formatHeaderSubtitle(property: {
     type?: string | null;
     category?: string | null;
-    purposes?: string[] | null;
+    purpose?: string | null;
     location?: string | null;
     structuredLocation?: {
         municipality?: string | null;
@@ -142,7 +128,7 @@ function formatHeaderSubtitle(property: {
 }) {
     const nature = formatNature(property.type);
     const propertyTypes = formatListingTypes(property.category);
-    const purposeSummary = formatPurposeSummary(property.purposes);
+    const purposeSummary = formatPurposeSummary(property.purpose);
     const location = formatLocation(property);
     return `${nature} ${propertyTypes} ${purposeSummary} at ${location}`.replace(/\s+/g, " ").trim();
 }
@@ -717,7 +703,6 @@ function mapCreationDraftToListing(change: {
     data: Record<string, any>;
 }) {
     const data = change.data ?? {};
-    const purposes = normalizeStringArray(data.purposes);
     const categories = normalizeStringArray(data.categories);
     const types = normalizeStringArray(data.types);
     const pricing = data.pricing && typeof data.pricing === "object" && !Array.isArray(data.pricing)
@@ -741,7 +726,7 @@ function mapCreationDraftToListing(change: {
         description: firstNonEmptyString(data.description) ?? "",
         type: firstNonEmptyString(data.type, types[0]),
         category: firstNonEmptyString(data.category, categories[0]),
-        purposes: purposes.length ? purposes : normalizeStringArray(data.purpose),
+        purpose: Array.isArray(data.purpose) ? data.purpose[0] : data.purpose,
         location: firstNonEmptyString(data.location) ?? "",
         structuredLocation,
         area: extractAreaNumber(data.area),
@@ -865,7 +850,7 @@ export async function ListingDetails({ id, review = false }: ListingDetailsProps
     const headerSubtitle = formatHeaderSubtitle({
         type: property.type,
         category: property.category,
-        purposes: property.purposes,
+        purpose: property.purpose,
         location: property.location,
         structuredLocation: property.structuredLocation,
     });

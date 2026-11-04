@@ -299,7 +299,6 @@ export interface Listing {
     buildStart?: number;
     buildCompleted?: number;
     purpose: z.infer<typeof ListingPurposeSchema>;
-    purposes?: z.infer<typeof ListingPurposesSchema>;
     category: z.infer<typeof ListingCategorySchema>;
     type: z.infer<typeof ListingUsageTypeSchema>;
     images: string[];
@@ -356,9 +355,8 @@ export const CreateListingSchema = z.object({
         (val) => typeof val === "string" ? stripHtmlTags(val) : val,
         z.string().min(10, {message: "Description must be at least 10 characters long."})
     ),
-    purpose: ListingPurposeSchema.optional(),
-    purposes: ListingPurposesSchema,
-    categories: z.array(ListingCategorySchema).min(1, "Please select at least one property type."),
+    purpose: ListingPurposeSchema,
+    category: ListingCategorySchema,
     types: z.array(ListingUsageTypeSchema).min(1, "Please select at least one property nature."),
 
     // Property Details

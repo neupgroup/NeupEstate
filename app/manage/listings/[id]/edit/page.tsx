@@ -27,8 +27,8 @@ import { Skeleton } from '@neup/components/ui/skeleton';
 const DEFAULT_DRAFT_PROPERTY_VALUES: UpdateListingFormValues = {
     title: '',
     description: '',
-    purposes: [],
-    categories: [],
+    purpose: 'Sale',
+    category: 'House',
     types: [],
     area: undefined,
     bedrooms: 1,
@@ -101,10 +101,8 @@ function extractDraftNumber(value: unknown): number {
 }
 
 function mapCreationDraftToEditableListing(id: string, data: Record<string, any>): Listing {
-    const purposes = normalizeDraftStringArray(data.purposes).length
-        ? normalizeDraftStringArray(data.purposes)
-        : normalizeDraftStringArray(data.purpose);
-    const categories = normalizeDraftStringArray(data.categories);
+    const purposes = normalizeDraftStringArray(data.purpose).length ? normalizeDraftStringArray(data.purpose) : normalizeDraftStringArray(data.purposes);
+    const categories = normalizeDraftStringArray(data.category).length ? normalizeDraftStringArray(data.category) : normalizeDraftStringArray(data.categories);
     const types = normalizeDraftStringArray(data.types);
     const postingAgencyId = typeof data.postingAgencyId === 'string' && data.postingAgencyId.trim()
         ? data.postingAgencyId.trim()
@@ -123,7 +121,6 @@ function mapCreationDraftToEditableListing(id: string, data: Record<string, any>
         buildStart: data.buildStart,
         buildCompleted: data.buildCompleted,
         purpose: (purposes[0] || 'Sale') as Listing['purpose'],
-        purposes: purposes as Listing['purposes'],
         category: (categories[0] || 'House') as Listing['category'],
         type: (types[0] || 'Residential') as Listing['type'],
         images: normalizeDraftStringArray(data.images),
@@ -603,8 +600,6 @@ export default function EditListingPage() {
                 // area is stored in square metres — wrap it back into AreaValue shape
                 area: propertyData.area ? { sqm: propertyData.area } : undefined,
                 purpose: propertyData.purpose,
-                purposes: propertyData.purposes?.length ? propertyData.purposes : [propertyData.purpose],
-                categories: propertyData.category ? [propertyData.category] : [],
                 types: propertyData.type ? [propertyData.type] : [],
                 amenities: Array.isArray(propertyData.amenities) ? propertyData.amenities.join(', ') : '',
                 images: Array.isArray(propertyData.images) ? propertyData.images : [],

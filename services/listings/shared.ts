@@ -507,7 +507,6 @@ export function mapRecord(record: any): Listing {
     area,
     facing,
     purpose,
-    purposes:         [purpose],
     category,
     type:             record.type === PROPERTY_TYPE.COMMERCIAL ? 'Commercial' : 'Residential',
     images,

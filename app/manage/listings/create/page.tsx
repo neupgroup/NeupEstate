@@ -22,8 +22,8 @@ import { ProgressiveListingSections } from '@/components/manage/progressive-prop
 const DEFAULT_CREATE_PROPERTY_VALUES: CreateListingFormValues = {
     title: '',
     description: '',
-    purposes: [],
-    categories: [],
+    purpose: 'Sale',
+    category: 'House',
     types: [],
     area: undefined,
     bedrooms: 1,

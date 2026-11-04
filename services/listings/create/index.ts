@@ -19,13 +19,11 @@ export async function submitListingCreation(input: CreateListingFormValues, cont
   const actorId = context.actorId ?? context.actorAccountId;
   const validatedData = CreateListingSchema.parse(input);
   const postingContext = await resolveListingCreateContext({ actorAccountId: actorId, requestedWorkingProfileId: context.workingProfileId ?? null });
-  const purposes = validatedData.purposes?.length ? validatedData.purposes : validatedData.purpose ? [validatedData.purpose] : [];
-  if (!purposes.length) throw new Error('Please select at least one purpose.');
   const priceDisplayMode = validatedData.pricing?.priceDisplayMode ?? 'show-price';
   const price = firstPositivePrice(validatedData.pricing);
   if (priceDisplayMode === 'show-price' && price <= 0) throw new Error('Show price requires at least one price.');
   const serviceInput: CreateListingInput = {
-    ...validatedData, purpose: purposes[0], purposes, location: formatLocationString(validatedData.structuredLocation), price,
+    ...validatedData, location: formatLocationString(validatedData.structuredLocation), price,
     details: { priceDisplayMode, showMap: validatedData.showMap ?? true, showOwnerInformation: validatedData.showOwnerInformation ?? true, isPrivate: validatedData.isPrivate ?? false },
     area: areaValueToSqm(validatedData.area), amenities: validatedData.amenities?.split(',').map((item) => item.trim()).filter(Boolean) || [],
     images: validatedData.images?.filter((image) => image.trim() !== '') || [], pricing: cleanPricing(validatedData.pricing), owners: normalizeOwnerEntries(validatedData.owners),

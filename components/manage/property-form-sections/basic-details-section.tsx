@@ -14,10 +14,11 @@ interface BasicDetailsSectionProps {
 
 export function BasicDetailsSection({ control, fieldChangeNotes }: BasicDetailsSectionProps) {
     const { watch, setValue } = useFormContext<CreateListingFormValues>();
-    const selectedPurposes = watch("purposes") || [];
-    const selectedCategories = (watch("categories" as any) as unknown as string[]) || [];
+    const selectedPurpose = watch("purpose");
+    const selectedCategoryValue = watch("category");
+    const selectedPurposes = selectedPurpose ? [selectedPurpose] : [];
+    const selectedCategories = selectedCategoryValue ? [selectedCategoryValue] : [];
     const selectedTypes = (watch("types" as any) as unknown as string[]) || [];
-    const selectedCategory = selectedCategories[0];
     const selectedType = selectedTypes[0];
 
     const { disabledCategories, disabledPurposes, disabledNatures, autoNature } =
@@ -36,24 +37,16 @@ export function BasicDetailsSection({ control, fieldChangeNotes }: BasicDetailsS
     useEffect(() => {
         const cleaned = (selectedPurposes as string[]).filter((p) => !disabledPurposes.has(p));
         if (cleaned.length !== selectedPurposes.length) {
-            setValue("purposes", cleaned as any, { shouldDirty: true });
             setValue("purpose", cleaned[0] as any, { shouldDirty: true });
         }
     }, [JSON.stringify(selectedCategories)]);
 
     const togglePurpose = (option: string) => {
-        const current = selectedPurposes as string[];
-        const next = current.includes(option) ? current.filter((o) => o !== option) : [...current, option];
-        setValue("purposes", next as any, { shouldDirty: true, shouldValidate: true });
-        setValue("purpose", next[0] as any, { shouldDirty: true, shouldValidate: true });
+        setValue("purpose", option as any, { shouldDirty: true, shouldValidate: true });
     };
 
     const toggleCategory = (option: string) => {
-        const isSelected = selectedCategories.includes(option);
-        const next = isSelected
-            ? selectedCategories.filter((c) => c !== option)
-            : [...selectedCategories, option];
-        setValue("categories" as any, next, { shouldDirty: true, shouldValidate: true });
+        setValue("category", option as any, { shouldDirty: true, shouldValidate: true });
     };
 
     const toggleType = (option: string) => {
@@ -69,7 +62,7 @@ export function BasicDetailsSection({ control, fieldChangeNotes }: BasicDetailsS
         <section className="space-y-10">
             <FormField
                 control={control}
-                name="purposes"
+                name="purpose"
                 render={() => (
                     <FormItem>
                         <FormLabel className="text-base font-semibold">Listing Purpose</FormLabel>
@@ -78,7 +71,6 @@ export function BasicDetailsSection({ control, fieldChangeNotes }: BasicDetailsS
                             selected={selectedPurposes as string[]}
                             onToggle={togglePurpose}
                             disabled={disabledPurposes}
-                            multi
                         />
                         {fieldChangeNotes?.purposes && (
                             <p className="text-xs text-muted-foreground">{fieldChangeNotes.purposes}</p>
@@ -90,7 +82,7 @@ export function BasicDetailsSection({ control, fieldChangeNotes }: BasicDetailsS
 
             <FormField
                 control={control}
-                name={"categories" as any}
+                name="category"
                 render={() => (
                     <FormItem>
                         <FormLabel className="text-base font-semibold">Listing Type</FormLabel>
@@ -99,7 +91,6 @@ export function BasicDetailsSection({ control, fieldChangeNotes }: BasicDetailsS
                             selected={selectedCategories}
                             onToggle={toggleCategory}
                             disabled={disabledCategories}
-                            multi
                         />
                         {fieldChangeNotes?.categories && (
                             <p className="text-xs text-muted-foreground">{fieldChangeNotes.categories}</p>

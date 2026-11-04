@@ -915,15 +915,6 @@ export async function updateListingAction(
     await requirePermission(PERMISSIONS.manage.propertySelfUpdate);
     await requireIdentity();
     const validatedData = UpdateListingSchema.parse(data);
-    const orderedPurposes = validatedData.purposes?.length
-      ? validatedData.purposes
-      : validatedData.purpose
-        ? [validatedData.purpose]
-        : [];
-
-    if (orderedPurposes.length === 0) {
-      return { success: false, error: "Please select at least one purpose." };
-    }
 
     const priceDisplayMode = validatedData.pricing?.priceDisplayMode ?? 'show-price';
     const resolvedPrice = firstPositivePrice(validatedData.pricing);
@@ -937,8 +928,6 @@ export async function updateListingAction(
 
     const serviceInput: UpdateListingInput = {
       ...validatedData,
-      purpose: orderedPurposes[0],
-      purposes: orderedPurposes,
       location: locationString,
       price: resolvedPrice,
       details: {

@@ -191,8 +191,8 @@ export function ProgressiveListingSections({
     const [nextError, setNextError] = useState<string | null>(null);
     const [errorStepIndex, setErrorStepIndex] = useState<number | null>(null);
     const [isDroppingCreationDraft, setIsDroppingCreationDraft] = useState(false);
-    const categories = (form.watch("categories" as any) as unknown as string[]) || [];
-    const category = categories[0] as string | undefined;
+    const category = form.watch("category") as string | undefined;
+    const categories = category ? [category] : [];
 
     const steps = useMemo<ListingFormStep[]>(() => [
         {
@@ -200,7 +200,7 @@ export function ProgressiveListingSections({
             section: "basic",
             title: "Basic Information",
             description: "Set the listing purpose, property type, and nature.",
-            fields: ["purposes", "category", "type"],
+            fields: ["purpose", "category", "types"],
             render: () => <BasicDetailsSection control={form.control} fieldChangeNotes={fieldChangeNotes} />,
         },
         {

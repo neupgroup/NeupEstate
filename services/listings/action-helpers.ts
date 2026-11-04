@@ -256,7 +256,6 @@ export function mapListingToCreateFormValues(property: Listing): Partial<CreateL
     buildStart: property.buildStart,
     buildCompleted: property.buildCompleted,
     purpose: property.purpose,
-    purposes: property.purposes?.length ? property.purposes : [property.purpose],
     categories: property.category ? [property.category] : [],
     types: property.type ? [property.type] : [],
     amenities: Array.isArray(property.amenities) ? property.amenities.join(', ') : '',

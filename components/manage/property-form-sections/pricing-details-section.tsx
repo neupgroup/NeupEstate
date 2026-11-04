@@ -103,8 +103,10 @@ function getBasisOptions(categories: string[], purposes: string[]): BasisOption[
 export function PricingDetailsSection({ control, fieldChangeNotes }: PricingDetailsSectionProps) {
     const { watch, setValue, unregister } = useFormContext<CreateListingFormValues>();
     const [manuallyExpandedBasis, setManuallyExpandedBasis] = useState<string[]>([]);
-    const categories = (watch("categories" as any) as unknown as string[]) || [];
-    const purposes = watch("purposes") || [];
+    const category = watch("category");
+    const purpose = watch("purpose");
+    const categories = category ? [category] : [];
+    const purposes = purpose ? [purpose] : [];
     const selectedBasis = watch("pricing.basis");
     const priceDisplayMode = watch("pricing.priceDisplayMode") || "show-price";
     const listedPrice = watch("pricing.listed");
