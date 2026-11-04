@@ -330,10 +330,10 @@ Fields:
 > details: jsonb;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 
-Table: property, Model: Listing
+Table: listings, Model: Listing
 Fields:
 > id: text PK, NOT NULL;
-> slug: text NOT NULL, INDEX property_slug_idx(slug);
+> slug: text NOT NULL, INDEX listings_slug_idx(slug);
 > title: varchar(255) NOT NULL;
 > description: text NOT NULL;
 > coverImage: varchar(255) NOT NULL;
@@ -363,9 +363,9 @@ Fields:
 > customId: text;
 > details: jsonb;
 
-Table: property_apartment_detail, Model: ListingApartment
+Table: listings_apartment, Model: ListingApartment
 Fields:
-> propertyId: text PK, NOT NULL, UNIQUE property_apartment_detail_propertyId_key(propertyId), references property.id;
+> propertyId: text PK, NOT NULL, UNIQUE listings_apartment_property_id_key(propertyId), references listings.id;
 > bedrooms: integer NOT NULL;
 > bathrooms: integer NOT NULL;
 > onFloor: integer NOT NULL;
@@ -381,23 +381,23 @@ Fields:
 > builtUpArea: numeric(18,8) NOT NULL;
 > maintenanceFee: numeric(18,8) NOT NULL;
 
-Table: property_changes, Model: ListingChange
+Table: listing_changes, Model: ListingChange
 Fields:
 > id: text PK, NOT NULL;
 > data: jsonb NOT NULL;
 > modifiedOn: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > status: text NOT NULL, default: 'editing'::text;
 > createdOn: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
-> property_id: text references property.id;
+> property_id: text references listings.id;
 > is_approved: boolean;
 > account_id: text NOT NULL, references account.id;
 > created_by_id: text references account.id;
 > created_for_id: text references account.id;
 > working_profile_id: text references account.id;
 
-Table: property_commercial_detail, Model: ListingCommercial
+Table: listings_commercial, Model: ListingCommercial
 Fields:
-> propertyId: text PK, NOT NULL, UNIQUE property_commercial_detail_propertyId_key(propertyId), references property.id;
+> propertyId: text PK, NOT NULL, UNIQUE listings_commercial_property_id_key(propertyId), references listings.id;
 > floor: integer NOT NULL;
 > washrooms: integer NOT NULL;
 > parkingSpots: integer NOT NULL;
@@ -408,23 +408,23 @@ Fields:
 Table: property_competition_map, Model: PropertyCompetitionMap
 Fields:
 > id: text PK, NOT NULL;
-> property_id: text NOT NULL, references property.id;
+> property_id: text NOT NULL, references listings.id;
 > competitor_property_id: text NOT NULL, references competitor_listings.id;
 > status: text NOT NULL, default: 'UNVERIFIED'::text;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > updatedAt: timestamp(3) NOT NULL;
 
-Table: property_document, Model: ListingDocument
+Table: listing_documents, Model: ListingDocument
 Fields:
 > id: text PK, NOT NULL;
-> propertyId: text NOT NULL, references property.id;
+> propertyId: text NOT NULL, references listings.id;
 > name: text NOT NULL;
 > urls: jsonb NOT NULL;
 > sortOrder: integer NOT NULL, default: 0;
 
-Table: property_house_detail, Model: ListingHouse
+Table: listings_house, Model: ListingHouse
 Fields:
-> propertyId: text PK, NOT NULL, UNIQUE property_house_detail_propertyId_key(propertyId), references property.id;
+> propertyId: text PK, NOT NULL, UNIQUE listings_house_property_id_key(propertyId), references listings.id;
 > bedrooms: integer NOT NULL;
 > bathrooms: integer NOT NULL;
 > floors: integer NOT NULL;
@@ -441,7 +441,7 @@ Fields:
 
 Table: property_land_detail, Model: PropertyLandDetail
 Fields:
-> propertyId: text PK, NOT NULL, UNIQUE property_land_detail_propertyId_key(propertyId), references property.id;
+> propertyId: text PK, NOT NULL, UNIQUE property_land_detail_propertyId_key(propertyId), references listings.id;
 > area: numeric(18,8) NOT NULL;
 > facing: varchar(50) NOT NULL;
 > roadAccess: numeric(18,8) NOT NULL;
@@ -454,10 +454,10 @@ Fields:
 Table: property_link, Model: PropertyLink
 Fields:
 > id: text PK, NOT NULL;
-> primaryId: text NOT NULL, references property.id;
-> secondaryId: text NOT NULL, references property.id;
+> primaryId: text NOT NULL, references listings.id;
+> secondaryId: text NOT NULL, references listings.id;
 
-Table: property_log, Model: ListingsLog
+Table: listings_logs, Model: ListingsLog
 Fields:
 > id: text PK, NOT NULL;
 > property_id: text NOT NULL;
@@ -467,10 +467,10 @@ Fields:
 > requested_on: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > approved_on: timestamp(3);
 
-Table: property_media, Model: ListingMedia
+Table: listings_media, Model: ListingMedia
 Fields:
 > id: text PK, NOT NULL;
-> propertyId: text NOT NULL, references property.id;
+> propertyId: text NOT NULL, references listings.id;
 > type: text NOT NULL;
 > url: varchar(500) NOT NULL;
 > alt: varchar(255) NOT NULL;
@@ -482,14 +482,14 @@ Fields:
 Table: property_owner, Model: PropertyOwner
 Fields:
 > id: text PK, NOT NULL;
-> property_id: text NOT NULL, UNIQUE property_owner_property_id_owner_client_id_key(property_id, owner_client_id), references property.id;
+> property_id: text NOT NULL, UNIQUE property_owner_property_id_owner_client_id_key(property_id, owner_client_id), references listings.id;
 > owner_client_id: text NOT NULL, UNIQUE property_owner_property_id_owner_client_id_key(property_id, owner_client_id), references base_lead.id;
 > is_primary_owner: boolean NOT NULL, default: false;
 
 Table: property_representatives, Model: PropertyRepresentative
 Fields:
 > id: text PK, NOT NULL;
-> property_id: text NOT NULL, INDEX property_representatives_property_id_idx(property_id), references property.id;
+> property_id: text NOT NULL, INDEX property_representatives_property_id_idx(property_id), references listings.id;
 > representative_id: text NOT NULL, INDEX property_representatives_representative_id_idx(representative_id), references account.id;
 > role: enum(propertyOwner, listingOwner, listingParty, listingOwner.propertyOwner) NOT NULL;
 > status: text;
@@ -497,7 +497,7 @@ Fields:
 Table: property_price, Model: PropertyPrice
 Fields:
 > id: text PK, NOT NULL;
-> propertyId: text NOT NULL, references property.id;
+> propertyId: text NOT NULL, references listings.id;
 > for: text NOT NULL;
 > currency: varchar(10) NOT NULL;
 > unit: text NOT NULL;
@@ -520,11 +520,11 @@ Fields:
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > updatedAt: timestamp(3) NOT NULL;
 
-Table: property_views, Model: ListingsView
+Table: listings_views, Model: ListingsView
 Fields:
 > id: text PK, NOT NULL;
 > accountId: text NOT NULL;
-> propertyId: text NOT NULL, references property.id;
+> propertyId: text NOT NULL, references listings.id;
 > onType: text NOT NULL;
 > viewedAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > timeViewed: integer NOT NULL;
@@ -583,7 +583,7 @@ Table: saved_property, Model: SavedProperty
 Fields:
 > id: text PK, NOT NULL;
 > accountId: text NOT NULL;
-> propertyId: text NOT NULL, references property.id;
+> propertyId: text NOT NULL, references listings.id;
 > savedAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 
 Table: shared_leads, Model: SharedLeads

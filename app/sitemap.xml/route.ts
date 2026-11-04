@@ -10,14 +10,14 @@ function xmlEscape(value: string): string {
 
 // Handle the GET request and return the requested resource.
 export async function GET(request: Request) {
-  const propertyCount = await prisma.listing.count({ where: { isApproved: true, isDeleted: false } });
+  const listingCount = await prisma.listing.count({ where: { isApproved: true, isDeleted: false } });
 
-  // Divide the property count into sitemap-sized groups and keep one group for empty sites.
-  const propertySitemaps = Array.from({ length: Math.max(1, Math.ceil(propertyCount / PAGE_SIZE)) }, (_, i) => `/sitemap/listings-${i + 1}.xml`);
+  // Divide the listing count into sitemap-sized groups and keep one group for empty sites.
+  const listingSitemaps = Array.from({ length: Math.max(1, Math.ceil(listingCount / PAGE_SIZE)) }, (_, i) => `/sitemap/listings-${i + 1}.xml`);
 
   const entries = [
     '/sitemap/static.xml',
-    ...propertySitemaps,
+    ...listingSitemaps,
     '/sitemap/agents-01.xml',
     '/sitemap/agencies-01.xml',
   ];

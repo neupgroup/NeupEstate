@@ -10,11 +10,11 @@
  * message content.
  *
  * Inputs:
- * - `POST /bridge/api.v1/inquiry?property=<propertyId>`
+ * - `POST /bridge/api.v1/inquiry?listing=<listingId>`
  * - JSON body fields: `phone`, `email`, `message`, `name`, `account_id`
  *
  * Validation:
- * - `property` is required
+ * - `listing` is required
  * - at least one of `phone` or `email` is required
  *
  * Response behavior:
@@ -43,12 +43,10 @@ import { logger } from "@neup/logica/logger";
 
 export const dynamic = 'force-dynamic';
 
-// Resolve the property identifier from supported query and body aliases.
+// Resolve the listing identifier from the listing query or JSON body field.
 function readListingId(request: NextRequest, body: Record<string, unknown>): string {
-  return request.nextUrl.searchParams.get('property')?.trim()
-    || request.nextUrl.searchParams.get('property_id')?.trim()
-    || (typeof body.property === 'string' ? body.property.trim() : '')
-    || (typeof body.property_id === 'string' ? body.property_id.trim() : '');
+  return request.nextUrl.searchParams.get('listing')?.trim()
+    || (typeof body.listing === 'string' ? body.listing.trim() : '');
 }
 
 // Build the optional contact fields accepted by the inquiry service.
