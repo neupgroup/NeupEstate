@@ -123,6 +123,7 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 exports.Prisma.LocationScalarFieldEnum = {
   id: 'id',
   title: 'title',
+  slug: 'slug',
   type: 'type',
   childOf: 'childOf',
   postalCode: 'postalCode',

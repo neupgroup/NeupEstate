@@ -6769,6 +6769,7 @@ export namespace Prisma {
   export type LocationMinAggregateOutputType = {
     id: string | null
     title: string | null
+    slug: string | null
     type: string | null
     childOf: string | null
     postalCode: string | null
@@ -6778,6 +6779,7 @@ export namespace Prisma {
   export type LocationMaxAggregateOutputType = {
     id: string | null
     title: string | null
+    slug: string | null
     type: string | null
     childOf: string | null
     postalCode: string | null
@@ -6787,6 +6789,7 @@ export namespace Prisma {
   export type LocationCountAggregateOutputType = {
     id: number
     title: number
+    slug: number
     type: number
     childOf: number
     postalCode: number
@@ -6798,6 +6801,7 @@ export namespace Prisma {
   export type LocationMinAggregateInputType = {
     id?: true
     title?: true
+    slug?: true
     type?: true
     childOf?: true
     postalCode?: true
@@ -6807,6 +6811,7 @@ export namespace Prisma {
   export type LocationMaxAggregateInputType = {
     id?: true
     title?: true
+    slug?: true
     type?: true
     childOf?: true
     postalCode?: true
@@ -6816,6 +6821,7 @@ export namespace Prisma {
   export type LocationCountAggregateInputType = {
     id?: true
     title?: true
+    slug?: true
     type?: true
     childOf?: true
     postalCode?: true
@@ -6898,6 +6904,7 @@ export namespace Prisma {
   export type LocationGroupByOutputType = {
     id: string
     title: string
+    slug: string | null
     type: string
     childOf: string | null
     postalCode: string | null
@@ -6924,6 +6931,7 @@ export namespace Prisma {
   export type LocationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
+    slug?: boolean
     type?: boolean
     childOf?: boolean
     postalCode?: boolean
@@ -6936,6 +6944,7 @@ export namespace Prisma {
   export type LocationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
+    slug?: boolean
     type?: boolean
     childOf?: boolean
     postalCode?: boolean
@@ -6946,6 +6955,7 @@ export namespace Prisma {
   export type LocationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     title?: boolean
+    slug?: boolean
     type?: boolean
     childOf?: boolean
     postalCode?: boolean
@@ -6956,13 +6966,14 @@ export namespace Prisma {
   export type LocationSelectScalar = {
     id?: boolean
     title?: boolean
+    slug?: boolean
     type?: boolean
     childOf?: boolean
     postalCode?: boolean
     status?: boolean
   }
 
-  export type LocationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "type" | "childOf" | "postalCode" | "status", ExtArgs["result"]["location"]>
+  export type LocationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "slug" | "type" | "childOf" | "postalCode" | "status", ExtArgs["result"]["location"]>
   export type LocationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     parent?: boolean | Location$parentArgs<ExtArgs>
     children?: boolean | Location$childrenArgs<ExtArgs>
@@ -6984,6 +6995,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       title: string
+      slug: string | null
       type: string
       childOf: string | null
       postalCode: string | null
@@ -7415,6 +7427,7 @@ export namespace Prisma {
   interface LocationFieldRefs {
     readonly id: FieldRef<"Location", 'String'>
     readonly title: FieldRef<"Location", 'String'>
+    readonly slug: FieldRef<"Location", 'String'>
     readonly type: FieldRef<"Location", 'String'>
     readonly childOf: FieldRef<"Location", 'String'>
     readonly postalCode: FieldRef<"Location", 'String'>
@@ -70995,6 +71008,7 @@ export namespace Prisma {
   export const LocationScalarFieldEnum: {
     id: 'id',
     title: 'title',
+    slug: 'slug',
     type: 'type',
     childOf: 'childOf',
     postalCode: 'postalCode',
@@ -72076,6 +72090,7 @@ export namespace Prisma {
     NOT?: LocationWhereInput | LocationWhereInput[]
     id?: UuidFilter<"Location"> | string
     title?: StringFilter<"Location"> | string
+    slug?: StringNullableFilter<"Location"> | string | null
     type?: StringFilter<"Location"> | string
     childOf?: UuidNullableFilter<"Location"> | string | null
     postalCode?: StringNullableFilter<"Location"> | string | null
@@ -72087,6 +72102,7 @@ export namespace Prisma {
   export type LocationOrderByWithRelationInput = {
     id?: SortOrder
     title?: SortOrder
+    slug?: SortOrderInput | SortOrder
     type?: SortOrder
     childOf?: SortOrderInput | SortOrder
     postalCode?: SortOrderInput | SortOrder
@@ -72101,6 +72117,7 @@ export namespace Prisma {
     OR?: LocationWhereInput[]
     NOT?: LocationWhereInput | LocationWhereInput[]
     title?: StringFilter<"Location"> | string
+    slug?: StringNullableFilter<"Location"> | string | null
     type?: StringFilter<"Location"> | string
     childOf?: UuidNullableFilter<"Location"> | string | null
     postalCode?: StringNullableFilter<"Location"> | string | null
@@ -72112,6 +72129,7 @@ export namespace Prisma {
   export type LocationOrderByWithAggregationInput = {
     id?: SortOrder
     title?: SortOrder
+    slug?: SortOrderInput | SortOrder
     type?: SortOrder
     childOf?: SortOrderInput | SortOrder
     postalCode?: SortOrderInput | SortOrder
@@ -72127,6 +72145,7 @@ export namespace Prisma {
     NOT?: LocationScalarWhereWithAggregatesInput | LocationScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"Location"> | string
     title?: StringWithAggregatesFilter<"Location"> | string
+    slug?: StringNullableWithAggregatesFilter<"Location"> | string | null
     type?: StringWithAggregatesFilter<"Location"> | string
     childOf?: UuidNullableWithAggregatesFilter<"Location"> | string | null
     postalCode?: StringNullableWithAggregatesFilter<"Location"> | string | null
@@ -76374,6 +76393,7 @@ export namespace Prisma {
   export type LocationCreateInput = {
     id?: string
     title: string
+    slug?: string | null
     type: string
     postalCode?: string | null
     status?: string
@@ -76384,6 +76404,7 @@ export namespace Prisma {
   export type LocationUncheckedCreateInput = {
     id?: string
     title: string
+    slug?: string | null
     type: string
     childOf?: string | null
     postalCode?: string | null
@@ -76394,6 +76415,7 @@ export namespace Prisma {
   export type LocationUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -76404,6 +76426,7 @@ export namespace Prisma {
   export type LocationUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     childOf?: NullableStringFieldUpdateOperationsInput | string | null
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
@@ -76414,6 +76437,7 @@ export namespace Prisma {
   export type LocationCreateManyInput = {
     id?: string
     title: string
+    slug?: string | null
     type: string
     childOf?: string | null
     postalCode?: string | null
@@ -76423,6 +76447,7 @@ export namespace Prisma {
   export type LocationUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -76431,6 +76456,7 @@ export namespace Prisma {
   export type LocationUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     childOf?: NullableStringFieldUpdateOperationsInput | string | null
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
@@ -81133,18 +81159,6 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type UuidNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
-  }
-
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -81158,6 +81172,18 @@ export namespace Prisma {
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type UuidNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
   }
 
   export type LocationNullableScalarRelationFilter = {
@@ -81183,6 +81209,7 @@ export namespace Prisma {
   export type LocationCountOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
+    slug?: SortOrder
     type?: SortOrder
     childOf?: SortOrder
     postalCode?: SortOrder
@@ -81192,6 +81219,7 @@ export namespace Prisma {
   export type LocationMaxOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
+    slug?: SortOrder
     type?: SortOrder
     childOf?: SortOrder
     postalCode?: SortOrder
@@ -81201,6 +81229,7 @@ export namespace Prisma {
   export type LocationMinOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
+    slug?: SortOrder
     type?: SortOrder
     childOf?: SortOrder
     postalCode?: SortOrder
@@ -81240,21 +81269,6 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
-  export type UuidNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -81268,6 +81282,21 @@ export namespace Prisma {
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
     not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type UuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
@@ -87155,17 +87184,6 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type NestedUuidNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
-  }
-
   export type NestedStringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -87178,6 +87196,17 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedUuidNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedUuidNullableFilter<$PrismaModel> | string | null
   }
 
   export type NestedUuidWithAggregatesFilter<$PrismaModel = never> = {
@@ -87222,7 +87251,7 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
-  export type NestedUuidNullableWithAggregatesFilter<$PrismaModel = never> = {
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -87230,7 +87259,10 @@ export namespace Prisma {
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
     gte?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
@@ -87247,7 +87279,7 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+  export type NestedUuidNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
     notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -87255,10 +87287,7 @@ export namespace Prisma {
     lte?: string | StringFieldRefInput<$PrismaModel>
     gt?: string | StringFieldRefInput<$PrismaModel>
     gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    not?: NestedUuidNullableWithAggregatesFilter<$PrismaModel> | string | null
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
@@ -87605,6 +87634,7 @@ export namespace Prisma {
   export type LocationCreateWithoutChildrenInput = {
     id?: string
     title: string
+    slug?: string | null
     type: string
     postalCode?: string | null
     status?: string
@@ -87614,6 +87644,7 @@ export namespace Prisma {
   export type LocationUncheckedCreateWithoutChildrenInput = {
     id?: string
     title: string
+    slug?: string | null
     type: string
     childOf?: string | null
     postalCode?: string | null
@@ -87628,6 +87659,7 @@ export namespace Prisma {
   export type LocationCreateWithoutParentInput = {
     id?: string
     title: string
+    slug?: string | null
     type: string
     postalCode?: string | null
     status?: string
@@ -87637,6 +87669,7 @@ export namespace Prisma {
   export type LocationUncheckedCreateWithoutParentInput = {
     id?: string
     title: string
+    slug?: string | null
     type: string
     postalCode?: string | null
     status?: string
@@ -87667,6 +87700,7 @@ export namespace Prisma {
   export type LocationUpdateWithoutChildrenInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -87676,6 +87710,7 @@ export namespace Prisma {
   export type LocationUncheckedUpdateWithoutChildrenInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     childOf?: NullableStringFieldUpdateOperationsInput | string | null
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
@@ -87704,6 +87739,7 @@ export namespace Prisma {
     NOT?: LocationScalarWhereInput | LocationScalarWhereInput[]
     id?: UuidFilter<"Location"> | string
     title?: StringFilter<"Location"> | string
+    slug?: StringNullableFilter<"Location"> | string | null
     type?: StringFilter<"Location"> | string
     childOf?: UuidNullableFilter<"Location"> | string | null
     postalCode?: StringNullableFilter<"Location"> | string | null
@@ -96761,6 +96797,7 @@ export namespace Prisma {
   export type LocationCreateManyParentInput = {
     id?: string
     title: string
+    slug?: string | null
     type: string
     postalCode?: string | null
     status?: string
@@ -96769,6 +96806,7 @@ export namespace Prisma {
   export type LocationUpdateWithoutParentInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -96778,6 +96816,7 @@ export namespace Prisma {
   export type LocationUncheckedUpdateWithoutParentInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -96787,6 +96826,7 @@ export namespace Prisma {
   export type LocationUncheckedUpdateManyWithoutParentInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
     type?: StringFieldUpdateOperationsInput | string
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
