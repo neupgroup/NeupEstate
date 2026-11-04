@@ -72,7 +72,7 @@ export async function getAccountProfile(id: string) {
 
   const isAgencyAccount = AGENCY_ACCOUNT_TYPES.includes(account.accountType);
   const [propertyCount, associatedAgencies, agentContact, agencyContact] = await Promise.all([
-    prisma.property.count({
+    prisma.listing.count({
       where: {
         isDeleted: false,
         status: 'ACTIVE',

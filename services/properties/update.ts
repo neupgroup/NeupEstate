@@ -153,7 +153,7 @@ function buildPropertySlug(input: { slug?: string | null; title?: string | null 
  */
 export async function createPropertyRecordWithGeneratedSlug(data: Record<string, any>) {
   const slug = buildPropertySlug(data);
-  return prisma.property.create({ data: { ...data, slug } as any });
+  return prisma.listing.create({ data: { ...data, slug } as any });
 }
 
 
@@ -263,25 +263,25 @@ export async function resolveMergedPropertyData(id: string, patch: Partial<Creat
 export async function upsertDetailTable(propertyId: string, type: PropertyTypeValue, d: any) {
   const area = areaValueToSqm(d.area);
   if (type === PROPERTY_TYPE.HOUSE) {
-    await prisma.propertyHouseDetail.upsert({
+    await prisma.listingHouseDetail.upsert({
       where: { propertyId },
       create: { propertyId, bedrooms: d.bedrooms ?? 0, bathrooms: d.bathrooms ?? 0, floors: d.floors ?? 0, kitchens: d.kitchens ?? 0, livingRooms: d.livingRooms ?? 0, diningRooms: d.diningRooms ?? 0, carParkingSpots: d.carParkingSpots ?? 0, bikeParkingSpots: d.bikeParkingSpots ?? 0, furnished: false, buildYear: 0, area, facing: d.facing ?? '', roadAccess: d.roadAccess ?? 0 },
       update: { bedrooms: d.bedrooms ?? 0, bathrooms: d.bathrooms ?? 0, floors: d.floors ?? 0, kitchens: d.kitchens ?? 0, livingRooms: d.livingRooms ?? 0, diningRooms: d.diningRooms ?? 0, carParkingSpots: d.carParkingSpots ?? 0, bikeParkingSpots: d.bikeParkingSpots ?? 0, area, facing: d.facing ?? '', roadAccess: d.roadAccess ?? 0 },
     });
   } else if (type === PROPERTY_TYPE.APARTMENT) {
-    await prisma.propertyApartmentDetail.upsert({
+    await prisma.listingApartmentDetail.upsert({
       where: { propertyId },
       create: { propertyId, bedrooms: d.bedrooms ?? 0, bathrooms: d.bathrooms ?? 0, onFloor: d.onFloor ?? 0, totalFloors: d.floors ?? 0, balconies: 0, lifts: 0, carParkingSpots: d.carParkingSpots ?? 0, bikeParkingSpots: d.bikeParkingSpots ?? 0, furnished: false, blockName: '', unitNumber: '', superArea: area, builtUpArea: area, maintenanceFee: 0 },
       update: { bedrooms: d.bedrooms ?? 0, bathrooms: d.bathrooms ?? 0, onFloor: d.onFloor ?? 0, totalFloors: d.floors ?? 0, carParkingSpots: d.carParkingSpots ?? 0, bikeParkingSpots: d.bikeParkingSpots ?? 0, superArea: area, builtUpArea: area },
     });
   } else if (type === PROPERTY_TYPE.LAND) {
-    await prisma.propertyLandDetail.upsert({
+    await prisma.listingLandDetail.upsert({
       where: { propertyId },
       create: { propertyId, area, facing: d.facing ?? '', roadAccess: d.roadAccess ?? 0, plotShape: '', cornerPlot: false, waterAvailable: false, electricityAvailable: false, boundaryWall: false },
       update: { area, facing: d.facing ?? '', roadAccess: d.roadAccess ?? 0 },
     });
   } else if (type === PROPERTY_TYPE.COMMERCIAL) {
-    await prisma.propertyCommercialDetail.upsert({
+    await prisma.listingCommercialDetail.upsert({
       where: { propertyId },
       create: { propertyId, floor: d.floors ?? 0, washrooms: d.bathrooms ?? 0, parkingSpots: d.carParkingSpots ?? 0, frontage: 0, usableArea: area, buildingType: '' },
       update: { floor: d.floors ?? 0, washrooms: d.bathrooms ?? 0, parkingSpots: d.carParkingSpots ?? 0, usableArea: area },
@@ -373,9 +373,9 @@ function normalizePropertyOwners(owners: unknown): NonNullable<CreatePropertyInp
  */
 export async function upsertMedia(propertyId: string, images: unknown) {
   const normalizedImages = normalizePropertyImages(images);
-  await prisma.propertyMedia.deleteMany({ where: { propertyId } });
+  await prisma.listingMedia.deleteMany({ where: { propertyId } });
   if (normalizedImages.length > 0) {
-    await prisma.propertyMedia.createMany({
+    await prisma.listingMedia.createMany({
       data: normalizedImages.map((url, i) => ({ propertyId, url, type: 'photo', alt: '', sortOrder: i, isPrimary: i === 0 })),
     });
   }
@@ -390,10 +390,10 @@ export async function upsertMedia(propertyId: string, images: unknown) {
  */
 export async function replacePropertyOwners(propertyId: string, owners: CreatePropertyInput['owners'] = []) {
   const normalizedOwners = normalizePropertyOwners(owners);
-  await prisma.propertyOwner.deleteMany({ where: { propertyId } });
+  await prisma.listingOwner.deleteMany({ where: { propertyId } });
   if (!normalizedOwners.length) return;
 
-  await prisma.propertyOwner.createMany({
+  await prisma.listingOwner.createMany({
     data: normalizedOwners.map((owner, index) => ({
       propertyId,
       ownerClientId: owner.ownerClientId,
@@ -404,9 +404,9 @@ export async function replacePropertyOwners(propertyId: string, owners: CreatePr
 
 async function replacePropertyRepresentatives(propertyId: string, agencyId?: string | null, listingOwnerId?: string | null) {
   const representativeIds = [...new Set([agencyId, listingOwnerId].filter((id): id is string => Boolean(id?.trim())).map((id) => id.trim()))];
-  await prisma.propertyRepresentative.deleteMany({ where: { propertyId, role: 'listingOwner' } });
+  await prisma.listingRepresentative.deleteMany({ where: { propertyId, role: 'listingOwner' } });
   if (!representativeIds.length) return;
-  await prisma.propertyRepresentative.createMany({
+  await prisma.listingRepresentative.createMany({
     data: representativeIds.map((representativeId) => ({
       propertyId,
       representativeId,
@@ -428,7 +428,7 @@ export async function createPropertyRecord(d: CreatePropertyInput & { creatorId?
     const coreData = buildCoreData({ ...d, status: 'approved', isApproved: true });
     const created = await createPropertyRecordWithGeneratedSlug(coreData);
     await replacePropertyRepresentatives(created.id, d.agency, d.listingOwner ?? d.agent);
-    if (!created.slug) await prisma.property.update({ where: { id: created.id }, data: { slug: created.id } });
+    if (!created.slug) await prisma.listing.update({ where: { id: created.id }, data: { slug: created.id } });
     await upsertDetailTable(created.id, created.type, d);
     await upsertMedia(created.id, d.images ?? []);
 
@@ -451,7 +451,7 @@ export async function addProperty(d: Omit<ExtractedPropertyData, 'embedding'>): 
     const coreData = buildCoreData({ ...rest, status: 'pending', isApproved: false });
     const created = await createPropertyRecordWithGeneratedSlug(coreData);
     await replacePropertyRepresentatives(created.id, rest.agency, rest.listingOwner ?? rest.agent);
-    if (!created.slug) await prisma.property.update({ where: { id: created.id }, data: { slug: created.id } });
+    if (!created.slug) await prisma.listing.update({ where: { id: created.id }, data: { slug: created.id } });
     await upsertDetailTable(created.id, created.type, rest);
     await upsertMedia(created.id, rest.images ?? []);
     return created.id;
@@ -469,7 +469,7 @@ export async function updateProperty(id: string, d: UpdatePropertyInput): Promis
   try {
     const merged = await resolveMergedPropertyData(id, d as Partial<CreatePropertyInput> & Record<string, any>);
     const coreData = buildCoreData(merged);
-    await prisma.property.update({ where: { id }, data: coreData as any });
+    await prisma.listing.update({ where: { id }, data: coreData as any });
     await replacePropertyRepresentatives(id, merged.agency, merged.listingOwner);
     await upsertDetailTable(id, mapTypeToEnum((merged as any).category ?? merged.categories?.[0]), merged);
     if (merged.images !== undefined) await upsertMedia(id, merged.images ?? []);
@@ -499,7 +499,7 @@ export async function updatePropertyWithExtractedData(id: string, d: ExtractedPr
 export async function updatePropertyImages(id: string, images: string[]): Promise<void> {
   try {
     await upsertMedia(id, images);
-    await prisma.property.update({
+    await prisma.listing.update({
       where: { id },
       data: { coverImage: normalizePropertyImages(images)[0] ?? '' },
     });

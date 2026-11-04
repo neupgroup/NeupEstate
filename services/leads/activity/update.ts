@@ -35,7 +35,7 @@ export async function updateLeadActivity(id: string, input: UpdateLeadActivityIn
             ? current.data as Record<string, any>
             : {};
         const propertyTitle = input.propertyId
-            ? await prisma.property.findUnique({
+            ? await prisma.listing.findUnique({
                 where: { id: input.propertyId },
                 select: { title: true },
             })

@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
     }
     const parsed = SavePropertySchema.safeParse(body);
     if (!parsed.success) return NextResponse.json({ success: false, error: 'Invalid saved property.', details: parsed.error.flatten().fieldErrors }, { status: 400 });
-    const property = await prisma.property.findUnique({ where: { id: parsed.data.propertyId }, select: { id: true } });
+    const property = await prisma.listing.findUnique({ where: { id: parsed.data.propertyId }, select: { id: true } });
     if (!property) return NextResponse.json({ success: false, error: 'Property not found.' }, { status: 404 });
     const existing = await prisma.savedProperty.findFirst({ where: { accountId, propertyId: parsed.data.propertyId } });
     const data = existing ?? await prisma.savedProperty.create({ data: { accountId, propertyId: parsed.data.propertyId } });

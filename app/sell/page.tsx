@@ -19,14 +19,14 @@ function formatApproximateCount(count: number): string {
 /** Load public marketplace totals used by the seller landing page. */
 async function getSellingPageStats() {
     const [propertyCount, areaRecords, agentCount, ownerPropertyCount] = await Promise.all([
-        prisma.property.count({ where: ACTIVE_PROPERTY_FILTER }),
-        prisma.property.findMany({
+        prisma.listing.count({ where: ACTIVE_PROPERTY_FILTER }),
+        prisma.listing.findMany({
             where: ACTIVE_PROPERTY_FILTER,
             distinct: ['locationText'],
             select: { locationText: true },
         }),
         getAgentCount(),
-        prisma.property.count({
+        prisma.listing.count({
             where: {
                 ...ACTIVE_PROPERTY_FILTER,
                 representatives: { some: { role: 'propertyOwner' } },

@@ -91,11 +91,11 @@ model Account {
   ownedSharedLeads        SharedLeads[]   @relation("SharedLeadsOwner")
   intelligenceMappings IntelligenceMapping[]
   intelligenceAlerts    IntelligenceAlert[]
-  propertyChanges       PropertyChange[]
-  createdPropertyChanges       PropertyChange[] @relation("PropertyChangeCreatedBy")
-  propertyChangesForProfile    PropertyChange[] @relation("PropertyChangeCreatedFor")
-  propertyChangesByWorkingProfile PropertyChange[] @relation("PropertyChangeWorkingProfile")
-  propertyRepresentatives PropertyRepresentative[]
+  propertyChanges       ListingChange[]
+  createdListingChanges       ListingChange[] @relation("ListingChangeCreatedBy")
+  propertyChangesForProfile    ListingChange[] @relation("ListingChangeCreatedFor")
+  propertyChangesByWorkingProfile ListingChange[] @relation("ListingChangeWorkingProfile")
+  propertyRepresentatives ListingRepresentative[]
 
   @@index([workingProfile])
   @@map("account")
@@ -114,10 +114,10 @@ model Activity {
 }
 
 // ============================================================================
-// Property
+// Listing
 // ============================================================================
 
-model Property {
+model Listing {
   id                 String          @id @default(cuid())
   slug               String
   title              String          @db.VarChar(255)
@@ -149,30 +149,30 @@ model Property {
   isDeleted          Boolean         @default(false)
   customId           String?
 
-  media              PropertyMedia[]
-  houseDetail        PropertyHouseDetail?
-  apartmentDetail    PropertyApartmentDetail?
+  media              ListingMedia[]
+  houseDetail        ListingHouse?
+  apartmentDetail    ListingApartment?
   landDetail         PropertyLandDetail?
-  commercialDetail   PropertyCommercialDetail?
+  commercialDetail   ListingCommercial?
   prices             PropertyPrice[]
   owners             PropertyOwner[]
-  documents          PropertyDocument[]
-  changes            PropertyChange[]
+  documents          ListingDocument[]
+  changes            ListingChange[]
   links              PropertyLink[]           @relation("PrimaryLinks")
   linkedBy           PropertyLink[]           @relation("SecondaryLinks")
   savedBy            SavedProperty[]
-  views              PropertyView[]
+  views              ListingsView[]
   competitionMaps    PropertyCompetitionMap[]
-  representatives    PropertyRepresentative[]
+  representatives    ListingRepresentative[]
 
-  @@index([type])
-  @@index([purpose])
-  @@index([status])
-  @@index([slug], map: "property_slug_idx")
-  @@map("property")
+  @@index([type], map: "listings_type_idx")
+  @@index([purpose], map: "listings_purpose_idx")
+  @@index([status], map: "listings_status_idx")
+  @@index([slug], map: "listings_slug_idx")
+  @@map("listings")
 }
 
-model PropertyLog {
+model ListingsLog {
   id           String   @id @default(cuid())
   propertyId   String   @map("property_id")
   requestedBy  String   @map("requested_by")
@@ -181,10 +181,10 @@ model PropertyLog {
   requestedOn  DateTime @default(now()) @map("requested_on")
   approvedOn   DateTime? @map("approved_on")
 
-  @@index([propertyId])
-  @@index([requestedBy])
-  @@index([approvedBy])
-  @@map("property_log")
+  @@index([propertyId], map: "listings_logs_property_id_idx")
+  @@index([requestedBy], map: "listings_logs_requested_by_idx")
+  @@index([approvedBy], map: "listings_logs_approved_by_idx")
+  @@map("listings_logs")
 }
 
 model PropertyLink {
@@ -192,13 +192,13 @@ model PropertyLink {
   primaryId   String
   secondaryId String
 
-  primary     Property @relation("PrimaryLinks", fields: [primaryId], references: [id], onDelete: Cascade)
-  secondary   Property @relation("SecondaryLinks", fields: [secondaryId], references: [id], onDelete: Cascade)
+  primary     Listing @relation("PrimaryLinks", fields: [primaryId], references: [id], onDelete: Cascade)
+  secondary   Listing @relation("SecondaryLinks", fields: [secondaryId], references: [id], onDelete: Cascade)
 
   @@map("property_link")
 }
 
-model PropertyMedia {
+model ListingMedia {
   id         String   @id @default(cuid())
   propertyId String
   type       String
@@ -209,14 +209,14 @@ model PropertyMedia {
   createdAt  DateTime @default(now())
   isDeleted  Boolean  @default(false)
 
-  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  property   Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
-  @@index([propertyId])
-  @@map("property_media")
+  @@index([propertyId], map: "listings_media_property_id_idx")
+  @@map("listings_media")
 }
 
-model PropertyHouseDetail {
-  propertyId       String   @id @unique
+model ListingHouse {
+  propertyId       String   @id @unique(map: "listings_house_property_id_key")
   bedrooms         Int
   bathrooms        Int
   floors           Int
@@ -231,13 +231,13 @@ model PropertyHouseDetail {
   facing           String   @db.VarChar(50)
   roadAccess       Decimal  @db.Decimal(18, 8)
 
-  property         Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  property         Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
-  @@map("property_house_detail")
+  @@map("listings_house")
 }
 
-model PropertyApartmentDetail {
-  propertyId       String   @id @unique
+model ListingApartment {
+  propertyId       String   @id @unique(map: "listings_apartment_property_id_key")
   bedrooms         Int
   bathrooms        Int
   onFloor          Int
@@ -253,9 +253,9 @@ model PropertyApartmentDetail {
   builtUpArea      Decimal  @db.Decimal(18, 8)
   maintenanceFee   Decimal  @db.Decimal(18, 8)
 
-  property         Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  property         Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
-  @@map("property_apartment_detail")
+  @@map("listings_apartment")
 }
 
 model PropertyLandDetail {
@@ -269,13 +269,13 @@ model PropertyLandDetail {
   electricityAvailable  Boolean
   boundaryWall          Boolean
 
-  property              Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  property              Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   @@map("property_land_detail")
 }
 
-model PropertyCommercialDetail {
-  propertyId    String   @id @unique
+model ListingCommercial {
+  propertyId    String   @id @unique(map: "listings_commercial_property_id_key")
   floor         Int
   washrooms     Int
   parkingSpots  Int
@@ -283,9 +283,9 @@ model PropertyCommercialDetail {
   usableArea    Decimal  @db.Decimal(18, 8)
   buildingType  String   @db.VarChar(100)
 
-  property      Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  property      Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
-  @@map("property_commercial_detail")
+  @@map("listings_commercial")
 }
 
 model PropertyPrice {
@@ -297,7 +297,7 @@ model PropertyPrice {
   price      Decimal  @db.Decimal(18, 2)
   priceUnit  String   @db.VarChar(24)
 
-  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  property   Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   @@index([propertyId])
   @@map("property_price")
@@ -309,7 +309,7 @@ model PropertyOwner {
   ownerClientId  String    @map("owner_client_id")
   isPrimaryOwner Boolean   @default(false) @map("is_primary_owner")
 
-  property       Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  property       Listing  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   ownerClient    BaseLead  @relation(fields: [ownerClientId], references: [id], onDelete: Cascade)
 
   @@index([propertyId])
@@ -318,14 +318,14 @@ model PropertyOwner {
   @@map("property_owner")
 }
 
-model PropertyRepresentative {
+model ListingRepresentative {
   id               String                     @id @default(cuid())
   propertyId       String                     @map("property_id")
   representativeId String                     @map("representative_id")
   role             PropertyRepresentativeRole
   status           String?
 
-  property         Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  property         Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   representative  Account  @relation(fields: [representativeId], references: [id], onDelete: Cascade)
 
   @@index([propertyId])
@@ -333,20 +333,20 @@ model PropertyRepresentative {
   @@map("property_representatives")
 }
 
-model PropertyDocument {
+model ListingDocument {
   id         String   @id @default(cuid())
   propertyId String
   name       String
   urls       Json
   sortOrder  Int      @default(0)
 
-  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  property   Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
-  @@index([propertyId])
-  @@map("property_document")
+  @@index([propertyId], map: "listing_documents_property_id_idx")
+  @@map("listing_documents")
 }
 
-model PropertyChange {
+model ListingChange {
   id               String   @id @default(cuid())
   propertyId       String?  @map("property_id")
   accountId        String   @map("account_id")
@@ -359,21 +359,21 @@ model PropertyChange {
   createdOn        DateTime @default(now())
   modifiedOn       DateTime @default(now())
 
-  property         Property? @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  property         Listing? @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   account          Account   @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  createdBy        Account?  @relation("PropertyChangeCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
-  createdFor       Account?  @relation("PropertyChangeCreatedFor", fields: [createdForId], references: [id], onDelete: SetNull)
-  workingProfile   Account?  @relation("PropertyChangeWorkingProfile", fields: [workingProfileId], references: [id], onDelete: SetNull)
+  createdBy        Account?  @relation("ListingChangeCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdFor       Account?  @relation("ListingChangeCreatedFor", fields: [createdForId], references: [id], onDelete: SetNull)
+  workingProfile   Account?  @relation("ListingChangeWorkingProfile", fields: [workingProfileId], references: [id], onDelete: SetNull)
 
-  @@index([propertyId])
-  @@index([accountId])
-  @@index([createdById])
-  @@index([createdForId])
-  @@index([workingProfileId])
-  @@index([status])
-  @@index([createdOn])
-  @@index([modifiedOn])
-  @@map("property_changes")
+  @@index([propertyId], map: "listing_changes_property_id_idx")
+  @@index([accountId], map: "listing_changes_account_id_idx")
+  @@index([createdById], map: "listing_changes_created_by_id_idx")
+  @@index([createdForId], map: "listing_changes_created_for_id_idx")
+  @@index([workingProfileId], map: "listing_changes_working_profile_id_idx")
+  @@index([status], map: "listing_changes_status_idx")
+  @@index([createdOn], map: "listing_changes_created_on_idx")
+  @@index([modifiedOn], map: "listing_changes_modified_on_idx")
+  @@map("listing_changes")
 }
 
 // ============================================================================
@@ -532,14 +532,14 @@ model SavedProperty {
   propertyId String
   savedAt    DateTime @default(now())
 
-  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  property   Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   @@index([accountId])
   @@index([propertyId])
   @@map("saved_property")
 }
 
-model PropertyView {
+model ListingsView {
   id         String   @id @default(cuid())
   accountId  String
   propertyId String
@@ -548,11 +548,11 @@ model PropertyView {
   timeViewed Int
   viewedOn   String
 
-  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  property   Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
-  @@index([accountId])
-  @@index([propertyId])
-  @@map("property_views")
+  @@index([accountId], map: "listings_views_account_id_idx")
+  @@index([propertyId], map: "listings_views_property_id_idx")
+  @@map("listings_views")
 }
 
 // ============================================================================
@@ -1056,29 +1056,29 @@ model CompetitorListing {
 model PropertyCompetitionMap {
   id                String   @id @default(cuid())
   propertyId        String   @map("property_id")
-  competitorPropertyId String @map("competitor_property_id")
+  competitorListingId String @map("competitor_property_id")
   status            PropertyCompetitionStatus @default(UNVERIFIED)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
-  property         Property          @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-  competitorListing CompetitorListing @relation(fields: [competitorPropertyId], references: [id], onDelete: Cascade)
+  property         Listing          @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  competitorListing CompetitorListing @relation(fields: [competitorListingId], references: [id], onDelete: Cascade)
 
   @@index([propertyId], map: "property_competition_map_property_id_idx")
-  @@index([competitorPropertyId], map: "property_competition_map_competitor_property_id_idx")
+  @@index([competitorListingId], map: "property_competition_map_competitor_property_id_idx")
   @@map("property_competition_map")
 }
 
 model CompetitorTracking {
   id                   String             @id @default(cuid())
   competitorPageId     String
-  ourPropertyId        String?
+  ourListingId        String?
   createdAt            DateTime           @default(now())
 
   competitorPage       CompetitorPage     @relation(fields: [competitorPageId], references: [id], onDelete: Cascade)
 
   @@index([competitorPageId])
-  @@index([ourPropertyId])
+  @@index([ourListingId])
   @@map("competitor_tracking")
 }
 

@@ -258,7 +258,7 @@ async function getPropertyIdsForAccounts(accountIds: string[], agencyId?: string
   if (agencyId) ownershipFilters.push({ representatives: { some: { role: 'listingOwner', representativeId: agencyId } } });
   if (accountIds.length) ownershipFilters.push({ representatives: { some: { role: 'listingOwner', representativeId: { in: accountIds } } } });
 
-  const properties = await prisma.property.findMany({
+  const properties = await prisma.listing.findMany({
     where: {
       isDeleted: false,
       OR: ownershipFilters,
@@ -309,7 +309,7 @@ async function buildNativeScopeSummary(
   ].filter((filter): filter is NonNullable<typeof filter> => Boolean(filter));
   const [activities, propertyViews, savedProperties, clientLinks, leads, inquiries, visits, properties] = await Promise.all([
     getActivities(context, from, to),
-    prisma.propertyView.findMany({
+    prisma.listingView.findMany({
       where: {
         accountId: accountFilter,
         propertyId: propertyFilter,
@@ -350,7 +350,7 @@ async function buildNativeScopeSummary(
       },
       select: { createdAt: true },
     }),
-    prisma.property.findMany({
+    prisma.listing.findMany({
       where: {
         isDeleted: false,
         id: propertyFilter,
@@ -420,7 +420,7 @@ async function buildApiScopeSummary(
         })
       : Promise.resolve([]),
     scope === 'app.custom.via.api'
-      ? prisma.property.findMany({
+      ? prisma.listing.findMany({
           where: {
             isDeleted: false,
             id: propertyFilter,

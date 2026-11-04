@@ -61,7 +61,7 @@ export async function savePropertyCreateDraftAction(input: {
       ? { in: ['creation_draft', 'creation_pending', 'creating'] }
       : { in: ['creation_draft', 'creating'] };
     const existingDraft = requestedChangeId
-      ? await prisma.propertyChange.findFirst({
+      ? await prisma.listingChange.findFirst({
           where: {
             id: requestedChangeId,
             accountId: actorId,
@@ -104,11 +104,11 @@ export async function savePropertyCreateDraftAction(input: {
     };
 
     const draft = existingDraft
-      ? await prisma.propertyChange.update({
+      ? await prisma.listingChange.update({
           where: { id: existingDraft.id },
           data: draftPayload,
         })
-      : await prisma.propertyChange.create({ data: draftPayload });
+      : await prisma.listingChange.create({ data: draftPayload });
 
     return { success: true, changeId: draft.id, propertyId: draft.propertyId };
   } catch (e: any) {
@@ -143,7 +143,7 @@ export async function getCurrentPropertyCreateDraftAction(changeId?: string | nu
       ? { in: ['creation_draft', 'creation_pending', 'creating'] }
       : { in: ['creation_draft', 'creating'] };
     const draft = requestedChangeId
-      ? await prisma.propertyChange.findFirst({
+      ? await prisma.listingChange.findFirst({
           where: {
             id: requestedChangeId,
             accountId: actorId,
@@ -199,7 +199,7 @@ export async function savePropertyChangeDraftAction(input: {
       }
     }
     const actorId = await requireIdentity();
-    const existingDraft = await prisma.propertyChange.findFirst({
+    const existingDraft = await prisma.listingChange.findFirst({
       where: {
         propertyId: input.propertyId,
         accountId: actorId,
@@ -212,7 +212,7 @@ export async function savePropertyChangeDraftAction(input: {
     const normalizedInputData = normalizePropertyChangeData(input.data);
     if (input.status === 'changing' && Object.keys(normalizedInputData).length === 0) {
       if (existingDraft && Object.keys(normalizedExistingData).length === 0) {
-        await prisma.propertyChange.delete({ where: { id: existingDraft.id } });
+        await prisma.listingChange.delete({ where: { id: existingDraft.id } });
         revalidatePath(`/manage/properties/${input.propertyId}`);
         return { success: true };
       }
@@ -225,7 +225,7 @@ export async function savePropertyChangeDraftAction(input: {
       : normalizedInputData;
     if (input.status === 'changing' && Object.keys(mergedData).length === 0) {
       if (existingDraft) {
-        await prisma.propertyChange.delete({ where: { id: existingDraft.id } });
+        await prisma.listingChange.delete({ where: { id: existingDraft.id } });
         revalidatePath(`/manage/properties/${input.propertyId}`);
       }
       return { success: true };
@@ -241,11 +241,11 @@ export async function savePropertyChangeDraftAction(input: {
     };
 
     const draft = existingDraft
-      ? await prisma.propertyChange.update({
+      ? await prisma.listingChange.update({
           where: { id: existingDraft.id },
           data,
         })
-      : await prisma.propertyChange.create({ data });
+      : await prisma.listingChange.create({ data });
 
     return { success: true, changeId: draft.id };
   } catch (e: any) {
@@ -418,7 +418,7 @@ export async function getPropertyChangeDraftAction(changeId: string): Promise<{
   error?: string;
 }> {
   try {
-    const draft = await prisma.propertyChange.findUnique({ where: { id: changeId } });
+    const draft = await prisma.listingChange.findUnique({ where: { id: changeId } });
     if (!draft) return { success: false, error: 'Draft not found.' };
     await requirePermission(
       PERMISSIONS.manage.propertySelfUpdate,
@@ -484,7 +484,7 @@ export async function getPropertyChangeContextAction(propertyId: string): Promis
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
     const [currentUserChange, currentUserRecentChanges, otherRecentChanges, latestOutcomeChange] = await Promise.all([
-      prisma.propertyChange.findFirst({
+      prisma.listingChange.findFirst({
         where: {
           propertyId,
           accountId,
@@ -492,21 +492,21 @@ export async function getPropertyChangeContextAction(propertyId: string): Promis
         },
         orderBy: { modifiedOn: 'desc' },
       }),
-      prisma.propertyChange.count({
+      prisma.listingChange.count({
         where: {
           propertyId,
           accountId,
           modifiedOn: { gte: sevenDaysAgo },
         },
       }),
-      prisma.propertyChange.count({
+      prisma.listingChange.count({
         where: {
           propertyId,
           accountId: { not: accountId },
           modifiedOn: { gte: sevenDaysAgo },
         },
       }),
-      prisma.propertyChange.findFirst({
+      prisma.listingChange.findFirst({
         where: {
           propertyId,
           accountId,
@@ -565,7 +565,7 @@ export async function getPropertyChangeContextAction(propertyId: string): Promis
 export async function cancelPropertyChangeDraftAction(changeId: string): Promise<{ success: boolean; error?: string }> {
   try {
     const accountId = await requireIdentity();
-    const draft = await prisma.propertyChange.findFirst({
+    const draft = await prisma.listingChange.findFirst({
       where: {
         id: changeId,
         accountId,
@@ -594,13 +594,13 @@ export async function cancelPropertyChangeDraftAction(changeId: string): Promise
     }
 
     if (draft.status === 'deleting' && draft.propertyId) {
-      await prisma.property.update({
+      await prisma.listing.update({
         where: { id: draft.propertyId },
         data: { status: 'ACTIVE' },
       });
     }
 
-    await prisma.propertyChange.delete({
+    await prisma.listingChange.delete({
       where: { id: draft.id },
     });
 
@@ -631,7 +631,7 @@ export async function reviewPropertyChangeAction(input: {
   try {
     await requirePermission(PERMISSIONS.manage.propertyReviewApprove);
     const accountId = await requireIdentity();
-    const request = await prisma.propertyChange.findFirst({
+    const request = await prisma.listingChange.findFirst({
       where: {
         id: input.changeId,
         ...(input.propertyId ? { propertyId: input.propertyId } : {}),
@@ -689,7 +689,7 @@ export async function reviewPropertyChangeAction(input: {
           approvedOn: new Date(),
           data: creationLogData,
         });
-        await prisma.propertyChange.update({
+        await prisma.listingChange.update({
           where: { id: request.id },
           data: {
             propertyId: createdPropertyId,
@@ -714,7 +714,7 @@ export async function reviewPropertyChangeAction(input: {
           approvedOn: new Date(),
           data: acceptedData.length ? acceptedData : [{ field: 'status', value: 'deleting' }],
         });
-        await prisma.propertyChange.update({
+        await prisma.listingChange.update({
           where: { id: request.id },
           data: {
             isApproved: true,
@@ -740,7 +740,7 @@ export async function reviewPropertyChangeAction(input: {
           data: acceptedData,
         });
       }
-      await prisma.propertyChange.update({
+      await prisma.listingChange.update({
         where: { id: request.id },
         data: {
           isApproved: true,
@@ -750,7 +750,7 @@ export async function reviewPropertyChangeAction(input: {
       return { success: true, propertyId: request.propertyId };
     }
 
-    await prisma.propertyChange.update({
+    await prisma.listingChange.update({
       where: { id: request.id },
       data: {
         isApproved: false,
@@ -759,7 +759,7 @@ export async function reviewPropertyChangeAction(input: {
     });
 
     if (request.status === 'deleting' && request.propertyId) {
-      await prisma.property.update({
+      await prisma.listing.update({
         where: { id: request.propertyId },
         data: { status: 'ACTIVE' },
       });

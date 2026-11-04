@@ -12,11 +12,11 @@ export async function getPropertyAgentRepresentatives(input: {
   propertyId: string;
   listingOwnerId?: string | null;
   supportingAgentIds?: Array<string | { id?: string }>;
-  includeListingOwner?: boolean;
+  includePropertyOwner?: boolean;
   includeAgents?: boolean;
   includeSupportingAgents?: boolean;
 }): Promise<AgentRepresentative[]> {
-  const propertyRepresentatives = await prisma.propertyRepresentative.findMany({
+  const propertyRepresentatives = await prisma.listingRepresentative.findMany({
     where: { propertyId: input.propertyId, role: { in: ['listingOwner', 'listingParty'] } },
     include: { representative: { select: { id: true, accountType: true, displayName: true, displayImage: true } } },
   });
@@ -51,7 +51,7 @@ export async function getPropertyAgentRepresentatives(input: {
   const listingOwnerIsAgent = Boolean(listingOwnerAccount) || (listingOwnerId ? mappedAgentIds.has(listingOwnerId) : false);
 
   const accountIds = [...new Set([
-    ...(input.includeListingOwner && listingOwnerId ? [listingOwnerId] : []),
+    ...(input.includePropertyOwner && listingOwnerId ? [listingOwnerId] : []),
     ...(input.includeAgents && listingOwnerIsAgent && listingOwnerId ? [listingOwnerId] : []),
     ...(input.includeSupportingAgents ? supportingAgentIds : []),
   ])];
@@ -65,7 +65,7 @@ export async function getPropertyAgentRepresentatives(input: {
   if (listingOwnerAccount) accountById.set(listingOwnerAccount.id, listingOwnerAccount);
   const representatives: AgentRepresentative[] = [];
 
-  if (input.includeListingOwner && listingOwnerId && !(input.includeAgents && listingOwnerIsAgent)) {
+  if (input.includePropertyOwner && listingOwnerId && !(input.includeAgents && listingOwnerIsAgent)) {
     const account = accountById.get(listingOwnerId);
     representatives.push({
       id: listingOwnerId,

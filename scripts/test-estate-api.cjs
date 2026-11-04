@@ -120,7 +120,7 @@ async function main() {
     assert.equal(response.body.totalPages, Math.ceil(49 / limit));
   }
   let prismaOptions;
-  mocks['@neup/core/database/prisma'].prisma.property = {
+  mocks['@neup/core/database/prisma'].prisma.listing = {
     count: async () => 0,
     findMany: async (options) => { prismaOptions = options; return []; },
   };

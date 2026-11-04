@@ -110,7 +110,7 @@ async function getAgencyReportData(agencyAccountId: string) {
     memberAccounts.map((account) => [account.id, account.displayName || account.id]),
   );
 
-  const properties = await prisma.property.findMany({
+  const properties = await prisma.listing.findMany({
     where: {
       isDeleted: false,
       OR: [
@@ -180,10 +180,10 @@ async function getAgencyReportData(agencyAccountId: string) {
           },
           orderBy: { createdAt: 'desc' },
         }),
-        prisma.propertyView.count({
+        prisma.listingView.count({
           where: { propertyId: { in: propertyIds } },
         }),
-        prisma.propertyView.count({
+        prisma.listingView.count({
           where: {
             propertyId: { in: propertyIds },
             viewedAt: { gte: thirtyDaysAgo },

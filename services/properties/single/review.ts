@@ -18,7 +18,7 @@ import { normalizeOwnerReferenceEntries } from '@/services/properties/action-hel
  */
 export async function approveProperty(propertyId: string): Promise<void> {
   try {
-    await prisma.property.update({ where: { id: propertyId }, data: { status: 'ACTIVE', isApproved: true } });
+    await prisma.listing.update({ where: { id: propertyId }, data: { status: 'ACTIVE', isApproved: true } });
   } catch (error) {
     await logger().type(`approveProperty ${propertyId}`).data({ error: String(error), details: {} }).log();
     throw new Error('Failed to approve property.');
@@ -34,7 +34,7 @@ export async function approveProperty(propertyId: string): Promise<void> {
  */
 export async function rejectProperty(propertyId: string): Promise<void> {
   try {
-    await prisma.property.update({ where: { id: propertyId }, data: { status: 'PENDING', isApproved: false } });
+    await prisma.listing.update({ where: { id: propertyId }, data: { status: 'PENDING', isApproved: false } });
   } catch (error) {
     await logger().type(`rejectProperty ${propertyId}`).data({ error: String(error), details: {} }).log();
     throw new Error('Failed to reject property.');
@@ -79,9 +79,9 @@ export async function deletePropertyAction(propertyId: string) {
 export async function requestPropertyDeletionAction(propertyId: string) {
   try {
     await requirePermission(PERMISSIONS.manage.propertySelfDelete); const accountId = await requireIdentity();
-    const existingDraft = await prisma.propertyChange.findFirst({ where: { propertyId, accountId, status: 'deleting', isApproved: null }, orderBy: { modifiedOn: 'desc' }, select: { id: true, data: true } });
+    const existingDraft = await prisma.listingChange.findFirst({ where: { propertyId, accountId, status: 'deleting', isApproved: null }, orderBy: { modifiedOn: 'desc' }, select: { id: true, data: true } });
     const data = existingDraft?.data && typeof existingDraft.data === 'object' && !Array.isArray(existingDraft.data) ? normalizePropertyChangeData(existingDraft.data as Record<string, any>) : {};
-    await prisma.propertyChange.upsert({ where: { id: existingDraft?.id ?? '__new_property_change__' }, update: { status: 'deleting', data, modifiedOn: new Date() }, create: { propertyId, accountId, status: 'deleting', isApproved: null, data } });
+    await prisma.listingChange.upsert({ where: { id: existingDraft?.id ?? '__new_property_change__' }, update: { status: 'deleting', data, modifiedOn: new Date() }, create: { propertyId, accountId, status: 'deleting', isApproved: null, data } });
     revalidatePath('/manage/properties'); revalidatePath(`/manage/properties/${propertyId}`); return { success: true };
   } catch (error) { await logger().type(`requestPropertyDeletionAction (ID: ${propertyId})`).data({ error: String(error), details: {} }).log(); return { success: false, error: 'Failed to request property deletion.' }; }
 }
@@ -96,11 +96,11 @@ export async function requestPropertyDeletionAction(propertyId: string) {
 export async function cancelPropertyChangeDraftAction(changeId: string): Promise<{ success: boolean; error?: string }> {
   try {
     const accountId = await requireIdentity();
-    const draft = await prisma.propertyChange.findFirst({ where: { id: changeId, accountId, isApproved: null }, select: { id: true, propertyId: true, status: true } });
+    const draft = await prisma.listingChange.findFirst({ where: { id: changeId, accountId, isApproved: null }, select: { id: true, propertyId: true, status: true } });
     if (!draft) return { success: false, error: 'Pending request not found.' };
     await requirePermission(draft.status === 'deleting' ? PERMISSIONS.manage.propertySelfDelete : PERMISSIONS.manage.propertySelfUpdate);
-    if (draft.status === 'deleting' && draft.propertyId) await prisma.property.update({ where: { id: draft.propertyId }, data: { status: 'ACTIVE' } });
-    await prisma.propertyChange.delete({ where: { id: draft.id } });
+    if (draft.status === 'deleting' && draft.propertyId) await prisma.listing.update({ where: { id: draft.propertyId }, data: { status: 'ACTIVE' } });
+    await prisma.listingChange.delete({ where: { id: draft.id } });
     return { success: true };
   } catch (error) { await logger().type(`cancelPropertyChangeDraftAction ${changeId}`).data({ error: String(error), details: {} }).log(); return { success: false, error: error instanceof Error ? error.message : 'Failed to cancel property change draft.' }; }
 }

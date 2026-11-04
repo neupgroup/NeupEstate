@@ -17,14 +17,14 @@ export type DeletePropertyContext = { actorAccountId: string };
 export async function deleteProperty(input: DeletePropertyInput, context: DeletePropertyContext): Promise<void> {
   if (!context.actorAccountId.trim()) throw new Error('Authenticated account is required.');
   await requirePermission(PERMISSIONS.manage.propertySelfDelete);
-  const property = await prisma.property.findUnique({ where: { id: input.propertyId }, select: { id: true } });
+  const property = await prisma.listing.findUnique({ where: { id: input.propertyId }, select: { id: true } });
   if (!property) throw new Error('Property not found.');
   await prisma.$transaction(async (transaction) => {
-    await transaction.propertyMedia.deleteMany({ where: { propertyId: input.propertyId } });
-    await transaction.propertyOwner.deleteMany({ where: { propertyId: input.propertyId } });
-    await transaction.propertyPrice.deleteMany({ where: { propertyId: input.propertyId } });
-    await transaction.propertyChange.deleteMany({ where: { propertyId: input.propertyId } });
-    await transaction.property.delete({ where: { id: input.propertyId } });
+    await transaction.listingMedia.deleteMany({ where: { propertyId: input.propertyId } });
+    await transaction.listingOwner.deleteMany({ where: { propertyId: input.propertyId } });
+    await transaction.listingPrice.deleteMany({ where: { propertyId: input.propertyId } });
+    await transaction.listingChange.deleteMany({ where: { propertyId: input.propertyId } });
+    await transaction.listing.delete({ where: { id: input.propertyId } });
   });
   await logger().type('property.delete').data({ propertyId: input.propertyId, actorAccountId: context.actorAccountId }).log();
 }

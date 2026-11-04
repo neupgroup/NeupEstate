@@ -72,7 +72,7 @@ async function getAgencyCounts(accountId: string) {
         status: 'accepted',
       },
     }),
-    prisma.property.count({
+    prisma.listing.count({
       where: {
         representatives: {
           some: { role: 'listingOwner', representativeId: accountId },
@@ -165,7 +165,7 @@ export async function getPublicAgencyAccounts({
             },
             _count: { agentId: true },
           }),
-          prisma.propertyRepresentative.groupBy({
+          prisma.listingRepresentative.groupBy({
             by: ['representativeId'],
             where: {
               role: 'listingOwner',

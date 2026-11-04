@@ -806,7 +806,7 @@ export async function PropertyDetails({ id, review = false }: PropertyDetailsPro
     const resolvedProperty = await getPropertyById(id, { includeInactive: true });
     const creationDraft = resolvedProperty
         ? null
-        : await prisma.propertyChange.findFirst({
+        : await prisma.listingChange.findFirst({
             where: {
                 id,
                 status: { in: ["creation_draft", "creation_pending", "creating"] },

@@ -167,7 +167,7 @@ const getHandler = async (req: NextRequest, context: Context) => {
         propertyId: property.id ?? routeId,
         listingOwnerId: typeof property.listingAgentId === 'string' ? property.listingAgentId : null,
         supportingAgentIds: Array.isArray(supportingAgentIds) ? supportingAgentIds : [],
-        includeListingOwner: representativeSelection.all || representativeSelection.listingOwner,
+        includePropertyOwner: representativeSelection.all || representativeSelection.listingOwner,
         includeAgents: representativeSelection.all || representativeSelection.agents || representativeSelection.agent,
         includeSupportingAgents: representativeSelection.all || representativeSelection.agents,
       }),

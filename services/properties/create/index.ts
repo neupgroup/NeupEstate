@@ -34,11 +34,11 @@ export async function submitPropertyCreation(input: CreatePropertyFormValues, co
     apartmentUnits: validatedData.apartmentUnits?.map((unit) => ({ ...unit, area: areaValueToSqm(unit.area) })) as unknown as ApartmentUnit[],
     agency: postingContext.postingAgencyId, listingOwner: validatedData.listingAgentAccountId?.trim() || postingContext.propertyAgentId,
   };
-  const existingDraft = await prisma.propertyChange.findFirst({ where: { accountId: actorId, status: { in: ['creation_draft', 'creation_pending', 'creating'] }, isApproved: null }, orderBy: { modifiedOn: 'desc' } });
+  const existingDraft = await prisma.listingChange.findFirst({ where: { accountId: actorId, status: { in: ['creation_draft', 'creation_pending', 'creating'] }, isApproved: null }, orderBy: { modifiedOn: 'desc' } });
   const data = { ...serviceInput, postingAgencyId: postingContext.postingAgencyId, createdById: postingContext.createdById, createdForId: postingContext.createdForId, workingProfileId: postingContext.workingProfileId, transferToId: postingContext.transferToId, created_by: postingContext.createdById, transfer_to: postingContext.transferToId, workingProfileType: postingContext.profileType } as any;
   const draft = existingDraft
-    ? await prisma.propertyChange.update({ where: { id: existingDraft.id }, data: { data, status: 'creation_pending', isApproved: null, modifiedOn: new Date(), createdById: postingContext.createdById, createdForId: postingContext.createdForId, workingProfileId: postingContext.workingProfileId } })
-    : await prisma.propertyChange.create({ data: { accountId: actorId, propertyId: null, status: 'creation_pending', isApproved: null, createdById: postingContext.createdById, createdForId: postingContext.createdForId, workingProfileId: postingContext.workingProfileId, data, modifiedOn: new Date() } });
+    ? await prisma.listingChange.update({ where: { id: existingDraft.id }, data: { data, status: 'creation_pending', isApproved: null, modifiedOn: new Date(), createdById: postingContext.createdById, createdForId: postingContext.createdForId, workingProfileId: postingContext.workingProfileId } })
+    : await prisma.listingChange.create({ data: { accountId: actorId, propertyId: null, status: 'creation_pending', isApproved: null, createdById: postingContext.createdById, createdForId: postingContext.createdForId, workingProfileId: postingContext.workingProfileId, data, modifiedOn: new Date() } });
   await logger().type('property.create').data({ requestId: draft.id, actorAccountId: actorId, refreshed: Boolean(existingDraft) }).log();
   return { requestId: draft.id };
 }
@@ -62,7 +62,7 @@ export async function createPropertyDraftRequest(input: { actorId: string; posti
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
 export async function editUncreatedPropertyDraftRequest(input: { requestId: string; actorId?: string; postingAgencyId?: string | null; workingProfileId?: string | null; data: CreatePropertyFormValues }) {
-  const request = await prisma.propertyChange.findUnique({ where: { id: input.requestId }, select: { id: true, accountId: true, propertyId: true, status: true, isApproved: true } });
+  const request = await prisma.listingChange.findUnique({ where: { id: input.requestId }, select: { id: true, accountId: true, propertyId: true, status: true, isApproved: true } });
   if (!request || !['creation_draft', 'creation_pending', 'creating'].includes(request.status) || request.isApproved !== null) throw new Error('Pending create request not found.');
   if (input.actorId && request.accountId !== input.actorId) throw new Error('The provided requestId does not belong to the provided accountId.');
   const result = await submitPropertyCreation(input.data, { actorAccountId: request.accountId, postingAgencyId: input.postingAgencyId, workingProfileId: input.workingProfileId });

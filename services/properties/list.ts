@@ -38,7 +38,7 @@ import {
  */
 export async function getProperties(opts: { includeInactive?: boolean } = {}): Promise<Property[]> {
   try {
-    const records = await prisma.property.findMany({ orderBy: { updatedAt: 'desc' }, include: PROPERTY_INCLUDE });
+    const records = await prisma.listing.findMany({ orderBy: { updatedAt: 'desc' }, include: PROPERTY_INCLUDE });
     const all = await hydratePropertyAccountLabels(records.map(mapRecord));
     return opts.includeInactive ? all : all.filter(onlyActive);
   } catch (e) { await logger().type('getProperties').data({ error: String(e), details: {} }).log(); return []; }
@@ -204,8 +204,8 @@ export async function getPaginatedProperties(opts: {
     }
 
     const [totalCount, records] = await Promise.all([
-      prisma.property.count({ where }),
-      prisma.property.findMany({ where, orderBy: { createdAt: opts.orderBy === 'oldestFirst' ? 'asc' : 'desc' }, take: limit, skip: offset, include: PROPERTY_INCLUDE }),
+      prisma.listing.count({ where }),
+      prisma.listing.findMany({ where, orderBy: { createdAt: opts.orderBy === 'oldestFirst' ? 'asc' : 'desc' }, take: limit, skip: offset, include: PROPERTY_INCLUDE }),
     ]);
     return { properties: await hydratePropertyAccountLabels(records.map(mapRecord)), totalCount };
   } catch (e) { await logger().type('getPaginatedProperties').data({ error: String(e), details: {} }).log(); return { properties: [], totalCount: 0 }; }
@@ -220,7 +220,7 @@ export async function getPaginatedProperties(opts: {
  */
 export async function getPropertyDrafts(accountId: string): Promise<PropertyDraftSummary[]> {
   try {
-    const drafts = await prisma.propertyChange.findMany({
+    const drafts = await prisma.listingChange.findMany({
       where: {
         accountId,
         isApproved: null,
@@ -282,9 +282,9 @@ export async function getPropertyDrafts(accountId: string): Promise<PropertyDraf
  */
 export async function getFeaturedProperties(limit = 4): Promise<Property[]> {
   try {
-    const records = await prisma.property.findMany({ where: { isFeatured: true, status: PROPERTY_STATUS.ACTIVE }, orderBy: { updatedAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
+    const records = await prisma.listing.findMany({ where: { isFeatured: true, status: PROPERTY_STATUS.ACTIVE }, orderBy: { updatedAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
     if (records.length > 0) return hydratePropertyAccountLabels(records.map(mapRecord));
-    const fallback = await prisma.property.findMany({ where: { status: PROPERTY_STATUS.ACTIVE }, orderBy: { updatedAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
+    const fallback = await prisma.listing.findMany({ where: { status: PROPERTY_STATUS.ACTIVE }, orderBy: { updatedAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
     return hydratePropertyAccountLabels(fallback.map(mapRecord));
   } catch (e) { await logger().type('getFeaturedProperties').data({ error: String(e), details: {} }).log(); return []; }
 }
@@ -298,7 +298,7 @@ export async function getFeaturedProperties(limit = 4): Promise<Property[]> {
  */
 export async function getRecentProperties(limit = 4): Promise<Property[]> {
   try {
-    const records = await prisma.property.findMany({ where: { status: PROPERTY_STATUS.ACTIVE }, orderBy: { createdAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
+    const records = await prisma.listing.findMany({ where: { status: PROPERTY_STATUS.ACTIVE }, orderBy: { createdAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
     return hydratePropertyAccountLabels(records.map(mapRecord));
   } catch (e) { await logger().type('getRecentProperties').data({ error: String(e), details: {} }).log(); return []; }
 }
@@ -312,7 +312,7 @@ export async function getRecentProperties(limit = 4): Promise<Property[]> {
  */
 export async function getPropertiesByPurpose(purpose: 'Sale' | 'Rent' | 'Lease', limit = 4): Promise<Property[]> {
   try {
-    const records = await prisma.property.findMany({ where: { purpose: mapPurposeToEnum(purpose), status: PROPERTY_STATUS.ACTIVE }, orderBy: { updatedAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
+    const records = await prisma.listing.findMany({ where: { purpose: mapPurposeToEnum(purpose), status: PROPERTY_STATUS.ACTIVE }, orderBy: { updatedAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
     return hydratePropertyAccountLabels(records.map(mapRecord));
   } catch (e) { await logger().type('getPropertiesByPurpose').data({ error: String(e), details: {} }).log(); return []; }
 }
@@ -337,7 +337,7 @@ export async function getFeaturedProjects(limit = 4): Promise<Property[]> {
  */
 export async function getPremiumProperties(limit = 4): Promise<Property[]> {
   try {
-    const records = await prisma.property.findMany({ where: { status: PROPERTY_STATUS.ACTIVE, displayPrice: { gt: 0 } }, orderBy: { displayPrice: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
+    const records = await prisma.listing.findMany({ where: { status: PROPERTY_STATUS.ACTIVE, displayPrice: { gt: 0 } }, orderBy: { displayPrice: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
     return hydratePropertyAccountLabels(records.map(mapRecord));
   } catch (e) { await logger().type('getPremiumProperties').data({ error: String(e), details: {} }).log(); return []; }
 }
@@ -362,7 +362,7 @@ export async function getLuxuriousProperties(limit = 4): Promise<Property[]> {
  */
 export async function getPendingProperties(limit = 50): Promise<Property[]> {
   try {
-    const records = await prisma.property.findMany({
+    const records = await prisma.listing.findMany({
       where: { status: { in: [PROPERTY_STATUS.AWAITING_CREATION, PROPERTY_STATUS.PENDING] } },
       orderBy: { updatedAt: 'desc' },
       take: limit,
@@ -397,7 +397,7 @@ export async function getAwaitingReviewItems(
     const [pendingProperties, drafts] = opts.includeAll
       ? await Promise.all([
           getPendingProperties(limit),
-          prisma.propertyChange.findMany({
+          prisma.listingChange.findMany({
             where: reviewChangeWhere,
             orderBy: { modifiedOn: 'desc' },
             take: limit,
@@ -413,7 +413,7 @@ export async function getAwaitingReviewItems(
             },
           }),
         ])
-      : [[], await prisma.propertyChange.findMany({
+      : [[], await prisma.listingChange.findMany({
           where: reviewChangeWhere,
           orderBy: { modifiedOn: 'desc' },
           take: limit,
@@ -476,7 +476,7 @@ export async function getAwaitingReviewItems(
           .slice(0, limit);
       }
 
-      const scopedProperties = await prisma.property.findMany({
+      const scopedProperties = await prisma.listing.findMany({
         where: {
           id: { in: Array.from(pendingIds) },
         },
@@ -571,7 +571,7 @@ async function listAccountProperties(
       delete where.representatives;
     }
 
-    const records = await prisma.property.findMany({
+    const records = await prisma.listing.findMany({
       where,
       orderBy: { updatedAt: 'desc' },
       skip: page.offset,
@@ -630,8 +630,8 @@ export async function getBridgePropertiesByAccount(opts: BridgePropertyQuery): P
     if (!opts.includeInactive) where.status = PROPERTY_STATUS.ACTIVE;
 
     const [totalCount, records] = await Promise.all([
-      prisma.property.count({ where }),
-      prisma.property.findMany({
+      prisma.listing.count({ where }),
+      prisma.listing.findMany({
         where,
         orderBy: { updatedAt: 'desc' },
         take: limit,

@@ -10,7 +10,7 @@ function xmlEscape(value: string): string {
 
 // Handle the GET request and return the requested resource.
 export async function GET(request: Request) {
-  const propertyCount = await prisma.property.count({ where: { isApproved: true, isDeleted: false } });
+  const propertyCount = await prisma.listing.count({ where: { isApproved: true, isDeleted: false } });
 
   // Divide the property count into sitemap-sized groups and keep one group for empty sites.
   const propertySitemaps = Array.from({ length: Math.max(1, Math.ceil(propertyCount / PAGE_SIZE)) }, (_, i) => `/sitemap/properties-${i + 1}.xml`);

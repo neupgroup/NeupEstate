@@ -153,7 +153,7 @@ exports.Prisma.ActivityScalarFieldEnum = {
   ipAddress: 'ipAddress'
 };
 
-exports.Prisma.PropertyScalarFieldEnum = {
+exports.Prisma.ListingScalarFieldEnum = {
   id: 'id',
   slug: 'slug',
   title: 'title',
@@ -186,7 +186,7 @@ exports.Prisma.PropertyScalarFieldEnum = {
   customId: 'customId'
 };
 
-exports.Prisma.PropertyLogScalarFieldEnum = {
+exports.Prisma.ListingsLogScalarFieldEnum = {
   id: 'id',
   propertyId: 'propertyId',
   requestedBy: 'requestedBy',
@@ -202,7 +202,7 @@ exports.Prisma.PropertyLinkScalarFieldEnum = {
   secondaryId: 'secondaryId'
 };
 
-exports.Prisma.PropertyMediaScalarFieldEnum = {
+exports.Prisma.ListingMediaScalarFieldEnum = {
   id: 'id',
   propertyId: 'propertyId',
   type: 'type',
@@ -214,7 +214,7 @@ exports.Prisma.PropertyMediaScalarFieldEnum = {
   isDeleted: 'isDeleted'
 };
 
-exports.Prisma.PropertyHouseDetailScalarFieldEnum = {
+exports.Prisma.ListingHouseScalarFieldEnum = {
   propertyId: 'propertyId',
   bedrooms: 'bedrooms',
   bathrooms: 'bathrooms',
@@ -231,7 +231,7 @@ exports.Prisma.PropertyHouseDetailScalarFieldEnum = {
   roadAccess: 'roadAccess'
 };
 
-exports.Prisma.PropertyApartmentDetailScalarFieldEnum = {
+exports.Prisma.ListingApartmentScalarFieldEnum = {
   propertyId: 'propertyId',
   bedrooms: 'bedrooms',
   bathrooms: 'bathrooms',
@@ -261,7 +261,7 @@ exports.Prisma.PropertyLandDetailScalarFieldEnum = {
   boundaryWall: 'boundaryWall'
 };
 
-exports.Prisma.PropertyCommercialDetailScalarFieldEnum = {
+exports.Prisma.ListingCommercialScalarFieldEnum = {
   propertyId: 'propertyId',
   floor: 'floor',
   washrooms: 'washrooms',
@@ -288,7 +288,7 @@ exports.Prisma.PropertyOwnerScalarFieldEnum = {
   isPrimaryOwner: 'isPrimaryOwner'
 };
 
-exports.Prisma.PropertyRepresentativeScalarFieldEnum = {
+exports.Prisma.ListingRepresentativeScalarFieldEnum = {
   id: 'id',
   propertyId: 'propertyId',
   representativeId: 'representativeId',
@@ -296,7 +296,7 @@ exports.Prisma.PropertyRepresentativeScalarFieldEnum = {
   status: 'status'
 };
 
-exports.Prisma.PropertyDocumentScalarFieldEnum = {
+exports.Prisma.ListingDocumentScalarFieldEnum = {
   id: 'id',
   propertyId: 'propertyId',
   name: 'name',
@@ -304,7 +304,7 @@ exports.Prisma.PropertyDocumentScalarFieldEnum = {
   sortOrder: 'sortOrder'
 };
 
-exports.Prisma.PropertyChangeScalarFieldEnum = {
+exports.Prisma.ListingChangeScalarFieldEnum = {
   id: 'id',
   propertyId: 'propertyId',
   accountId: 'accountId',
@@ -418,7 +418,7 @@ exports.Prisma.SavedPropertyScalarFieldEnum = {
   savedAt: 'savedAt'
 };
 
-exports.Prisma.PropertyViewScalarFieldEnum = {
+exports.Prisma.ListingsViewScalarFieldEnum = {
   id: 'id',
   accountId: 'accountId',
   propertyId: 'propertyId',
@@ -740,7 +740,7 @@ exports.Prisma.CompetitorListingScalarFieldEnum = {
 exports.Prisma.PropertyCompetitionMapScalarFieldEnum = {
   id: 'id',
   propertyId: 'propertyId',
-  competitorPropertyId: 'competitorPropertyId',
+  competitorListingId: 'competitorListingId',
   status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -749,7 +749,7 @@ exports.Prisma.PropertyCompetitionMapScalarFieldEnum = {
 exports.Prisma.CompetitorTrackingScalarFieldEnum = {
   id: 'id',
   competitorPageId: 'competitorPageId',
-  ourPropertyId: 'ourPropertyId',
+  ourListingId: 'ourListingId',
   createdAt: 'createdAt'
 };
 
@@ -859,19 +859,19 @@ exports.Prisma.ModelName = {
   Location: 'Location',
   Account: 'Account',
   Activity: 'Activity',
-  Property: 'Property',
-  PropertyLog: 'PropertyLog',
+  Listing: 'Listing',
+  ListingsLog: 'ListingsLog',
   PropertyLink: 'PropertyLink',
-  PropertyMedia: 'PropertyMedia',
-  PropertyHouseDetail: 'PropertyHouseDetail',
-  PropertyApartmentDetail: 'PropertyApartmentDetail',
+  ListingMedia: 'ListingMedia',
+  ListingHouse: 'ListingHouse',
+  ListingApartment: 'ListingApartment',
   PropertyLandDetail: 'PropertyLandDetail',
-  PropertyCommercialDetail: 'PropertyCommercialDetail',
+  ListingCommercial: 'ListingCommercial',
   PropertyPrice: 'PropertyPrice',
   PropertyOwner: 'PropertyOwner',
-  PropertyRepresentative: 'PropertyRepresentative',
-  PropertyDocument: 'PropertyDocument',
-  PropertyChange: 'PropertyChange',
+  ListingRepresentative: 'ListingRepresentative',
+  ListingDocument: 'ListingDocument',
+  ListingChange: 'ListingChange',
   Agency: 'Agency',
   AgencyMap: 'AgencyMap',
   AgencyAgentMap: 'AgencyAgentMap',
@@ -881,7 +881,7 @@ exports.Prisma.ModelName = {
   Requirement: 'Requirement',
   NaturalSearch: 'NaturalSearch',
   SavedProperty: 'SavedProperty',
-  PropertyView: 'PropertyView',
+  ListingsView: 'ListingsView',
   BaseLead: 'BaseLead',
   ClientContact: 'ClientContact',
   ClientLink: 'ClientLink',

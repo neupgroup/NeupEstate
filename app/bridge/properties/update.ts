@@ -37,7 +37,7 @@ export function registerPropertyUpdateTool(server: McpServer, actorAccountId: st
         return toolError(JSON.stringify({ error: 'Invalid property update.', details: parsed.error.flatten().fieldErrors }));
       }
 
-      const property = await prisma.property.findFirst({
+      const property = await prisma.listing.findFirst({
         where: {
           id: propertyId,
           representatives: { some: { representativeId: actorAccountId } },

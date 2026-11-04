@@ -26,7 +26,7 @@ export interface CreateLeadActivityInput {
 export async function createLeadActivity(input: CreateLeadActivityInput): Promise<string> {
     try {
         const propertyTitle = input.propertyId
-            ? await prisma.property.findUnique({
+            ? await prisma.listing.findUnique({
                 where: { id: input.propertyId },
                 select: { title: true },
             })

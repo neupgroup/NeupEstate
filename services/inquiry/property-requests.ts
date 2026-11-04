@@ -10,7 +10,7 @@ import { logger } from "@neup/logica/logger";
 export async function createPropertyRequest(data: CreatePropertyRequestFormValues): Promise<string> {
 
     try {
-        const request = await prisma.propertyRequest.create({
+        const request = await prisma.listingRequest.create({
             data: {
                 name: data.name,
                 email: data.email,
@@ -34,7 +34,7 @@ export async function createPropertyRequest(data: CreatePropertyRequestFormValue
 export async function getPropertyRequests({ limit = 20, offset = 0 }: { limit?: number; offset?: number } = {}): Promise<PropertyRequest[]> {
 
     try {
-        const requests = await prisma.propertyRequest.findMany({
+        const requests = await prisma.listingRequest.findMany({
             orderBy: { createdAt: 'desc' },
             take: limit,
             skip: offset,

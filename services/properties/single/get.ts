@@ -20,7 +20,7 @@ export async function getProperty(input: GetPropertyInput): Promise<(Partial<Pro
   try {
     const loggerResponse = await logger().type('property.get.called').data({ propertyId: propertyId ?? null, propertyCode: propertyCode ?? null, fields: input.fields ?? null }).log();
     if (!loggerResponse.ok) console.error('[property.get] Logger request failed.', loggerResponse.status, loggerResponse.body);
-    const record = await prisma.property.findFirst({ where: propertyId ? { id: propertyId } : { customId: propertyCode }, include: PROPERTY_INCLUDE });
+    const record = await prisma.listing.findFirst({ where: propertyId ? { id: propertyId } : { customId: propertyCode }, include: PROPERTY_INCLUDE });
     if (!record || !record.isApproved) return null;
     const [property] = await hydratePropertyAccountLabels([mapRecord(record)]);
     const selectedProperty = pickPropertyFields(property, resolveBridgePropertyFields(input.fields));

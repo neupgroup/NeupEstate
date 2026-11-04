@@ -23,7 +23,7 @@ import { parsePropertySlugId } from './slug';
  */
 export async function getPropertyById(id: string, opts: { includeInactive?: boolean } = {}): Promise<Property | null> {
   try {
-    const record = await prisma.property.findUnique({ where: { id }, include: PROPERTY_INCLUDE });
+    const record = await prisma.listing.findUnique({ where: { id }, include: PROPERTY_INCLUDE });
     if (!record) return null;
     const [p] = await hydratePropertyAccountLabels([mapRecord(record)]);
     return opts.includeInactive ? p : (p.isApproved ? p : null);
@@ -41,8 +41,8 @@ export async function getPropertyBySlug(slug: string, opts: { includeInactive?: 
   try {
     const parsed = parsePropertySlugId(slug);
     const record = parsed
-      ? await prisma.property.findUnique({ where: { id: parsed.id }, include: PROPERTY_INCLUDE })
-      : await prisma.property.findFirst({ where: { slug }, include: PROPERTY_INCLUDE });
+      ? await prisma.listing.findUnique({ where: { id: parsed.id }, include: PROPERTY_INCLUDE })
+      : await prisma.listing.findFirst({ where: { slug }, include: PROPERTY_INCLUDE });
     if (record) {
       const [p] = await hydratePropertyAccountLabels([mapRecord(record)]);
       return opts.includeInactive ? p : (p.isApproved ? p : null);
@@ -73,7 +73,7 @@ export async function getPropertyReviewRequests(propertyId: string): Promise<Arr
   } | null;
 }>> {
   try {
-    const rows = await prisma.propertyChange.findMany({
+    const rows = await prisma.listingChange.findMany({
       where: {
         propertyId,
         isApproved: null,
@@ -124,7 +124,7 @@ export async function createPropertyLog(input: {
   approvedOn?: Date | null;
 }): Promise<void> {
   try {
-    await prisma.propertyLog.create({
+    await prisma.listingLog.create({
       data: {
         propertyId: input.propertyId,
         requestedBy: input.requestedBy,
@@ -157,7 +157,7 @@ export async function getPropertyLogs(propertyId: string): Promise<Array<{
   approvedByAccount: { id: string; displayName: string | null; neupId: string | null } | null;
 }>> {
   try {
-    const logs = await prisma.propertyLog.findMany({
+    const logs = await prisma.listingLog.findMany({
       where: { propertyId },
       orderBy: [{ requestedOn: 'desc' }, { id: 'desc' }],
     });

@@ -19,7 +19,7 @@ function sitemapResponse(urls: string[]): Response {
 
 // PropertySitemap for this route.
 async function propertySitemap(page: number): Promise<Response> {
-  const rows = await prisma.property.findMany({
+  const rows = await prisma.listing.findMany({
     where: { isApproved: true, isDeleted: false },
     select: { id: true, slug: true },
     orderBy: { id: 'asc' },

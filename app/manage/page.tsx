@@ -14,8 +14,8 @@ async function getStats() {
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
     const [listedThisWeek, pendingCount] = await Promise.all([
-        prisma.property.count({ where: { createdAt: { gte: sevenDaysAgo } } }),
-        prisma.property.count({ where: { isApproved: false } }),
+        prisma.listing.count({ where: { createdAt: { gte: sevenDaysAgo } } }),
+        prisma.listing.count({ where: { isApproved: false } }),
     ]);
 
     // Placeholders for future data points that are not yet tracked

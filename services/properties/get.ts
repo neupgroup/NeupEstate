@@ -13,7 +13,7 @@ import type { PropertyDraftSummary } from '@/services/properties/shared';
  */
 export async function getPropertyDrafts(accountId: string): Promise<PropertyDraftSummary[]> {
   try {
-    const drafts = await prisma.propertyChange.findMany({
+    const drafts = await prisma.listingChange.findMany({
       where: { accountId, isApproved: null, status: { in: ['creation_draft', 'creation_pending', 'changing', 'deleting', 'creating'] } },
       orderBy: { modifiedOn: 'desc' },
       include: { property: { select: { id: true, title: true, locationText: true, type: true } } },
