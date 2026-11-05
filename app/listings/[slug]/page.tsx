@@ -141,36 +141,6 @@ function hasEarningPotentialData(earnings: Listing['earnings']): boolean {
   );
 }
 
-function formatPricingBasisSuffix({
-  basis,
-  frequency,
-  unit,
-}: {
-  basis?: string | null;
-  frequency?: string | null;
-  unit?: string | null;
-}) {
-  const normalizedBasis = basis?.trim()?.toLowerCase() || '';
-  const normalizedFrequency = frequency?.trim();
-  const normalizedUnit = unit?.trim();
-  const hasPerUnitBasis = normalizedBasis.includes('unit') || normalizedBasis.includes('per-aana') || normalizedBasis.includes('per-ropani') || normalizedBasis.includes('per-sqft');
-  const hasFlatBasis = normalizedBasis.includes('flat') || normalizedBasis === 'flat-price';
-
-  if (normalizedFrequency && normalizedUnit) {
-    return `per ${normalizedUnit} per ${normalizedFrequency}`;
-  }
-
-  if (normalizedUnit && hasPerUnitBasis) {
-    return `per ${normalizedUnit}`;
-  }
-
-  if (normalizedFrequency && (!hasFlatBasis || normalizedBasis.includes('rent'))) {
-    return `per ${normalizedFrequency}`;
-  }
-
-  return null;
-}
-
 type Props = {
   params: Promise<{ slug: string }>
 }
@@ -327,7 +297,7 @@ function generateSchema(property: Listing) {
             '@type': 'Offer',
             url: propertyUrl,
             price: property.price,
-            priceCurrency: property.pricing?.currency || 'USD',
+            priceCurrency: property.priceCurrency || 'NPR',
             availability: 'https://schema.org/InStock', // Assuming it's available if listed
             seller: {
                 '@type': 'Organization',
@@ -447,10 +417,15 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
     { label: 'Car Parking', value: property.carParkingSpots, singular: 'Car Parking', icon: <Car className="h-4 w-4 text-primary" /> },
     { label: 'Bike Parking', value: property.bikeParkingSpots, singular: 'Bike Parking', icon: <Bike className="h-4 w-4 text-primary" /> },
   ].filter((item) => hasPositiveValue(item.value));
-  const primaryPrice = hasPositiveValue(property.pricing?.listed) ? property.pricing.listed : property.price;
-  const pricingBasis = property.pricing?.basis;
-  const pricingFrequency = pricingBasis ? property.pricing?.basisFrequencies?.[pricingBasis] ?? null : null;
-  const pricingUnit = pricingBasis ? property.pricing?.basisUnits?.[pricingBasis] ?? null : null;
+  const primaryPrice = property.price;
+  const pricingBasisLabels: Record<string, string> = {
+    total: 'Total price',
+    perUnit: 'Price per square meter',
+    perMonth: 'Price per month',
+    perYear: 'Price per year',
+    perUnitPerMonth: 'Price per square meter per month',
+    perUnitPerYear: 'Price per square meter per year',
+  };
   const mapLocation = getLocation(property);
   const showExactMapLocation = mapLocation?.mode === 'exact';
 
@@ -543,13 +518,13 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
               )}
             </div>
             
-            {property.pricing && (
+            {(property.pricing || property.priceAmount != null) && (
               <DetailCard title="Pricing Details" icon={<Tag className="h-5 w-5"/>}>
-                  <DetailItem label="Listed Price" value={hiddenPriceLabel || (property.pricing.listed ? formatPrice(property.pricing.listed, property.pricing.currency) : 'N/A')} />
-                  <DetailItem label="Minimum Price" value={hiddenPriceLabel || (property.pricing.minimum ? formatPrice(property.pricing.minimum, property.pricing.currency) : 'N/A')} />
-                  <DetailItem label="Maximum Price" value={hiddenPriceLabel || (property.pricing.maximum ? formatPrice(property.pricing.maximum, property.pricing.currency) : 'N/A')} />
-                  <DetailItem label="Negotiable" value={property.pricing.negotiable ? 'Yes' : 'No'} />
-                  <DetailItem label="Basis" value={formatOptionalText(property.pricing.basis)} />
+                  <DetailItem label="Listed Price" value={hiddenPriceLabel || (hasPositiveValue(property.priceAmount) ? formatPrice(property.priceAmount, property.priceCurrency || 'NPR') : 'N/A')} />
+                  <DetailItem label="Minimum Price" value={hiddenPriceLabel || (property.pricing?.minimum ? formatPrice(property.pricing.minimum, property.priceCurrency || 'NPR') : 'N/A')} />
+                  <DetailItem label="Maximum Price" value={hiddenPriceLabel || (property.pricing?.maximum ? formatPrice(property.pricing.maximum, property.priceCurrency || 'NPR') : 'N/A')} />
+                  <DetailItem label="Negotiable" value={property.pricing?.negotiable ? 'Yes' : 'No'} />
+                  <DetailItem label="Basis" value={property.priceBasis ? pricingBasisLabels[property.priceBasis] : 'N/A'} />
                   <DetailItem label="Options" value={safePricingOptions} />
               </DetailCard>
             )}
@@ -712,7 +687,7 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
               </div>
             ) : null}
 
-            {hasPositiveValue(primaryPrice) && <EmiCalculatorChart price={primaryPrice} currency={property.pricing?.currency || 'USD'} />}
+            {hasPositiveValue(primaryPrice) && <EmiCalculatorChart price={primaryPrice} currency={property.priceCurrency || 'NPR'} />}
           </div>
 
           <div className="property-detail-sidebar hidden lg:block">

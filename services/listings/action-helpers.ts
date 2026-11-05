@@ -1,4 +1,4 @@
-import type { CreateListingFormValues, CreateListingInput, Listing, StructuredLocation } from '@/types';
+import type { CreateListingFormValues, CreateListingInput, Listing, ListingPriceBasis, StructuredLocation } from '@/types';
 import { getIdentity } from '@/services/neupid/get-identity';
 
 // Returns the verified accountId on success, or throws with a structured error
@@ -40,14 +40,113 @@ export const formatLocationString = (structuredLocation?: StructuredLocation): s
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
 export function firstPositivePrice(pricing?: CreateListingFormValues['pricing']): number {
-  const direct = Number(pricing?.listed ?? 0);
-  if (direct > 0) return direct;
+  return getListingPriceFields(pricing).priceAmount ?? 0;
+}
 
-  const prices = Object.values(pricing?.basisPrices ?? {})
-    .map((value) => Number(value ?? 0))
-    .filter((value) => value > 0);
+const PRICE_AREA_SQUARE_METERS: Record<string, number> = {
+  sqm: 1, 'sq m': 1, 'square meter': 1, 'square meters': 1, 'm²': 1,
+  sqft: 0.09290304, 'sq ft': 0.09290304, 'square feet': 0.09290304,
+  sqyd: 0.83612736, 'sq yd': 0.83612736, 'square yard': 0.83612736,
+  aana: 31.797, ana: 31.797, ropani: 508.752, paisa: 7.94925, daam: 1.9873125,
+  bigha: 2508.38208, kattha: 313.54776, dhur: 15.677388, acre: 4046.8564224, hectare: 10000,
+};
 
-  return prices[0] ?? 0;
+type ListingPriceFields = { priceBasis: ListingPriceBasis | null; priceCurrency: string | null; priceAmount: number | null };
+
+// Normalize the selected form price into the canonical listing basis and square-meter amount.
+export function getListingPriceFields(pricing?: CreateListingFormValues['pricing'], fallbackPrice?: number): ListingPriceFields {
+  const populatedBases = Object.entries(pricing?.basisPrices ?? {})
+    .filter(([, value]) => Number(value ?? 0) > 0);
+  const preferredNonRental = populatedBases.find(([basis]) => !/rent|lease/i.test(basis));
+  const selectedBasis = populatedBases.length > 1 && preferredNonRental
+    ? preferredNonRental[0] as NonNullable<CreateListingFormValues['pricing']>['basis']
+    : pricing?.basis ?? populatedBases[0]?.[0] as NonNullable<CreateListingFormValues['pricing']>['basis'] | undefined;
+  const rawAmount = Number((selectedBasis ? pricing?.basisPrices?.[selectedBasis] : undefined) ?? pricing?.listed ?? fallbackPrice ?? 0);
+  if (!Number.isFinite(rawAmount) || rawAmount <= 0) {
+    return { priceBasis: null, priceCurrency: pricing?.currency ?? null, priceAmount: null };
+  }
+
+  const normalizedBasis = (selectedBasis ?? '').toLowerCase();
+  const selectedUnit = selectedBasis ? pricing?.basisUnits?.[selectedBasis] : undefined;
+  const normalizedUnit = selectedUnit?.trim().toLowerCase().replaceAll('_', ' ').replaceAll('-', ' ');
+  const areaInSquareMeters = normalizedUnit ? PRICE_AREA_SQUARE_METERS[normalizedUnit] : undefined;
+  const hasUnitBasis = normalizedBasis.includes('unit') || normalizedBasis.includes('per-aana') || normalizedBasis.includes('per-ropani') || normalizedBasis.includes('per-sqft');
+  const frequency = selectedBasis ? pricing?.basisFrequencies?.[selectedBasis]?.trim().toLowerCase() : undefined;
+  const isPerUnit = hasUnitBasis || Boolean(areaInSquareMeters);
+  const isMonthly = frequency
+    ? ['monthly', 'quarterly', 'half-yearly', 'half yearly'].includes(frequency)
+    : normalizedBasis.includes('per-month') || normalizedBasis.includes('monthly') || normalizedBasis.includes('rent');
+  const isYearly = frequency
+    ? ['yearly', 'annual'].includes(frequency)
+    : normalizedBasis.includes('per-annum') || normalizedBasis.includes('annual') || normalizedBasis.includes('yearly');
+
+  let priceBasis: ListingPriceBasis = 'total';
+  if (isPerUnit && isMonthly) priceBasis = 'perUnitPerMonth';
+  else if (isPerUnit && isYearly) priceBasis = 'perUnitPerYear';
+  else if (isPerUnit) priceBasis = 'perUnit';
+  else if (isMonthly) priceBasis = 'perMonth';
+  else if (isYearly) priceBasis = 'perYear';
+
+  let priceAmount = isPerUnit && areaInSquareMeters ? rawAmount / areaInSquareMeters : rawAmount;
+  if (frequency === 'quarterly') priceAmount /= 3;
+  if (frequency === 'half-yearly' || frequency === 'half yearly') priceAmount /= 6;
+  return { priceBasis, priceCurrency: pricing?.currency ?? 'NPR', priceAmount };
+}
+
+// Convert canonical listing prices back to the selected form unit for editing.
+export function getListingFormPricing(property: Listing): CreateListingFormValues['pricing'] {
+  const pricing = { ...(property.pricing ?? {}) } as NonNullable<CreateListingFormValues['pricing']>;
+  const canonicalAmount = Number(property.priceAmount ?? property.price ?? 0);
+  pricing.currency = (property.priceCurrency ?? pricing.currency ?? 'NPR') as NonNullable<typeof pricing.currency>;
+
+  if (canonicalAmount > 0 && property.priceBasis) {
+    const isLand = property.category === 'Land';
+    const isApartment = ['Apartment', 'Penthouse', 'Flat'].includes(property.category);
+    const isHouse = ['House', 'Bungalow', 'Villa', 'Multiplex'].includes(property.category);
+    const isRental = property.purpose === 'Rent' || property.purpose === 'Lease';
+    const isPerUnit = property.priceBasis === 'perUnit' || property.priceBasis === 'perUnitPerMonth' || property.priceBasis === 'perUnitPerYear';
+    const isMonthly = property.priceBasis === 'perMonth' || property.priceBasis === 'perUnitPerMonth';
+    const isYearly = property.priceBasis === 'perYear' || property.priceBasis === 'perUnitPerYear';
+    const defaultBasis = isLand
+      ? isPerUnit ? (isRental ? 'land-rent-unit' : 'land-sale-unit') : isRental ? 'land-rent-flat' : 'land-sale-flat'
+      : isApartment
+        ? isRental ? 'apartment-rent' : 'apartment-sale-flat'
+        : isHouse
+          ? isRental ? 'house-rent' : 'house-sale-flat'
+          : isMonthly ? 'per-month' : isYearly ? 'per-annum' : 'flat-price';
+    const originalBasis = pricing.basis;
+    const originalUnit = originalBasis ? pricing.basisUnits?.[originalBasis] : undefined;
+    const basis = defaultBasis;
+    pricing.basis = basis as NonNullable<typeof pricing.basis>;
+    if (isPerUnit) {
+      pricing.basisUnits = { ...(pricing.basisUnits ?? {}), [basis]: originalUnit ?? pricing.basisUnits?.[basis] ?? 'Sqm' };
+    }
+    if (isMonthly) {
+      pricing.basisFrequencies = { ...(pricing.basisFrequencies ?? {}), [basis]: 'Monthly' };
+    }
+    if (isYearly) {
+      pricing.basisFrequencies = { ...(pricing.basisFrequencies ?? {}), [basis]: 'Yearly' };
+    }
+    if (basis) {
+      const unit = pricing.basisUnits?.[basis]?.trim().toLowerCase().replaceAll('_', ' ').replaceAll('-', ' ');
+      const areaInSquareMeters = unit ? PRICE_AREA_SQUARE_METERS[unit] : undefined;
+      const formAmount = property.priceBasis === 'perUnit' || property.priceBasis === 'perUnitPerMonth' || property.priceBasis === 'perUnitPerYear'
+        ? canonicalAmount * (areaInSquareMeters ?? 1)
+        : canonicalAmount;
+      pricing.basisPrices = { ...(pricing.basisPrices ?? {}), [basis]: formAmount };
+    } else {
+      pricing.listed = canonicalAmount;
+    }
+  }
+
+  return pricing;
+}
+
+// Keep display settings and negotiation metadata in JSON while storing primary prices in listing columns.
+export function cleanPricingMetadata(pricing: unknown): Record<string, unknown> | null {
+  if (!isPlainObject(pricing)) return null;
+  const { listed: _listed, basisPrices: _basisPrices, ...metadata } = pricing;
+  return metadata;
 }
 
 
@@ -288,10 +387,10 @@ export function mapListingToCreateFormValues(property: Listing): Partial<CreateL
         : undefined,
     })),
     structuredLocation: property.structuredLocation || {},
-    pricing: property.pricing ? {
-      ...property.pricing,
-      options: Array.isArray(property.pricing.options) ? property.pricing.options.join(', ') : '',
-    } : { listed: property.price, currency: 'USD', priceDisplayMode: 'show-price', negotiable: false },
+    pricing: {
+      ...getListingFormPricing(property),
+      options: Array.isArray(property.pricing?.options) ? property.pricing.options.join(', ') : '',
+    },
     roadAccessDetails: property.roadAccessDetails || undefined,
     distancing: property.distancing || undefined,
     earnings: property.earnings || undefined,

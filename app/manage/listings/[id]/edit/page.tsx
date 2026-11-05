@@ -14,6 +14,7 @@ import { getListingById } from "@/services/listings/view";
 import { getListingSlugId } from '@/services/listings/slug';
 import { listAccounts } from "@/services/accounts/list";
 import { useAgencyCustomization } from '@/inapp/agency-customization/use-agency-customization';
+import { getListingFormPricing } from '@/services/listings/action-helpers';
 
 import { Form } from '@/components/ui/form';
 import { Button } from '@neup/components/ui/button';
@@ -634,10 +635,10 @@ export default function EditListingPage() {
                         : undefined,
                 })),
                 structuredLocation: propertyData.structuredLocation || {},
-                pricing: propertyData.pricing ? {
-                    ...propertyData.pricing,
-                    options: Array.isArray(propertyData.pricing.options) ? propertyData.pricing.options.join(', ') : '',
-                } : { listed: propertyData.price },
+                pricing: {
+                    ...getListingFormPricing(propertyData),
+                    options: Array.isArray(propertyData.pricing?.options) ? propertyData.pricing.options.join(', ') : '',
+                },
                 roadAccessDetails: propertyData.roadAccessDetails || {},
                 distancing: propertyData.distancing || {},
                 earnings: propertyData.earnings || {},

@@ -34,8 +34,8 @@ export function getHiddenPriceLabel(property: Pick<Listing, 'pricing'>): string 
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function getPrimaryCurrency(property: Pick<Listing, 'pricing'>): string {
-  return property.pricing?.currency || 'USD';
+export function getPrimaryCurrency(property: Pick<Listing, 'priceCurrency' | 'pricing'>): string {
+  return property.priceCurrency || property.pricing?.currency || 'NPR';
 }
 
 
@@ -45,11 +45,7 @@ export function getPrimaryCurrency(property: Pick<Listing, 'pricing'>): string {
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function getPrimaryPrice(property: Pick<Listing, 'price' | 'pricing'>): number {
-  if (hasPositivePrice(property.pricing?.listed)) {
-    return property.pricing.listed;
-  }
-
+export function getPrimaryPrice(property: Pick<Listing, 'price'>): number {
   return property.price || 0;
 }
 
@@ -97,12 +93,12 @@ export function formatPricingBasisSuffix({
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function getPrimaryPricingSuffix(property: Pick<Listing, 'pricing'>): string | null {
-  const basis = property.pricing?.basis;
-
-  return formatPricingBasisSuffix({
-    basis,
-    frequency: basis ? property.pricing?.basisFrequencies?.[basis] ?? null : null,
-    unit: basis ? property.pricing?.basisUnits?.[basis] ?? null : null,
-  });
+export function getPrimaryPricingSuffix(property: Pick<Listing, 'priceBasis' | 'pricing'>): string | null {
+  const basis = property.priceBasis ?? property.pricing?.basis;
+  if (basis === 'perUnit') return 'per m²';
+  if (basis === 'perMonth') return 'per month';
+  if (basis === 'perYear') return 'per year';
+  if (basis === 'perUnitPerMonth') return 'per m² per month';
+  if (basis === 'perUnitPerYear') return 'per m² per year';
+  return formatPricingBasisSuffix({ basis });
 }

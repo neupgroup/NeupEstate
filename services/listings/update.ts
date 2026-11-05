@@ -13,6 +13,7 @@ import { logger } from "@neup/logica/logger";
 import type { CreateListingInput, ExtractedListingData, UpdateListingInput } from '@/types';
 import { areaValueToSqm } from '@/types';
 import { mapPurposeToEnum, mapStatusToEnum, mapTypeToEnum } from '@/inapp/database/adapters';
+import { cleanPricingMetadata, getListingPriceFields } from '@/services/listings/action-helpers';
 import slugify from 'slugify';
 import { getListingById } from '../listings/view';
 import { PROPERTY_TYPE, type ListingTypeValue } from './shared';
@@ -86,6 +87,7 @@ function buildListingDetails(d: Partial<CreateListingInput> & Record<string, any
  */
 function buildCoreData(d: Partial<CreateListingInput> & Record<string, any>) {
   const geo = (d.latitude != null && d.longitude != null) ? `${d.latitude},${d.longitude}` : '';
+  const listingPrice = getListingPriceFields(d.pricing, d.price);
   const truncate = (s: string | undefined | null, max: number) =>
     s ? s.substring(0, max) : '';
   return {
@@ -96,9 +98,12 @@ function buildCoreData(d: Partial<CreateListingInput> & Record<string, any>) {
     type:              mapTypeToEnum(d.category),
     purpose:           mapPurposeToEnum(d.purpose),
     status:            mapStatusToEnum(d.status),
-    currency:          truncate(d.pricing?.currency ?? 'NPR', 10),
-    displayPrice:      d.price ?? 0,
-    displayPriceUnit:  truncate(d.pricing?.basis ?? '', 24),
+    currency:          truncate(listingPrice.priceCurrency ?? d.pricing?.currency ?? 'NPR', 10),
+    displayPrice:      listingPrice.priceAmount ?? d.price ?? 0,
+    displayPriceUnit:  truncate(listingPrice.priceBasis ?? '', 24),
+    priceBasis:        listingPrice.priceBasis,
+    priceCurrency:    listingPrice.priceCurrency,
+    priceAmount:      listingPrice.priceAmount,
     locationText:      truncate(d.location ?? '', 255),
     geoLocation:       truncate(geo, 63),
     structuredLocation: d.structuredLocation ? JSON.stringify(d.structuredLocation) : '',
@@ -106,7 +111,7 @@ function buildCoreData(d: Partial<CreateListingInput> & Record<string, any>) {
     isApproved:        d.isApproved ?? false,
     amenities:         Array.isArray(d.amenities) ? d.amenities : [],
     metaTags:          Array.isArray(d.metaTags) ? d.metaTags : [],
-    pricing:           d.pricing ?? null,
+    pricing:           cleanPricingMetadata(d.pricing),
     details:           buildListingDetails(d),
     roadAccessDetails: d.roadAccessDetails ?? null,
     distancing:        d.distancing ?? null,

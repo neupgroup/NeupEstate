@@ -25,6 +25,15 @@ enum PropertyPurpose {
   LEASE
 }
 
+enum ListingPriceBasis {
+  total
+  perUnit
+  perMonth
+  perYear
+  perUnitPerMonth
+  perUnitPerYear
+}
+
 enum PropertyStatus {
   AWAITING_CREATION
   AWAITING_DELETION
@@ -118,19 +127,22 @@ model Activity {
 // ============================================================================
 
 model Listing {
-  id                 String          @id @default(cuid())
+  id                 String             @id @default(cuid())
   slug               String
-  title              String          @db.VarChar(255)
+  title              String             @db.VarChar(255)
   description        String
-  coverImage         String          @db.VarChar(255)
+  coverImage         String             @db.VarChar(255)
   type               PropertyType
   purpose            PropertyPurpose
-  status             PropertyStatus  @default(PENDING)
-  currency           String          @db.VarChar(10)
-  displayPrice       Decimal         @db.Decimal(18, 2)
-  displayPriceUnit   String          @db.VarChar(24)
-  locationText       String          @db.VarChar(255)
-  geoLocation        String          @db.VarChar(63)
+  status             PropertyStatus     @default(PENDING)
+  currency           String             @db.VarChar(10)
+  displayPrice       Decimal            @db.Decimal(18, 2)
+  displayPriceUnit   String             @db.VarChar(24)
+  priceBasis         ListingPriceBasis?
+  priceCurrency      String?            @db.VarChar(3)
+  priceAmount        Decimal?           @db.Decimal(22, 10)
+  locationText       String             @db.VarChar(255)
+  geoLocation        String             @db.VarChar(63)
   structuredLocation String
   details            Json?
   pricing            Json?
@@ -140,13 +152,13 @@ model Listing {
   landDetails        Json?
   plots              Json?
   apartmentDetails   Json?
-  metaTags           String[]        @default([])
-  amenities          String[]        @default([])
-  createdAt          DateTime        @default(now())
-  updatedAt          DateTime        @updatedAt
-  isFeatured         Boolean         @default(false)
-  isApproved         Boolean         @default(false)
-  isDeleted          Boolean         @default(false)
+  metaTags           String[]           @default([])
+  amenities          String[]           @default([])
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  isFeatured         Boolean            @default(false)
+  isApproved         Boolean            @default(false)
+  isDeleted          Boolean            @default(false)
   customId           String?
 
   media            ListingMedia[]

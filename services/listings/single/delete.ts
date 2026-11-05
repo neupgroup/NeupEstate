@@ -22,7 +22,6 @@ export async function deleteListing(input: DeleteListingInput, context: DeleteLi
   await prisma.$transaction(async (transaction) => {
     await transaction.listingMedia.deleteMany({ where: { propertyId: input.propertyId } });
     await transaction.propertyOwner.deleteMany({ where: { propertyId: input.propertyId } });
-    await transaction.propertyPrice.deleteMany({ where: { propertyId: input.propertyId } });
     await transaction.listingChange.deleteMany({ where: { propertyId: input.propertyId } });
     await transaction.listing.delete({ where: { id: input.propertyId } });
   });

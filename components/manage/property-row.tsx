@@ -85,6 +85,11 @@ function formatCurrencyPrefix(currency?: string) {
 
 function formatBasisLabel(basis?: string) {
     switch (basis) {
+        case 'perUnit': return 'per m²';
+        case 'perUnitPerMonth': return 'per m² per Month';
+        case 'perUnitPerYear': return 'per m² per Year';
+        case 'perMonth': return 'per Month';
+        case 'perYear': return 'per Year';
         case 'house-rent-monthly':
         case 'apartment-rent-monthly':
         case 'per-month':
@@ -113,11 +118,11 @@ function getListingPriceLine(property: Listing) {
     const hiddenPriceLabel = getHiddenPriceLabel(property);
     if (hiddenPriceLabel) return null;
 
-    const currency = formatCurrencyPrefix(property.pricing?.currency);
+    const currency = formatCurrencyPrefix(property.priceCurrency);
     const amount = new Intl.NumberFormat('en-US', {
         maximumFractionDigits: 0,
     }).format(property.price || 0);
-    const basis = formatBasisLabel(property.pricing?.basis);
+    const basis = formatBasisLabel(property.priceBasis);
 
     return `for ${currency} ${amount}${basis ? ` ${basis}` : ''}`;
 }

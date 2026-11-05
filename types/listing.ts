@@ -120,6 +120,8 @@ function stripHtmlTags(value: string) {
 
 // Detailed Schemas (Location, Pricing, etc.)
 export const CurrencySchema = z.enum(['NPR', 'USD', 'INR']);
+export const ListingPriceBasisSchema = z.enum(['total', 'perUnit', 'perMonth', 'perYear', 'perUnitPerMonth', 'perUnitPerYear']);
+export type ListingPriceBasis = z.infer<typeof ListingPriceBasisSchema>;
 export const DistanceUnitSchema = z.enum(['km', 'miles', 'meters', 'feet', 'yards']);
 export const RoadTypeSchema = z.enum(['Blacktop', 'Gravel', 'Dirt']);
 export const RoadConditionSchema = z.enum(['Good', 'Fair', 'Poor']);
@@ -291,6 +293,9 @@ export interface Listing {
     title: string;
     description: string;
     price: number;
+    priceBasis?: ListingPriceBasis | null;
+    priceCurrency?: string | null;
+    priceAmount?: number | null;
     location: string;
     bedrooms: number;
     bathrooms: number;

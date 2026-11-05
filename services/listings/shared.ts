@@ -91,7 +91,6 @@ export const PROPERTY_INCLUDE = {
   apartmentDetail: true,
   landDetail:      true,
   commercialDetail: true,
-  prices:          true,
   owners:          {
     include: {
       ownerClient: {
@@ -121,6 +120,9 @@ export const BRIDGE_PROPERTY_FIELDS = [
   'title',
   'description',
   'price',
+  'priceBasis',
+  'priceCurrency',
+  'priceAmount',
   'location',
   'bedrooms',
   'bathrooms',
@@ -167,6 +169,13 @@ export const DEFAULT_BRIDGE_PROPERTY_FIELDS = BRIDGE_PROPERTY_FIELDS;
 
 export const BRIDGE_PROPERTY_DEFAULT_LIMIT = 10;
 export const BRIDGE_PROPERTY_MAX_LIMIT = 15;
+
+// Retain pricing display and negotiation settings while removing duplicated primary price values.
+function getListingPricingMetadata(value: unknown): Record<string, unknown> | null {
+  if (!isRecord(value)) return null;
+  const { listed: _listed, basisPrices: _basisPrices, ...metadata } = value;
+  return metadata;
+}
 
 
 
@@ -437,8 +446,14 @@ export function mapRecord(record: any): Listing {
   const mediaImages: string[] = (record.media ?? []).map((m: any) => m.url).filter(Boolean);
   const images = mediaImages;
 
-  const firstPrice = record.prices?.[0];
-  const price = firstPrice ? Number(firstPrice.price) : Number(record.displayPrice ?? 0);
+  const priceAmount = record.priceAmount == null ? null : Number(record.priceAmount);
+  const priceCurrency = record.priceCurrency ?? null;
+  const priceBasis = record.priceBasis ?? null;
+  const price = priceAmount ?? 0;
+  const pricingMetadata = getListingPricingMetadata(record.pricing);
+  const pricing = pricingMetadata
+    ? { ...pricingMetadata, currency: priceCurrency ?? 'NPR', listed: priceAmount ?? undefined }
+    : undefined;
 
   const { latitude, longitude } = parseGeoLocation(record.geoLocation);
   const representatives = (record.representatives ?? [])
@@ -500,6 +515,9 @@ export function mapRecord(record: any): Listing {
     title:            record.title || 'Untitled Property',
     description:      record.description || '',
     price,
+    priceBasis,
+    priceCurrency,
+    priceAmount,
     location:         record.locationText || 'Nepal',
     bedrooms,
     bathrooms,
@@ -536,7 +554,7 @@ export function mapRecord(record: any): Listing {
     plots:            record.plots || undefined,
     apartmentDetails: record.apartmentDetails || undefined,
     structuredLocation: parseStructuredLocation(record.structuredLocation),
-    pricing:          record.pricing || undefined,
+    pricing,
     details:          record.details || undefined,
     roadAccessDetails: record.roadAccessDetails || undefined,
     distancing:       record.distancing || undefined,

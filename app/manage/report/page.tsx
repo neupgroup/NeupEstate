@@ -129,7 +129,7 @@ async function getAgencyReportData(agencyAccountId: string) {
       status: true,
       isApproved: true,
       createdAt: true,
-      displayPrice: true,
+      priceAmount: true,
       type: true,
       purpose: true,
     },
@@ -207,7 +207,7 @@ async function getAgencyReportData(agencyAccountId: string) {
   const approvedListings = listings.filter((property) => property.isApproved).length;
   const pendingListings = listings.filter((property) => !property.isApproved).length;
   const totalListingValue = listings.reduce(
-    (sum, property) => sum + Number(property.displayPrice || 0),
+    (sum, property) => sum + Number(property.priceAmount || 0),
     0,
   );
   const inquiries30 = inquiries.filter((inquiry) => inquiry.createdAt >= thirtyDaysAgo).length;

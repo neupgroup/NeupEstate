@@ -165,6 +165,9 @@ exports.Prisma.ListingScalarFieldEnum = {
   currency: 'currency',
   displayPrice: 'displayPrice',
   displayPriceUnit: 'displayPriceUnit',
+  priceBasis: 'priceBasis',
+  priceCurrency: 'priceCurrency',
+  priceAmount: 'priceAmount',
   locationText: 'locationText',
   geoLocation: 'geoLocation',
   structuredLocation: 'structuredLocation',
@@ -826,6 +829,15 @@ exports.PropertyStatus = exports.$Enums.PropertyStatus = {
   SOLD: 'SOLD',
   RENTED: 'RENTED',
   ARCHIVED: 'ARCHIVED'
+};
+
+exports.ListingPriceBasis = exports.$Enums.ListingPriceBasis = {
+  total: 'total',
+  perUnit: 'perUnit',
+  perMonth: 'perMonth',
+  perYear: 'perYear',
+  perUnitPerMonth: 'perUnitPerMonth',
+  perUnitPerYear: 'perUnitPerYear'
 };
 
 exports.PropertyRepresentativeRole = exports.$Enums.PropertyRepresentativeRole = {

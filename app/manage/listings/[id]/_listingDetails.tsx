@@ -365,6 +365,12 @@ function formatPriceAmount(value: number, currency: string = "NPR"): string {
 
 function formatPricingBasisLabel(basis: string): string {
     const labels: Record<string, string> = {
+        total: "Listed price",
+        perUnit: "Price per square meter",
+        perMonth: "Monthly price",
+        perYear: "Annual price",
+        perUnitPerMonth: "Monthly price per square meter",
+        perUnitPerYear: "Annual price per square meter",
         "house-rent": "House rent",
         "land-sale-unit": "Land sale per unit",
         "land-rent-unit": "Land rent per unit",
@@ -407,6 +413,14 @@ function formatPricingBasisSuffix({
     frequency?: string | null;
     unit?: string | null;
 }) {
+    const canonicalSuffixes: Record<string, string> = {
+        perUnit: "per m²",
+        perMonth: "per month",
+        perYear: "per year",
+        perUnitPerMonth: "per m² per month",
+        perUnitPerYear: "per m² per year",
+    };
+    if (canonicalSuffixes[basis]) return canonicalSuffixes[basis];
     const normalizedFrequency = frequency?.trim();
     const normalizedUnit = unit?.trim();
     const hasPerUnitBasis = basis.includes("unit") || basis.includes("per-aana") || basis.includes("per-ropani") || basis.includes("per-sqft");
@@ -435,6 +449,9 @@ function formatHiddenPriceMode(mode?: string | null) {
 
 function getPricingCards(property: {
     price?: number | null;
+    priceBasis?: string | null;
+    priceCurrency?: string | null;
+    priceAmount?: number | null;
     pricing?: {
         currency?: string | null;
         priceDisplayMode?: string | null;
@@ -449,7 +466,30 @@ function getPricingCards(property: {
     } | null;
 }) {
     const pricing = property.pricing;
-    const currency = pricing?.currency || "NPR";
+    const currency = property.priceCurrency || pricing?.currency || "NPR";
+    const canonicalAmount = Number(property.priceAmount ?? 0);
+    if (property.priceBasis && canonicalAmount > 0) {
+        const labels: Record<string, string> = {
+            total: "Listed price",
+            perUnit: "Price per square meter",
+            perMonth: "Monthly price",
+            perYear: "Annual price",
+            perUnitPerMonth: "Monthly price per square meter",
+            perUnitPerYear: "Annual price per square meter",
+        };
+        const suffixes: Record<string, string> = {
+            perUnit: "per m²",
+            perMonth: "per month",
+            perYear: "per year",
+            perUnitPerMonth: "per m² per month",
+            perUnitPerYear: "per m² per year",
+        };
+        return [{
+            label: labels[property.priceBasis] ?? "Listed price",
+            value: [formatPriceAmount(canonicalAmount, currency), suffixes[property.priceBasis]].filter(Boolean).join(" "),
+            note: pricing?.negotiable ? "Negotiable" : null,
+        }];
+    }
     const basisPrices = pricing?.basisPrices ?? {};
     const basisKeys = Array.from(
         new Set([
