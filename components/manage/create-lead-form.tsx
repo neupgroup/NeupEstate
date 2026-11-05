@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import { appendCurrentProjectParamV1 } from '@/components/manage-nav';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -304,7 +305,7 @@ export function CreateLeadForm() {
                 setSubmitting(false);
                 return;
             }
-            router.push('/manage/leads/shared');
+            router.push(appendCurrentProjectParamV1('/manage/leads/shared'));
         } catch {
             toast({ name: "default",
                 convey: 'danger',

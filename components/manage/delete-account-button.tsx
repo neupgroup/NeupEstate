@@ -2,6 +2,7 @@
 
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import { appendCurrentProjectParamV1 } from '@/components/manage-nav';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,7 +34,7 @@ export function DeleteAccountButton({ accountId, displayName }: DeleteAccountBut
       const result = await deleteAccountAction(accountId);
       if (result.success) {
         toast({ name: "default", title: 'Account Deleted', description: `Account ${displayName ?? accountId} removed.` });
-        router.push('/manage/accounts');
+        router.push(appendCurrentProjectParamV1('/manage/accounts'));
       } else {
         toast({ name: "default", convey: 'danger', title: 'Deletion Failed', description: result.error });
       }

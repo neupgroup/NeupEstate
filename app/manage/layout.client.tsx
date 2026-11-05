@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Menu } from 'lucide-react';
@@ -54,12 +54,38 @@ function ManageNavigation({ permissions, workingProfile, pathname }: {
 // Compose the shared header/sidebar layout without mounting another root shell.
 export function ManageLayoutClient({ children, profile, permissions }: ManageLayoutClientProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const projectId = searchParams.get('project')?.trim() || null;
+  const manageHref = projectId ? `/manage?project=${encodeURIComponent(projectId)}` : '/manage';
   const navigation = <ManageNavigation permissions={permissions} workingProfile={profile.workingProfile} pathname={pathname} />;
 
+  // Preserve the selected project across management navigation and keep shell-home links in management.
+  function handleProjectNavigation(event: React.MouseEvent<HTMLDivElement>) {
+    if (!projectId || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const anchor = target.closest('a[href]');
+    if (!(anchor instanceof HTMLAnchorElement) || anchor.target === '_blank' || anchor.hasAttribute('download')) return;
+
+    const destination = new URL(anchor.href, window.location.href);
+    if (destination.origin !== window.location.origin) return;
+    if (!destination.pathname.startsWith('/manage') && destination.pathname !== '/home' && destination.pathname !== '/search') return;
+
+    if (destination.pathname === '/home' || destination.pathname === '/search') {
+      destination.pathname = '/manage';
+      destination.search = '';
+    }
+    destination.searchParams.set('project', projectId);
+    event.preventDefault();
+    router.push(`${destination.pathname}${destination.search}${destination.hash}`);
+  }
+
   return (
-    <div className="min-h-screen w-full bg-[var(--background)] text-[var(--foreground)]">
+    <div onClickCapture={handleProjectNavigation} className="min-h-screen w-full bg-[var(--background)] text-[var(--foreground)]">
       <HeaderV1>
-        <Link href="/home" className="flex min-w-0 items-center gap-2">
+        <Link href={manageHref} className="flex min-w-0 items-center gap-2">
           <Image src="https://cdn.neupgroup.com/neupestate/logo.png" alt="Neup.Estate Logo" width={36} height={36} unoptimized />
           <span className="font-headline text-lg font-bold">Neup.Estate</span>
         </Link>

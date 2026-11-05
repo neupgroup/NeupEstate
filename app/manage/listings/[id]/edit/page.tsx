@@ -4,6 +4,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { appendCurrentProjectParamV1 } from '@/components/manage-nav';
 import { useTransition, useState, useEffect, useMemo } from 'react';
 import { UpdateListingSchema, type Listing, type User, type UpdateListingFormValues } from '@/types';
 import { createListingAction, getCurrentListingCreateDraftAction, saveListingChangeDraftAction, getListingChangeContextAction, getListingEditCapabilitiesAction, getListingAgentOptionsAction, saveListingCreateDraftAction } from '@/services/listings/drafts';
@@ -566,7 +567,7 @@ export default function EditListingPage() {
                 }
 
                 toast({ name: "default", convey: 'danger', title: 'Error', description: 'Property not found.' });
-                router.push('/manage/listings');
+                router.push(appendCurrentProjectParamV1('/manage/listings'));
                 return;
             }
 
@@ -697,7 +698,7 @@ export default function EditListingPage() {
                         title: 'Review Requested',
                         description: `The property "${values.title}" has been saved for approval.`,
                     });
-                    router.push('/manage/listings');
+                    router.push(appendCurrentProjectParamV1('/manage/listings'));
                 } else {
                     toast({ name: "default",
                         convey: 'danger',
@@ -731,7 +732,7 @@ export default function EditListingPage() {
                     title: 'Review Requested',
                     description: `Your changes for "${values.title}" have been sent for review.`,
                 });
-                router.push(`/manage/listings/${property.id}`);
+                router.push(appendCurrentProjectParamV1(`/manage/listings/${property.id}`));
             } else {
                 toast({ name: "default",
                     convey: 'danger',
@@ -820,7 +821,7 @@ export default function EditListingPage() {
     async function handleDropCreationDraft() {
         const changeId = changeContext?.currentUserChange?.id;
         if (!changeId) {
-            router.push('/manage/listings');
+            router.push(appendCurrentProjectParamV1('/manage/listings'));
             return true;
         }
 
@@ -838,7 +839,7 @@ export default function EditListingPage() {
             title: 'Property dropped',
             description: 'The unrequested property draft has been removed.',
         });
-        router.push('/manage/listings');
+        router.push(appendCurrentProjectParamV1('/manage/listings'));
         return true;
     }
 

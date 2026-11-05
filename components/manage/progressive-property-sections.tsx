@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { appendCurrentProjectParamV1 } from '@/components/manage-nav';
 import type { AgencyCustomizationRule, CreateListingFormValues, User } from "@/types";
 import { Button, buttonVariants } from "@neup/components/ui/button";
 import {
@@ -487,16 +488,16 @@ export function ProgressiveListingSections({
 
     function handleCancel() {
         if (pathname.endsWith("/create")) {
-            router.push("/manage/listings");
+            router.push(appendCurrentProjectParamV1("/manage/listings"));
             return;
         }
 
         if (pathname.endsWith("/edit")) {
-            router.push(pathname.replace(/\/edit@base/, ""));
+            router.push(appendCurrentProjectParamV1(pathname.replace(/\/edit@base/, "")));
             return;
         }
 
-        router.push("/manage/listings");
+        router.push(appendCurrentProjectParamV1("/manage/listings"));
     }
 
     async function handleDropCreationDraft() {

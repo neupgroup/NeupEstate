@@ -5,6 +5,7 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { appendCurrentProjectParamV1 } from '@/components/manage-nav';
 import { useTransition, useEffect, useMemo, useState } from 'react';
 import { CreateListingSchema, type CreateListingFormValues, type User } from '@/types';
 import { createListingAction, getCurrentListingCreateDraftAction, getCurrentListingCreateContextAction, getListingAgentOptionsAction, saveListingCreateDraftAction } from '@/services/listings/drafts';
@@ -321,7 +322,7 @@ export default function CreateListingPage() {
                     title: 'Review Requested',
                     description: `The property "${values.title}" has been saved for approval.`,
                 });
-                router.push('/manage/listings');
+                router.push(appendCurrentProjectParamV1('/manage/listings'));
             } else {
                 if (result.changeId && result.changeId !== draftChangeId) {
                     syncDraftChangeId(result.changeId);
@@ -369,7 +370,7 @@ export default function CreateListingPage() {
         form.reset(form.getValues());
 
         if (fromIndex === 0 && result.changeId) {
-            router.push(`/manage/listings/${result.changeId}/edit?section=specifics`);
+            router.push(appendCurrentProjectParamV1(`/manage/listings/${result.changeId}/edit?section=specifics`));
             return false;
         }
 
@@ -378,7 +379,7 @@ export default function CreateListingPage() {
 
     async function handleDropCreationDraft() {
         if (!draftChangeId) {
-            router.push('/manage/listings');
+            router.push(appendCurrentProjectParamV1('/manage/listings'));
             return true;
         }
 
@@ -396,7 +397,7 @@ export default function CreateListingPage() {
             title: 'Property dropped',
             description: 'The unrequested property draft has been removed.',
         });
-        router.push('/manage/listings');
+        router.push(appendCurrentProjectParamV1('/manage/listings'));
         return true;
     }
 

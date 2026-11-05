@@ -8,6 +8,7 @@ import { useToast } from "@neup/core/hooks/useToast";
 import type { Listing } from "@/types";
 import { ListingImageGrid } from "@/components/manage/property-image-grid";
 import { useRouter } from "next/navigation";
+import { appendCurrentProjectParamV1 } from '@/components/manage-nav';
 
 type ReviewRequest = {
   id: string;
@@ -107,11 +108,11 @@ export function ListingReviewRequests({
     } else {
       toast({ name: "default", title: "Request approved" });
       if (request.status === "deleting") {
-        router.push("/manage/listings");
+        router.push(appendCurrentProjectParamV1("/manage/listings"));
         return;
       }
       if (!propertyId && result.propertyId) {
-        router.replace(`/manage/listings/${result.propertyId}`);
+        router.replace(appendCurrentProjectParamV1(`/manage/listings/${result.propertyId}`));
         return;
       }
       window.location.reload();
@@ -129,7 +130,7 @@ export function ListingReviewRequests({
     } else {
       toast({ name: "default", title: "Request rejected" });
       if (!propertyId && !result.propertyId) {
-        router.push("/manage/listings");
+        router.push(appendCurrentProjectParamV1("/manage/listings"));
         return;
       }
       window.location.reload();

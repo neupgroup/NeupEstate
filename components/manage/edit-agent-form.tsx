@@ -4,6 +4,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import { appendCurrentProjectParamV1 } from '@/components/manage-nav';
 import { useState, useTransition, useEffect } from 'react';
 import { UpdateAgentSchema, type Agent, type UpdateAgentFormValues, type User } from '@/types';
 import { updateAgentAction, deleteAgentAction } from '@/services/agents';
@@ -104,7 +105,7 @@ export function EditAgentForm({ agent, users }: EditAgentFormProps) {
                     title: "Agent Deleted",
                     description: `The agent has been permanently deleted.`,
                 });
-                router.push('/manage/team');
+                router.push(appendCurrentProjectParamV1('/manage/team'));
             } else {
                 toast({ name: "default",
                     convey: 'danger',

@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { appendCurrentProjectParamV1 } from '@/components/manage-nav';
 import { ArrowLeft, Send } from "lucide-react";
 
 import { saveListingChangeDraftAction } from '@/services/listings/drafts';
@@ -110,7 +111,7 @@ export function ListingTransferForm({
         title: "Transfer requested",
         description: "Listing agency and agent changes were saved for review.",
       });
-      router.push(`/manage/listings/${propertyId}`);
+      router.push(appendCurrentProjectParamV1(`/manage/listings/${propertyId}`));
       router.refresh();
     });
   }

@@ -4,6 +4,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import { appendCurrentProjectParamV1 } from '@/components/manage-nav';
 import { useState, useTransition } from 'react';
 import { CreateAgencySchema, type Agency, type CreateAgencyFormValues } from '@/types';
 import { updateAgencyAction, deleteAgencyAction } from '@/services/agency';
@@ -81,7 +82,7 @@ export function EditAgencyForm({ agency }: EditAgencyFormProps) {
                     title: "Agency Deleted",
                     description: `"${agency.name}" has been permanently deleted.`,
                 });
-                router.push('/manage/agencies');
+                router.push(appendCurrentProjectParamV1('/manage/agencies'));
             } else {
                 toast({ name: "default",
                     convey: 'danger',

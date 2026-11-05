@@ -4,6 +4,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import { appendCurrentProjectParamV1 } from '@/components/manage-nav';
 import { useTransition } from 'react';
 import { CreateAgencySchema, type CreateAgencyFormValues } from '@/types';
 import { createAgencyAction } from '@/services/agency';
@@ -46,7 +47,7 @@ export default function CreateAgencyPage() {
                     title: 'Agency Created',
                     description: `The agency "${values.name}" has been successfully created.`,
                 });
-                router.push('/manage/agencies');
+                router.push(appendCurrentProjectParamV1('/manage/agencies'));
             } else {
                 toast({ name: "default",
                     convey: 'danger',

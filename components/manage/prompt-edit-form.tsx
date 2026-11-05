@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import { appendCurrentProjectParamV1 } from '@/components/manage-nav';
 import { UpdatePromptSchema, CreatePromptSchema, type UpdatePromptFormValues, type CreatePromptFormValues, type AIModel } from '@/types';
 import type { Prompt } from '@/services/intelligence/prompts';
 import { updatePromptAction, createPromptAction } from '@/services/content';
@@ -66,7 +67,7 @@ export function PromptEditForm({ prompt, mode, models }: PromptEditFormProps) {
                     title: `Prompt ${mode === 'create' ? 'Created' : 'Updated'}`,
                     description: `The prompt "${values.name}" has been successfully saved.`,
                 });
-                router.push('/manage/settings/ai-configuration');
+                router.push(appendCurrentProjectParamV1('/manage/settings/ai-configuration'));
             } else {
                 toast({ name: "default",
                     convey: 'danger',

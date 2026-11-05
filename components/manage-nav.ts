@@ -100,3 +100,14 @@ export function appendWorkingProfile(href: string, workingProfile?: string | nul
   url.searchParams.set("workingProfile", workingProfile);
   return url.origin === "http://local" ? `${url.pathname}${url.search}` : url.toString();
 }
+
+// Keep the active project on client-side management redirects.
+export function appendCurrentProjectParamV1(href: string) {
+  if (typeof window === 'undefined') return href;
+  const projectId = new URLSearchParams(window.location.search).get('project')?.trim();
+  if (!projectId) return href;
+
+  const url = new URL(href, "http://local");
+  url.searchParams.set("project", projectId);
+  return url.origin === "http://local" ? `${url.pathname}${url.search}${url.hash}` : url.toString();
+}
