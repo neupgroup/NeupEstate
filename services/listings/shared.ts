@@ -120,9 +120,6 @@ export const BRIDGE_PROPERTY_FIELDS = [
   'title',
   'description',
   'price',
-  'priceBasis',
-  'priceCurrency',
-  'priceAmount',
   'location',
   'bedrooms',
   'bathrooms',
@@ -173,7 +170,12 @@ export const BRIDGE_PROPERTY_MAX_LIMIT = 15;
 // Retain pricing display and negotiation settings while removing duplicated primary price values.
 function getListingPricingMetadata(value: unknown): Record<string, unknown> | null {
   if (!isRecord(value)) return null;
-  const { listed: _listed, basisPrices: _basisPrices, ...metadata } = value;
+  const {
+    listed: _listed, basis: _basis, basisPrices: _basisPrices,
+    basisNegotiable: _basisNegotiable, basisNegotiablePrices: _basisNegotiablePrices,
+    basisFrequencies: _basisFrequencies, basisUnits: _basisUnits, currency: _currency,
+    ...metadata
+  } = value;
   return metadata;
 }
 
@@ -449,11 +451,8 @@ export function mapRecord(record: any): Listing {
   const priceAmount = record.priceAmount == null ? null : Number(record.priceAmount);
   const priceCurrency = record.priceCurrency ?? null;
   const priceBasis = record.priceBasis ?? null;
-  const price = priceAmount ?? 0;
   const pricingMetadata = getListingPricingMetadata(record.pricing);
-  const pricing = pricingMetadata
-    ? { ...pricingMetadata, currency: priceCurrency ?? 'NPR', listed: priceAmount ?? undefined }
-    : undefined;
+  const pricing = pricingMetadata ?? undefined;
 
   const { latitude, longitude } = parseGeoLocation(record.geoLocation);
   const representatives = (record.representatives ?? [])
@@ -514,10 +513,7 @@ export function mapRecord(record: any): Listing {
     slug:             record.slug || record.id,
     title:            record.title || 'Untitled Property',
     description:      record.description || '',
-    price,
-    priceBasis,
-    priceCurrency,
-    priceAmount,
+    price: { currency: priceCurrency ?? 'NPR', basis: priceBasis, amount: priceAmount },
     location:         record.locationText || 'Nepal',
     bedrooms,
     bathrooms,
@@ -554,7 +550,7 @@ export function mapRecord(record: any): Listing {
     plots:            record.plots || undefined,
     apartmentDetails: record.apartmentDetails || undefined,
     structuredLocation: parseStructuredLocation(record.structuredLocation),
-    pricing,
+    pricing: pricing as Listing['pricing'],
     details:          record.details || undefined,
     roadAccessDetails: record.roadAccessDetails || undefined,
     distancing:       record.distancing || undefined,

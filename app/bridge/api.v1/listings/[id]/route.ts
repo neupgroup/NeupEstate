@@ -22,6 +22,8 @@ Example response:
 PATCH submits an edit request for the property identified by `id`. The body
 may include `accountId`, posting context fields, and a `property` or `data`
 object. Edits are submitted for review and return a `requestId` and status.
+GET returns the primary price as one `price` object with `currency`, `basis`,
+and `amount`; multi-price basis maps are not part of the listing response.
 
 ::public end
 

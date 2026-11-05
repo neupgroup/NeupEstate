@@ -10,7 +10,8 @@ parameter to return only matching statuses, for example
 `pending`, `rejected`, `active`, `sold`, `rented`, `archived`,
 `awaiting_creation`, and `awaiting_deletion`; `draft` and `approved` are also
 accepted aliases. If omitted, the endpoint returns only `active` properties.
-Each property includes all supported fields, including `status`.
+Each property includes all supported fields, including `status`. Its single
+primary price is returned as `price: { currency, basis, amount }`.
 
 It accepts `limit` and `offset`, plus `query` for term lookup,
 `agency` or `agent` for ownership filtering, and `orderBy=newestFirst|oldestFirst`

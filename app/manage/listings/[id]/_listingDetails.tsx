@@ -404,43 +404,6 @@ function formatPricingBasisLabel(basis: string): string {
     return labels[basis] || basis.replace(/[-_]/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
-function formatPricingBasisSuffix({
-    basis,
-    frequency,
-    unit,
-}: {
-    basis: string;
-    frequency?: string | null;
-    unit?: string | null;
-}) {
-    const canonicalSuffixes: Record<string, string> = {
-        perUnit: "per m²",
-        perMonth: "per month",
-        perYear: "per year",
-        perUnitPerMonth: "per m² per month",
-        perUnitPerYear: "per m² per year",
-    };
-    if (canonicalSuffixes[basis]) return canonicalSuffixes[basis];
-    const normalizedFrequency = frequency?.trim();
-    const normalizedUnit = unit?.trim();
-    const hasPerUnitBasis = basis.includes("unit") || basis.includes("per-aana") || basis.includes("per-ropani") || basis.includes("per-sqft");
-    const hasFlatBasis = basis.includes("flat") || basis === "flat-price";
-
-    if (normalizedFrequency && normalizedUnit) {
-        return `per ${normalizedUnit} per ${normalizedFrequency}`;
-    }
-
-    if (normalizedUnit && hasPerUnitBasis) {
-        return `per ${normalizedUnit}`;
-    }
-
-    if (normalizedFrequency && (!hasFlatBasis || basis.includes("rent"))) {
-        return `per ${normalizedFrequency}`;
-    }
-
-    return null;
-}
-
 function formatHiddenPriceMode(mode?: string | null) {
     if (mode === "price-on-call") return "Price on call";
     if (mode === "offer-yours-first") return "Offer yours first";
@@ -448,27 +411,16 @@ function formatHiddenPriceMode(mode?: string | null) {
 }
 
 function getPricingCards(property: {
-    price?: number | null;
-    priceBasis?: string | null;
-    priceCurrency?: string | null;
-    priceAmount?: number | null;
+    price: { currency: string; basis: string | null; amount: number | null };
     pricing?: {
-        currency?: string | null;
         priceDisplayMode?: string | null;
-        listed?: number | null;
         negotiable?: boolean | null;
-        basis?: string | null;
-        basisPrices?: Record<string, number | undefined> | null;
-        basisNegotiable?: Record<string, boolean | undefined> | null;
-        basisNegotiablePrices?: Record<string, number | undefined> | null;
-        basisFrequencies?: Record<string, string | undefined> | null;
-        basisUnits?: Record<string, string | undefined> | null;
     } | null;
 }) {
     const pricing = property.pricing;
-    const currency = property.priceCurrency || pricing?.currency || "NPR";
-    const canonicalAmount = Number(property.priceAmount ?? 0);
-    if (property.priceBasis && canonicalAmount > 0) {
+    const currency = property.price.currency || "NPR";
+    const canonicalAmount = Number(property.price.amount ?? 0);
+    if (property.price.basis && canonicalAmount > 0) {
         const labels: Record<string, string> = {
             total: "Listed price",
             perUnit: "Price per square meter",
@@ -485,51 +437,15 @@ function getPricingCards(property: {
             perUnitPerYear: "per m² per year",
         };
         return [{
-            label: labels[property.priceBasis] ?? "Listed price",
-            value: [formatPriceAmount(canonicalAmount, currency), suffixes[property.priceBasis]].filter(Boolean).join(" "),
+            label: labels[property.price.basis] ?? "Listed price",
+            value: [formatPriceAmount(canonicalAmount, currency), suffixes[property.price.basis]].filter(Boolean).join(" "),
             note: pricing?.negotiable ? "Negotiable" : null,
         }];
     }
-    const basisPrices = pricing?.basisPrices ?? {};
-    const basisKeys = Array.from(
-        new Set([
-            ...Object.keys(basisPrices),
-            ...(pricing?.basis ? [pricing.basis] : []),
-        ]),
-    );
-
-    const cards = basisKeys
-        .map((basis) => {
-            const amount = Number(basisPrices[basis] ?? 0);
-            const negotiable = Boolean(pricing?.basisNegotiable?.[basis]);
-            const negotiableAmount = Number(pricing?.basisNegotiablePrices?.[basis] ?? 0);
-
-            if (amount <= 0 && negotiableAmount <= 0) return null;
-
-            const suffix = formatPricingBasisSuffix({
-                basis,
-                frequency: pricing?.basisFrequencies?.[basis] ?? null,
-                unit: pricing?.basisUnits?.[basis] ?? null,
-            });
-
-            return {
-                label: formatPricingBasisLabel(basis),
-                value: [formatPriceAmount(amount > 0 ? amount : negotiableAmount, currency), suffix].filter(Boolean).join(" "),
-                note: negotiable
-                    ? negotiableAmount > 0 && negotiableAmount !== amount
-                        ? `Negotiable from ${formatPriceAmount(negotiableAmount, currency)}`
-                        : "Negotiable"
-                    : null,
-            };
-        })
-        .filter((card): card is { label: string; value: string; note: string | null } => Boolean(card));
-
-    if (cards.length) return cards;
-
-    const listed = Number(pricing?.listed ?? property.price ?? 0);
+    const listed = Number(property.price.amount ?? 0);
     if (listed > 0) {
         return [{
-            label: pricing?.basis ? formatPricingBasisLabel(pricing.basis) : "Listed price",
+            label: property.price.basis ? formatPricingBasisLabel(property.price.basis) : "Listed price",
             value: formatPriceAmount(listed, currency),
             note: pricing?.negotiable ? "Negotiable" : null,
         }];
@@ -782,7 +698,11 @@ function mapCreationDraftToListing(change: {
         floors: extractNumber(data.floors),
         onFloor: extractNumber(data.onFloor),
         roadAccess: extractNumber(data.roadAccess),
-        price: extractNumber(data.price) ?? extractNumber(pricing?.listed),
+        price: {
+            currency: typeof pricing?.currency === "string" ? pricing.currency : "NPR",
+            basis: typeof data.priceBasis === "string" ? data.priceBasis : null,
+            amount: extractNumber(data.price) ?? extractNumber(pricing?.listed),
+        },
         pricing,
         amenities: normalizeStringArray(data.amenities),
         images: normalizeStringArray(data.images),

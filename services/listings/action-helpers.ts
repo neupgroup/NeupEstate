@@ -96,17 +96,17 @@ export function getListingPriceFields(pricing?: CreateListingFormValues['pricing
 // Convert canonical listing prices back to the selected form unit for editing.
 export function getListingFormPricing(property: Listing): CreateListingFormValues['pricing'] {
   const pricing = { ...(property.pricing ?? {}) } as NonNullable<CreateListingFormValues['pricing']>;
-  const canonicalAmount = Number(property.priceAmount ?? property.price ?? 0);
-  pricing.currency = (property.priceCurrency ?? pricing.currency ?? 'NPR') as NonNullable<typeof pricing.currency>;
+  const canonicalAmount = Number(property.price.amount ?? 0);
+  pricing.currency = property.price.currency as NonNullable<typeof pricing.currency>;
 
-  if (canonicalAmount > 0 && property.priceBasis) {
+  if (canonicalAmount > 0 && property.price.basis) {
     const isLand = property.category === 'Land';
     const isApartment = ['Apartment', 'Penthouse', 'Flat'].includes(property.category);
     const isHouse = ['House', 'Bungalow', 'Villa', 'Multiplex'].includes(property.category);
     const isRental = property.purpose === 'Rent' || property.purpose === 'Lease';
-    const isPerUnit = property.priceBasis === 'perUnit' || property.priceBasis === 'perUnitPerMonth' || property.priceBasis === 'perUnitPerYear';
-    const isMonthly = property.priceBasis === 'perMonth' || property.priceBasis === 'perUnitPerMonth';
-    const isYearly = property.priceBasis === 'perYear' || property.priceBasis === 'perUnitPerYear';
+    const isPerUnit = property.price.basis === 'perUnit' || property.price.basis === 'perUnitPerMonth' || property.price.basis === 'perUnitPerYear';
+    const isMonthly = property.price.basis === 'perMonth' || property.price.basis === 'perUnitPerMonth';
+    const isYearly = property.price.basis === 'perYear' || property.price.basis === 'perUnitPerYear';
     const defaultBasis = isLand
       ? isPerUnit ? (isRental ? 'land-rent-unit' : 'land-sale-unit') : isRental ? 'land-rent-flat' : 'land-sale-flat'
       : isApartment
@@ -130,7 +130,7 @@ export function getListingFormPricing(property: Listing): CreateListingFormValue
     if (basis) {
       const unit = pricing.basisUnits?.[basis]?.trim().toLowerCase().replaceAll('_', ' ').replaceAll('-', ' ');
       const areaInSquareMeters = unit ? PRICE_AREA_SQUARE_METERS[unit] : undefined;
-      const formAmount = property.priceBasis === 'perUnit' || property.priceBasis === 'perUnitPerMonth' || property.priceBasis === 'perUnitPerYear'
+      const formAmount = property.price.basis === 'perUnit' || property.price.basis === 'perUnitPerMonth' || property.price.basis === 'perUnitPerYear'
         ? canonicalAmount * (areaInSquareMeters ?? 1)
         : canonicalAmount;
       pricing.basisPrices = { ...(pricing.basisPrices ?? {}), [basis]: formAmount };
@@ -145,7 +145,12 @@ export function getListingFormPricing(property: Listing): CreateListingFormValue
 // Keep display settings and negotiation metadata in JSON while storing primary prices in listing columns.
 export function cleanPricingMetadata(pricing: unknown): Record<string, unknown> | null {
   if (!isPlainObject(pricing)) return null;
-  const { listed: _listed, basisPrices: _basisPrices, ...metadata } = pricing;
+  const {
+    listed: _listed, basis: _basis, basisPrices: _basisPrices,
+    basisNegotiable: _basisNegotiable, basisNegotiablePrices: _basisNegotiablePrices,
+    basisFrequencies: _basisFrequencies, basisUnits: _basisUnits, currency: _currency,
+    ...metadata
+  } = pricing;
   return metadata;
 }
 

@@ -112,7 +112,11 @@ function mapCreationDraftToEditableListing(id: string, data: Record<string, any>
         id,
         title: typeof data.title === 'string' && data.title.trim() ? data.title : 'Untitled draft property',
         description: typeof data.description === 'string' ? data.description : '',
-        price: extractDraftNumber(data.price ?? data.pricing?.listed),
+        price: {
+            currency: typeof data.pricing?.currency === 'string' ? data.pricing.currency : 'NPR',
+            basis: data.priceBasis ?? null,
+            amount: extractDraftNumber(data.price ?? data.pricing?.listed) || null,
+        },
         location: typeof data.location === 'string' ? data.location : '',
         bedrooms: extractDraftNumber(data.bedrooms),
         bathrooms: extractDraftNumber(data.bathrooms),

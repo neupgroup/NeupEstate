@@ -34,8 +34,8 @@ export function getHiddenPriceLabel(property: Pick<Listing, 'pricing'>): string 
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function getPrimaryCurrency(property: Pick<Listing, 'priceCurrency' | 'pricing'>): string {
-  return property.priceCurrency || property.pricing?.currency || 'NPR';
+export function getPrimaryCurrency(property: Pick<Listing, 'price'>): string {
+  return property.price.currency || 'NPR';
 }
 
 
@@ -46,7 +46,7 @@ export function getPrimaryCurrency(property: Pick<Listing, 'priceCurrency' | 'pr
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
 export function getPrimaryPrice(property: Pick<Listing, 'price'>): number {
-  return property.price || 0;
+  return property.price.amount || 0;
 }
 
 
@@ -93,8 +93,8 @@ export function formatPricingBasisSuffix({
  *
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
-export function getPrimaryPricingSuffix(property: Pick<Listing, 'priceBasis' | 'pricing'>): string | null {
-  const basis = property.priceBasis ?? property.pricing?.basis;
+export function getPrimaryPricingSuffix(property: Pick<Listing, 'price'>): string | null {
+  const basis = property.price.basis;
   if (basis === 'perUnit') return 'per m²';
   if (basis === 'perMonth') return 'per month';
   if (basis === 'perYear') return 'per year';

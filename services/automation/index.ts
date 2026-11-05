@@ -150,7 +150,7 @@ export async function analyzeMarketAction(prevState: MarketAnalysisState, formDa
             return { success: true, result: { count: 0, averagePrice: 0, minPrice: 0, maxPrice: 0, summary: `No matching properties found for "${query}". Try a different description.` } };
         }
 
-        const prices = listings.map(p => p.price).filter(p => p > 0);
+        const prices = listings.map(p => p.price.amount ?? 0).filter(p => p > 0);
         if (prices.length === 0) {
             return { success: true, result: { count: listings.length, averagePrice: 0, minPrice: 0, maxPrice: 0, summary: "Found matching properties, but none have a listed price to analyze." } };
         }

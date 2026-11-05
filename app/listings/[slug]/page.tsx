@@ -296,8 +296,8 @@ function generateSchema(property: Listing) {
         offers: {
             '@type': 'Offer',
             url: propertyUrl,
-            price: property.price,
-            priceCurrency: property.priceCurrency || 'NPR',
+            price: property.price.amount,
+            priceCurrency: property.price.currency,
             availability: 'https://schema.org/InStock', // Assuming it's available if listed
             seller: {
                 '@type': 'Organization',
@@ -417,7 +417,7 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
     { label: 'Car Parking', value: property.carParkingSpots, singular: 'Car Parking', icon: <Car className="h-4 w-4 text-primary" /> },
     { label: 'Bike Parking', value: property.bikeParkingSpots, singular: 'Bike Parking', icon: <Bike className="h-4 w-4 text-primary" /> },
   ].filter((item) => hasPositiveValue(item.value));
-  const primaryPrice = property.price;
+  const primaryPrice = property.price.amount ?? 0;
   const pricingBasisLabels: Record<string, string> = {
     total: 'Total price',
     perUnit: 'Price per square meter',
@@ -518,13 +518,13 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
               )}
             </div>
             
-            {(property.pricing || property.priceAmount != null) && (
+            {(property.pricing || property.price.amount != null) && (
               <DetailCard title="Pricing Details" icon={<Tag className="h-5 w-5"/>}>
-                  <DetailItem label="Listed Price" value={hiddenPriceLabel || (hasPositiveValue(property.priceAmount) ? formatPrice(property.priceAmount, property.priceCurrency || 'NPR') : 'N/A')} />
-                  <DetailItem label="Minimum Price" value={hiddenPriceLabel || (property.pricing?.minimum ? formatPrice(property.pricing.minimum, property.priceCurrency || 'NPR') : 'N/A')} />
-                  <DetailItem label="Maximum Price" value={hiddenPriceLabel || (property.pricing?.maximum ? formatPrice(property.pricing.maximum, property.priceCurrency || 'NPR') : 'N/A')} />
+                  <DetailItem label="Listed Price" value={hiddenPriceLabel || (hasPositiveValue(property.price.amount) ? formatPrice(property.price.amount, property.price.currency) : 'N/A')} />
+                  <DetailItem label="Minimum Price" value={hiddenPriceLabel || (property.pricing?.minimum ? formatPrice(property.pricing.minimum, property.price.currency) : 'N/A')} />
+                  <DetailItem label="Maximum Price" value={hiddenPriceLabel || (property.pricing?.maximum ? formatPrice(property.pricing.maximum, property.price.currency) : 'N/A')} />
                   <DetailItem label="Negotiable" value={property.pricing?.negotiable ? 'Yes' : 'No'} />
-                  <DetailItem label="Basis" value={property.priceBasis ? pricingBasisLabels[property.priceBasis] : 'N/A'} />
+                  <DetailItem label="Basis" value={property.price.basis ? pricingBasisLabels[property.price.basis] : 'N/A'} />
                   <DetailItem label="Options" value={safePricingOptions} />
               </DetailCard>
             )}
@@ -687,7 +687,7 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
               </div>
             ) : null}
 
-            {hasPositiveValue(primaryPrice) && <EmiCalculatorChart price={primaryPrice} currency={property.priceCurrency || 'NPR'} />}
+            {hasPositiveValue(primaryPrice) && <EmiCalculatorChart price={primaryPrice} currency={property.price.currency} />}
           </div>
 
           <div className="property-detail-sidebar hidden lg:block">

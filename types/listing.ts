@@ -292,10 +292,11 @@ export interface Listing {
     id: string;
     title: string;
     description: string;
-    price: number;
-    priceBasis?: ListingPriceBasis | null;
-    priceCurrency?: string | null;
-    priceAmount?: number | null;
+    price: {
+        currency: string;
+        basis: ListingPriceBasis | null;
+        amount: number | null;
+    };
     location: string;
     bedrooms: number;
     bathrooms: number;
@@ -345,7 +346,7 @@ export interface Listing {
     apartmentUnits?: ApartmentUnit[];
     structuredLocation?: StructuredLocation;
     details?: Record<string, any>;
-    pricing?: Pricing & { options?: string[] }; // DB stores array
+    pricing?: Omit<Pricing, 'listed' | 'basis' | 'basisPrices' | 'basisNegotiable' | 'basisNegotiablePrices' | 'basisFrequencies' | 'basisUnits' | 'currency'> & { options?: string[] };
     roadAccessDetails?: RoadAccessDetails;
     distancing?: Distancing;
     earnings?: Earnings;

@@ -115,8 +115,8 @@ export async function updateAccountPreferences(
                 prefs.district[(property as any).structuredLocation.district][event.type] = (prefs.district[(property as any).structuredLocation.district][event.type] || 0) + weight;
             }
             // Update budget range preference
-            if ((property as any).price > 0) {
-                const budgetRange = getBudgetRange((property as any).price);
+            if (Number(property.price.amount ?? 0) > 0) {
+                const budgetRange = getBudgetRange(Number(property.price.amount));
                 if (!prefs.budget_range) prefs.budget_range = {};
                 if (!prefs.budget_range[budgetRange]) prefs.budget_range[budgetRange] = {};
                 prefs.budget_range[budgetRange][event.type] = (prefs.budget_range[budgetRange][event.type] || 0) + weight;
@@ -153,8 +153,8 @@ export async function updateAccountPreferences(
                 if (!prefs.district[(property as any).structuredLocation.district]) prefs.district[(property as any).structuredLocation.district] = {};
                 prefs.district[(property as any).structuredLocation.district].view = (prefs.district[(property as any).structuredLocation.district].view || 0) + viewWeight;
             }
-            if ((property as any).price > 0) {
-                const budgetRange = getBudgetRange((property as any).price);
+            if (Number(property.price.amount ?? 0) > 0) {
+                const budgetRange = getBudgetRange(Number(property.price.amount));
                 if (!prefs.budget_range) prefs.budget_range = {};
                 if (!prefs.budget_range[budgetRange]) prefs.budget_range[budgetRange] = {};
                 prefs.budget_range[budgetRange].view = (prefs.budget_range[budgetRange].view || 0) + viewWeight;
