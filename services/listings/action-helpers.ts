@@ -51,10 +51,19 @@ const PRICE_AREA_SQUARE_METERS: Record<string, number> = {
   bigha: 2508.38208, kattha: 313.54776, dhur: 15.677388, acre: 4046.8564224, hectare: 10000,
 };
 
+type ListingPricingInput = {
+  currency?: string | null;
+  listed?: number;
+  basis?: NonNullable<CreateListingFormValues['pricing']>['basis'];
+  basisPrices?: Record<string, number | undefined>;
+  basisFrequencies?: Record<string, string | undefined>;
+  basisUnits?: Record<string, string | undefined>;
+};
+
 type ListingPriceFields = { priceBasis: ListingPriceBasis | null; priceCurrency: string | null; priceAmount: number | null };
 
 // Normalize the selected form price into the canonical listing basis and square-meter amount.
-export function getListingPriceFields(pricing?: CreateListingFormValues['pricing'], fallbackPrice?: number): ListingPriceFields {
+export function getListingPriceFields(pricing?: ListingPricingInput, fallbackPrice?: number): ListingPriceFields {
   const populatedBases = Object.entries(pricing?.basisPrices ?? {})
     .filter(([, value]) => Number(value ?? 0) > 0);
   const preferredNonRental = populatedBases.find(([basis]) => !/rent|lease/i.test(basis));
@@ -393,6 +402,9 @@ export function mapListingToCreateFormValues(property: Listing): Partial<CreateL
     })),
     structuredLocation: property.structuredLocation || {},
     pricing: {
+      currency: 'NPR',
+      priceDisplayMode: 'show-price',
+      negotiable: false,
       ...getListingFormPricing(property),
       options: Array.isArray(property.pricing?.options) ? property.pricing.options.join(', ') : '',
     },
