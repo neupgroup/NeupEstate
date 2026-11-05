@@ -343,6 +343,9 @@ Fields:
 > currency: varchar(10) NOT NULL;
 > displayPrice: numeric(18,2) NOT NULL;
 > displayPriceUnit: varchar(24) NOT NULL;
+> priceBasis: enum(total, perUnit, perMonth, perYear, perUnitPerMonth, perUnitPerYear);
+> priceCurrency: varchar(3), currency code;
+> priceAmount: numeric(22,10);
 > locationText: varchar(255) NOT NULL;
 > geoLocation: varchar(63) NOT NULL;
 > structuredLocation: text NOT NULL;

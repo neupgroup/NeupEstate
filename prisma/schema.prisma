@@ -25,6 +25,15 @@ enum PropertyPurpose {
   LEASE
 }
 
+enum ListingPriceBasis {
+  total
+  perUnit
+  perMonth
+  perYear
+  perUnitPerMonth
+  perUnitPerYear
+}
+
 enum PropertyStatus {
   AWAITING_CREATION
   AWAITING_DELETION
@@ -129,6 +138,9 @@ model Listing {
   currency           String          @db.VarChar(10)
   displayPrice       Decimal         @db.Decimal(18, 2)
   displayPriceUnit   String          @db.VarChar(24)
+  priceBasis         ListingPriceBasis?
+  priceCurrency      String?         @db.VarChar(3)
+  priceAmount        Decimal?        @db.Decimal(22, 10)
   locationText       String          @db.VarChar(255)
   geoLocation        String          @db.VarChar(63)
   structuredLocation String
