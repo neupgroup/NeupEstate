@@ -62,6 +62,7 @@ export async function createListingDraftRequest(input: { actorId: string; postin
 export async function editUncreatedListingDraftRequest(input: { requestId: string; actorId?: string; postingAgencyId?: string | null; workingProfileId?: string | null; data: CreateListingFormValues }) {
   const request = await prisma.listingChange.findUnique({ where: { id: input.requestId }, select: { id: true, accountId: true, propertyId: true, status: true, isApproved: true } });
   if (!request || !['creation_draft', 'creation_pending', 'creating'].includes(request.status) || request.isApproved !== null) throw new Error('Pending create request not found.');
+  if (!request.accountId) throw new Error('The pending request has no requesting account.');
   if (input.actorId && request.accountId !== input.actorId) throw new Error('The provided requestId does not belong to the provided accountId.');
   const result = await submitListingCreation(input.data, { actorAccountId: request.accountId, postingAgencyId: input.postingAgencyId, workingProfileId: input.workingProfileId });
   if (result.requestId !== input.requestId) throw new Error('The provided requestId does not match the active pending create request.');

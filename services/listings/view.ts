@@ -92,7 +92,7 @@ export async function getListingReviewRequests(propertyId: string): Promise<Arra
     return rows.map((row) => ({
       id: row.id,
       propertyId: row.propertyId ?? undefined,
-      accountId: row.accountId,
+      accountId: row.accountId ?? '',
       status: row.status,
       isApproved: row.isApproved,
       data: row.data as Record<string, any>,
@@ -161,7 +161,7 @@ export async function getListingLogs(propertyId: string): Promise<Array<{
   try {
     const logs = await prisma.listingChange.findMany({
       where: { propertyId },
-      orderBy: [{ requestedOn: 'desc' }, { id: 'desc' }],
+      orderBy: [{ createdOn: 'desc' }, { id: 'desc' }],
     });
 
     const accountIds = Array.from(
@@ -181,11 +181,11 @@ export async function getListingLogs(propertyId: string): Promise<Array<{
 
     return logs.map((log) => ({
       id: log.id,
-      propertyId: log.propertyId,
+      propertyId: log.propertyId ?? '',
       requestedBy: log.accountId ?? '',
       approvedBy: log.approvedBy,
       data: Array.isArray(log.data) ? log.data as Record<string, any>[] : [],
-      requestedOn: log.requestedOn.toISOString(),
+      requestedOn: log.createdOn.toISOString(),
       approvedOn: log.approvedOn ? log.approvedOn.toISOString() : null,
       requestedByAccount: log.accountId ? accountMap.get(log.accountId) ?? null : null,
       approvedByAccount: log.approvedBy ? accountMap.get(log.approvedBy) ?? null : null,

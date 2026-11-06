@@ -798,7 +798,7 @@ export async function ListingDetails({ id, review = false }: ListingDetailsProps
                 isApproved: creationDraft.isApproved,
                 data: creationDraft.data as Record<string, any>,
                 modifiedOn: creationDraft.modifiedOn.toISOString(),
-                accountId: creationDraft.accountId,
+                accountId: creationDraft.accountId ?? '',
             }
             : null;
     const isMyChange = Boolean(currentAccountId && currentChange?.accountId === currentAccountId);
@@ -833,7 +833,7 @@ export async function ListingDetails({ id, review = false }: ListingDetailsProps
                 ? [{
                     id: creationDraft.id,
                     propertyId: creationDraft.propertyId ?? undefined,
-                    accountId: creationDraft.accountId,
+                    accountId: creationDraft.accountId ?? '',
                     status: creationDraft.status,
                     isApproved: creationDraft.isApproved,
                     data: creationDraft.data as Record<string, any>,

@@ -9,6 +9,7 @@ Read-side property listing, search, queue, and bridge query services.
 */
 
 import { prisma } from '@neup/core/database/prisma';
+import type { ListingLogStatus } from '@/prisma/client';
 import { logger } from "@neup/logica/logger";
 import type { Listing, ListingFilters } from '@/types';
 import { mapPurposeToEnum, mapStatusToEnum, mapTypeFromEnum, mapTypeToEnum } from '@/inapp/database/adapters';
@@ -385,46 +386,29 @@ export async function getAwaitingReviewItems(
       return [];
     }
 
+    const reviewStatuses: ListingLogStatus[] = ['creation_pending', 'changing', 'deleting', 'creating'];
     const reviewChangeWhere = {
       isApproved: null,
-      status: { in: ['creation_pending', 'changing', 'deleting', 'creating'] },
+      status: { in: reviewStatuses },
       ...(opts.includeAll ? {} : opts.accountId ? { accountId: opts.accountId } : {}),
     };
 
-    const [pendingListings, drafts] = opts.includeAll
-      ? await Promise.all([
-          getPendingListings(limit),
-          prisma.listingChange.findMany({
-            where: reviewChangeWhere,
-            orderBy: { modifiedOn: 'desc' },
-            take: limit,
-            include: {
-              property: {
-                select: {
-                  id: true,
-                  title: true,
-                  locationText: true,
-                  type: true,
-                },
-              },
-            },
-          }),
-        ])
-      : [[], await prisma.listingChange.findMany({
-          where: reviewChangeWhere,
-          orderBy: { modifiedOn: 'desc' },
-          take: limit,
-          include: {
-            property: {
-              select: {
-                id: true,
-                title: true,
-                locationText: true,
-                type: true,
-              },
-            },
+    const pendingListings = opts.includeAll ? await getPendingListings(limit) : [];
+    const drafts = await prisma.listingChange.findMany({
+      where: reviewChangeWhere,
+      orderBy: { modifiedOn: 'desc' },
+      take: limit,
+      include: {
+        property: {
+          select: {
+            id: true,
+            title: true,
+            locationText: true,
+            type: true,
           },
-        })] as const;
+        },
+      },
+    });
 
     const draftItems = drafts.map((draft) => {
       const data = (draft.data && typeof draft.data === 'object' && !Array.isArray(draft.data))

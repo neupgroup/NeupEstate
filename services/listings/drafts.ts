@@ -16,6 +16,7 @@ import { z } from "zod";
 import { hasPermission, requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';;
 import { prisma } from '@neup/core/database/prisma';
+import type { ListingLogStatus } from '@/prisma/client';
 import { resolveListingCreateContext } from '@/services/listings/create/context';
 import { requireIdentity, formatLocationString, firstPositivePrice, cleanPricing, deepMergeJson, normalizeOwnerEntries, normalizeListingChangeData, mapListingToCreateFormValues } from '@/services/listings/action-helpers';
 
@@ -57,15 +58,15 @@ export async function saveListingCreateDraftAction(input: {
       requestedWorkingProfileId: input.workingProfileId,
     });
     const requestedChangeId = input.changeId?.trim() || null;
-    const draftStatusFilter = requestedChangeId
-      ? { in: ['creation_draft', 'creation_pending', 'creating'] }
-      : { in: ['creation_draft', 'creating'] };
+    const draftStatuses: ListingLogStatus[] = requestedChangeId
+      ? ['creation_draft', 'creation_pending', 'creating']
+      : ['creation_draft', 'creating'];
     const existingDraft = requestedChangeId
       ? await prisma.listingChange.findFirst({
           where: {
             id: requestedChangeId,
             accountId: actorId,
-            status: draftStatusFilter,
+            status: { in: draftStatuses },
             isApproved: null,
           },
           orderBy: { modifiedOn: 'desc' },
@@ -139,15 +140,15 @@ export async function getCurrentListingCreateDraftAction(changeId?: string | nul
     await requirePermission(PERMISSIONS.manage.propertySelfCreate);
     const actorId = await requireIdentity();
     const requestedChangeId = changeId?.trim() || null;
-    const draftStatusFilter = requestedChangeId
-      ? { in: ['creation_draft', 'creation_pending', 'creating'] }
-      : { in: ['creation_draft', 'creating'] };
+    const draftStatuses: ListingLogStatus[] = requestedChangeId
+      ? ['creation_draft', 'creation_pending', 'creating']
+      : ['creation_draft', 'creating'];
     const draft = requestedChangeId
       ? await prisma.listingChange.findFirst({
           where: {
             id: requestedChangeId,
             accountId: actorId,
-            status: draftStatusFilter,
+            status: { in: draftStatuses },
             isApproved: null,
           },
           orderBy: { modifiedOn: 'desc' },
@@ -164,7 +165,7 @@ export async function getCurrentListingCreateDraftAction(changeId?: string | nul
       changeId: draft.id,
       data: normalizedData,
       status: draft.status,
-      accountId: draft.accountId,
+      accountId: draft.accountId ?? '',
       modifiedOn: draft.modifiedOn.toISOString(),
       postingAgencyId: typeof normalizedData.postingAgencyId === 'string'
         ? normalizedData.postingAgencyId
@@ -533,7 +534,7 @@ export async function getListingChangeContextAction(propertyId: string): Promise
         isApproved: currentUserChange.isApproved,
         data: normalizeListingChangeData(currentUserChange.data as Record<string, any>),
         modifiedOn: currentUserChange.modifiedOn.toISOString(),
-        accountId: currentUserChange.accountId,
+        accountId: currentUserChange.accountId ?? '',
       } : null,
       recentActivity: {
         hasCurrentUserChangeInLast7Days: currentUserRecentChanges > 0,
@@ -642,6 +643,11 @@ export async function reviewListingChangeAction(input: {
     if (!request) {
       return { success: false, error: 'Pending request not found.' };
     }
+    if (!request.accountId) {
+      return { success: false, error: 'Pending request has no requesting account.' };
+    }
+
+    const requestedBy = request.accountId;
 
     if (input.approve) {
       const requestData = normalizeListingChangeData(request.data as Record<string, any>);
@@ -684,7 +690,7 @@ export async function reviewListingChangeAction(input: {
         }
         await createListingLog({
           propertyId: createdListingId,
-          requestedBy: request.accountId,
+          requestedBy,
           approvedBy: accountId,
           approvedOn: new Date(),
           data: creationLogData,
@@ -709,7 +715,7 @@ export async function reviewListingChangeAction(input: {
       if (request.status === 'deleting') {
         await createListingLog({
           propertyId: request.propertyId,
-          requestedBy: request.accountId,
+          requestedBy,
           approvedBy: accountId,
           approvedOn: new Date(),
           data: acceptedData.length ? acceptedData : [{ field: 'status', value: 'deleting' }],
@@ -734,7 +740,7 @@ export async function reviewListingChangeAction(input: {
         await approveListing(request.propertyId);
         await createListingLog({
           propertyId: request.propertyId,
-          requestedBy: request.accountId,
+          requestedBy,
           approvedBy: accountId,
           approvedOn: new Date(),
           data: acceptedData,
@@ -774,7 +780,7 @@ export async function reviewListingChangeAction(input: {
       }
       await createListingLog({
         propertyId: requestListingId,
-        requestedBy: request.accountId,
+        requestedBy,
         approvedBy: accountId,
         approvedOn: new Date(),
         data: input.acceptedFields
