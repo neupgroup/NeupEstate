@@ -384,20 +384,6 @@ Fields:
 > builtUpArea: numeric(18,8) NOT NULL;
 > maintenanceFee: numeric(18,8) NOT NULL;
 
-Table: listing_changes, Model: ListingChange
-Fields:
-> id: text PK, NOT NULL;
-> data: jsonb NOT NULL;
-> modifiedOn: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
-> status: text NOT NULL, default: 'editing'::text;
-> createdOn: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
-> property_id: text references listings.id;
-> is_approved: boolean;
-> account_id: text NOT NULL, references account.id;
-> created_by_id: text references account.id;
-> created_for_id: text references account.id;
-> working_profile_id: text references account.id;
-
 Table: listings_commercial, Model: ListingCommercial
 Fields:
 > propertyId: text PK, NOT NULL, UNIQUE listings_commercial_property_id_key(propertyId), references listings.id;
@@ -460,15 +446,20 @@ Fields:
 > primaryId: text NOT NULL, references listings.id;
 > secondaryId: text NOT NULL, references listings.id;
 
-Table: listings_logs, Model: ListingsLog
+Table: listings_logs, Model: ListingChange
 Fields:
 > id: text PK, NOT NULL;
-> property_id: text NOT NULL;
-> requested_by: text NOT NULL;
-> approved_by: text;
-> data: jsonb[] NOT NULL, default: ARRAY[]::jsonb[];
+> listing_id: text, references listings.id ON DELETE SET NULL;
+> data: jsonb NOT NULL;
+> requested_by: text, references account.id ON DELETE SET NULL;
+> status: enum(creation_draft, creation_pending, creating, changing, deleting, approved, accepted, rejected) NOT NULL;
 > requested_on: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
-> approved_on: timestamp(3);
+> responded_on: timestamp(3);
+> responded_by: text, references account.id ON DELETE SET NULL;
+> created_by_id: text, references account.id;
+> created_for_id: text, references account.id;
+> working_profile_id: text, references account.id;
+> modified_on: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 
 Table: listings_media, Model: ListingMedia
 Fields:

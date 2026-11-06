@@ -34,11 +34,6 @@ export type Activity = $Result.DefaultSelection<Prisma.$ActivityPayload>
  */
 export type Listing = $Result.DefaultSelection<Prisma.$ListingPayload>
 /**
- * Model ListingsLog
- * 
- */
-export type ListingsLog = $Result.DefaultSelection<Prisma.$ListingsLogPayload>
-/**
  * Model PropertyLink
  * 
  */
@@ -366,6 +361,20 @@ export const PropertyRepresentativeRole: {
 export type PropertyRepresentativeRole = (typeof PropertyRepresentativeRole)[keyof typeof PropertyRepresentativeRole]
 
 
+export const ListingLogStatus: {
+  creation_draft: 'creation_draft',
+  creation_pending: 'creation_pending',
+  creating: 'creating',
+  changing: 'changing',
+  deleting: 'deleting',
+  approved: 'approved',
+  accepted: 'accepted',
+  rejected: 'rejected'
+};
+
+export type ListingLogStatus = (typeof ListingLogStatus)[keyof typeof ListingLogStatus]
+
+
 export const LeadType: {
   BUYER: 'BUYER',
   SELLER: 'SELLER',
@@ -410,6 +419,10 @@ export const PropertyCompetitionStatus: typeof $Enums.PropertyCompetitionStatus
 export type PropertyRepresentativeRole = $Enums.PropertyRepresentativeRole
 
 export const PropertyRepresentativeRole: typeof $Enums.PropertyRepresentativeRole
+
+export type ListingLogStatus = $Enums.ListingLogStatus
+
+export const ListingLogStatus: typeof $Enums.ListingLogStatus
 
 export type LeadType = $Enums.LeadType
 
@@ -579,16 +592,6 @@ export class PrismaClient<
     * ```
     */
   get listing(): Prisma.ListingDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.listingsLog`: Exposes CRUD operations for the **ListingsLog** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more ListingsLogs
-    * const listingsLogs = await prisma.listingsLog.findMany()
-    * ```
-    */
-  get listingsLog(): Prisma.ListingsLogDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.propertyLink`: Exposes CRUD operations for the **PropertyLink** model.
@@ -1547,7 +1550,6 @@ export namespace Prisma {
     Account: 'Account',
     Activity: 'Activity',
     Listing: 'Listing',
-    ListingsLog: 'ListingsLog',
     PropertyLink: 'PropertyLink',
     ListingMedia: 'ListingMedia',
     ListingHouse: 'ListingHouse',
@@ -1615,7 +1617,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "location" | "account" | "activity" | "listing" | "listingsLog" | "propertyLink" | "listingMedia" | "listingHouse" | "listingApartment" | "propertyLandDetail" | "listingCommercial" | "propertyPrice" | "propertyOwner" | "listingRepresentative" | "listingDocument" | "listingChange" | "agency" | "agencyMap" | "agencyAgentMap" | "agencyCustomization" | "agent" | "review" | "requirement" | "naturalSearch" | "savedProperty" | "listingsView" | "baseLead" | "clientContact" | "clientLink" | "sharedLeads" | "leadActivity" | "conversation" | "message" | "siteContent" | "userPreference" | "propertyRequest" | "mortgageRequest" | "salesRequest" | "visitRequest" | "problem" | "sitemapEntry" | "inquiry" | "newsletterSubscription" | "authzRole" | "application" | "accountAccess" | "roleCapability" | "authzAccountAccessGrant" | "authzAssetsAccessGrant" | "competitor" | "competitorSource" | "competitorPage" | "competitorListing" | "propertyCompetitionMap" | "competitorTracking" | "intelligenceMapping" | "intelligenceAlert"
+      modelProps: "location" | "account" | "activity" | "listing" | "propertyLink" | "listingMedia" | "listingHouse" | "listingApartment" | "propertyLandDetail" | "listingCommercial" | "propertyPrice" | "propertyOwner" | "listingRepresentative" | "listingDocument" | "listingChange" | "agency" | "agencyMap" | "agencyAgentMap" | "agencyCustomization" | "agent" | "review" | "requirement" | "naturalSearch" | "savedProperty" | "listingsView" | "baseLead" | "clientContact" | "clientLink" | "sharedLeads" | "leadActivity" | "conversation" | "message" | "siteContent" | "userPreference" | "propertyRequest" | "mortgageRequest" | "salesRequest" | "visitRequest" | "problem" | "sitemapEntry" | "inquiry" | "newsletterSubscription" | "authzRole" | "application" | "accountAccess" | "roleCapability" | "authzAccountAccessGrant" | "authzAssetsAccessGrant" | "competitor" | "competitorSource" | "competitorPage" | "competitorListing" | "propertyCompetitionMap" | "competitorTracking" | "intelligenceMapping" | "intelligenceAlert"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1912,80 +1914,6 @@ export namespace Prisma {
           count: {
             args: Prisma.ListingCountArgs<ExtArgs>
             result: $Utils.Optional<ListingCountAggregateOutputType> | number
-          }
-        }
-      }
-      ListingsLog: {
-        payload: Prisma.$ListingsLogPayload<ExtArgs>
-        fields: Prisma.ListingsLogFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.ListingsLogFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingsLogPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.ListingsLogFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingsLogPayload>
-          }
-          findFirst: {
-            args: Prisma.ListingsLogFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingsLogPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.ListingsLogFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingsLogPayload>
-          }
-          findMany: {
-            args: Prisma.ListingsLogFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingsLogPayload>[]
-          }
-          create: {
-            args: Prisma.ListingsLogCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingsLogPayload>
-          }
-          createMany: {
-            args: Prisma.ListingsLogCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.ListingsLogCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingsLogPayload>[]
-          }
-          delete: {
-            args: Prisma.ListingsLogDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingsLogPayload>
-          }
-          update: {
-            args: Prisma.ListingsLogUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingsLogPayload>
-          }
-          deleteMany: {
-            args: Prisma.ListingsLogDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.ListingsLogUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.ListingsLogUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingsLogPayload>[]
-          }
-          upsert: {
-            args: Prisma.ListingsLogUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingsLogPayload>
-          }
-          aggregate: {
-            args: Prisma.ListingsLogAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateListingsLog>
-          }
-          groupBy: {
-            args: Prisma.ListingsLogGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ListingsLogGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ListingsLogCountArgs<ExtArgs>
-            result: $Utils.Optional<ListingsLogCountAggregateOutputType> | number
           }
         }
       }
@@ -5949,7 +5877,6 @@ export namespace Prisma {
     account?: AccountOmit
     activity?: ActivityOmit
     listing?: ListingOmit
-    listingsLog?: ListingsLogOmit
     propertyLink?: PropertyLinkOmit
     listingMedia?: ListingMediaOmit
     listingHouse?: ListingHouseOmit
@@ -12279,1028 +12206,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ListingInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model ListingsLog
-   */
-
-  export type AggregateListingsLog = {
-    _count: ListingsLogCountAggregateOutputType | null
-    _min: ListingsLogMinAggregateOutputType | null
-    _max: ListingsLogMaxAggregateOutputType | null
-  }
-
-  export type ListingsLogMinAggregateOutputType = {
-    id: string | null
-    propertyId: string | null
-    requestedBy: string | null
-    approvedBy: string | null
-    requestedOn: Date | null
-    approvedOn: Date | null
-  }
-
-  export type ListingsLogMaxAggregateOutputType = {
-    id: string | null
-    propertyId: string | null
-    requestedBy: string | null
-    approvedBy: string | null
-    requestedOn: Date | null
-    approvedOn: Date | null
-  }
-
-  export type ListingsLogCountAggregateOutputType = {
-    id: number
-    propertyId: number
-    requestedBy: number
-    approvedBy: number
-    data: number
-    requestedOn: number
-    approvedOn: number
-    _all: number
-  }
-
-
-  export type ListingsLogMinAggregateInputType = {
-    id?: true
-    propertyId?: true
-    requestedBy?: true
-    approvedBy?: true
-    requestedOn?: true
-    approvedOn?: true
-  }
-
-  export type ListingsLogMaxAggregateInputType = {
-    id?: true
-    propertyId?: true
-    requestedBy?: true
-    approvedBy?: true
-    requestedOn?: true
-    approvedOn?: true
-  }
-
-  export type ListingsLogCountAggregateInputType = {
-    id?: true
-    propertyId?: true
-    requestedBy?: true
-    approvedBy?: true
-    data?: true
-    requestedOn?: true
-    approvedOn?: true
-    _all?: true
-  }
-
-  export type ListingsLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ListingsLog to aggregate.
-     */
-    where?: ListingsLogWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ListingsLogs to fetch.
-     */
-    orderBy?: ListingsLogOrderByWithRelationInput | ListingsLogOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: ListingsLogWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ListingsLogs from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ListingsLogs.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned ListingsLogs
-    **/
-    _count?: true | ListingsLogCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: ListingsLogMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: ListingsLogMaxAggregateInputType
-  }
-
-  export type GetListingsLogAggregateType<T extends ListingsLogAggregateArgs> = {
-        [P in keyof T & keyof AggregateListingsLog]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateListingsLog[P]>
-      : GetScalarType<T[P], AggregateListingsLog[P]>
-  }
-
-
-
-
-  export type ListingsLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ListingsLogWhereInput
-    orderBy?: ListingsLogOrderByWithAggregationInput | ListingsLogOrderByWithAggregationInput[]
-    by: ListingsLogScalarFieldEnum[] | ListingsLogScalarFieldEnum
-    having?: ListingsLogScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: ListingsLogCountAggregateInputType | true
-    _min?: ListingsLogMinAggregateInputType
-    _max?: ListingsLogMaxAggregateInputType
-  }
-
-  export type ListingsLogGroupByOutputType = {
-    id: string
-    propertyId: string
-    requestedBy: string
-    approvedBy: string | null
-    data: JsonValue[]
-    requestedOn: Date
-    approvedOn: Date | null
-    _count: ListingsLogCountAggregateOutputType | null
-    _min: ListingsLogMinAggregateOutputType | null
-    _max: ListingsLogMaxAggregateOutputType | null
-  }
-
-  type GetListingsLogGroupByPayload<T extends ListingsLogGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<ListingsLogGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof ListingsLogGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], ListingsLogGroupByOutputType[P]>
-            : GetScalarType<T[P], ListingsLogGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type ListingsLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    propertyId?: boolean
-    requestedBy?: boolean
-    approvedBy?: boolean
-    data?: boolean
-    requestedOn?: boolean
-    approvedOn?: boolean
-  }, ExtArgs["result"]["listingsLog"]>
-
-  export type ListingsLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    propertyId?: boolean
-    requestedBy?: boolean
-    approvedBy?: boolean
-    data?: boolean
-    requestedOn?: boolean
-    approvedOn?: boolean
-  }, ExtArgs["result"]["listingsLog"]>
-
-  export type ListingsLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    propertyId?: boolean
-    requestedBy?: boolean
-    approvedBy?: boolean
-    data?: boolean
-    requestedOn?: boolean
-    approvedOn?: boolean
-  }, ExtArgs["result"]["listingsLog"]>
-
-  export type ListingsLogSelectScalar = {
-    id?: boolean
-    propertyId?: boolean
-    requestedBy?: boolean
-    approvedBy?: boolean
-    data?: boolean
-    requestedOn?: boolean
-    approvedOn?: boolean
-  }
-
-  export type ListingsLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "propertyId" | "requestedBy" | "approvedBy" | "data" | "requestedOn" | "approvedOn", ExtArgs["result"]["listingsLog"]>
-
-  export type $ListingsLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "ListingsLog"
-    objects: {}
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      propertyId: string
-      requestedBy: string
-      approvedBy: string | null
-      data: Prisma.JsonValue[]
-      requestedOn: Date
-      approvedOn: Date | null
-    }, ExtArgs["result"]["listingsLog"]>
-    composites: {}
-  }
-
-  type ListingsLogGetPayload<S extends boolean | null | undefined | ListingsLogDefaultArgs> = $Result.GetResult<Prisma.$ListingsLogPayload, S>
-
-  type ListingsLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<ListingsLogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ListingsLogCountAggregateInputType | true
-    }
-
-  export interface ListingsLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ListingsLog'], meta: { name: 'ListingsLog' } }
-    /**
-     * Find zero or one ListingsLog that matches the filter.
-     * @param {ListingsLogFindUniqueArgs} args - Arguments to find a ListingsLog
-     * @example
-     * // Get one ListingsLog
-     * const listingsLog = await prisma.listingsLog.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends ListingsLogFindUniqueArgs>(args: SelectSubset<T, ListingsLogFindUniqueArgs<ExtArgs>>): Prisma__ListingsLogClient<$Result.GetResult<Prisma.$ListingsLogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one ListingsLog that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {ListingsLogFindUniqueOrThrowArgs} args - Arguments to find a ListingsLog
-     * @example
-     * // Get one ListingsLog
-     * const listingsLog = await prisma.listingsLog.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends ListingsLogFindUniqueOrThrowArgs>(args: SelectSubset<T, ListingsLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ListingsLogClient<$Result.GetResult<Prisma.$ListingsLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first ListingsLog that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingsLogFindFirstArgs} args - Arguments to find a ListingsLog
-     * @example
-     * // Get one ListingsLog
-     * const listingsLog = await prisma.listingsLog.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends ListingsLogFindFirstArgs>(args?: SelectSubset<T, ListingsLogFindFirstArgs<ExtArgs>>): Prisma__ListingsLogClient<$Result.GetResult<Prisma.$ListingsLogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first ListingsLog that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingsLogFindFirstOrThrowArgs} args - Arguments to find a ListingsLog
-     * @example
-     * // Get one ListingsLog
-     * const listingsLog = await prisma.listingsLog.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends ListingsLogFindFirstOrThrowArgs>(args?: SelectSubset<T, ListingsLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__ListingsLogClient<$Result.GetResult<Prisma.$ListingsLogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more ListingsLogs that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingsLogFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all ListingsLogs
-     * const listingsLogs = await prisma.listingsLog.findMany()
-     * 
-     * // Get first 10 ListingsLogs
-     * const listingsLogs = await prisma.listingsLog.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const listingsLogWithIdOnly = await prisma.listingsLog.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends ListingsLogFindManyArgs>(args?: SelectSubset<T, ListingsLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingsLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a ListingsLog.
-     * @param {ListingsLogCreateArgs} args - Arguments to create a ListingsLog.
-     * @example
-     * // Create one ListingsLog
-     * const ListingsLog = await prisma.listingsLog.create({
-     *   data: {
-     *     // ... data to create a ListingsLog
-     *   }
-     * })
-     * 
-     */
-    create<T extends ListingsLogCreateArgs>(args: SelectSubset<T, ListingsLogCreateArgs<ExtArgs>>): Prisma__ListingsLogClient<$Result.GetResult<Prisma.$ListingsLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many ListingsLogs.
-     * @param {ListingsLogCreateManyArgs} args - Arguments to create many ListingsLogs.
-     * @example
-     * // Create many ListingsLogs
-     * const listingsLog = await prisma.listingsLog.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends ListingsLogCreateManyArgs>(args?: SelectSubset<T, ListingsLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many ListingsLogs and returns the data saved in the database.
-     * @param {ListingsLogCreateManyAndReturnArgs} args - Arguments to create many ListingsLogs.
-     * @example
-     * // Create many ListingsLogs
-     * const listingsLog = await prisma.listingsLog.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many ListingsLogs and only return the `id`
-     * const listingsLogWithIdOnly = await prisma.listingsLog.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends ListingsLogCreateManyAndReturnArgs>(args?: SelectSubset<T, ListingsLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingsLogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a ListingsLog.
-     * @param {ListingsLogDeleteArgs} args - Arguments to delete one ListingsLog.
-     * @example
-     * // Delete one ListingsLog
-     * const ListingsLog = await prisma.listingsLog.delete({
-     *   where: {
-     *     // ... filter to delete one ListingsLog
-     *   }
-     * })
-     * 
-     */
-    delete<T extends ListingsLogDeleteArgs>(args: SelectSubset<T, ListingsLogDeleteArgs<ExtArgs>>): Prisma__ListingsLogClient<$Result.GetResult<Prisma.$ListingsLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one ListingsLog.
-     * @param {ListingsLogUpdateArgs} args - Arguments to update one ListingsLog.
-     * @example
-     * // Update one ListingsLog
-     * const listingsLog = await prisma.listingsLog.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends ListingsLogUpdateArgs>(args: SelectSubset<T, ListingsLogUpdateArgs<ExtArgs>>): Prisma__ListingsLogClient<$Result.GetResult<Prisma.$ListingsLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more ListingsLogs.
-     * @param {ListingsLogDeleteManyArgs} args - Arguments to filter ListingsLogs to delete.
-     * @example
-     * // Delete a few ListingsLogs
-     * const { count } = await prisma.listingsLog.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends ListingsLogDeleteManyArgs>(args?: SelectSubset<T, ListingsLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more ListingsLogs.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingsLogUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many ListingsLogs
-     * const listingsLog = await prisma.listingsLog.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends ListingsLogUpdateManyArgs>(args: SelectSubset<T, ListingsLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more ListingsLogs and returns the data updated in the database.
-     * @param {ListingsLogUpdateManyAndReturnArgs} args - Arguments to update many ListingsLogs.
-     * @example
-     * // Update many ListingsLogs
-     * const listingsLog = await prisma.listingsLog.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more ListingsLogs and only return the `id`
-     * const listingsLogWithIdOnly = await prisma.listingsLog.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends ListingsLogUpdateManyAndReturnArgs>(args: SelectSubset<T, ListingsLogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingsLogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one ListingsLog.
-     * @param {ListingsLogUpsertArgs} args - Arguments to update or create a ListingsLog.
-     * @example
-     * // Update or create a ListingsLog
-     * const listingsLog = await prisma.listingsLog.upsert({
-     *   create: {
-     *     // ... data to create a ListingsLog
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the ListingsLog we want to update
-     *   }
-     * })
-     */
-    upsert<T extends ListingsLogUpsertArgs>(args: SelectSubset<T, ListingsLogUpsertArgs<ExtArgs>>): Prisma__ListingsLogClient<$Result.GetResult<Prisma.$ListingsLogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of ListingsLogs.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingsLogCountArgs} args - Arguments to filter ListingsLogs to count.
-     * @example
-     * // Count the number of ListingsLogs
-     * const count = await prisma.listingsLog.count({
-     *   where: {
-     *     // ... the filter for the ListingsLogs we want to count
-     *   }
-     * })
-    **/
-    count<T extends ListingsLogCountArgs>(
-      args?: Subset<T, ListingsLogCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], ListingsLogCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a ListingsLog.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingsLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends ListingsLogAggregateArgs>(args: Subset<T, ListingsLogAggregateArgs>): Prisma.PrismaPromise<GetListingsLogAggregateType<T>>
-
-    /**
-     * Group by ListingsLog.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingsLogGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends ListingsLogGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ListingsLogGroupByArgs['orderBy'] }
-        : { orderBy?: ListingsLogGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, ListingsLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetListingsLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the ListingsLog model
-   */
-  readonly fields: ListingsLogFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for ListingsLog.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__ListingsLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the ListingsLog model
-   */
-  interface ListingsLogFieldRefs {
-    readonly id: FieldRef<"ListingsLog", 'String'>
-    readonly propertyId: FieldRef<"ListingsLog", 'String'>
-    readonly requestedBy: FieldRef<"ListingsLog", 'String'>
-    readonly approvedBy: FieldRef<"ListingsLog", 'String'>
-    readonly data: FieldRef<"ListingsLog", 'Json[]'>
-    readonly requestedOn: FieldRef<"ListingsLog", 'DateTime'>
-    readonly approvedOn: FieldRef<"ListingsLog", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * ListingsLog findUnique
-   */
-  export type ListingsLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingsLog
-     */
-    select?: ListingsLogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingsLog
-     */
-    omit?: ListingsLogOmit<ExtArgs> | null
-    /**
-     * Filter, which ListingsLog to fetch.
-     */
-    where: ListingsLogWhereUniqueInput
-  }
-
-  /**
-   * ListingsLog findUniqueOrThrow
-   */
-  export type ListingsLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingsLog
-     */
-    select?: ListingsLogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingsLog
-     */
-    omit?: ListingsLogOmit<ExtArgs> | null
-    /**
-     * Filter, which ListingsLog to fetch.
-     */
-    where: ListingsLogWhereUniqueInput
-  }
-
-  /**
-   * ListingsLog findFirst
-   */
-  export type ListingsLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingsLog
-     */
-    select?: ListingsLogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingsLog
-     */
-    omit?: ListingsLogOmit<ExtArgs> | null
-    /**
-     * Filter, which ListingsLog to fetch.
-     */
-    where?: ListingsLogWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ListingsLogs to fetch.
-     */
-    orderBy?: ListingsLogOrderByWithRelationInput | ListingsLogOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ListingsLogs.
-     */
-    cursor?: ListingsLogWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ListingsLogs from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ListingsLogs.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ListingsLogs.
-     */
-    distinct?: ListingsLogScalarFieldEnum | ListingsLogScalarFieldEnum[]
-  }
-
-  /**
-   * ListingsLog findFirstOrThrow
-   */
-  export type ListingsLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingsLog
-     */
-    select?: ListingsLogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingsLog
-     */
-    omit?: ListingsLogOmit<ExtArgs> | null
-    /**
-     * Filter, which ListingsLog to fetch.
-     */
-    where?: ListingsLogWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ListingsLogs to fetch.
-     */
-    orderBy?: ListingsLogOrderByWithRelationInput | ListingsLogOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ListingsLogs.
-     */
-    cursor?: ListingsLogWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ListingsLogs from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ListingsLogs.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ListingsLogs.
-     */
-    distinct?: ListingsLogScalarFieldEnum | ListingsLogScalarFieldEnum[]
-  }
-
-  /**
-   * ListingsLog findMany
-   */
-  export type ListingsLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingsLog
-     */
-    select?: ListingsLogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingsLog
-     */
-    omit?: ListingsLogOmit<ExtArgs> | null
-    /**
-     * Filter, which ListingsLogs to fetch.
-     */
-    where?: ListingsLogWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ListingsLogs to fetch.
-     */
-    orderBy?: ListingsLogOrderByWithRelationInput | ListingsLogOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing ListingsLogs.
-     */
-    cursor?: ListingsLogWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ListingsLogs from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ListingsLogs.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ListingsLogs.
-     */
-    distinct?: ListingsLogScalarFieldEnum | ListingsLogScalarFieldEnum[]
-  }
-
-  /**
-   * ListingsLog create
-   */
-  export type ListingsLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingsLog
-     */
-    select?: ListingsLogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingsLog
-     */
-    omit?: ListingsLogOmit<ExtArgs> | null
-    /**
-     * The data needed to create a ListingsLog.
-     */
-    data: XOR<ListingsLogCreateInput, ListingsLogUncheckedCreateInput>
-  }
-
-  /**
-   * ListingsLog createMany
-   */
-  export type ListingsLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many ListingsLogs.
-     */
-    data: ListingsLogCreateManyInput | ListingsLogCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * ListingsLog createManyAndReturn
-   */
-  export type ListingsLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingsLog
-     */
-    select?: ListingsLogSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingsLog
-     */
-    omit?: ListingsLogOmit<ExtArgs> | null
-    /**
-     * The data used to create many ListingsLogs.
-     */
-    data: ListingsLogCreateManyInput | ListingsLogCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * ListingsLog update
-   */
-  export type ListingsLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingsLog
-     */
-    select?: ListingsLogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingsLog
-     */
-    omit?: ListingsLogOmit<ExtArgs> | null
-    /**
-     * The data needed to update a ListingsLog.
-     */
-    data: XOR<ListingsLogUpdateInput, ListingsLogUncheckedUpdateInput>
-    /**
-     * Choose, which ListingsLog to update.
-     */
-    where: ListingsLogWhereUniqueInput
-  }
-
-  /**
-   * ListingsLog updateMany
-   */
-  export type ListingsLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update ListingsLogs.
-     */
-    data: XOR<ListingsLogUpdateManyMutationInput, ListingsLogUncheckedUpdateManyInput>
-    /**
-     * Filter which ListingsLogs to update
-     */
-    where?: ListingsLogWhereInput
-    /**
-     * Limit how many ListingsLogs to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * ListingsLog updateManyAndReturn
-   */
-  export type ListingsLogUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingsLog
-     */
-    select?: ListingsLogSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingsLog
-     */
-    omit?: ListingsLogOmit<ExtArgs> | null
-    /**
-     * The data used to update ListingsLogs.
-     */
-    data: XOR<ListingsLogUpdateManyMutationInput, ListingsLogUncheckedUpdateManyInput>
-    /**
-     * Filter which ListingsLogs to update
-     */
-    where?: ListingsLogWhereInput
-    /**
-     * Limit how many ListingsLogs to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * ListingsLog upsert
-   */
-  export type ListingsLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingsLog
-     */
-    select?: ListingsLogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingsLog
-     */
-    omit?: ListingsLogOmit<ExtArgs> | null
-    /**
-     * The filter to search for the ListingsLog to update in case it exists.
-     */
-    where: ListingsLogWhereUniqueInput
-    /**
-     * In case the ListingsLog found by the `where` argument doesn't exist, create a new ListingsLog with this data.
-     */
-    create: XOR<ListingsLogCreateInput, ListingsLogUncheckedCreateInput>
-    /**
-     * In case the ListingsLog was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<ListingsLogUpdateInput, ListingsLogUncheckedUpdateInput>
-  }
-
-  /**
-   * ListingsLog delete
-   */
-  export type ListingsLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingsLog
-     */
-    select?: ListingsLogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingsLog
-     */
-    omit?: ListingsLogOmit<ExtArgs> | null
-    /**
-     * Filter which ListingsLog to delete.
-     */
-    where: ListingsLogWhereUniqueInput
-  }
-
-  /**
-   * ListingsLog deleteMany
-   */
-  export type ListingsLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ListingsLogs to delete
-     */
-    where?: ListingsLogWhereInput
-    /**
-     * Limit how many ListingsLogs to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * ListingsLog without action
-   */
-  export type ListingsLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingsLog
-     */
-    select?: ListingsLogSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingsLog
-     */
-    omit?: ListingsLogOmit<ExtArgs> | null
   }
 
 
@@ -24673,10 +23578,12 @@ export namespace Prisma {
     createdById: string | null
     createdForId: string | null
     workingProfileId: string | null
-    status: string | null
+    status: $Enums.ListingLogStatus | null
     isApproved: boolean | null
     createdOn: Date | null
     modifiedOn: Date | null
+    approvedBy: string | null
+    approvedOn: Date | null
   }
 
   export type ListingChangeMaxAggregateOutputType = {
@@ -24686,10 +23593,12 @@ export namespace Prisma {
     createdById: string | null
     createdForId: string | null
     workingProfileId: string | null
-    status: string | null
+    status: $Enums.ListingLogStatus | null
     isApproved: boolean | null
     createdOn: Date | null
     modifiedOn: Date | null
+    approvedBy: string | null
+    approvedOn: Date | null
   }
 
   export type ListingChangeCountAggregateOutputType = {
@@ -24704,6 +23613,8 @@ export namespace Prisma {
     isApproved: number
     createdOn: number
     modifiedOn: number
+    approvedBy: number
+    approvedOn: number
     _all: number
   }
 
@@ -24719,6 +23630,8 @@ export namespace Prisma {
     isApproved?: true
     createdOn?: true
     modifiedOn?: true
+    approvedBy?: true
+    approvedOn?: true
   }
 
   export type ListingChangeMaxAggregateInputType = {
@@ -24732,6 +23645,8 @@ export namespace Prisma {
     isApproved?: true
     createdOn?: true
     modifiedOn?: true
+    approvedBy?: true
+    approvedOn?: true
   }
 
   export type ListingChangeCountAggregateInputType = {
@@ -24746,6 +23661,8 @@ export namespace Prisma {
     isApproved?: true
     createdOn?: true
     modifiedOn?: true
+    approvedBy?: true
+    approvedOn?: true
     _all?: true
   }
 
@@ -24824,15 +23741,17 @@ export namespace Prisma {
   export type ListingChangeGroupByOutputType = {
     id: string
     propertyId: string | null
-    accountId: string
+    accountId: string | null
     createdById: string | null
     createdForId: string | null
     workingProfileId: string | null
     data: JsonValue
-    status: string
+    status: $Enums.ListingLogStatus
     isApproved: boolean | null
     createdOn: Date
     modifiedOn: Date
+    approvedBy: string | null
+    approvedOn: Date | null
     _count: ListingChangeCountAggregateOutputType | null
     _min: ListingChangeMinAggregateOutputType | null
     _max: ListingChangeMaxAggregateOutputType | null
@@ -24864,8 +23783,10 @@ export namespace Prisma {
     isApproved?: boolean
     createdOn?: boolean
     modifiedOn?: boolean
+    approvedBy?: boolean
+    approvedOn?: boolean
     property?: boolean | ListingChange$propertyArgs<ExtArgs>
-    account?: boolean | AccountDefaultArgs<ExtArgs>
+    account?: boolean | ListingChange$accountArgs<ExtArgs>
     createdBy?: boolean | ListingChange$createdByArgs<ExtArgs>
     createdFor?: boolean | ListingChange$createdForArgs<ExtArgs>
     workingProfile?: boolean | ListingChange$workingProfileArgs<ExtArgs>
@@ -24883,8 +23804,10 @@ export namespace Prisma {
     isApproved?: boolean
     createdOn?: boolean
     modifiedOn?: boolean
+    approvedBy?: boolean
+    approvedOn?: boolean
     property?: boolean | ListingChange$propertyArgs<ExtArgs>
-    account?: boolean | AccountDefaultArgs<ExtArgs>
+    account?: boolean | ListingChange$accountArgs<ExtArgs>
     createdBy?: boolean | ListingChange$createdByArgs<ExtArgs>
     createdFor?: boolean | ListingChange$createdForArgs<ExtArgs>
     workingProfile?: boolean | ListingChange$workingProfileArgs<ExtArgs>
@@ -24902,8 +23825,10 @@ export namespace Prisma {
     isApproved?: boolean
     createdOn?: boolean
     modifiedOn?: boolean
+    approvedBy?: boolean
+    approvedOn?: boolean
     property?: boolean | ListingChange$propertyArgs<ExtArgs>
-    account?: boolean | AccountDefaultArgs<ExtArgs>
+    account?: boolean | ListingChange$accountArgs<ExtArgs>
     createdBy?: boolean | ListingChange$createdByArgs<ExtArgs>
     createdFor?: boolean | ListingChange$createdForArgs<ExtArgs>
     workingProfile?: boolean | ListingChange$workingProfileArgs<ExtArgs>
@@ -24921,26 +23846,28 @@ export namespace Prisma {
     isApproved?: boolean
     createdOn?: boolean
     modifiedOn?: boolean
+    approvedBy?: boolean
+    approvedOn?: boolean
   }
 
-  export type ListingChangeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "propertyId" | "accountId" | "createdById" | "createdForId" | "workingProfileId" | "data" | "status" | "isApproved" | "createdOn" | "modifiedOn", ExtArgs["result"]["listingChange"]>
+  export type ListingChangeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "propertyId" | "accountId" | "createdById" | "createdForId" | "workingProfileId" | "data" | "status" | "isApproved" | "createdOn" | "modifiedOn" | "approvedBy" | "approvedOn", ExtArgs["result"]["listingChange"]>
   export type ListingChangeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     property?: boolean | ListingChange$propertyArgs<ExtArgs>
-    account?: boolean | AccountDefaultArgs<ExtArgs>
+    account?: boolean | ListingChange$accountArgs<ExtArgs>
     createdBy?: boolean | ListingChange$createdByArgs<ExtArgs>
     createdFor?: boolean | ListingChange$createdForArgs<ExtArgs>
     workingProfile?: boolean | ListingChange$workingProfileArgs<ExtArgs>
   }
   export type ListingChangeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     property?: boolean | ListingChange$propertyArgs<ExtArgs>
-    account?: boolean | AccountDefaultArgs<ExtArgs>
+    account?: boolean | ListingChange$accountArgs<ExtArgs>
     createdBy?: boolean | ListingChange$createdByArgs<ExtArgs>
     createdFor?: boolean | ListingChange$createdForArgs<ExtArgs>
     workingProfile?: boolean | ListingChange$workingProfileArgs<ExtArgs>
   }
   export type ListingChangeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     property?: boolean | ListingChange$propertyArgs<ExtArgs>
-    account?: boolean | AccountDefaultArgs<ExtArgs>
+    account?: boolean | ListingChange$accountArgs<ExtArgs>
     createdBy?: boolean | ListingChange$createdByArgs<ExtArgs>
     createdFor?: boolean | ListingChange$createdForArgs<ExtArgs>
     workingProfile?: boolean | ListingChange$workingProfileArgs<ExtArgs>
@@ -24950,7 +23877,7 @@ export namespace Prisma {
     name: "ListingChange"
     objects: {
       property: Prisma.$ListingPayload<ExtArgs> | null
-      account: Prisma.$AccountPayload<ExtArgs>
+      account: Prisma.$AccountPayload<ExtArgs> | null
       createdBy: Prisma.$AccountPayload<ExtArgs> | null
       createdFor: Prisma.$AccountPayload<ExtArgs> | null
       workingProfile: Prisma.$AccountPayload<ExtArgs> | null
@@ -24958,15 +23885,17 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       propertyId: string | null
-      accountId: string
+      accountId: string | null
       createdById: string | null
       createdForId: string | null
       workingProfileId: string | null
       data: Prisma.JsonValue
-      status: string
+      status: $Enums.ListingLogStatus
       isApproved: boolean | null
       createdOn: Date
       modifiedOn: Date
+      approvedBy: string | null
+      approvedOn: Date | null
     }, ExtArgs["result"]["listingChange"]>
     composites: {}
   }
@@ -25362,7 +24291,7 @@ export namespace Prisma {
   export interface Prisma__ListingChangeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     property<T extends ListingChange$propertyArgs<ExtArgs> = {}>(args?: Subset<T, ListingChange$propertyArgs<ExtArgs>>): Prisma__ListingClient<$Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    account<T extends AccountDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AccountDefaultArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    account<T extends ListingChange$accountArgs<ExtArgs> = {}>(args?: Subset<T, ListingChange$accountArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     createdBy<T extends ListingChange$createdByArgs<ExtArgs> = {}>(args?: Subset<T, ListingChange$createdByArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     createdFor<T extends ListingChange$createdForArgs<ExtArgs> = {}>(args?: Subset<T, ListingChange$createdForArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     workingProfile<T extends ListingChange$workingProfileArgs<ExtArgs> = {}>(args?: Subset<T, ListingChange$workingProfileArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -25402,10 +24331,12 @@ export namespace Prisma {
     readonly createdForId: FieldRef<"ListingChange", 'String'>
     readonly workingProfileId: FieldRef<"ListingChange", 'String'>
     readonly data: FieldRef<"ListingChange", 'Json'>
-    readonly status: FieldRef<"ListingChange", 'String'>
+    readonly status: FieldRef<"ListingChange", 'ListingLogStatus'>
     readonly isApproved: FieldRef<"ListingChange", 'Boolean'>
     readonly createdOn: FieldRef<"ListingChange", 'DateTime'>
     readonly modifiedOn: FieldRef<"ListingChange", 'DateTime'>
+    readonly approvedBy: FieldRef<"ListingChange", 'String'>
+    readonly approvedOn: FieldRef<"ListingChange", 'DateTime'>
   }
     
 
@@ -25823,6 +24754,25 @@ export namespace Prisma {
      */
     include?: ListingInclude<ExtArgs> | null
     where?: ListingWhereInput
+  }
+
+  /**
+   * ListingChange.account
+   */
+  export type ListingChange$accountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Account
+     */
+    select?: AccountSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Account
+     */
+    omit?: AccountOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AccountInclude<ExtArgs> | null
+    where?: AccountWhereInput
   }
 
   /**
@@ -71145,19 +70095,6 @@ export namespace Prisma {
   export type ListingScalarFieldEnum = (typeof ListingScalarFieldEnum)[keyof typeof ListingScalarFieldEnum]
 
 
-  export const ListingsLogScalarFieldEnum: {
-    id: 'id',
-    propertyId: 'propertyId',
-    requestedBy: 'requestedBy',
-    approvedBy: 'approvedBy',
-    data: 'data',
-    requestedOn: 'requestedOn',
-    approvedOn: 'approvedOn'
-  };
-
-  export type ListingsLogScalarFieldEnum = (typeof ListingsLogScalarFieldEnum)[keyof typeof ListingsLogScalarFieldEnum]
-
-
   export const PropertyLinkScalarFieldEnum: {
     id: 'id',
     primaryId: 'primaryId',
@@ -71307,7 +70244,9 @@ export namespace Prisma {
     status: 'status',
     isApproved: 'isApproved',
     createdOn: 'createdOn',
-    modifiedOn: 'modifiedOn'
+    modifiedOn: 'modifiedOn',
+    approvedBy: 'approvedBy',
+    approvedOn: 'approvedOn'
   };
 
   export type ListingChangeScalarFieldEnum = (typeof ListingChangeScalarFieldEnum)[keyof typeof ListingChangeScalarFieldEnum]
@@ -72067,13 +71006,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Json[]'
-   */
-  export type ListJsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -72098,6 +71030,20 @@ export namespace Prisma {
    * Reference to a field of type 'PropertyRepresentativeRole[]'
    */
   export type ListEnumPropertyRepresentativeRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PropertyRepresentativeRole[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ListingLogStatus'
+   */
+  export type EnumListingLogStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ListingLogStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ListingLogStatus[]'
+   */
+  export type ListEnumListingLogStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ListingLogStatus[]'>
     
 
 
@@ -72649,68 +71595,6 @@ export namespace Prisma {
     isApproved?: BoolWithAggregatesFilter<"Listing"> | boolean
     isDeleted?: BoolWithAggregatesFilter<"Listing"> | boolean
     customId?: StringNullableWithAggregatesFilter<"Listing"> | string | null
-  }
-
-  export type ListingsLogWhereInput = {
-    AND?: ListingsLogWhereInput | ListingsLogWhereInput[]
-    OR?: ListingsLogWhereInput[]
-    NOT?: ListingsLogWhereInput | ListingsLogWhereInput[]
-    id?: StringFilter<"ListingsLog"> | string
-    propertyId?: StringFilter<"ListingsLog"> | string
-    requestedBy?: StringFilter<"ListingsLog"> | string
-    approvedBy?: StringNullableFilter<"ListingsLog"> | string | null
-    data?: JsonNullableListFilter<"ListingsLog">
-    requestedOn?: DateTimeFilter<"ListingsLog"> | Date | string
-    approvedOn?: DateTimeNullableFilter<"ListingsLog"> | Date | string | null
-  }
-
-  export type ListingsLogOrderByWithRelationInput = {
-    id?: SortOrder
-    propertyId?: SortOrder
-    requestedBy?: SortOrder
-    approvedBy?: SortOrderInput | SortOrder
-    data?: SortOrder
-    requestedOn?: SortOrder
-    approvedOn?: SortOrderInput | SortOrder
-  }
-
-  export type ListingsLogWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: ListingsLogWhereInput | ListingsLogWhereInput[]
-    OR?: ListingsLogWhereInput[]
-    NOT?: ListingsLogWhereInput | ListingsLogWhereInput[]
-    propertyId?: StringFilter<"ListingsLog"> | string
-    requestedBy?: StringFilter<"ListingsLog"> | string
-    approvedBy?: StringNullableFilter<"ListingsLog"> | string | null
-    data?: JsonNullableListFilter<"ListingsLog">
-    requestedOn?: DateTimeFilter<"ListingsLog"> | Date | string
-    approvedOn?: DateTimeNullableFilter<"ListingsLog"> | Date | string | null
-  }, "id">
-
-  export type ListingsLogOrderByWithAggregationInput = {
-    id?: SortOrder
-    propertyId?: SortOrder
-    requestedBy?: SortOrder
-    approvedBy?: SortOrderInput | SortOrder
-    data?: SortOrder
-    requestedOn?: SortOrder
-    approvedOn?: SortOrderInput | SortOrder
-    _count?: ListingsLogCountOrderByAggregateInput
-    _max?: ListingsLogMaxOrderByAggregateInput
-    _min?: ListingsLogMinOrderByAggregateInput
-  }
-
-  export type ListingsLogScalarWhereWithAggregatesInput = {
-    AND?: ListingsLogScalarWhereWithAggregatesInput | ListingsLogScalarWhereWithAggregatesInput[]
-    OR?: ListingsLogScalarWhereWithAggregatesInput[]
-    NOT?: ListingsLogScalarWhereWithAggregatesInput | ListingsLogScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"ListingsLog"> | string
-    propertyId?: StringWithAggregatesFilter<"ListingsLog"> | string
-    requestedBy?: StringWithAggregatesFilter<"ListingsLog"> | string
-    approvedBy?: StringNullableWithAggregatesFilter<"ListingsLog"> | string | null
-    data?: JsonNullableListFilter<"ListingsLog">
-    requestedOn?: DateTimeWithAggregatesFilter<"ListingsLog"> | Date | string
-    approvedOn?: DateTimeNullableWithAggregatesFilter<"ListingsLog"> | Date | string | null
   }
 
   export type PropertyLinkWhereInput = {
@@ -73433,17 +72317,19 @@ export namespace Prisma {
     NOT?: ListingChangeWhereInput | ListingChangeWhereInput[]
     id?: StringFilter<"ListingChange"> | string
     propertyId?: StringNullableFilter<"ListingChange"> | string | null
-    accountId?: StringFilter<"ListingChange"> | string
+    accountId?: StringNullableFilter<"ListingChange"> | string | null
     createdById?: StringNullableFilter<"ListingChange"> | string | null
     createdForId?: StringNullableFilter<"ListingChange"> | string | null
     workingProfileId?: StringNullableFilter<"ListingChange"> | string | null
     data?: JsonFilter<"ListingChange">
-    status?: StringFilter<"ListingChange"> | string
+    status?: EnumListingLogStatusFilter<"ListingChange"> | $Enums.ListingLogStatus
     isApproved?: BoolNullableFilter<"ListingChange"> | boolean | null
     createdOn?: DateTimeFilter<"ListingChange"> | Date | string
     modifiedOn?: DateTimeFilter<"ListingChange"> | Date | string
+    approvedBy?: StringNullableFilter<"ListingChange"> | string | null
+    approvedOn?: DateTimeNullableFilter<"ListingChange"> | Date | string | null
     property?: XOR<ListingNullableScalarRelationFilter, ListingWhereInput> | null
-    account?: XOR<AccountScalarRelationFilter, AccountWhereInput>
+    account?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
     createdBy?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
     createdFor?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
     workingProfile?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
@@ -73452,7 +72338,7 @@ export namespace Prisma {
   export type ListingChangeOrderByWithRelationInput = {
     id?: SortOrder
     propertyId?: SortOrderInput | SortOrder
-    accountId?: SortOrder
+    accountId?: SortOrderInput | SortOrder
     createdById?: SortOrderInput | SortOrder
     createdForId?: SortOrderInput | SortOrder
     workingProfileId?: SortOrderInput | SortOrder
@@ -73461,6 +72347,8 @@ export namespace Prisma {
     isApproved?: SortOrderInput | SortOrder
     createdOn?: SortOrder
     modifiedOn?: SortOrder
+    approvedBy?: SortOrderInput | SortOrder
+    approvedOn?: SortOrderInput | SortOrder
     property?: ListingOrderByWithRelationInput
     account?: AccountOrderByWithRelationInput
     createdBy?: AccountOrderByWithRelationInput
@@ -73474,17 +72362,19 @@ export namespace Prisma {
     OR?: ListingChangeWhereInput[]
     NOT?: ListingChangeWhereInput | ListingChangeWhereInput[]
     propertyId?: StringNullableFilter<"ListingChange"> | string | null
-    accountId?: StringFilter<"ListingChange"> | string
+    accountId?: StringNullableFilter<"ListingChange"> | string | null
     createdById?: StringNullableFilter<"ListingChange"> | string | null
     createdForId?: StringNullableFilter<"ListingChange"> | string | null
     workingProfileId?: StringNullableFilter<"ListingChange"> | string | null
     data?: JsonFilter<"ListingChange">
-    status?: StringFilter<"ListingChange"> | string
+    status?: EnumListingLogStatusFilter<"ListingChange"> | $Enums.ListingLogStatus
     isApproved?: BoolNullableFilter<"ListingChange"> | boolean | null
     createdOn?: DateTimeFilter<"ListingChange"> | Date | string
     modifiedOn?: DateTimeFilter<"ListingChange"> | Date | string
+    approvedBy?: StringNullableFilter<"ListingChange"> | string | null
+    approvedOn?: DateTimeNullableFilter<"ListingChange"> | Date | string | null
     property?: XOR<ListingNullableScalarRelationFilter, ListingWhereInput> | null
-    account?: XOR<AccountScalarRelationFilter, AccountWhereInput>
+    account?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
     createdBy?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
     createdFor?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
     workingProfile?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
@@ -73493,7 +72383,7 @@ export namespace Prisma {
   export type ListingChangeOrderByWithAggregationInput = {
     id?: SortOrder
     propertyId?: SortOrderInput | SortOrder
-    accountId?: SortOrder
+    accountId?: SortOrderInput | SortOrder
     createdById?: SortOrderInput | SortOrder
     createdForId?: SortOrderInput | SortOrder
     workingProfileId?: SortOrderInput | SortOrder
@@ -73502,6 +72392,8 @@ export namespace Prisma {
     isApproved?: SortOrderInput | SortOrder
     createdOn?: SortOrder
     modifiedOn?: SortOrder
+    approvedBy?: SortOrderInput | SortOrder
+    approvedOn?: SortOrderInput | SortOrder
     _count?: ListingChangeCountOrderByAggregateInput
     _max?: ListingChangeMaxOrderByAggregateInput
     _min?: ListingChangeMinOrderByAggregateInput
@@ -73513,15 +72405,17 @@ export namespace Prisma {
     NOT?: ListingChangeScalarWhereWithAggregatesInput | ListingChangeScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"ListingChange"> | string
     propertyId?: StringNullableWithAggregatesFilter<"ListingChange"> | string | null
-    accountId?: StringWithAggregatesFilter<"ListingChange"> | string
+    accountId?: StringNullableWithAggregatesFilter<"ListingChange"> | string | null
     createdById?: StringNullableWithAggregatesFilter<"ListingChange"> | string | null
     createdForId?: StringNullableWithAggregatesFilter<"ListingChange"> | string | null
     workingProfileId?: StringNullableWithAggregatesFilter<"ListingChange"> | string | null
     data?: JsonWithAggregatesFilter<"ListingChange">
-    status?: StringWithAggregatesFilter<"ListingChange"> | string
+    status?: EnumListingLogStatusWithAggregatesFilter<"ListingChange"> | $Enums.ListingLogStatus
     isApproved?: BoolNullableWithAggregatesFilter<"ListingChange"> | boolean | null
     createdOn?: DateTimeWithAggregatesFilter<"ListingChange"> | Date | string
     modifiedOn?: DateTimeWithAggregatesFilter<"ListingChange"> | Date | string
+    approvedBy?: StringNullableWithAggregatesFilter<"ListingChange"> | string | null
+    approvedOn?: DateTimeNullableWithAggregatesFilter<"ListingChange"> | Date | string | null
   }
 
   export type AgencyWhereInput = {
@@ -77082,76 +75976,6 @@ export namespace Prisma {
     customId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type ListingsLogCreateInput = {
-    id?: string
-    propertyId: string
-    requestedBy: string
-    approvedBy?: string | null
-    data?: ListingsLogCreatedataInput | InputJsonValue[]
-    requestedOn?: Date | string
-    approvedOn?: Date | string | null
-  }
-
-  export type ListingsLogUncheckedCreateInput = {
-    id?: string
-    propertyId: string
-    requestedBy: string
-    approvedBy?: string | null
-    data?: ListingsLogCreatedataInput | InputJsonValue[]
-    requestedOn?: Date | string
-    approvedOn?: Date | string | null
-  }
-
-  export type ListingsLogUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    propertyId?: StringFieldUpdateOperationsInput | string
-    requestedBy?: StringFieldUpdateOperationsInput | string
-    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    data?: ListingsLogUpdatedataInput | InputJsonValue[]
-    requestedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type ListingsLogUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    propertyId?: StringFieldUpdateOperationsInput | string
-    requestedBy?: StringFieldUpdateOperationsInput | string
-    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    data?: ListingsLogUpdatedataInput | InputJsonValue[]
-    requestedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type ListingsLogCreateManyInput = {
-    id?: string
-    propertyId: string
-    requestedBy: string
-    approvedBy?: string | null
-    data?: ListingsLogCreatedataInput | InputJsonValue[]
-    requestedOn?: Date | string
-    approvedOn?: Date | string | null
-  }
-
-  export type ListingsLogUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    propertyId?: StringFieldUpdateOperationsInput | string
-    requestedBy?: StringFieldUpdateOperationsInput | string
-    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    data?: ListingsLogUpdatedataInput | InputJsonValue[]
-    requestedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type ListingsLogUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    propertyId?: StringFieldUpdateOperationsInput | string
-    requestedBy?: StringFieldUpdateOperationsInput | string
-    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
-    data?: ListingsLogUpdatedataInput | InputJsonValue[]
-    requestedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
   export type PropertyLinkCreateInput = {
     id?: string
     primary: ListingCreateNestedOneWithoutLinksInput
@@ -77898,12 +76722,14 @@ export namespace Prisma {
   export type ListingChangeCreateInput = {
     id?: string
     data: JsonNullValueInput | InputJsonValue
-    status: string
+    status: $Enums.ListingLogStatus
     isApproved?: boolean | null
     createdOn?: Date | string
     modifiedOn?: Date | string
+    approvedBy?: string | null
+    approvedOn?: Date | string | null
     property?: ListingCreateNestedOneWithoutChangesInput
-    account: AccountCreateNestedOneWithoutPropertyChangesInput
+    account?: AccountCreateNestedOneWithoutPropertyChangesInput
     createdBy?: AccountCreateNestedOneWithoutCreatedListingChangesInput
     createdFor?: AccountCreateNestedOneWithoutPropertyChangesForProfileInput
     workingProfile?: AccountCreateNestedOneWithoutPropertyChangesByWorkingProfileInput
@@ -77912,26 +76738,30 @@ export namespace Prisma {
   export type ListingChangeUncheckedCreateInput = {
     id?: string
     propertyId?: string | null
-    accountId: string
+    accountId?: string | null
     createdById?: string | null
     createdForId?: string | null
     workingProfileId?: string | null
     data: JsonNullValueInput | InputJsonValue
-    status: string
+    status: $Enums.ListingLogStatus
     isApproved?: boolean | null
     createdOn?: Date | string
     modifiedOn?: Date | string
+    approvedBy?: string | null
+    approvedOn?: Date | string | null
   }
 
   export type ListingChangeUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     data?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumListingLogStatusFieldUpdateOperationsInput | $Enums.ListingLogStatus
     isApproved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
     modifiedOn?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     property?: ListingUpdateOneWithoutChangesNestedInput
-    account?: AccountUpdateOneRequiredWithoutPropertyChangesNestedInput
+    account?: AccountUpdateOneWithoutPropertyChangesNestedInput
     createdBy?: AccountUpdateOneWithoutCreatedListingChangesNestedInput
     createdFor?: AccountUpdateOneWithoutPropertyChangesForProfileNestedInput
     workingProfile?: AccountUpdateOneWithoutPropertyChangesByWorkingProfileNestedInput
@@ -77940,52 +76770,60 @@ export namespace Prisma {
   export type ListingChangeUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     propertyId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountId?: StringFieldUpdateOperationsInput | string
+    accountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdForId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumListingLogStatusFieldUpdateOperationsInput | $Enums.ListingLogStatus
     isApproved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
     modifiedOn?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ListingChangeCreateManyInput = {
     id?: string
     propertyId?: string | null
-    accountId: string
+    accountId?: string | null
     createdById?: string | null
     createdForId?: string | null
     workingProfileId?: string | null
     data: JsonNullValueInput | InputJsonValue
-    status: string
+    status: $Enums.ListingLogStatus
     isApproved?: boolean | null
     createdOn?: Date | string
     modifiedOn?: Date | string
+    approvedBy?: string | null
+    approvedOn?: Date | string | null
   }
 
   export type ListingChangeUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     data?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumListingLogStatusFieldUpdateOperationsInput | $Enums.ListingLogStatus
     isApproved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
     modifiedOn?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ListingChangeUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     propertyId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountId?: StringFieldUpdateOperationsInput | string
+    accountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdForId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumListingLogStatusFieldUpdateOperationsInput | $Enums.ListingLogStatus
     isApproved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
     modifiedOn?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type AgencyCreateInput = {
@@ -82049,73 +80887,6 @@ export namespace Prisma {
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
   }
-  export type JsonNullableListFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableListFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableListFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableListFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableListFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableListFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue[] | ListJsonFieldRefInput<$PrismaModel> | null
-    has?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    hasEvery?: InputJsonValue[] | ListJsonFieldRefInput<$PrismaModel>
-    hasSome?: InputJsonValue[] | ListJsonFieldRefInput<$PrismaModel>
-    isEmpty?: boolean
-  }
-
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type ListingsLogCountOrderByAggregateInput = {
-    id?: SortOrder
-    propertyId?: SortOrder
-    requestedBy?: SortOrder
-    approvedBy?: SortOrder
-    data?: SortOrder
-    requestedOn?: SortOrder
-    approvedOn?: SortOrder
-  }
-
-  export type ListingsLogMaxOrderByAggregateInput = {
-    id?: SortOrder
-    propertyId?: SortOrder
-    requestedBy?: SortOrder
-    approvedBy?: SortOrder
-    requestedOn?: SortOrder
-    approvedOn?: SortOrder
-  }
-
-  export type ListingsLogMinOrderByAggregateInput = {
-    id?: SortOrder
-    propertyId?: SortOrder
-    requestedBy?: SortOrder
-    approvedBy?: SortOrder
-    requestedOn?: SortOrder
-    approvedOn?: SortOrder
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
 
   export type ListingScalarRelationFilter = {
     is?: ListingWhereInput
@@ -82609,9 +81380,27 @@ export namespace Prisma {
     sortOrder?: SortOrder
   }
 
+  export type EnumListingLogStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ListingLogStatus | EnumListingLogStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ListingLogStatus[] | ListEnumListingLogStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ListingLogStatus[] | ListEnumListingLogStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumListingLogStatusFilter<$PrismaModel> | $Enums.ListingLogStatus
+  }
+
   export type BoolNullableFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
     not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type ListingNullableScalarRelationFilter = {
@@ -82631,6 +81420,8 @@ export namespace Prisma {
     isApproved?: SortOrder
     createdOn?: SortOrder
     modifiedOn?: SortOrder
+    approvedBy?: SortOrder
+    approvedOn?: SortOrder
   }
 
   export type ListingChangeMaxOrderByAggregateInput = {
@@ -82644,6 +81435,8 @@ export namespace Prisma {
     isApproved?: SortOrder
     createdOn?: SortOrder
     modifiedOn?: SortOrder
+    approvedBy?: SortOrder
+    approvedOn?: SortOrder
   }
 
   export type ListingChangeMinOrderByAggregateInput = {
@@ -82657,6 +81450,18 @@ export namespace Prisma {
     isApproved?: SortOrder
     createdOn?: SortOrder
     modifiedOn?: SortOrder
+    approvedBy?: SortOrder
+    approvedOn?: SortOrder
+  }
+
+  export type EnumListingLogStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ListingLogStatus | EnumListingLogStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ListingLogStatus[] | ListEnumListingLogStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ListingLogStatus[] | ListEnumListingLogStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumListingLogStatusWithAggregatesFilter<$PrismaModel> | $Enums.ListingLogStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumListingLogStatusFilter<$PrismaModel>
+    _max?: NestedEnumListingLogStatusFilter<$PrismaModel>
   }
 
   export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -82665,6 +81470,20 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedBoolNullableFilter<$PrismaModel>
     _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type AgencyMapListRelationFilter = {
@@ -85704,19 +84523,6 @@ export namespace Prisma {
     deleteMany?: ListingRepresentativeScalarWhereInput | ListingRepresentativeScalarWhereInput[]
   }
 
-  export type ListingsLogCreatedataInput = {
-    set: InputJsonValue[]
-  }
-
-  export type ListingsLogUpdatedataInput = {
-    set?: InputJsonValue[]
-    push?: InputJsonValue | InputJsonValue[]
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
-  }
-
   export type ListingCreateNestedOneWithoutLinksInput = {
     create?: XOR<ListingCreateWithoutLinksInput, ListingUncheckedCreateWithoutLinksInput>
     connectOrCreate?: ListingCreateOrConnectWithoutLinksInput
@@ -85941,8 +84747,16 @@ export namespace Prisma {
     connect?: AccountWhereUniqueInput
   }
 
+  export type EnumListingLogStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ListingLogStatus
+  }
+
   export type NullableBoolFieldUpdateOperationsInput = {
     set?: boolean | null
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type ListingUpdateOneWithoutChangesNestedInput = {
@@ -85955,10 +84769,12 @@ export namespace Prisma {
     update?: XOR<XOR<ListingUpdateToOneWithWhereWithoutChangesInput, ListingUpdateWithoutChangesInput>, ListingUncheckedUpdateWithoutChangesInput>
   }
 
-  export type AccountUpdateOneRequiredWithoutPropertyChangesNestedInput = {
+  export type AccountUpdateOneWithoutPropertyChangesNestedInput = {
     create?: XOR<AccountCreateWithoutPropertyChangesInput, AccountUncheckedCreateWithoutPropertyChangesInput>
     connectOrCreate?: AccountCreateOrConnectWithoutPropertyChangesInput
     upsert?: AccountUpsertWithoutPropertyChangesInput
+    disconnect?: AccountWhereInput | boolean
+    delete?: AccountWhereInput | boolean
     connect?: AccountWhereUniqueInput
     update?: XOR<XOR<AccountUpdateToOneWithWhereWithoutPropertyChangesInput, AccountUpdateWithoutPropertyChangesInput>, AccountUncheckedUpdateWithoutPropertyChangesInput>
   }
@@ -87678,31 +86494,6 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -87747,9 +86538,37 @@ export namespace Prisma {
     _max?: NestedEnumPropertyRepresentativeRoleFilter<$PrismaModel>
   }
 
+  export type NestedEnumListingLogStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ListingLogStatus | EnumListingLogStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ListingLogStatus[] | ListEnumListingLogStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ListingLogStatus[] | ListEnumListingLogStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumListingLogStatusFilter<$PrismaModel> | $Enums.ListingLogStatus
+  }
+
   export type NestedBoolNullableFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
     not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedEnumListingLogStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ListingLogStatus | EnumListingLogStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ListingLogStatus[] | ListEnumListingLogStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ListingLogStatus[] | ListEnumListingLogStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumListingLogStatusWithAggregatesFilter<$PrismaModel> | $Enums.ListingLogStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumListingLogStatusFilter<$PrismaModel>
+    _max?: NestedEnumListingLogStatusFilter<$PrismaModel>
   }
 
   export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -87758,6 +86577,20 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedBoolNullableFilter<$PrismaModel>
     _max?: NestedBoolNullableFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -88349,10 +87182,12 @@ export namespace Prisma {
   export type ListingChangeCreateWithoutAccountInput = {
     id?: string
     data: JsonNullValueInput | InputJsonValue
-    status: string
+    status: $Enums.ListingLogStatus
     isApproved?: boolean | null
     createdOn?: Date | string
     modifiedOn?: Date | string
+    approvedBy?: string | null
+    approvedOn?: Date | string | null
     property?: ListingCreateNestedOneWithoutChangesInput
     createdBy?: AccountCreateNestedOneWithoutCreatedListingChangesInput
     createdFor?: AccountCreateNestedOneWithoutPropertyChangesForProfileInput
@@ -88366,10 +87201,12 @@ export namespace Prisma {
     createdForId?: string | null
     workingProfileId?: string | null
     data: JsonNullValueInput | InputJsonValue
-    status: string
+    status: $Enums.ListingLogStatus
     isApproved?: boolean | null
     createdOn?: Date | string
     modifiedOn?: Date | string
+    approvedBy?: string | null
+    approvedOn?: Date | string | null
   }
 
   export type ListingChangeCreateOrConnectWithoutAccountInput = {
@@ -88385,12 +87222,14 @@ export namespace Prisma {
   export type ListingChangeCreateWithoutCreatedByInput = {
     id?: string
     data: JsonNullValueInput | InputJsonValue
-    status: string
+    status: $Enums.ListingLogStatus
     isApproved?: boolean | null
     createdOn?: Date | string
     modifiedOn?: Date | string
+    approvedBy?: string | null
+    approvedOn?: Date | string | null
     property?: ListingCreateNestedOneWithoutChangesInput
-    account: AccountCreateNestedOneWithoutPropertyChangesInput
+    account?: AccountCreateNestedOneWithoutPropertyChangesInput
     createdFor?: AccountCreateNestedOneWithoutPropertyChangesForProfileInput
     workingProfile?: AccountCreateNestedOneWithoutPropertyChangesByWorkingProfileInput
   }
@@ -88398,14 +87237,16 @@ export namespace Prisma {
   export type ListingChangeUncheckedCreateWithoutCreatedByInput = {
     id?: string
     propertyId?: string | null
-    accountId: string
+    accountId?: string | null
     createdForId?: string | null
     workingProfileId?: string | null
     data: JsonNullValueInput | InputJsonValue
-    status: string
+    status: $Enums.ListingLogStatus
     isApproved?: boolean | null
     createdOn?: Date | string
     modifiedOn?: Date | string
+    approvedBy?: string | null
+    approvedOn?: Date | string | null
   }
 
   export type ListingChangeCreateOrConnectWithoutCreatedByInput = {
@@ -88421,12 +87262,14 @@ export namespace Prisma {
   export type ListingChangeCreateWithoutCreatedForInput = {
     id?: string
     data: JsonNullValueInput | InputJsonValue
-    status: string
+    status: $Enums.ListingLogStatus
     isApproved?: boolean | null
     createdOn?: Date | string
     modifiedOn?: Date | string
+    approvedBy?: string | null
+    approvedOn?: Date | string | null
     property?: ListingCreateNestedOneWithoutChangesInput
-    account: AccountCreateNestedOneWithoutPropertyChangesInput
+    account?: AccountCreateNestedOneWithoutPropertyChangesInput
     createdBy?: AccountCreateNestedOneWithoutCreatedListingChangesInput
     workingProfile?: AccountCreateNestedOneWithoutPropertyChangesByWorkingProfileInput
   }
@@ -88434,14 +87277,16 @@ export namespace Prisma {
   export type ListingChangeUncheckedCreateWithoutCreatedForInput = {
     id?: string
     propertyId?: string | null
-    accountId: string
+    accountId?: string | null
     createdById?: string | null
     workingProfileId?: string | null
     data: JsonNullValueInput | InputJsonValue
-    status: string
+    status: $Enums.ListingLogStatus
     isApproved?: boolean | null
     createdOn?: Date | string
     modifiedOn?: Date | string
+    approvedBy?: string | null
+    approvedOn?: Date | string | null
   }
 
   export type ListingChangeCreateOrConnectWithoutCreatedForInput = {
@@ -88457,12 +87302,14 @@ export namespace Prisma {
   export type ListingChangeCreateWithoutWorkingProfileInput = {
     id?: string
     data: JsonNullValueInput | InputJsonValue
-    status: string
+    status: $Enums.ListingLogStatus
     isApproved?: boolean | null
     createdOn?: Date | string
     modifiedOn?: Date | string
+    approvedBy?: string | null
+    approvedOn?: Date | string | null
     property?: ListingCreateNestedOneWithoutChangesInput
-    account: AccountCreateNestedOneWithoutPropertyChangesInput
+    account?: AccountCreateNestedOneWithoutPropertyChangesInput
     createdBy?: AccountCreateNestedOneWithoutCreatedListingChangesInput
     createdFor?: AccountCreateNestedOneWithoutPropertyChangesForProfileInput
   }
@@ -88470,14 +87317,16 @@ export namespace Prisma {
   export type ListingChangeUncheckedCreateWithoutWorkingProfileInput = {
     id?: string
     propertyId?: string | null
-    accountId: string
+    accountId?: string | null
     createdById?: string | null
     createdForId?: string | null
     data: JsonNullValueInput | InputJsonValue
-    status: string
+    status: $Enums.ListingLogStatus
     isApproved?: boolean | null
     createdOn?: Date | string
     modifiedOn?: Date | string
+    approvedBy?: string | null
+    approvedOn?: Date | string | null
   }
 
   export type ListingChangeCreateOrConnectWithoutWorkingProfileInput = {
@@ -88863,15 +87712,17 @@ export namespace Prisma {
     NOT?: ListingChangeScalarWhereInput | ListingChangeScalarWhereInput[]
     id?: StringFilter<"ListingChange"> | string
     propertyId?: StringNullableFilter<"ListingChange"> | string | null
-    accountId?: StringFilter<"ListingChange"> | string
+    accountId?: StringNullableFilter<"ListingChange"> | string | null
     createdById?: StringNullableFilter<"ListingChange"> | string | null
     createdForId?: StringNullableFilter<"ListingChange"> | string | null
     workingProfileId?: StringNullableFilter<"ListingChange"> | string | null
     data?: JsonFilter<"ListingChange">
-    status?: StringFilter<"ListingChange"> | string
+    status?: EnumListingLogStatusFilter<"ListingChange"> | $Enums.ListingLogStatus
     isApproved?: BoolNullableFilter<"ListingChange"> | boolean | null
     createdOn?: DateTimeFilter<"ListingChange"> | Date | string
     modifiedOn?: DateTimeFilter<"ListingChange"> | Date | string
+    approvedBy?: StringNullableFilter<"ListingChange"> | string | null
+    approvedOn?: DateTimeNullableFilter<"ListingChange"> | Date | string | null
   }
 
   export type ListingChangeUpsertWithWhereUniqueWithoutCreatedByInput = {
@@ -89184,11 +88035,13 @@ export namespace Prisma {
   export type ListingChangeCreateWithoutPropertyInput = {
     id?: string
     data: JsonNullValueInput | InputJsonValue
-    status: string
+    status: $Enums.ListingLogStatus
     isApproved?: boolean | null
     createdOn?: Date | string
     modifiedOn?: Date | string
-    account: AccountCreateNestedOneWithoutPropertyChangesInput
+    approvedBy?: string | null
+    approvedOn?: Date | string | null
+    account?: AccountCreateNestedOneWithoutPropertyChangesInput
     createdBy?: AccountCreateNestedOneWithoutCreatedListingChangesInput
     createdFor?: AccountCreateNestedOneWithoutPropertyChangesForProfileInput
     workingProfile?: AccountCreateNestedOneWithoutPropertyChangesByWorkingProfileInput
@@ -89196,15 +88049,17 @@ export namespace Prisma {
 
   export type ListingChangeUncheckedCreateWithoutPropertyInput = {
     id?: string
-    accountId: string
+    accountId?: string | null
     createdById?: string | null
     createdForId?: string | null
     workingProfileId?: string | null
     data: JsonNullValueInput | InputJsonValue
-    status: string
+    status: $Enums.ListingLogStatus
     isApproved?: boolean | null
     createdOn?: Date | string
     modifiedOn?: Date | string
+    approvedBy?: string | null
+    approvedOn?: Date | string | null
   }
 
   export type ListingChangeCreateOrConnectWithoutPropertyInput = {
@@ -97335,49 +96190,57 @@ export namespace Prisma {
     createdForId?: string | null
     workingProfileId?: string | null
     data: JsonNullValueInput | InputJsonValue
-    status: string
+    status: $Enums.ListingLogStatus
     isApproved?: boolean | null
     createdOn?: Date | string
     modifiedOn?: Date | string
+    approvedBy?: string | null
+    approvedOn?: Date | string | null
   }
 
   export type ListingChangeCreateManyCreatedByInput = {
     id?: string
     propertyId?: string | null
-    accountId: string
+    accountId?: string | null
     createdForId?: string | null
     workingProfileId?: string | null
     data: JsonNullValueInput | InputJsonValue
-    status: string
+    status: $Enums.ListingLogStatus
     isApproved?: boolean | null
     createdOn?: Date | string
     modifiedOn?: Date | string
+    approvedBy?: string | null
+    approvedOn?: Date | string | null
   }
 
   export type ListingChangeCreateManyCreatedForInput = {
     id?: string
     propertyId?: string | null
-    accountId: string
+    accountId?: string | null
     createdById?: string | null
     workingProfileId?: string | null
     data: JsonNullValueInput | InputJsonValue
-    status: string
+    status: $Enums.ListingLogStatus
     isApproved?: boolean | null
     createdOn?: Date | string
     modifiedOn?: Date | string
+    approvedBy?: string | null
+    approvedOn?: Date | string | null
   }
 
   export type ListingChangeCreateManyWorkingProfileInput = {
     id?: string
     propertyId?: string | null
-    accountId: string
+    accountId?: string | null
     createdById?: string | null
     createdForId?: string | null
     data: JsonNullValueInput | InputJsonValue
-    status: string
+    status: $Enums.ListingLogStatus
     isApproved?: boolean | null
     createdOn?: Date | string
     modifiedOn?: Date | string
+    approvedBy?: string | null
+    approvedOn?: Date | string | null
   }
 
   export type ListingRepresentativeCreateManyRepresentativeInput = {
@@ -97711,10 +96574,12 @@ export namespace Prisma {
   export type ListingChangeUpdateWithoutAccountInput = {
     id?: StringFieldUpdateOperationsInput | string
     data?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumListingLogStatusFieldUpdateOperationsInput | $Enums.ListingLogStatus
     isApproved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
     modifiedOn?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     property?: ListingUpdateOneWithoutChangesNestedInput
     createdBy?: AccountUpdateOneWithoutCreatedListingChangesNestedInput
     createdFor?: AccountUpdateOneWithoutPropertyChangesForProfileNestedInput
@@ -97728,10 +96593,12 @@ export namespace Prisma {
     createdForId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumListingLogStatusFieldUpdateOperationsInput | $Enums.ListingLogStatus
     isApproved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
     modifiedOn?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ListingChangeUncheckedUpdateManyWithoutAccountInput = {
@@ -97741,21 +96608,25 @@ export namespace Prisma {
     createdForId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumListingLogStatusFieldUpdateOperationsInput | $Enums.ListingLogStatus
     isApproved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
     modifiedOn?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ListingChangeUpdateWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     data?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumListingLogStatusFieldUpdateOperationsInput | $Enums.ListingLogStatus
     isApproved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
     modifiedOn?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     property?: ListingUpdateOneWithoutChangesNestedInput
-    account?: AccountUpdateOneRequiredWithoutPropertyChangesNestedInput
+    account?: AccountUpdateOneWithoutPropertyChangesNestedInput
     createdFor?: AccountUpdateOneWithoutPropertyChangesForProfileNestedInput
     workingProfile?: AccountUpdateOneWithoutPropertyChangesByWorkingProfileNestedInput
   }
@@ -97763,38 +96634,44 @@ export namespace Prisma {
   export type ListingChangeUncheckedUpdateWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     propertyId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountId?: StringFieldUpdateOperationsInput | string
+    accountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdForId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumListingLogStatusFieldUpdateOperationsInput | $Enums.ListingLogStatus
     isApproved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
     modifiedOn?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ListingChangeUncheckedUpdateManyWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     propertyId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountId?: StringFieldUpdateOperationsInput | string
+    accountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdForId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumListingLogStatusFieldUpdateOperationsInput | $Enums.ListingLogStatus
     isApproved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
     modifiedOn?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ListingChangeUpdateWithoutCreatedForInput = {
     id?: StringFieldUpdateOperationsInput | string
     data?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumListingLogStatusFieldUpdateOperationsInput | $Enums.ListingLogStatus
     isApproved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
     modifiedOn?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     property?: ListingUpdateOneWithoutChangesNestedInput
-    account?: AccountUpdateOneRequiredWithoutPropertyChangesNestedInput
+    account?: AccountUpdateOneWithoutPropertyChangesNestedInput
     createdBy?: AccountUpdateOneWithoutCreatedListingChangesNestedInput
     workingProfile?: AccountUpdateOneWithoutPropertyChangesByWorkingProfileNestedInput
   }
@@ -97802,38 +96679,44 @@ export namespace Prisma {
   export type ListingChangeUncheckedUpdateWithoutCreatedForInput = {
     id?: StringFieldUpdateOperationsInput | string
     propertyId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountId?: StringFieldUpdateOperationsInput | string
+    accountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumListingLogStatusFieldUpdateOperationsInput | $Enums.ListingLogStatus
     isApproved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
     modifiedOn?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ListingChangeUncheckedUpdateManyWithoutCreatedForInput = {
     id?: StringFieldUpdateOperationsInput | string
     propertyId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountId?: StringFieldUpdateOperationsInput | string
+    accountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumListingLogStatusFieldUpdateOperationsInput | $Enums.ListingLogStatus
     isApproved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
     modifiedOn?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ListingChangeUpdateWithoutWorkingProfileInput = {
     id?: StringFieldUpdateOperationsInput | string
     data?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumListingLogStatusFieldUpdateOperationsInput | $Enums.ListingLogStatus
     isApproved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
     modifiedOn?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     property?: ListingUpdateOneWithoutChangesNestedInput
-    account?: AccountUpdateOneRequiredWithoutPropertyChangesNestedInput
+    account?: AccountUpdateOneWithoutPropertyChangesNestedInput
     createdBy?: AccountUpdateOneWithoutCreatedListingChangesNestedInput
     createdFor?: AccountUpdateOneWithoutPropertyChangesForProfileNestedInput
   }
@@ -97841,27 +96724,31 @@ export namespace Prisma {
   export type ListingChangeUncheckedUpdateWithoutWorkingProfileInput = {
     id?: StringFieldUpdateOperationsInput | string
     propertyId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountId?: StringFieldUpdateOperationsInput | string
+    accountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdForId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumListingLogStatusFieldUpdateOperationsInput | $Enums.ListingLogStatus
     isApproved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
     modifiedOn?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ListingChangeUncheckedUpdateManyWithoutWorkingProfileInput = {
     id?: StringFieldUpdateOperationsInput | string
     propertyId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountId?: StringFieldUpdateOperationsInput | string
+    accountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdForId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumListingLogStatusFieldUpdateOperationsInput | $Enums.ListingLogStatus
     isApproved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
     modifiedOn?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ListingRepresentativeUpdateWithoutRepresentativeInput = {
@@ -97920,15 +96807,17 @@ export namespace Prisma {
 
   export type ListingChangeCreateManyPropertyInput = {
     id?: string
-    accountId: string
+    accountId?: string | null
     createdById?: string | null
     createdForId?: string | null
     workingProfileId?: string | null
     data: JsonNullValueInput | InputJsonValue
-    status: string
+    status: $Enums.ListingLogStatus
     isApproved?: boolean | null
     createdOn?: Date | string
     modifiedOn?: Date | string
+    approvedBy?: string | null
+    approvedOn?: Date | string | null
   }
 
   export type PropertyLinkCreateManyPrimaryInput = {
@@ -98073,11 +96962,13 @@ export namespace Prisma {
   export type ListingChangeUpdateWithoutPropertyInput = {
     id?: StringFieldUpdateOperationsInput | string
     data?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumListingLogStatusFieldUpdateOperationsInput | $Enums.ListingLogStatus
     isApproved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
     modifiedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    account?: AccountUpdateOneRequiredWithoutPropertyChangesNestedInput
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    account?: AccountUpdateOneWithoutPropertyChangesNestedInput
     createdBy?: AccountUpdateOneWithoutCreatedListingChangesNestedInput
     createdFor?: AccountUpdateOneWithoutPropertyChangesForProfileNestedInput
     workingProfile?: AccountUpdateOneWithoutPropertyChangesByWorkingProfileNestedInput
@@ -98085,28 +96976,32 @@ export namespace Prisma {
 
   export type ListingChangeUncheckedUpdateWithoutPropertyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    accountId?: StringFieldUpdateOperationsInput | string
+    accountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdForId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumListingLogStatusFieldUpdateOperationsInput | $Enums.ListingLogStatus
     isApproved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
     modifiedOn?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type ListingChangeUncheckedUpdateManyWithoutPropertyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    accountId?: StringFieldUpdateOperationsInput | string
+    accountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdForId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     data?: JsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
+    status?: EnumListingLogStatusFieldUpdateOperationsInput | $Enums.ListingLogStatus
     isApproved?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
     modifiedOn?: DateTimeFieldUpdateOperationsInput | Date | string
+    approvedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type PropertyLinkUpdateWithoutPrimaryInput = {

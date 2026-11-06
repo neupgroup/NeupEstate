@@ -57,6 +57,17 @@ enum PropertyRepresentativeRole {
   listingOwner_propertyOwner @map("listingOwner.propertyOwner")
 }
 
+enum ListingLogStatus {
+  creation_draft
+  creation_pending
+  creating
+  changing
+  deleting
+  approved
+  accepted
+  rejected
+}
+
 model Location {
   id         String     @id @default(uuid()) @db.Uuid
   title      String
@@ -182,21 +193,6 @@ model Listing {
   @@index([status], map: "listings_status_idx")
   @@index([slug], map: "listings_slug_idx")
   @@map("listings")
-}
-
-model ListingsLog {
-  id          String    @id @default(cuid())
-  propertyId  String    @map("property_id")
-  requestedBy String    @map("requested_by")
-  approvedBy  String?   @map("approved_by")
-  data        Json[]    @default([])
-  requestedOn DateTime  @default(now()) @map("requested_on")
-  approvedOn  DateTime? @map("approved_on")
-
-  @@index([propertyId], map: "listings_logs_property_id_idx")
-  @@index([requestedBy], map: "listings_logs_requested_by_idx")
-  @@index([approvedBy], map: "listings_logs_approved_by_idx")
-  @@map("listings_logs")
 }
 
 model PropertyLink {
@@ -359,33 +355,35 @@ model ListingDocument {
 }
 
 model ListingChange {
-  id               String   @id @default(cuid())
-  propertyId       String?  @map("property_id")
-  accountId        String   @map("account_id")
-  createdById      String?  @map("created_by_id")
-  createdForId     String?  @map("created_for_id")
-  workingProfileId String?  @map("working_profile_id")
+  id               String           @id @default(cuid())
+  propertyId       String?          @map("listing_id")
+  accountId        String?          @map("requested_by")
+  createdById      String?          @map("created_by_id")
+  createdForId     String?          @map("created_for_id")
+  workingProfileId String?          @map("working_profile_id")
   data             Json
-  status           String
-  isApproved       Boolean? @map("is_approved")
-  createdOn        DateTime @default(now())
-  modifiedOn       DateTime @default(now())
+  status           ListingLogStatus
+  isApproved       Boolean?         @map("legacy_is_approved")
+  createdOn        DateTime         @default(now()) @map("requested_on")
+  modifiedOn       DateTime         @default(now()) @map("modified_on")
+  approvedBy       String?          @map("responded_by")
+  approvedOn       DateTime?        @map("responded_on")
+  property         Listing?         @relation(fields: [propertyId], references: [id], onDelete: SetNull)
+  account          Account?         @relation(fields: [accountId], references: [id], onDelete: SetNull)
+  createdBy        Account?         @relation("ListingChangeCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  createdFor       Account?         @relation("ListingChangeCreatedFor", fields: [createdForId], references: [id], onDelete: SetNull)
+  workingProfile   Account?         @relation("ListingChangeWorkingProfile", fields: [workingProfileId], references: [id], onDelete: SetNull)
 
-  property       Listing? @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-  account        Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  createdBy      Account? @relation("ListingChangeCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
-  createdFor     Account? @relation("ListingChangeCreatedFor", fields: [createdForId], references: [id], onDelete: SetNull)
-  workingProfile Account? @relation("ListingChangeWorkingProfile", fields: [workingProfileId], references: [id], onDelete: SetNull)
-
-  @@index([propertyId], map: "listing_changes_property_id_idx")
-  @@index([accountId], map: "listing_changes_account_id_idx")
-  @@index([createdById], map: "listing_changes_created_by_id_idx")
-  @@index([createdForId], map: "listing_changes_created_for_id_idx")
-  @@index([workingProfileId], map: "listing_changes_working_profile_id_idx")
-  @@index([status], map: "listing_changes_status_idx")
-  @@index([createdOn], map: "listing_changes_created_on_idx")
-  @@index([modifiedOn], map: "listing_changes_modified_on_idx")
-  @@map("listing_changes")
+  @@index([propertyId], map: "listings_logs_listing_id_idx")
+  @@index([accountId], map: "listings_logs_requested_by_idx")
+  @@index([approvedBy], map: "listings_logs_responded_by_idx")
+  @@index([createdById], map: "listings_logs_created_by_id_idx")
+  @@index([createdForId], map: "listings_logs_created_for_id_idx")
+  @@index([workingProfileId], map: "listings_logs_working_profile_id_idx")
+  @@index([status], map: "listings_logs_status_idx")
+  @@index([createdOn], map: "listings_logs_requested_on_idx")
+  @@index([modifiedOn], map: "listings_logs_modified_on_idx")
+  @@map("listings_logs")
 }
 
 // ============================================================================

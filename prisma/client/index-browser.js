@@ -189,16 +189,6 @@ exports.Prisma.ListingScalarFieldEnum = {
   customId: 'customId'
 };
 
-exports.Prisma.ListingsLogScalarFieldEnum = {
-  id: 'id',
-  propertyId: 'propertyId',
-  requestedBy: 'requestedBy',
-  approvedBy: 'approvedBy',
-  data: 'data',
-  requestedOn: 'requestedOn',
-  approvedOn: 'approvedOn'
-};
-
 exports.Prisma.PropertyLinkScalarFieldEnum = {
   id: 'id',
   primaryId: 'primaryId',
@@ -318,7 +308,9 @@ exports.Prisma.ListingChangeScalarFieldEnum = {
   status: 'status',
   isApproved: 'isApproved',
   createdOn: 'createdOn',
-  modifiedOn: 'modifiedOn'
+  modifiedOn: 'modifiedOn',
+  approvedBy: 'approvedBy',
+  approvedOn: 'approvedOn'
 };
 
 exports.Prisma.AgencyScalarFieldEnum = {
@@ -847,6 +839,17 @@ exports.PropertyRepresentativeRole = exports.$Enums.PropertyRepresentativeRole =
   listingOwner_propertyOwner: 'listingOwner_propertyOwner'
 };
 
+exports.ListingLogStatus = exports.$Enums.ListingLogStatus = {
+  creation_draft: 'creation_draft',
+  creation_pending: 'creation_pending',
+  creating: 'creating',
+  changing: 'changing',
+  deleting: 'deleting',
+  approved: 'approved',
+  accepted: 'accepted',
+  rejected: 'rejected'
+};
+
 exports.LeadType = exports.$Enums.LeadType = {
   BUYER: 'BUYER',
   SELLER: 'SELLER',
@@ -872,7 +875,6 @@ exports.Prisma.ModelName = {
   Account: 'Account',
   Activity: 'Activity',
   Listing: 'Listing',
-  ListingsLog: 'ListingsLog',
   PropertyLink: 'PropertyLink',
   ListingMedia: 'ListingMedia',
   ListingHouse: 'ListingHouse',

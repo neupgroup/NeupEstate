@@ -124,11 +124,13 @@ export async function createListingLog(input: {
   approvedOn?: Date | null;
 }): Promise<void> {
   try {
-    await prisma.listingsLog.create({
+    await prisma.listingChange.create({
       data: {
         propertyId: input.propertyId,
-        requestedBy: input.requestedBy,
+        accountId: input.requestedBy,
         approvedBy: input.approvedBy ?? null,
+        isApproved: input.approvedBy ? true : null,
+        status: input.approvedBy ? 'approved' : 'accepted',
         data: input.data as any,
         approvedOn: input.approvedOn ?? null,
       },
@@ -157,14 +159,14 @@ export async function getListingLogs(propertyId: string): Promise<Array<{
   approvedByAccount: { id: string; displayName: string | null; neupId: string | null } | null;
 }>> {
   try {
-    const logs = await prisma.listingsLog.findMany({
+    const logs = await prisma.listingChange.findMany({
       where: { propertyId },
       orderBy: [{ requestedOn: 'desc' }, { id: 'desc' }],
     });
 
     const accountIds = Array.from(
       new Set(
-        logs.flatMap((log) => [log.requestedBy, log.approvedBy].filter((id): id is string => Boolean(id))),
+        logs.flatMap((log) => [log.accountId, log.approvedBy].filter((id): id is string => Boolean(id))),
       ),
     );
 
@@ -180,12 +182,12 @@ export async function getListingLogs(propertyId: string): Promise<Array<{
     return logs.map((log) => ({
       id: log.id,
       propertyId: log.propertyId,
-      requestedBy: log.requestedBy,
+      requestedBy: log.accountId ?? '',
       approvedBy: log.approvedBy,
       data: Array.isArray(log.data) ? log.data as Record<string, any>[] : [],
       requestedOn: log.requestedOn.toISOString(),
       approvedOn: log.approvedOn ? log.approvedOn.toISOString() : null,
-      requestedByAccount: accountMap.get(log.requestedBy) ?? null,
+      requestedByAccount: log.accountId ? accountMap.get(log.accountId) ?? null : null,
       approvedByAccount: log.approvedBy ? accountMap.get(log.approvedBy) ?? null : null,
     }));
   } catch (e) {
