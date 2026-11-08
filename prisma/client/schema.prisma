@@ -91,16 +91,16 @@ model Location {
 
 model Account {
   id                              String                  @id // ssid from NeupID Silent SSO
-  neupId                          String?                 @unique @map("neup_id")
-  accountType                     String
+  neupId                          String?                 @unique @map("neupid")
+  accountType                     String                  @map("type")
   createdOn                       DateTime                @default(now()) @map("created_on")
   accessedOn                      DateTime                @default(now()) @map("accessed_on")
-  displayName                     String? // denormalized from NeupID — set on first create
-  displayImage                    String? // denormalized from NeupID — set on first create
+  displayName                     String?                 @map("display_name") // denormalized from NeupID — set on first create
+  displayImage                    String?                 @map("display_image") // denormalized from NeupID — set on first create
   coverImage                      String?                 @map("cover_image")
   bio                             String?
-  connectionId                    String?
   workingProfile                  String?                 @map("working_profile")
+  moreDetails                     Json?                   @map("more_details") @db.JsonB
   accessRows                      AccountAccess[]
   workingProfileAccount           Account?                @relation("AccountWorkingProfile", fields: [workingProfile], references: [id], onDelete: SetNull)
   workingProfileOf                Account[]               @relation("AccountWorkingProfile")
@@ -118,7 +118,7 @@ model Account {
   propertyRepresentatives         ListingRepresentative[]
 
   @@index([workingProfile])
-  @@map("account")
+  @@map("accounts")
 }
 
 model Activity {

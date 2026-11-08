@@ -24,7 +24,7 @@
 
 import { prisma } from '@neup/core/database/prisma';
 import { logica } from '@neup/logica';
-import { getAccountInformation } from '@/services/accounts/lookup';
+import { getAccountInformation, getSignedAccountInformation } from '@/services/accounts/lookup';
 import { getAuthenticatedAccount } from '@/services/auth/account';
 import { getAuthCookieServer } from '@/services/auth/cookie';
 import { logger } from "@neup/logica/logger";
@@ -35,7 +35,6 @@ type LocalAccountSeed = {
   displayName: string | null;
   displayImage: string | null;
   accountType: string;
-  connectionId: string | null;
 };
 
 function getRequiredEnv(name: 'NEUP_APP_ID' | 'NEUP_APP_SECRET'): string {
@@ -46,7 +45,7 @@ function getRequiredEnv(name: 'NEUP_APP_ID' | 'NEUP_APP_SECRET'): string {
   return value;
 }
 
-async function getLocalAccountSeed(accountId: string, connectionId: string | null): Promise<LocalAccountSeed> {
+async function getLocalAccountSeed(accountId: string): Promise<LocalAccountSeed> {
   const accountInfo = await getAccountInformation({ accountId }).catch(() => null);
   const foundAccount = accountInfo?.found ? accountInfo.account : null;
 
@@ -56,7 +55,6 @@ async function getLocalAccountSeed(accountId: string, connectionId: string | nul
     displayName: foundAccount?.displayName ?? null,
     displayImage: foundAccount?.displayImage ?? null,
     accountType: 'individual',
-    connectionId,
   };
 }
 
@@ -70,11 +68,8 @@ export async function createAccount(): Promise<void> {
       return;
     }
 
-    const existingAccount = await prisma.account.findUnique({
-      where: { id: authResult.account.aid },
-      select: { connectionId: true },
-    });
-    if (existingAccount?.connectionId) return;
+    const signedAccountInfo = await getSignedAccountInformation().catch(() => null);
+    if (signedAccountInfo?.found && signedAccountInfo.account.connectionId) return;
 
     const connectionResponse = await logica.account(authResult.account.aid).connection.create({
       authAccountToken: authCookie,
@@ -83,11 +78,6 @@ export async function createAccount(): Promise<void> {
     });
 
     const connectionBody = connectionResponse.body;
-    const connectionId =
-      typeof connectionBody?.connectionId === 'string' && connectionBody.connectionId.trim()
-        ? connectionBody.connectionId.trim()
-        : null;
-
     if (!connectionResponse.ok || connectionBody?.success === false) {
       throw new Error(
         connectionBody?.error_description ||
@@ -96,7 +86,7 @@ export async function createAccount(): Promise<void> {
       );
     }
 
-    const seed = await getLocalAccountSeed(authResult.account.aid, connectionId);
+    const seed = await getLocalAccountSeed(authResult.account.aid);
     await prisma.account.upsert({
       where: { id: seed.id },
       create: {
@@ -107,7 +97,6 @@ export async function createAccount(): Promise<void> {
         accessedOn: new Date(),
         displayName: seed.displayName,
         displayImage: seed.displayImage,
-        connectionId: seed.connectionId,
       },
       update: {
         accessedOn: new Date(),
@@ -115,7 +104,6 @@ export async function createAccount(): Promise<void> {
         accountType: 'individual',
         displayName: seed.displayName,
         displayImage: seed.displayImage,
-        connectionId: seed.connectionId,
       },
     });
   } catch (error) {

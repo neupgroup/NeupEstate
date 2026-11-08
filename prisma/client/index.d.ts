@@ -7857,7 +7857,6 @@ export namespace Prisma {
     displayImage: string | null
     coverImage: string | null
     bio: string | null
-    connectionId: string | null
     workingProfile: string | null
   }
 
@@ -7871,7 +7870,6 @@ export namespace Prisma {
     displayImage: string | null
     coverImage: string | null
     bio: string | null
-    connectionId: string | null
     workingProfile: string | null
   }
 
@@ -7885,8 +7883,8 @@ export namespace Prisma {
     displayImage: number
     coverImage: number
     bio: number
-    connectionId: number
     workingProfile: number
+    moreDetails: number
     _all: number
   }
 
@@ -7901,7 +7899,6 @@ export namespace Prisma {
     displayImage?: true
     coverImage?: true
     bio?: true
-    connectionId?: true
     workingProfile?: true
   }
 
@@ -7915,7 +7912,6 @@ export namespace Prisma {
     displayImage?: true
     coverImage?: true
     bio?: true
-    connectionId?: true
     workingProfile?: true
   }
 
@@ -7929,8 +7925,8 @@ export namespace Prisma {
     displayImage?: true
     coverImage?: true
     bio?: true
-    connectionId?: true
     workingProfile?: true
+    moreDetails?: true
     _all?: true
   }
 
@@ -8016,8 +8012,8 @@ export namespace Prisma {
     displayImage: string | null
     coverImage: string | null
     bio: string | null
-    connectionId: string | null
     workingProfile: string | null
+    moreDetails: JsonValue | null
     _count: AccountCountAggregateOutputType | null
     _min: AccountMinAggregateOutputType | null
     _max: AccountMaxAggregateOutputType | null
@@ -8047,8 +8043,8 @@ export namespace Prisma {
     displayImage?: boolean
     coverImage?: boolean
     bio?: boolean
-    connectionId?: boolean
     workingProfile?: boolean
+    moreDetails?: boolean
     accessRows?: boolean | Account$accessRowsArgs<ExtArgs>
     workingProfileAccount?: boolean | Account$workingProfileAccountArgs<ExtArgs>
     workingProfileOf?: boolean | Account$workingProfileOfArgs<ExtArgs>
@@ -8077,8 +8073,8 @@ export namespace Prisma {
     displayImage?: boolean
     coverImage?: boolean
     bio?: boolean
-    connectionId?: boolean
     workingProfile?: boolean
+    moreDetails?: boolean
     workingProfileAccount?: boolean | Account$workingProfileAccountArgs<ExtArgs>
   }, ExtArgs["result"]["account"]>
 
@@ -8092,8 +8088,8 @@ export namespace Prisma {
     displayImage?: boolean
     coverImage?: boolean
     bio?: boolean
-    connectionId?: boolean
     workingProfile?: boolean
+    moreDetails?: boolean
     workingProfileAccount?: boolean | Account$workingProfileAccountArgs<ExtArgs>
   }, ExtArgs["result"]["account"]>
 
@@ -8107,11 +8103,11 @@ export namespace Prisma {
     displayImage?: boolean
     coverImage?: boolean
     bio?: boolean
-    connectionId?: boolean
     workingProfile?: boolean
+    moreDetails?: boolean
   }
 
-  export type AccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "neupId" | "accountType" | "createdOn" | "accessedOn" | "displayName" | "displayImage" | "coverImage" | "bio" | "connectionId" | "workingProfile", ExtArgs["result"]["account"]>
+  export type AccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "neupId" | "accountType" | "createdOn" | "accessedOn" | "displayName" | "displayImage" | "coverImage" | "bio" | "workingProfile" | "moreDetails", ExtArgs["result"]["account"]>
   export type AccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accessRows?: boolean | Account$accessRowsArgs<ExtArgs>
     workingProfileAccount?: boolean | Account$workingProfileAccountArgs<ExtArgs>
@@ -8166,8 +8162,8 @@ export namespace Prisma {
       displayImage: string | null
       coverImage: string | null
       bio: string | null
-      connectionId: string | null
       workingProfile: string | null
+      moreDetails: Prisma.JsonValue | null
     }, ExtArgs["result"]["account"]>
     composites: {}
   }
@@ -8615,8 +8611,8 @@ export namespace Prisma {
     readonly displayImage: FieldRef<"Account", 'String'>
     readonly coverImage: FieldRef<"Account", 'String'>
     readonly bio: FieldRef<"Account", 'String'>
-    readonly connectionId: FieldRef<"Account", 'String'>
     readonly workingProfile: FieldRef<"Account", 'String'>
+    readonly moreDetails: FieldRef<"Account", 'Json'>
   }
     
 
@@ -70037,8 +70033,8 @@ export namespace Prisma {
     displayImage: 'displayImage',
     coverImage: 'coverImage',
     bio: 'bio',
-    connectionId: 'connectionId',
-    workingProfile: 'workingProfile'
+    workingProfile: 'workingProfile',
+    moreDetails: 'moreDetails'
   };
 
   export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
@@ -70841,19 +70837,19 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
-  export const JsonNullValueInput: {
-    JsonNull: typeof JsonNull
-  };
-
-  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
-
-
   export const NullableJsonNullValueInput: {
     DbNull: typeof DbNull,
     JsonNull: typeof JsonNull
   };
 
   export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull
+  };
+
+  export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
   export const QueryMode: {
@@ -71187,8 +71183,8 @@ export namespace Prisma {
     displayImage?: StringNullableFilter<"Account"> | string | null
     coverImage?: StringNullableFilter<"Account"> | string | null
     bio?: StringNullableFilter<"Account"> | string | null
-    connectionId?: StringNullableFilter<"Account"> | string | null
     workingProfile?: StringNullableFilter<"Account"> | string | null
+    moreDetails?: JsonNullableFilter<"Account">
     accessRows?: AccountAccessListRelationFilter
     workingProfileAccount?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
     workingProfileOf?: AccountListRelationFilter
@@ -71216,8 +71212,8 @@ export namespace Prisma {
     displayImage?: SortOrderInput | SortOrder
     coverImage?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
-    connectionId?: SortOrderInput | SortOrder
     workingProfile?: SortOrderInput | SortOrder
+    moreDetails?: SortOrderInput | SortOrder
     accessRows?: AccountAccessOrderByRelationAggregateInput
     workingProfileAccount?: AccountOrderByWithRelationInput
     workingProfileOf?: AccountOrderByRelationAggregateInput
@@ -71248,8 +71244,8 @@ export namespace Prisma {
     displayImage?: StringNullableFilter<"Account"> | string | null
     coverImage?: StringNullableFilter<"Account"> | string | null
     bio?: StringNullableFilter<"Account"> | string | null
-    connectionId?: StringNullableFilter<"Account"> | string | null
     workingProfile?: StringNullableFilter<"Account"> | string | null
+    moreDetails?: JsonNullableFilter<"Account">
     accessRows?: AccountAccessListRelationFilter
     workingProfileAccount?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
     workingProfileOf?: AccountListRelationFilter
@@ -71277,8 +71273,8 @@ export namespace Prisma {
     displayImage?: SortOrderInput | SortOrder
     coverImage?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
-    connectionId?: SortOrderInput | SortOrder
     workingProfile?: SortOrderInput | SortOrder
+    moreDetails?: SortOrderInput | SortOrder
     _count?: AccountCountOrderByAggregateInput
     _max?: AccountMaxOrderByAggregateInput
     _min?: AccountMinOrderByAggregateInput
@@ -71297,8 +71293,8 @@ export namespace Prisma {
     displayImage?: StringNullableWithAggregatesFilter<"Account"> | string | null
     coverImage?: StringNullableWithAggregatesFilter<"Account"> | string | null
     bio?: StringNullableWithAggregatesFilter<"Account"> | string | null
-    connectionId?: StringNullableWithAggregatesFilter<"Account"> | string | null
     workingProfile?: StringNullableWithAggregatesFilter<"Account"> | string | null
+    moreDetails?: JsonNullableWithAggregatesFilter<"Account">
   }
 
   export type ActivityWhereInput = {
@@ -75458,7 +75454,7 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
@@ -75486,8 +75482,8 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
     workingProfile?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
@@ -75514,7 +75510,7 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
@@ -75542,8 +75538,8 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
@@ -75570,8 +75566,8 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
     workingProfile?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type AccountUpdateManyMutationInput = {
@@ -75584,7 +75580,7 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type AccountUncheckedUpdateManyInput = {
@@ -75597,8 +75593,8 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type ActivityCreateInput = {
@@ -80262,6 +80258,29 @@ export namespace Prisma {
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type AccountAccessListRelationFilter = {
     every?: AccountAccessWhereInput
@@ -80378,8 +80397,8 @@ export namespace Prisma {
     displayImage?: SortOrder
     coverImage?: SortOrder
     bio?: SortOrder
-    connectionId?: SortOrder
     workingProfile?: SortOrder
+    moreDetails?: SortOrder
   }
 
   export type AccountMaxOrderByAggregateInput = {
@@ -80392,7 +80411,6 @@ export namespace Prisma {
     displayImage?: SortOrder
     coverImage?: SortOrder
     bio?: SortOrder
-    connectionId?: SortOrder
     workingProfile?: SortOrder
   }
 
@@ -80406,7 +80424,6 @@ export namespace Prisma {
     displayImage?: SortOrder
     coverImage?: SortOrder
     bio?: SortOrder
-    connectionId?: SortOrder
     workingProfile?: SortOrder
   }
 
@@ -80422,6 +80439,32 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
   export type JsonFilter<$PrismaModel = never> =
     | PatchUndefined<
@@ -80546,29 +80589,6 @@ export namespace Prisma {
     gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null
-  }
-  export type JsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type StringNullableListFilter<$PrismaModel = never> = {
@@ -80852,32 +80872,6 @@ export namespace Prisma {
     _sum?: NestedDecimalNullableFilter<$PrismaModel>
     _min?: NestedDecimalNullableFilter<$PrismaModel>
     _max?: NestedDecimalNullableFilter<$PrismaModel>
-  }
-  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedJsonNullableFilter<$PrismaModel>
-    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -86312,6 +86306,29 @@ export namespace Prisma {
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
   export type NestedJsonFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
@@ -86461,29 +86478,6 @@ export namespace Prisma {
     _sum?: NestedDecimalNullableFilter<$PrismaModel>
     _min?: NestedDecimalNullableFilter<$PrismaModel>
     _max?: NestedDecimalNullableFilter<$PrismaModel>
-  }
-  export type NestedJsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -86834,7 +86828,7 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     developedApplications?: ApplicationCreateNestedManyWithoutDeveloperAccountInput
@@ -86861,8 +86855,8 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
     workingProfile?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
@@ -86893,7 +86887,7 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     developedApplications?: ApplicationCreateNestedManyWithoutDeveloperAccountInput
@@ -86920,7 +86914,7 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
@@ -87410,7 +87404,7 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     developedApplications?: ApplicationUpdateManyWithoutDeveloperAccountNestedInput
@@ -87437,8 +87431,8 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
@@ -87483,8 +87477,8 @@ export namespace Prisma {
     displayImage?: StringNullableFilter<"Account"> | string | null
     coverImage?: StringNullableFilter<"Account"> | string | null
     bio?: StringNullableFilter<"Account"> | string | null
-    connectionId?: StringNullableFilter<"Account"> | string | null
     workingProfile?: StringNullableFilter<"Account"> | string | null
+    moreDetails?: JsonNullableFilter<"Account">
   }
 
   export type ApplicationUpsertWithWhereUniqueWithoutDeveloperAccountInput = {
@@ -90762,7 +90756,7 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
@@ -90789,8 +90783,8 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
     workingProfile?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
@@ -90943,7 +90937,7 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
@@ -90970,8 +90964,8 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
@@ -91318,7 +91312,7 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
@@ -91345,8 +91339,8 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
     workingProfile?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
@@ -91377,7 +91371,7 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
@@ -91404,8 +91398,8 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
     workingProfile?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
@@ -91436,7 +91430,7 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
@@ -91463,8 +91457,8 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
     workingProfile?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
@@ -91495,7 +91489,7 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
@@ -91522,8 +91516,8 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
     workingProfile?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
@@ -91676,7 +91670,7 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
@@ -91703,8 +91697,8 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
@@ -91741,7 +91735,7 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
@@ -91768,8 +91762,8 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
@@ -91806,7 +91800,7 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
@@ -91833,8 +91827,8 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
@@ -91871,7 +91865,7 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
@@ -91898,8 +91892,8 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
@@ -92106,7 +92100,7 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
@@ -92133,8 +92127,8 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
     workingProfile?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
@@ -92165,7 +92159,7 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
@@ -92192,8 +92186,8 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
     workingProfile?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
@@ -92235,7 +92229,7 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
@@ -92262,8 +92256,8 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
@@ -92300,7 +92294,7 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
@@ -92327,8 +92321,8 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
@@ -92958,7 +92952,7 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
@@ -92985,8 +92979,8 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
     workingProfile?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
@@ -93111,7 +93105,7 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
@@ -93138,8 +93132,8 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
@@ -93342,7 +93336,7 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
@@ -93369,8 +93363,8 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
     workingProfile?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
@@ -93475,7 +93469,7 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
@@ -93502,8 +93496,8 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
@@ -93871,7 +93865,7 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
@@ -93898,8 +93892,8 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
     workingProfile?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
@@ -94069,7 +94063,7 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
@@ -94096,8 +94090,8 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
@@ -94229,7 +94223,7 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     developedApplications?: ApplicationCreateNestedManyWithoutDeveloperAccountInput
@@ -94256,8 +94250,8 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
     workingProfile?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
@@ -94332,7 +94326,7 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     developedApplications?: ApplicationUpdateManyWithoutDeveloperAccountNestedInput
@@ -94359,8 +94353,8 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
@@ -95566,7 +95560,7 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
@@ -95593,8 +95587,8 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
     workingProfile?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
@@ -95695,7 +95689,7 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
@@ -95722,8 +95716,8 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
@@ -95833,7 +95827,7 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
@@ -95860,8 +95854,8 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
     workingProfile?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
@@ -95971,7 +95965,7 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
@@ -95998,8 +95992,8 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
@@ -96106,7 +96100,7 @@ export namespace Prisma {
     displayImage?: string | null
     coverImage?: string | null
     bio?: string | null
-    connectionId?: string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type ApplicationCreateManyDeveloperAccountInput = {
@@ -96278,7 +96272,7 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     developedApplications?: ApplicationUpdateManyWithoutDeveloperAccountNestedInput
@@ -96305,7 +96299,7 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
@@ -96332,7 +96326,7 @@ export namespace Prisma {
     displayImage?: NullableStringFieldUpdateOperationsInput | string | null
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
-    connectionId?: NullableStringFieldUpdateOperationsInput | string | null
+    moreDetails?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type ApplicationUpdateWithoutDeveloperAccountInput = {

@@ -140,8 +140,8 @@ exports.Prisma.AccountScalarFieldEnum = {
   displayImage: 'displayImage',
   coverImage: 'coverImage',
   bio: 'bio',
-  connectionId: 'connectionId',
-  workingProfile: 'workingProfile'
+  workingProfile: 'workingProfile',
+  moreDetails: 'moreDetails'
 };
 
 exports.Prisma.ActivityScalarFieldEnum = {
@@ -776,12 +776,12 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
-exports.Prisma.JsonNullValueInput = {
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull
 };
 
-exports.Prisma.NullableJsonNullValueInput = {
-  DbNull: Prisma.DbNull,
+exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 

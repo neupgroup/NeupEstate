@@ -19,23 +19,23 @@ Fields:
 > started_at: timestamptz(6) NOT NULL, default: now();
 > applied_steps_count: integer NOT NULL, default: 0;
 
-Table: account, Model: Account
+Table: accounts, Model: Account
 Fields:
 > id: text PK, NOT NULL;
-> accountType: text NOT NULL;
+> type: text NOT NULL;
 > created_on: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > accessed_on: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
-> displayImage: text;
-> displayName: text;
+> display_image: text;
+> display_name: text;
 > cover_image: text;
 > bio: text;
-> neup_id: text UNIQUE account_neupId_key(neup_id); account_neup_id_key(neup_id);
-> connectionId: text;
-> working_profile: text references account.id;
+> neupid: text UNIQUE accounts_neupid_key(neupid);
+> working_profile: text references accounts.id;
+> more_details: jsonb;
 
 Table: account_access, Model: AccountAccess
 Fields:
-> account_id: text PK, NOT NULL, references account.id;
+> account_id: text PK, NOT NULL, references accounts.id;
 > app_id: text PK, NOT NULL;
 > role_id: text PK, NOT NULL, references authz_role.id;
 > updated_on: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
@@ -66,8 +66,8 @@ Fields:
 Table: agency_agent_map, Model: AgencyAgentMap
 Fields:
 > id: text PK, NOT NULL;
-> agency_id: text NOT NULL, UNIQUE agency_agent_map_agency_id_agent_id_key(agency_id, agent_id), references account.id;
-> agent_id: text NOT NULL, UNIQUE agency_agent_map_agency_id_agent_id_key(agency_id, agent_id), references account.id;
+> agency_id: text NOT NULL, UNIQUE agency_agent_map_agency_id_agent_id_key(agency_id, agent_id), references accounts.id;
+> agent_id: text NOT NULL, UNIQUE agency_agent_map_agency_id_agent_id_key(agency_id, agent_id), references accounts.id;
 > status: text NOT NULL, default: 'invited'::text;
 > is_admin: boolean NOT NULL, default: false;
 
@@ -150,7 +150,7 @@ Fields:
 Table: base_lead, Model: BaseLead
 Fields:
 > id: text PK, NOT NULL;
-> belongsTo: text NOT NULL, references account.id;
+> belongsTo: text NOT NULL, references accounts.id;
 > firstName: text NOT NULL;
 > lastName: text NOT NULL;
 > contact: jsonb NOT NULL;
@@ -265,7 +265,7 @@ Table: intelligence_alerts, Model: IntelligenceAlert
 Fields:
 > id: text PK, NOT NULL;
 > map_id: text NOT NULL, references intelligence_mapping.id;
-> account_id: text NOT NULL, references account.id;
+> account_id: text NOT NULL, references accounts.id;
 > listing_id: text NOT NULL, references competitor.id;
 > status: text;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
@@ -274,7 +274,7 @@ Fields:
 Table: intelligence_mapping, Model: IntelligenceMapping
 Fields:
 > id: text PK, NOT NULL;
-> account_id: text NOT NULL, references account.id;
+> account_id: text NOT NULL, references accounts.id;
 > c_location: text;
 > c_min_budget: integer;
 > c_max_budget: integer;
@@ -451,14 +451,14 @@ Fields:
 > id: text PK, NOT NULL;
 > listing_id: text, references listings.id ON DELETE SET NULL;
 > data: jsonb NOT NULL;
-> requested_by: text, references account.id ON DELETE SET NULL;
+> requested_by: text, references accounts.id ON DELETE SET NULL;
 > status: enum(creation_draft, creation_pending, creating, changing, deleting, approved, accepted, rejected) NOT NULL;
 > requested_on: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > responded_on: timestamp(3);
-> responded_by: text, references account.id ON DELETE SET NULL;
-> created_by_id: text, references account.id;
-> created_for_id: text, references account.id;
-> working_profile_id: text, references account.id;
+> responded_by: text, references accounts.id ON DELETE SET NULL;
+> created_by_id: text, references accounts.id;
+> created_for_id: text, references accounts.id;
+> working_profile_id: text, references accounts.id;
 > modified_on: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 
 Table: listings_media, Model: ListingMedia
@@ -484,7 +484,7 @@ Table: property_representatives, Model: PropertyRepresentative
 Fields:
 > id: text PK, NOT NULL;
 > property_id: text NOT NULL, INDEX property_representatives_property_id_idx(property_id), references listings.id;
-> representative_id: text NOT NULL, INDEX property_representatives_representative_id_idx(representative_id), references account.id;
+> representative_id: text NOT NULL, INDEX property_representatives_representative_id_idx(representative_id), references accounts.id;
 > role: enum(propertyOwner, listingOwner, listingParty, listingOwner.propertyOwner) NOT NULL;
 > status: text;
 
@@ -587,7 +587,7 @@ Fields:
 > type: LeadType NOT NULL;
 > requirements: jsonb;
 > priority: LeadPriority NOT NULL, default: 'MEDIUM'::"LeadPriority";
-> owner: text NOT NULL, references account.id;
+> owner: text NOT NULL, references accounts.id;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > updatedAt: timestamp(3) NOT NULL;
 
@@ -598,10 +598,10 @@ Fields:
 > type: LeadType NOT NULL;
 > requirements: jsonb;
 > priority: LeadPriority NOT NULL, default: 'MEDIUM'::"LeadPriority";
-> leadOwner: text references account.id;
+> leadOwner: text references accounts.id;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > updatedAt: timestamp(3) NOT NULL;
-> ownerId: text NOT NULL, references account.id;
+> ownerId: text NOT NULL, references accounts.id;
 
 Table: site_content, Model: SiteContent
 Fields:

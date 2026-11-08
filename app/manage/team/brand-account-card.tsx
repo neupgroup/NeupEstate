@@ -47,7 +47,6 @@ type BrandAccountCardProps = {
     displayName: string | null;
     displayImage: string | null;
     accountType?: string | null;
-    connectionId?: string | null;
   } | null;
   isSelected: boolean;
   isDefault: boolean;
@@ -95,7 +94,7 @@ export function BrandAccountCard({
   const searchParams = useSearchParams();
 
   const isExisting = !!existingAccount;
-  const hasConnection = Boolean(existingAccount?.connectionId?.trim());
+  const hasConnection = Boolean(existingAccount);
   const isRemoteBrandAccount = brandAccount.source === "brand";
   const displayAccountType = existingAccount?.accountType ?? brandAccount.accountType ?? 'individual';
   const canCreateRemoteConnection =

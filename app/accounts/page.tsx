@@ -61,7 +61,7 @@ export default async function AccountsPage({
     }),
     prisma.account.findUnique({
       where: { id: authAccount.aid },
-      select: { id: true, displayName: true, displayImage: true, accountType: true, workingProfile: true, connectionId: true },
+      select: { id: true, displayName: true, displayImage: true, accountType: true, workingProfile: true },
     }),
   ]);
 
@@ -83,7 +83,7 @@ export default async function AccountsPage({
     linkedAgencyIds.length > 0
       ? await prisma.account.findMany({
           where: { id: { in: linkedAgencyIds } },
-          select: { id: true, displayName: true, displayImage: true, accountType: true, connectionId: true },
+          select: { id: true, displayName: true, displayImage: true, accountType: true },
         })
       : [];
 
@@ -118,11 +118,11 @@ export default async function AccountsPage({
     const existingAccount = existingAccountMap.get(agency.id);
     const accountType = existingAccount?.accountType ?? agency.accountType;
     if (!isAgencyLikeAccountType(accountType)) return false;
-    return Boolean(existingAccount?.connectionId?.trim());
+    return Boolean(existingAccount);
   });
   const creatableAccounts = remoteBrandCards.filter((agency) => {
     const existingAccount = existingAccountMap.get(agency.id);
-    return !existingAccount?.connectionId?.trim() && ['brand', 'subbrand'].includes(agency.accountType.trim().toLowerCase());
+    return !existingAccount && ['brand', 'subbrand'].includes(agency.accountType.trim().toLowerCase());
   });
   const switchableProfiles = [...accountAgentProfiles, ...switchableAgencyProfiles];
   const switchableProfileIds = new Set(switchableProfiles.map((profile) => profile.id));

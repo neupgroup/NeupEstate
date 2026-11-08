@@ -10,10 +10,11 @@ type DisplayPreferences = { areaUnit: string; currency: string; numberSystem: st
 
 /** Read saved display settings for an account. */
 async function getDisplayPreferences(accountId: string): Promise<DisplayPreferences> {
-  const record = await prisma.userPreference.findUnique({ where: { accountId }, select: { preferences: true } });
-  const preferences = record?.preferences && typeof record.preferences === 'object'
-    ? record.preferences as { display?: Partial<DisplayPreferences> }
+  const record = await prisma.account.findUnique({ where: { id: accountId }, select: { moreDetails: true } });
+  const moreDetails = record?.moreDetails && typeof record.moreDetails === 'object'
+    ? record.moreDetails as { preferences?: { display?: Partial<DisplayPreferences> } }
     : {};
+  const preferences = moreDetails.preferences ?? {};
   return {
     areaUnit: preferences.display?.areaUnit ?? 'aana',
     currency: preferences.display?.currency ?? 'NPR',

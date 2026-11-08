@@ -317,7 +317,6 @@ async function persistAccountUpdate(
     ...(hasChangedField("accountType") && typeof payload.account.accountType === "string"
       ? { accountType: payload.account.accountType }
       : {}),
-    connectionId,
     accessedOn: new Date(),
   };
 
@@ -351,7 +350,6 @@ async function persistAccountUpdate(
         hasChangedField("bio") && (typeof payload.profile?.bio === "string" || payload.profile?.bio === null)
           ? payload.profile.bio
           : null,
-      connectionId,
       createdOn: new Date(),
       accessedOn: new Date(),
     },

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { prisma } from '@neup/core/database/prisma';
+import { Prisma } from '@/prisma/client';
 import { requireAuth } from '@/services/auth/account';
 
 const AREA_UNITS = ['aana', 'ropani', 'paisa', 'daam', 'sqft', 'sqm', 'bigha', 'kattha', 'dhur'] as const;
@@ -29,15 +30,19 @@ function validateDisplayPreferences(input: FormData) {
 export async function saveDisplayPreferences(input: FormData) {
   const account = await requireAuth();
   const display = validateDisplayPreferences(input);
-  const record = await prisma.userPreference.findUnique({ where: { accountId: account.aid }, select: { preferences: true } });
-  const preferences = record?.preferences && typeof record.preferences === 'object' && !Array.isArray(record.preferences)
-    ? record.preferences as Record<string, unknown>
+  const accountRecord = await prisma.account.findUnique({ where: { id: account.aid }, select: { moreDetails: true } });
+  const moreDetails = accountRecord?.moreDetails && typeof accountRecord.moreDetails === 'object' && !Array.isArray(accountRecord.moreDetails)
+    ? accountRecord.moreDetails as Record<string, unknown>
     : {};
+  const preferences = moreDetails.preferences && typeof moreDetails.preferences === 'object' && !Array.isArray(moreDetails.preferences)
+    ? moreDetails.preferences as Record<string, unknown>
+    : {};
+  const updatedMoreDetails = { ...moreDetails, preferences: { ...preferences, display } } as Prisma.InputJsonObject;
 
-  await prisma.userPreference.upsert({
-    where: { accountId: account.aid },
-    create: { accountId: account.aid, preferences: { ...preferences, display } },
-    update: { preferences: { ...preferences, display } },
+  await prisma.account.upsert({
+    where: { id: account.aid },
+    create: { id: account.aid, accountType: 'individual', moreDetails: updatedMoreDetails },
+    update: { moreDetails: updatedMoreDetails },
   });
 
   revalidatePath('/preferences');
