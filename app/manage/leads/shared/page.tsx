@@ -7,6 +7,7 @@ import { Link } from '@neup/components/ui/link';
 import { Badge } from '@neup/components/ui/badge';
 import { Button } from '@neup/components/ui/button';
 import { Plus } from 'lucide-react';
+import { DisplayBudget } from '@/components/display-preferences';
 
 export default async function SharedLeadsPage() {
     await checkAuthenticationForWeb();
@@ -75,15 +76,9 @@ export default async function SharedLeadsPage() {
                                             <p className="text-xs text-muted-foreground">
                                                 {[
                                                     req.location,
-                                                    req.minBudget && req.maxBudget
-                                                        ? `${req.minBudget.toLocaleString()} – ${req.maxBudget.toLocaleString()}`
-                                                        : req.minBudget
-                                                          ? `From ${req.minBudget.toLocaleString()}`
-                                                          : req.maxBudget
-                                                            ? `Up to ${req.maxBudget.toLocaleString()}`
-                                                            : null,
                                                     req.notes,
                                                 ].filter(Boolean).join(' · ')}
+                                                {(req.minBudget != null || req.maxBudget != null) && <>{(req.location || req.notes) ? ' · ' : ''}<DisplayBudget minimum={req.minBudget} maximum={req.maxBudget} /></>}
                                             </p>
                                         )}
                                     </div>

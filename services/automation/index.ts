@@ -9,6 +9,7 @@ import { createAgencyAgentMap as createAgencyAgentMapService, getAgencyAgentAcco
 import { getAgentsByLocation as getAgentsByLocationService, createAgent as createAgentService, updateAgent as updateAgentService, deleteAgent as deleteAgentService } from '@/services/agents/agent/service';
 import { addSitemap, getNewUrlsFromSitemap, processSitemapUrl, updateSitemapCheckedTime } from "@/services/crawl/sitemap";
 import { logger } from "@neup/logica/logger";
+import { getDisplayConfiguration } from '@/services/preferences/display';
 import type { NaturalLanguageSearchOutput, Listing, CreateListingInput, UpdateListingInput, CreateAgencyInput, UpdateAgencyInput, ListingApprovalResult, CreateListingFormValues, UpdateListingFormValues, CreateAgencyFormValues, UpdateAgencyFormValues, ListingFilters, ExtractedListingData, SitemapLog, ListingAmendmentResult, RewriteListingDetailsOutput, ListingAssuranceResult, Agent, CreateAgentFormValues, UpdateAgentFormValues, StructuredLocation, CreateUserActivityInput, ListingImageUpdateResult, CreateInquiryFormValues, InquiryStatus, UpdatePromptFormValues, CreatePromptFormValues, User, CreateListingRequestFormValues, CreateSalesRequestFormValues, CreateVisitRequestFormValues, CreateMortgageRequestFormValues, ListingActivityEvent, UserPreferences, AIModel, CreateAIModelFormValues, UpdateAIModelFormValues, CreateRequirementFormValues, Requirement, UpdateUserFormValues, LandDetails, PlotDetails, ApartmentUnit } from "@/types";
 import { CreateListingSchema, UpdateListingSchema, CreateAgencySchema, UpdateAgencySchema, ListingPurposeSchema, ListingCategorySchema, ListingUsageTypeSchema, CreateAgentSchema, UpdateAgentSchema, CreateInquirySchema, UpdatePromptSchema, CreatePromptSchema, CreateListingRequestSchema, CreateSalesRequestSchema, CreateVisitRequestSchema, CreateMortgageRequestSchema, CreateAIModelSchema, UpdateAIModelSchema, CreateRequirementSchema, UpdateUserSchema } from "@/types";
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
@@ -150,7 +151,15 @@ export async function analyzeMarketAction(prevState: MarketAnalysisState, formDa
             return { success: true, result: { count: 0, averagePrice: 0, minPrice: 0, maxPrice: 0, summary: `No matching properties found for "${query}". Try a different description.` } };
         }
 
-        const prices = listings.map(p => p.price.amount ?? 0).filter(p => p > 0);
+        const { usdRates } = await getDisplayConfiguration();
+        const prices = listings
+            .map((property) => {
+                const amount = property.price.amount ?? 0;
+                const currency = property.price.currency?.toUpperCase() || 'NPR';
+                const rate = usdRates[currency];
+                return amount > 0 && rate ? amount / rate : 0;
+            })
+            .filter((price) => price > 0);
         if (prices.length === 0) {
             return { success: true, result: { count: listings.length, averagePrice: 0, minPrice: 0, maxPrice: 0, summary: "Found matching properties, but none have a listed price to analyze." } };
         }
@@ -160,9 +169,7 @@ export async function analyzeMarketAction(prevState: MarketAnalysisState, formDa
         const minPrice = Math.min(...prices);
         const maxPrice = Math.max(...prices);
         
-        const formatCurrency = (value: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
-
-        const summary = `Based on ${totalCount} properties matching your description, the estimated market rate is between ${formatCurrency(minPrice)} and ${formatCurrency(maxPrice)}, with an average of ${formatCurrency(averagePrice)}.`;
+        const summary = `Based on ${totalCount} properties matching your description, the converted market range and average are shown below.`;
 
         return { success: true, result: { count: totalCount, averagePrice, minPrice, maxPrice, summary }};
     } catch(e: any) {

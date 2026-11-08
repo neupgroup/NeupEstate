@@ -4,6 +4,7 @@ import { Link } from '@neup/components/ui/link';
 import { Badge } from '@neup/components/ui/badge';
 import { ChevronLeft, Plus } from 'lucide-react';
 import { Button } from '@neup/components/ui/button';
+import { DisplayBudget } from '@/components/display-preferences';
 
 export default async function BaseLeadClientPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -63,17 +64,8 @@ export default async function BaseLeadClientPage({ params }: { params: Promise<{
                                     </div>
                                     {req && (req.location || req.minBudget || req.maxBudget || req.notes) && (
                                         <p className="text-xs text-muted-foreground">
-                                            {[
-                                                req.location,
-                                                req.minBudget && req.maxBudget
-                                                    ? `${req.minBudget.toLocaleString()} – ${req.maxBudget.toLocaleString()}`
-                                                    : req.minBudget
-                                                      ? `From ${req.minBudget.toLocaleString()}`
-                                                      : req.maxBudget
-                                                        ? `Up to ${req.maxBudget.toLocaleString()}`
-                                                        : null,
-                                                req.notes,
-                                            ].filter(Boolean).join(' · ')}
+                                            {[req.location, req.notes].filter(Boolean).join(' · ')}
+                                            {(req.minBudget != null || req.maxBudget != null) && <>{(req.location || req.notes) ? ' · ' : ''}<DisplayBudget minimum={req.minBudget} maximum={req.maxBudget} /></>}
                                         </p>
                                     )}
                                 </div>

@@ -27,6 +27,7 @@ import { getHiddenPriceLabel } from '@/services/listings/price-display';
 import { getListingSlugId } from '@/services/listings/slug';
 import { ListingMediaGallery } from '@/components/manage/property-media-gallery';
 import { getLocation } from '@/services/listings/create/location';
+import { DisplayArea, DisplayCurrency, DisplayListingPrice, DisplayPriceBasis } from '@/components/display-preferences';
 
 function stripHtml(html: string) {
   return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
@@ -395,14 +396,6 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
       } }).log();
   }
 
-  const formatPrice = (price: number, currency: string = 'USD') => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currency,
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
-
   const schemaJson = generateSchema({ ...property, images: safeImages, amenities: safeAmenities });
   const hiddenPriceLabel = getHiddenPriceLabel(property);
   const showOwnerInformation = property.details?.showOwnerInformation ?? true;
@@ -418,14 +411,6 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
     { label: 'Bike Parking', value: property.bikeParkingSpots, singular: 'Bike Parking', icon: <Bike className="h-4 w-4 text-primary" /> },
   ].filter((item) => hasPositiveValue(item.value));
   const primaryPrice = property.price.amount ?? 0;
-  const pricingBasisLabels: Record<string, string> = {
-    total: 'Total price',
-    perUnit: 'Price per square meter',
-    perMonth: 'Price per month',
-    perYear: 'Price per year',
-    perUnitPerMonth: 'Price per square meter per month',
-    perUnitPerYear: 'Price per square meter per year',
-  };
   const mapLocation = getLocation(property);
   const showExactMapLocation = mapLocation?.mode === 'exact';
 
@@ -520,11 +505,11 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
             
             {(property.pricing || property.price.amount != null) && (
               <DetailCard title="Pricing Details" icon={<Tag className="h-5 w-5"/>}>
-                  <DetailItem label="Listed Price" value={hiddenPriceLabel || (hasPositiveValue(property.price.amount) ? formatPrice(property.price.amount, property.price.currency) : 'N/A')} />
-                  <DetailItem label="Minimum Price" value={hiddenPriceLabel || (property.pricing?.minimum ? formatPrice(property.pricing.minimum, property.price.currency) : 'N/A')} />
-                  <DetailItem label="Maximum Price" value={hiddenPriceLabel || (property.pricing?.maximum ? formatPrice(property.pricing.maximum, property.price.currency) : 'N/A')} />
+                  <DetailItem label="Listed Price" value={hiddenPriceLabel || (hasPositiveValue(property.price.amount) ? <DisplayListingPrice amount={property.price.amount} sourceCurrency={property.price.currency} basis={property.price.basis} /> : 'N/A')} />
+                  <DetailItem label="Minimum Price" value={hiddenPriceLabel || (property.pricing?.minimum ? <DisplayListingPrice amount={property.pricing.minimum} sourceCurrency={property.price.currency} basis={property.price.basis} /> : 'N/A')} />
+                  <DetailItem label="Maximum Price" value={hiddenPriceLabel || (property.pricing?.maximum ? <DisplayListingPrice amount={property.pricing.maximum} sourceCurrency={property.price.currency} basis={property.price.basis} /> : 'N/A')} />
                   <DetailItem label="Negotiable" value={property.pricing?.negotiable ? 'Yes' : 'No'} />
-                  <DetailItem label="Basis" value={property.price.basis ? pricingBasisLabels[property.price.basis] : 'N/A'} />
+                  <DetailItem label="Basis" value={<DisplayPriceBasis basis={property.price.basis} />} />
                   <DetailItem label="Options" value={safePricingOptions} />
               </DetailCard>
             )}
@@ -590,8 +575,8 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
             {shouldShowEarningPotential && property.earnings && (
               <DetailCard title="Earning Potential" icon={<Banknote className="h-5 w-5"/>}>
                   <DetailItem label="Type" value={property.earnings.type} />
-                  <DetailItem label="Monthly" value={property.earnings.monthly ? formatPrice(property.earnings.monthly, property.earnings.currency) : 'N/A'} />
-                  <DetailItem label="Yearly" value={property.earnings.yearly ? formatPrice(property.earnings.yearly, property.earnings.currency) : 'N/A'} />
+                  <DetailItem label="Monthly" value={property.earnings.monthly ? <DisplayCurrency amount={property.earnings.monthly} sourceCurrency={property.earnings.currency} /> : 'N/A'} />
+                  <DetailItem label="Yearly" value={property.earnings.yearly ? <DisplayCurrency amount={property.earnings.yearly} sourceCurrency={property.earnings.currency} /> : 'N/A'} />
               </DetailCard>
             )}
 
@@ -600,7 +585,7 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
               <div className="mt-6 border-t pt-6">
                   <h2 className="text-2xl font-headline font-semibold mb-4">Land Details</h2>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-2">
-                      {property.landDetails.area && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Area</p><p className="font-semibold">{areaValueToSqm(property.landDetails.area).toLocaleString()} m²</p></div>}
+                      {property.landDetails.area && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Area</p><p className="font-semibold"><DisplayArea squareMetres={areaValueToSqm(property.landDetails.area)} /></p></div>}
                       {property.landDetails.frontage && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Frontage</p><p className="font-semibold">{property.landDetails.frontage} ft</p></div>}
                       {property.landDetails.depth && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Depth</p><p className="font-semibold">{property.landDetails.depth} ft</p></div>}
                       {property.landDetails.facing && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Facing</p><p className="font-semibold">{property.landDetails.facing}</p></div>}
@@ -628,7 +613,7 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
                           {safePlots.map((plot) => (
                               <TableRow key={plot.id}>
                                   <TableCell className="font-medium">{plot.id}</TableCell>
-                                  <TableCell>{areaValueToSqm(plot.area).toLocaleString()} m²</TableCell>
+                                  <TableCell><DisplayArea squareMetres={areaValueToSqm(plot.area)} /></TableCell>
                                   <TableCell>{plot.frontage ? `${plot.frontage} ft` : 'N/A'}</TableCell>
                                   <TableCell>{plot.zoning || 'N/A'}</TableCell>
                                   <TableCell>{plot.topography || 'N/A'}</TableCell>
@@ -643,7 +628,7 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
               <div className="mt-6 border-t pt-6">
                   <h2 className="text-2xl font-headline font-semibold mb-4">Apartment Building Details</h2>
                    <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-2">
-                      {(property.apartmentDetails as any).buildingArea && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Building Area</p><p className="font-semibold">{(property.apartmentDetails as any).buildingArea} m²</p></div>}
+                      {(property.apartmentDetails as any).buildingArea && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Building Area</p><p className="font-semibold"><DisplayArea squareMetres={Number((property.apartmentDetails as any).buildingArea)} /></p></div>}
                       {property.apartmentDetails.furnishing && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Furnishing</p><p className="font-semibold">{property.apartmentDetails.furnishing}</p></div>}
                       {(property.apartmentDetails as any).buildStart && <div className="p-3 bg-secondary rounded-md"><p className="text-xs text-muted-foreground">Built</p><p className="font-semibold">{(property.apartmentDetails as any).buildStart} - {(property.apartmentDetails as any).buildCompleted}</p></div>}
                   </div>
@@ -661,7 +646,7 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
                               </CardHeader>
                               <CardContent>
                                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                      {unit.area && <div className="flex items-center gap-2"><SquareGanttChart className="h-4 w-4 text-muted-foreground" /> {areaValueToSqm(unit.area).toLocaleString()} m²</div>}
+                                      {unit.area && <div className="flex items-center gap-2"><SquareGanttChart className="h-4 w-4 text-muted-foreground" /> <DisplayArea squareMetres={areaValueToSqm(unit.area)} /></div>}
                                       {unit.furnishing && <div className="flex items-center gap-2"><Box className="h-4 w-4 text-muted-foreground" /> {unit.furnishing}</div>}
                                       {unit.bedrooms && <div className="flex items-center gap-2"><BedDouble className="h-4 w-4 text-muted-foreground" /> {unit.bedrooms} Beds</div>}
                                       {unit.bathrooms && <div className="flex items-center gap-2"><Bath className="h-4 w-4 text-muted-foreground" /> {unit.bathrooms} Baths</div>}

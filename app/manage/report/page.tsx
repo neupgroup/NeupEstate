@@ -9,6 +9,8 @@ import { getAgencyMapByAccount, getAgencyMapsByAgency } from '@/services/agencie
 import { requireAuth } from '@/services/auth/account';
 import { AlertCircle, ArrowLeft, Building2, CalendarCheck2, Eye, FileQuestion, Heart, TrendingUp, UsersRound } from 'lucide-react';
 import type { ReactNode } from 'react';
+import { DisplayCurrency, DisplayNumber } from '@/components/display-preferences';
+import { getDisplayConfiguration } from '@/services/preferences/display';
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
@@ -37,18 +39,6 @@ type ActivityItem =
       createdAt: Date;
       href: string;
     };
-
-function formatCompactNumber(value: number) {
-  return new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(value);
-}
-
-function formatCurrency(value: number) {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'NPR',
-    maximumFractionDigits: 0,
-  }).format(value);
-}
 
 function formatPercent(value: number) {
   if (!Number.isFinite(value)) return '0%';
@@ -130,6 +120,7 @@ async function getAgencyReportData(agencyAccountId: string) {
       isApproved: true,
       createdAt: true,
       priceAmount: true,
+      priceCurrency: true,
       type: true,
       purpose: true,
     },
@@ -206,10 +197,13 @@ async function getAgencyReportData(agencyAccountId: string) {
   const activeListings = listings.filter((property) => property.status === 'ACTIVE').length;
   const approvedListings = listings.filter((property) => property.isApproved).length;
   const pendingListings = listings.filter((property) => !property.isApproved).length;
-  const totalListingValue = listings.reduce(
-    (sum, property) => sum + Number(property.priceAmount || 0),
-    0,
-  );
+  const { usdRates } = await getDisplayConfiguration();
+  const totalListingValueUsd = listings.reduce((sum, property) => {
+    const amount = Number(property.priceAmount || 0);
+    const currency = property.priceCurrency?.toUpperCase() || 'NPR';
+    const rate = usdRates[currency];
+    return sum + (rate ? amount / rate : 0);
+  }, 0);
   const inquiries30 = inquiries.filter((inquiry) => inquiry.createdAt >= thirtyDaysAgo).length;
   const visits30 = visits.filter((visit) => visit.createdAt >= thirtyDaysAgo).length;
 
@@ -326,7 +320,7 @@ async function getAgencyReportData(agencyAccountId: string) {
       recentViews,
       totalSaves,
       recentSaves,
-      totalListingValue,
+      totalListingValueUsd,
     },
   };
 }
@@ -338,7 +332,7 @@ function StatCard({
   icon,
 }: {
   title: string;
-  value: string;
+  value: ReactNode;
   description: string;
   icon: ReactNode;
 }) {
@@ -441,7 +435,7 @@ export default async function ManageReportPage({
         />
         <StatCard
           title="Portfolio Value"
-          value={formatCurrency(report.totals.totalListingValue)}
+          value={<DisplayCurrency amount={report.totals.totalListingValueUsd} sourceCurrency="USD" />}
           description={`${report.listings.length} tracked listing${report.listings.length === 1 ? '' : 's'}`}
           icon={<Building2 className="h-4 w-4 text-muted-foreground" />}
         />
@@ -463,7 +457,7 @@ export default async function ManageReportPage({
               </div>
               <p className="mt-3 text-2xl font-semibold">{formatPercent(viewToSaveRate)}</p>
               <p className="mt-1 text-xs text-muted-foreground">
-                {formatCompactNumber(report.totals.totalViews)} views and {formatCompactNumber(report.totals.totalSaves)} saves total
+                <DisplayNumber value={report.totals.totalViews} maximumFractionDigits={0} /> views and <DisplayNumber value={report.totals.totalSaves} maximumFractionDigits={0} /> saves total
               </p>
             </div>
             <div className="rounded-lg border bg-muted/30 p-4">
@@ -507,11 +501,11 @@ export default async function ManageReportPage({
             </div>
             <div className="flex items-center justify-between rounded-lg border p-3">
               <span className="text-sm text-muted-foreground">Views in last 30 days</span>
-              <span className="font-medium">{formatCompactNumber(report.totals.recentViews)}</span>
+              <span className="font-medium"><DisplayNumber value={report.totals.recentViews} maximumFractionDigits={0} /></span>
             </div>
             <div className="flex items-center justify-between rounded-lg border p-3">
               <span className="text-sm text-muted-foreground">Saves in last 30 days</span>
-              <span className="font-medium">{formatCompactNumber(report.totals.recentSaves)}</span>
+              <span className="font-medium"><DisplayNumber value={report.totals.recentSaves} maximumFractionDigits={0} /></span>
             </div>
           </CardContent>
         </Card>

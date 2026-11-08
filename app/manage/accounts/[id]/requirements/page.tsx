@@ -2,6 +2,7 @@ import { getRequirementByUserId } from '@/services/requirements/get';
 import { Card, CardContent, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Target } from 'lucide-react';
 import { Badge } from '@neup/components/ui/badge';
+import { DisplayCurrency } from '@/components/display-preferences';
 
 export default async function AccountRequirementsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: accountId } = await params;
@@ -42,8 +43,8 @@ export default async function AccountRequirementsPage({ params }: { params: Prom
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                   {[
                     r.location && { label: 'Location', value: r.location },
-                    r.minBudget && { label: 'Min budget', value: r.minBudget.toLocaleString() },
-                    r.maxBudget && { label: 'Max budget', value: r.maxBudget.toLocaleString() },
+                    r.minBudget != null && { label: 'Min budget', value: <DisplayCurrency amount={r.minBudget} sourceCurrency="NPR" /> },
+                    r.maxBudget != null && { label: 'Max budget', value: <DisplayCurrency amount={r.maxBudget} sourceCurrency="NPR" /> },
                     r.urgency && { label: 'Urgency', value: r.urgency },
                     r.requiredTime && { label: 'Timeline', value: r.requiredTime },
                     r.loan && { label: 'Loan', value: 'Yes' },

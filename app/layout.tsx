@@ -8,6 +8,7 @@ import { ActivityTracker } from '@/components/activity-tracker';
 import { createAccount } from '@/services/accounts/create';
 import { getAuthenticatedMeData } from '@/services/auth/me';
 import { canShowManagePanelLink } from '@/services/permissions';
+import { getDisplayConfiguration } from '@/services/preferences/display';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,6 +28,7 @@ export default async function RootLayout({
   await createAccount();
 
   const me = await getAuthenticatedMeData();
+  const displayConfiguration = await getDisplayConfiguration(me?.accountId);
   const isGuestUser = me?.accountType === 'guest';
   const canShowManagePanel = me ? await canShowManagePanelLink() : false;
   const initialUser = me
@@ -64,6 +66,7 @@ export default async function RootLayout({
         <ActivityTracker />
         <LayoutClient
           initialUser={initialUser}
+          displayConfiguration={displayConfiguration}
           showManagePanelLink={canShowManagePanel}
           showGuestBanner={isGuestUser}
         >

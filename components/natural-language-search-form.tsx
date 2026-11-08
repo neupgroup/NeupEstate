@@ -13,6 +13,7 @@ import { Button } from '@neup/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { Lightbulb, Loader2 } from 'lucide-react';
 import { useToast } from '@neup/core/hooks/useToast';
+import { DisplayArea, DisplayCurrency, DisplayNumber } from '@/components/display-preferences';
 
 const formSchema = z.object({
   query: z.string().min(10, {
@@ -89,8 +90,8 @@ export function NaturalLanguageSearchForm() {
             <ul className="mt-2 list-disc list-inside text-sm">
                 <li>Location: {(searchResult as any).location}</li>
                 <li>Type: {(searchResult as any).propertyType}</li>
-                <li>Price: ${(searchResult as any).minPrice?.toLocaleString()} - ${(searchResult as any).maxPrice?.toLocaleString()}</li>
-                <li>Features: {(searchResult as any).bedrooms} bed, {(searchResult as any).bathrooms} bath, {(searchResult as any).squareFootage?.toLocaleString()} sqft</li>
+                <li>Price: <DisplayCurrency amount={(searchResult as any).minPrice} sourceCurrency="USD" /> - <DisplayCurrency amount={(searchResult as any).maxPrice} sourceCurrency="USD" /></li>
+                <li>Features: <DisplayNumber value={(searchResult as any).bedrooms} maximumFractionDigits={0} /> bed, <DisplayNumber value={(searchResult as any).bathrooms} maximumFractionDigits={0} /> bath, <DisplayArea squareMetres={Number((searchResult as any).squareFootage) * 0.092903} /></li>
                 <li>Amenities: {(searchResult as any).amenities?.join(', ')}</li>
             </ul>
           </AlertDescription>

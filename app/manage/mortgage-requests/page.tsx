@@ -6,6 +6,7 @@ import { AlertCircle, User, MapPin, BadgePercent, Phone, Mail, Contact } from 'l
 import { RelativeTime } from '@/components/manage/relative-time';
 import { Badge } from '@neup/components/ui/badge';
 import { WhatsAppIcon } from '@/components/icons';
+import { DisplayCurrency } from '@/components/display-preferences';
 
 export default async function MortgageRequestsPage() {
     const requests = await getMortgageRequests();
@@ -45,7 +46,7 @@ export default async function MortgageRequestsPage() {
                                     <TableCell className="max-w-md">
                                         <div className="flex flex-col gap-1 text-sm">
                                             {req.address && <div className="flex items-center gap-1.5"><MapPin className="h-3 w-3" /> {req.address}</div>}
-                                            {req.income && <div className="flex items-center gap-1.5"><BadgePercent className="h-3 w-3" /> Approx. Income: ${req.income.toLocaleString()}</div>}
+                                            {req.income && <div className="flex items-center gap-1.5"><BadgePercent className="h-3 w-3" /> Approx. Income: <DisplayCurrency amount={req.income} sourceCurrency="USD" /></div>}
                                         </div>
                                         {req.moreDetails && <details className="mt-2 text-sm"><summary className="cursor-pointer text-xs font-medium">View Details</summary><p className="mt-1 p-2 bg-muted/50 rounded-md whitespace-pre-wrap">{req.moreDetails}</p></details>}
                                         <div className="flex items-center gap-2 mt-2">

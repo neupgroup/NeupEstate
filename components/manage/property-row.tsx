@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { Link } from '@neup/components/ui/link';
 import { getHiddenPriceLabel } from '@/services/listings/price-display';
+import { DisplayListingPrice } from '@/components/display-preferences';
 
 // ─── Status badge ─────────────────────────────────────────────────────────────
 
@@ -77,12 +78,6 @@ function Thumbnail({ property }: { property: Listing }) {
     );
 }
 
-function formatCurrencyPrefix(currency?: string) {
-    if (currency === 'NPR') return 'NRs.';
-    if (currency === 'INR') return 'IRs.';
-    return '$';
-}
-
 function formatBasisLabel(basis?: string) {
     switch (basis) {
         case 'perUnit': return 'per m²';
@@ -114,24 +109,12 @@ function formatBasisLabel(basis?: string) {
     }
 }
 
-function getListingPriceLine(property: Listing) {
-    const hiddenPriceLabel = getHiddenPriceLabel(property);
-    if (hiddenPriceLabel) return null;
-
-    const currency = formatCurrencyPrefix(property.price.currency);
-    const amount = new Intl.NumberFormat('en-US', {
-        maximumFractionDigits: 0,
-    }).format(property.price.amount || 0);
-    const basis = formatBasisLabel(property.price.basis ?? undefined);
-
-    return `for ${currency} ${amount}${basis ? ` ${basis}` : ''}`;
-}
-
 // ─── Row ──────────────────────────────────────────────────────────────────────
 
 export function AdminListingRow({ property, draftKind }: { property: Listing; draftKind?: 'creation_draft' | 'creation_pending' | 'changing' | 'deleting' }) {
     const byline = getListingByline(property);
-    const priceLine = getListingPriceLine(property);
+    const hiddenPriceLabel = getHiddenPriceLabel(property);
+    const priceBasis = formatBasisLabel(property.price.basis ?? undefined);
 
     return (
         <Link
@@ -144,9 +127,9 @@ export function AdminListingRow({ property, draftKind }: { property: Listing; dr
                 <p className="text-sm font-semibold leading-snug truncate group-hover:text-primary transition-colors">
                     {property.title}
                 </p>
-                {priceLine ? (
+                {!hiddenPriceLabel && property.price.amount ? (
                     <p className="text-xs text-muted-foreground truncate">
-                        {priceLine}
+                        for <DisplayListingPrice amount={property.price.amount} sourceCurrency={property.price.currency} basis={property.price.basis} />{priceBasis && !property.price.basis ? ` ${priceBasis}` : ''}
                     </p>
                 ) : null}
                 {byline ? (

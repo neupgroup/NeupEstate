@@ -20,16 +20,7 @@ import {
   TableRow,
 } from '@neup/components/ui/table'
 import { Link } from '@neup/components/ui/link'
-
-const currencyFormatter = new Intl.NumberFormat('en-NP', {
-  style: 'currency',
-  currency: 'NPR',
-  maximumFractionDigits: 2,
-})
-
-const numberFormatter = new Intl.NumberFormat('en-NP', {
-  maximumFractionDigits: 2,
-})
+import { formatDisplayCurrency, formatDisplayNumber, useDisplayConfiguration } from '@/components/display-preferences'
 
 const CHART_COLORS = ['hsl(var(--primary))', 'hsl(var(--accent))']
 
@@ -61,6 +52,9 @@ function SummaryCard({ title, value, description, highlight = false }: SummaryCa
 }
 
 export function EmiCalculatorTool() {
+  const displayConfiguration = useDisplayConfiguration()
+  const currencyFormatter = (value: number) => formatDisplayCurrency(value, 'NPR', displayConfiguration, 2)
+  const numberFormatter = (value: number) => formatDisplayNumber(value, displayConfiguration.preferences.numberSystem, 2)
   const [principalInput, setPrincipalInput] = useState('7500000')
   const [interestInput, setInterestInput] = useState('10.5')
   const [termInput, setTermInput] = useState('20')
@@ -201,18 +195,18 @@ export function EmiCalculatorTool() {
               <div className="grid gap-4 md:grid-cols-3">
                 <SummaryCard
                   title="Monthly EMI"
-                  value={currencyFormatter.format(result.monthlyPayment)}
+                  value={currencyFormatter(result.monthlyPayment)}
                   description="Your estimated monthly installment."
                   highlight
                 />
                 <SummaryCard
                   title="Total Interest"
-                  value={currencyFormatter.format(result.totalInterest)}
+                  value={currencyFormatter(result.totalInterest)}
                   description="Interest paid over the full term."
                 />
                 <SummaryCard
                   title="Total Payment"
-                  value={currencyFormatter.format(result.totalPayment)}
+                  value={currencyFormatter(result.totalPayment)}
                   description="Principal plus total interest."
                 />
               </div>
@@ -244,7 +238,7 @@ export function EmiCalculatorTool() {
                       ))}
                     </Pie>
                     <RechartsTooltip
-                      formatter={(value: number) => currencyFormatter.format(value)}
+                      formatter={(value: number) => currencyFormatter(value)}
                       contentStyle={{
                         borderRadius: '12px',
                         borderColor: 'hsl(var(--border))',
@@ -265,7 +259,7 @@ export function EmiCalculatorTool() {
                       <span className="font-medium">{item.name}</span>
                     </div>
                     <span className="text-sm text-muted-foreground">
-                      {currencyFormatter.format(item.value)}
+                      {currencyFormatter(item.value)}
                     </span>
                   </div>
                 ))}
@@ -279,7 +273,7 @@ export function EmiCalculatorTool() {
                   </div>
                   <p className="mt-2 text-2xl font-semibold">
                     {result.totalPayment > 0
-                      ? numberFormatter.format((result.totalInterest / result.totalPayment) * 100)
+                      ? numberFormatter((result.totalInterest / result.totalPayment) * 100)
                       : '0'}
                     %
                   </p>
@@ -290,7 +284,7 @@ export function EmiCalculatorTool() {
                     First year outflow
                   </div>
                   <p className="mt-2 text-2xl font-semibold">
-                    {currencyFormatter.format(
+                    {currencyFormatter(
                       result.yearlySchedule[0]?.totalPaid ?? result.monthlyPayment * 12,
                     )}
                   </p>
@@ -331,10 +325,10 @@ export function EmiCalculatorTool() {
                 {result.yearlySchedule.map((row) => (
                   <TableRow key={row.year}>
                     <TableCell className="font-medium">{row.year}</TableCell>
-                    <TableCell className="text-right">{currencyFormatter.format(row.principalPaid)}</TableCell>
-                    <TableCell className="text-right">{currencyFormatter.format(row.interestPaid)}</TableCell>
-                    <TableCell className="text-right">{currencyFormatter.format(row.totalPaid)}</TableCell>
-                    <TableCell className="text-right">{currencyFormatter.format(row.remainingBalance)}</TableCell>
+                    <TableCell className="text-right">{currencyFormatter(row.principalPaid)}</TableCell>
+                    <TableCell className="text-right">{currencyFormatter(row.interestPaid)}</TableCell>
+                    <TableCell className="text-right">{currencyFormatter(row.totalPaid)}</TableCell>
+                    <TableCell className="text-right">{currencyFormatter(row.remainingBalance)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

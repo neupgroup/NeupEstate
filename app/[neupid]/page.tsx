@@ -9,6 +9,7 @@ import { getRequirementByUserId } from '@/services/requirements/get';
 import { getAgencyAgentAccountsByAgency } from '@/services/agencies/agent-maps/service';
 import { Building2, MessageSquare, Phone, UserRound, Users } from 'lucide-react';
 import { WhatsAppIcon } from '@/components/icons';
+import { DisplayCurrency } from '@/components/display-preferences';
 
 const AGENCY_ACCOUNT_TYPES = ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'];
 
@@ -181,7 +182,7 @@ export default async function PublicAccountProfilePage({
                     <dl className="mt-5 space-y-3 text-sm">
                       <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Listing type</dt><dd className="text-right">{requirement.propertyType?.join(', ') || 'Any'}</dd></div>
                       <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Area</dt><dd className="text-right">{requirement.location || 'Any'}</dd></div>
-                      <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Budget</dt><dd className="text-right">{requirement.minBudget?.toLocaleString() || 'Any'} – {requirement.maxBudget?.toLocaleString() || 'Any'}</dd></div>
+                      <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Budget</dt><dd className="text-right">{requirement.minBudget != null ? <DisplayCurrency amount={requirement.minBudget} sourceCurrency="NPR" /> : 'Any'} – {requirement.maxBudget != null ? <DisplayCurrency amount={requirement.maxBudget} sourceCurrency="NPR" /> : 'Any'}</dd></div>
                       <div className="flex justify-between gap-4"><dt className="text-muted-foreground">Timeline</dt><dd className="text-right">{requirement.requiredTime || 'Flexible'}</dd></div>
                     </dl>
                   </CardContent>

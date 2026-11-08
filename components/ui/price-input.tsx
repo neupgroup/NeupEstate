@@ -2,8 +2,9 @@
 
 import * as React from "react";
 import { Input } from "@neup/components/ui/input";
-import { formatNepaliComma, toNepaliReadableWords } from "@/components/estate/logic/formatCurrency";
+import { toNepaliReadableWords } from "@/components/estate/logic/formatCurrency";
 import { cn } from "@neup/core/utils";
+import { formatDisplayNumber, useDisplayConfiguration } from '@/components/display-preferences';
 
 interface PriceInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "value" | "type"> {
   value: string;
@@ -20,8 +21,16 @@ interface PriceInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElemen
  * - Passes the raw numeric string back via onChange
  */
 export function PriceInput({ value, onChange, wrapperClassName, className, ...props }: PriceInputProps) {
-  const formatted = formatNepaliComma(value);
-  const words = toNepaliReadableWords(value);
+  const { preferences } = useDisplayConfiguration();
+  const numberSystem = preferences.numberSystem;
+  const groupingSystem = numberSystem.includes('.readable')
+    ? numberSystem.split('.readable')[0]
+    : numberSystem;
+  const numericValue = Number(value);
+  const formatted = value ? formatDisplayNumber(numericValue, groupingSystem, 0) : '';
+  const words = numberSystem.includes('.readable')
+    ? formatDisplayNumber(numericValue, numberSystem, 0)
+    : toNepaliReadableWords(value);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     // Strip everything except digits

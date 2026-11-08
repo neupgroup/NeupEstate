@@ -5,6 +5,7 @@ import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { AlertCircle, User, MapPin, Home, DollarSign, BedDouble, Bath, ClipboardList } from 'lucide-react';
 import { RelativeTime } from '@/components/manage/relative-time';
 import { Badge } from '@neup/components/ui/badge';
+import { DisplayCurrency } from '@/components/display-preferences';
 
 export default async function ListingRequestsPage() {
     const requests = await getListingRequests();
@@ -48,7 +49,7 @@ export default async function ListingRequestsPage() {
                                         <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
                                             {req.location && <div className="flex items-center gap-1.5"><MapPin className="h-3 w-3" /> Location: {req.location}</div>}
                                             {req.propertyType && <div className="flex items-center gap-1.5"><Home className="h-3 w-3" /> Type: {req.propertyType}</div>}
-                                            {req.budget && <div className="flex items-center gap-1.5"><DollarSign className="h-3 w-3" /> Budget: ${req.budget.toLocaleString()}</div>}
+                                            {req.budget && <div className="flex items-center gap-1.5"><DollarSign className="h-3 w-3" /> Budget: <DisplayCurrency amount={req.budget} sourceCurrency="USD" /></div>}
                                             {req.bedrooms && <div className="flex items-center gap-1.5"><BedDouble className="h-3 w-3" /> Bedrooms: {req.bedrooms}+</div>}
                                             {req.bathrooms && <div className="flex items-center gap-1.5"><Bath className="h-3 w-3" /> Bathrooms: {req.bathrooms}+</div>}
                                         </div>

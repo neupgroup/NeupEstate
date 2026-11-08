@@ -6,6 +6,7 @@ import { Button } from '@neup/components/ui/button';
 import { Plus } from 'lucide-react';
 import { requirePagePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';;
+import { DisplayBudget } from '@/components/display-preferences';
 
 export default async function MyLeadsPage() {
     await requirePagePermission(PERMISSIONS.crm.lead.view);
@@ -61,16 +62,10 @@ export default async function MyLeadsPage() {
                                         {req && (req.location || req.minBudget || req.maxBudget || req.notes) && (
                                             <p className="text-xs text-muted-foreground">
                                                 {[
-                                                    req.location,
-                                                    req.minBudget && req.maxBudget
-                                                        ? `${req.minBudget.toLocaleString()} – ${req.maxBudget.toLocaleString()}`
-                                                        : req.minBudget
-                                                          ? `From ${req.minBudget.toLocaleString()}`
-                                                          : req.maxBudget
-                                                            ? `Up to ${req.maxBudget.toLocaleString()}`
-                                                            : null,
-                                                    req.notes,
-                                                ].filter(Boolean).join(' · ')}
+                                                req.location,
+                                                req.notes,
+                                            ].filter(Boolean).join(' · ')}
+                                            {(req.minBudget != null || req.maxBudget != null) && <>{(req.location || req.notes) ? ' · ' : ''}<DisplayBudget minimum={req.minBudget} maximum={req.maxBudget} /></>}
                                             </p>
                                         )}
                                     </div>

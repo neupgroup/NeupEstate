@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Ruler, Calculator } from 'lucide-react';
+import { formatDisplayNumber, useDisplayConfiguration } from '@/components/display-preferences';
 
 type UnitCategory = 'area' | 'length' | 'price-per-area' | 'volume';
 
@@ -83,14 +84,8 @@ const categories: Category[] = [
   },
 ];
 
-const formatNumber = (value: number): string => {
-  if (isNaN(value) || value === 0) return '';
-  if (Math.abs(value) >= 1e9) return value.toExponential(4);
-  if (Number.isInteger(value)) return value.toLocaleString('en-US');
-  return value.toLocaleString('en-US', { maximumFractionDigits: 6 });
-};
-
 export default function UnitConverterPage() {
+  const { preferences } = useDisplayConfiguration();
   const [categoryId, setCategoryId] = useState<UnitCategory>('area');
   const [fromUnit, setFromUnit] = useState<string>('sqft');
   const [toUnit, setToUnit] = useState<string>('sqm');
@@ -98,6 +93,11 @@ export default function UnitConverterPage() {
   const [toValue, setToValue] = useState<string>('');
 
   const category = categories.find((c) => c.id === categoryId)!;
+  const formatConvertedValue = (value: number): string => {
+    if (Number.isNaN(value) || value === 0) return '';
+    if (Math.abs(value) >= 1e9) return value.toExponential(4);
+    return formatDisplayNumber(value, preferences.numberSystem, 6);
+  };
 
   const fromUnitData = useMemo(
     () => category.units.find((u) => u.value === fromUnit)!,
@@ -124,7 +124,7 @@ export default function UnitConverterPage() {
     const numValue = parseFloat(value);
     if (!isNaN(numValue)) {
       const result = convert(numValue, fromUnitData, toUnitData);
-      setToValue(formatNumber(result));
+      setToValue(formatConvertedValue(result));
     }
   };
 
@@ -137,7 +137,7 @@ export default function UnitConverterPage() {
     const numValue = parseFloat(value);
     if (!isNaN(numValue)) {
       const result = convert(numValue, toUnitData, fromUnitData);
-      setFromValue(formatNumber(result));
+      setFromValue(formatConvertedValue(result));
     }
   };
 

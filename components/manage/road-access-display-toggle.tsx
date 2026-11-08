@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Route } from "lucide-react";
+import { formatDisplayNumber, useDisplayConfiguration } from '@/components/display-preferences';
 
 type RoadAccessUnit = "meter" | "feet" | "haat" | "inch";
 
@@ -13,21 +14,18 @@ const METERS_PER_UNIT: Record<RoadAccessUnit, number> = {
     inch: 2.54 / 100,
 };
 
-function formatNumber(value: number) {
-    const rounded = Math.round(value * 100000000) / 100000000;
-    return Number.isInteger(rounded) ? String(rounded) : String(rounded);
-}
-
-function formatAanaLike(value: number, unit: RoadAccessUnit) {
+/** Convert the stored road width into the selected display unit and number style. */
+function formatRoadAccess(value: number, unit: RoadAccessUnit, numberSystem: string) {
     const display = value / METERS_PER_UNIT[unit];
-    return `${formatNumber(display)} ${unit}`;
+    return `${formatDisplayNumber(display, numberSystem, 8)} ${unit}`;
 }
 
 export function RoadAccessDisplayToggle({ value }: { value?: number | null }) {
+    const { preferences } = useDisplayConfiguration();
     const [index, setIndex] = useState(0);
     const unit = ORDER[index];
     const numeric = Number(value ?? 0);
-    const formatted = !numeric ? "Not set" : formatAanaLike(numeric, unit);
+    const formatted = !numeric ? "Not set" : formatRoadAccess(numeric, unit, preferences.numberSystem);
 
     return (
         <button

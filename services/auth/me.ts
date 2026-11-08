@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logica } from '@neup/logica';
-import { prisma } from '@neup/core/database/prisma';
 import { getAuthenticatedAccount } from '@/services/auth/account';
 import { buildHandshakeGrantUrl } from '@/services/auth/bridge';
 
@@ -28,11 +27,6 @@ export async function getAuthenticatedMeData(): Promise<AuthenticatedMe | null> 
 
   const account = result.account;
   const guest = isGuestClaim(account.guest);
-  const accountType = guest ? 'guest' : 'individual';
-  const storedAccount = await prisma.account.findUnique({
-    where: { id: account.aid },
-    select: { accountType: true },
-  });
 
   try {
     const profile = await logica.account(account.aid).get(['displayName', 'displayImage', 'accountType', 'neupid']);

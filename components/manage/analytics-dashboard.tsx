@@ -8,6 +8,7 @@ import { Badge } from '@neup/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@neup/components/ui/tabs';
 import { ChartConfig, ChartContainer, ChartTooltipContent } from '@neup/components/ui/chart';
+import { DisplayNumber } from '@/components/display-preferences';
 
 const chartConfig = {
   Reach: { label: 'Reach', color: 'hsl(var(--primary))' },
@@ -21,10 +22,6 @@ const levelIcons: Record<AnalyticsLevelSummary['level'], ReactNode> = {
   agency: <Building2 className="h-4 w-4" />,
   user: <User className="h-4 w-4" />,
 };
-
-function formatNumber(value: number): string {
-  return new Intl.NumberFormat('en-US').format(Math.round(value));
-}
 
 function StatCard({
   title,
@@ -44,7 +41,7 @@ function StatCard({
         <div className="text-muted-foreground">{icon}</div>
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{formatNumber(value)}</div>
+        <div className="text-2xl font-bold"><DisplayNumber value={Math.round(value)} maximumFractionDigits={0} /></div>
         <p className="text-xs text-muted-foreground">{description}</p>
       </CardContent>
     </Card>
@@ -63,26 +60,26 @@ function ScopeCard({ summary }: { summary: AnalyticsScopeSummary }) {
             </CardTitle>
             <CardDescription>{summary.description}</CardDescription>
           </div>
-          <Badge variant="secondary">{formatNumber(summary.totals.reach + summary.totals.interactions)} events</Badge>
+          <Badge variant="secondary"><DisplayNumber value={summary.totals.reach + summary.totals.interactions} maximumFractionDigits={0} /> events</Badge>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid gap-3 sm:grid-cols-4">
           <div>
             <p className="text-xs text-muted-foreground">Reach</p>
-            <p className="font-semibold">{formatNumber(summary.totals.reach)}</p>
+            <p className="font-semibold"><DisplayNumber value={summary.totals.reach} maximumFractionDigits={0} /></p>
           </div>
           <div>
             <p className="text-xs text-muted-foreground">Interactions</p>
-            <p className="font-semibold">{formatNumber(summary.totals.interactions)}</p>
+            <p className="font-semibold"><DisplayNumber value={summary.totals.interactions} maximumFractionDigits={0} /></p>
           </div>
           <div>
             <p className="text-xs text-muted-foreground">Leads</p>
-            <p className="font-semibold">{formatNumber(summary.totals.leads)}</p>
+            <p className="font-semibold"><DisplayNumber value={summary.totals.leads} maximumFractionDigits={0} /></p>
           </div>
           <div>
             <p className="text-xs text-muted-foreground">Inquiries</p>
-            <p className="font-semibold">{formatNumber(summary.totals.inquiries)}</p>
+            <p className="font-semibold"><DisplayNumber value={summary.totals.inquiries} maximumFractionDigits={0} /></p>
           </div>
         </div>
 
@@ -128,7 +125,7 @@ function LevelPanel({ level }: { level: AnalyticsLevelSummary }) {
           </h3>
           <p className="text-sm text-muted-foreground">{level.contextLabel}</p>
         </div>
-        <Badge variant="outline">{formatNumber(level.totals.reach + level.totals.interactions + level.totals.leads + level.totals.inquiries)} total signals</Badge>
+        <Badge variant="outline"><DisplayNumber value={level.totals.reach + level.totals.interactions + level.totals.leads + level.totals.inquiries} maximumFractionDigits={0} /> total signals</Badge>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">

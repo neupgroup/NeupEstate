@@ -6,6 +6,8 @@ import { Link } from '@neup/components/ui/link';
 import { Badge } from '@neup/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { ArrowLeft, BadgeInfo, CalendarDays, CircleDollarSign, ExternalLink, Images, Layers3, MapPin, Ruler, User } from 'lucide-react';
+import { CompetitorPrice } from '@/components/competitor-price';
+import { DisplayAreaValue } from '@/components/display-preferences';
 
 function formatValue(value: unknown): string {
   if (value === null || value === undefined || value === '') return 'Not provided';
@@ -22,12 +24,6 @@ function decodeMaybeEncodedText(value: string): string {
   } catch {
     return value;
   }
-}
-
-function asNumber(value: unknown): string {
-  if (value === null || value === undefined || value === '') return 'Not provided';
-  const num = Number(value);
-  return Number.isFinite(num) ? num.toLocaleString() : String(value);
 }
 
 export default async function IntelligenceListingDetailPage({
@@ -82,9 +78,7 @@ export default async function IntelligenceListingDetailPage({
 
   const details = (listing.details as Record<string, unknown> | null) ?? (listing.sourceDetails as Record<string, unknown> | null) ?? null;
   const images = Array.isArray(details?.images) ? details.images.filter((item): item is string => typeof item === 'string') : [];
-  const heroPrice = listing.price
-    ? (typeof listing.price === 'object' ? JSON.stringify(listing.price) : String(listing.price))
-    : (details?.price !== undefined ? asNumber(details.price) : 'Not provided');
+  const heroPrice = listing.price ?? details?.price;
   const title = decodeMaybeEncodedText(formatValue(listing.title));
   const description = listing.description
     ? decodeMaybeEncodedText(formatValue(listing.description))
@@ -136,7 +130,7 @@ export default async function IntelligenceListingDetailPage({
             </div>
             <div className="rounded-xl border bg-background p-4 shadow-sm min-w-[240px]">
               <div className="text-xs uppercase tracking-wide text-muted-foreground">Price</div>
-              <div className="mt-2 text-3xl font-semibold">{heroPrice}</div>
+              <div className="mt-2 text-3xl font-semibold"><CompetitorPrice value={heroPrice} /></div>
               <div className="mt-3 text-sm text-muted-foreground">
                 {listing.sourceUrl ? decodeMaybeEncodedText(listing.sourceUrl) : 'Source unavailable'}
               </div>
@@ -149,7 +143,7 @@ export default async function IntelligenceListingDetailPage({
             {infoRows.map((row) => (
               <div key={row.label} className="rounded-lg border bg-card p-4">
                 <div className="text-xs uppercase tracking-wide text-muted-foreground">{row.label}</div>
-                <div className="mt-2 text-sm font-medium whitespace-pre-wrap">{formatValue(row.value)}</div>
+                <div className="mt-2 text-sm font-medium whitespace-pre-wrap">{row.label === 'Area' ? <DisplayAreaValue value={row.value} /> : formatValue(row.value)}</div>
               </div>
             ))}
           </div>
@@ -254,7 +248,7 @@ export default async function IntelligenceListingDetailPage({
                   <CircleDollarSign className="mt-0.5 h-4 w-4 text-muted-foreground" />
                   <div>
                     <div className="text-muted-foreground">Price</div>
-                    <div>{heroPrice}</div>
+                    <div><CompetitorPrice value={heroPrice} /></div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -268,7 +262,7 @@ export default async function IntelligenceListingDetailPage({
                   <Ruler className="mt-0.5 h-4 w-4 text-muted-foreground" />
                   <div>
                     <div className="text-muted-foreground">Area</div>
-                    <div>{formatValue(details?.area)}</div>
+                    <div><DisplayAreaValue value={details?.area} /></div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">

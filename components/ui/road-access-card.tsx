@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { cn } from "@neup/core/utils";
+import { formatDisplayNumber, useDisplayConfiguration } from '@/components/display-preferences';
 
 type RoadAccessUnit = "meter" | "feet" | "haat" | "inch";
 
@@ -15,13 +16,13 @@ const METERS_PER_UNIT: Record<RoadAccessUnit, number> = {
     inch: 2.54 / 100,
 };
 
-function formatNumber(value: number) {
-    const rounded = Math.round(value * 100000000) / 100000000;
-    return Number.isInteger(rounded) ? String(rounded) : String(rounded);
-}
-
 export function RoadAccessCard({ name, note }: { name: string; note?: string }) {
     const { watch, setValue } = useFormContext();
+    const { preferences } = useDisplayConfiguration();
+    const groupingSystem = preferences.numberSystem.includes('.readable')
+        ? preferences.numberSystem.split('.readable')[0]
+        : preferences.numberSystem;
+    const formatNumber = (number: number) => formatDisplayNumber(number, groupingSystem, 8);
     const value = watch(name as any) as number | undefined;
     const [text, setText] = useState("");
     const [touched, setTouched] = useState(false);
@@ -52,7 +53,7 @@ export function RoadAccessCard({ name, note }: { name: string; note?: string }) 
             select(undefined);
             return;
         }
-        const parsed = Number(text.trim());
+        const parsed = parseRoadAccessInput(text, groupingSystem);
         if (Number.isFinite(parsed)) {
             select(parsed * METERS_PER_UNIT[unit]);
             return;
@@ -118,4 +119,12 @@ t                     <span className="text-foreground">Road Access</span>
             </div>
         </div>
     );
+}
+
+/** Parse grouped values using the decimal separator of the selected number system. */
+function parseRoadAccessInput(value: string, numberSystem: string): number {
+    const normalized = ['France', 'Germany', 'Switzerland'].includes(numberSystem)
+        ? value.replace(/[ .'’]/g, '').replace(',', '.')
+        : value.replace(/[, ]/g, '');
+    return Number(normalized);
 }

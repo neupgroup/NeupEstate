@@ -12,6 +12,7 @@ import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
 import { Loader2, Calculator, BarChartBig, AlertCircle } from 'lucide-react';
 import { Skeleton } from '@neup/components/ui/skeleton';
 import { Textarea } from '@neup/components/ui/textarea';
+import { DisplayCurrency } from '@/components/display-preferences';
 
 const initialState: MarketAnalysisState = {
     success: false,
@@ -43,8 +44,6 @@ export function MarketAnalysis() {
     useEffect(() => {
         setIsClient(true);
     }, []);
-
-    const formatCurrency = (value: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
 
     return (
         <Card>
@@ -87,15 +86,15 @@ export function MarketAnalysis() {
                                     <div className="mt-2 text-xs grid grid-cols-3 gap-2">
                                         <div>
                                             <p className="text-muted-foreground">Avg. Price</p>
-                                            {isClient ? <p>{formatCurrency(state.result.averagePrice)}</p> : <Skeleton className="h-4 w-20" />}
+                                            {isClient ? <p><DisplayCurrency amount={state.result.averagePrice} sourceCurrency="USD" /></p> : <Skeleton className="h-4 w-20" />}
                                         </div>
                                          <div>
                                             <p className="text-muted-foreground">Min. Price</p>
-                                            {isClient ? <p>{formatCurrency(state.result.minPrice)}</p> : <Skeleton className="h-4 w-20" />}
+                                            {isClient ? <p><DisplayCurrency amount={state.result.minPrice} sourceCurrency="USD" /></p> : <Skeleton className="h-4 w-20" />}
                                         </div>
                                          <div>
                                             <p className="text-muted-foreground">Max. Price</p>
-                                            {isClient ? <p>{formatCurrency(state.result.maxPrice)}</p> : <Skeleton className="h-4 w-20" />}
+                                            {isClient ? <p><DisplayCurrency amount={state.result.maxPrice} sourceCurrency="USD" /></p> : <Skeleton className="h-4 w-20" />}
                                         </div>
                                     </div>
                                 )}

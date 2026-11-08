@@ -18,6 +18,7 @@ import { RoadAccessDisplayToggle } from "@/components/manage/road-access-display
 import { ListingMediaGallery } from "@/components/manage/property-media-gallery";
 import { getListingSlugId } from '@/services/listings/slug';
 import { ArrowLeftRight, Bath, BedDouble, Bike, Building2, CalendarDays, CarFront, ChefHat, ChevronLeft, ExternalLink, FilePenLine, FileText, Layers3, Link2, PenSquare, Sofa, SquareUserRound, Tag, UserRound, UtensilsCrossed } from "lucide-react";
+import { DisplayListingPrice } from '@/components/display-preferences';
 
 type ListingDetailsProps = {
     id: string;
@@ -338,31 +339,6 @@ function ListedByCard({
     );
 }
 
-function formatPricingValue(value: unknown): string {
-    if (value == null || value === "") return "Not set";
-    if (typeof value === "boolean") return value ? "Yes" : "No";
-    if (typeof value === "number") return String(value);
-    if (typeof value === "string") return value;
-    if (Array.isArray(value)) {
-        if (!value.length) return "None";
-        return value.map((entry) => formatPricingValue(entry)).join(", ");
-    }
-    if (typeof value === "object") {
-        const entries = Object.entries(value as Record<string, unknown>)
-            .filter(([, entry]) => entry != null && entry !== "");
-        if (!entries.length) return "None";
-        return entries.map(([key, entry]) => `${key}: ${formatPricingValue(entry)}`).join("\n");
-    }
-    return String(value);
-}
-
-function formatPriceAmount(value: number, currency: string = "NPR"): string {
-    const symbol = currency === "NPR" ? "NRs." : currency === "USD" ? "$" : currency === "INR" ? "INR" : currency;
-    return `${symbol} ${new Intl.NumberFormat("en-US", {
-        maximumFractionDigits: Number.isInteger(value) ? 0 : 2,
-    }).format(value)}`;
-}
-
 function formatPricingBasisLabel(basis: string): string {
     const labels: Record<string, string> = {
         total: "Listed price",
@@ -423,22 +399,15 @@ function getPricingCards(property: {
     if (property.price.basis && canonicalAmount > 0) {
         const labels: Record<string, string> = {
             total: "Listed price",
-            perUnit: "Price per square meter",
+            perUnit: "Listed price",
             perMonth: "Monthly price",
             perYear: "Annual price",
-            perUnitPerMonth: "Monthly price per square meter",
-            perUnitPerYear: "Annual price per square meter",
-        };
-        const suffixes: Record<string, string> = {
-            perUnit: "per m²",
-            perMonth: "per month",
-            perYear: "per year",
-            perUnitPerMonth: "per m² per month",
-            perUnitPerYear: "per m² per year",
+            perUnitPerMonth: "Listed price",
+            perUnitPerYear: "Listed price",
         };
         return [{
             label: labels[property.price.basis] ?? "Listed price",
-            value: [formatPriceAmount(canonicalAmount, currency), suffixes[property.price.basis]].filter(Boolean).join(" "),
+            value: <DisplayListingPrice amount={canonicalAmount} sourceCurrency={currency} basis={property.price.basis} />,
             note: pricing?.negotiable ? "Negotiable" : null,
         }];
     }
@@ -446,7 +415,7 @@ function getPricingCards(property: {
     if (listed > 0) {
         return [{
             label: property.price.basis ? formatPricingBasisLabel(property.price.basis) : "Listed price",
-            value: formatPriceAmount(listed, currency),
+            value: <DisplayListingPrice amount={listed} sourceCurrency={currency} basis={property.price.basis} />,
             note: pricing?.negotiable ? "Negotiable" : null,
         }];
     }
@@ -469,7 +438,7 @@ function PricingCard({
     note,
 }: {
     label: string;
-    value: unknown;
+    value: ReactNode;
     icon: ReactNode;
     note?: string | null;
 }) {
@@ -482,7 +451,7 @@ function PricingCard({
                 <div className="min-w-0">
                     <div className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{label}</div>
                     <div className="mt-1 text-sm font-medium text-foreground whitespace-pre-wrap break-words">
-                        {formatPricingValue(value)}
+                        {value}
                     </div>
                     {note ? <div className="mt-1 text-xs text-muted-foreground">{note}</div> : null}
                 </div>

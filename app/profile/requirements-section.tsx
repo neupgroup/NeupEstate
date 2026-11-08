@@ -13,6 +13,7 @@ import { Skeleton } from '@neup/components/ui/skeleton';
 import { Card, CardContent, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Link } from '@neup/components/ui/link';
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
+import { DisplayCurrency } from '@/components/display-preferences';
 
 function ViewRequirements({ requirements, isLoading }: { requirements: Requirement[], isLoading: boolean }) {
   if (isLoading) {
@@ -55,7 +56,7 @@ function ViewRequirements({ requirements, isLoading }: { requirements: Requireme
               <div><b>Looking to:</b> <span className="capitalize">{req.purpose}</span></div>
               <div><b>Listing Type:</b> <span className="capitalize">{Array.isArray(req.propertyType) ? req.propertyType.join(', ') : req.propertyType}</span></div>
               <div><b>Location:</b> {req.location}</div>
-              <div><b>Budget:</b> ${req.minBudget?.toLocaleString() || 'Any'} - ${req.maxBudget?.toLocaleString() || 'Any'}</div>
+              <div><b>Budget:</b> {req.minBudget != null ? <DisplayCurrency amount={req.minBudget} sourceCurrency="NPR" /> : 'Any'} - {req.maxBudget != null ? <DisplayCurrency amount={req.maxBudget} sourceCurrency="NPR" /> : 'Any'}</div>
               <div><b>Urgency:</b> <span className="capitalize">{req.requiredTime}</span></div>
               <div><b>Payment:</b> {Array.isArray(req.paymentMethod) ? req.paymentMethod.join(', ') : 'N/A'}</div>
             </div>

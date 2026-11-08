@@ -8,6 +8,7 @@ import { Button } from '@neup/components/ui/button';
 import { Input } from '@neup/components/ui/input';
 import { Badge } from '@neup/components/ui/badge';
 import { createIntelligenceCriteriaAction, deleteIntelligenceCriteriaAction } from './actions';
+import { DisplayBudget } from '@/components/display-preferences';
 
 const PURPOSE_OPTIONS = ['rent', 'sale', 'sale.auction', 'sale.exchange'] as const;
 const TYPE_OPTIONS = ['house', 'land', 'apartment', 'commercial', 'other'] as const;
@@ -131,7 +132,7 @@ export function IntelligenceCriteriaClient({ criteria, competitors }: { criteria
                   <p className="text-sm font-medium">{item.cLocation}</p>
                   <p className="text-sm text-muted-foreground">
                     {item.cMinBudget || item.cMaxBudget
-                      ? `${item.cMinBudget ? item.cMinBudget.toLocaleString() : 'Any'} - ${item.cMaxBudget ? item.cMaxBudget.toLocaleString() : 'Any'}`
+                      ? <DisplayBudget minimum={item.cMinBudget} maximum={item.cMaxBudget} />
                       : 'Any budget'}
                   </p>
                   {item.competitor && (

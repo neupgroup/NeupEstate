@@ -17,7 +17,8 @@ import { Badge } from "@neup/components/ui/badge";
 import { Heart, Star, MapPin } from "lucide-react";
 import { useState, useTransition, useEffect } from "react";
 import { cn } from "@neup/core/utils";
-import { getHiddenPriceLabel, getPrimaryCurrency, getPrimaryPrice, getPrimaryPricingSuffix } from "@/services/listings/price-display";
+import { getHiddenPriceLabel, getPrimaryPrice } from "@/services/listings/price-display";
+import { DisplayArea, DisplayListingPrice } from '@/components/display-preferences';
 import { SafeImage } from "./safe-image";
 import { isSaved, save } from '@/services/listings/single/engage/save';
 import { useToast } from "@neup/core/hooks/useToast";
@@ -100,23 +101,11 @@ export function ListingCard({ property, propertyCount, reviewCount, rating }: Li
     });
   };
 
-  const formatPrice = (price: number) => {
-    const currency = getPrimaryCurrency(property);
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency,
-      maximumFractionDigits: 0,
-    }).format(price);
-  };
   const hiddenPriceLabel = getHiddenPriceLabel(property);
   const primaryPrice = getPrimaryPrice(property);
-  const primaryPricingSuffix = getPrimaryPricingSuffix(property);
   const propertyTagItems = [
     property.bedrooms ? `${property.bedrooms} Beds` : null,
     property.bathrooms ? `${property.bathrooms} Baths` : null,
-    typeof property.area === "number" && property.area > 0
-      ? `${property.area.toLocaleString()} m²`
-      : null,
   ].filter((item): item is string => Boolean(item));
   
   return (
@@ -174,13 +163,8 @@ export function ListingCard({ property, propertyCount, reviewCount, rating }: Li
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               <p className="text-lg font-bold leading-tight text-primary">
-                {hiddenPriceLabel || formatPrice(primaryPrice)}
+                {hiddenPriceLabel || <DisplayListingPrice amount={primaryPrice} sourceCurrency={property.price.currency} basis={property.price.basis} />}
               </p>
-              {!hiddenPriceLabel && primaryPricingSuffix ? (
-                <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
-                  {primaryPricingSuffix}
-                </p>
-              ) : null}
             </div>
 
             {(rating !== undefined || propertyCount !== undefined) ? (
@@ -215,6 +199,9 @@ export function ListingCard({ property, propertyCount, reviewCount, rating }: Li
           {propertyTagItems.length > 0 ? (
             <p className="text-sm text-foreground">
               {propertyTagItems.join(" • ")}
+              {typeof property.area === 'number' && property.area > 0 && (
+                <>{propertyTagItems.length > 0 ? ' • ' : ''}<DisplayArea squareMetres={property.area} /></>
+              )}
             </p>
           ) : null}
         </div>

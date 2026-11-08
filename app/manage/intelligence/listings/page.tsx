@@ -5,6 +5,7 @@ import { ListChecks } from 'lucide-react';
 import { requirePagePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';;
 import { Pagination } from '@/components/manage/pagination';
+import { CompetitorPrice } from '@/components/competitor-price';
 
 function formatCompactValue(value: unknown): string | null {
   if (value === null || value === undefined || value === '') return null;
@@ -21,16 +22,6 @@ function decodeMaybeEncodedText(value: string): string {
   } catch {
     return value;
   }
-}
-
-function formatPrice(value: unknown): string | null {
-  if (value === null || value === undefined || value === '') return null;
-  if (typeof value === 'number' && Number.isFinite(value)) {
-    return value.toLocaleString();
-  }
-  const numeric = Number(value);
-  if (Number.isFinite(numeric)) return numeric.toLocaleString();
-  return String(value);
 }
 
 function formatListingTitle(title: unknown): string {
@@ -50,7 +41,7 @@ function getListingSummary(listing: any) {
       details?.sourceName,
   );
   const agencyName = formatCompactValue(details?.agencyName ?? details?.agency);
-  const price = formatPrice(listing.price ?? details?.price);
+  const price = listing.price ?? details?.price;
   const priceBasis = formatCompactValue(listing.priceBasis ?? details?.priceBasis);
 
   return {
@@ -144,7 +135,7 @@ export default async function ListingsIntelligencePage({
               </CardHeader>
               <CardContent className="space-y-1.5 pt-0 pl-5">
                 <div className="text-sm font-medium">
-                  {summary.price ? `NPR ${summary.price}` : 'Price not provided'}
+                  {summary.price != null ? <CompetitorPrice value={summary.price} /> : 'Price not provided'}
                   {summary.priceBasis ? ` ${summary.priceBasis}` : ''}
                 </div>
               </CardContent>
