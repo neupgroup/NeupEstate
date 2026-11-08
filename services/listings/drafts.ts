@@ -51,7 +51,7 @@ export async function saveListingCreateDraftAction(input: {
   data: Record<string, any>;
 }): Promise<{ success: boolean; changeId?: string; propertyId?: string | null; error?: string }> {
   try {
-    await requirePermission(PERMISSIONS.manage.propertySelfCreate);
+    await requirePermission(PERMISSIONS.estate.listing.create);
     const actorId = await requireIdentity();
     const postingContext = await resolveListingCreateContext({
       actorAccountId: actorId,
@@ -137,7 +137,7 @@ export async function getCurrentListingCreateDraftAction(changeId?: string | nul
   error?: string;
 }> {
   try {
-    await requirePermission(PERMISSIONS.manage.propertySelfCreate);
+    await requirePermission(PERMISSIONS.estate.listing.create);
     const actorId = await requireIdentity();
     const requestedChangeId = changeId?.trim() || null;
     const draftStatuses: ListingLogStatus[] = requestedChangeId
@@ -192,9 +192,9 @@ export async function saveListingChangeDraftAction(input: {
   isApproved?: boolean | null;
 }): Promise<{ success: boolean; changeId?: string; error?: string }> {
   try {
-    await requirePermission(PERMISSIONS.manage.propertySelfUpdate);
+    await requirePermission(PERMISSIONS.estate.listing.update);
     if ('owners' in input.data || 'listingAgentAccountId' in input.data || 'listingAgent' in input.data) {
-      const canTransferOwnership = await hasPermission(PERMISSIONS.manage.propertySelfTransfer);
+      const canTransferOwnership = await hasPermission(PERMISSIONS.estate.listing.transfer);
       if (!canTransferOwnership) {
         return { success: false, error: 'You do not have permission to edit listing ownership details.' };
       }
@@ -267,10 +267,10 @@ export async function getListingEditCapabilitiesAction(): Promise<{
   canEditOwnership: boolean;
 }> {
   try {
-    await requirePermission(PERMISSIONS.manage.propertySelfUpdate);
+    await requirePermission(PERMISSIONS.estate.listing.update);
     return {
       success: true,
-      canEditOwnership: await hasPermission(PERMISSIONS.manage.propertySelfTransfer),
+      canEditOwnership: await hasPermission(PERMISSIONS.estate.listing.transfer),
     };
   } catch (error) {
     await logger().type('getPropertyEditCapabilitiesAction').data({ error: String(error), details: {} }).log();
@@ -296,9 +296,9 @@ export async function getListingAgentOptionsAction(input: {
   agents: Array<{ id: string; name: string; imageUrl: string | null; agencyId: string | null; agencyName: string | null }>;
 }> {
   try {
-    await requirePermission(PERMISSIONS.manage.propertySelfUpdate);
+    await requirePermission(PERMISSIONS.estate.listing.update);
     const actorId = await requireIdentity();
-    const canEditOwnership = await hasPermission(PERMISSIONS.manage.propertySelfTransfer);
+    const canEditOwnership = await hasPermission(PERMISSIONS.estate.listing.transfer);
 
     if (!canEditOwnership) {
       return { success: true, agents: [] };
@@ -422,7 +422,7 @@ export async function getListingChangeDraftAction(changeId: string): Promise<{
     const draft = await prisma.listingChange.findUnique({ where: { id: changeId } });
     if (!draft) return { success: false, error: 'Draft not found.' };
     await requirePermission(
-      PERMISSIONS.manage.propertySelfUpdate,
+      PERMISSIONS.estate.listing.update,
     );
 
     if (draft.isApproved !== null) {
@@ -475,8 +475,8 @@ export async function getListingChangeContextAction(propertyId: string): Promise
   error?: string;
 }> {
   try {
-    const canUpdate = await hasPermission(PERMISSIONS.manage.propertySelfUpdate);
-    const canDelete = await hasPermission(PERMISSIONS.manage.propertySelfDelete);
+    const canUpdate = await hasPermission(PERMISSIONS.estate.listing.update);
+    const canDelete = await hasPermission(PERMISSIONS.estate.listing.drop);
     if (!canUpdate && !canDelete) {
       throw new Error('You do not have permission to access property change context.');
     }
@@ -584,9 +584,9 @@ export async function cancelListingChangeDraftAction(changeId: string): Promise<
     }
 
     if (draft.status === 'deleting') {
-      await requirePermission(PERMISSIONS.manage.propertySelfDelete);
+      await requirePermission(PERMISSIONS.estate.listing.drop);
     } else {
-      await requirePermission(PERMISSIONS.manage.propertySelfUpdate);
+      await requirePermission(PERMISSIONS.estate.listing.update);
     }
 
     if ((draft.status === 'creation_draft' || draft.status === 'creation_pending' || draft.status === 'creating') && draft.propertyId) {
@@ -630,7 +630,7 @@ export async function reviewListingChangeAction(input: {
   acceptedFields?: string[];
 }): Promise<{ success: boolean; error?: string; propertyId?: string | null }> {
   try {
-    await requirePermission(PERMISSIONS.manage.propertyReviewApprove);
+    await requirePermission(PERMISSIONS.estate.listing.approvalUpdate);
     const accountId = await requireIdentity();
     const request = await prisma.listingChange.findFirst({
       where: {
@@ -837,7 +837,7 @@ export async function createListingAction(
   workingProfileId?: string | null,
 ): Promise<{ success: boolean; error?: string | null; propertyId?: string | null; changeId?: string | null }> {
   try {
-    await requirePermission(PERMISSIONS.manage.propertySelfCreate);
+    await requirePermission(PERMISSIONS.estate.listing.create);
     const actorId = await requireIdentity();
     const draft = changeId?.trim()
       ? await editUncreatedListingDraftRequest({
@@ -880,7 +880,7 @@ export async function getCurrentListingCreateContextAction(input?: {
   error?: string;
 }> {
   try {
-    await requirePermission(PERMISSIONS.manage.propertySelfCreate);
+    await requirePermission(PERMISSIONS.estate.listing.create);
     const actorId = await requireIdentity();
     const context = await resolveListingCreateContext({
       actorAccountId: actorId,
@@ -918,7 +918,7 @@ export async function updateListingAction(
   data: UpdateListingFormValues
 ): Promise<{ success: boolean; error?: string | null; }> {
   try {
-    await requirePermission(PERMISSIONS.manage.propertySelfUpdate);
+    await requirePermission(PERMISSIONS.estate.listing.update);
     await requireIdentity();
     const validatedData = UpdateListingSchema.parse(data);
 

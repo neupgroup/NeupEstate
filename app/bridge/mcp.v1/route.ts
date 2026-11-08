@@ -69,7 +69,7 @@ function createMcpServer(actorAccountId: string, format?: string): McpServer {
     annotations: { readOnlyHint: true, openWorldHint: false },
   }, async ({ limit, offset }) => {
     try {
-      await requirePermission(PERMISSIONS.manage.selfLeadView);
+      await requirePermission(PERMISSIONS.crm.lead.view);
       const where = await canViewAllTeamLeads(actorAccountId) ? {} : { owner: actorAccountId };
       const [data, total] = await Promise.all([
         prisma.sharedLeads.findMany({ where, include: { baseLead: { include: { contacts: true } } }, orderBy: { createdAt: 'desc' }, skip: offset, take: limit }),

@@ -70,9 +70,9 @@ export default async function ManageListingsPage({
   const identity = await getIdentity();
   const currentAccountId = identity.authenticated ? identity.account.accountId : null;
   const sp = await searchParams ?? {};
-  const canViewOwnListings = await hasPermission(PERMISSIONS.manage.propertySelfView);
+  const canViewOwnListings = await hasPermission(PERMISSIONS.estate.listing.view);
   const canViewAllListings = await hasPermission(PERMISSIONS.root.listingsView);
-  const canViewAllAwaitingReviews = await hasPermission(PERMISSIONS.manage.propertyReviewView);
+  const canViewAllAwaitingReviews = await hasPermission(PERMISSIONS.estate.listing.approvalView);
 
   const isAllListingsView = sp.scope === 'all';
   if (isAllListingsView && !canViewAllListings) notFound();

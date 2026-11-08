@@ -25,7 +25,7 @@ export function registerAddLeadTool(server: McpToolServer, actorAccountId: strin
     annotations: { readOnlyHint: false, destructiveHint: false, openWorldHint: false },
   }, async (input) => {
     try {
-      await requirePermission(PERMISSIONS.manage.selfLeadCreate);
+      await requirePermission(PERMISSIONS.crm.lead.create);
       if (input.existingClientId) {
         const client = await prisma.baseLead.findFirst({ where: { id: input.existingClientId, belongsTo: actorAccountId }, select: { id: true } });
         if (!client) return mcpError('Client not found or not owned by this account.');

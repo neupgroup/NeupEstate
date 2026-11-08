@@ -50,8 +50,8 @@ type ManageLayoutPermissionState = {
 };
 
 const PLATFORM_WIDE_PERMISSIONS = new Set<string>([
-  PERMISSIONS.manage.selfLeadView,
-  PERMISSIONS.manage.selfLeadAddActivity,
+  PERMISSIONS.crm.lead.view,
+  PERMISSIONS.crm.lead.activityAdd,
 ]);
 
 function getCurrentAppId(): string {
@@ -194,15 +194,15 @@ export async function getManageLayoutPermissionState(): Promise<ManageLayoutPerm
     canDashboard: has(PERMISSIONS.manage.dashboardView),
     canAnalytics: has(PERMISSIONS.manage.analyticsView),
     canIntelListings: has(PERMISSIONS.manage.intelligenceListingsView),
-    canListingView: has(PERMISSIONS.manage.propertySelfView),
+    canListingView: has(PERMISSIONS.estate.listing.view),
     canRootListingsView: has(PERMISSIONS.root.listingsView),
     canCollectionView: has(PERMISSIONS.manage.propertyCollectionSelfView),
     canAccountsView: has(PERMISSIONS.manage.accountView),
-    canLeadsHomeView: has(PERMISSIONS.manage.selfLeadView),
-    canLeadsBaseView: has(PERMISSIONS.manage.selfLeadView),
-    canLeadsMyView: has(PERMISSIONS.manage.selfLeadView),
-    canLeadsSharedView: has(PERMISSIONS.manage.selfLeadView),
-    canLeadsAlertsView: has(PERMISSIONS.manage.selfLeadView),
+    canLeadsHomeView: has(PERMISSIONS.crm.lead.view),
+    canLeadsBaseView: has(PERMISSIONS.crm.lead.view),
+    canLeadsMyView: has(PERMISSIONS.crm.lead.view),
+    canLeadsSharedView: has(PERMISSIONS.crm.lead.view),
+    canLeadsAlertsView: has(PERMISSIONS.crm.lead.view),
     canReviewsView: has(PERMISSIONS.manage.selfReviewsView),
     canAgentMapView: has(PERMISSIONS.manage.agentMapView),
     canNotificationView: has(PERMISSIONS.manage.notificationView),

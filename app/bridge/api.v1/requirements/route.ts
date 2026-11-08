@@ -108,7 +108,7 @@ export async function GET(request: NextRequest) {
 // Validate and process the resource submitted in a POST request.
 export async function POST(request: NextRequest) {
   try {
-    await requirePermission(PERMISSIONS.public.requirementCreate);
+    await requirePermission(PERMISSIONS.estate.requirement.create);
     const userId = await requireIdentity();
     let body: unknown;
     try {

@@ -8,7 +8,7 @@ import { requirePagePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';;
 
 export default async function LeadAlertsPage() {
-    await requirePagePermission(PERMISSIONS.manage.selfLeadView);
+    await requirePagePermission(PERMISSIONS.crm.lead.view);
     await checkAuthenticationForWeb();
     const leads = await getSharedLeads();
     const alerts = leads.filter((lead) => ['HIGH', 'URGENT'].includes(String(lead.priority)));

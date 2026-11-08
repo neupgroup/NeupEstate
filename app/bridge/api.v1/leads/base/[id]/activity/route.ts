@@ -61,7 +61,7 @@ export async function GET(_request: NextRequest, context: RouteContext) {
   let baseLeadId = '';
 
   try {
-    await requirePermission(PERMISSIONS.manage.selfLeadView);
+    await requirePermission(PERMISSIONS.crm.lead.view);
     stage = 'identity-resolution';
     const accountId = await requireIdentity();
     const { id } = await context.params;

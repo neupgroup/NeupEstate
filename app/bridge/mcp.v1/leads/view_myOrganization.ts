@@ -35,7 +35,7 @@ export function registerViewMyOrganizationTool(server: McpToolServer, actorAccou
     annotations: { readOnlyHint: true, openWorldHint: false },
   }, async ({ limit, offset }) => {
     try {
-      await requirePermission(PERMISSIONS.manage.selfLeadView);
+      await requirePermission(PERMISSIONS.crm.lead.view);
       const accountIds = await getOrganizationAccountIds(actorAccountId);
       const where = { OR: [{ owner: { in: accountIds } }, { baseLead: { belongsTo: { in: accountIds } } }] };
       const [data, total] = await Promise.all([

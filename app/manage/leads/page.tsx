@@ -8,7 +8,7 @@ import { requirePagePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';;
 
 export default async function LeadsHomePage() {
-    await requirePagePermission(PERMISSIONS.manage.selfLeadView);
+    await requirePagePermission(PERMISSIONS.crm.lead.view);
     await checkAuthenticationForWeb();
     const accountId = await getAccountIdFromJWT();
     const [baseLeads, sharedLeads, myLeads] = await Promise.all([

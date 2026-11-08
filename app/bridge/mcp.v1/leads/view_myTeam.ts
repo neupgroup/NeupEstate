@@ -18,7 +18,7 @@ export function registerViewMyTeamTool(server: McpToolServer, actorAccountId: st
     annotations: { readOnlyHint: true, openWorldHint: false },
   }, async ({ limit, offset }) => {
     try {
-      await requirePermission(PERMISSIONS.manage.selfLeadView);
+      await requirePermission(PERMISSIONS.crm.lead.view);
       const links = await getAgencyAgentMapsByAgent(actorAccountId);
       const agencyIds = links.filter((link) => link.status === 'accepted').map((link) => link.agencyId);
       const members = agencyIds.length ? await prisma.agencyAgentMap.findMany({ where: { agencyId: { in: agencyIds }, status: 'accepted' }, select: { agentId: true } }) : [];

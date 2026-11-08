@@ -128,7 +128,7 @@ export async function GET(_request: NextRequest, context: RouteContext) {
   let stage = 'permission-check';
   let leadId = '';
   try {
-    await requirePermission(PERMISSIONS.manage.selfLeadView);
+    await requirePermission(PERMISSIONS.crm.lead.view);
     stage = 'identity-resolution';
     const accountId = await requireIdentity();
     const { id } = await context.params;
@@ -153,7 +153,7 @@ export async function POST(request: NextRequest, context: RouteContext) {
   let stage = 'permission-check';
   let leadId = '';
   try {
-    await requirePermission(PERMISSIONS.manage.selfLeadAddActivity);
+    await requirePermission(PERMISSIONS.crm.lead.activityAdd);
     stage = 'identity-resolution';
     const accountId = await requireIdentity();
     const { id } = await context.params;

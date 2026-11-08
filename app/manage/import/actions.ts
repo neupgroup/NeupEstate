@@ -40,7 +40,7 @@ export async function importJsonListingsAction(input: {
   structureJson: string;
 }): Promise<ImportActionResult> {
   try {
-    await requirePermission(PERMISSIONS.manage.propertySelfCreate);
+    await requirePermission(PERMISSIONS.estate.listing.create);
     const validated = ImportJsonListingsSchema.parse(input);
     const data = parseJson(validated.dataJson, 'Property data');
     const structure = parseJson(validated.structureJson, 'Property structure') as ListingJsonImportStructure;

@@ -22,7 +22,7 @@ import { logger } from "@neup/logica/logger";
 
 export async function createListingRequestAction(data: CreateListingRequestFormValues): Promise<{ success: boolean; error?: string }> {
   try {
-    await requirePermission(PERMISSIONS.public.requirementCreate);
+    await requirePermission(PERMISSIONS.estate.requirement.create);
     const actorId = await requireIdentity();
     const validatedData = CreateListingRequestSchema.parse({ ...data, submittedBy: actorId });
     await createListingRequest(validatedData);
@@ -51,7 +51,7 @@ export async function createSalesRequestAction(data: CreateSalesRequestFormValue
 
 export async function createMortgageRequestAction(data: CreateMortgageRequestFormValues): Promise<{ success: boolean; error?: string }> {
   try {
-    await requirePermission(PERMISSIONS.public.mortgageRequest);
+    await requirePermission(PERMISSIONS.estate.mortgageRequests.create);
     const actorId = await requireIdentity();
     const validatedData = CreateMortgageRequestSchema.parse({ ...data, submittedBy: actorId });
     await createMortgageRequest(validatedData);

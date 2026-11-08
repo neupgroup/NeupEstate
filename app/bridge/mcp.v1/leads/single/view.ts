@@ -19,7 +19,7 @@ export function registerViewLeadTool(server: McpToolServer, actorAccountId: stri
     annotations: { readOnlyHint: true, openWorldHint: false },
   }, async ({ leadId }) => {
     try {
-      await requirePermission(PERMISSIONS.manage.selfLeadView);
+      await requirePermission(PERMISSIONS.crm.lead.view);
       if (!await getVisibleLead(leadId, actorAccountId)) return mcpError('Lead not found or not visible to this account.');
       const lead = await getLeadById(leadId);
       if (!lead) return mcpError('Lead not found or not visible to this account.');

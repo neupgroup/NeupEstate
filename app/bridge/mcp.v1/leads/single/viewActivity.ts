@@ -17,7 +17,7 @@ export function registerViewActivityTool(server: McpToolServer, actorAccountId: 
     annotations: { readOnlyHint: true, openWorldHint: false },
   }, async ({ leadId }) => {
     try {
-      await requirePermission(PERMISSIONS.manage.selfLeadView);
+      await requirePermission(PERMISSIONS.crm.lead.view);
       if (!await getVisibleLead(leadId, actorAccountId)) return mcpError('Lead not found or not visible to this account.');
       return mcpSuccess({ leadId, data: await getLeadActivities(leadId) }, format, responseFormats);
     } catch (error) { return mcpError(error, 'Failed to view lead activity.'); }

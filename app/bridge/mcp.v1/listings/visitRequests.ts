@@ -44,7 +44,7 @@ export function registerVisitRequestTools(server: McpToolServer, actorAccountId:
     annotations: { readOnlyHint: true, openWorldHint: false },
   }, async ({ limit, offset }) => {
     try {
-      await requirePermission(PERMISSIONS.manage.propertySelfView);
+      await requirePermission(PERMISSIONS.estate.listing.view);
       const where = { agentId: actorAccountId };
       const [requests, total] = await Promise.all([
         prisma.visitRequest.findMany({ where, orderBy: { createdAt: 'desc' }, skip: offset, take: limit }),

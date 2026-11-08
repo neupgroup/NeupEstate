@@ -31,7 +31,7 @@ export function registerAddActivityTool(server: McpToolServer, actorAccountId: s
     annotations: { readOnlyHint: false, destructiveHint: false, openWorldHint: false },
   }, async ({ leadId, activity }) => {
     try {
-      await requirePermission(PERMISSIONS.manage.selfLeadAddActivity);
+      await requirePermission(PERMISSIONS.crm.lead.activityAdd);
       if (!await getVisibleLead(leadId, actorAccountId)) return mcpError('Lead not found or not visible to this account.');
       const data = await addLeadActivity({
         leadId, accountId: actorAccountId, activityType: activity.activityType,

@@ -16,7 +16,7 @@ export type DeleteListingContext = { actorAccountId: string };
  */
 export async function deleteListing(input: DeleteListingInput, context: DeleteListingContext): Promise<void> {
   if (!context.actorAccountId.trim()) throw new Error('Authenticated account is required.');
-  await requirePermission(PERMISSIONS.manage.propertySelfDelete);
+  await requirePermission(PERMISSIONS.estate.listing.drop);
   const property = await prisma.listing.findUnique({ where: { id: input.propertyId }, select: { id: true } });
   if (!property) throw new Error('Property not found.');
   await prisma.$transaction(async (transaction) => {

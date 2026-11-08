@@ -6,7 +6,7 @@ import { Link } from '@neup/components/ui/link';
 import { ChevronLeft } from 'lucide-react';
 
 export default async function AddLeadPage() {
-    await requirePagePermission(PERMISSIONS.manage.selfLeadView);
+    await requirePagePermission(PERMISSIONS.crm.lead.view);
     await checkAuthenticationForWeb();
 
     return (

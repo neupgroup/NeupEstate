@@ -65,7 +65,7 @@ export async function approveListingAction(propertyId: string) {
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
 export async function deleteListingAction(propertyId: string) {
-  try { await requirePermission(PERMISSIONS.manage.propertySelfDelete); const actorAccountId = await requireIdentity(); await deleteListing({ propertyId }, { actorAccountId }); revalidatePath('/manage/listings'); return { success: true }; }
+  try { await requirePermission(PERMISSIONS.estate.listing.drop); const actorAccountId = await requireIdentity(); await deleteListing({ propertyId }, { actorAccountId }); revalidatePath('/manage/listings'); return { success: true }; }
   catch (error) { await logger().type(`deletePropertyAction (ID: ${propertyId})`).data({ error: String(error), details: {} }).log(); return { success: false, error: 'Failed to delete property.' }; }
 }
 
@@ -78,7 +78,7 @@ export async function deleteListingAction(propertyId: string) {
  */
 export async function requestListingDeletionAction(propertyId: string) {
   try {
-    await requirePermission(PERMISSIONS.manage.propertySelfDelete); const accountId = await requireIdentity();
+    await requirePermission(PERMISSIONS.estate.listing.drop); const accountId = await requireIdentity();
     const existingDraft = await prisma.listingChange.findFirst({ where: { propertyId, accountId, status: 'deleting', isApproved: null }, orderBy: { modifiedOn: 'desc' }, select: { id: true, data: true } });
     const data = existingDraft?.data && typeof existingDraft.data === 'object' && !Array.isArray(existingDraft.data) ? normalizeListingChangeData(existingDraft.data as Record<string, any>) : {};
     await prisma.listingChange.upsert({ where: { id: existingDraft?.id ?? '__new_property_change__' }, update: { status: 'deleting', data, modifiedOn: new Date() }, create: { propertyId, accountId, status: 'deleting', isApproved: null, data } });
@@ -98,7 +98,7 @@ export async function cancelListingChangeDraftAction(changeId: string): Promise<
     const accountId = await requireIdentity();
     const draft = await prisma.listingChange.findFirst({ where: { id: changeId, accountId, isApproved: null }, select: { id: true, propertyId: true, status: true } });
     if (!draft) return { success: false, error: 'Pending request not found.' };
-    await requirePermission(draft.status === 'deleting' ? PERMISSIONS.manage.propertySelfDelete : PERMISSIONS.manage.propertySelfUpdate);
+    await requirePermission(draft.status === 'deleting' ? PERMISSIONS.estate.listing.drop : PERMISSIONS.estate.listing.update);
     if (draft.status === 'deleting' && draft.propertyId) await prisma.listing.update({ where: { id: draft.propertyId }, data: { status: 'ACTIVE' } });
     await prisma.listingChange.delete({ where: { id: draft.id } });
     return { success: true };

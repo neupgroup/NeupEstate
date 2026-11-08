@@ -17,7 +17,7 @@ export function registerViewMineTool(server: McpToolServer, actorAccountId: stri
     annotations: { readOnlyHint: true, openWorldHint: false },
   }, async ({ limit, offset }) => {
     try {
-      await requirePermission(PERMISSIONS.manage.selfLeadView);
+      await requirePermission(PERMISSIONS.crm.lead.view);
       const where = { owner: actorAccountId };
       const [data, total] = await Promise.all([
         prisma.sharedLeads.findMany({ where, include: { baseLead: { include: { contacts: true } } }, orderBy: { createdAt: 'desc' }, skip: offset, take: limit }),

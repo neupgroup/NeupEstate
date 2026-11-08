@@ -63,7 +63,7 @@ export const dynamic = 'force-dynamic';
 export async function GET(request: NextRequest) {
   let stage = 'permission-check';
   try {
-    await requirePermission(PERMISSIONS.manage.selfLeadView);
+    await requirePermission(PERMISSIONS.crm.lead.view);
 
     stage = 'identity-resolution';
     const accountId = await requireIdentity();

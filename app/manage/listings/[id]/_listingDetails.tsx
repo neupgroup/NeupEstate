@@ -740,11 +740,11 @@ detail and review page.
 
 export async function ListingDetails({ id, review = false }: ListingDetailsProps) {
     const currentAccountId = await getCurrentAccountId();
-    const canApproveListing = await hasPermission(PERMISSIONS.manage.propertyReviewApprove);
+    const canApproveListing = await hasPermission(PERMISSIONS.estate.listing.approvalUpdate);
     if (review && !canApproveListing) notFound();
     const [canUpdateListing, canTransferListing] = await Promise.all([
-        hasPermission(PERMISSIONS.manage.propertySelfUpdate),
-        hasPermission(PERMISSIONS.manage.propertySelfTransfer),
+        hasPermission(PERMISSIONS.estate.listing.update),
+        hasPermission(PERMISSIONS.estate.listing.transfer),
     ]);
     const canEditOwnership = canUpdateListing && canTransferListing;
     const resolvedListing = await getListingById(id, { includeInactive: true });

@@ -48,7 +48,7 @@ export async function createAgencyAction(
   data: CreateAgencyFormValues
 ): Promise<{ success: boolean; error?: string | null; agencyId?: string | null }> {
   try {
-    await requirePermission(PERMISSIONS.public.createAgency);
+    await requirePermission(PERMISSIONS.estate.agency.create);
     const actorId = await requireIdentity();
     const validatedData = CreateAgencySchema.parse(data);
     const serviceInput: CreateAgencyInput = {
@@ -94,7 +94,7 @@ export async function updateAgencyAction(
   data: UpdateAgencyFormValues
 ): Promise<{ success: boolean; error?: string | null; }> {
   try {
-    await requirePermission(PERMISSIONS.public.createAgency);
+    await requirePermission(PERMISSIONS.estate.agency.create);
     await requireIdentity();
     const validatedData = UpdateAgencySchema.parse(data);
     const serviceInput: UpdateAgencyInput = {
@@ -117,7 +117,7 @@ export async function updateAgencyAction(
 
 export async function deleteAgencyAction(agencyId: string) {
     try {
-        await requirePermission(PERMISSIONS.public.createAgency);
+        await requirePermission(PERMISSIONS.estate.agency.create);
         await deleteAgencyService(agencyId);
         revalidatePath('/manage/team');
         revalidatePath('/agencies');
@@ -186,7 +186,7 @@ export async function createLeadAction(
   },
 ): Promise<{ success: boolean; error?: string | null; leadId?: string | null }> {
   try {
-    await requirePermission(PERMISSIONS.manage.selfLeadCreate);
+    await requirePermission(PERMISSIONS.crm.lead.create);
     const actorId = await requireIdentity();
     const currentAccount = await getAccountById(actorId);
     const fallbackAgencyId = currentAccount && ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'].includes(currentAccount.account_type)
@@ -249,7 +249,7 @@ export async function addLeadActivityAction(
   },
 ): Promise<{ success: boolean; error?: string | null; activityId?: string | null }> {
   try {
-    await requirePermission(PERMISSIONS.manage.selfLeadAddActivity);
+    await requirePermission(PERMISSIONS.crm.lead.activityAdd);
     const actorId = await requireIdentity();
     const account = await getAccountById(actorId);
     const activityBy = account?.display_name?.trim() || actorId;

@@ -26,7 +26,7 @@ export function registerTransferLeadTool(server: McpToolServer, actorAccountId: 
     annotations: { readOnlyHint: false, destructiveHint: false, openWorldHint: false },
   }, async ({ leadId, targetAccountId }) => {
     try {
-      await requirePermission(PERMISSIONS.manage.selfLeadCreate);
+      await requirePermission(PERMISSIONS.crm.lead.create);
       const { accountIds, canManage } = await getAcceptedOrganizationMembers(actorAccountId);
       const lead = await prisma.sharedLeads.findUnique({ where: { id: leadId }, select: { id: true, owner: true } });
       if (!lead || !accountIds.includes(lead.owner) || (!canManage && lead.owner !== actorAccountId)) return mcpError('Lead not found or not transferable by this account.');

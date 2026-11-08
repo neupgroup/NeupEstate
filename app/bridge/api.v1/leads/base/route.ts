@@ -72,7 +72,7 @@ function getPagination(request: NextRequest) {
 // Return the requested resource collection or item for a GET request.
 export async function GET(request: NextRequest) {
   try {
-    await requirePermission(PERMISSIONS.manage.selfLeadView);
+    await requirePermission(PERMISSIONS.crm.lead.view);
     const accountId = await requireIdentity();
     const [account, agencyLinks] = await Promise.all([
       getAccountById(accountId),

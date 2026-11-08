@@ -36,8 +36,8 @@ the required permissions.
 export default async function TransferListingPage({ params }: PageProps) {
   await requireAuth();
   const [canUpdate, canTransfer] = await Promise.all([
-    hasPermission(PERMISSIONS.manage.propertySelfUpdate),
-    hasPermission(PERMISSIONS.manage.propertySelfTransfer),
+    hasPermission(PERMISSIONS.estate.listing.update),
+    hasPermission(PERMISSIONS.estate.listing.transfer),
   ]);
   if (!canUpdate || !canTransfer) notFound();
 

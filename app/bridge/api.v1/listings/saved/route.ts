@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
     const currentAccountId = await requireIdentity();
     const accountId = await getTargetAccountId(request, currentAccountId);
     if (accountId instanceof NextResponse) return accountId;
-    if (accountId === currentAccountId) await requirePermission(PERMISSIONS.public.propertySave);
+    if (accountId === currentAccountId) await requirePermission(PERMISSIONS.estate.listing.save);
     const { limit, offset } = getPagination(request);
     const where = { accountId };
     const [data, total] = await Promise.all([
@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    await requirePermission(PERMISSIONS.public.propertySave);
+    await requirePermission(PERMISSIONS.estate.listing.save);
     const accountId = await requireIdentity();
     let body: unknown;
     try {
@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
 /** DELETE /bridge/api.v1/listings/saved?id=<savedId> or ?propertyId=<propertyId> */
 export async function DELETE(request: NextRequest) {
   try {
-    await requirePermission(PERMISSIONS.public.propertySave);
+    await requirePermission(PERMISSIONS.estate.listing.save);
     const accountId = await requireIdentity();
     const params = request.nextUrl.searchParams;
     const id = params.get('id');

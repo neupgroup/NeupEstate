@@ -16,7 +16,7 @@ export async function upsertRequirementAction(
   requirementId?: string,
 ): Promise<{ success: boolean; error?: string | null }> {
   try {
-    await requirePermission(PERMISSIONS.public.requirementCreate);
+    await requirePermission(PERMISSIONS.estate.requirement.create);
     const actorId = await requireIdentity();
     const validatedData = CreateRequirementSchema.parse({ ...data, userId: actorId });
 

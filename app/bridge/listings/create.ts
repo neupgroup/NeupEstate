@@ -29,7 +29,7 @@ export function registerListingCreateTool(server: McpServer, actorAccountId: str
     annotations: { readOnlyHint: false, destructiveHint: false, openWorldHint: false },
   }, async ({ listing, workingProfileId }) => {
     try {
-      await requirePermission(PERMISSIONS.manage.propertySelfCreate);
+      await requirePermission(PERMISSIONS.estate.listing.create);
       const parsed = CreateListingSchema.safeParse(listing);
       if (!parsed.success) {
         return toolError(JSON.stringify({ error: 'Invalid property.', details: parsed.error.flatten().fieldErrors }));

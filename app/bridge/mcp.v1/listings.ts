@@ -66,7 +66,7 @@ export function registerListingTools(server: McpServer, actorAccountId: string, 
     annotations: { readOnlyHint: true, openWorldHint: false },
   }, async ({ limit, offset }) => {
     try {
-      await requirePermission(PERMISSIONS.public.propertySave);
+      await requirePermission(PERMISSIONS.estate.listing.save);
       const where = { accountId: actorAccountId };
       const [data, total] = await Promise.all([
         getListingsSaved(actorAccountId, offset, limit),

@@ -8,7 +8,7 @@ import { revalidatePath } from 'next/cache';
 import { isListingSaved, toggleSavedListing } from '../../view';
 
 export async function save(accountId: string, propertyId: string): Promise<{ saved: boolean }> {
-  await requirePermission(PERMISSIONS.public.propertySave);
+  await requirePermission(PERMISSIONS.estate.listing.save);
   const identity = await getIdentity();
   const verifiedUserId = identity.authenticated ? identity.account.accountId : accountId;
   if (!verifiedUserId) throw new Error('User ID is required to save a property.');
@@ -20,7 +20,7 @@ export async function save(accountId: string, propertyId: string): Promise<{ sav
 
 export async function isSaved(accountId: string, propertyId: string): Promise<boolean> {
   try {
-    await requirePermission(PERMISSIONS.public.propertySave);
+    await requirePermission(PERMISSIONS.estate.listing.save);
     const identity = await getIdentity();
     const verifiedUserId = identity.authenticated ? identity.account.accountId : accountId;
     if (!verifiedUserId) return false;

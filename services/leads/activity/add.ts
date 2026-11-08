@@ -17,7 +17,7 @@ export async function addLeadActivityAction(data: {
     remarks: string;
 }): Promise<{ success: boolean; error?: string | null; activityId?: string | null }> {
     try {
-        await requirePermission(PERMISSIONS.manage.selfLeadAddActivity);
+        await requirePermission(PERMISSIONS.crm.lead.activityAdd);
         const identity = await getIdentity();
         if (!identity.authenticated) {
             throw new Error('Authentication required. Please sign in and try again.');

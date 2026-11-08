@@ -465,7 +465,7 @@ export default async function ListingLogsPage({ params }: PageProps) {
   const { id } = await params;
   const canViewLogs = await hasPermission(PERMISSIONS.root.propertyLog);
   if (!canViewLogs) notFound();
-  const canApproveListing = await hasPermission(PERMISSIONS.manage.propertyReviewApprove);
+  const canApproveListing = await hasPermission(PERMISSIONS.estate.listing.approvalUpdate);
 
   const property = await getListingById(id, { includeInactive: true });
   if (!property) notFound();

@@ -31,7 +31,7 @@ export function registerListingUpdateTool(server: McpServer, actorAccountId: str
     annotations: { readOnlyHint: false, destructiveHint: false, openWorldHint: false },
   }, async ({ propertyId, data }) => {
     try {
-      await requirePermission(PERMISSIONS.manage.propertySelfUpdate);
+      await requirePermission(PERMISSIONS.estate.listing.update);
       const parsed = propertyUpdateSchema.safeParse(data);
       if (!parsed.success) {
         return toolError(JSON.stringify({ error: 'Invalid property update.', details: parsed.error.flatten().fieldErrors }));
