@@ -208,7 +208,7 @@ exports.Prisma.ListingMediaScalarFieldEnum = {
 };
 
 exports.Prisma.ListingHouseScalarFieldEnum = {
-  propertyId: 'propertyId',
+  listingId: 'listingId',
   bedrooms: 'bedrooms',
   bathrooms: 'bathrooms',
   floors: 'floors',

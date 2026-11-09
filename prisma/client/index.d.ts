@@ -14440,7 +14440,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseMinAggregateOutputType = {
-    propertyId: string | null
+    listingId: string | null
     bedrooms: number | null
     bathrooms: number | null
     floors: number | null
@@ -14457,7 +14457,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseMaxAggregateOutputType = {
-    propertyId: string | null
+    listingId: string | null
     bedrooms: number | null
     bathrooms: number | null
     floors: number | null
@@ -14474,7 +14474,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseCountAggregateOutputType = {
-    propertyId: number
+    listingId: number
     bedrooms: number
     bathrooms: number
     floors: number
@@ -14521,7 +14521,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseMinAggregateInputType = {
-    propertyId?: true
+    listingId?: true
     bedrooms?: true
     bathrooms?: true
     floors?: true
@@ -14538,7 +14538,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseMaxAggregateInputType = {
-    propertyId?: true
+    listingId?: true
     bedrooms?: true
     bathrooms?: true
     floors?: true
@@ -14555,7 +14555,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseCountAggregateInputType = {
-    propertyId?: true
+    listingId?: true
     bedrooms?: true
     bathrooms?: true
     floors?: true
@@ -14659,7 +14659,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseGroupByOutputType = {
-    propertyId: string
+    listingId: string
     bedrooms: number
     bathrooms: number
     floors: number
@@ -14695,7 +14695,7 @@ export namespace Prisma {
 
 
   export type ListingHouseSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    propertyId?: boolean
+    listingId?: boolean
     bedrooms?: boolean
     bathrooms?: boolean
     floors?: boolean
@@ -14713,7 +14713,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["listingHouse"]>
 
   export type ListingHouseSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    propertyId?: boolean
+    listingId?: boolean
     bedrooms?: boolean
     bathrooms?: boolean
     floors?: boolean
@@ -14731,7 +14731,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["listingHouse"]>
 
   export type ListingHouseSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    propertyId?: boolean
+    listingId?: boolean
     bedrooms?: boolean
     bathrooms?: boolean
     floors?: boolean
@@ -14749,7 +14749,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["listingHouse"]>
 
   export type ListingHouseSelectScalar = {
-    propertyId?: boolean
+    listingId?: boolean
     bedrooms?: boolean
     bathrooms?: boolean
     floors?: boolean
@@ -14765,7 +14765,7 @@ export namespace Prisma {
     roadAccess?: boolean
   }
 
-  export type ListingHouseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"propertyId" | "bedrooms" | "bathrooms" | "floors" | "kitchens" | "livingRooms" | "diningRooms" | "carParkingSpots" | "bikeParkingSpots" | "furnished" | "buildYear" | "area" | "facing" | "roadAccess", ExtArgs["result"]["listingHouse"]>
+  export type ListingHouseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"listingId" | "bedrooms" | "bathrooms" | "floors" | "kitchens" | "livingRooms" | "diningRooms" | "carParkingSpots" | "bikeParkingSpots" | "furnished" | "buildYear" | "area" | "facing" | "roadAccess", ExtArgs["result"]["listingHouse"]>
   export type ListingHouseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     property?: boolean | ListingDefaultArgs<ExtArgs>
   }
@@ -14782,7 +14782,7 @@ export namespace Prisma {
       property: Prisma.$ListingPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
-      propertyId: string
+      listingId: string
       bedrooms: number
       bathrooms: number
       floors: number
@@ -14879,8 +14879,8 @@ export namespace Prisma {
      * // Get first 10 ListingHouses
      * const listingHouses = await prisma.listingHouse.findMany({ take: 10 })
      * 
-     * // Only select the `propertyId`
-     * const listingHouseWithPropertyIdOnly = await prisma.listingHouse.findMany({ select: { propertyId: true } })
+     * // Only select the `listingId`
+     * const listingHouseWithListingIdOnly = await prisma.listingHouse.findMany({ select: { listingId: true } })
      * 
      */
     findMany<T extends ListingHouseFindManyArgs>(args?: SelectSubset<T, ListingHouseFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingHousePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -14924,9 +14924,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many ListingHouses and only return the `propertyId`
-     * const listingHouseWithPropertyIdOnly = await prisma.listingHouse.createManyAndReturn({
-     *   select: { propertyId: true },
+     * // Create many ListingHouses and only return the `listingId`
+     * const listingHouseWithListingIdOnly = await prisma.listingHouse.createManyAndReturn({
+     *   select: { listingId: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -15015,9 +15015,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more ListingHouses and only return the `propertyId`
-     * const listingHouseWithPropertyIdOnly = await prisma.listingHouse.updateManyAndReturn({
-     *   select: { propertyId: true },
+     * // Update zero or more ListingHouses and only return the `listingId`
+     * const listingHouseWithListingIdOnly = await prisma.listingHouse.updateManyAndReturn({
+     *   select: { listingId: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -15220,7 +15220,7 @@ export namespace Prisma {
    * Fields of the ListingHouse model
    */
   interface ListingHouseFieldRefs {
-    readonly propertyId: FieldRef<"ListingHouse", 'String'>
+    readonly listingId: FieldRef<"ListingHouse", 'String'>
     readonly bedrooms: FieldRef<"ListingHouse", 'Int'>
     readonly bathrooms: FieldRef<"ListingHouse", 'Int'>
     readonly floors: FieldRef<"ListingHouse", 'Int'>
@@ -70116,7 +70116,7 @@ export namespace Prisma {
 
 
   export const ListingHouseScalarFieldEnum: {
-    propertyId: 'propertyId',
+    listingId: 'listingId',
     bedrooms: 'bedrooms',
     bathrooms: 'bathrooms',
     floors: 'floors',
@@ -71722,7 +71722,7 @@ export namespace Prisma {
     AND?: ListingHouseWhereInput | ListingHouseWhereInput[]
     OR?: ListingHouseWhereInput[]
     NOT?: ListingHouseWhereInput | ListingHouseWhereInput[]
-    propertyId?: StringFilter<"ListingHouse"> | string
+    listingId?: StringFilter<"ListingHouse"> | string
     bedrooms?: IntFilter<"ListingHouse"> | number
     bathrooms?: IntFilter<"ListingHouse"> | number
     floors?: IntFilter<"ListingHouse"> | number
@@ -71740,7 +71740,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseOrderByWithRelationInput = {
-    propertyId?: SortOrder
+    listingId?: SortOrder
     bedrooms?: SortOrder
     bathrooms?: SortOrder
     floors?: SortOrder
@@ -71758,7 +71758,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseWhereUniqueInput = Prisma.AtLeast<{
-    propertyId?: string
+    listingId?: string
     AND?: ListingHouseWhereInput | ListingHouseWhereInput[]
     OR?: ListingHouseWhereInput[]
     NOT?: ListingHouseWhereInput | ListingHouseWhereInput[]
@@ -71776,10 +71776,10 @@ export namespace Prisma {
     facing?: StringFilter<"ListingHouse"> | string
     roadAccess?: DecimalFilter<"ListingHouse"> | Decimal | DecimalJsLike | number | string
     property?: XOR<ListingScalarRelationFilter, ListingWhereInput>
-  }, "propertyId" | "propertyId">
+  }, "listingId" | "listingId">
 
   export type ListingHouseOrderByWithAggregationInput = {
-    propertyId?: SortOrder
+    listingId?: SortOrder
     bedrooms?: SortOrder
     bathrooms?: SortOrder
     floors?: SortOrder
@@ -71804,7 +71804,7 @@ export namespace Prisma {
     AND?: ListingHouseScalarWhereWithAggregatesInput | ListingHouseScalarWhereWithAggregatesInput[]
     OR?: ListingHouseScalarWhereWithAggregatesInput[]
     NOT?: ListingHouseScalarWhereWithAggregatesInput | ListingHouseScalarWhereWithAggregatesInput[]
-    propertyId?: StringWithAggregatesFilter<"ListingHouse"> | string
+    listingId?: StringWithAggregatesFilter<"ListingHouse"> | string
     bedrooms?: IntWithAggregatesFilter<"ListingHouse"> | number
     bathrooms?: IntWithAggregatesFilter<"ListingHouse"> | number
     floors?: IntWithAggregatesFilter<"ListingHouse"> | number
@@ -76113,7 +76113,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseUncheckedCreateInput = {
-    propertyId: string
+    listingId: string
     bedrooms: number
     bathrooms: number
     floors: number
@@ -76147,7 +76147,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseUncheckedUpdateInput = {
-    propertyId?: StringFieldUpdateOperationsInput | string
+    listingId?: StringFieldUpdateOperationsInput | string
     bedrooms?: IntFieldUpdateOperationsInput | number
     bathrooms?: IntFieldUpdateOperationsInput | number
     floors?: IntFieldUpdateOperationsInput | number
@@ -76164,7 +76164,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseCreateManyInput = {
-    propertyId: string
+    listingId: string
     bedrooms: number
     bathrooms: number
     floors: number
@@ -76197,7 +76197,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseUncheckedUpdateManyInput = {
-    propertyId?: StringFieldUpdateOperationsInput | string
+    listingId?: StringFieldUpdateOperationsInput | string
     bedrooms?: IntFieldUpdateOperationsInput | number
     bathrooms?: IntFieldUpdateOperationsInput | number
     floors?: IntFieldUpdateOperationsInput | number
@@ -80977,7 +80977,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseCountOrderByAggregateInput = {
-    propertyId?: SortOrder
+    listingId?: SortOrder
     bedrooms?: SortOrder
     bathrooms?: SortOrder
     floors?: SortOrder
@@ -81008,7 +81008,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseMaxOrderByAggregateInput = {
-    propertyId?: SortOrder
+    listingId?: SortOrder
     bedrooms?: SortOrder
     bathrooms?: SortOrder
     floors?: SortOrder
@@ -81025,7 +81025,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseMinOrderByAggregateInput = {
-    propertyId?: SortOrder
+    listingId?: SortOrder
     bedrooms?: SortOrder
     bathrooms?: SortOrder
     floors?: SortOrder

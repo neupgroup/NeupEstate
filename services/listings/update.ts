@@ -269,8 +269,8 @@ export async function upsertDetailTable(propertyId: string, type: ListingTypeVal
   const area = areaValueToSqm(d.area);
   if (type === PROPERTY_TYPE.HOUSE) {
     await prisma.listingHouse.upsert({
-      where: { propertyId },
-      create: { propertyId, bedrooms: d.bedrooms ?? 0, bathrooms: d.bathrooms ?? 0, floors: d.floors ?? 0, kitchens: d.kitchens ?? 0, livingRooms: d.livingRooms ?? 0, diningRooms: d.diningRooms ?? 0, carParkingSpots: d.carParkingSpots ?? 0, bikeParkingSpots: d.bikeParkingSpots ?? 0, furnished: false, buildYear: 0, area, facing: d.facing ?? '', roadAccess: d.roadAccess ?? 0 },
+      where: { listingId: propertyId },
+      create: { listingId: propertyId, bedrooms: d.bedrooms ?? 0, bathrooms: d.bathrooms ?? 0, floors: d.floors ?? 0, kitchens: d.kitchens ?? 0, livingRooms: d.livingRooms ?? 0, diningRooms: d.diningRooms ?? 0, carParkingSpots: d.carParkingSpots ?? 0, bikeParkingSpots: d.bikeParkingSpots ?? 0, furnished: false, buildYear: 0, area, facing: d.facing ?? '', roadAccess: d.roadAccess ?? 0 },
       update: { bedrooms: d.bedrooms ?? 0, bathrooms: d.bathrooms ?? 0, floors: d.floors ?? 0, kitchens: d.kitchens ?? 0, livingRooms: d.livingRooms ?? 0, diningRooms: d.diningRooms ?? 0, carParkingSpots: d.carParkingSpots ?? 0, bikeParkingSpots: d.bikeParkingSpots ?? 0, area, facing: d.facing ?? '', roadAccess: d.roadAccess ?? 0 },
     });
   } else if (type === PROPERTY_TYPE.APARTMENT) {

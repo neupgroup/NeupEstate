@@ -413,7 +413,7 @@ Fields:
 
 Table: listings_house, Model: ListingHouse
 Fields:
-> propertyId: text PK, NOT NULL, UNIQUE listings_house_property_id_key(propertyId), references listings.id;
+> listingId: text PK, NOT NULL, UNIQUE listings_house_listing_id_key(listingId), references listings.id;
 > bedrooms: integer NOT NULL;
 > bathrooms: integer NOT NULL;
 > floors: integer NOT NULL;

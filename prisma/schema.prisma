@@ -224,7 +224,7 @@ model ListingMedia {
 }
 
 model ListingHouse {
-  propertyId       String   @id @unique(map: "listings_house_property_id_key")
+  listingId        String   @id @unique(map: "listings_house_listing_id_key")
   bedrooms         Int
   bathrooms        Int
   floors           Int
@@ -239,7 +239,7 @@ model ListingHouse {
   facing           String   @db.VarChar(50)
   roadAccess       Decimal  @db.Decimal(18, 8)
 
-  property         Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  property         Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
 
   @@map("listings_house")
 }
