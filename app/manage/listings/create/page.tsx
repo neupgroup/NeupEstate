@@ -56,6 +56,7 @@ const DEFAULT_CREATE_PROPERTY_VALUES: CreateListingFormValues = {
     plots: [],
     apartmentDetails: {},
     apartmentUnits: [],
+    locationId: '',
     structuredLocation: {},
     pricing: {
         currency: 'USD',

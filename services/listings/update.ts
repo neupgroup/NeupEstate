@@ -30,6 +30,7 @@ function buildListingDetails(d: Partial<CreateListingInput> & Record<string, any
 
   return {
     ...baseDetails,
+    ...(isPlainObject(d.structuredLocation) ? { structuredLocation: d.structuredLocation } : {}),
     attachedBathrooms: typeof d.attachedBathrooms === 'number'
       ? d.attachedBathrooms
       : typeof baseDetails.attachedBathrooms === 'number'
@@ -78,6 +79,15 @@ function buildListingDetails(d: Partial<CreateListingInput> & Record<string, any
   };
 }
 
+// Require a real location UUID before writing a listing record.
+function resolveLocationId(data: Partial<CreateListingInput> & Record<string, any>): string {
+  const locationId = data.locationId ?? data.location;
+  if (typeof locationId !== 'string' || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(locationId)) {
+    throw new Error('Select a valid location from the location list.');
+  }
+  return locationId;
+}
+
 
 
 /**
@@ -104,9 +114,8 @@ function buildCoreData(d: Partial<CreateListingInput> & Record<string, any>) {
     priceBasis:        listingPrice.priceBasis,
     priceCurrency:    listingPrice.priceCurrency,
     priceAmount:      listingPrice.priceAmount,
-    locationText:      truncate(d.location ?? '', 255),
+    location:          resolveLocationId(d),
     geoLocation:       truncate(geo, 63),
-    structuredLocation: d.structuredLocation ? JSON.stringify(d.structuredLocation) : '',
     isFeatured:        d.isFeatured ?? false,
     isApproved:        d.isApproved ?? false,
     amenities:         Array.isArray(d.amenities) ? d.amenities : [],

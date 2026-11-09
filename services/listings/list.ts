@@ -23,6 +23,7 @@ import {
   BRIDGE_PROPERTY_MAX_LIMIT,
   PROPERTY_STATUS,
   hydrateListingAccountLabels,
+  formatLocationWithParent,
   mapRecord,
   normalizeListingChangeStatus,
   onlyActive,
@@ -185,15 +186,16 @@ export async function getPaginatedListings(opts: {
         OR: [
           { title: { contains: filters.searchTerm, mode: 'insensitive' } },
           { description: { contains: filters.searchTerm, mode: 'insensitive' } },
-          { locationText: { contains: filters.searchTerm, mode: 'insensitive' } },
+          { locationRecord: { is: { title: { contains: filters.searchTerm, mode: 'insensitive' } } } },
+          { locationRecord: { is: { parent: { is: { title: { contains: filters.searchTerm, mode: 'insensitive' } } } } } },
         ],
       });
     }
     if (filters.location) {
       andClauses.push({
         OR: [
-          { locationText: { contains: filters.location, mode: 'insensitive' } },
-          { structuredLocation: { contains: filters.location, mode: 'insensitive' } },
+          { locationRecord: { is: { title: { contains: filters.location, mode: 'insensitive' } } } },
+          { locationRecord: { is: { parent: { is: { title: { contains: filters.location, mode: 'insensitive' } } } } } },
         ],
       });
     }
@@ -235,8 +237,8 @@ export async function getListingDrafts(accountId: string): Promise<ListingDraftS
           select: {
             id: true,
             title: true,
-            locationText: true,
             type: true,
+            locationRecord: { select: { title: true, parent: { select: { title: true } } } },
           },
         },
       },
@@ -259,7 +261,7 @@ export async function getListingDrafts(accountId: string): Promise<ListingDraftS
         id: draft.id,
         propertyId: draft.propertyId,
         title: String(data.title || draft.property?.title || 'Unfinished property draft'),
-        location: String(data.location || locationParts.join(', ') || draft.property?.locationText || ''),
+        location: String(data.location || locationParts.join(', ') || formatLocationWithParent(draft.property?.locationRecord) || ''),
         category: String(data.category || (draft.property?.type ? mapTypeFromEnum(draft.property.type) : '') || ''),
         status: normalizeListingChangeStatus(draft.status) as ListingDraftSummary['status'],
         modifiedOn: draft.modifiedOn.toISOString(),
@@ -403,8 +405,8 @@ export async function getAwaitingReviewItems(
           select: {
             id: true,
             title: true,
-            locationText: true,
             type: true,
+            locationRecord: { select: { title: true, parent: { select: { title: true } } } },
           },
         },
       },
@@ -427,7 +429,7 @@ export async function getAwaitingReviewItems(
         id: draft.id,
         propertyId: draft.propertyId ?? undefined,
         title: String(data.title || draft.property?.title || 'Unfinished property draft'),
-        location: String(data.location || locationParts.join(', ') || draft.property?.locationText || ''),
+        location: String(data.location || locationParts.join(', ') || formatLocationWithParent(draft.property?.locationRecord) || ''),
         category: String(data.category || ''),
         kind: 'draft' as const,
         status: normalizeListingChangeStatus(draft.status),

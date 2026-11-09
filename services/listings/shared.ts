@@ -86,6 +86,7 @@ export const PROPERTY_STATUS = {
 } as const;
 
 export const PROPERTY_INCLUDE = {
+  locationRecord: { include: { parent: true } },
   media:           { where: { isDeleted: false }, orderBy: { sortOrder: 'asc' as const } },
   houseDetail:     true,
   apartmentDetail: true,
@@ -420,6 +421,11 @@ export function parseStructuredLocation(raw: string | null): any {
   try { return JSON.parse(raw); } catch { return undefined; }
 }
 
+// Format the selected location and its immediate parent for listing displays.
+export function formatLocationWithParent(locationRecord: { title?: string | null; parent?: { title?: string | null } | null } | null | undefined): string {
+  return [locationRecord?.title, locationRecord?.parent?.title].filter((part): part is string => Boolean(part?.trim())).join(', ');
+}
+
 
 
 /**
@@ -514,7 +520,8 @@ export function mapRecord(record: any): Listing {
     title:            record.title || 'Untitled Property',
     description:      record.description || '',
     price: { currency: priceCurrency ?? 'NPR', basis: priceBasis, amount: priceAmount },
-    location:         record.locationText || 'Nepal',
+    locationId:       record.location,
+    location:         formatLocationWithParent(record.locationRecord) || 'Nepal',
     bedrooms,
     bathrooms,
     area,
@@ -549,7 +556,7 @@ export function mapRecord(record: any): Listing {
     landDetails:      record.landDetails || undefined,
     plots:            record.plots || undefined,
     apartmentDetails: record.apartmentDetails || undefined,
-    structuredLocation: parseStructuredLocation(record.structuredLocation),
+    structuredLocation: record.details?.structuredLocation,
     pricing: pricing as Listing['pricing'],
     details:          record.details || undefined,
     roadAccessDetails: record.roadAccessDetails || undefined,

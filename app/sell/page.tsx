@@ -22,8 +22,8 @@ async function getSellingPageStats() {
         prisma.listing.count({ where: ACTIVE_PROPERTY_FILTER }),
         prisma.listing.findMany({
             where: ACTIVE_PROPERTY_FILTER,
-            distinct: ['locationText'],
-            select: { locationText: true },
+            distinct: ['location'],
+            select: { location: true },
         }),
         getAgentCount(),
         prisma.listing.count({

@@ -239,7 +239,7 @@ export function ProgressiveListingSections({
             section: "location",
             title: "Location Details",
             description: "Provide the address, geo-coordinates, and nearby landmarks.",
-            fields: ["structuredLocation"],
+            fields: ["locationId", "structuredLocation"],
             render: () => <LocationDetailsSection control={form.control} fieldChangeNotes={fieldChangeNotes} />,
         },
         ...(canEditOwnership ? [{

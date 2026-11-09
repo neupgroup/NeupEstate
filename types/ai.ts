@@ -10,6 +10,7 @@ export const ExtractedListingSchema = z.object({
     description: z.string().optional().describe('A detailed description of the property.'),
     price: z.coerce.number().optional().describe('The price of the property (for sale or rent). If the price is listed as "negotiable", "on-call", or is not present, **you must omit the \'price\' field from the output**. The value must be a number, without currency symbols.'),
     location: z.string().optional().describe('The address or general location of the property.'),
+    locationId: z.string().uuid().optional().describe('The UUID of an existing location record selected for the property.'),
     bedrooms: z.coerce.number().optional().describe('The number of bedrooms.'),
     bathrooms: z.coerce.number().optional().describe('The number of bathrooms.'),
     area: z.coerce.number().optional().describe('The total area in square feet.'),

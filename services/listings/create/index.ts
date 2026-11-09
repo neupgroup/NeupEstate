@@ -23,7 +23,7 @@ export async function submitListingCreation(input: CreateListingFormValues, cont
   const price = firstPositivePrice(validatedData.pricing);
   if (priceDisplayMode === 'show-price' && price <= 0) throw new Error('Show price requires at least one price.');
   const serviceInput: CreateListingInput = {
-    ...validatedData, location: formatLocationString(validatedData.structuredLocation), price,
+    ...validatedData, location: formatLocationString(validatedData.structuredLocation), locationId: validatedData.locationId, price,
     details: { priceDisplayMode, showMap: validatedData.showMap ?? true, showOwnerInformation: validatedData.showOwnerInformation ?? true, isPrivate: validatedData.isPrivate ?? false },
     area: areaValueToSqm(validatedData.area), amenities: validatedData.amenities?.split(',').map((item) => item.trim()).filter(Boolean) || [],
     images: validatedData.images?.filter((image) => image.trim() !== '') || [], pricing: cleanPricing(validatedData.pricing), owners: normalizeOwnerEntries(validatedData.owners),

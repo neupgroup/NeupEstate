@@ -303,6 +303,7 @@ function validateImportableListing(data: ExtractedListingData): string[] {
   if (!data.title) missing.push('title');
   if (!data.description) missing.push('description');
   if (!data.location) missing.push('location');
+  if (typeof data.locationId !== 'string' || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(data.locationId)) missing.push('locationId (valid UUID)');
   if (!data.purpose) missing.push('purpose');
   if (!data.category) missing.push('category');
   if (!data.type) missing.push('type');

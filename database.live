@@ -346,7 +346,6 @@ Fields:
 > priceBasis: enum(total, perUnit, perMonth, perYear, perUnitPerMonth, perUnitPerYear);
 > priceCurrency: varchar(3), currency code;
 > priceAmount: numeric(22,10);
-> locationText: varchar(255) NOT NULL;
 > geoLocation: varchar(63) NOT NULL;
 > location: uuid NOT NULL, references locations.id, ON DELETE RESTRICT, ON UPDATE CASCADE;
 > pricing: jsonb;

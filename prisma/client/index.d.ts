@@ -39,11 +39,6 @@ export type Listing = $Result.DefaultSelection<Prisma.$ListingPayload>
  */
 export type PropertyLink = $Result.DefaultSelection<Prisma.$PropertyLinkPayload>
 /**
- * Model ListingMedia
- * 
- */
-export type ListingMedia = $Result.DefaultSelection<Prisma.$ListingMediaPayload>
-/**
  * Model ListingHouse
  * 
  */
@@ -602,16 +597,6 @@ export class PrismaClient<
     * ```
     */
   get propertyLink(): Prisma.PropertyLinkDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.listingMedia`: Exposes CRUD operations for the **ListingMedia** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more ListingMedias
-    * const listingMedias = await prisma.listingMedia.findMany()
-    * ```
-    */
-  get listingMedia(): Prisma.ListingMediaDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.listingHouse`: Exposes CRUD operations for the **ListingHouse** model.
@@ -1551,7 +1536,6 @@ export namespace Prisma {
     Activity: 'Activity',
     Listing: 'Listing',
     PropertyLink: 'PropertyLink',
-    ListingMedia: 'ListingMedia',
     ListingHouse: 'ListingHouse',
     ListingApartment: 'ListingApartment',
     PropertyLandDetail: 'PropertyLandDetail',
@@ -1617,7 +1601,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "location" | "account" | "activity" | "listing" | "propertyLink" | "listingMedia" | "listingHouse" | "listingApartment" | "propertyLandDetail" | "listingCommercial" | "propertyPrice" | "propertyOwner" | "listingRepresentative" | "listingDocument" | "listingChange" | "agency" | "agencyMap" | "agencyAgentMap" | "agencyCustomization" | "agent" | "review" | "requirement" | "naturalSearch" | "savedProperty" | "listingsView" | "baseLead" | "clientContact" | "clientLink" | "sharedLeads" | "leadActivity" | "conversation" | "message" | "siteContent" | "userPreference" | "propertyRequest" | "mortgageRequest" | "salesRequest" | "visitRequest" | "problem" | "sitemapEntry" | "inquiry" | "newsletterSubscription" | "authzRole" | "application" | "accountAccess" | "roleCapability" | "authzAccountAccessGrant" | "authzAssetsAccessGrant" | "competitor" | "competitorSource" | "competitorPage" | "competitorListing" | "propertyCompetitionMap" | "competitorTracking" | "intelligenceMapping" | "intelligenceAlert"
+      modelProps: "location" | "account" | "activity" | "listing" | "propertyLink" | "listingHouse" | "listingApartment" | "propertyLandDetail" | "listingCommercial" | "propertyPrice" | "propertyOwner" | "listingRepresentative" | "listingDocument" | "listingChange" | "agency" | "agencyMap" | "agencyAgentMap" | "agencyCustomization" | "agent" | "review" | "requirement" | "naturalSearch" | "savedProperty" | "listingsView" | "baseLead" | "clientContact" | "clientLink" | "sharedLeads" | "leadActivity" | "conversation" | "message" | "siteContent" | "userPreference" | "propertyRequest" | "mortgageRequest" | "salesRequest" | "visitRequest" | "problem" | "sitemapEntry" | "inquiry" | "newsletterSubscription" | "authzRole" | "application" | "accountAccess" | "roleCapability" | "authzAccountAccessGrant" | "authzAssetsAccessGrant" | "competitor" | "competitorSource" | "competitorPage" | "competitorListing" | "propertyCompetitionMap" | "competitorTracking" | "intelligenceMapping" | "intelligenceAlert"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1988,80 +1972,6 @@ export namespace Prisma {
           count: {
             args: Prisma.PropertyLinkCountArgs<ExtArgs>
             result: $Utils.Optional<PropertyLinkCountAggregateOutputType> | number
-          }
-        }
-      }
-      ListingMedia: {
-        payload: Prisma.$ListingMediaPayload<ExtArgs>
-        fields: Prisma.ListingMediaFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.ListingMediaFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingMediaPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.ListingMediaFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingMediaPayload>
-          }
-          findFirst: {
-            args: Prisma.ListingMediaFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingMediaPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.ListingMediaFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingMediaPayload>
-          }
-          findMany: {
-            args: Prisma.ListingMediaFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingMediaPayload>[]
-          }
-          create: {
-            args: Prisma.ListingMediaCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingMediaPayload>
-          }
-          createMany: {
-            args: Prisma.ListingMediaCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.ListingMediaCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingMediaPayload>[]
-          }
-          delete: {
-            args: Prisma.ListingMediaDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingMediaPayload>
-          }
-          update: {
-            args: Prisma.ListingMediaUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingMediaPayload>
-          }
-          deleteMany: {
-            args: Prisma.ListingMediaDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.ListingMediaUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.ListingMediaUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingMediaPayload>[]
-          }
-          upsert: {
-            args: Prisma.ListingMediaUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingMediaPayload>
-          }
-          aggregate: {
-            args: Prisma.ListingMediaAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateListingMedia>
-          }
-          groupBy: {
-            args: Prisma.ListingMediaGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ListingMediaGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ListingMediaCountArgs<ExtArgs>
-            result: $Utils.Optional<ListingMediaCountAggregateOutputType> | number
           }
         }
       }
@@ -5878,7 +5788,6 @@ export namespace Prisma {
     activity?: ActivityOmit
     listing?: ListingOmit
     propertyLink?: PropertyLinkOmit
-    listingMedia?: ListingMediaOmit
     listingHouse?: ListingHouseOmit
     listingApartment?: ListingApartmentOmit
     propertyLandDetail?: PropertyLandDetailOmit
@@ -6010,10 +5919,12 @@ export namespace Prisma {
 
   export type LocationCountOutputType = {
     children: number
+    listings: number
   }
 
   export type LocationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     children?: boolean | LocationCountOutputTypeCountChildrenArgs
+    listings?: boolean | LocationCountOutputTypeCountListingsArgs
   }
 
   // Custom InputTypes
@@ -6032,6 +5943,13 @@ export namespace Prisma {
    */
   export type LocationCountOutputTypeCountChildrenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: LocationWhereInput
+  }
+
+  /**
+   * LocationCountOutputType without action
+   */
+  export type LocationCountOutputTypeCountListingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ListingWhereInput
   }
 
 
@@ -6188,7 +6106,6 @@ export namespace Prisma {
    */
 
   export type ListingCountOutputType = {
-    media: number
     prices: number
     owners: number
     documents: number
@@ -6202,7 +6119,6 @@ export namespace Prisma {
   }
 
   export type ListingCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    media?: boolean | ListingCountOutputTypeCountMediaArgs
     prices?: boolean | ListingCountOutputTypeCountPricesArgs
     owners?: boolean | ListingCountOutputTypeCountOwnersArgs
     documents?: boolean | ListingCountOutputTypeCountDocumentsArgs
@@ -6224,13 +6140,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the ListingCountOutputType
      */
     select?: ListingCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * ListingCountOutputType without action
-   */
-  export type ListingCountOutputTypeCountMediaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ListingMediaWhereInput
   }
 
   /**
@@ -6881,6 +6790,7 @@ export namespace Prisma {
     status?: boolean
     parent?: boolean | Location$parentArgs<ExtArgs>
     children?: boolean | Location$childrenArgs<ExtArgs>
+    listings?: boolean | Location$listingsArgs<ExtArgs>
     _count?: boolean | LocationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["location"]>
 
@@ -6920,6 +6830,7 @@ export namespace Prisma {
   export type LocationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     parent?: boolean | Location$parentArgs<ExtArgs>
     children?: boolean | Location$childrenArgs<ExtArgs>
+    listings?: boolean | Location$listingsArgs<ExtArgs>
     _count?: boolean | LocationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type LocationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6934,6 +6845,7 @@ export namespace Prisma {
     objects: {
       parent: Prisma.$LocationPayload<ExtArgs> | null
       children: Prisma.$LocationPayload<ExtArgs>[]
+      listings: Prisma.$ListingPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7339,6 +7251,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     parent<T extends Location$parentArgs<ExtArgs> = {}>(args?: Subset<T, Location$parentArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     children<T extends Location$childrenArgs<ExtArgs> = {}>(args?: Subset<T, Location$childrenArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    listings<T extends Location$listingsArgs<ExtArgs> = {}>(args?: Subset<T, Location$listingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7816,6 +7729,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: LocationScalarFieldEnum | LocationScalarFieldEnum[]
+  }
+
+  /**
+   * Location.listings
+   */
+  export type Location$listingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Listing
+     */
+    select?: ListingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Listing
+     */
+    omit?: ListingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ListingInclude<ExtArgs> | null
+    where?: ListingWhereInput
+    orderBy?: ListingOrderByWithRelationInput | ListingOrderByWithRelationInput[]
+    cursor?: ListingWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ListingScalarFieldEnum | ListingScalarFieldEnum[]
   }
 
   /**
@@ -10423,7 +10360,6 @@ export namespace Prisma {
     slug: string | null
     title: string | null
     description: string | null
-    coverImage: string | null
     type: $Enums.PropertyType | null
     purpose: $Enums.PropertyPurpose | null
     status: $Enums.PropertyStatus | null
@@ -10433,9 +10369,8 @@ export namespace Prisma {
     priceBasis: $Enums.ListingPriceBasis | null
     priceCurrency: string | null
     priceAmount: Decimal | null
-    locationText: string | null
     geoLocation: string | null
-    structuredLocation: string | null
+    location: string | null
     createdAt: Date | null
     updatedAt: Date | null
     isFeatured: boolean | null
@@ -10449,7 +10384,6 @@ export namespace Prisma {
     slug: string | null
     title: string | null
     description: string | null
-    coverImage: string | null
     type: $Enums.PropertyType | null
     purpose: $Enums.PropertyPurpose | null
     status: $Enums.PropertyStatus | null
@@ -10459,9 +10393,8 @@ export namespace Prisma {
     priceBasis: $Enums.ListingPriceBasis | null
     priceCurrency: string | null
     priceAmount: Decimal | null
-    locationText: string | null
     geoLocation: string | null
-    structuredLocation: string | null
+    location: string | null
     createdAt: Date | null
     updatedAt: Date | null
     isFeatured: boolean | null
@@ -10475,7 +10408,7 @@ export namespace Prisma {
     slug: number
     title: number
     description: number
-    coverImage: number
+    media: number
     type: number
     purpose: number
     status: number
@@ -10485,9 +10418,8 @@ export namespace Prisma {
     priceBasis: number
     priceCurrency: number
     priceAmount: number
-    locationText: number
     geoLocation: number
-    structuredLocation: number
+    location: number
     details: number
     pricing: number
     roadAccessDetails: number
@@ -10523,7 +10455,6 @@ export namespace Prisma {
     slug?: true
     title?: true
     description?: true
-    coverImage?: true
     type?: true
     purpose?: true
     status?: true
@@ -10533,9 +10464,8 @@ export namespace Prisma {
     priceBasis?: true
     priceCurrency?: true
     priceAmount?: true
-    locationText?: true
     geoLocation?: true
-    structuredLocation?: true
+    location?: true
     createdAt?: true
     updatedAt?: true
     isFeatured?: true
@@ -10549,7 +10479,6 @@ export namespace Prisma {
     slug?: true
     title?: true
     description?: true
-    coverImage?: true
     type?: true
     purpose?: true
     status?: true
@@ -10559,9 +10488,8 @@ export namespace Prisma {
     priceBasis?: true
     priceCurrency?: true
     priceAmount?: true
-    locationText?: true
     geoLocation?: true
-    structuredLocation?: true
+    location?: true
     createdAt?: true
     updatedAt?: true
     isFeatured?: true
@@ -10575,7 +10503,7 @@ export namespace Prisma {
     slug?: true
     title?: true
     description?: true
-    coverImage?: true
+    media?: true
     type?: true
     purpose?: true
     status?: true
@@ -10585,9 +10513,8 @@ export namespace Prisma {
     priceBasis?: true
     priceCurrency?: true
     priceAmount?: true
-    locationText?: true
     geoLocation?: true
-    structuredLocation?: true
+    location?: true
     details?: true
     pricing?: true
     roadAccessDetails?: true
@@ -10698,7 +10625,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media: JsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status: $Enums.PropertyStatus
@@ -10708,9 +10635,8 @@ export namespace Prisma {
     priceBasis: $Enums.ListingPriceBasis | null
     priceCurrency: string | null
     priceAmount: Decimal | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
+    location: string
     details: JsonValue | null
     pricing: JsonValue | null
     roadAccessDetails: JsonValue | null
@@ -10753,7 +10679,7 @@ export namespace Prisma {
     slug?: boolean
     title?: boolean
     description?: boolean
-    coverImage?: boolean
+    media?: boolean
     type?: boolean
     purpose?: boolean
     status?: boolean
@@ -10763,9 +10689,8 @@ export namespace Prisma {
     priceBasis?: boolean
     priceCurrency?: boolean
     priceAmount?: boolean
-    locationText?: boolean
     geoLocation?: boolean
-    structuredLocation?: boolean
+    location?: boolean
     details?: boolean
     pricing?: boolean
     roadAccessDetails?: boolean
@@ -10782,7 +10707,7 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: boolean
-    media?: boolean | Listing$mediaArgs<ExtArgs>
+    locationRecord?: boolean | LocationDefaultArgs<ExtArgs>
     houseDetail?: boolean | Listing$houseDetailArgs<ExtArgs>
     apartmentDetail?: boolean | Listing$apartmentDetailArgs<ExtArgs>
     landDetail?: boolean | Listing$landDetailArgs<ExtArgs>
@@ -10805,7 +10730,7 @@ export namespace Prisma {
     slug?: boolean
     title?: boolean
     description?: boolean
-    coverImage?: boolean
+    media?: boolean
     type?: boolean
     purpose?: boolean
     status?: boolean
@@ -10815,9 +10740,8 @@ export namespace Prisma {
     priceBasis?: boolean
     priceCurrency?: boolean
     priceAmount?: boolean
-    locationText?: boolean
     geoLocation?: boolean
-    structuredLocation?: boolean
+    location?: boolean
     details?: boolean
     pricing?: boolean
     roadAccessDetails?: boolean
@@ -10834,6 +10758,7 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: boolean
+    locationRecord?: boolean | LocationDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["listing"]>
 
   export type ListingSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -10841,7 +10766,7 @@ export namespace Prisma {
     slug?: boolean
     title?: boolean
     description?: boolean
-    coverImage?: boolean
+    media?: boolean
     type?: boolean
     purpose?: boolean
     status?: boolean
@@ -10851,9 +10776,8 @@ export namespace Prisma {
     priceBasis?: boolean
     priceCurrency?: boolean
     priceAmount?: boolean
-    locationText?: boolean
     geoLocation?: boolean
-    structuredLocation?: boolean
+    location?: boolean
     details?: boolean
     pricing?: boolean
     roadAccessDetails?: boolean
@@ -10870,6 +10794,7 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: boolean
+    locationRecord?: boolean | LocationDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["listing"]>
 
   export type ListingSelectScalar = {
@@ -10877,7 +10802,7 @@ export namespace Prisma {
     slug?: boolean
     title?: boolean
     description?: boolean
-    coverImage?: boolean
+    media?: boolean
     type?: boolean
     purpose?: boolean
     status?: boolean
@@ -10887,9 +10812,8 @@ export namespace Prisma {
     priceBasis?: boolean
     priceCurrency?: boolean
     priceAmount?: boolean
-    locationText?: boolean
     geoLocation?: boolean
-    structuredLocation?: boolean
+    location?: boolean
     details?: boolean
     pricing?: boolean
     roadAccessDetails?: boolean
@@ -10908,9 +10832,9 @@ export namespace Prisma {
     customId?: boolean
   }
 
-  export type ListingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "title" | "description" | "coverImage" | "type" | "purpose" | "status" | "currency" | "displayPrice" | "displayPriceUnit" | "priceBasis" | "priceCurrency" | "priceAmount" | "locationText" | "geoLocation" | "structuredLocation" | "details" | "pricing" | "roadAccessDetails" | "distancing" | "earnings" | "landDetails" | "plots" | "apartmentDetails" | "metaTags" | "amenities" | "createdAt" | "updatedAt" | "isFeatured" | "isApproved" | "isDeleted" | "customId", ExtArgs["result"]["listing"]>
+  export type ListingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "title" | "description" | "media" | "type" | "purpose" | "status" | "currency" | "displayPrice" | "displayPriceUnit" | "priceBasis" | "priceCurrency" | "priceAmount" | "geoLocation" | "location" | "details" | "pricing" | "roadAccessDetails" | "distancing" | "earnings" | "landDetails" | "plots" | "apartmentDetails" | "metaTags" | "amenities" | "createdAt" | "updatedAt" | "isFeatured" | "isApproved" | "isDeleted" | "customId", ExtArgs["result"]["listing"]>
   export type ListingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    media?: boolean | Listing$mediaArgs<ExtArgs>
+    locationRecord?: boolean | LocationDefaultArgs<ExtArgs>
     houseDetail?: boolean | Listing$houseDetailArgs<ExtArgs>
     apartmentDetail?: boolean | Listing$apartmentDetailArgs<ExtArgs>
     landDetail?: boolean | Listing$landDetailArgs<ExtArgs>
@@ -10927,13 +10851,17 @@ export namespace Prisma {
     representatives?: boolean | Listing$representativesArgs<ExtArgs>
     _count?: boolean | ListingCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type ListingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type ListingIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ListingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    locationRecord?: boolean | LocationDefaultArgs<ExtArgs>
+  }
+  export type ListingIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    locationRecord?: boolean | LocationDefaultArgs<ExtArgs>
+  }
 
   export type $ListingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Listing"
     objects: {
-      media: Prisma.$ListingMediaPayload<ExtArgs>[]
+      locationRecord: Prisma.$LocationPayload<ExtArgs>
       houseDetail: Prisma.$ListingHousePayload<ExtArgs> | null
       apartmentDetail: Prisma.$ListingApartmentPayload<ExtArgs> | null
       landDetail: Prisma.$PropertyLandDetailPayload<ExtArgs> | null
@@ -10954,7 +10882,7 @@ export namespace Prisma {
       slug: string
       title: string
       description: string
-      coverImage: string
+      media: Prisma.JsonValue
       type: $Enums.PropertyType
       purpose: $Enums.PropertyPurpose
       status: $Enums.PropertyStatus
@@ -10964,9 +10892,8 @@ export namespace Prisma {
       priceBasis: $Enums.ListingPriceBasis | null
       priceCurrency: string | null
       priceAmount: Prisma.Decimal | null
-      locationText: string
       geoLocation: string
-      structuredLocation: string
+      location: string
       details: Prisma.JsonValue | null
       pricing: Prisma.JsonValue | null
       roadAccessDetails: Prisma.JsonValue | null
@@ -11377,7 +11304,7 @@ export namespace Prisma {
    */
   export interface Prisma__ListingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    media<T extends Listing$mediaArgs<ExtArgs> = {}>(args?: Subset<T, Listing$mediaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingMediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    locationRecord<T extends LocationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LocationDefaultArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     houseDetail<T extends Listing$houseDetailArgs<ExtArgs> = {}>(args?: Subset<T, Listing$houseDetailArgs<ExtArgs>>): Prisma__ListingHouseClient<$Result.GetResult<Prisma.$ListingHousePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     apartmentDetail<T extends Listing$apartmentDetailArgs<ExtArgs> = {}>(args?: Subset<T, Listing$apartmentDetailArgs<ExtArgs>>): Prisma__ListingApartmentClient<$Result.GetResult<Prisma.$ListingApartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     landDetail<T extends Listing$landDetailArgs<ExtArgs> = {}>(args?: Subset<T, Listing$landDetailArgs<ExtArgs>>): Prisma__PropertyLandDetailClient<$Result.GetResult<Prisma.$PropertyLandDetailPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -11425,7 +11352,7 @@ export namespace Prisma {
     readonly slug: FieldRef<"Listing", 'String'>
     readonly title: FieldRef<"Listing", 'String'>
     readonly description: FieldRef<"Listing", 'String'>
-    readonly coverImage: FieldRef<"Listing", 'String'>
+    readonly media: FieldRef<"Listing", 'Json'>
     readonly type: FieldRef<"Listing", 'PropertyType'>
     readonly purpose: FieldRef<"Listing", 'PropertyPurpose'>
     readonly status: FieldRef<"Listing", 'PropertyStatus'>
@@ -11435,9 +11362,8 @@ export namespace Prisma {
     readonly priceBasis: FieldRef<"Listing", 'ListingPriceBasis'>
     readonly priceCurrency: FieldRef<"Listing", 'String'>
     readonly priceAmount: FieldRef<"Listing", 'Decimal'>
-    readonly locationText: FieldRef<"Listing", 'String'>
     readonly geoLocation: FieldRef<"Listing", 'String'>
-    readonly structuredLocation: FieldRef<"Listing", 'String'>
+    readonly location: FieldRef<"Listing", 'String'>
     readonly details: FieldRef<"Listing", 'Json'>
     readonly pricing: FieldRef<"Listing", 'Json'>
     readonly roadAccessDetails: FieldRef<"Listing", 'Json'>
@@ -11708,6 +11634,10 @@ export namespace Prisma {
      */
     data: ListingCreateManyInput | ListingCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ListingIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -11778,6 +11708,10 @@ export namespace Prisma {
      * Limit how many Listings to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ListingIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -11844,30 +11778,6 @@ export namespace Prisma {
      * Limit how many Listings to delete.
      */
     limit?: number
-  }
-
-  /**
-   * Listing.media
-   */
-  export type Listing$mediaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingMedia
-     */
-    select?: ListingMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingMedia
-     */
-    omit?: ListingMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ListingMediaInclude<ExtArgs> | null
-    where?: ListingMediaWhereInput
-    orderBy?: ListingMediaOrderByWithRelationInput | ListingMediaOrderByWithRelationInput[]
-    cursor?: ListingMediaWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ListingMediaScalarFieldEnum | ListingMediaScalarFieldEnum[]
   }
 
   /**
@@ -13247,1155 +13157,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: PropertyLinkInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model ListingMedia
-   */
-
-  export type AggregateListingMedia = {
-    _count: ListingMediaCountAggregateOutputType | null
-    _avg: ListingMediaAvgAggregateOutputType | null
-    _sum: ListingMediaSumAggregateOutputType | null
-    _min: ListingMediaMinAggregateOutputType | null
-    _max: ListingMediaMaxAggregateOutputType | null
-  }
-
-  export type ListingMediaAvgAggregateOutputType = {
-    sortOrder: number | null
-  }
-
-  export type ListingMediaSumAggregateOutputType = {
-    sortOrder: number | null
-  }
-
-  export type ListingMediaMinAggregateOutputType = {
-    id: string | null
-    propertyId: string | null
-    type: string | null
-    url: string | null
-    alt: string | null
-    sortOrder: number | null
-    isPrimary: boolean | null
-    createdAt: Date | null
-    isDeleted: boolean | null
-  }
-
-  export type ListingMediaMaxAggregateOutputType = {
-    id: string | null
-    propertyId: string | null
-    type: string | null
-    url: string | null
-    alt: string | null
-    sortOrder: number | null
-    isPrimary: boolean | null
-    createdAt: Date | null
-    isDeleted: boolean | null
-  }
-
-  export type ListingMediaCountAggregateOutputType = {
-    id: number
-    propertyId: number
-    type: number
-    url: number
-    alt: number
-    sortOrder: number
-    isPrimary: number
-    createdAt: number
-    isDeleted: number
-    _all: number
-  }
-
-
-  export type ListingMediaAvgAggregateInputType = {
-    sortOrder?: true
-  }
-
-  export type ListingMediaSumAggregateInputType = {
-    sortOrder?: true
-  }
-
-  export type ListingMediaMinAggregateInputType = {
-    id?: true
-    propertyId?: true
-    type?: true
-    url?: true
-    alt?: true
-    sortOrder?: true
-    isPrimary?: true
-    createdAt?: true
-    isDeleted?: true
-  }
-
-  export type ListingMediaMaxAggregateInputType = {
-    id?: true
-    propertyId?: true
-    type?: true
-    url?: true
-    alt?: true
-    sortOrder?: true
-    isPrimary?: true
-    createdAt?: true
-    isDeleted?: true
-  }
-
-  export type ListingMediaCountAggregateInputType = {
-    id?: true
-    propertyId?: true
-    type?: true
-    url?: true
-    alt?: true
-    sortOrder?: true
-    isPrimary?: true
-    createdAt?: true
-    isDeleted?: true
-    _all?: true
-  }
-
-  export type ListingMediaAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ListingMedia to aggregate.
-     */
-    where?: ListingMediaWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ListingMedias to fetch.
-     */
-    orderBy?: ListingMediaOrderByWithRelationInput | ListingMediaOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: ListingMediaWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ListingMedias from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ListingMedias.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned ListingMedias
-    **/
-    _count?: true | ListingMediaCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: ListingMediaAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: ListingMediaSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: ListingMediaMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: ListingMediaMaxAggregateInputType
-  }
-
-  export type GetListingMediaAggregateType<T extends ListingMediaAggregateArgs> = {
-        [P in keyof T & keyof AggregateListingMedia]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateListingMedia[P]>
-      : GetScalarType<T[P], AggregateListingMedia[P]>
-  }
-
-
-
-
-  export type ListingMediaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ListingMediaWhereInput
-    orderBy?: ListingMediaOrderByWithAggregationInput | ListingMediaOrderByWithAggregationInput[]
-    by: ListingMediaScalarFieldEnum[] | ListingMediaScalarFieldEnum
-    having?: ListingMediaScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: ListingMediaCountAggregateInputType | true
-    _avg?: ListingMediaAvgAggregateInputType
-    _sum?: ListingMediaSumAggregateInputType
-    _min?: ListingMediaMinAggregateInputType
-    _max?: ListingMediaMaxAggregateInputType
-  }
-
-  export type ListingMediaGroupByOutputType = {
-    id: string
-    propertyId: string
-    type: string
-    url: string
-    alt: string
-    sortOrder: number
-    isPrimary: boolean
-    createdAt: Date
-    isDeleted: boolean
-    _count: ListingMediaCountAggregateOutputType | null
-    _avg: ListingMediaAvgAggregateOutputType | null
-    _sum: ListingMediaSumAggregateOutputType | null
-    _min: ListingMediaMinAggregateOutputType | null
-    _max: ListingMediaMaxAggregateOutputType | null
-  }
-
-  type GetListingMediaGroupByPayload<T extends ListingMediaGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<ListingMediaGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof ListingMediaGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], ListingMediaGroupByOutputType[P]>
-            : GetScalarType<T[P], ListingMediaGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type ListingMediaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    propertyId?: boolean
-    type?: boolean
-    url?: boolean
-    alt?: boolean
-    sortOrder?: boolean
-    isPrimary?: boolean
-    createdAt?: boolean
-    isDeleted?: boolean
-    property?: boolean | ListingDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["listingMedia"]>
-
-  export type ListingMediaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    propertyId?: boolean
-    type?: boolean
-    url?: boolean
-    alt?: boolean
-    sortOrder?: boolean
-    isPrimary?: boolean
-    createdAt?: boolean
-    isDeleted?: boolean
-    property?: boolean | ListingDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["listingMedia"]>
-
-  export type ListingMediaSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    propertyId?: boolean
-    type?: boolean
-    url?: boolean
-    alt?: boolean
-    sortOrder?: boolean
-    isPrimary?: boolean
-    createdAt?: boolean
-    isDeleted?: boolean
-    property?: boolean | ListingDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["listingMedia"]>
-
-  export type ListingMediaSelectScalar = {
-    id?: boolean
-    propertyId?: boolean
-    type?: boolean
-    url?: boolean
-    alt?: boolean
-    sortOrder?: boolean
-    isPrimary?: boolean
-    createdAt?: boolean
-    isDeleted?: boolean
-  }
-
-  export type ListingMediaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "propertyId" | "type" | "url" | "alt" | "sortOrder" | "isPrimary" | "createdAt" | "isDeleted", ExtArgs["result"]["listingMedia"]>
-  export type ListingMediaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    property?: boolean | ListingDefaultArgs<ExtArgs>
-  }
-  export type ListingMediaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    property?: boolean | ListingDefaultArgs<ExtArgs>
-  }
-  export type ListingMediaIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    property?: boolean | ListingDefaultArgs<ExtArgs>
-  }
-
-  export type $ListingMediaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "ListingMedia"
-    objects: {
-      property: Prisma.$ListingPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      propertyId: string
-      type: string
-      url: string
-      alt: string
-      sortOrder: number
-      isPrimary: boolean
-      createdAt: Date
-      isDeleted: boolean
-    }, ExtArgs["result"]["listingMedia"]>
-    composites: {}
-  }
-
-  type ListingMediaGetPayload<S extends boolean | null | undefined | ListingMediaDefaultArgs> = $Result.GetResult<Prisma.$ListingMediaPayload, S>
-
-  type ListingMediaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<ListingMediaFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ListingMediaCountAggregateInputType | true
-    }
-
-  export interface ListingMediaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ListingMedia'], meta: { name: 'ListingMedia' } }
-    /**
-     * Find zero or one ListingMedia that matches the filter.
-     * @param {ListingMediaFindUniqueArgs} args - Arguments to find a ListingMedia
-     * @example
-     * // Get one ListingMedia
-     * const listingMedia = await prisma.listingMedia.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends ListingMediaFindUniqueArgs>(args: SelectSubset<T, ListingMediaFindUniqueArgs<ExtArgs>>): Prisma__ListingMediaClient<$Result.GetResult<Prisma.$ListingMediaPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one ListingMedia that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {ListingMediaFindUniqueOrThrowArgs} args - Arguments to find a ListingMedia
-     * @example
-     * // Get one ListingMedia
-     * const listingMedia = await prisma.listingMedia.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends ListingMediaFindUniqueOrThrowArgs>(args: SelectSubset<T, ListingMediaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ListingMediaClient<$Result.GetResult<Prisma.$ListingMediaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first ListingMedia that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingMediaFindFirstArgs} args - Arguments to find a ListingMedia
-     * @example
-     * // Get one ListingMedia
-     * const listingMedia = await prisma.listingMedia.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends ListingMediaFindFirstArgs>(args?: SelectSubset<T, ListingMediaFindFirstArgs<ExtArgs>>): Prisma__ListingMediaClient<$Result.GetResult<Prisma.$ListingMediaPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first ListingMedia that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingMediaFindFirstOrThrowArgs} args - Arguments to find a ListingMedia
-     * @example
-     * // Get one ListingMedia
-     * const listingMedia = await prisma.listingMedia.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends ListingMediaFindFirstOrThrowArgs>(args?: SelectSubset<T, ListingMediaFindFirstOrThrowArgs<ExtArgs>>): Prisma__ListingMediaClient<$Result.GetResult<Prisma.$ListingMediaPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more ListingMedias that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingMediaFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all ListingMedias
-     * const listingMedias = await prisma.listingMedia.findMany()
-     * 
-     * // Get first 10 ListingMedias
-     * const listingMedias = await prisma.listingMedia.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const listingMediaWithIdOnly = await prisma.listingMedia.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends ListingMediaFindManyArgs>(args?: SelectSubset<T, ListingMediaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingMediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a ListingMedia.
-     * @param {ListingMediaCreateArgs} args - Arguments to create a ListingMedia.
-     * @example
-     * // Create one ListingMedia
-     * const ListingMedia = await prisma.listingMedia.create({
-     *   data: {
-     *     // ... data to create a ListingMedia
-     *   }
-     * })
-     * 
-     */
-    create<T extends ListingMediaCreateArgs>(args: SelectSubset<T, ListingMediaCreateArgs<ExtArgs>>): Prisma__ListingMediaClient<$Result.GetResult<Prisma.$ListingMediaPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many ListingMedias.
-     * @param {ListingMediaCreateManyArgs} args - Arguments to create many ListingMedias.
-     * @example
-     * // Create many ListingMedias
-     * const listingMedia = await prisma.listingMedia.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends ListingMediaCreateManyArgs>(args?: SelectSubset<T, ListingMediaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many ListingMedias and returns the data saved in the database.
-     * @param {ListingMediaCreateManyAndReturnArgs} args - Arguments to create many ListingMedias.
-     * @example
-     * // Create many ListingMedias
-     * const listingMedia = await prisma.listingMedia.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many ListingMedias and only return the `id`
-     * const listingMediaWithIdOnly = await prisma.listingMedia.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends ListingMediaCreateManyAndReturnArgs>(args?: SelectSubset<T, ListingMediaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingMediaPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a ListingMedia.
-     * @param {ListingMediaDeleteArgs} args - Arguments to delete one ListingMedia.
-     * @example
-     * // Delete one ListingMedia
-     * const ListingMedia = await prisma.listingMedia.delete({
-     *   where: {
-     *     // ... filter to delete one ListingMedia
-     *   }
-     * })
-     * 
-     */
-    delete<T extends ListingMediaDeleteArgs>(args: SelectSubset<T, ListingMediaDeleteArgs<ExtArgs>>): Prisma__ListingMediaClient<$Result.GetResult<Prisma.$ListingMediaPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one ListingMedia.
-     * @param {ListingMediaUpdateArgs} args - Arguments to update one ListingMedia.
-     * @example
-     * // Update one ListingMedia
-     * const listingMedia = await prisma.listingMedia.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends ListingMediaUpdateArgs>(args: SelectSubset<T, ListingMediaUpdateArgs<ExtArgs>>): Prisma__ListingMediaClient<$Result.GetResult<Prisma.$ListingMediaPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more ListingMedias.
-     * @param {ListingMediaDeleteManyArgs} args - Arguments to filter ListingMedias to delete.
-     * @example
-     * // Delete a few ListingMedias
-     * const { count } = await prisma.listingMedia.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends ListingMediaDeleteManyArgs>(args?: SelectSubset<T, ListingMediaDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more ListingMedias.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingMediaUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many ListingMedias
-     * const listingMedia = await prisma.listingMedia.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends ListingMediaUpdateManyArgs>(args: SelectSubset<T, ListingMediaUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more ListingMedias and returns the data updated in the database.
-     * @param {ListingMediaUpdateManyAndReturnArgs} args - Arguments to update many ListingMedias.
-     * @example
-     * // Update many ListingMedias
-     * const listingMedia = await prisma.listingMedia.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more ListingMedias and only return the `id`
-     * const listingMediaWithIdOnly = await prisma.listingMedia.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends ListingMediaUpdateManyAndReturnArgs>(args: SelectSubset<T, ListingMediaUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingMediaPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one ListingMedia.
-     * @param {ListingMediaUpsertArgs} args - Arguments to update or create a ListingMedia.
-     * @example
-     * // Update or create a ListingMedia
-     * const listingMedia = await prisma.listingMedia.upsert({
-     *   create: {
-     *     // ... data to create a ListingMedia
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the ListingMedia we want to update
-     *   }
-     * })
-     */
-    upsert<T extends ListingMediaUpsertArgs>(args: SelectSubset<T, ListingMediaUpsertArgs<ExtArgs>>): Prisma__ListingMediaClient<$Result.GetResult<Prisma.$ListingMediaPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of ListingMedias.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingMediaCountArgs} args - Arguments to filter ListingMedias to count.
-     * @example
-     * // Count the number of ListingMedias
-     * const count = await prisma.listingMedia.count({
-     *   where: {
-     *     // ... the filter for the ListingMedias we want to count
-     *   }
-     * })
-    **/
-    count<T extends ListingMediaCountArgs>(
-      args?: Subset<T, ListingMediaCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], ListingMediaCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a ListingMedia.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingMediaAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends ListingMediaAggregateArgs>(args: Subset<T, ListingMediaAggregateArgs>): Prisma.PrismaPromise<GetListingMediaAggregateType<T>>
-
-    /**
-     * Group by ListingMedia.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingMediaGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends ListingMediaGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ListingMediaGroupByArgs['orderBy'] }
-        : { orderBy?: ListingMediaGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, ListingMediaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetListingMediaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the ListingMedia model
-   */
-  readonly fields: ListingMediaFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for ListingMedia.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__ListingMediaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    property<T extends ListingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ListingDefaultArgs<ExtArgs>>): Prisma__ListingClient<$Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the ListingMedia model
-   */
-  interface ListingMediaFieldRefs {
-    readonly id: FieldRef<"ListingMedia", 'String'>
-    readonly propertyId: FieldRef<"ListingMedia", 'String'>
-    readonly type: FieldRef<"ListingMedia", 'String'>
-    readonly url: FieldRef<"ListingMedia", 'String'>
-    readonly alt: FieldRef<"ListingMedia", 'String'>
-    readonly sortOrder: FieldRef<"ListingMedia", 'Int'>
-    readonly isPrimary: FieldRef<"ListingMedia", 'Boolean'>
-    readonly createdAt: FieldRef<"ListingMedia", 'DateTime'>
-    readonly isDeleted: FieldRef<"ListingMedia", 'Boolean'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * ListingMedia findUnique
-   */
-  export type ListingMediaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingMedia
-     */
-    select?: ListingMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingMedia
-     */
-    omit?: ListingMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ListingMediaInclude<ExtArgs> | null
-    /**
-     * Filter, which ListingMedia to fetch.
-     */
-    where: ListingMediaWhereUniqueInput
-  }
-
-  /**
-   * ListingMedia findUniqueOrThrow
-   */
-  export type ListingMediaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingMedia
-     */
-    select?: ListingMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingMedia
-     */
-    omit?: ListingMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ListingMediaInclude<ExtArgs> | null
-    /**
-     * Filter, which ListingMedia to fetch.
-     */
-    where: ListingMediaWhereUniqueInput
-  }
-
-  /**
-   * ListingMedia findFirst
-   */
-  export type ListingMediaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingMedia
-     */
-    select?: ListingMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingMedia
-     */
-    omit?: ListingMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ListingMediaInclude<ExtArgs> | null
-    /**
-     * Filter, which ListingMedia to fetch.
-     */
-    where?: ListingMediaWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ListingMedias to fetch.
-     */
-    orderBy?: ListingMediaOrderByWithRelationInput | ListingMediaOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ListingMedias.
-     */
-    cursor?: ListingMediaWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ListingMedias from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ListingMedias.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ListingMedias.
-     */
-    distinct?: ListingMediaScalarFieldEnum | ListingMediaScalarFieldEnum[]
-  }
-
-  /**
-   * ListingMedia findFirstOrThrow
-   */
-  export type ListingMediaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingMedia
-     */
-    select?: ListingMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingMedia
-     */
-    omit?: ListingMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ListingMediaInclude<ExtArgs> | null
-    /**
-     * Filter, which ListingMedia to fetch.
-     */
-    where?: ListingMediaWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ListingMedias to fetch.
-     */
-    orderBy?: ListingMediaOrderByWithRelationInput | ListingMediaOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for ListingMedias.
-     */
-    cursor?: ListingMediaWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ListingMedias from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ListingMedias.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ListingMedias.
-     */
-    distinct?: ListingMediaScalarFieldEnum | ListingMediaScalarFieldEnum[]
-  }
-
-  /**
-   * ListingMedia findMany
-   */
-  export type ListingMediaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingMedia
-     */
-    select?: ListingMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingMedia
-     */
-    omit?: ListingMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ListingMediaInclude<ExtArgs> | null
-    /**
-     * Filter, which ListingMedias to fetch.
-     */
-    where?: ListingMediaWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of ListingMedias to fetch.
-     */
-    orderBy?: ListingMediaOrderByWithRelationInput | ListingMediaOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing ListingMedias.
-     */
-    cursor?: ListingMediaWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` ListingMedias from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` ListingMedias.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of ListingMedias.
-     */
-    distinct?: ListingMediaScalarFieldEnum | ListingMediaScalarFieldEnum[]
-  }
-
-  /**
-   * ListingMedia create
-   */
-  export type ListingMediaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingMedia
-     */
-    select?: ListingMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingMedia
-     */
-    omit?: ListingMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ListingMediaInclude<ExtArgs> | null
-    /**
-     * The data needed to create a ListingMedia.
-     */
-    data: XOR<ListingMediaCreateInput, ListingMediaUncheckedCreateInput>
-  }
-
-  /**
-   * ListingMedia createMany
-   */
-  export type ListingMediaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many ListingMedias.
-     */
-    data: ListingMediaCreateManyInput | ListingMediaCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * ListingMedia createManyAndReturn
-   */
-  export type ListingMediaCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingMedia
-     */
-    select?: ListingMediaSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingMedia
-     */
-    omit?: ListingMediaOmit<ExtArgs> | null
-    /**
-     * The data used to create many ListingMedias.
-     */
-    data: ListingMediaCreateManyInput | ListingMediaCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ListingMediaIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * ListingMedia update
-   */
-  export type ListingMediaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingMedia
-     */
-    select?: ListingMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingMedia
-     */
-    omit?: ListingMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ListingMediaInclude<ExtArgs> | null
-    /**
-     * The data needed to update a ListingMedia.
-     */
-    data: XOR<ListingMediaUpdateInput, ListingMediaUncheckedUpdateInput>
-    /**
-     * Choose, which ListingMedia to update.
-     */
-    where: ListingMediaWhereUniqueInput
-  }
-
-  /**
-   * ListingMedia updateMany
-   */
-  export type ListingMediaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update ListingMedias.
-     */
-    data: XOR<ListingMediaUpdateManyMutationInput, ListingMediaUncheckedUpdateManyInput>
-    /**
-     * Filter which ListingMedias to update
-     */
-    where?: ListingMediaWhereInput
-    /**
-     * Limit how many ListingMedias to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * ListingMedia updateManyAndReturn
-   */
-  export type ListingMediaUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingMedia
-     */
-    select?: ListingMediaSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingMedia
-     */
-    omit?: ListingMediaOmit<ExtArgs> | null
-    /**
-     * The data used to update ListingMedias.
-     */
-    data: XOR<ListingMediaUpdateManyMutationInput, ListingMediaUncheckedUpdateManyInput>
-    /**
-     * Filter which ListingMedias to update
-     */
-    where?: ListingMediaWhereInput
-    /**
-     * Limit how many ListingMedias to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ListingMediaIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * ListingMedia upsert
-   */
-  export type ListingMediaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingMedia
-     */
-    select?: ListingMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingMedia
-     */
-    omit?: ListingMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ListingMediaInclude<ExtArgs> | null
-    /**
-     * The filter to search for the ListingMedia to update in case it exists.
-     */
-    where: ListingMediaWhereUniqueInput
-    /**
-     * In case the ListingMedia found by the `where` argument doesn't exist, create a new ListingMedia with this data.
-     */
-    create: XOR<ListingMediaCreateInput, ListingMediaUncheckedCreateInput>
-    /**
-     * In case the ListingMedia was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<ListingMediaUpdateInput, ListingMediaUncheckedUpdateInput>
-  }
-
-  /**
-   * ListingMedia delete
-   */
-  export type ListingMediaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingMedia
-     */
-    select?: ListingMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingMedia
-     */
-    omit?: ListingMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ListingMediaInclude<ExtArgs> | null
-    /**
-     * Filter which ListingMedia to delete.
-     */
-    where: ListingMediaWhereUniqueInput
-  }
-
-  /**
-   * ListingMedia deleteMany
-   */
-  export type ListingMediaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which ListingMedias to delete
-     */
-    where?: ListingMediaWhereInput
-    /**
-     * Limit how many ListingMedias to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * ListingMedia without action
-   */
-  export type ListingMediaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ListingMedia
-     */
-    select?: ListingMediaSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ListingMedia
-     */
-    omit?: ListingMediaOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ListingMediaInclude<ExtArgs> | null
   }
 
 
@@ -70057,7 +68818,7 @@ export namespace Prisma {
     slug: 'slug',
     title: 'title',
     description: 'description',
-    coverImage: 'coverImage',
+    media: 'media',
     type: 'type',
     purpose: 'purpose',
     status: 'status',
@@ -70067,9 +68828,8 @@ export namespace Prisma {
     priceBasis: 'priceBasis',
     priceCurrency: 'priceCurrency',
     priceAmount: 'priceAmount',
-    locationText: 'locationText',
     geoLocation: 'geoLocation',
-    structuredLocation: 'structuredLocation',
+    location: 'location',
     details: 'details',
     pricing: 'pricing',
     roadAccessDetails: 'roadAccessDetails',
@@ -70098,21 +68858,6 @@ export namespace Prisma {
   };
 
   export type PropertyLinkScalarFieldEnum = (typeof PropertyLinkScalarFieldEnum)[keyof typeof PropertyLinkScalarFieldEnum]
-
-
-  export const ListingMediaScalarFieldEnum: {
-    id: 'id',
-    propertyId: 'propertyId',
-    type: 'type',
-    url: 'url',
-    alt: 'alt',
-    sortOrder: 'sortOrder',
-    isPrimary: 'isPrimary',
-    createdAt: 'createdAt',
-    isDeleted: 'isDeleted'
-  };
-
-  export type ListingMediaScalarFieldEnum = (typeof ListingMediaScalarFieldEnum)[keyof typeof ListingMediaScalarFieldEnum]
 
 
   export const ListingHouseScalarFieldEnum: {
@@ -71115,6 +69860,7 @@ export namespace Prisma {
     status?: StringFilter<"Location"> | string
     parent?: XOR<LocationNullableScalarRelationFilter, LocationWhereInput> | null
     children?: LocationListRelationFilter
+    listings?: ListingListRelationFilter
   }
 
   export type LocationOrderByWithRelationInput = {
@@ -71127,6 +69873,7 @@ export namespace Prisma {
     status?: SortOrder
     parent?: LocationOrderByWithRelationInput
     children?: LocationOrderByRelationAggregateInput
+    listings?: ListingOrderByRelationAggregateInput
   }
 
   export type LocationWhereUniqueInput = Prisma.AtLeast<{
@@ -71142,6 +69889,7 @@ export namespace Prisma {
     status?: StringFilter<"Location"> | string
     parent?: XOR<LocationNullableScalarRelationFilter, LocationWhereInput> | null
     children?: LocationListRelationFilter
+    listings?: ListingListRelationFilter
   }, "id">
 
   export type LocationOrderByWithAggregationInput = {
@@ -71362,7 +70110,7 @@ export namespace Prisma {
     slug?: StringFilter<"Listing"> | string
     title?: StringFilter<"Listing"> | string
     description?: StringFilter<"Listing"> | string
-    coverImage?: StringFilter<"Listing"> | string
+    media?: JsonFilter<"Listing">
     type?: EnumPropertyTypeFilter<"Listing"> | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFilter<"Listing"> | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFilter<"Listing"> | $Enums.PropertyStatus
@@ -71372,9 +70120,8 @@ export namespace Prisma {
     priceBasis?: EnumListingPriceBasisNullableFilter<"Listing"> | $Enums.ListingPriceBasis | null
     priceCurrency?: StringNullableFilter<"Listing"> | string | null
     priceAmount?: DecimalNullableFilter<"Listing"> | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFilter<"Listing"> | string
     geoLocation?: StringFilter<"Listing"> | string
-    structuredLocation?: StringFilter<"Listing"> | string
+    location?: UuidFilter<"Listing"> | string
     details?: JsonNullableFilter<"Listing">
     pricing?: JsonNullableFilter<"Listing">
     roadAccessDetails?: JsonNullableFilter<"Listing">
@@ -71391,7 +70138,7 @@ export namespace Prisma {
     isApproved?: BoolFilter<"Listing"> | boolean
     isDeleted?: BoolFilter<"Listing"> | boolean
     customId?: StringNullableFilter<"Listing"> | string | null
-    media?: ListingMediaListRelationFilter
+    locationRecord?: XOR<LocationScalarRelationFilter, LocationWhereInput>
     houseDetail?: XOR<ListingHouseNullableScalarRelationFilter, ListingHouseWhereInput> | null
     apartmentDetail?: XOR<ListingApartmentNullableScalarRelationFilter, ListingApartmentWhereInput> | null
     landDetail?: XOR<PropertyLandDetailNullableScalarRelationFilter, PropertyLandDetailWhereInput> | null
@@ -71413,7 +70160,7 @@ export namespace Prisma {
     slug?: SortOrder
     title?: SortOrder
     description?: SortOrder
-    coverImage?: SortOrder
+    media?: SortOrder
     type?: SortOrder
     purpose?: SortOrder
     status?: SortOrder
@@ -71423,9 +70170,8 @@ export namespace Prisma {
     priceBasis?: SortOrderInput | SortOrder
     priceCurrency?: SortOrderInput | SortOrder
     priceAmount?: SortOrderInput | SortOrder
-    locationText?: SortOrder
     geoLocation?: SortOrder
-    structuredLocation?: SortOrder
+    location?: SortOrder
     details?: SortOrderInput | SortOrder
     pricing?: SortOrderInput | SortOrder
     roadAccessDetails?: SortOrderInput | SortOrder
@@ -71442,7 +70188,7 @@ export namespace Prisma {
     isApproved?: SortOrder
     isDeleted?: SortOrder
     customId?: SortOrderInput | SortOrder
-    media?: ListingMediaOrderByRelationAggregateInput
+    locationRecord?: LocationOrderByWithRelationInput
     houseDetail?: ListingHouseOrderByWithRelationInput
     apartmentDetail?: ListingApartmentOrderByWithRelationInput
     landDetail?: PropertyLandDetailOrderByWithRelationInput
@@ -71467,7 +70213,7 @@ export namespace Prisma {
     slug?: StringFilter<"Listing"> | string
     title?: StringFilter<"Listing"> | string
     description?: StringFilter<"Listing"> | string
-    coverImage?: StringFilter<"Listing"> | string
+    media?: JsonFilter<"Listing">
     type?: EnumPropertyTypeFilter<"Listing"> | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFilter<"Listing"> | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFilter<"Listing"> | $Enums.PropertyStatus
@@ -71477,9 +70223,8 @@ export namespace Prisma {
     priceBasis?: EnumListingPriceBasisNullableFilter<"Listing"> | $Enums.ListingPriceBasis | null
     priceCurrency?: StringNullableFilter<"Listing"> | string | null
     priceAmount?: DecimalNullableFilter<"Listing"> | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFilter<"Listing"> | string
     geoLocation?: StringFilter<"Listing"> | string
-    structuredLocation?: StringFilter<"Listing"> | string
+    location?: UuidFilter<"Listing"> | string
     details?: JsonNullableFilter<"Listing">
     pricing?: JsonNullableFilter<"Listing">
     roadAccessDetails?: JsonNullableFilter<"Listing">
@@ -71496,7 +70241,7 @@ export namespace Prisma {
     isApproved?: BoolFilter<"Listing"> | boolean
     isDeleted?: BoolFilter<"Listing"> | boolean
     customId?: StringNullableFilter<"Listing"> | string | null
-    media?: ListingMediaListRelationFilter
+    locationRecord?: XOR<LocationScalarRelationFilter, LocationWhereInput>
     houseDetail?: XOR<ListingHouseNullableScalarRelationFilter, ListingHouseWhereInput> | null
     apartmentDetail?: XOR<ListingApartmentNullableScalarRelationFilter, ListingApartmentWhereInput> | null
     landDetail?: XOR<PropertyLandDetailNullableScalarRelationFilter, PropertyLandDetailWhereInput> | null
@@ -71518,7 +70263,7 @@ export namespace Prisma {
     slug?: SortOrder
     title?: SortOrder
     description?: SortOrder
-    coverImage?: SortOrder
+    media?: SortOrder
     type?: SortOrder
     purpose?: SortOrder
     status?: SortOrder
@@ -71528,9 +70273,8 @@ export namespace Prisma {
     priceBasis?: SortOrderInput | SortOrder
     priceCurrency?: SortOrderInput | SortOrder
     priceAmount?: SortOrderInput | SortOrder
-    locationText?: SortOrder
     geoLocation?: SortOrder
-    structuredLocation?: SortOrder
+    location?: SortOrder
     details?: SortOrderInput | SortOrder
     pricing?: SortOrderInput | SortOrder
     roadAccessDetails?: SortOrderInput | SortOrder
@@ -71562,7 +70306,7 @@ export namespace Prisma {
     slug?: StringWithAggregatesFilter<"Listing"> | string
     title?: StringWithAggregatesFilter<"Listing"> | string
     description?: StringWithAggregatesFilter<"Listing"> | string
-    coverImage?: StringWithAggregatesFilter<"Listing"> | string
+    media?: JsonWithAggregatesFilter<"Listing">
     type?: EnumPropertyTypeWithAggregatesFilter<"Listing"> | $Enums.PropertyType
     purpose?: EnumPropertyPurposeWithAggregatesFilter<"Listing"> | $Enums.PropertyPurpose
     status?: EnumPropertyStatusWithAggregatesFilter<"Listing"> | $Enums.PropertyStatus
@@ -71572,9 +70316,8 @@ export namespace Prisma {
     priceBasis?: EnumListingPriceBasisNullableWithAggregatesFilter<"Listing"> | $Enums.ListingPriceBasis | null
     priceCurrency?: StringNullableWithAggregatesFilter<"Listing"> | string | null
     priceAmount?: DecimalNullableWithAggregatesFilter<"Listing"> | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringWithAggregatesFilter<"Listing"> | string
     geoLocation?: StringWithAggregatesFilter<"Listing"> | string
-    structuredLocation?: StringWithAggregatesFilter<"Listing"> | string
+    location?: UuidWithAggregatesFilter<"Listing"> | string
     details?: JsonNullableWithAggregatesFilter<"Listing">
     pricing?: JsonNullableWithAggregatesFilter<"Listing">
     roadAccessDetails?: JsonNullableWithAggregatesFilter<"Listing">
@@ -71639,83 +70382,6 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"PropertyLink"> | string
     primaryId?: StringWithAggregatesFilter<"PropertyLink"> | string
     secondaryId?: StringWithAggregatesFilter<"PropertyLink"> | string
-  }
-
-  export type ListingMediaWhereInput = {
-    AND?: ListingMediaWhereInput | ListingMediaWhereInput[]
-    OR?: ListingMediaWhereInput[]
-    NOT?: ListingMediaWhereInput | ListingMediaWhereInput[]
-    id?: StringFilter<"ListingMedia"> | string
-    propertyId?: StringFilter<"ListingMedia"> | string
-    type?: StringFilter<"ListingMedia"> | string
-    url?: StringFilter<"ListingMedia"> | string
-    alt?: StringFilter<"ListingMedia"> | string
-    sortOrder?: IntFilter<"ListingMedia"> | number
-    isPrimary?: BoolFilter<"ListingMedia"> | boolean
-    createdAt?: DateTimeFilter<"ListingMedia"> | Date | string
-    isDeleted?: BoolFilter<"ListingMedia"> | boolean
-    property?: XOR<ListingScalarRelationFilter, ListingWhereInput>
-  }
-
-  export type ListingMediaOrderByWithRelationInput = {
-    id?: SortOrder
-    propertyId?: SortOrder
-    type?: SortOrder
-    url?: SortOrder
-    alt?: SortOrder
-    sortOrder?: SortOrder
-    isPrimary?: SortOrder
-    createdAt?: SortOrder
-    isDeleted?: SortOrder
-    property?: ListingOrderByWithRelationInput
-  }
-
-  export type ListingMediaWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: ListingMediaWhereInput | ListingMediaWhereInput[]
-    OR?: ListingMediaWhereInput[]
-    NOT?: ListingMediaWhereInput | ListingMediaWhereInput[]
-    propertyId?: StringFilter<"ListingMedia"> | string
-    type?: StringFilter<"ListingMedia"> | string
-    url?: StringFilter<"ListingMedia"> | string
-    alt?: StringFilter<"ListingMedia"> | string
-    sortOrder?: IntFilter<"ListingMedia"> | number
-    isPrimary?: BoolFilter<"ListingMedia"> | boolean
-    createdAt?: DateTimeFilter<"ListingMedia"> | Date | string
-    isDeleted?: BoolFilter<"ListingMedia"> | boolean
-    property?: XOR<ListingScalarRelationFilter, ListingWhereInput>
-  }, "id">
-
-  export type ListingMediaOrderByWithAggregationInput = {
-    id?: SortOrder
-    propertyId?: SortOrder
-    type?: SortOrder
-    url?: SortOrder
-    alt?: SortOrder
-    sortOrder?: SortOrder
-    isPrimary?: SortOrder
-    createdAt?: SortOrder
-    isDeleted?: SortOrder
-    _count?: ListingMediaCountOrderByAggregateInput
-    _avg?: ListingMediaAvgOrderByAggregateInput
-    _max?: ListingMediaMaxOrderByAggregateInput
-    _min?: ListingMediaMinOrderByAggregateInput
-    _sum?: ListingMediaSumOrderByAggregateInput
-  }
-
-  export type ListingMediaScalarWhereWithAggregatesInput = {
-    AND?: ListingMediaScalarWhereWithAggregatesInput | ListingMediaScalarWhereWithAggregatesInput[]
-    OR?: ListingMediaScalarWhereWithAggregatesInput[]
-    NOT?: ListingMediaScalarWhereWithAggregatesInput | ListingMediaScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"ListingMedia"> | string
-    propertyId?: StringWithAggregatesFilter<"ListingMedia"> | string
-    type?: StringWithAggregatesFilter<"ListingMedia"> | string
-    url?: StringWithAggregatesFilter<"ListingMedia"> | string
-    alt?: StringWithAggregatesFilter<"ListingMedia"> | string
-    sortOrder?: IntWithAggregatesFilter<"ListingMedia"> | number
-    isPrimary?: BoolWithAggregatesFilter<"ListingMedia"> | boolean
-    createdAt?: DateTimeWithAggregatesFilter<"ListingMedia"> | Date | string
-    isDeleted?: BoolWithAggregatesFilter<"ListingMedia"> | boolean
   }
 
   export type ListingHouseWhereInput = {
@@ -75380,6 +74046,7 @@ export namespace Prisma {
     status?: string
     parent?: LocationCreateNestedOneWithoutChildrenInput
     children?: LocationCreateNestedManyWithoutParentInput
+    listings?: ListingCreateNestedManyWithoutLocationRecordInput
   }
 
   export type LocationUncheckedCreateInput = {
@@ -75391,6 +74058,7 @@ export namespace Prisma {
     postalCode?: string | null
     status?: string
     children?: LocationUncheckedCreateNestedManyWithoutParentInput
+    listings?: ListingUncheckedCreateNestedManyWithoutLocationRecordInput
   }
 
   export type LocationUpdateInput = {
@@ -75402,6 +74070,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     parent?: LocationUpdateOneWithoutChildrenNestedInput
     children?: LocationUpdateManyWithoutParentNestedInput
+    listings?: ListingUpdateManyWithoutLocationRecordNestedInput
   }
 
   export type LocationUncheckedUpdateInput = {
@@ -75413,6 +74082,7 @@ export namespace Prisma {
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     children?: LocationUncheckedUpdateManyWithoutParentNestedInput
+    listings?: ListingUncheckedUpdateManyWithoutLocationRecordNestedInput
   }
 
   export type LocationCreateManyInput = {
@@ -75665,7 +74335,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -75675,9 +74345,7 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -75694,7 +74362,7 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaCreateNestedManyWithoutPropertyInput
+    locationRecord: LocationCreateNestedOneWithoutListingsInput
     houseDetail?: ListingHouseCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
@@ -75716,7 +74384,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -75726,9 +74394,8 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
+    location: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -75745,7 +74412,6 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaUncheckedCreateNestedManyWithoutPropertyInput
     houseDetail?: ListingHouseUncheckedCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
@@ -75767,7 +74433,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -75777,9 +74443,7 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -75796,7 +74460,7 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUpdateManyWithoutPropertyNestedInput
+    locationRecord?: LocationUpdateOneRequiredWithoutListingsNestedInput
     houseDetail?: ListingHouseUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
@@ -75818,7 +74482,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -75828,9 +74492,8 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -75847,7 +74510,6 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUncheckedUpdateManyWithoutPropertyNestedInput
     houseDetail?: ListingHouseUncheckedUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
@@ -75869,7 +74531,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -75879,9 +74541,8 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
+    location: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -75905,7 +74566,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -75915,9 +74576,7 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -75941,7 +74600,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -75951,9 +74610,8 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -76010,89 +74668,6 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     primaryId?: StringFieldUpdateOperationsInput | string
     secondaryId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type ListingMediaCreateInput = {
-    id?: string
-    type: string
-    url: string
-    alt: string
-    sortOrder?: number
-    isPrimary?: boolean
-    createdAt?: Date | string
-    isDeleted?: boolean
-    property: ListingCreateNestedOneWithoutMediaInput
-  }
-
-  export type ListingMediaUncheckedCreateInput = {
-    id?: string
-    propertyId: string
-    type: string
-    url: string
-    alt: string
-    sortOrder?: number
-    isPrimary?: boolean
-    createdAt?: Date | string
-    isDeleted?: boolean
-  }
-
-  export type ListingMediaUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
-    alt?: StringFieldUpdateOperationsInput | string
-    sortOrder?: IntFieldUpdateOperationsInput | number
-    isPrimary?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    property?: ListingUpdateOneRequiredWithoutMediaNestedInput
-  }
-
-  export type ListingMediaUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    propertyId?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
-    alt?: StringFieldUpdateOperationsInput | string
-    sortOrder?: IntFieldUpdateOperationsInput | number
-    isPrimary?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type ListingMediaCreateManyInput = {
-    id?: string
-    propertyId: string
-    type: string
-    url: string
-    alt: string
-    sortOrder?: number
-    isPrimary?: boolean
-    createdAt?: Date | string
-    isDeleted?: boolean
-  }
-
-  export type ListingMediaUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
-    alt?: StringFieldUpdateOperationsInput | string
-    sortOrder?: IntFieldUpdateOperationsInput | number
-    isPrimary?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type ListingMediaUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    propertyId?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
-    alt?: StringFieldUpdateOperationsInput | string
-    sortOrder?: IntFieldUpdateOperationsInput | number
-    isPrimary?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ListingHouseCreateInput = {
@@ -80143,12 +78718,22 @@ export namespace Prisma {
     none?: LocationWhereInput
   }
 
+  export type ListingListRelationFilter = {
+    every?: ListingWhereInput
+    some?: ListingWhereInput
+    none?: ListingWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
   }
 
   export type LocationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ListingOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -80604,10 +79189,9 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type ListingMediaListRelationFilter = {
-    every?: ListingMediaWhereInput
-    some?: ListingMediaWhereInput
-    none?: ListingMediaWhereInput
+  export type LocationScalarRelationFilter = {
+    is?: LocationWhereInput
+    isNot?: LocationWhereInput
   }
 
   export type ListingHouseNullableScalarRelationFilter = {
@@ -80672,10 +79256,6 @@ export namespace Prisma {
     none?: PropertyCompetitionMapWhereInput
   }
 
-  export type ListingMediaOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type PropertyPriceOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -80709,7 +79289,7 @@ export namespace Prisma {
     slug?: SortOrder
     title?: SortOrder
     description?: SortOrder
-    coverImage?: SortOrder
+    media?: SortOrder
     type?: SortOrder
     purpose?: SortOrder
     status?: SortOrder
@@ -80719,9 +79299,8 @@ export namespace Prisma {
     priceBasis?: SortOrder
     priceCurrency?: SortOrder
     priceAmount?: SortOrder
-    locationText?: SortOrder
     geoLocation?: SortOrder
-    structuredLocation?: SortOrder
+    location?: SortOrder
     details?: SortOrder
     pricing?: SortOrder
     roadAccessDetails?: SortOrder
@@ -80750,7 +79329,6 @@ export namespace Prisma {
     slug?: SortOrder
     title?: SortOrder
     description?: SortOrder
-    coverImage?: SortOrder
     type?: SortOrder
     purpose?: SortOrder
     status?: SortOrder
@@ -80760,9 +79338,8 @@ export namespace Prisma {
     priceBasis?: SortOrder
     priceCurrency?: SortOrder
     priceAmount?: SortOrder
-    locationText?: SortOrder
     geoLocation?: SortOrder
-    structuredLocation?: SortOrder
+    location?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isFeatured?: SortOrder
@@ -80776,7 +79353,6 @@ export namespace Prisma {
     slug?: SortOrder
     title?: SortOrder
     description?: SortOrder
-    coverImage?: SortOrder
     type?: SortOrder
     purpose?: SortOrder
     status?: SortOrder
@@ -80786,9 +79362,8 @@ export namespace Prisma {
     priceBasis?: SortOrder
     priceCurrency?: SortOrder
     priceAmount?: SortOrder
-    locationText?: SortOrder
     geoLocation?: SortOrder
-    structuredLocation?: SortOrder
+    location?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isFeatured?: SortOrder
@@ -80916,66 +79491,6 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
-  export type ListingMediaCountOrderByAggregateInput = {
-    id?: SortOrder
-    propertyId?: SortOrder
-    type?: SortOrder
-    url?: SortOrder
-    alt?: SortOrder
-    sortOrder?: SortOrder
-    isPrimary?: SortOrder
-    createdAt?: SortOrder
-    isDeleted?: SortOrder
-  }
-
-  export type ListingMediaAvgOrderByAggregateInput = {
-    sortOrder?: SortOrder
-  }
-
-  export type ListingMediaMaxOrderByAggregateInput = {
-    id?: SortOrder
-    propertyId?: SortOrder
-    type?: SortOrder
-    url?: SortOrder
-    alt?: SortOrder
-    sortOrder?: SortOrder
-    isPrimary?: SortOrder
-    createdAt?: SortOrder
-    isDeleted?: SortOrder
-  }
-
-  export type ListingMediaMinOrderByAggregateInput = {
-    id?: SortOrder
-    propertyId?: SortOrder
-    type?: SortOrder
-    url?: SortOrder
-    alt?: SortOrder
-    sortOrder?: SortOrder
-    isPrimary?: SortOrder
-    createdAt?: SortOrder
-    isDeleted?: SortOrder
-  }
-
-  export type ListingMediaSumOrderByAggregateInput = {
-    sortOrder?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
   export type ListingHouseCountOrderByAggregateInput = {
     listingId?: SortOrder
     bedrooms?: SortOrder
@@ -81053,6 +79568,22 @@ export namespace Prisma {
     buildYear?: SortOrder
     area?: SortOrder
     roadAccess?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type ListingApartmentCountOrderByAggregateInput = {
@@ -83212,11 +81743,25 @@ export namespace Prisma {
     connect?: LocationWhereUniqueInput | LocationWhereUniqueInput[]
   }
 
+  export type ListingCreateNestedManyWithoutLocationRecordInput = {
+    create?: XOR<ListingCreateWithoutLocationRecordInput, ListingUncheckedCreateWithoutLocationRecordInput> | ListingCreateWithoutLocationRecordInput[] | ListingUncheckedCreateWithoutLocationRecordInput[]
+    connectOrCreate?: ListingCreateOrConnectWithoutLocationRecordInput | ListingCreateOrConnectWithoutLocationRecordInput[]
+    createMany?: ListingCreateManyLocationRecordInputEnvelope
+    connect?: ListingWhereUniqueInput | ListingWhereUniqueInput[]
+  }
+
   export type LocationUncheckedCreateNestedManyWithoutParentInput = {
     create?: XOR<LocationCreateWithoutParentInput, LocationUncheckedCreateWithoutParentInput> | LocationCreateWithoutParentInput[] | LocationUncheckedCreateWithoutParentInput[]
     connectOrCreate?: LocationCreateOrConnectWithoutParentInput | LocationCreateOrConnectWithoutParentInput[]
     createMany?: LocationCreateManyParentInputEnvelope
     connect?: LocationWhereUniqueInput | LocationWhereUniqueInput[]
+  }
+
+  export type ListingUncheckedCreateNestedManyWithoutLocationRecordInput = {
+    create?: XOR<ListingCreateWithoutLocationRecordInput, ListingUncheckedCreateWithoutLocationRecordInput> | ListingCreateWithoutLocationRecordInput[] | ListingUncheckedCreateWithoutLocationRecordInput[]
+    connectOrCreate?: ListingCreateOrConnectWithoutLocationRecordInput | ListingCreateOrConnectWithoutLocationRecordInput[]
+    createMany?: ListingCreateManyLocationRecordInputEnvelope
+    connect?: ListingWhereUniqueInput | ListingWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -83251,6 +81796,20 @@ export namespace Prisma {
     deleteMany?: LocationScalarWhereInput | LocationScalarWhereInput[]
   }
 
+  export type ListingUpdateManyWithoutLocationRecordNestedInput = {
+    create?: XOR<ListingCreateWithoutLocationRecordInput, ListingUncheckedCreateWithoutLocationRecordInput> | ListingCreateWithoutLocationRecordInput[] | ListingUncheckedCreateWithoutLocationRecordInput[]
+    connectOrCreate?: ListingCreateOrConnectWithoutLocationRecordInput | ListingCreateOrConnectWithoutLocationRecordInput[]
+    upsert?: ListingUpsertWithWhereUniqueWithoutLocationRecordInput | ListingUpsertWithWhereUniqueWithoutLocationRecordInput[]
+    createMany?: ListingCreateManyLocationRecordInputEnvelope
+    set?: ListingWhereUniqueInput | ListingWhereUniqueInput[]
+    disconnect?: ListingWhereUniqueInput | ListingWhereUniqueInput[]
+    delete?: ListingWhereUniqueInput | ListingWhereUniqueInput[]
+    connect?: ListingWhereUniqueInput | ListingWhereUniqueInput[]
+    update?: ListingUpdateWithWhereUniqueWithoutLocationRecordInput | ListingUpdateWithWhereUniqueWithoutLocationRecordInput[]
+    updateMany?: ListingUpdateManyWithWhereWithoutLocationRecordInput | ListingUpdateManyWithWhereWithoutLocationRecordInput[]
+    deleteMany?: ListingScalarWhereInput | ListingScalarWhereInput[]
+  }
+
   export type LocationUncheckedUpdateManyWithoutParentNestedInput = {
     create?: XOR<LocationCreateWithoutParentInput, LocationUncheckedCreateWithoutParentInput> | LocationCreateWithoutParentInput[] | LocationUncheckedCreateWithoutParentInput[]
     connectOrCreate?: LocationCreateOrConnectWithoutParentInput | LocationCreateOrConnectWithoutParentInput[]
@@ -83263,6 +81822,20 @@ export namespace Prisma {
     update?: LocationUpdateWithWhereUniqueWithoutParentInput | LocationUpdateWithWhereUniqueWithoutParentInput[]
     updateMany?: LocationUpdateManyWithWhereWithoutParentInput | LocationUpdateManyWithWhereWithoutParentInput[]
     deleteMany?: LocationScalarWhereInput | LocationScalarWhereInput[]
+  }
+
+  export type ListingUncheckedUpdateManyWithoutLocationRecordNestedInput = {
+    create?: XOR<ListingCreateWithoutLocationRecordInput, ListingUncheckedCreateWithoutLocationRecordInput> | ListingCreateWithoutLocationRecordInput[] | ListingUncheckedCreateWithoutLocationRecordInput[]
+    connectOrCreate?: ListingCreateOrConnectWithoutLocationRecordInput | ListingCreateOrConnectWithoutLocationRecordInput[]
+    upsert?: ListingUpsertWithWhereUniqueWithoutLocationRecordInput | ListingUpsertWithWhereUniqueWithoutLocationRecordInput[]
+    createMany?: ListingCreateManyLocationRecordInputEnvelope
+    set?: ListingWhereUniqueInput | ListingWhereUniqueInput[]
+    disconnect?: ListingWhereUniqueInput | ListingWhereUniqueInput[]
+    delete?: ListingWhereUniqueInput | ListingWhereUniqueInput[]
+    connect?: ListingWhereUniqueInput | ListingWhereUniqueInput[]
+    update?: ListingUpdateWithWhereUniqueWithoutLocationRecordInput | ListingUpdateWithWhereUniqueWithoutLocationRecordInput[]
+    updateMany?: ListingUpdateManyWithWhereWithoutLocationRecordInput | ListingUpdateManyWithWhereWithoutLocationRecordInput[]
+    deleteMany?: ListingScalarWhereInput | ListingScalarWhereInput[]
   }
 
   export type AccountAccessCreateNestedManyWithoutAccountInput = {
@@ -83881,11 +82454,10 @@ export namespace Prisma {
     set: string[]
   }
 
-  export type ListingMediaCreateNestedManyWithoutPropertyInput = {
-    create?: XOR<ListingMediaCreateWithoutPropertyInput, ListingMediaUncheckedCreateWithoutPropertyInput> | ListingMediaCreateWithoutPropertyInput[] | ListingMediaUncheckedCreateWithoutPropertyInput[]
-    connectOrCreate?: ListingMediaCreateOrConnectWithoutPropertyInput | ListingMediaCreateOrConnectWithoutPropertyInput[]
-    createMany?: ListingMediaCreateManyPropertyInputEnvelope
-    connect?: ListingMediaWhereUniqueInput | ListingMediaWhereUniqueInput[]
+  export type LocationCreateNestedOneWithoutListingsInput = {
+    create?: XOR<LocationCreateWithoutListingsInput, LocationUncheckedCreateWithoutListingsInput>
+    connectOrCreate?: LocationCreateOrConnectWithoutListingsInput
+    connect?: LocationWhereUniqueInput
   }
 
   export type ListingHouseCreateNestedOneWithoutPropertyInput = {
@@ -83980,13 +82552,6 @@ export namespace Prisma {
     connectOrCreate?: ListingRepresentativeCreateOrConnectWithoutPropertyInput | ListingRepresentativeCreateOrConnectWithoutPropertyInput[]
     createMany?: ListingRepresentativeCreateManyPropertyInputEnvelope
     connect?: ListingRepresentativeWhereUniqueInput | ListingRepresentativeWhereUniqueInput[]
-  }
-
-  export type ListingMediaUncheckedCreateNestedManyWithoutPropertyInput = {
-    create?: XOR<ListingMediaCreateWithoutPropertyInput, ListingMediaUncheckedCreateWithoutPropertyInput> | ListingMediaCreateWithoutPropertyInput[] | ListingMediaUncheckedCreateWithoutPropertyInput[]
-    connectOrCreate?: ListingMediaCreateOrConnectWithoutPropertyInput | ListingMediaCreateOrConnectWithoutPropertyInput[]
-    createMany?: ListingMediaCreateManyPropertyInputEnvelope
-    connect?: ListingMediaWhereUniqueInput | ListingMediaWhereUniqueInput[]
   }
 
   export type ListingHouseUncheckedCreateNestedOneWithoutPropertyInput = {
@@ -84129,18 +82694,12 @@ export namespace Prisma {
     set?: boolean
   }
 
-  export type ListingMediaUpdateManyWithoutPropertyNestedInput = {
-    create?: XOR<ListingMediaCreateWithoutPropertyInput, ListingMediaUncheckedCreateWithoutPropertyInput> | ListingMediaCreateWithoutPropertyInput[] | ListingMediaUncheckedCreateWithoutPropertyInput[]
-    connectOrCreate?: ListingMediaCreateOrConnectWithoutPropertyInput | ListingMediaCreateOrConnectWithoutPropertyInput[]
-    upsert?: ListingMediaUpsertWithWhereUniqueWithoutPropertyInput | ListingMediaUpsertWithWhereUniqueWithoutPropertyInput[]
-    createMany?: ListingMediaCreateManyPropertyInputEnvelope
-    set?: ListingMediaWhereUniqueInput | ListingMediaWhereUniqueInput[]
-    disconnect?: ListingMediaWhereUniqueInput | ListingMediaWhereUniqueInput[]
-    delete?: ListingMediaWhereUniqueInput | ListingMediaWhereUniqueInput[]
-    connect?: ListingMediaWhereUniqueInput | ListingMediaWhereUniqueInput[]
-    update?: ListingMediaUpdateWithWhereUniqueWithoutPropertyInput | ListingMediaUpdateWithWhereUniqueWithoutPropertyInput[]
-    updateMany?: ListingMediaUpdateManyWithWhereWithoutPropertyInput | ListingMediaUpdateManyWithWhereWithoutPropertyInput[]
-    deleteMany?: ListingMediaScalarWhereInput | ListingMediaScalarWhereInput[]
+  export type LocationUpdateOneRequiredWithoutListingsNestedInput = {
+    create?: XOR<LocationCreateWithoutListingsInput, LocationUncheckedCreateWithoutListingsInput>
+    connectOrCreate?: LocationCreateOrConnectWithoutListingsInput
+    upsert?: LocationUpsertWithoutListingsInput
+    connect?: LocationWhereUniqueInput
+    update?: XOR<XOR<LocationUpdateToOneWithWhereWithoutListingsInput, LocationUpdateWithoutListingsInput>, LocationUncheckedUpdateWithoutListingsInput>
   }
 
   export type ListingHouseUpdateOneWithoutPropertyNestedInput = {
@@ -84321,20 +82880,6 @@ export namespace Prisma {
     update?: ListingRepresentativeUpdateWithWhereUniqueWithoutPropertyInput | ListingRepresentativeUpdateWithWhereUniqueWithoutPropertyInput[]
     updateMany?: ListingRepresentativeUpdateManyWithWhereWithoutPropertyInput | ListingRepresentativeUpdateManyWithWhereWithoutPropertyInput[]
     deleteMany?: ListingRepresentativeScalarWhereInput | ListingRepresentativeScalarWhereInput[]
-  }
-
-  export type ListingMediaUncheckedUpdateManyWithoutPropertyNestedInput = {
-    create?: XOR<ListingMediaCreateWithoutPropertyInput, ListingMediaUncheckedCreateWithoutPropertyInput> | ListingMediaCreateWithoutPropertyInput[] | ListingMediaUncheckedCreateWithoutPropertyInput[]
-    connectOrCreate?: ListingMediaCreateOrConnectWithoutPropertyInput | ListingMediaCreateOrConnectWithoutPropertyInput[]
-    upsert?: ListingMediaUpsertWithWhereUniqueWithoutPropertyInput | ListingMediaUpsertWithWhereUniqueWithoutPropertyInput[]
-    createMany?: ListingMediaCreateManyPropertyInputEnvelope
-    set?: ListingMediaWhereUniqueInput | ListingMediaWhereUniqueInput[]
-    disconnect?: ListingMediaWhereUniqueInput | ListingMediaWhereUniqueInput[]
-    delete?: ListingMediaWhereUniqueInput | ListingMediaWhereUniqueInput[]
-    connect?: ListingMediaWhereUniqueInput | ListingMediaWhereUniqueInput[]
-    update?: ListingMediaUpdateWithWhereUniqueWithoutPropertyInput | ListingMediaUpdateWithWhereUniqueWithoutPropertyInput[]
-    updateMany?: ListingMediaUpdateManyWithWhereWithoutPropertyInput | ListingMediaUpdateManyWithWhereWithoutPropertyInput[]
-    deleteMany?: ListingMediaScalarWhereInput | ListingMediaScalarWhereInput[]
   }
 
   export type ListingHouseUncheckedUpdateOneWithoutPropertyNestedInput = {
@@ -84545,9 +83090,9 @@ export namespace Prisma {
     update?: XOR<XOR<ListingUpdateToOneWithWhereWithoutLinkedByInput, ListingUpdateWithoutLinkedByInput>, ListingUncheckedUpdateWithoutLinkedByInput>
   }
 
-  export type ListingCreateNestedOneWithoutMediaInput = {
-    create?: XOR<ListingCreateWithoutMediaInput, ListingUncheckedCreateWithoutMediaInput>
-    connectOrCreate?: ListingCreateOrConnectWithoutMediaInput
+  export type ListingCreateNestedOneWithoutHouseDetailInput = {
+    create?: XOR<ListingCreateWithoutHouseDetailInput, ListingUncheckedCreateWithoutHouseDetailInput>
+    connectOrCreate?: ListingCreateOrConnectWithoutHouseDetailInput
     connect?: ListingWhereUniqueInput
   }
 
@@ -84557,20 +83102,6 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
-  }
-
-  export type ListingUpdateOneRequiredWithoutMediaNestedInput = {
-    create?: XOR<ListingCreateWithoutMediaInput, ListingUncheckedCreateWithoutMediaInput>
-    connectOrCreate?: ListingCreateOrConnectWithoutMediaInput
-    upsert?: ListingUpsertWithoutMediaInput
-    connect?: ListingWhereUniqueInput
-    update?: XOR<XOR<ListingUpdateToOneWithWhereWithoutMediaInput, ListingUpdateWithoutMediaInput>, ListingUncheckedUpdateWithoutMediaInput>
-  }
-
-  export type ListingCreateNestedOneWithoutHouseDetailInput = {
-    create?: XOR<ListingCreateWithoutHouseDetailInput, ListingUncheckedCreateWithoutHouseDetailInput>
-    connectOrCreate?: ListingCreateOrConnectWithoutHouseDetailInput
-    connect?: ListingWhereUniqueInput
   }
 
   export type ListingUpdateOneRequiredWithoutHouseDetailNestedInput = {
@@ -86689,6 +85220,7 @@ export namespace Prisma {
     postalCode?: string | null
     status?: string
     parent?: LocationCreateNestedOneWithoutChildrenInput
+    listings?: ListingCreateNestedManyWithoutLocationRecordInput
   }
 
   export type LocationUncheckedCreateWithoutChildrenInput = {
@@ -86699,6 +85231,7 @@ export namespace Prisma {
     childOf?: string | null
     postalCode?: string | null
     status?: string
+    listings?: ListingUncheckedCreateNestedManyWithoutLocationRecordInput
   }
 
   export type LocationCreateOrConnectWithoutChildrenInput = {
@@ -86714,6 +85247,7 @@ export namespace Prisma {
     postalCode?: string | null
     status?: string
     children?: LocationCreateNestedManyWithoutParentInput
+    listings?: ListingCreateNestedManyWithoutLocationRecordInput
   }
 
   export type LocationUncheckedCreateWithoutParentInput = {
@@ -86724,6 +85258,7 @@ export namespace Prisma {
     postalCode?: string | null
     status?: string
     children?: LocationUncheckedCreateNestedManyWithoutParentInput
+    listings?: ListingUncheckedCreateNestedManyWithoutLocationRecordInput
   }
 
   export type LocationCreateOrConnectWithoutParentInput = {
@@ -86733,6 +85268,112 @@ export namespace Prisma {
 
   export type LocationCreateManyParentInputEnvelope = {
     data: LocationCreateManyParentInput | LocationCreateManyParentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ListingCreateWithoutLocationRecordInput = {
+    id?: string
+    slug: string
+    title: string
+    description: string
+    media?: JsonNullValueInput | InputJsonValue
+    type: $Enums.PropertyType
+    purpose: $Enums.PropertyPurpose
+    status?: $Enums.PropertyStatus
+    currency: string
+    displayPrice: Decimal | DecimalJsLike | number | string
+    displayPriceUnit: string
+    priceBasis?: $Enums.ListingPriceBasis | null
+    priceCurrency?: string | null
+    priceAmount?: Decimal | DecimalJsLike | number | string | null
+    geoLocation: string
+    details?: NullableJsonNullValueInput | InputJsonValue
+    pricing?: NullableJsonNullValueInput | InputJsonValue
+    roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
+    distancing?: NullableJsonNullValueInput | InputJsonValue
+    earnings?: NullableJsonNullValueInput | InputJsonValue
+    landDetails?: NullableJsonNullValueInput | InputJsonValue
+    plots?: NullableJsonNullValueInput | InputJsonValue
+    apartmentDetails?: NullableJsonNullValueInput | InputJsonValue
+    metaTags?: ListingCreatemetaTagsInput | string[]
+    amenities?: ListingCreateamenitiesInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isFeatured?: boolean
+    isApproved?: boolean
+    isDeleted?: boolean
+    customId?: string | null
+    houseDetail?: ListingHouseCreateNestedOneWithoutPropertyInput
+    apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
+    landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
+    commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
+    prices?: PropertyPriceCreateNestedManyWithoutPropertyInput
+    owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
+    documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
+    changes?: ListingChangeCreateNestedManyWithoutPropertyInput
+    links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
+    linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
+    savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
+    views?: ListingsViewCreateNestedManyWithoutPropertyInput
+    competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
+    representatives?: ListingRepresentativeCreateNestedManyWithoutPropertyInput
+  }
+
+  export type ListingUncheckedCreateWithoutLocationRecordInput = {
+    id?: string
+    slug: string
+    title: string
+    description: string
+    media?: JsonNullValueInput | InputJsonValue
+    type: $Enums.PropertyType
+    purpose: $Enums.PropertyPurpose
+    status?: $Enums.PropertyStatus
+    currency: string
+    displayPrice: Decimal | DecimalJsLike | number | string
+    displayPriceUnit: string
+    priceBasis?: $Enums.ListingPriceBasis | null
+    priceCurrency?: string | null
+    priceAmount?: Decimal | DecimalJsLike | number | string | null
+    geoLocation: string
+    details?: NullableJsonNullValueInput | InputJsonValue
+    pricing?: NullableJsonNullValueInput | InputJsonValue
+    roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
+    distancing?: NullableJsonNullValueInput | InputJsonValue
+    earnings?: NullableJsonNullValueInput | InputJsonValue
+    landDetails?: NullableJsonNullValueInput | InputJsonValue
+    plots?: NullableJsonNullValueInput | InputJsonValue
+    apartmentDetails?: NullableJsonNullValueInput | InputJsonValue
+    metaTags?: ListingCreatemetaTagsInput | string[]
+    amenities?: ListingCreateamenitiesInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isFeatured?: boolean
+    isApproved?: boolean
+    isDeleted?: boolean
+    customId?: string | null
+    houseDetail?: ListingHouseUncheckedCreateNestedOneWithoutPropertyInput
+    apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
+    landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
+    commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
+    prices?: PropertyPriceUncheckedCreateNestedManyWithoutPropertyInput
+    owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
+    documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
+    changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
+    links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
+    linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
+    savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
+    views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
+    competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
+    representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutPropertyInput
+  }
+
+  export type ListingCreateOrConnectWithoutLocationRecordInput = {
+    where: ListingWhereUniqueInput
+    create: XOR<ListingCreateWithoutLocationRecordInput, ListingUncheckedCreateWithoutLocationRecordInput>
+  }
+
+  export type ListingCreateManyLocationRecordInputEnvelope = {
+    data: ListingCreateManyLocationRecordInput | ListingCreateManyLocationRecordInput[]
     skipDuplicates?: boolean
   }
 
@@ -86755,6 +85396,7 @@ export namespace Prisma {
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     parent?: LocationUpdateOneWithoutChildrenNestedInput
+    listings?: ListingUpdateManyWithoutLocationRecordNestedInput
   }
 
   export type LocationUncheckedUpdateWithoutChildrenInput = {
@@ -86765,6 +85407,7 @@ export namespace Prisma {
     childOf?: NullableStringFieldUpdateOperationsInput | string | null
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+    listings?: ListingUncheckedUpdateManyWithoutLocationRecordNestedInput
   }
 
   export type LocationUpsertWithWhereUniqueWithoutParentInput = {
@@ -86794,6 +85437,60 @@ export namespace Prisma {
     childOf?: UuidNullableFilter<"Location"> | string | null
     postalCode?: StringNullableFilter<"Location"> | string | null
     status?: StringFilter<"Location"> | string
+  }
+
+  export type ListingUpsertWithWhereUniqueWithoutLocationRecordInput = {
+    where: ListingWhereUniqueInput
+    update: XOR<ListingUpdateWithoutLocationRecordInput, ListingUncheckedUpdateWithoutLocationRecordInput>
+    create: XOR<ListingCreateWithoutLocationRecordInput, ListingUncheckedCreateWithoutLocationRecordInput>
+  }
+
+  export type ListingUpdateWithWhereUniqueWithoutLocationRecordInput = {
+    where: ListingWhereUniqueInput
+    data: XOR<ListingUpdateWithoutLocationRecordInput, ListingUncheckedUpdateWithoutLocationRecordInput>
+  }
+
+  export type ListingUpdateManyWithWhereWithoutLocationRecordInput = {
+    where: ListingScalarWhereInput
+    data: XOR<ListingUpdateManyMutationInput, ListingUncheckedUpdateManyWithoutLocationRecordInput>
+  }
+
+  export type ListingScalarWhereInput = {
+    AND?: ListingScalarWhereInput | ListingScalarWhereInput[]
+    OR?: ListingScalarWhereInput[]
+    NOT?: ListingScalarWhereInput | ListingScalarWhereInput[]
+    id?: StringFilter<"Listing"> | string
+    slug?: StringFilter<"Listing"> | string
+    title?: StringFilter<"Listing"> | string
+    description?: StringFilter<"Listing"> | string
+    media?: JsonFilter<"Listing">
+    type?: EnumPropertyTypeFilter<"Listing"> | $Enums.PropertyType
+    purpose?: EnumPropertyPurposeFilter<"Listing"> | $Enums.PropertyPurpose
+    status?: EnumPropertyStatusFilter<"Listing"> | $Enums.PropertyStatus
+    currency?: StringFilter<"Listing"> | string
+    displayPrice?: DecimalFilter<"Listing"> | Decimal | DecimalJsLike | number | string
+    displayPriceUnit?: StringFilter<"Listing"> | string
+    priceBasis?: EnumListingPriceBasisNullableFilter<"Listing"> | $Enums.ListingPriceBasis | null
+    priceCurrency?: StringNullableFilter<"Listing"> | string | null
+    priceAmount?: DecimalNullableFilter<"Listing"> | Decimal | DecimalJsLike | number | string | null
+    geoLocation?: StringFilter<"Listing"> | string
+    location?: UuidFilter<"Listing"> | string
+    details?: JsonNullableFilter<"Listing">
+    pricing?: JsonNullableFilter<"Listing">
+    roadAccessDetails?: JsonNullableFilter<"Listing">
+    distancing?: JsonNullableFilter<"Listing">
+    earnings?: JsonNullableFilter<"Listing">
+    landDetails?: JsonNullableFilter<"Listing">
+    plots?: JsonNullableFilter<"Listing">
+    apartmentDetails?: JsonNullableFilter<"Listing">
+    metaTags?: StringNullableListFilter<"Listing">
+    amenities?: StringNullableListFilter<"Listing">
+    createdAt?: DateTimeFilter<"Listing"> | Date | string
+    updatedAt?: DateTimeFilter<"Listing"> | Date | string
+    isFeatured?: BoolFilter<"Listing"> | boolean
+    isApproved?: BoolFilter<"Listing"> | boolean
+    isDeleted?: BoolFilter<"Listing"> | boolean
+    customId?: StringNullableFilter<"Listing"> | string | null
   }
 
   export type AccountAccessCreateWithoutAccountInput = {
@@ -87794,36 +86491,31 @@ export namespace Prisma {
     status?: StringNullableFilter<"ListingRepresentative"> | string | null
   }
 
-  export type ListingMediaCreateWithoutPropertyInput = {
+  export type LocationCreateWithoutListingsInput = {
     id?: string
+    title: string
+    slug?: string | null
     type: string
-    url: string
-    alt: string
-    sortOrder?: number
-    isPrimary?: boolean
-    createdAt?: Date | string
-    isDeleted?: boolean
+    postalCode?: string | null
+    status?: string
+    parent?: LocationCreateNestedOneWithoutChildrenInput
+    children?: LocationCreateNestedManyWithoutParentInput
   }
 
-  export type ListingMediaUncheckedCreateWithoutPropertyInput = {
+  export type LocationUncheckedCreateWithoutListingsInput = {
     id?: string
+    title: string
+    slug?: string | null
     type: string
-    url: string
-    alt: string
-    sortOrder?: number
-    isPrimary?: boolean
-    createdAt?: Date | string
-    isDeleted?: boolean
+    childOf?: string | null
+    postalCode?: string | null
+    status?: string
+    children?: LocationUncheckedCreateNestedManyWithoutParentInput
   }
 
-  export type ListingMediaCreateOrConnectWithoutPropertyInput = {
-    where: ListingMediaWhereUniqueInput
-    create: XOR<ListingMediaCreateWithoutPropertyInput, ListingMediaUncheckedCreateWithoutPropertyInput>
-  }
-
-  export type ListingMediaCreateManyPropertyInputEnvelope = {
-    data: ListingMediaCreateManyPropertyInput | ListingMediaCreateManyPropertyInput[]
-    skipDuplicates?: boolean
+  export type LocationCreateOrConnectWithoutListingsInput = {
+    where: LocationWhereUniqueInput
+    create: XOR<LocationCreateWithoutListingsInput, LocationUncheckedCreateWithoutListingsInput>
   }
 
   export type ListingHouseCreateWithoutPropertyInput = {
@@ -88206,35 +86898,37 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ListingMediaUpsertWithWhereUniqueWithoutPropertyInput = {
-    where: ListingMediaWhereUniqueInput
-    update: XOR<ListingMediaUpdateWithoutPropertyInput, ListingMediaUncheckedUpdateWithoutPropertyInput>
-    create: XOR<ListingMediaCreateWithoutPropertyInput, ListingMediaUncheckedCreateWithoutPropertyInput>
+  export type LocationUpsertWithoutListingsInput = {
+    update: XOR<LocationUpdateWithoutListingsInput, LocationUncheckedUpdateWithoutListingsInput>
+    create: XOR<LocationCreateWithoutListingsInput, LocationUncheckedCreateWithoutListingsInput>
+    where?: LocationWhereInput
   }
 
-  export type ListingMediaUpdateWithWhereUniqueWithoutPropertyInput = {
-    where: ListingMediaWhereUniqueInput
-    data: XOR<ListingMediaUpdateWithoutPropertyInput, ListingMediaUncheckedUpdateWithoutPropertyInput>
+  export type LocationUpdateToOneWithWhereWithoutListingsInput = {
+    where?: LocationWhereInput
+    data: XOR<LocationUpdateWithoutListingsInput, LocationUncheckedUpdateWithoutListingsInput>
   }
 
-  export type ListingMediaUpdateManyWithWhereWithoutPropertyInput = {
-    where: ListingMediaScalarWhereInput
-    data: XOR<ListingMediaUpdateManyMutationInput, ListingMediaUncheckedUpdateManyWithoutPropertyInput>
+  export type LocationUpdateWithoutListingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    parent?: LocationUpdateOneWithoutChildrenNestedInput
+    children?: LocationUpdateManyWithoutParentNestedInput
   }
 
-  export type ListingMediaScalarWhereInput = {
-    AND?: ListingMediaScalarWhereInput | ListingMediaScalarWhereInput[]
-    OR?: ListingMediaScalarWhereInput[]
-    NOT?: ListingMediaScalarWhereInput | ListingMediaScalarWhereInput[]
-    id?: StringFilter<"ListingMedia"> | string
-    propertyId?: StringFilter<"ListingMedia"> | string
-    type?: StringFilter<"ListingMedia"> | string
-    url?: StringFilter<"ListingMedia"> | string
-    alt?: StringFilter<"ListingMedia"> | string
-    sortOrder?: IntFilter<"ListingMedia"> | number
-    isPrimary?: BoolFilter<"ListingMedia"> | boolean
-    createdAt?: DateTimeFilter<"ListingMedia"> | Date | string
-    isDeleted?: BoolFilter<"ListingMedia"> | boolean
+  export type LocationUncheckedUpdateWithoutListingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: StringFieldUpdateOperationsInput | string
+    childOf?: NullableStringFieldUpdateOperationsInput | string | null
+    postalCode?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    children?: LocationUncheckedUpdateManyWithoutParentNestedInput
   }
 
   export type ListingHouseUpsertWithoutPropertyInput = {
@@ -88630,7 +87324,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -88640,9 +87334,7 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -88659,7 +87351,7 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaCreateNestedManyWithoutPropertyInput
+    locationRecord: LocationCreateNestedOneWithoutListingsInput
     houseDetail?: ListingHouseCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
@@ -88680,7 +87372,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -88690,9 +87382,8 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
+    location: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -88709,7 +87400,6 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaUncheckedCreateNestedManyWithoutPropertyInput
     houseDetail?: ListingHouseUncheckedCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
@@ -88735,7 +87425,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -88745,9 +87435,7 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -88764,7 +87452,7 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaCreateNestedManyWithoutPropertyInput
+    locationRecord: LocationCreateNestedOneWithoutListingsInput
     houseDetail?: ListingHouseCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
@@ -88785,7 +87473,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -88795,9 +87483,8 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
+    location: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -88814,7 +87501,6 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaUncheckedCreateNestedManyWithoutPropertyInput
     houseDetail?: ListingHouseUncheckedCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
@@ -88851,7 +87537,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -88861,9 +87547,7 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -88880,7 +87564,7 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUpdateManyWithoutPropertyNestedInput
+    locationRecord?: LocationUpdateOneRequiredWithoutListingsNestedInput
     houseDetail?: ListingHouseUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
@@ -88901,7 +87585,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -88911,9 +87595,8 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -88930,7 +87613,6 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUncheckedUpdateManyWithoutPropertyNestedInput
     houseDetail?: ListingHouseUncheckedUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
@@ -88962,7 +87644,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -88972,9 +87654,7 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -88991,7 +87671,7 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUpdateManyWithoutPropertyNestedInput
+    locationRecord?: LocationUpdateOneRequiredWithoutListingsNestedInput
     houseDetail?: ListingHouseUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
@@ -89012,7 +87692,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -89022,225 +87702,8 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
-    details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
-    roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
-    distancing?: NullableJsonNullValueInput | InputJsonValue
-    earnings?: NullableJsonNullValueInput | InputJsonValue
-    landDetails?: NullableJsonNullValueInput | InputJsonValue
-    plots?: NullableJsonNullValueInput | InputJsonValue
-    apartmentDetails?: NullableJsonNullValueInput | InputJsonValue
-    metaTags?: ListingUpdatemetaTagsInput | string[]
-    amenities?: ListingUpdateamenitiesInput | string[]
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isApproved?: BoolFieldUpdateOperationsInput | boolean
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUncheckedUpdateManyWithoutPropertyNestedInput
-    houseDetail?: ListingHouseUncheckedUpdateOneWithoutPropertyNestedInput
-    apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
-    landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
-    commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUncheckedUpdateManyWithoutPropertyNestedInput
-    owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
-    changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
-    links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
-    savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
-    views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
-    competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUncheckedUpdateManyWithoutPropertyNestedInput
-  }
-
-  export type ListingCreateWithoutMediaInput = {
-    id?: string
-    slug: string
-    title: string
-    description: string
-    coverImage: string
-    type: $Enums.PropertyType
-    purpose: $Enums.PropertyPurpose
-    status?: $Enums.PropertyStatus
-    currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
-    priceBasis?: $Enums.ListingPriceBasis | null
-    priceCurrency?: string | null
-    priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
-    geoLocation: string
-    structuredLocation: string
-    details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
-    roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
-    distancing?: NullableJsonNullValueInput | InputJsonValue
-    earnings?: NullableJsonNullValueInput | InputJsonValue
-    landDetails?: NullableJsonNullValueInput | InputJsonValue
-    plots?: NullableJsonNullValueInput | InputJsonValue
-    apartmentDetails?: NullableJsonNullValueInput | InputJsonValue
-    metaTags?: ListingCreatemetaTagsInput | string[]
-    amenities?: ListingCreateamenitiesInput | string[]
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    isFeatured?: boolean
-    isApproved?: boolean
-    isDeleted?: boolean
-    customId?: string | null
-    houseDetail?: ListingHouseCreateNestedOneWithoutPropertyInput
-    apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
-    landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
-    commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceCreateNestedManyWithoutPropertyInput
-    owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
-    changes?: ListingChangeCreateNestedManyWithoutPropertyInput
-    links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
-    linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
-    views?: ListingsViewCreateNestedManyWithoutPropertyInput
-    competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeCreateNestedManyWithoutPropertyInput
-  }
-
-  export type ListingUncheckedCreateWithoutMediaInput = {
-    id?: string
-    slug: string
-    title: string
-    description: string
-    coverImage: string
-    type: $Enums.PropertyType
-    purpose: $Enums.PropertyPurpose
-    status?: $Enums.PropertyStatus
-    currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
-    priceBasis?: $Enums.ListingPriceBasis | null
-    priceCurrency?: string | null
-    priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
-    geoLocation: string
-    structuredLocation: string
-    details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
-    roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
-    distancing?: NullableJsonNullValueInput | InputJsonValue
-    earnings?: NullableJsonNullValueInput | InputJsonValue
-    landDetails?: NullableJsonNullValueInput | InputJsonValue
-    plots?: NullableJsonNullValueInput | InputJsonValue
-    apartmentDetails?: NullableJsonNullValueInput | InputJsonValue
-    metaTags?: ListingCreatemetaTagsInput | string[]
-    amenities?: ListingCreateamenitiesInput | string[]
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    isFeatured?: boolean
-    isApproved?: boolean
-    isDeleted?: boolean
-    customId?: string | null
-    houseDetail?: ListingHouseUncheckedCreateNestedOneWithoutPropertyInput
-    apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
-    landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
-    commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceUncheckedCreateNestedManyWithoutPropertyInput
-    owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
-    changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
-    links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
-    linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
-    views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
-    competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutPropertyInput
-  }
-
-  export type ListingCreateOrConnectWithoutMediaInput = {
-    where: ListingWhereUniqueInput
-    create: XOR<ListingCreateWithoutMediaInput, ListingUncheckedCreateWithoutMediaInput>
-  }
-
-  export type ListingUpsertWithoutMediaInput = {
-    update: XOR<ListingUpdateWithoutMediaInput, ListingUncheckedUpdateWithoutMediaInput>
-    create: XOR<ListingCreateWithoutMediaInput, ListingUncheckedCreateWithoutMediaInput>
-    where?: ListingWhereInput
-  }
-
-  export type ListingUpdateToOneWithWhereWithoutMediaInput = {
-    where?: ListingWhereInput
-    data: XOR<ListingUpdateWithoutMediaInput, ListingUncheckedUpdateWithoutMediaInput>
-  }
-
-  export type ListingUpdateWithoutMediaInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
-    type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
-    purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
-    status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
-    currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
-    priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
-    priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
-    geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
-    details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
-    roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
-    distancing?: NullableJsonNullValueInput | InputJsonValue
-    earnings?: NullableJsonNullValueInput | InputJsonValue
-    landDetails?: NullableJsonNullValueInput | InputJsonValue
-    plots?: NullableJsonNullValueInput | InputJsonValue
-    apartmentDetails?: NullableJsonNullValueInput | InputJsonValue
-    metaTags?: ListingUpdatemetaTagsInput | string[]
-    amenities?: ListingUpdateamenitiesInput | string[]
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isApproved?: BoolFieldUpdateOperationsInput | boolean
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    customId?: NullableStringFieldUpdateOperationsInput | string | null
-    houseDetail?: ListingHouseUpdateOneWithoutPropertyNestedInput
-    apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
-    landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
-    commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUpdateManyWithoutPropertyNestedInput
-    owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
-    changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
-    links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
-    linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
-    views?: ListingsViewUpdateManyWithoutPropertyNestedInput
-    competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUpdateManyWithoutPropertyNestedInput
-  }
-
-  export type ListingUncheckedUpdateWithoutMediaInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
-    type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
-    purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
-    status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
-    currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
-    priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
-    priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
-    priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
-    geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -89266,7 +87729,6 @@ export namespace Prisma {
     documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
-    linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
     savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
@@ -89278,7 +87740,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -89288,9 +87750,7 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -89307,7 +87767,7 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaCreateNestedManyWithoutPropertyInput
+    locationRecord: LocationCreateNestedOneWithoutListingsInput
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
@@ -89328,7 +87788,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -89338,9 +87798,8 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
+    location: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -89357,7 +87816,6 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaUncheckedCreateNestedManyWithoutPropertyInput
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
@@ -89394,7 +87852,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -89404,9 +87862,7 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -89423,7 +87879,7 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUpdateManyWithoutPropertyNestedInput
+    locationRecord?: LocationUpdateOneRequiredWithoutListingsNestedInput
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
@@ -89444,7 +87900,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -89454,9 +87910,8 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -89473,7 +87928,6 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUncheckedUpdateManyWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
@@ -89494,7 +87948,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -89504,9 +87958,7 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -89523,7 +87975,7 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaCreateNestedManyWithoutPropertyInput
+    locationRecord: LocationCreateNestedOneWithoutListingsInput
     houseDetail?: ListingHouseCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
@@ -89544,7 +87996,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -89554,9 +88006,8 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
+    location: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -89573,7 +88024,6 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaUncheckedCreateNestedManyWithoutPropertyInput
     houseDetail?: ListingHouseUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
@@ -89610,7 +88060,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -89620,9 +88070,7 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -89639,7 +88087,7 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUpdateManyWithoutPropertyNestedInput
+    locationRecord?: LocationUpdateOneRequiredWithoutListingsNestedInput
     houseDetail?: ListingHouseUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
@@ -89660,7 +88108,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -89670,9 +88118,8 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -89689,7 +88136,6 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUncheckedUpdateManyWithoutPropertyNestedInput
     houseDetail?: ListingHouseUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
@@ -89710,7 +88156,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -89720,9 +88166,7 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -89739,7 +88183,7 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaCreateNestedManyWithoutPropertyInput
+    locationRecord: LocationCreateNestedOneWithoutListingsInput
     houseDetail?: ListingHouseCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
@@ -89760,7 +88204,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -89770,9 +88214,8 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
+    location: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -89789,7 +88232,6 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaUncheckedCreateNestedManyWithoutPropertyInput
     houseDetail?: ListingHouseUncheckedCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
@@ -89826,7 +88268,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -89836,9 +88278,7 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -89855,7 +88295,7 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUpdateManyWithoutPropertyNestedInput
+    locationRecord?: LocationUpdateOneRequiredWithoutListingsNestedInput
     houseDetail?: ListingHouseUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
@@ -89876,7 +88316,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -89886,9 +88326,8 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -89905,7 +88344,6 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUncheckedUpdateManyWithoutPropertyNestedInput
     houseDetail?: ListingHouseUncheckedUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
@@ -89926,7 +88364,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -89936,9 +88374,7 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -89955,7 +88391,7 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaCreateNestedManyWithoutPropertyInput
+    locationRecord: LocationCreateNestedOneWithoutListingsInput
     houseDetail?: ListingHouseCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
@@ -89976,7 +88412,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -89986,9 +88422,8 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
+    location: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90005,7 +88440,6 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaUncheckedCreateNestedManyWithoutPropertyInput
     houseDetail?: ListingHouseUncheckedCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
@@ -90042,7 +88476,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -90052,9 +88486,7 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90071,7 +88503,7 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUpdateManyWithoutPropertyNestedInput
+    locationRecord?: LocationUpdateOneRequiredWithoutListingsNestedInput
     houseDetail?: ListingHouseUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
@@ -90092,7 +88524,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -90102,9 +88534,8 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90121,7 +88552,6 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUncheckedUpdateManyWithoutPropertyNestedInput
     houseDetail?: ListingHouseUncheckedUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
@@ -90142,7 +88572,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -90152,9 +88582,7 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90171,7 +88599,7 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaCreateNestedManyWithoutPropertyInput
+    locationRecord: LocationCreateNestedOneWithoutListingsInput
     houseDetail?: ListingHouseCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
@@ -90192,7 +88620,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -90202,9 +88630,8 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
+    location: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90221,7 +88648,6 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaUncheckedCreateNestedManyWithoutPropertyInput
     houseDetail?: ListingHouseUncheckedCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
@@ -90258,7 +88684,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -90268,9 +88694,7 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90287,7 +88711,7 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUpdateManyWithoutPropertyNestedInput
+    locationRecord?: LocationUpdateOneRequiredWithoutListingsNestedInput
     houseDetail?: ListingHouseUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
@@ -90308,7 +88732,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -90318,9 +88742,8 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90337,7 +88760,6 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUncheckedUpdateManyWithoutPropertyNestedInput
     houseDetail?: ListingHouseUncheckedUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
@@ -90358,7 +88780,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -90368,9 +88790,7 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90387,7 +88807,7 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaCreateNestedManyWithoutPropertyInput
+    locationRecord: LocationCreateNestedOneWithoutListingsInput
     houseDetail?: ListingHouseCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
@@ -90408,7 +88828,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -90418,9 +88838,8 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
+    location: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90437,7 +88856,6 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaUncheckedCreateNestedManyWithoutPropertyInput
     houseDetail?: ListingHouseUncheckedCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
@@ -90507,7 +88925,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -90517,9 +88935,7 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90536,7 +88952,7 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUpdateManyWithoutPropertyNestedInput
+    locationRecord?: LocationUpdateOneRequiredWithoutListingsNestedInput
     houseDetail?: ListingHouseUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
@@ -90557,7 +88973,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -90567,9 +88983,8 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90586,7 +89001,6 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUncheckedUpdateManyWithoutPropertyNestedInput
     houseDetail?: ListingHouseUncheckedUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
@@ -90646,7 +89060,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -90656,9 +89070,7 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90675,7 +89087,7 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaCreateNestedManyWithoutPropertyInput
+    locationRecord: LocationCreateNestedOneWithoutListingsInput
     houseDetail?: ListingHouseCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
@@ -90696,7 +89108,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -90706,9 +89118,8 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
+    location: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90725,7 +89136,6 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaUncheckedCreateNestedManyWithoutPropertyInput
     houseDetail?: ListingHouseUncheckedCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
@@ -90821,7 +89231,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -90831,9 +89241,7 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90850,7 +89258,7 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUpdateManyWithoutPropertyNestedInput
+    locationRecord?: LocationUpdateOneRequiredWithoutListingsNestedInput
     houseDetail?: ListingHouseUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
@@ -90871,7 +89279,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -90881,9 +89289,8 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -90900,7 +89307,6 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUncheckedUpdateManyWithoutPropertyNestedInput
     houseDetail?: ListingHouseUncheckedUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
@@ -90986,7 +89392,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -90996,9 +89402,7 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -91015,7 +89419,7 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaCreateNestedManyWithoutPropertyInput
+    locationRecord: LocationCreateNestedOneWithoutListingsInput
     houseDetail?: ListingHouseCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
@@ -91036,7 +89440,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -91046,9 +89450,8 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
+    location: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -91065,7 +89468,6 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaUncheckedCreateNestedManyWithoutPropertyInput
     houseDetail?: ListingHouseUncheckedCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
@@ -91102,7 +89504,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -91112,9 +89514,7 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -91131,7 +89531,7 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUpdateManyWithoutPropertyNestedInput
+    locationRecord?: LocationUpdateOneRequiredWithoutListingsNestedInput
     houseDetail?: ListingHouseUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
@@ -91152,7 +89552,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -91162,9 +89562,8 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -91181,7 +89580,6 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUncheckedUpdateManyWithoutPropertyNestedInput
     houseDetail?: ListingHouseUncheckedUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
@@ -91202,7 +89600,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -91212,9 +89610,7 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -91231,7 +89627,7 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaCreateNestedManyWithoutPropertyInput
+    locationRecord: LocationCreateNestedOneWithoutListingsInput
     houseDetail?: ListingHouseCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
@@ -91252,7 +89648,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -91262,9 +89658,8 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
+    location: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -91281,7 +89676,6 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaUncheckedCreateNestedManyWithoutPropertyInput
     houseDetail?: ListingHouseUncheckedCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
@@ -91554,7 +89948,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -91564,9 +89958,7 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -91583,7 +89975,7 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUpdateManyWithoutPropertyNestedInput
+    locationRecord?: LocationUpdateOneRequiredWithoutListingsNestedInput
     houseDetail?: ListingHouseUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
@@ -91604,7 +89996,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -91614,9 +90006,8 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -91633,7 +90024,6 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUncheckedUpdateManyWithoutPropertyNestedInput
     houseDetail?: ListingHouseUncheckedUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
@@ -92419,7 +90809,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -92429,9 +90819,7 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -92448,7 +90836,7 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaCreateNestedManyWithoutPropertyInput
+    locationRecord: LocationCreateNestedOneWithoutListingsInput
     houseDetail?: ListingHouseCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
@@ -92469,7 +90857,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -92479,9 +90867,8 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
+    location: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -92498,7 +90885,6 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaUncheckedCreateNestedManyWithoutPropertyInput
     houseDetail?: ListingHouseUncheckedCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
@@ -92535,7 +90921,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -92545,9 +90931,7 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -92564,7 +90948,7 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUpdateManyWithoutPropertyNestedInput
+    locationRecord?: LocationUpdateOneRequiredWithoutListingsNestedInput
     houseDetail?: ListingHouseUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
@@ -92585,7 +90969,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -92595,9 +90979,8 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -92614,7 +90997,6 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUncheckedUpdateManyWithoutPropertyNestedInput
     houseDetail?: ListingHouseUncheckedUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
@@ -92635,7 +91017,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -92645,9 +91027,7 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -92664,7 +91044,7 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaCreateNestedManyWithoutPropertyInput
+    locationRecord: LocationCreateNestedOneWithoutListingsInput
     houseDetail?: ListingHouseCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
@@ -92685,7 +91065,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -92695,9 +91075,8 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
+    location: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -92714,7 +91093,6 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaUncheckedCreateNestedManyWithoutPropertyInput
     houseDetail?: ListingHouseUncheckedCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
@@ -92751,7 +91129,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -92761,9 +91139,7 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -92780,7 +91156,7 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUpdateManyWithoutPropertyNestedInput
+    locationRecord?: LocationUpdateOneRequiredWithoutListingsNestedInput
     houseDetail?: ListingHouseUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
@@ -92801,7 +91177,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -92811,9 +91187,8 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -92830,7 +91205,6 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUncheckedUpdateManyWithoutPropertyNestedInput
     houseDetail?: ListingHouseUncheckedUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
@@ -95175,7 +93549,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -95185,9 +93559,7 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -95204,7 +93576,7 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaCreateNestedManyWithoutPropertyInput
+    locationRecord: LocationCreateNestedOneWithoutListingsInput
     houseDetail?: ListingHouseCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
@@ -95225,7 +93597,7 @@ export namespace Prisma {
     slug: string
     title: string
     description: string
-    coverImage: string
+    media?: JsonNullValueInput | InputJsonValue
     type: $Enums.PropertyType
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
@@ -95235,9 +93607,8 @@ export namespace Prisma {
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceAmount?: Decimal | DecimalJsLike | number | string | null
-    locationText: string
     geoLocation: string
-    structuredLocation: string
+    location: string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -95254,7 +93625,6 @@ export namespace Prisma {
     isApproved?: boolean
     isDeleted?: boolean
     customId?: string | null
-    media?: ListingMediaUncheckedCreateNestedManyWithoutPropertyInput
     houseDetail?: ListingHouseUncheckedCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
@@ -95330,7 +93700,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -95340,9 +93710,7 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -95359,7 +93727,7 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUpdateManyWithoutPropertyNestedInput
+    locationRecord?: LocationUpdateOneRequiredWithoutListingsNestedInput
     houseDetail?: ListingHouseUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
@@ -95380,7 +93748,7 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
-    coverImage?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
     type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
@@ -95390,9 +93758,8 @@ export namespace Prisma {
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    locationText?: StringFieldUpdateOperationsInput | string
     geoLocation?: StringFieldUpdateOperationsInput | string
-    structuredLocation?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
     pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
@@ -95409,7 +93776,6 @@ export namespace Prisma {
     isApproved?: BoolFieldUpdateOperationsInput | boolean
     isDeleted?: BoolFieldUpdateOperationsInput | boolean
     customId?: NullableStringFieldUpdateOperationsInput | string | null
-    media?: ListingMediaUncheckedUpdateManyWithoutPropertyNestedInput
     houseDetail?: ListingHouseUncheckedUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
@@ -96055,6 +94421,40 @@ export namespace Prisma {
     status?: string
   }
 
+  export type ListingCreateManyLocationRecordInput = {
+    id?: string
+    slug: string
+    title: string
+    description: string
+    media?: JsonNullValueInput | InputJsonValue
+    type: $Enums.PropertyType
+    purpose: $Enums.PropertyPurpose
+    status?: $Enums.PropertyStatus
+    currency: string
+    displayPrice: Decimal | DecimalJsLike | number | string
+    displayPriceUnit: string
+    priceBasis?: $Enums.ListingPriceBasis | null
+    priceCurrency?: string | null
+    priceAmount?: Decimal | DecimalJsLike | number | string | null
+    geoLocation: string
+    details?: NullableJsonNullValueInput | InputJsonValue
+    pricing?: NullableJsonNullValueInput | InputJsonValue
+    roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
+    distancing?: NullableJsonNullValueInput | InputJsonValue
+    earnings?: NullableJsonNullValueInput | InputJsonValue
+    landDetails?: NullableJsonNullValueInput | InputJsonValue
+    plots?: NullableJsonNullValueInput | InputJsonValue
+    apartmentDetails?: NullableJsonNullValueInput | InputJsonValue
+    metaTags?: ListingCreatemetaTagsInput | string[]
+    amenities?: ListingCreateamenitiesInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isFeatured?: boolean
+    isApproved?: boolean
+    isDeleted?: boolean
+    customId?: string | null
+  }
+
   export type LocationUpdateWithoutParentInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -96063,6 +94463,7 @@ export namespace Prisma {
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     children?: LocationUpdateManyWithoutParentNestedInput
+    listings?: ListingUpdateManyWithoutLocationRecordNestedInput
   }
 
   export type LocationUncheckedUpdateWithoutParentInput = {
@@ -96073,6 +94474,7 @@ export namespace Prisma {
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     children?: LocationUncheckedUpdateManyWithoutParentNestedInput
+    listings?: ListingUncheckedUpdateManyWithoutLocationRecordNestedInput
   }
 
   export type LocationUncheckedUpdateManyWithoutParentInput = {
@@ -96082,6 +94484,136 @@ export namespace Prisma {
     type?: StringFieldUpdateOperationsInput | string
     postalCode?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ListingUpdateWithoutLocationRecordInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
+    type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+    purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
+    status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
+    currency?: StringFieldUpdateOperationsInput | string
+    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    displayPriceUnit?: StringFieldUpdateOperationsInput | string
+    priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
+    priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    geoLocation?: StringFieldUpdateOperationsInput | string
+    details?: NullableJsonNullValueInput | InputJsonValue
+    pricing?: NullableJsonNullValueInput | InputJsonValue
+    roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
+    distancing?: NullableJsonNullValueInput | InputJsonValue
+    earnings?: NullableJsonNullValueInput | InputJsonValue
+    landDetails?: NullableJsonNullValueInput | InputJsonValue
+    plots?: NullableJsonNullValueInput | InputJsonValue
+    apartmentDetails?: NullableJsonNullValueInput | InputJsonValue
+    metaTags?: ListingUpdatemetaTagsInput | string[]
+    amenities?: ListingUpdateamenitiesInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isFeatured?: BoolFieldUpdateOperationsInput | boolean
+    isApproved?: BoolFieldUpdateOperationsInput | boolean
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    customId?: NullableStringFieldUpdateOperationsInput | string | null
+    houseDetail?: ListingHouseUpdateOneWithoutPropertyNestedInput
+    apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
+    landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
+    commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
+    prices?: PropertyPriceUpdateManyWithoutPropertyNestedInput
+    owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
+    documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
+    changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
+    links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
+    linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
+    savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
+    views?: ListingsViewUpdateManyWithoutPropertyNestedInput
+    competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
+    representatives?: ListingRepresentativeUpdateManyWithoutPropertyNestedInput
+  }
+
+  export type ListingUncheckedUpdateWithoutLocationRecordInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
+    type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+    purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
+    status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
+    currency?: StringFieldUpdateOperationsInput | string
+    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    displayPriceUnit?: StringFieldUpdateOperationsInput | string
+    priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
+    priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    geoLocation?: StringFieldUpdateOperationsInput | string
+    details?: NullableJsonNullValueInput | InputJsonValue
+    pricing?: NullableJsonNullValueInput | InputJsonValue
+    roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
+    distancing?: NullableJsonNullValueInput | InputJsonValue
+    earnings?: NullableJsonNullValueInput | InputJsonValue
+    landDetails?: NullableJsonNullValueInput | InputJsonValue
+    plots?: NullableJsonNullValueInput | InputJsonValue
+    apartmentDetails?: NullableJsonNullValueInput | InputJsonValue
+    metaTags?: ListingUpdatemetaTagsInput | string[]
+    amenities?: ListingUpdateamenitiesInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isFeatured?: BoolFieldUpdateOperationsInput | boolean
+    isApproved?: BoolFieldUpdateOperationsInput | boolean
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    customId?: NullableStringFieldUpdateOperationsInput | string | null
+    houseDetail?: ListingHouseUncheckedUpdateOneWithoutPropertyNestedInput
+    apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
+    landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
+    commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
+    prices?: PropertyPriceUncheckedUpdateManyWithoutPropertyNestedInput
+    owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
+    documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
+    changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
+    links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
+    linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
+    savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
+    views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
+    competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
+    representatives?: ListingRepresentativeUncheckedUpdateManyWithoutPropertyNestedInput
+  }
+
+  export type ListingUncheckedUpdateManyWithoutLocationRecordInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    media?: JsonNullValueInput | InputJsonValue
+    type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
+    purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
+    status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
+    currency?: StringFieldUpdateOperationsInput | string
+    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    displayPriceUnit?: StringFieldUpdateOperationsInput | string
+    priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
+    priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    priceAmount?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    geoLocation?: StringFieldUpdateOperationsInput | string
+    details?: NullableJsonNullValueInput | InputJsonValue
+    pricing?: NullableJsonNullValueInput | InputJsonValue
+    roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
+    distancing?: NullableJsonNullValueInput | InputJsonValue
+    earnings?: NullableJsonNullValueInput | InputJsonValue
+    landDetails?: NullableJsonNullValueInput | InputJsonValue
+    plots?: NullableJsonNullValueInput | InputJsonValue
+    apartmentDetails?: NullableJsonNullValueInput | InputJsonValue
+    metaTags?: ListingUpdatemetaTagsInput | string[]
+    amenities?: ListingUpdateamenitiesInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isFeatured?: BoolFieldUpdateOperationsInput | boolean
+    isApproved?: BoolFieldUpdateOperationsInput | boolean
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    customId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AccountAccessCreateManyAccountInput = {
@@ -96766,17 +95298,6 @@ export namespace Prisma {
     status?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type ListingMediaCreateManyPropertyInput = {
-    id?: string
-    type: string
-    url: string
-    alt: string
-    sortOrder?: number
-    isPrimary?: boolean
-    createdAt?: Date | string
-    isDeleted?: boolean
-  }
-
   export type PropertyPriceCreateManyPropertyInput = {
     id?: string
     for: string
@@ -96852,39 +95373,6 @@ export namespace Prisma {
     representativeId: string
     role: $Enums.PropertyRepresentativeRole
     status?: string | null
-  }
-
-  export type ListingMediaUpdateWithoutPropertyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
-    alt?: StringFieldUpdateOperationsInput | string
-    sortOrder?: IntFieldUpdateOperationsInput | number
-    isPrimary?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type ListingMediaUncheckedUpdateWithoutPropertyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
-    alt?: StringFieldUpdateOperationsInput | string
-    sortOrder?: IntFieldUpdateOperationsInput | number
-    isPrimary?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type ListingMediaUncheckedUpdateManyWithoutPropertyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    type?: StringFieldUpdateOperationsInput | string
-    url?: StringFieldUpdateOperationsInput | string
-    alt?: StringFieldUpdateOperationsInput | string
-    sortOrder?: IntFieldUpdateOperationsInput | number
-    isPrimary?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type PropertyPriceUpdateWithoutPropertyInput = {

@@ -78,6 +78,7 @@ model Location {
   status     String     @default("active")
   parent     Location?  @relation("LocationHierarchy", fields: [childOf], references: [id], onDelete: SetNull)
   children   Location[] @relation("LocationHierarchy")
+  listings   Listing[]
 
   @@index([childOf], map: "locations_child_of_idx")
   @@index([type], map: "locations_type_idx")
@@ -138,39 +139,39 @@ model Activity {
 // ============================================================================
 
 model Listing {
-  id                 String             @id @default(cuid())
-  slug               String
-  title              String             @db.VarChar(255)
-  description        String
-  media              Json               @default("[]")
-  type               PropertyType
-  purpose            PropertyPurpose
-  status             PropertyStatus     @default(PENDING)
-  currency           String             @db.VarChar(10)
-  displayPrice       Decimal            @db.Decimal(18, 2)
-  displayPriceUnit   String             @db.VarChar(24)
-  priceBasis         ListingPriceBasis?
-  priceCurrency      String?            @db.VarChar(3)
-  priceAmount        Decimal?           @db.Decimal(22, 10)
-  locationText       String             @db.VarChar(255)
-  geoLocation        String             @db.VarChar(63)
-  structuredLocation String
-  details            Json?
-  pricing            Json?
-  roadAccessDetails  Json?
-  distancing         Json?
-  earnings           Json?
-  landDetails        Json?
-  plots              Json?
-  apartmentDetails   Json?
-  metaTags           String[]           @default([])
-  amenities          String[]           @default([])
-  createdAt          DateTime           @default(now())
-  updatedAt          DateTime           @updatedAt
-  isFeatured         Boolean            @default(false)
-  isApproved         Boolean            @default(false)
-  isDeleted          Boolean            @default(false)
-  customId           String?
+  id                String             @id @default(cuid())
+  slug              String
+  title             String             @db.VarChar(255)
+  description       String
+  media             Json               @default("[]")
+  type              PropertyType
+  purpose           PropertyPurpose
+  status            PropertyStatus     @default(PENDING)
+  currency          String             @db.VarChar(10)
+  displayPrice      Decimal            @db.Decimal(18, 2)
+  displayPriceUnit  String             @db.VarChar(24)
+  priceBasis        ListingPriceBasis?
+  priceCurrency     String?            @db.VarChar(3)
+  priceAmount       Decimal?           @db.Decimal(22, 10)
+  geoLocation       String             @db.VarChar(63)
+  location          String             @db.Uuid
+  locationRecord    Location           @relation(fields: [location], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  details           Json?
+  pricing           Json?
+  roadAccessDetails Json?
+  distancing        Json?
+  earnings          Json?
+  landDetails       Json?
+  plots             Json?
+  apartmentDetails  Json?
+  metaTags          String[]           @default([])
+  amenities         String[]           @default([])
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  isFeatured        Boolean            @default(false)
+  isApproved        Boolean            @default(false)
+  isDeleted         Boolean            @default(false)
+  customId          String?
 
   houseDetail      ListingHouse?
   apartmentDetail  ListingApartment?
@@ -191,6 +192,7 @@ model Listing {
   @@index([purpose], map: "listings_purpose_idx")
   @@index([status], map: "listings_status_idx")
   @@index([slug], map: "listings_slug_idx")
+  @@index([location], map: "listings_location_idx")
   @@map("listings")
 }
 

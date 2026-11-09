@@ -158,7 +158,7 @@ exports.Prisma.ListingScalarFieldEnum = {
   slug: 'slug',
   title: 'title',
   description: 'description',
-  coverImage: 'coverImage',
+  media: 'media',
   type: 'type',
   purpose: 'purpose',
   status: 'status',
@@ -168,9 +168,8 @@ exports.Prisma.ListingScalarFieldEnum = {
   priceBasis: 'priceBasis',
   priceCurrency: 'priceCurrency',
   priceAmount: 'priceAmount',
-  locationText: 'locationText',
   geoLocation: 'geoLocation',
-  structuredLocation: 'structuredLocation',
+  location: 'location',
   details: 'details',
   pricing: 'pricing',
   roadAccessDetails: 'roadAccessDetails',
@@ -193,18 +192,6 @@ exports.Prisma.PropertyLinkScalarFieldEnum = {
   id: 'id',
   primaryId: 'primaryId',
   secondaryId: 'secondaryId'
-};
-
-exports.Prisma.ListingMediaScalarFieldEnum = {
-  id: 'id',
-  propertyId: 'propertyId',
-  type: 'type',
-  url: 'url',
-  alt: 'alt',
-  sortOrder: 'sortOrder',
-  isPrimary: 'isPrimary',
-  createdAt: 'createdAt',
-  isDeleted: 'isDeleted'
 };
 
 exports.Prisma.ListingHouseScalarFieldEnum = {
@@ -876,7 +863,6 @@ exports.Prisma.ModelName = {
   Activity: 'Activity',
   Listing: 'Listing',
   PropertyLink: 'PropertyLink',
-  ListingMedia: 'ListingMedia',
   ListingHouse: 'ListingHouse',
   ListingApartment: 'ListingApartment',
   PropertyLandDetail: 'PropertyLandDetail',

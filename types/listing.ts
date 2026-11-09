@@ -297,6 +297,7 @@ export interface Listing {
         basis: ListingPriceBasis | null;
         amount: number | null;
     };
+    locationId: string;
     location: string;
     bedrooms: number;
     bathrooms: number;
@@ -413,6 +414,7 @@ export const CreateListingSchema = z.object({
     apartmentDetails: ApartmentDetailsSchema.optional(),
     apartmentUnits: z.array(ApartmentUnitSchema).optional(),
     // New Detailed Schemas for Form
+    locationId: z.string().uuid({ message: 'Select a location from the location list.' }),
     structuredLocation: StructuredLocationSchema.optional(),
     pricing: PricingSchema.optional(),
     roadAccessDetails: RoadAccessDetailsSchema.optional(),

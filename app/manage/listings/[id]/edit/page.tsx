@@ -160,6 +160,7 @@ function mapCreationDraftToEditableListing(id: string, data: Record<string, any>
         plots: Array.isArray(data.plots) ? data.plots : [],
         apartmentDetails: data.apartmentDetails,
         apartmentUnits: Array.isArray(data.apartmentUnits) ? data.apartmentUnits : [],
+        locationId: data.locationId,
         structuredLocation: data.structuredLocation,
         details: {
             isPrivate: data.isPrivate ?? false,
@@ -638,6 +639,7 @@ export default function EditListingPage() {
                         ? (typeof u.area === 'number' ? { sqm: u.area } : u.area)
                         : undefined,
                 })),
+                locationId: propertyData.locationId,
                 structuredLocation: propertyData.structuredLocation || {},
                 pricing: {
                     ...getListingFormPricing(propertyData),
