@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { addLeadActivity, getVisibleLead, type FollowUpMethod } from '@neup/logica/estate/lead/activity';
+import { addLeadActivity, getVisibleLead, type FollowUpMethod } from '@/services/leads/activity/access';
 import { requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';
 import { mcpError, mcpSuccess, type McpToolServer } from '../../_shared';

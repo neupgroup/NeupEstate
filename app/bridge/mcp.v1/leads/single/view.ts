@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { getLeadById } from '@/services/leads/search';
-import { getVisibleLead } from '@neup/logica/estate/lead/activity';
+import { getVisibleLead } from '@/services/leads/activity/access';
 import { requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';
 import { mcpError, mcpSuccess, type McpToolServer } from '../../_shared';

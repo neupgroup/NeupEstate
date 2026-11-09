@@ -90,8 +90,7 @@ import { logger } from '@neup/logica/logger';
 import { requireIdentity } from '@/services/listings/action-helpers';
 import { requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';
-import { addLeadActivity, getLeadActivities, getVisibleLead, type FollowUpMethod } from '@neup/logica/estate/lead/activity';
-import type { LeadActivityType } from '@/services/leads/activity/create';
+import { addLeadActivity, getLeadActivities, getVisibleLead, type FollowUpMethod, type LeadActivityType } from '@/services/leads/activity/access';
 
 export const dynamic = 'force-dynamic';
 
