@@ -87,7 +87,6 @@ export const PROPERTY_STATUS = {
 
 export const PROPERTY_INCLUDE = {
   locationRecord: { include: { parent: true } },
-  media:           { where: { isDeleted: false }, orderBy: { sortOrder: 'asc' as const } },
   houseDetail:     true,
   apartmentDetail: true,
   landDetail:      true,
