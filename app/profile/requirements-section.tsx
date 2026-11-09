@@ -13,7 +13,7 @@ import { Skeleton } from '@neup/components/ui/skeleton';
 import { Card, CardContent, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Link } from '@neup/components/ui/link';
 import { Alert, AlertDescription, AlertTitle } from '@neup/components/ui/alert';
-import { DisplayCurrency } from '@/components/display-preferences';
+import { DisplayCurrency, DisplayNumber } from '@/components/display-preferences';
 
 function ViewRequirements({ requirements, isLoading }: { requirements: Requirement[], isLoading: boolean }) {
   if (isLoading) {
@@ -42,7 +42,7 @@ function ViewRequirements({ requirements, isLoading }: { requirements: Requireme
         <Card key={req.id}>
           <CardHeader>
             <div className="flex justify-between items-center">
-              <CardTitle>Requirement Profile #{index + 1}</CardTitle>
+              <CardTitle>Requirement Profile #<DisplayNumber value={index + 1} maximumFractionDigits={0} /></CardTitle>
               <Link href={`/profile/requirements?id=${req.id}`}>
                 <Button variant="outlined" size="sm">
                   <Plus className="mr-2 h-4 w-4" />
@@ -129,7 +129,7 @@ export function RequirementsSection({ accountId }: RequirementsSectionProps) {
               Let us know what you're looking for so we can provide better recommendations.
             </p>
           </div>
-          <Link href="/profile/requirements">
+          <Link href="/requirements/new">
             <Button>
               <Plus className="mr-2 h-4 w-4" />
               Add New Requirement

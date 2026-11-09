@@ -12,7 +12,7 @@ import { Activity, Bookmark, Home, Shield, Target } from 'lucide-react';
 import { AccountRefreshButton } from '@/components/manage/account-refresh-button';
 import { DeleteAccountButton } from '@/components/manage/delete-account-button';
 import { fetchApplicationUsers } from "@/services/neupid/application-users";
-import { DisplayCurrency } from '@/components/display-preferences';
+import { DisplayCurrency, DisplayNumber } from '@/components/display-preferences';
 
 type RolePermissionMap = Record<string, unknown>;
 
@@ -272,7 +272,7 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
               <Target className="h-4 w-4" />
               Requirements
               <span className="ml-auto text-sm font-normal text-muted-foreground">
-                {requirements?.length ?? 0} total
+                <DisplayNumber value={requirements?.length ?? 0} maximumFractionDigits={0} /> total
               </span>
             </CardTitle>
           </CardHeader>

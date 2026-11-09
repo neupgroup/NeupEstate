@@ -11,6 +11,7 @@ import { useToast } from '@neup/core/hooks/useToast';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { Form, FormControl, FormItem } from '@/components/ui/form';
+import { useDisplayConfiguration } from '@/components/display-preferences';
 
 const PROPERTY_TYPES = ["House", "Land", "Apartment", "Flat", "Rooms", "Shop Space"] as const;
 const PRESET_LOCATIONS = ["Kathmandu", "Lalitpur", "Bhaktapur", "Pokhara"] as const;
@@ -131,9 +132,15 @@ export function UserRequirementsForm({ initialRequirements, onSave }: UserRequir
     const { toast } = useToast();
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
+    const { preferences, usdRates } = useDisplayConfiguration();
+    const initialDisplayRequirements = initialRequirements ? {
+        ...initialRequirements,
+        minPrice: convertRequirementBudget(initialRequirements.minPrice, 'NPR', preferences.currency, usdRates),
+        maxPrice: convertRequirementBudget(initialRequirements.maxPrice, 'NPR', preferences.currency, usdRates),
+    } : null;
 
     const form = useForm<RequirementsFormValues>({
-        defaultValues: initialRequirements || {
+        defaultValues: initialDisplayRequirements || {
             purpose: 'Buy',
             propertyType: 'House',
             minPrice: undefined,
@@ -149,6 +156,8 @@ export function UserRequirementsForm({ initialRequirements, onSave }: UserRequir
         startTransition(async () => {
              const dataToSave = {
                 ...data,
+                minPrice: convertRequirementBudget(data.minPrice, preferences.currency, 'NPR', usdRates),
+                maxPrice: convertRequirementBudget(data.maxPrice, preferences.currency, 'NPR', usdRates),
                 propertyType: [data.propertyType], // Wrap in array to match schema
             };
             const result = await onSave(dataToSave);
@@ -217,7 +226,7 @@ export function UserRequirementsForm({ initialRequirements, onSave }: UserRequir
                     </div>
 
                     <div className="space-y-2">
-                        <Label className="font-semibold">Budget</Label>
+                        <Label className="font-semibold">Budget ({preferences.currency})</Label>
                         <div className="grid grid-cols-2 gap-4 mt-2">
                             <Input type="number" placeholder="Min Price" {...form.register("minPrice", { setValueAs: v => (v === "" ? undefined : parseInt(v, 10)) })} />
                             <Input type="number" placeholder="Max Price" {...form.register("maxPrice", { setValueAs: v => (v === "" ? undefined : parseInt(v, 10)) })} />
@@ -265,4 +274,18 @@ export function UserRequirementsForm({ initialRequirements, onSave }: UserRequir
             </form>
         </Form>
     );
+}
+
+/** Convert a requirement budget between the selected display currency and stored NPR. */
+function convertRequirementBudget(
+    amount: number | undefined,
+    sourceCurrency: string,
+    targetCurrency: string,
+    usdRates: Record<string, number>,
+): number | undefined {
+    if (amount == null || sourceCurrency === targetCurrency) return amount;
+    const sourceRate = usdRates[sourceCurrency.toUpperCase()];
+    const targetRate = usdRates[targetCurrency.toUpperCase()];
+    if (!sourceRate || !targetRate) return amount;
+    return amount / sourceRate * targetRate;
 }

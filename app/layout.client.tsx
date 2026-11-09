@@ -36,12 +36,6 @@ export function LayoutClient({
         {showGuestBanner && !isAdminPage && !isHomePage && !isCustomBannerPage && <GuestSigninBanner variant="inline" />}
         {children}
         {shouldShowFooter && <FooterLayoutV1 showManagePanelLink={showManagePanelLink ?? false} />}
-        {Object.keys(displayConfiguration.usdRates).length > 1 && (
-          <p className="pb-2 text-center text-[10px] text-muted-foreground">
-            Currency conversions use daily reference rates from{' '}
-            <a href="https://www.exchangerate-api.com" target="_blank" rel="noreferrer" className="underline">ExchangeRate-API</a>.
-          </p>
-        )}
       </SessionProvider>
     </DisplayPreferencesProvider>
   );

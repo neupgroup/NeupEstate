@@ -2,7 +2,7 @@ import { getRequirementByUserId } from '@/services/requirements/get';
 import { Card, CardContent, CardHeader, CardTitle } from '@neup/components/ui/card';
 import { Target } from 'lucide-react';
 import { Badge } from '@neup/components/ui/badge';
-import { DisplayCurrency } from '@/components/display-preferences';
+import { DisplayCurrency, DisplayNumber } from '@/components/display-preferences';
 
 export default async function AccountRequirementsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: accountId } = await params;
@@ -15,7 +15,7 @@ export default async function AccountRequirementsPage({ params }: { params: Prom
           <Target className="h-4 w-4" />
           Requirements
           <span className="ml-auto text-sm font-normal text-muted-foreground">
-            {requirements?.length ?? 0} total
+            <DisplayNumber value={requirements?.length ?? 0} maximumFractionDigits={0} /> total
           </span>
         </CardTitle>
       </CardHeader>
