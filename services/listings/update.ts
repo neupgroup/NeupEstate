@@ -104,7 +104,7 @@ function buildCoreData(d: Partial<CreateListingInput> & Record<string, any>) {
     slug:              d.slug ? d.slug.substring(0, 120) : undefined,
     title:             truncate(d.title, 255),
     description:       d.description ?? '',
-    coverImage:        truncate(Array.isArray(d.images) && d.images[0] ? d.images[0] : '', 255),
+    media:             normalizeListingMedia(d.images),
     type:              mapTypeToEnum(d.category),
     purpose:           mapPurposeToEnum(d.purpose),
     status:            mapStatusToEnum(d.status),
@@ -331,6 +331,11 @@ function normalizeListingImages(images: unknown): string[] {
   return [];
 }
 
+// Convert form image URLs to the JSON shape stored on listings.media.
+function normalizeListingMedia(images: unknown): Array<{ type: string; url: string; alt: string }> {
+  return normalizeListingImages(images).map((url) => ({ type: 'image', url, alt: '' }));
+}
+
 
 
 /**
@@ -386,13 +391,7 @@ function normalizeListingOwners(owners: unknown): NonNullable<CreateListingInput
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
 export async function upsertMedia(propertyId: string, images: unknown) {
-  const normalizedImages = normalizeListingImages(images);
-  await prisma.listingMedia.deleteMany({ where: { propertyId } });
-  if (normalizedImages.length > 0) {
-    await prisma.listingMedia.createMany({
-      data: normalizedImages.map((url, i) => ({ propertyId, url, type: 'photo', alt: '', sortOrder: i, isPrimary: i === 0 })),
-    });
-  }
+  await prisma.listing.update({ where: { id: propertyId }, data: { media: normalizeListingMedia(images) } });
 }
 
 
@@ -513,9 +512,5 @@ export async function updateListingWithExtractedData(id: string, d: ExtractedLis
 export async function updateListingImages(id: string, images: string[]): Promise<void> {
   try {
     await upsertMedia(id, images);
-    await prisma.listing.update({
-      where: { id },
-      data: { coverImage: normalizeListingImages(images)[0] ?? '' },
-    });
   } catch (e) { await logger().type(`updatePropertyImages ${id}`).data({ error: String(e), details: {} }).log(); throw new Error('Failed to update images.'); }
 }

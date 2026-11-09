@@ -62,6 +62,7 @@ const DEFAULT_DRAFT_PROPERTY_VALUES: UpdateListingFormValues = {
     plots: [],
     apartmentDetails: {},
     apartmentUnits: [],
+    locationId: '',
     structuredLocation: {},
     pricing: {
         currency: 'USD',

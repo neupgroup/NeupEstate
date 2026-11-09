@@ -450,7 +450,9 @@ export function mapRecord(record: any): Listing {
   const purpose  = mapPurposeFromEnum(record.purpose) as Listing['purpose'];
   const category = mapTypeFromEnum(record.type)       as Listing['category'];
 
-  const mediaImages: string[] = (record.media ?? []).map((m: any) => m.url).filter(Boolean);
+  const mediaImages: string[] = Array.isArray(record.media)
+    ? record.media.map((item: any) => typeof item === 'string' ? item : item?.url).filter((url: unknown): url is string => typeof url === 'string' && url.length > 0)
+    : [];
   const images = mediaImages;
 
   const priceAmount = record.priceAmount == null ? null : Number(record.priceAmount);
