@@ -348,7 +348,7 @@ Fields:
 > priceAmount: numeric(22,10);
 > locationText: varchar(255) NOT NULL;
 > geoLocation: varchar(63) NOT NULL;
-> structuredLocation: text NOT NULL;
+> location: uuid NOT NULL, references locations.id, ON DELETE RESTRICT, ON UPDATE CASCADE;
 > pricing: jsonb;
 > roadAccessDetails: jsonb;
 > distancing: jsonb;
