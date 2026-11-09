@@ -205,23 +205,6 @@ model PropertyLink {
   @@map("property_link")
 }
 
-model ListingMedia {
-  id         String   @id @default(cuid())
-  propertyId String
-  type       String
-  url        String   @db.VarChar(500)
-  alt        String   @db.VarChar(255)
-  sortOrder  Int      @default(0)
-  isPrimary  Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  isDeleted  Boolean  @default(false)
-
-  property   Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-
-  @@index([propertyId], map: "listings_media_property_id_idx")
-  @@map("listings_media")
-}
-
 model ListingHouse {
   listingId        String   @id @unique(map: "listings_house_listing_id_key")
   bedrooms         Int

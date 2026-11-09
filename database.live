@@ -461,18 +461,6 @@ Fields:
 > working_profile_id: text, references accounts.id;
 > modified_on: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 
-Table: listings_media, Model: ListingMedia
-Fields:
-> id: text PK, NOT NULL;
-> propertyId: text NOT NULL, references listings.id;
-> type: text NOT NULL;
-> url: varchar(500) NOT NULL;
-> alt: varchar(255) NOT NULL;
-> sortOrder: integer NOT NULL, default: 0;
-> isPrimary: boolean NOT NULL, default: false;
-> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
-> isDeleted: boolean NOT NULL, default: false;
-
 Table: property_owner, Model: PropertyOwner
 Fields:
 > id: text PK, NOT NULL;
