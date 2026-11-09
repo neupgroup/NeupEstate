@@ -336,7 +336,7 @@ Fields:
 > slug: text NOT NULL, INDEX listings_slug_idx(slug);
 > title: varchar(255) NOT NULL;
 > description: text NOT NULL;
-> coverImage: varchar(255) NOT NULL;
+> media: jsonb NOT NULL, default: '[]'::jsonb; array of {type, url, alt};
 > type: PropertyType NOT NULL;
 > purpose: PropertyPurpose NOT NULL;
 > status: enum(PENDING, ACTIVE, SOLD, RENTED, ARCHIVED, AWAITING_CREATION, AWAITING_DELETION) NOT NULL, default: 'PENDING';

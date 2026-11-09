@@ -142,7 +142,7 @@ model Listing {
   slug               String
   title              String          @db.VarChar(255)
   description        String
-  coverImage         String          @db.VarChar(255)
+  media              Json            @default("[]")
   type               PropertyType
   purpose            PropertyPurpose
   status             PropertyStatus  @default(PENDING)
@@ -172,7 +172,6 @@ model Listing {
   isDeleted          Boolean         @default(false)
   customId           String?
 
-  media              ListingMedia[]
   houseDetail        ListingHouse?
   apartmentDetail    ListingApartment?
   landDetail         PropertyLandDetail?
