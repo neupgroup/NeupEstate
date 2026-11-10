@@ -6,7 +6,6 @@ import { recommendListings as recommendListingsFlow } from "@/services/intellige
 import { extractAndSaveListing as extractAndSaveListingFlow, type ExtractListingDetailsOutput } from "@/services/intelligence/extract-listing-details-flow";
 import { getPaginatedListings } from '@/services/listings/list';
 import { updateListingImages } from '@/services/listings/update';
-import { logger } from "@neup/logica/logger";
 import type { NaturalLanguageSearchOutput, Listing, ListingFilters } from "@/types";
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
 import { getAccountPreferences } from '@/services/accounts/single/preferences';
@@ -28,7 +27,6 @@ export async function naturalLanguageListingSearch(
     const result = await naturalLanguageListingSearchFlow({ query });
     return { success: true, data: result, error: null };
   } catch (e) {
-    await logger().type('naturalLanguagePropertySearch').data({ error: String(e), details: {} }).log();
     return { success: false, data: null, error: "An AI error occurred during the search. Please try again." };
   }
 }
@@ -52,7 +50,6 @@ export async function recommendListings(userId: string): Promise<{ success: bool
         const result = await recommendListingsFlow(preferences);
         return { success: true, data: result.filters, error: null };
     } catch (e) {
-        await logger().type('recommendProperties').data({ error: String(e), details: {} }).log();
         return { success: false, data: null, error: "Could not fetch AI recommendations." };
     }
 }
@@ -112,7 +109,6 @@ export async function searchListings(
 
     return { success: true, data: { ...mergedResult, appliedFilters }, error: null };
   } catch (e: any) {
-    await logger().type('searchProperties').data({ error: String(e), details: {} }).log();
     return { success: false, data: null, error: e.message || "An error occurred during the search." };
   }
 }
@@ -151,7 +147,6 @@ async function getNiaFiltersWithinSearchTimeout(query: string): Promise<ListingF
   });
   const niaSearch = parseListingSearchQuery(query)
     .catch((error) => {
-      console.error('Failed to parse property search query with Nia:', error);
       return null;
     });
 
@@ -261,7 +256,6 @@ export async function extractAndSaveListing(
                 error: "Property details were extracted, but no database record ID was returned.",
             });
         } catch (e: any) {
-            await logger().type(`extractAndSaveListing (URL: ${url})`).data({ error: String(e), details: {} }).log();
             results.push({ url, error: e.message || "An unknown error occurred." });
         }
     }
@@ -270,7 +264,6 @@ export async function extractAndSaveListing(
         revalidatePath('/manage/listings');
         revalidatePath('/listings');
     } catch (error) {
-        console.error('Failed to revalidate property pages after manual import:', error);
     }
 
     return { success: true, results };
@@ -292,7 +285,6 @@ export async function applyFetchedImagesToListingAction(
     revalidatePath(`/manage/listings/${propertyId}/edit`);
     return { success: true };
   } catch (e: any) {
-    await logger().type(`applyFetchedImagesToPropertyAction (ID: ${propertyId})`).data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message };
   }
 }

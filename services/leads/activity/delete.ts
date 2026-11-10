@@ -1,7 +1,6 @@
 'use server';
 
 import { prisma } from '@neup/core/database/prisma';
-import { logger } from "@neup/logica/logger";
 
 // ::neup.documentation::lead-activity-delete-service
 // ::private
@@ -19,7 +18,6 @@ export async function deleteLeadActivity(id: string): Promise<string> {
 
         return id;
     } catch (e) {
-        await logger().type(`deleteLeadActivity ${id}`).data({ error: String(e), details: {} }).log();
         throw new Error('Failed to delete lead activity.');
     }
 }

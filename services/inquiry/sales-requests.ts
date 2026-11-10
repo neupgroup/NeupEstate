@@ -3,7 +3,6 @@
 
 import { prisma } from '@neup/core/database/prisma';
 import type { SalesRequest, CreateSalesRequestFormValues } from '@/types';
-import { logger } from "@neup/logica/logger";
 
 
 export async function createSalesRequest(data: CreateSalesRequestFormValues): Promise<string> {
@@ -22,7 +21,6 @@ export async function createSalesRequest(data: CreateSalesRequestFormValues): Pr
         });
         return request.id;
     } catch (error) {
-        await logger().type('createSalesRequest').data({ error: String(error), details: {} }).log();
         throw new Error('Failed to submit sales request.');
     }
 }
@@ -42,7 +40,6 @@ export async function getSalesRequests({ limit = 20, offset = 0 }: { limit?: num
             createdAt: r.createdAt.toISOString(),
         }));
     } catch (error) {
-        await logger().type('getSalesRequests').data({ error: String(error), details: {} }).log();
         return [];
     }
 }

@@ -9,7 +9,6 @@ export default async function ManageSavedListingsPage() {
     try {
         latestSaved = await getLatestSavedListings(20);
     } catch (e) {
-        console.error("Failed to fetch latest saved properties:", e);
     }
     
     return <SavedListingsDashboard initialSavedListings={latestSaved} />;

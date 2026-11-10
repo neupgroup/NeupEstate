@@ -16,7 +16,6 @@ non-preview imports.
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { importListingsFromJson, type ListingJsonImportStructure } from '@/services/listings/import';
-import { logger } from "@neup/logica/logger";
 import { PERMISSIONS } from '@/services/permission-names';;
 import { requirePermission } from '@/services/permissions';;
 
@@ -65,7 +64,6 @@ export async function importJsonListingsAction(input: {
 
     return result;
   } catch (error) {
-    await logger().type('importJsonPropertiesAction').data({ error: String(error), details: {} }).log();
     return {
       success: false,
       importedCount: 0,

@@ -11,8 +11,6 @@ import { headers } from "next/headers";
 import { prisma } from "@neup/core/database/prisma";
 import { getAccountId } from "@/services/auth/account";
 
-import { logger } from "@neup/logica/logger";
-
 const ENROLL_AGENT_ROLE_URL = "https://neupgroup.com/account/bridge/api.v1/roles/enroll";
 const AGENT_APP_ID = "neupestate";
 const AGENT_ROLE_ID = "neupestate.660724c77.individual-beagent";
@@ -88,14 +86,11 @@ export async function enrollCurrentAccountAsAgent(): Promise<AgentEnrollmentResu
       cache: "no-store",
     });
   } catch (error: any) {
-    await logger().type('agent-registration:enroll').data({ error: error?.message ?? 'network_error' }).log();
     return { success: false, error: error?.message ?? "Unable to contact the enrollment service." };
   }
 
   const responseText = await response.text();
   const responseBody = safeJsonParse(responseText);
-
-  await logger().type('agent-registration:enroll').data({ status: response.status, response: responseBody }).log();
 
   if (!response.ok) {
     return {

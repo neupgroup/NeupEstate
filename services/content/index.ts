@@ -1,7 +1,6 @@
 "use server";
 
 import { getListingById } from '@/services/listings';
-import { logger } from "@neup/logica/logger";
 import type { CreateInquiryFormValues, InquiryStatus, UpdatePromptFormValues, CreatePromptFormValues, CreateAIModelFormValues, UpdateAIModelFormValues } from "@/types";
 import { CreateInquirySchema, UpdatePromptSchema, CreatePromptSchema, CreateAIModelSchema, UpdateAIModelSchema } from "@/types";
 import { revalidatePath } from "next/cache";
@@ -32,7 +31,6 @@ export async function suggestListingQuestionsAction(
 
     return { success: true, questions: result.questions };
   } catch (e: any) {
-    await logger().type(`suggestPropertyQuestionsAction (ID: ${propertyId})`).data({ error: String(e), details: {} }).log();
     return { success: false, error: "Failed to generate suggested questions." };
   }
 }
@@ -83,7 +81,6 @@ export async function createPromptAction(
     if (e instanceof z.ZodError) {
       return { success: false, error: e.message };
     }
-    await logger().type(`createPromptAction (ID: ${data.id})`).data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message || "An unexpected server error occurred." };
   }
 }
@@ -100,7 +97,6 @@ export async function updatePromptAction(
     if (e instanceof z.ZodError) {
       return { success: false, error: e.message };
     }
-    await logger().type(`updatePromptAction (ID: ${data.id})`).data({ error: String(e), details: {} }).log();
     return { success: false, error: "An unexpected server error occurred." };
   }
 }
@@ -111,7 +107,6 @@ export async function deletePromptAction(promptId: string): Promise<{ success: b
     revalidatePath('/manage/settings/ai-configuration');
     return { success: true };
   } catch (error: any) {
-    await logger().type(`deletePromptAction (ID: ${promptId})`).data({ error: String(error), details: {} }).log();
     return { success: false, error: (error as Error).message || "Failed to delete prompt." };
   }
 }
@@ -127,7 +122,6 @@ export async function createModelAction(data: CreateAIModelFormValues): Promise<
     if (e instanceof z.ZodError) {
       return { success: false, error: e.message };
     }
-    await logger().type(`createModelAction`).data({ error: String(e), details: {} }).log();
     return { success: false, error: (e as Error).message };
   }
 }
@@ -143,7 +137,6 @@ export async function updateModelAction(data: UpdateAIModelFormValues): Promise<
     if (e instanceof z.ZodError) {
       return { success: false, error: e.message };
     }
-    await logger().type(`updateModelAction`).data({ error: String(e), details: {} }).log();
     return { success: false, error: (e as Error).message };
   }
 }
@@ -154,7 +147,6 @@ export async function deleteModelAction(id: string): Promise<{ success: boolean;
     revalidatePath('/manage/settings/ai-models');
     return { success: true };
   } catch (e: any) {
-    await logger().type(`deleteModelAction`).data({ error: String(e), details: {} }).log();
     return { success: false, error: (e as Error).message };
   }
 }
@@ -165,7 +157,6 @@ export async function setDefaultModelAction(id: string): Promise<{ success: bool
     revalidatePath('/manage/settings/ai-models');
     return { success: true };
   } catch (e: any) {
-    await logger().type(`setDefaultModelAction`).data({ error: String(e), details: {} }).log();
     return { success: false, error: (e as Error).message };
   }
 }

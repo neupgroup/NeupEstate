@@ -2,7 +2,6 @@
 
 import { createAgency as createAgencyService, updateAgency as updateAgencyService, deleteAgency as deleteAgencyService } from '@/services/agencies/agency/service';
 import { createAgencyAgentMap as createAgencyAgentMapService, getAgencyAgentMapsByAgent as getAgencyAgentMapsByAgentService, getAgencyAgentMapsByAgency as getAgencyAgentMapsByAgencyService } from '@/services/agencies/agent-maps/service';
-import { logger } from "@neup/logica/logger";
 import type { CreateAgencyInput, UpdateAgencyInput, CreateAgencyFormValues, UpdateAgencyFormValues } from "@/types";
 import { CreateAgencySchema, UpdateAgencySchema } from "@/types";
 import { revalidatePath } from "next/cache";
@@ -53,7 +52,6 @@ export async function createAgencyAction(
     return { success: true, agencyId, error: null };
   } catch (e: any)
    {
-    await logger().type('createAgencyAction').data({ error: String(e), details: {} }).log();
     if (e instanceof z.ZodError) {
         return { success: false, error: e.message, agencyId: null };
     }
@@ -79,7 +77,6 @@ export async function updateAgencyAction(
     revalidatePath(`/manage/agencies/${id}/edit`);
     return { success: true, error: null };
   } catch (e: any) {
-    await logger().type(`updateAgencyAction (ID: ${id})`).data({ error: String(e), details: {} }).log();
     if (e instanceof z.ZodError) {
         return { success: false, error: e.message };
     }
@@ -95,7 +92,6 @@ export async function deleteAgencyAction(agencyId: string) {
         revalidatePath('/agencies');
         return { success: true };
     } catch (error: any) {
-        await logger().type(`deleteAgencyAction (ID: ${agencyId})`).data({ error: String(error), details: {} }).log();
         return { success: false, error: "Failed to delete agency." };
     }
 }
@@ -138,7 +134,6 @@ export async function createAgencyAgentMapAction(
     revalidatePath('/manage/dashboard');
     return { success: true, error: null };
   } catch (error: any) {
-    await logger().type('createAgencyAgentMapAction').data({ error: String(error), details: {} }).log();
     return { success: false, error: error?.message ?? 'Failed to create agency-agent mapping.' };
   }
 }
@@ -205,7 +200,6 @@ export async function createLeadAction(
     revalidatePath('/manage/leads/shared');
     return { success: true, error: null, leadId };
   } catch (error: any) {
-    await logger().type('createLeadAction').data({ error: String(error), details: {} }).log();
     return { success: false, error: error?.message ?? 'Failed to create lead.', leadId: null };
   }
 }
@@ -245,7 +239,6 @@ export async function addLeadActivityAction(
     revalidatePath('/manage/leads');
     return { success: true, error: null, activityId };
   } catch (error: any) {
-    await logger().type('addLeadActivityAction').data({ error: String(error), details: {} }).log();
     return { success: false, error: error?.message ?? 'Failed to add lead activity.', activityId: null };
   }
 }
@@ -275,7 +268,6 @@ export async function acceptAgencyAgentMapAction(mapId: string): Promise<{ succe
     revalidatePath('/manage/leads/my');
     return { success: true, error: null };
   } catch (error: any) {
-    await logger().type('acceptAgencyAgentMapAction').data({ error: String(error), details: {} }).log();
     return { success: false, error: error?.message ?? 'Failed to accept invitation.' };
   }
 }

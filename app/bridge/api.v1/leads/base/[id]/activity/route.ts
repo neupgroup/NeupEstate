@@ -43,7 +43,6 @@ Example response:
 */
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@neup/core/database/prisma';
-import { logger } from '@neup/logica/logger';
 import { requireIdentity } from '@/services/listings/action-helpers';
 import { getAccountById } from '@/services/accounts/id/get';
 import { getAgencyAgentMapsByAgent } from '@/services/agencies/agent-maps/service';
@@ -111,10 +110,7 @@ export async function GET(_request: NextRequest, context: RouteContext) {
       : { value: String(error) };
     const status = unauthenticated ? 401 : denied ? 403 : 500;
     try {
-      await logger().type(endpoint).data({ endpoint: '/bridge/api.v1/leads/base/[id]/activity', stage, baseLeadId, error: details }).error();
     } catch (loggingError) {
-      console.error(`[${endpoint}] Logica error reporting failed`, loggingError);
-      console.error(`[${endpoint}] Request failed`, { stage, baseLeadId, error: details });
     }
     return NextResponse.json({ success: false, error: status === 401 ? 'Authentication required.' : status === 403 ? 'Forbidden.' : 'Internal server error.' }, { status });
   }

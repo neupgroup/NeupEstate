@@ -4,7 +4,6 @@ import { updateUser, updateAccountAccessInfo, refreshAccountDisplayInfo } from '
 export { updateAccountAccessInfo, refreshAccountDisplayInfo };
 
 import { UpdateUserSchema, type UpdateUserFormValues } from '@/types';
-import { logger } from "@neup/logica/logger";
 import { PERMISSIONS } from '@/services/permission-names';;
 import { requirePermission } from '@/services/permissions';;
 
@@ -18,7 +17,6 @@ export async function updateUserAction(data: UpdateUserFormValues): Promise<{ su
     if (error instanceof Error) {
       return { success: false, error: error.message };
     }
-    await logger().type(`updateUserAction (ID: ${data.id})`).data({ error: String(error), details: {} }).log();
     return { success: false, error: 'Failed to update user.' };
   }
 }

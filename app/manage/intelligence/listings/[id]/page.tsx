@@ -1,7 +1,6 @@
 import { requirePagePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';;
 import { prisma } from '@neup/core/database/prisma';
-import { logger } from "@neup/logica/logger";
 import { Link } from '@neup/components/ui/link';
 import { Badge } from '@neup/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
@@ -52,9 +51,6 @@ export default async function IntelligenceListingDetailPage({
 
   const listing = rows[0] ?? null;
   if (!listing) {
-    await logger().type('manage/intelligence/listings/[id]').data({ error: String(new Error('Listing detail lookup returned no rows.')), details: {
-      clickedId: id,
-    } }).log();
 
     return (
       <div className="space-y-4">

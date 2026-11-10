@@ -64,10 +64,8 @@ export function ActivityTracker() {
 
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                console.log('User location acquired:', position.coords.latitude, position.coords.longitude);
             },
             (error) => {
-                console.warn(`Geolocation error: ${error.message}`);
             },
             {
                 enableHighAccuracy: false,

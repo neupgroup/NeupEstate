@@ -127,7 +127,7 @@ export default async function ManageListingsPage({
       try {
         const parsed = await parseAdminFilter({ query });
         filters = { ...parsed, ...filters };
-      } catch (e) { console.error("Failed to parse admin filter:", e); }
+      } catch (e) { }
     }
   }
 

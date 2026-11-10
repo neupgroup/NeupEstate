@@ -8,7 +8,6 @@ the authenticated account or an account manager may read these collections.
 ::end
 */
 import { NextRequest, NextResponse } from 'next/server';
-import { logger } from '@neup/logica/logger';
 import { requireIdentity } from '@/services/listings/action-helpers';
 import { hasPermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';
@@ -64,7 +63,6 @@ export async function GET(request: NextRequest, context: Context) {
       pagination: { offset, limit },
     });
   } catch (error) {
-    await logger().type('bridge/api.v1/listings/account/[accountId]/[collection]:GET').data({ error: String(error), details: {} }).log();
     const unauthorized = error instanceof Error && 'code' in error && error.code === 'UNAUTHENTICATED';
     return NextResponse.json({ success: false, error: unauthorized ? 'Authentication required.' : 'Internal server error.' }, { status: unauthorized ? 401 : 500 });
   }

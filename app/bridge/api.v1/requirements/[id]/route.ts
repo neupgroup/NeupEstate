@@ -13,7 +13,6 @@ are not disclosed.
 */
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@neup/core/database/prisma';
-import { logger } from '@neup/logica/logger';
 import { CreateRequirementSchema } from '@/types/requirements';
 import { requireIdentity } from '@/services/listings/action-helpers';
 
@@ -67,7 +66,6 @@ export async function GET(_request: NextRequest, { params }: Context) {
     if (!data) return NextResponse.json({ success: false, error: 'Requirement not found.' }, { status: 404 });
     return NextResponse.json({ data });
   } catch (error) {
-    await logger().type('bridge/api.v1/requirements/[id]:GET').data({ error: String(error), details: {} }).log();
     return NextResponse.json({ success: false, error: 'Internal server error.' }, { status: 500 });
   }
 }
@@ -93,7 +91,6 @@ export async function PATCH(request: NextRequest, { params }: Context) {
     const updated = await prisma.requirement.findUnique({ where: { id } });
     return NextResponse.json({ success: true, data: updated });
   } catch (error) {
-    await logger().type('bridge/api.v1/requirements/[id]:PATCH').data({ error: String(error), details: {} }).log();
     const status = isUnauthorized(error) ? 401 : 500;
     return NextResponse.json({ success: false, error: status === 401 ? 'Authentication required.' : 'Internal server error.' }, { status });
   }
@@ -108,7 +105,6 @@ export async function DELETE(_request: NextRequest, { params }: Context) {
     if (result.count === 0) return NextResponse.json({ success: false, error: 'Requirement not found.' }, { status: 404 });
     return NextResponse.json({ success: true, id });
   } catch (error) {
-    await logger().type('bridge/api.v1/requirements/[id]:DELETE').data({ error: String(error), details: {} }).log();
     const status = isUnauthorized(error) ? 401 : 500;
     return NextResponse.json({ success: false, error: status === 401 ? 'Authentication required.' : 'Internal server error.' }, { status });
   }

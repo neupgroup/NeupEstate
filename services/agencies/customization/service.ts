@@ -1,7 +1,6 @@
 'use server';
 
 import { prisma } from '@neup/core/database/prisma';
-import { logger } from "@neup/logica/logger";
 import type {
   AgencyCustomization,
   AgencyCustomizationRule,
@@ -36,7 +35,6 @@ export async function createAgencyMap(d: CreateAgencyMapInput): Promise<AgencyMa
     });
     return mapAgencyMapRecord(record);
   } catch (e) {
-    await logger().type('createAgencyMap').data({ error: String(e), details: {} }).log();
     throw new Error('Failed to create agency map entry.');
   }
 }
@@ -48,7 +46,6 @@ export async function getAgencyMapByAccount(accountId: string): Promise<AgencyMa
     });
     return record ? mapAgencyMapRecord(record) : null;
   } catch (e) {
-    await logger().type(`getAgencyMapByAccount ${accountId}`).data({ error: String(e), details: {} }).log();
     return null;
   }
 }
@@ -61,7 +58,6 @@ export async function getAgencyMapsByAgency(agencyAccountId: string): Promise<Ag
     });
     return records.map(mapAgencyMapRecord);
   } catch (e) {
-    await logger().type(`getAgencyMapsByAgency ${agencyAccountId}`).data({ error: String(e), details: {} }).log();
     return [];
   }
 }
@@ -70,7 +66,6 @@ export async function deleteAgencyMap(id: string): Promise<void> {
   try {
     await prisma.agencyMap.delete({ where: { id } });
   } catch (e) {
-    await logger().type(`deleteAgencyMap ${id}`).data({ error: String(e), details: {} }).log();
     throw new Error('Failed to delete agency map entry.');
   }
 }
@@ -109,7 +104,6 @@ export async function upsertAgencyCustomization(d: CreateAgencyCustomizationInpu
     });
     return mapCustomizationRecord(record);
   } catch (e) {
-    await logger().type('upsertAgencyCustomization').data({ error: String(e), details: {} }).log();
     throw new Error('Failed to save agency customization.');
   }
 }
@@ -126,7 +120,6 @@ export async function getAgencyCustomization(
     });
     return record ? mapCustomizationRecord(record) : null;
   } catch (e) {
-    await logger().type(`getAgencyCustomization ${agencyId}/${customizeFor}`).data({ error: String(e), details: {} }).log();
     return null;
   }
 }
@@ -138,7 +131,6 @@ export async function getAgencyCustomizationsForAgency(agencyId: string): Promis
     });
     return records.map(mapCustomizationRecord);
   } catch (e) {
-    await logger().type(`getAgencyCustomizationsForAgency ${agencyId}`).data({ error: String(e), details: {} }).log();
     return [];
   }
 }
@@ -147,7 +139,6 @@ export async function deleteAgencyCustomization(id: string): Promise<void> {
   try {
     await prisma.agencyCustomization.delete({ where: { id } });
   } catch (e) {
-    await logger().type(`deleteAgencyCustomization ${id}`).data({ error: String(e), details: {} }).log();
     throw new Error('Failed to delete agency customization.');
   }
 }
@@ -178,7 +169,6 @@ export async function getCustomizationForAccount(
     const parsed = AgencyCustomizationRuleSchema.safeParse(record.customization);
     return parsed.success ? parsed.data : null;
   } catch (e) {
-    await logger().type(`getCustomizationForAccount ${accountId}/${customizeFor}`).data({ error: String(e), details: {} }).log();
     return null;
   }
 }

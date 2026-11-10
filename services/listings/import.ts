@@ -15,7 +15,6 @@ and one-to-many data, plus root-level many-to-one and many-to-many lookups.
 
 import type { ExtractedListingData } from '@/types';
 import { addListing } from '@/services/listings/update';
-import { logger } from "@neup/logica/logger";
 import { areaValueToSqm } from '@/types';
 
 type JsonObject = Record<string, unknown>;
@@ -374,7 +373,6 @@ export async function importListingsFromJson(
           importedData: propertyData,
         });
       } catch (error) {
-        await logger().type(`importPropertiesFromJson row ${index}`).data({ error: String(error), details: {} }).log();
         results.push({
           index,
           title: typeof item.title === 'string' ? item.title : undefined,
@@ -393,7 +391,6 @@ export async function importListingsFromJson(
       results,
     };
   } catch (error) {
-    await logger().type('importPropertiesFromJson').data({ error: String(error), details: {} }).log();
     return {
       success: false,
       importedCount: 0,

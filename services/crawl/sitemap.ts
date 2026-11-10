@@ -4,7 +4,6 @@
 import { prisma } from '@neup/core/database/prisma';
 import type { Sitemap, SitemapLog } from '@/types';
 import { extractAndSaveListing as extractAndSaveListingFlow } from '@/services/intelligence/extract-listing-details-flow';
-import { logger } from '@neup/logica/logger';
 import { crawlSitemap } from '@/services/crawl/sitemap-crawl';
 
 export async function addSitemap(url: string): Promise<string> {
@@ -37,7 +36,6 @@ export async function getSitemaps(): Promise<Sitemap[]> {
             lastChecked: row.lastmod?.toISOString(),
         }));
     } catch (error) {
-        await logger().type('getSitemaps').data({ error: String(error), details: {} }).log();
         return [];
     }
 }

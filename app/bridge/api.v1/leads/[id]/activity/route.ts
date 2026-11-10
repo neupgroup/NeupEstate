@@ -86,7 +86,6 @@ POST example response:
 ::end
 */
 import { NextRequest, NextResponse } from 'next/server';
-import { logger } from '@neup/logica/logger';
 import { requireIdentity } from '@/services/listings/action-helpers';
 import { requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';
@@ -103,65 +102,36 @@ const followUpMethods: FollowUpMethod[] = ['phone call', 'whatsapp', 'email'];
 function errorResponse(error: unknown) {
   const unauthenticated = error instanceof Error && 'code' in error && error.code === 'UNAUTHENTICATED';
   const denied = error instanceof Error && error.message.startsWith('Permission denied:');
-  const details = error instanceof Error
-    ? { name: error.name, message: error.message, stack: error.stack, cause: error.cause }
-    : { value: String(error) };
   const status = unauthenticated ? 401 : denied ? 403 : 500;
 
-  return { details, response: NextResponse.json({ success: false, error: status === 401 ? 'Authentication required.' : status === 403 ? 'Forbidden.' : 'Internal server error.' }, { status }) };
-}
-
-// Log route errors with endpoint context and safe diagnostic details.
-async function logRouteError(endpoint: string, error: unknown, details: Record<string, unknown>) {
-  try {
-    await logger().type(endpoint).data({ ...details, error }).error();
-  } catch (loggingError) {
-    console.error(`[${endpoint}] Logica error reporting failed`, loggingError);
-    console.error(`[${endpoint}] Request failed`, { ...details, error });
-  }
+  return NextResponse.json({ success: false, error: status === 401 ? 'Authentication required.' : status === 403 ? 'Forbidden.' : 'Internal server error.' }, { status });
 }
 
 // Return the requested resource collection or item for a GET request.
 export async function GET(_request: NextRequest, context: RouteContext) {
-  const endpoint = 'bridge/api.v1/leads/[id]/activity:GET';
-  let stage = 'permission-check';
-  let leadId = '';
   try {
     await requirePermission(PERMISSIONS.crm.lead.view);
-    stage = 'identity-resolution';
     const accountId = await requireIdentity();
     const { id } = await context.params;
-    leadId = id;
-    stage = 'lead-visibility-check';
     const lead = await getVisibleLead(id, accountId);
     if (!lead) return NextResponse.json({ success: false, error: 'Lead not found.' }, { status: 404 });
 
-    stage = 'activity-query';
     const data = await getLeadActivities(id);
     return NextResponse.json({ data });
   } catch (error) {
-    const failure = errorResponse(error);
-    await logRouteError(endpoint, failure.details, { stage, leadId });
-    return failure.response;
+    return errorResponse(error);
   }
 }
 
 // Validate and process the resource submitted in a POST request.
 export async function POST(request: NextRequest, context: RouteContext) {
-  const endpoint = 'bridge/api.v1/leads/[id]/activity:POST';
-  let stage = 'permission-check';
-  let leadId = '';
   try {
     await requirePermission(PERMISSIONS.crm.lead.activityAdd);
-    stage = 'identity-resolution';
     const accountId = await requireIdentity();
     const { id } = await context.params;
-    leadId = id;
-    stage = 'lead-visibility-check';
     const lead = await getVisibleLead(id, accountId);
     if (!lead) return NextResponse.json({ success: false, error: 'Lead not found.' }, { status: 404 });
 
-    stage = 'request-validation';
     let body: unknown;
     try {
       body = await request.json();
@@ -194,7 +164,6 @@ export async function POST(request: NextRequest, context: RouteContext) {
       return NextResponse.json({ success: false, error: 'propertyId must be a non-empty string when provided.' }, { status: 400 });
     }
 
-    stage = 'activity-creation';
     const data = await addLeadActivity({
       leadId: id,
       accountId,
@@ -206,8 +175,6 @@ export async function POST(request: NextRequest, context: RouteContext) {
     });
     return NextResponse.json({ success: true, data }, { status: 201 });
   } catch (error) {
-    const failure = errorResponse(error);
-    await logRouteError(endpoint, failure.details, { stage, leadId });
-    return failure.response;
+    return errorResponse(error);
   }
 }

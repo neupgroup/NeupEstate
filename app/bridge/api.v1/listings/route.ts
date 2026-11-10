@@ -51,7 +51,6 @@ import { NextRequest } from 'next/server';
 import { submitListingCreation } from '@/services/listings/create';
 import { listListings } from '@/services/listings/list';
 import { searchListings } from '@/services/listings/search';
-import { logger } from "@neup/logica/logger";
 import { CreateListingSchema, ListingFiltersSchema, type CreateListingFormValues } from '@/types';
 
 export const dynamic = 'force-dynamic';
@@ -266,7 +265,6 @@ const getHandler = async (req: NextRequest) => {
     }, { status: 200 });
   }
   catch (err) {
-    await logger().type('bridge/api.v1/listings:GET').data({ error: String(err), details: {} }).log();
     return Response.json({ success: false, error: 'Internal server error.' }, { status: 500 });
   }
 };

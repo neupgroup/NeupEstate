@@ -1,7 +1,6 @@
 "use server";
 
 import { getAgentsByLocation as getAgentsByLocationService, createAgent as createAgentService, updateAgent as updateAgentService, deleteAgent as deleteAgentService } from '@/services/agents/agent/service';
-import { logger } from "@neup/logica/logger";
 import type { Agent, CreateAgentFormValues, UpdateAgentFormValues } from "@/types";
 import { CreateAgentSchema, UpdateAgentSchema } from "@/types";
 import { revalidatePath } from "next/cache";
@@ -20,7 +19,6 @@ export async function searchAgentsByLocationAction(
     const agents = await getAgentsByLocationService(location);
     return { success: true, data: agents, error: null };
   } catch (e: any) {
-    await logger().type('searchAgentsByLocationAction').data({ error: String(e), details: {} }).log();
     return { success: false, data: null, error: "An error occurred while searching for agents." };
   }
 }
@@ -46,7 +44,6 @@ export async function createAgentAction(
     revalidatePath('/manage/team');
     return { success: true, agentId, error: null };
   } catch (e: any) {
-    await logger().type('createAgentAction').data({ error: String(e), details: {} }).log();
     if (e instanceof z.ZodError) {
         return { success: false, error: e.message, agentId: null };
     }
@@ -66,7 +63,6 @@ export async function updateAgentAction(
     revalidatePath(`/manage/agents/${id}/edit`);
     return { success: true, error: null };
   } catch (e: any) {
-    await logger().type(`updateAgentAction (ID: ${id})`).data({ error: String(e), details: {} }).log();
     if (e instanceof z.ZodError) {
         return { success: false, error: e.message };
     }
@@ -80,7 +76,6 @@ export async function deleteAgentAction(agentId: string) {
         revalidatePath('/manage/team');
         return { success: true };
     } catch (error: any) {
-        await logger().type(`deleteAgentAction (ID: ${agentId})`).data({ error: String(error), details: {} }).log();
         return { success: false, error: "Failed to delete agent." };
     }
 }

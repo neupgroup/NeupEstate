@@ -13,7 +13,6 @@ defaults to 15 and cannot exceed 15.
 ::end
 */
 import { NextRequest, NextResponse } from 'next/server';
-import { logger } from '@neup/logica/logger';
 import { ListingFiltersSchema } from '@/types';
 import { searchListings } from '@/services/listings/search';
 
@@ -144,7 +143,6 @@ export async function GET(request: NextRequest) {
     if (parsed.response) return parsed.response;
     return await runSearch(parsed.input!);
   } catch (error) {
-    await logger().type('bridge/api.v1/listings/search:GET').data({ error: String(error), details: {} }).log();
     return NextResponse.json({ success: false, error: 'Internal server error.' }, { status: 500 });
   }
 }
@@ -196,7 +194,6 @@ export async function POST(request: NextRequest) {
     };
     return await runSearch(input);
   } catch (error) {
-    await logger().type('bridge/api.v1/listings/search:POST').data({ error: String(error), details: {} }).log();
     return NextResponse.json({ success: false, error: 'Internal server error.' }, { status: 500 });
   }
 }

@@ -9,7 +9,6 @@ Single-property lookup, review-log, and saved-property read services.
 */
 
 import { prisma } from '@neup/core/database/prisma';
-import { logger } from "@neup/logica/logger";
 import type { Listing } from '@/types';
 import { PROPERTY_INCLUDE, type SavedListingEntry, hydrateListingAccountLabels, mapRecord, onlyActive } from '../listings/shared';
 import { parseListingSlugId } from './slug';
@@ -27,7 +26,7 @@ export async function getListingById(id: string, opts: { includeInactive?: boole
     if (!record) return null;
     const [p] = await hydrateListingAccountLabels([mapRecord(record)]);
     return opts.includeInactive ? p : (p.isApproved ? p : null);
-  } catch (e) { await logger().type(`getPropertyById ${id}`).data({ error: String(e), details: {} }).log(); return null; }
+  } catch (e) { return null; }
 }
 
 
@@ -48,7 +47,7 @@ export async function getListingBySlug(slug: string, opts: { includeInactive?: b
       return opts.includeInactive ? p : (p.isApproved ? p : null);
     }
     return getListingById(slug, opts);
-  } catch (e) { await logger().type(`getPropertyBySlug ${slug}`).data({ error: String(e), details: {} }).log(); return null; }
+  } catch (e) { return null; }
 }
 
 
@@ -104,7 +103,6 @@ export async function getListingReviewRequests(propertyId: string): Promise<Arra
       } : null,
     }));
   } catch (e) {
-    await logger().type(`getPropertyReviewRequests ${propertyId}`).data({ error: String(e), details: {} }).log();
     return [];
   }
 }
@@ -136,7 +134,6 @@ export async function createListingLog(input: {
       },
     });
   } catch (e) {
-    await logger().type(`createPropertyLog ${input.propertyId}`).data({ error: String(e), details: {} }).log();
   }
 }
 
@@ -191,7 +188,6 @@ export async function getListingLogs(propertyId: string): Promise<Array<{
       approvedByAccount: log.approvedBy ? accountMap.get(log.approvedBy) ?? null : null,
     }));
   } catch (e) {
-    await logger().type(`getPropertyLogs ${propertyId}`).data({ error: String(e), details: {} }).log();
     return [];
   }
 }
@@ -209,7 +205,7 @@ export async function isListingSaved(userId: string, propertyId: string): Promis
   try {
     const existing = await prisma.savedProperty.findFirst({ where: { accountId: userId, propertyId } });
     return Boolean(existing);
-  } catch (e) { await logger().type('isPropertySaved').data({ error: String(e), details: {} }).log(); return false; }
+  } catch (e) { return false; }
 }
 
 
@@ -228,7 +224,7 @@ export async function toggleSavedListing(userId: string, propertyId: string): Pr
     }
     await prisma.savedProperty.create({ data: { accountId: userId, propertyId } });
     return { saved: true };
-  } catch (e) { await logger().type('toggleSavedListing').data({ error: String(e), details: {} }).log(); throw new Error('Failed to toggle saved property.'); }
+  } catch (e) { throw new Error('Failed to toggle saved property.'); }
 }
 
 
@@ -242,7 +238,7 @@ export async function getSavedListings(userId: string): Promise<Listing[]> {
   try {
     const saved = await prisma.savedProperty.findMany({ where: { accountId: userId }, include: { property: { include: PROPERTY_INCLUDE } }, orderBy: { savedAt: 'desc' } });
     return saved.map((e) => e.property).filter(Boolean).map(mapRecord).filter(onlyActive);
-  } catch (e) { await logger().type(`getSavedProperties ${userId}`).data({ error: String(e), details: {} }).log(); return []; }
+  } catch (e) { return []; }
 }
 
 
@@ -262,7 +258,7 @@ export async function getLatestSavedListings(limit = 20): Promise<SavedListingEn
       propertyTitle: e.property?.title || 'Unknown Property',
       savedAt: e.savedAt.toISOString(),
     }));
-  } catch (e) { await logger().type('getLatestSavedProperties').data({ error: String(e), details: {} }).log(); return []; }
+  } catch (e) { return []; }
 }
 
 
@@ -275,7 +271,7 @@ export async function getLatestSavedListings(limit = 20): Promise<SavedListingEn
 export async function getUsersBySavedListing(propertyId: string) {
   try {
     return await prisma.savedProperty.findMany({ where: { propertyId }, orderBy: { savedAt: 'desc' } });
-  } catch (e) { await logger().type(`getUsersBySavedListing ${propertyId}`).data({ error: String(e), details: {} }).log(); return []; }
+  } catch (e) { return []; }
 }
 
 // Alias kept for backward compatibility with actions.ts

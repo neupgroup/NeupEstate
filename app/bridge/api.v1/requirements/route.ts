@@ -17,7 +17,6 @@ and loan. All fields are optional.
 */
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@neup/core/database/prisma';
-import { logger } from '@neup/logica/logger';
 import { CreateRequirementSchema } from '@/types/requirements';
 import { requireIdentity } from '@/services/listings/action-helpers';
 import { requirePermission } from '@/services/permissions';
@@ -99,7 +98,6 @@ export async function GET(request: NextRequest) {
     ]);
     return NextResponse.json({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } });
   } catch (error) {
-    await logger().type('bridge/api.v1/requirements:GET').data({ error: String(error), details: {} }).log();
     const status = isUnauthorized(error) ? 401 : 500;
     return NextResponse.json({ success: false, error: status === 401 ? 'Authentication required.' : 'Internal server error.' }, { status });
   }
@@ -123,7 +121,6 @@ export async function POST(request: NextRequest) {
     const data = await prisma.requirement.create({ data: { ...parsed.data, userId } });
     return NextResponse.json({ success: true, data }, { status: 201 });
   } catch (error) {
-    await logger().type('bridge/api.v1/requirements:POST').data({ error: String(error), details: {} }).log();
     const unauthorized = isUnauthorized(error);
     const denied = error instanceof Error && error.message.startsWith('Permission denied:');
     const status = unauthorized ? 401 : denied ? 403 : 500;

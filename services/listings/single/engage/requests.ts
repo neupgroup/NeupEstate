@@ -18,7 +18,6 @@ import { createMortgageRequest } from "@/services/mortgage/create";
 import { requireIdentity } from "@/services/listings/action-helpers";
 import { PERMISSIONS } from '@/services/permission-names';;
 import { requirePermission } from '@/services/permissions';;
-import { logger } from "@neup/logica/logger";
 
 export async function createListingRequestAction(data: CreateListingRequestFormValues): Promise<{ success: boolean; error?: string }> {
   try {
@@ -30,7 +29,6 @@ export async function createListingRequestAction(data: CreateListingRequestFormV
     return { success: true };
   } catch (error: any) {
     if (error instanceof z.ZodError) return { success: false, error: error.message };
-    await logger().type('createPropertyRequestAction').data({ error: String(error), details: {} }).log();
     return { success: false, error: error.message || 'Failed to submit property request.' };
   }
 }
@@ -44,7 +42,6 @@ export async function createSalesRequestAction(data: CreateSalesRequestFormValue
     return { success: true };
   } catch (error: any) {
     if (error instanceof z.ZodError) return { success: false, error: error.message };
-    await logger().type('createSalesRequestAction').data({ error: String(error), details: {} }).log();
     return { success: false, error: error.message || 'Failed to submit sales request.' };
   }
 }
@@ -59,7 +56,6 @@ export async function createMortgageRequestAction(data: CreateMortgageRequestFor
     return { success: true };
   } catch (error: any) {
     if (error instanceof z.ZodError) return { success: false, error: error.message };
-    await logger().type('createMortgageRequestAction').data({ error: String(error), details: {} }).log();
     return { success: false, error: error.message || 'Failed to submit mortgage request.' };
   }
 }

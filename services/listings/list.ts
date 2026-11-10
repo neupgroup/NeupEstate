@@ -10,7 +10,6 @@ Read-side property listing, search, queue, and bridge query services.
 
 import { prisma } from '@neup/core/database/prisma';
 import type { ListingLogStatus } from '@/prisma/client';
-import { logger } from "@neup/logica/logger";
 import type { Listing, ListingFilters } from '@/types';
 import { mapPurposeToEnum, mapStatusToEnum, mapTypeFromEnum, mapTypeToEnum } from '@/inapp/database/adapters';
 import {
@@ -43,7 +42,7 @@ export async function getListings(opts: { includeInactive?: boolean } = {}): Pro
     const records = await prisma.listing.findMany({ orderBy: { updatedAt: 'desc' }, include: PROPERTY_INCLUDE });
     const all = await hydrateListingAccountLabels(records.map(mapRecord));
     return opts.includeInactive ? all : all.filter(onlyActive);
-  } catch (e) { await logger().type('getProperties').data({ error: String(e), details: {} }).log(); return []; }
+  } catch (e) { return []; }
 }
 
 
@@ -211,7 +210,7 @@ export async function getPaginatedListings(opts: {
       prisma.listing.findMany({ where, orderBy: { createdAt: opts.orderBy === 'oldestFirst' ? 'asc' : 'desc' }, take: limit, skip: offset, include: PROPERTY_INCLUDE }),
     ]);
     return { listings: await hydrateListingAccountLabels(records.map(mapRecord)), totalCount };
-  } catch (e) { await logger().type('getPaginatedProperties').data({ error: String(e), details: {} }).log(); return { listings: [], totalCount: 0 }; }
+  } catch (e) { return { listings: [], totalCount: 0 }; }
 }
 
 
@@ -268,7 +267,6 @@ export async function getListingDrafts(accountId: string): Promise<ListingDraftS
       };
     });
   } catch (e) {
-    await logger().type(`getPropertyDrafts ${accountId}`).data({ error: String(e), details: {} }).log();
     return [];
   }
 }
@@ -286,7 +284,7 @@ export async function getFeaturedListings(limit = 4): Promise<Listing[]> {
     if (records.length > 0) return hydrateListingAccountLabels(records.map(mapRecord));
     const fallback = await prisma.listing.findMany({ where: { status: PROPERTY_STATUS.ACTIVE }, orderBy: { updatedAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
     return hydrateListingAccountLabels(fallback.map(mapRecord));
-  } catch (e) { await logger().type('getFeaturedProperties').data({ error: String(e), details: {} }).log(); return []; }
+  } catch (e) { return []; }
 }
 
 
@@ -300,7 +298,7 @@ export async function getRecentListings(limit = 4): Promise<Listing[]> {
   try {
     const records = await prisma.listing.findMany({ where: { status: PROPERTY_STATUS.ACTIVE }, orderBy: { createdAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
     return hydrateListingAccountLabels(records.map(mapRecord));
-  } catch (e) { await logger().type('getRecentProperties').data({ error: String(e), details: {} }).log(); return []; }
+  } catch (e) { return []; }
 }
 
 
@@ -314,7 +312,7 @@ export async function getListingsByPurpose(purpose: 'Sale' | 'Rent' | 'Lease', l
   try {
     const records = await prisma.listing.findMany({ where: { purpose: mapPurposeToEnum(purpose), status: PROPERTY_STATUS.ACTIVE }, orderBy: { updatedAt: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
     return hydrateListingAccountLabels(records.map(mapRecord));
-  } catch (e) { await logger().type('getPropertiesByPurpose').data({ error: String(e), details: {} }).log(); return []; }
+  } catch (e) { return []; }
 }
 
 
@@ -339,7 +337,7 @@ export async function getPremiumListings(limit = 4): Promise<Listing[]> {
   try {
     const records = await prisma.listing.findMany({ where: { status: PROPERTY_STATUS.ACTIVE, priceListed: { gt: 0 } }, orderBy: { priceListed: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
     return hydrateListingAccountLabels(records.map(mapRecord));
-  } catch (e) { await logger().type('getPremiumProperties').data({ error: String(e), details: {} }).log(); return []; }
+  } catch (e) { return []; }
 }
 
 
@@ -369,7 +367,7 @@ export async function getPendingListings(limit = 50): Promise<Listing[]> {
       include: PROPERTY_INCLUDE,
     });
     return records.map(mapRecord);
-  } catch (e) { await logger().type('getPendingProperties').data({ error: String(e), details: {} }).log(); return []; }
+  } catch (e) { return []; }
 }
 
 
@@ -487,7 +485,6 @@ export async function getAwaitingReviewItems(
       .sort((a, b) => String(b.modifiedOn || '').localeCompare(String(a.modifiedOn || '')))
       .slice(0, limit);
   } catch (e) {
-    await logger().type('getAwaitingReviewItems').data({ error: String(e), details: {} }).log();
     return [];
   }
 }
@@ -560,7 +557,6 @@ async function listAccountListings(
     });
     return hydrateListingAccountLabels(records.map(mapRecord));
   } catch (error) {
-    await logger().type(`getProperties${collection} ${accountId}`).data({ error: String(error), details: {} }).log();
     return [];
   }
 }
@@ -626,7 +622,6 @@ export async function getBridgeListingsByAccount(opts: BridgeListingQuery): Prom
 
     return { listings, totalCount, limit, offset };
   } catch (e) {
-    await logger().type(`getBridgePropertiesByAccount ${opts.agencyId || opts.agentId || 'unknown'}`).data({ error: String(e), details: {} }).log();
     return {
       listings: [],
       totalCount: 0,
@@ -659,6 +654,5 @@ export async function listListings(input: ListListingsInput): Promise<BridgeList
   });
   const fields = resolveBridgeListingFields(input.fields);
   const listings = result.listings.map((property) => pickListingFields(property, fields));
-  await logger().type('property.list').data({ limit: input.limit, offset: input.offset, totalCount: result.totalCount }).log();
   return { listings, totalCount: result.totalCount, limit: input.limit, offset: input.offset, appliedFilters: input.filters };
 }

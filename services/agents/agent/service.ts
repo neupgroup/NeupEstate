@@ -1,7 +1,6 @@
 'use server';
 
 import { prisma } from '@neup/core/database/prisma';
-import { logger } from "@neup/logica/logger";
 import type { Agent, CreateAgentFormValues, UpdateAgentFormValues } from '@/types';
 import slugify from 'slugify';
 import { filter, type Filters } from '@/services/agents/filter';
@@ -79,14 +78,13 @@ async function uniqueSlug(name: string, excludeId?: string): Promise<string> {
 export async function getAgents({ limit = 100, offset = 0, filters = {} }: { limit?: number; offset?: number; filters?: Filters } = {}): Promise<Agent[]> {
   try {
     return await getAccountBackedAgents({ limit, offset, filters });
-  } catch (e) { await logger().type('getAgents').data({ error: String(e), details: {} }).log(); return []; }
+  } catch (e) { return []; }
 }
 
 export async function getAgentCount(filters: Filters = {}): Promise<number> {
   try {
     return await prisma.account.count({ where: filter(filters) });
   } catch (e) {
-    await logger().type('getAgentCount').data({ error: String(e), details: {} }).log();
     return 0;
   }
 }
@@ -109,7 +107,7 @@ export async function getAgentById(id: string): Promise<Agent | null> {
 
     const record = await prisma.agent.findUnique({ where: { id } });
     return record ? mapRecord(record) : null;
-  } catch (e) { await logger().type(`getAgentById ${id}`).data({ error: String(e), details: {} }).log(); return null; }
+  } catch (e) { return null; }
 }
 
 export async function getAgentBySlug(slug: string): Promise<Agent | null> {
@@ -136,14 +134,14 @@ export async function getAgentBySlug(slug: string): Promise<Agent | null> {
     const record = await prisma.agent.findFirst({ where: { slug } });
     if (record) return mapRecord(record);
     return getAgentById(slug);
-  } catch (e) { await logger().type(`getAgentBySlug ${slug}`).data({ error: String(e), details: {} }).log(); return null; }
+  } catch (e) { return null; }
 }
 
 export async function getAgentsByLocation(location: string): Promise<Agent[]> {
   try {
     const records = await prisma.agent.findMany({ where: { location: { contains: location, mode: 'insensitive' } }, orderBy: { createdAt: 'desc' } });
     return records.map(mapRecord);
-  } catch (e) { await logger().type(`getAgentsByLocation ${location}`).data({ error: String(e), details: {} }).log(); return []; }
+  } catch (e) { return []; }
 }
 
 export async function createAgent(d: CreateAgentFormValues): Promise<string> {
@@ -176,7 +174,7 @@ export async function createAgent(d: CreateAgentFormValues): Promise<string> {
       },
     });
     return agent.id;
-  } catch (e) { await logger().type('createAgent').data({ error: String(e), details: {} }).log(); throw new Error('Failed to create agent.'); }
+  } catch (e) { throw new Error('Failed to create agent.'); }
 }
 
 export async function updateAgent(id: string, d: UpdateAgentFormValues): Promise<void> {
@@ -206,11 +204,11 @@ export async function updateAgent(id: string, d: UpdateAgentFormValues): Promise
         unavailability:    d.unavailability || null,
       },
     });
-  } catch (e) { await logger().type(`updateAgent ${id}`).data({ error: String(e), details: {} }).log(); throw new Error('Failed to update agent.'); }
+  } catch (e) { throw new Error('Failed to update agent.'); }
 }
 
 export async function deleteAgent(id: string): Promise<void> {
   try {
     await prisma.agent.delete({ where: { id } });
-  } catch (e) { await logger().type(`deleteAgent ${id}`).data({ error: String(e), details: {} }).log(); throw new Error('Failed to delete agent.'); }
+  } catch (e) { throw new Error('Failed to delete agent.'); }
 }

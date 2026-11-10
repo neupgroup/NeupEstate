@@ -42,7 +42,6 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { logger } from "@neup/logica/logger";
 import { createAccount } from '@/services/accounts/create';
 
 // Resolve the validated post-authentication redirect destination.
@@ -69,7 +68,6 @@ async function handleCallback(request: NextRequest) {
     const redirectTarget = getRedirectTarget(request);
     return NextResponse.redirect(new URL(redirectTarget, request.url));
   } catch (error) {
-    await logger().type('GET /api/auth/callback').data({ error: String(error), details: {} }).log();
     return NextResponse.json({ error: 'internal_error' }, { status: 500 });
   }
 }

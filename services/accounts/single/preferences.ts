@@ -2,7 +2,6 @@
 
 import { prisma } from '@neup/core/database/prisma';
 import type { Listing, ListingActivityEvent, UserPreferences } from '@/types';
-import { logger } from "@neup/logica/logger";
 
 
 const WEIGHTS = {
@@ -47,7 +46,6 @@ export async function getAccountPreferences(accountId: string): Promise<UserPref
             preferences: (pref.preferences as any) || {},
         } as UserPreferences;
     } catch (error) {
-        await logger().type(`getAccountPreferences (Account: ${accountId})`).data({ error: String(error), details: {} }).log();
         return null;
     }
 }
@@ -187,6 +185,5 @@ export async function updateAccountPreferences(
         });
 
     } catch (error) {
-        await logger().type(`updateAccountPreferences (Account: ${accountId})`).data({ error: String(error), details: {} }).log();
     }
 }

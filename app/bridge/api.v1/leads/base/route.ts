@@ -48,7 +48,6 @@ Example response:
 */
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@neup/core/database/prisma';
-import { logger } from '@neup/logica/logger';
 import { requireIdentity } from '@/services/listings/action-helpers';
 import { getAccountById } from '@/services/accounts/id/get';
 import { getAgencyAgentMapsByAgent } from '@/services/agencies/agent-maps/service';
@@ -111,7 +110,6 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     const unauthenticated = error instanceof Error && 'code' in error && error.code === 'UNAUTHENTICATED';
     const denied = error instanceof Error && error.message.startsWith('Permission denied:');
-    await logger().type('bridge/api.v1/leads/base:GET').data({ error: String(error), details: {} }).log();
     const status = unauthenticated ? 401 : denied ? 403 : 500;
     return NextResponse.json({ success: false, error: status === 401 ? 'Authentication required.' : status === 403 ? 'Forbidden.' : 'Internal server error.' }, { status });
   }

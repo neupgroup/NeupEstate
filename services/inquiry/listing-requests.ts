@@ -4,7 +4,6 @@
 
 import { prisma } from '@neup/core/database/prisma';
 import type { ListingRequest, CreateListingRequestFormValues } from '@/types';
-import { logger } from "@neup/logica/logger";
 
 
 export async function createListingRequest(data: CreateListingRequestFormValues): Promise<string> {
@@ -26,7 +25,6 @@ export async function createListingRequest(data: CreateListingRequestFormValues)
         });
         return request.id;
     } catch (error) {
-        await logger().type('createPropertyRequest').data({ error: String(error), details: {} }).log();
         throw new Error('Failed to submit property request.');
     }
 }
@@ -52,7 +50,6 @@ export async function getListingRequests({ limit = 20, offset = 0 }: { limit?: n
             createdAt: r.createdAt.toISOString(),
         }));
     } catch (error) {
-        await logger().type('getPropertyRequests').data({ error: String(error), details: {} }).log();
         return [];
     }
 }

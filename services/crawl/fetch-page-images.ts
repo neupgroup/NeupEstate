@@ -1,7 +1,6 @@
 'use server';
 
 import * as cheerio from 'cheerio';
-import { logger } from "@neup/logica/logger";
 import { fetchPageSourceCode } from './fetch-page-source';
 
 export async function fetchAllImageUrlsFromPage(url: string): Promise<string[]> {
@@ -23,7 +22,6 @@ export async function fetchAllImageUrlsFromPage(url: string): Promise<string[]> 
 
         return Array.from(images);
     } catch (error) {
-        await logger().type(`fetchAllImageUrlsFromPage (URL: ${url})`).data({ error: String(error), details: {} }).log();
         throw error;
     }
 }

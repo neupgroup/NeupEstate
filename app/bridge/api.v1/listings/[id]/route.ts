@@ -43,7 +43,6 @@ import { deleteListing } from '@/services/listings/single/delete';
 import { getListingAgentRepresentatives } from '@/services/listings/representatives/agents';
 import { getListingAgencyRepresentative } from '@/services/listings/representatives/agencies';
 import { getListingOwnerRepresentatives } from '@/services/listings/representatives/owners';
-import { logger } from "@neup/logica/logger";
 
 export const dynamic = 'force-dynamic';
 type Context = { params: Promise<{ id: string }> };
@@ -187,7 +186,6 @@ const getHandler = async (req: NextRequest, context: Context) => {
     return Response.json({ success: true, listing: responseListing });
   }
   catch (err) {
-    await logger().type('bridge/api.v1/listings/[id]:GET').data({ error: String(err), details: {} }).log();
     return Response.json({ success: false, error: 'Internal server error.' }, { status: 500 });
   }
 };
@@ -206,7 +204,6 @@ const patchHandler = async (req: NextRequest, context: Context) => {
     return Response.json({ success: true, requestId: result.requestId, status: 'awaiting review' });
   }
   catch (err) {
-    await logger().type('bridge/api.v1/listings/[id]:PATCH').data({ error: String(err), details: {} }).log();
     return Response.json({ success: false, error: 'Internal server error.' }, { status: 500 });
   }
 };
@@ -225,7 +222,6 @@ const deleteHandler = async (req: NextRequest, context: Context) => {
     await deleteListing({ propertyId: (await context.params).id }, { actorAccountId });
     return Response.json({ success: true }, { status: 200 });
   } catch (err) {
-    await logger().type('bridge/api.v1/listings/[id]:DELETE').data({ error: String(err), details: {} }).log();
     return Response.json({ success: false, error: 'Failed to delete property.' }, { status: 500 });
   }
 };

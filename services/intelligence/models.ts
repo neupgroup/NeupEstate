@@ -4,7 +4,6 @@
 
 import { randomUUID } from 'crypto';
 import { prisma } from '@neup/core/database/prisma';
-import { logger } from "@neup/logica/logger";
 import type { AIModel, CreateAIModelFormValues, UpdateAIModelFormValues } from '@/types';
 
 const DEFAULT_AI_MODEL: AIModel = {
@@ -59,7 +58,6 @@ export async function getModels(): Promise<AIModel[]> {
 
         return models.length > 0 ? models : [DEFAULT_AI_MODEL];
     } catch (error) {
-        await logger().type('getModels').data({ error: String(error), details: {} }).log();
         return [DEFAULT_AI_MODEL];
     }
 }
@@ -120,7 +118,6 @@ export async function createModel(data: CreateAIModelFormValues): Promise<void> 
             });
         });
     } catch (error) {
-        await logger().type('createModel').data({ error: String(error), details: {} }).log();
         throw error;
     }
 }
@@ -163,7 +160,6 @@ export async function updateModel(id: string, data: Omit<UpdateAIModelFormValues
             });
         });
     } catch (error) {
-        await logger().type(`updateModel (ID: ${id})`).data({ error: String(error), details: {} }).log();
         throw error;
     }
 }
@@ -195,7 +191,6 @@ export async function deleteModel(id: string): Promise<void> {
             where: { key: modelConfigKey(id) },
         });
     } catch (error) {
-        await logger().type(`deleteModel (ID: ${id})`).data({ error: String(error), details: {} }).log();
         throw error;
     }
 }

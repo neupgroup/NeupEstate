@@ -37,7 +37,6 @@ export function CrawlSourcesButton({ competitorId }: CrawlButtonProps) {
         
         if (result.errors && result.errors.length > 0) {
           result.errors.forEach((error) => {
-            console.warn('Crawl error:', error);
           });
         }
       } else {

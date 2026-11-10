@@ -7,7 +7,6 @@
 
 import { z } from 'zod';
 import { fetchPageSourceCode } from '@/services/crawl/fetch-page-source';
-import { logger } from "@neup/logica/logger";
 import { generateText } from '@/services/intelligence/unified-generation-service';
 
 const FetchListingImagesInputSchema = z.object({
@@ -61,7 +60,6 @@ async function fetchListingImagesFlow({ url }: FetchListingImagesInput): Promise
 
         return { images: output.images };
     } catch (e: any) {
-        await logger().type('fetchPropertyImagesFlow').data({ error: String(e), details: {} }).log();
         return { error: e.message || 'An unknown error occurred during image extraction.' };
     }
 }

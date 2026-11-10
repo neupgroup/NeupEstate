@@ -3,7 +3,6 @@
 'use server';
 
 import { prisma } from '@neup/core/database/prisma';
-import { logger } from "@neup/logica/logger";
 import type { CreatePromptFormValues } from '@/types';
 import { resolveModelIdentifier } from './models';
 
@@ -80,7 +79,6 @@ export async function getPrompt(promptId: string, defaultPrompt: Omit<Prompt, 'i
             promptData = configuredPrompt;
         }
     } catch (error) {
-        await logger().type(`getPrompt (ID: ${promptId})`).data({ error: String(error), details: {} }).log();
     }
 
     return {
@@ -108,7 +106,6 @@ export async function getPrompts(): Promise<Prompt[]> {
             }];
         });
     } catch (error) {
-        await logger().type('getPrompts').data({ error: String(error), details: {} }).log();
         return [];
     }
 }
@@ -130,7 +127,6 @@ export async function getPromptById(id: string): Promise<Prompt | null> {
             updatedAt: row.updatedAt.toISOString(),
         };
     } catch (error) {
-        await logger().type(`getPromptById (ID: ${id})`).data({ error: String(error), details: {} }).log();
         return null;
     }
 }
@@ -159,7 +155,6 @@ export async function createPrompt(data: CreatePromptFormValues): Promise<void> 
             },
         });
     } catch (error: any) {
-        await logger().type(`createPrompt (ID: ${data.id})`).data({ error: String(error), details: {} }).log();
         throw error;
     }
 }
@@ -193,7 +188,6 @@ export async function updatePrompt(id: string, data: Omit<CreatePromptFormValues
             },
         });
     } catch (error: any) {
-        await logger().type(`updatePrompt (ID: ${id})`).data({ error: String(error), details: {} }).log();
         throw new Error('Failed to update prompt.');
     }
 }
@@ -206,7 +200,6 @@ export async function deletePrompt(promptId: string): Promise<void> {
     try {
         await prisma.siteContent.delete({ where: { key: promptConfigKey(promptId) } });
     } catch (error: any) {
-        await logger().type(`deletePrompt (ID: ${promptId})`).data({ error: String(error), details: {} }).log();
         throw new Error('Failed to delete prompt.');
     }
 }

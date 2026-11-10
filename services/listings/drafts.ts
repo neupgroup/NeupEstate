@@ -8,7 +8,6 @@ import { getAgencyAgentAccountsByAgency as getAgencyAgentAccountsByAgencyService
 import { getAccountById, getAccounts } from '@/services/accounts/id/lookup';
 import { createListingDraftRequest, editUncreatedListingDraftRequest } from '@/services/listings/create';
 import { rewriteListingDetails } from '@/services/intelligence/rewrite-listing-details-flow';
-import { logger } from "@neup/logica/logger";
 import type { CreateListingInput, UpdateListingInput, CreateListingFormValues, UpdateListingFormValues, RewriteListingDetailsOutput, LandDetails, PlotDetails, ApartmentUnit } from "@/types";
 import { UpdateListingSchema, areaValueToSqm } from "@/types";
 import { revalidatePath } from "next/cache";
@@ -113,7 +112,6 @@ export async function saveListingCreateDraftAction(input: {
 
     return { success: true, changeId: draft.id, propertyId: draft.propertyId };
   } catch (e: any) {
-    await logger().type('savePropertyCreateDraftAction').data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message || 'Failed to save property draft.' };
   }
 }
@@ -173,7 +171,6 @@ export async function getCurrentListingCreateDraftAction(changeId?: string | nul
       propertyId: draft.propertyId,
     };
   } catch (e: any) {
-    await logger().type(`getCurrentListingCreateDraftAction ${changeId ?? 'latest'}`).data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message || 'Failed to load property draft.' };
   }
 }
@@ -250,7 +247,6 @@ export async function saveListingChangeDraftAction(input: {
 
     return { success: true, changeId: draft.id };
   } catch (e: any) {
-    await logger().type('savePropertyChangeDraftAction').data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message || 'Failed to save property draft.' };
   }
 }
@@ -273,7 +269,6 @@ export async function getListingEditCapabilitiesAction(): Promise<{
       canEditOwnership: await hasPermission(PERMISSIONS.estate.listing.transfer),
     };
   } catch (error) {
-    await logger().type('getPropertyEditCapabilitiesAction').data({ error: String(error), details: {} }).log();
     return {
       success: false,
       canEditOwnership: false,
@@ -398,7 +393,6 @@ export async function getListingAgentOptionsAction(input: {
         .map(({ id, name, imageUrl, agencyId, agencyName }) => ({ id, name, imageUrl, agencyId, agencyName })),
     };
   } catch (error) {
-    await logger().type('getListingAgentOptionsAction').data({ error: String(error), details: {} }).log();
     return { success: false, agents: [] };
   }
 }
@@ -443,7 +437,6 @@ export async function getListingChangeDraftAction(changeId: string): Promise<{
       propertyId: draft.propertyId,
     };
   } catch (e: any) {
-    await logger().type(`getPropertyChangeDraftAction ${changeId}`).data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message || 'Failed to load property draft.' };
   }
 }
@@ -551,7 +544,6 @@ export async function getListingChangeContextAction(propertyId: string): Promise
       },
     };
   } catch (e: any) {
-    await logger().type(`getPropertyChangeContextAction ${propertyId}`).data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message || 'Failed to load property change context.' };
   }
 }
@@ -611,7 +603,6 @@ export async function cancelListingChangeDraftAction(changeId: string): Promise<
     }
     return { success: true };
   } catch (e: any) {
-    await logger().type(`cancelPropertyChangeDraftAction ${changeId}`).data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message || 'Failed to cancel property change draft.' };
   }
 }
@@ -790,7 +781,6 @@ export async function reviewListingChangeAction(input: {
     }
     return { success: true, propertyId: request.propertyId };
   } catch (e: any) {
-    await logger().type(`reviewPropertyChangeAction ${input.propertyId}/${input.changeId}`).data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message || 'Failed to review property change.' };
   }
 }
@@ -818,7 +808,6 @@ export async function getListingCreateDraftAction(propertyId: string): Promise<{
       data: mapListingToCreateFormValues(property),
     };
   } catch (e: any) {
-    await logger().type(`getPropertyCreateDraftAction ${propertyId}`).data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message || 'Failed to load property data.' };
   }
 }
@@ -851,7 +840,6 @@ export async function createListingAction(
     revalidatePath('/manage/listings');
     return { success: true, propertyId: null, changeId: draft.requestId, error: null };
   } catch (e: any) {
-    await logger().type('createPropertyAction').data({ error: String(e), details: {} }).log();
     if (e instanceof z.ZodError) {
         return { success: false, error: e.message, propertyId: null, changeId: null };
     }
@@ -898,7 +886,6 @@ export async function getCurrentListingCreateContextAction(input?: {
       postingAgencyId: context.postingAgencyId,
     };
   } catch (error: any) {
-    await logger().type('getCurrentListingCreateContextAction').data({ error: String(error), details: {} }).log();
     return {
       success: false,
       error: error?.message || 'Failed to resolve property posting context.',
@@ -970,7 +957,6 @@ export async function updateListingAction(
     revalidatePath(`/manage/listings/${id}/edit`);
     return { success: true, error: null };
   } catch (e: any) {
-    await logger().type(`updatePropertyAction (ID: ${id})`).data({ error: String(e), details: {} }).log();
      if (e instanceof z.ZodError) {
         return { success: false, error: e.message };
     }
@@ -1018,7 +1004,6 @@ export async function rewriteListingDetailsAction(
 
     return { success: true, data: rewrittenData };
   } catch (e: any) {
-    await logger().type(`rewritePropertyDetailsAction (ID: ${propertyId})`).data({ error: String(e), details: {} }).log();
     return { success: false, error: e.message || "Failed to rewrite property details." };
   }
 }

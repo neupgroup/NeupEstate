@@ -10,7 +10,6 @@
  */
 
 import * as Handlebars from 'handlebars';
-import { logger } from "@neup/logica/logger";
 import { z } from 'zod';
 
 /**
@@ -73,7 +72,6 @@ export async function generateText<T>(options: GenerateTextInput): Promise<T> {
     // Step 2: Make the generation call using the model identifier
     try {
         const resolvedModel = resolveGoogleModel(modelIdentifier);
-        console.log(`Requesting response from model: ${resolvedModel}`);
 
         const response = await fetch(
             `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(resolvedModel)}:generateContent`,
@@ -116,11 +114,6 @@ export async function generateText<T>(options: GenerateTextInput): Promise<T> {
         }
 
     } catch (error: any) {
-        // Log the full error object for detailed debugging, including raw API responses.
-        await logger().type('unified-generation-service').data({ error: String(error), details: {
-            model: modelIdentifier,
-            errorDetails: JSON.parse(JSON.stringify(error, Object.getOwnPropertyNames(error)))
-        } }).log();
         throw new Error(`AI generation failed: ${error.message}`);
     }
 
@@ -159,10 +152,6 @@ export async function generateText<T>(options: GenerateTextInput): Promise<T> {
         const jsonOutput = JSON.parse(jsonString);
         return outputSchema.parse(jsonOutput) as T;
     } catch (error) {
-         await logger().type('generateText-output-parsing').data({ error: String(error), details: {
-            model: modelIdentifier,
-            rawOutput: generatedJsonString,
-        } }).log();
         throw new Error('AI returned a response with an invalid format.');
     }
 }

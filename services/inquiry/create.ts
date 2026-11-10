@@ -1,7 +1,6 @@
 import { prisma } from '@neup/core/database/prisma';
 import type { CreateInquiryFormValues } from '@/types';
 import { getListingById } from '@/services/listings/view';
-import { logger } from '@neup/logica/logger';
 
 export class InquiryServiceError extends Error { status: number; constructor(message: string, status: number) { super(message); this.name = 'InquiryServiceError'; this.status = status; } }
 export type InquiryType = 'property' | 'bridge';
@@ -21,7 +20,6 @@ export async function createInquiry(accountId: string | undefined, type: Inquiry
     return inquiry.id;
   } catch (error) {
     if (error instanceof InquiryServiceError) throw error;
-    await logger().type(`createInquiry${accountId ? ` account:${accountId}` : ''}`).data({ error: String(error), details: {} }).log();
     throw new InquiryServiceError('Failed to submit inquiry.', 500);
   }
 }

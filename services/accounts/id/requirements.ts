@@ -8,7 +8,6 @@ import { prisma } from '@neup/core/database/prisma';
 import { createRequirement } from "@/services/requirements/create";
 import { updateRequirement } from "@/services/requirements/update";
 import { requireIdentity } from "@/services/listings/action-helpers";
-import { logger } from "@neup/logica/logger";
 
 type RequirementFormSubmission = Omit<CreateRequirementFormValues, 'purpose'> & {
   purpose?: string;
@@ -72,11 +71,6 @@ export async function upsertRequirementAction(
   } catch (error: any) {
     const isValidationError = error instanceof z.ZodError;
     const details = getRequirementErrorDetails(error);
-    console.error('[requirements] Save action failed', { stage, ...details });
-    await logger().type('upsertRequirementAction').data({
-      error: details.message,
-      details: { stage, ...details },
-    }).log();
     if (isValidationError) return { success: false, error: error.message };
     return { success: false, error: 'Failed to save requirements.' };
   }

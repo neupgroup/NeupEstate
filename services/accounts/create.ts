@@ -27,7 +27,6 @@ import { logica } from '@neup/logica';
 import { getAccountInformation, getSignedAccountInformation } from '@/services/accounts/lookup';
 import { getAuthenticatedAccount } from '@/services/auth/account';
 import { getAuthCookieServer } from '@/services/auth/cookie';
-import { logger } from "@neup/logica/logger";
 
 type LocalAccountSeed = {
   id: string;
@@ -107,6 +106,5 @@ export async function createAccount(): Promise<void> {
       },
     });
   } catch (error) {
-    await logger().type('createAccount').data({ error: String(error), details: {} }).log().catch(() => {});
   }
 }

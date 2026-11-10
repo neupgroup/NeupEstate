@@ -1,7 +1,6 @@
 'use server';
 
 import { prisma } from '@neup/core/database/prisma';
-import { logger } from "@neup/logica/logger";
 import { randomUUID } from 'crypto';
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -74,7 +73,6 @@ export async function getCompetitors(): Promise<Competitor[]> {
     `;
     return rows.map(mapCompetitor);
   } catch (e) {
-    await logger().type('getCompetitors').data({ error: String(e), details: {} }).log();
     return [];
   }
 }
@@ -95,7 +93,6 @@ export async function getCompetitorById(id: string): Promise<Competitor | null> 
     const row = rows[0];
     return row ? mapCompetitor(row) : null;
   } catch (e) {
-    await logger().type(`getCompetitorById (${id})`).data({ error: String(e), details: {} }).log();
     return null;
   }
 }
@@ -136,7 +133,6 @@ export async function getCompetitorPages(competitorId: string): Promise<Competit
     `;
     return rows.map(mapCompetitorPage);
   } catch (e) {
-    await logger().type(`getCompetitorPages (${competitorId})`).data({ error: String(e), details: {} }).log();
     return [];
   }
 }
@@ -249,7 +245,6 @@ export async function getCompetitorPageById(id: string): Promise<CompetitorPage 
     const row = rows[0];
     return row ? mapCompetitorPage(row) : null;
   } catch (e) {
-    await logger().type(`getCompetitorPageById (${id})`).data({ error: String(e), details: {} }).log();
     return null;
   }
 }
@@ -265,7 +260,6 @@ export async function getCompetitorListingByPageId(competitorPageId: string): Pr
     const row = rows[0];
     return row ? mapCompetitorListing(row) : null;
   } catch (e) {
-    await logger().type(`getCompetitorListingByPageId (${competitorPageId})`).data({ error: String(e), details: {} }).log();
     return null;
   }
 }

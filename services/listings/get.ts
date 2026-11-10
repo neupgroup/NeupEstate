@@ -1,5 +1,4 @@
 import { prisma } from '@neup/core/database/prisma';
-import { logger } from "@neup/logica/logger";
 import { mapTypeFromEnum } from '@/inapp/database/adapters';
 import { formatLocationWithParent, normalizeListingChangeStatus, type ListingDraftSummary } from '@/services/listings/shared';
 
@@ -23,7 +22,6 @@ export async function getListingDrafts(accountId: string): Promise<ListingDraftS
       return { id: draft.id, propertyId: draft.propertyId, title: String(data.title || draft.property?.title || 'Unfinished property draft'), location: String(data.location || location || formatLocationWithParent(draft.property?.locationRecord) || ''), category: String(data.category || (draft.property?.type ? mapTypeFromEnum(draft.property.type) : '') || ''), status: normalizeListingChangeStatus(draft.status) as ListingDraftSummary['status'], modifiedOn: draft.modifiedOn.toISOString() };
     });
   } catch (error) {
-    await logger().type(`getPropertyDrafts ${accountId}`).data({ error: String(error), details: {} }).log();
     return [];
   }
 }

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@neup/core/database/prisma';
-import { logger } from "@neup/logica/logger";
 import {
   insertRoleCapability,
   updateRoleCapability,
@@ -367,7 +366,6 @@ const postHandler = async (req: NextRequest) => {
     if (err instanceof ScopeValidationError) {
       return NextResponse.json({ error: err.message }, { status: 400 });
     }
-    await logger().type(`bridge/webhook.v1/authz/role [${table}:${operation}]`).data({ error: String(err), details: {} }).log();
     return NextResponse.json({ error: err.message ?? 'Internal server error.' }, { status: 500 });
   }
 };

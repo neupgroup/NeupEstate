@@ -17,7 +17,6 @@ authenticated account.
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { prisma } from '@neup/core/database/prisma';
-import { logger } from '@neup/logica/logger';
 import { requireIdentity } from '@/services/listings/action-helpers';
 import { hasPermission, requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';
@@ -76,7 +75,6 @@ export async function GET(request: NextRequest) {
     ]);
     return NextResponse.json({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } });
   } catch (error) {
-    await logger().type('bridge/api.v1/listings/saved:GET').data({ error: String(error), details: {} }).log();
     return errorResponse(error);
   }
 }
@@ -103,7 +101,6 @@ export async function POST(request: NextRequest) {
     const data = existing ?? await prisma.savedProperty.create({ data: { accountId, propertyId: parsed.data.propertyId } });
     return NextResponse.json({ success: true, data }, { status: existing ? 200 : 201 });
   } catch (error) {
-    await logger().type('bridge/api.v1/listings/saved:POST').data({ error: String(error), details: {} }).log();
     return errorResponse(error);
   }
 }
@@ -123,7 +120,6 @@ export async function DELETE(request: NextRequest) {
     if (!result.count) return NextResponse.json({ success: false, error: 'Saved property not found.' }, { status: 404 });
     return NextResponse.json({ success: true, ...(id ? { id } : { propertyId }) });
   } catch (error) {
-    await logger().type('bridge/api.v1/listings/saved:DELETE').data({ error: String(error), details: {} }).log();
     return errorResponse(error);
   }
 }

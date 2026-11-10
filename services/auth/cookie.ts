@@ -1,11 +1,4 @@
-/**
- * cookie.ts
- *
- * Centralized cookie reading service for auth cookie and trusted server auth header.
- * Handles both client-side and server-side cookie access.
- */
 
-import { logger } from '@neup/logica/logger';
 
 const COOKIE_NAME = 'auth';
 
@@ -52,7 +45,6 @@ export async function getAuthCookieServer(): Promise<string | null> {
     const store = await cookies();
     return store.get(COOKIE_NAME)?.value ?? null;
   } catch (error) {
-    await logger().type('auth.cookie').data({ error: String(error) }).log();
     return null;
   }
 }

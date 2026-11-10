@@ -9,7 +9,6 @@ Renders the public property gallery grid and optionally the full-page selected-i
 import { Link } from "@neup/components/ui/link";
 import { notFound, redirect } from "next/navigation";
 import { getListingById, getListingBySlug } from "@/services/listings/view";
-import { logger } from "@neup/logica/logger";
 import { ListingGalleryFullPage } from "@/components/manage/property-gallery-full-page";
 import { Button } from "@neup/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -51,7 +50,6 @@ export default async function ListingGalleryPage({
       property = await getListingById(slug);
     }
   } catch (error) {
-    await logger().type(`Error fetching property gallery for slug/ID: ${slug}`).data({ error: String(error), details: {} }).log();
     notFound();
   }
 

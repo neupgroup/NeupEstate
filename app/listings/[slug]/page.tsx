@@ -10,7 +10,6 @@ import { notFound, redirect } from 'next/navigation';
 import { Link } from '@neup/components/ui/link';
 import { getListingById, getListings, getListingBySlug } from '@/services/listings';
 import { buildPublicAppUrl } from '@neup/core/helpers/link/url';
-import { logger } from "@neup/logica/logger";
 import { BedDouble, Bath, SquareGanttChart, MapPin, Building, Home, Box, Utensils, Hash, Car, Bike, Milestone, School, Briefcase, LandPlot, Sprout, Tag, Mountain, Wallet, Banknote, Calendar, Check, Plane, Link as LinkIcon, User as UserIcon, FileText } from 'lucide-react';
 import { SafeImage } from '@/components/safe-image';
 import { EmiCalculatorChart } from '@/components/emi-calculator-chart';
@@ -156,7 +155,6 @@ export async function generateMetadata(
   try {
     property = await getListingBySlug(slug) || await getListingById(slug);
   } catch (error) {
-     await logger().type(`generateMetadata for ListingDetailPage (slug: ${slug})`).data({ error: String(error), details: {} }).log();
   }
 
   if (!property) {
@@ -208,7 +206,6 @@ export async function generateStaticParams() {
       slug: getListingSlugId(property),
     }));
   } catch (e) {
-    await logger().type('generateStaticParams for ListingDetailPage').data({ error: String(e), details: {} }).log();
     return [];
   }
 }
@@ -323,7 +320,6 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
       property = await getListingById(slug);
     }
   } catch (e) {
-    await logger().type(`Error fetching property on detail page for slug/ID: ${slug}`).data({ error: String(e), details: {} }).log();
     notFound();
   }
   
@@ -389,11 +385,6 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
   }
 
   if (renderIssues.length > 0) {
-    await logger().type(`ListingDetailPage render (slug/ID: ${slug})`).data({ error: String(new Error('Property detail page rendered with malformed property data.')), details: {
-        propertyId: property.id,
-        propertySlug: property.slug || null,
-        issues: renderIssues,
-      } }).log();
   }
 
   const schemaJson = generateSchema({ ...property, images: safeImages, amenities: safeAmenities });

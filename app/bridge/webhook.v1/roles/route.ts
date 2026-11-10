@@ -1,7 +1,6 @@
 import { createDecipheriv, createHash, createHmac, timingSafeEqual } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { Prisma, prisma } from "@neup/core/database/prisma";
-import { logger } from "@neup/logica/logger";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -250,7 +249,6 @@ const postHandler = async (req: NextRequest) => {
   try {
     decryptedText = decryptEnvelope(body.iv, body.tag, body.data, appSecret);
   } catch (error) {
-    await logger().type("bridge/webhook.v1/roles decrypt").data({ error: String(error), details: {} }).log();
     return fail("decrypt_failed");
   }
 
@@ -275,7 +273,6 @@ const postHandler = async (req: NextRequest) => {
       }
     });
   } catch (error) {
-    await logger().type("bridge/webhook.v1/roles persist").data({ error: String(error), details: {} }).log();
     return fail("record_failed");
   }
 

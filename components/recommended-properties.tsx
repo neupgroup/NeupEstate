@@ -62,7 +62,6 @@ export function RecommendedListings({ requirements }: RecommendedListingsProps) 
 
       } catch (e) {
         setError("An unexpected error occurred while fetching recommendations.");
-        console.error(e);
       } finally {
         setIsLoading(false);
       }

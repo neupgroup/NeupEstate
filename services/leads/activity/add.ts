@@ -6,7 +6,6 @@ import { prisma } from '@neup/core/database/prisma';
 import { getIdentity } from '@/services/neupid/get-identity';
 import { requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';
-import { logger } from '@neup/logica/logger';
 
 export async function addLeadActivityAction(data: {
     leadId: string;
@@ -48,7 +47,6 @@ export async function addLeadActivityAction(data: {
         revalidatePath('/manage/leads');
         return { success: true, error: null, activityId };
     } catch (error: any) {
-        await logger().type('addLeadActivityAction').data({ error: String(error), details: {} }).log();
         return { success: false, error: error?.message ?? 'Failed to add lead activity.', activityId: null };
     }
 }

@@ -39,7 +39,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { createInquiry, InquiryServiceError } from '@/services/inquiry/create';
-import { logger } from "@neup/logica/logger";
 
 export const dynamic = 'force-dynamic';
 
@@ -92,8 +91,6 @@ const postHandler = async (req: NextRequest) => {
         { status: error.status },
       );
     }
-
-    await logger().type('bridge/api.v1/inquiry:POST').data({ error: String(error), details: {} }).log();
     return NextResponse.json(
       { success: false, error: 'Internal server error.' },
       { status: 500 },

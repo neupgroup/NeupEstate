@@ -1,7 +1,6 @@
 import { createDecipheriv, createHash, createHmac, timingSafeEqual } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { Prisma, prisma } from "@neup/core/database/prisma";
-import { logger } from "@neup/logica/logger";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -129,16 +128,6 @@ function decryptEnvelope(ivB64: string, tagB64: string, dataB64: string, appSecr
   return plain.toString("utf8");
 }
 
-// Write a structured webhook event log entry.
-function webhookLog(eventId: string | undefined, message: string, details?: Record<string, unknown>) {
-  const prefix = `[bridge/webhook.v1/account/updates][eventId:${eventId ?? "unknown"}]`;
-  if (details) {
-    console.log(`${prefix} ${message}`, details);
-    return;
-  }
-  console.log(`${prefix} ${message}`);
-}
-
 // Validate that the encrypted webhook envelope contains its required fields.
 function isValidEnvelope(body: EncryptedEnvelope): body is Required<EncryptedEnvelope> {
   return (
@@ -249,13 +238,11 @@ async function persistAccountUpdate(
   tx: Prisma.TransactionClient,
   payload: AccountUpdatePayload,
 ) {
-  webhookLog(payload.eventId, "Has asked to update account/user.");
   const accountId = payload.account.id.trim();
   if (!accountId) throw new Error("Missing account.id.");
 
   const connectionId = payload.connectionId.trim();
   if (!connectionId) throw new Error("Missing connectionId.");
-  webhookLog(payload.eventId, "Looking for user.", { accountId, connectionId });
 
   const changedFields = new Set(payload.changedFields);
   const hasChangedField = (field: SupportedChangedField): boolean => changedFields.has(field);
@@ -264,11 +251,6 @@ async function persistAccountUpdate(
   const primaryRoleId = normalizedRoles[0]?.id ?? null;
 
   if (rolesWereProvided) {
-    webhookLog(payload.eventId, "Replacing account role state from payload.", {
-      appId: payload.appId,
-      accountId,
-      roleCount: normalizedRoles.length,
-    });
 
     for (const role of normalizedRoles) {
       await tx.authzRole.upsert({
@@ -319,8 +301,6 @@ async function persistAccountUpdate(
       : {}),
     accessedOn: new Date(),
   };
-
-  webhookLog(payload.eventId, "Upserting account with changed fields.");
   await tx.account.upsert({
     where: { id: accountId },
     update: updateData,
@@ -380,7 +360,6 @@ async function persistAccountUpdate(
     typeof payload.account.neupId === "string" &&
     payload.account.neupId.trim().length > 0
   ) {
-    webhookLog(payload.eventId, "Syncing secondary rows by neupId.");
     const secondaryAccountIds = (
       await tx.account.findMany({
         where: {
@@ -421,15 +400,12 @@ async function persistAccountUpdate(
       }
     }
   }
-  webhookLog(payload.eventId, "Finished persistence for this payload.");
 }
 
 // Validate and process the submitted request.
 const postHandler = async (req: NextRequest) => {
-  webhookLog(undefined, "Received webhook request.");
   const appSecret = getAppSecret();
   if (!appSecret) {
-    webhookLog(undefined, "Misconfigured secret.");
     return fail("misconfigured_secret", "Set BRIDGE_APP_SECRET or NEUP_APP_SECRET.", 500);
   }
 
@@ -438,7 +414,6 @@ const postHandler = async (req: NextRequest) => {
   const signature = req.headers.get("x-bridge-signature") || "";
 
   if (encHeader.toLowerCase() !== "aes-256-gcm" || sigAlgHeader.toLowerCase() !== "hmac-sha256") {
-    webhookLog(undefined, "Invalid encryption/signature headers.");
     return fail("invalid_headers", "Unsupported bridge encryption/signature headers.");
   }
 
@@ -446,61 +421,40 @@ const postHandler = async (req: NextRequest) => {
   try {
     body = (await req.json()) as EncryptedEnvelope;
   } catch {
-    webhookLog(undefined, "Invalid JSON body.");
     return fail("invalid_body", "Body must be valid JSON.");
   }
 
   if (!isValidEnvelope(body)) {
-    webhookLog(undefined, "Missing required encrypted envelope fields.");
     return fail("invalid_body", "Missing required encrypted envelope fields.");
   }
 
   if (!verifySignature(body.iv, body.tag, body.data, signature, appSecret)) {
-    webhookLog(undefined, "Invalid signature.");
     return fail("invalid_signature");
   }
-  webhookLog(undefined, "Signature verified.");
 
   let decryptedText = "";
   try {
     decryptedText = decryptEnvelope(body.iv, body.tag, body.data, appSecret);
   } catch (error) {
-    await logger().type("bridge/webhook.v1/account/updates decrypt").data({ error: String(error), details: {} }).log();
-    webhookLog(undefined, "Failed to decrypt payload.");
     return fail("decrypt_failed");
   }
-  webhookLog(undefined, "Payload decrypted.");
 
   let parsed: unknown;
   try {
     parsed = JSON.parse(decryptedText);
   } catch {
-    webhookLog(undefined, "Decrypted payload is not valid JSON.");
     return fail("decrypt_failed", "Decrypted payload is not valid JSON.");
   }
 
   const payloads = Array.isArray(parsed) ? parsed : [parsed];
   if (!payloads.length || !payloads.every(isValidPayload)) {
-    webhookLog(undefined, "Invalid payload shape.");
     return fail("invalid_payload", "Decrypted payload shape is invalid.");
   }
-  webhookLog((payloads[0] as AccountUpdatePayload).eventId, "Payload validated.", {
-    payloadCount: payloads.length,
-  });
 
   const mergedChangedFields = new Set<string>();
   try {
-    await prisma.$transaction(async (tx) => {
-      for (const payload of payloads) {
-        webhookLog(payload.eventId, "Processing payload.");
-        await persistAccountUpdate(tx, payload);
-        for (const field of payload.changedFields) mergedChangedFields.add(field);
-      }
-    });
   } catch (error) {
-    await logger().type("bridge/webhook.v1/account/updates persist").data({ error: String(error), details: {} }).log();
     if (error instanceof Error && error.message.startsWith("Role does not exist in authz_role:")) {
-      webhookLog(undefined, "Role does not exist. Sending failure response.", { reason: error.message });
       return NextResponse.json(
         {
           success: false,
@@ -510,13 +464,8 @@ const postHandler = async (req: NextRequest) => {
         { status: 400 }
       );
     }
-    webhookLog(undefined, "Persistence failed. Sending failure response.");
     return fail("record_failed");
   }
-
-  webhookLog((payloads[0] as AccountUpdatePayload).eventId, "Response sent.", {
-    changedFields: Array.from(mergedChangedFields),
-  });
   return NextResponse.json({
     success: true,
     changedFields: Array.from(mergedChangedFields),

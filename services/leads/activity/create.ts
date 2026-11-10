@@ -1,7 +1,6 @@
 'use server';
 
 import { prisma } from '@neup/core/database/prisma';
-import { logger } from "@neup/logica/logger";
 
 // ::neup.documentation::lead-activity-create-service
 // ::private
@@ -49,7 +48,6 @@ export async function createLeadActivity(input: CreateLeadActivityInput): Promis
 
         return activity.id;
     } catch (e) {
-        await logger().type(`createLeadActivity ${input.leadId}`).data({ error: String(e), details: {} }).log();
         throw new Error('Failed to create lead activity.');
     }
 }

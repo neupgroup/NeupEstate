@@ -117,15 +117,9 @@ export default function SettingsPage() {
       <div className="py-6">
         <h3 className="text-xl font-semibold">Bugs and Support</h3>
         <p className="text-sm text-muted-foreground mt-1 mb-4">
-          View system error logs or get help.
+          Get help or share feedback.
         </p>
         <div className="border rounded-lg overflow-hidden">
-            <Link href="/manage/site/errors" className="block px-4 py-3 hover:bg-muted/50 transition-colors font-medium">
-                Error Log
-            </Link>
-            <Link href="/manage/site/devlogs" className="block px-4 py-3 border-t hover:bg-muted/50 transition-colors font-medium">
-                Request Dev Logs
-            </Link>
             <div className="block px-4 py-3 border-t font-medium opacity-50 cursor-not-allowed">
                 Request a Feature
             </div>

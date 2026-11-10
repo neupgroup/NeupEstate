@@ -2,7 +2,6 @@
 
 import { prisma } from '@neup/core/database/prisma';
 import type { CreateUserActivityInput } from '@/types';
-import { logger } from '@neup/logica/logger';
 
 export async function logActivity(activityData: CreateUserActivityInput): Promise<string> {
   try {
@@ -18,7 +17,6 @@ export async function logActivity(activityData: CreateUserActivityInput): Promis
     });
     return activity.id;
   } catch (error) {
-    await logger().type('logActivity').data({ error: String(error), details: {} }).log();
     return '';
   }
 }

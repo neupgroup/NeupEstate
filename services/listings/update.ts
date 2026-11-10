@@ -9,7 +9,6 @@ Property create and mutation services that persist core property fields, details
 */
 
 import { prisma } from '@neup/core/database/prisma';
-import { logger } from "@neup/logica/logger";
 import type { CreateListingInput, ExtractedListingData, UpdateListingInput } from '@/types';
 import { areaValueToSqm } from '@/types';
 import { mapPurposeToEnum, mapStatusToEnum, mapTypeToEnum } from '@/inapp/database/adapters';
@@ -447,7 +446,7 @@ export async function createListingRecord(d: CreateListingInput & { creatorId?: 
     await replaceListingOwners(created.id, d.owners);
 
     return created.id;
-  } catch (e) { await logger().type('createPropertyRecord').data({ error: String(e), details: {} }).log(); throw new Error('Failed to create property.'); }
+  } catch (e) { throw new Error('Failed to create property.'); }
 }
 
 
@@ -467,7 +466,7 @@ export async function addListing(d: Omit<ExtractedListingData, 'embedding'>): Pr
     await upsertDetailTable(created.id, created.type, rest);
     await upsertMedia(created.id, rest.images ?? []);
     return created.id;
-  } catch (e) { await logger().type('addProperty').data({ error: String(e), details: {} }).log(); throw new Error('Failed to add property.'); }
+  } catch (e) { throw new Error('Failed to add property.'); }
 }
 
 
@@ -486,7 +485,7 @@ export async function updateListing(id: string, d: UpdateListingInput): Promise<
     await upsertDetailTable(id, mapTypeToEnum(merged.category), merged);
     if (merged.images !== undefined) await upsertMedia(id, merged.images ?? []);
     await replaceListingOwners(id, merged.owners);
-  } catch (e) { await logger().type(`updateProperty ${id}`).data({ error: String(e), details: {} }).log(); throw new Error('Failed to update property.'); }
+  } catch (e) { throw new Error('Failed to update property.'); }
 }
 
 
@@ -511,5 +510,5 @@ export async function updateListingWithExtractedData(id: string, d: ExtractedLis
 export async function updateListingImages(id: string, images: string[]): Promise<void> {
   try {
     await upsertMedia(id, images);
-  } catch (e) { await logger().type(`updatePropertyImages ${id}`).data({ error: String(e), details: {} }).log(); throw new Error('Failed to update images.'); }
+  } catch (e) { throw new Error('Failed to update images.'); }
 }

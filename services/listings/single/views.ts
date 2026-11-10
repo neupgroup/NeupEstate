@@ -5,7 +5,6 @@ import { getListingById } from "../view";
 import { logActivity } from "@/services/activities/log";
 import { updateAccountAccessInfo } from "@/services/accounts/id/lookup";
 import { updateAccountPreferences } from "@/services/accounts/single/preferences";
-import { logger } from "@neup/logica/logger";
 
 export async function logListingViews(userId: string, events: ListingActivityEvent[], propertyId?: string): Promise<{ success: boolean; error?: string }> {
   try {
@@ -18,11 +17,9 @@ export async function logListingViews(userId: string, events: ListingActivityEve
     if (propertyId) {
       const property = await getListingById(propertyId);
       if (property) await updateAccountPreferences(userId, property, events);
-      else await logger().type(`logPropertyViews (Prop: ${propertyId})`).data({ error: String(new Error('Property not found during preference update.')), details: {} }).log();
     }
     return { success: true };
   } catch (error: any) {
-    await logger().type(`logPropertyViews (User: ${userId}, Prop: ${propertyId})`).data({ error: String(error), details: {} }).log();
     return { success: false, error: error.message || 'Failed to log property views.' };
   }
 }

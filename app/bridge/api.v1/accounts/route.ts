@@ -8,7 +8,6 @@ Lists public account profiles by account category. Optional pagination uses
 ::end
 */
 import { NextRequest, NextResponse } from 'next/server';
-import { logger } from '@neup/logica/logger';
 import { listAccountProfiles, type AccountProfileType } from '@/services/accounts/profile';
 
 export const dynamic = 'force-dynamic';
@@ -48,7 +47,6 @@ export async function GET(request: NextRequest) {
       pagination: { limit, offset, total: result.total, hasMore: offset + result.accounts.length < result.total },
     });
   } catch (error) {
-    await logger().type('bridge/api.v1/accounts:GET').data({ error: String(error), details: {} }).log();
     return NextResponse.json({ success: false, error: 'Internal server error.' }, { status: 500 });
   }
 }

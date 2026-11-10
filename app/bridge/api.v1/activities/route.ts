@@ -44,7 +44,6 @@ const postHandler = async (request: NextRequest) => {
 
     return NextResponse.json({ message: 'Activity received.' }, { status: 202 });
   } catch (error) {
-    console.error('Error in /bridge/api.v1/activities:', error);
     return NextResponse.json({ message: 'Invalid request body.' }, { status: 400 });
   }
 };

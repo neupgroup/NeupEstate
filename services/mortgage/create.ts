@@ -1,7 +1,6 @@
 'use server';
 
 import { prisma } from '@neup/core/database/prisma';
-import { logger } from '@neup/logica/logger';
 import type { CreateMortgageRequestFormValues } from '@/types';
 
 export async function createMortgageRequest(data: CreateMortgageRequestFormValues): Promise<string> {
@@ -22,7 +21,6 @@ export async function createMortgageRequest(data: CreateMortgageRequestFormValue
     });
     return request.id;
   } catch (error) {
-    await logger().type('createMortgageRequest').data({ error: String(error), details: {} }).log();
     throw new Error('Failed to submit mortgage request.');
   }
 }

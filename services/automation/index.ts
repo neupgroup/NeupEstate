@@ -2,7 +2,6 @@
 
 import { getAwaitingReviewItems, getPaginatedListings } from '@/services/listings';
 import { addSitemap, getNewUrlsFromSitemap, processSitemapUrl, updateSitemapCheckedTime } from "@/services/crawl/sitemap";
-import { logger } from "@neup/logica/logger";
 import { getDisplayConfiguration } from '@/services/preferences/display';
 import type { ListingApprovalResult, ListingAmendmentResult, ListingAssuranceResult } from "@/types";
 import { revalidatePath } from "next/cache";
@@ -30,7 +29,6 @@ export async function addSitemapAction(prevState: any, formData: FormData) {
         revalidatePath('/manage/automation');
         return { success: true, error: null };
     } catch (error: any) {
-        await logger().type('addSitemapAction').data({ error: String(error), details: {} }).log();
         return { success: false, error: error.message };
     }
 }
@@ -142,7 +140,6 @@ export async function analyzeMarketAction(prevState: MarketAnalysisState, formDa
 
         return { success: true, result: { count: totalCount, averagePrice, minPrice, maxPrice, summary }};
     } catch(e: any) {
-        await logger().type('analyzeMarketAction').data({ error: String(e), details: {} }).log();
         return { success: false, error: "An unexpected error occurred during analysis." };
     }
 }

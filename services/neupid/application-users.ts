@@ -1,5 +1,4 @@
 import { logica } from '@neup/logica';
-import { logger } from "@neup/logica/logger";
 
 type ApplicationUser = {
   accountId: string;
@@ -49,13 +48,6 @@ export async function fetchApplicationUsers(input?: {
     if (!response.ok || !response.body.success) {
       const message = response.body.error ?? `Neup users API failed with status ${response.status}`;
 
-      await logger().type('neupid/application-users:fetchApplicationUsers').data({ error: String(new Error(message)), details: {
-        response: {
-          status: response.status,
-          body: response.body,
-        },
-      } }).log();
-
       return {
         success: false,
         users: [],
@@ -80,10 +72,6 @@ export async function fetchApplicationUsers(input?: {
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Network error while fetching Neup application users';
-    await logger().type('neupid/application-users:fetchApplicationUsers').data({ error: String(new Error(message)), details: {
-      request: null,
-      response: null,
-    } }).log();
     return {
       success: false,
       users: [],

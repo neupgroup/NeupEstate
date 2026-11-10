@@ -85,7 +85,6 @@ export function ListingQA({ propertyId, agentName = "Property Agent", agentImage
                 if (userDetails.phone) form.setValue("phone", userDetails.phone);
             }
         } catch (error) {
-            console.error("Failed to parse user details from cookie:", error);
         }
     }, [form]);
 
@@ -156,7 +155,6 @@ export function ListingQA({ propertyId, agentName = "Property Agent", agentImage
                     };
                     setCookie("user_details", JSON.stringify(userDetailsToSave), 365);
                 } catch (error) {
-                    console.error("Failed to save user details to cookie:", error);
                 }
                 // --- End saving to cookie ---
 

@@ -8,7 +8,6 @@ properties represented by the account.
 ::end
 */
 import { NextResponse } from 'next/server';
-import { logger } from '@neup/logica/logger';
 import { getAccountProfile } from '@/services/accounts/profile';
 
 export const dynamic = 'force-dynamic';
@@ -25,7 +24,6 @@ export async function GET(_request: Request, context: Context) {
     }
     return NextResponse.json({ success: true, ...account });
   } catch (error) {
-    await logger().type('bridge/api.v1/accounts/[id]:GET').data({ error: String(error), details: {} }).log();
     return NextResponse.json({ success: false, error: 'Internal server error.' }, { status: 500 });
   }
 }

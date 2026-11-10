@@ -2,7 +2,6 @@ import { prisma } from '@neup/core/database/prisma';
 import { CreateListingSchema, areaValueToSqm, type ApartmentUnit, type CreateListingFormValues, type CreateListingInput, type LandDetails, type PlotDetails } from '@/types';
 import { resolveListingCreateContext, type ListingCreateContext } from '@/services/listings/create/context';
 import { cleanPricing, firstPositivePrice, formatLocationString, normalizeOwnerEntries } from '@/services/listings/action-helpers';
-import { logger } from '@neup/logica/logger';
 
 export type CreateListingContext = Pick<ListingCreateContext, 'actorAccountId'> & { actorId?: string; postingAgencyId?: string | null; workingProfileId?: string | null };
 export type CreateListingResult = { requestId: string };
@@ -37,7 +36,6 @@ export async function submitListingCreation(input: CreateListingFormValues, cont
   const draft = existingDraft
     ? await prisma.listingChange.update({ where: { id: existingDraft.id }, data: { data, status: 'creation_pending', isApproved: null, modifiedOn: new Date(), createdById: postingContext.createdById, createdForId: postingContext.createdForId, workingProfileId: postingContext.workingProfileId } })
     : await prisma.listingChange.create({ data: { accountId: actorId, propertyId: null, status: 'creation_pending', isApproved: null, createdById: postingContext.createdById, createdForId: postingContext.createdForId, workingProfileId: postingContext.workingProfileId, data, modifiedOn: new Date() } });
-  await logger().type('property.create').data({ requestId: draft.id, actorAccountId: actorId, refreshed: Boolean(existingDraft) }).log();
   return { requestId: draft.id };
 }
 
