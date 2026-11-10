@@ -110,8 +110,6 @@ function buildCoreData(d: Partial<CreateListingInput> & Record<string, any>) {
     purpose:           mapPurposeToEnum(d.purpose),
     status:            mapStatusToEnum(d.status),
     currency:          truncate(listingPrice.priceCurrency ?? d.pricing?.currency ?? 'NPR', 10),
-    displayPrice:      listingPrice.priceAmount ?? d.price ?? 0,
-    displayPriceUnit:  truncate(listingPrice.priceBasis ?? '', 24),
     priceBasis:        listingPrice.priceBasis,
     priceCurrency:    listingPrice.priceCurrency,
     priceListed:      listingPrice.priceAmount,

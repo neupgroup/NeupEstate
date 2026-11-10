@@ -10346,12 +10346,10 @@ export namespace Prisma {
   }
 
   export type ListingAvgAggregateOutputType = {
-    displayPrice: Decimal | null
     priceListed: Decimal | null
   }
 
   export type ListingSumAggregateOutputType = {
-    displayPrice: Decimal | null
     priceListed: Decimal | null
   }
 
@@ -10364,8 +10362,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose | null
     status: $Enums.PropertyStatus | null
     currency: string | null
-    displayPrice: Decimal | null
-    displayPriceUnit: string | null
     priceBasis: $Enums.ListingPriceBasis | null
     priceCurrency: string | null
     priceListed: Decimal | null
@@ -10389,8 +10385,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose | null
     status: $Enums.PropertyStatus | null
     currency: string | null
-    displayPrice: Decimal | null
-    displayPriceUnit: string | null
     priceBasis: $Enums.ListingPriceBasis | null
     priceCurrency: string | null
     priceListed: Decimal | null
@@ -10415,8 +10409,6 @@ export namespace Prisma {
     purpose: number
     status: number
     currency: number
-    displayPrice: number
-    displayPriceUnit: number
     priceBasis: number
     priceCurrency: number
     priceListed: number
@@ -10443,12 +10435,10 @@ export namespace Prisma {
 
 
   export type ListingAvgAggregateInputType = {
-    displayPrice?: true
     priceListed?: true
   }
 
   export type ListingSumAggregateInputType = {
-    displayPrice?: true
     priceListed?: true
   }
 
@@ -10461,8 +10451,6 @@ export namespace Prisma {
     purpose?: true
     status?: true
     currency?: true
-    displayPrice?: true
-    displayPriceUnit?: true
     priceBasis?: true
     priceCurrency?: true
     priceListed?: true
@@ -10486,8 +10474,6 @@ export namespace Prisma {
     purpose?: true
     status?: true
     currency?: true
-    displayPrice?: true
-    displayPriceUnit?: true
     priceBasis?: true
     priceCurrency?: true
     priceListed?: true
@@ -10512,8 +10498,6 @@ export namespace Prisma {
     purpose?: true
     status?: true
     currency?: true
-    displayPrice?: true
-    displayPriceUnit?: true
     priceBasis?: true
     priceCurrency?: true
     priceListed?: true
@@ -10634,8 +10618,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal
-    displayPriceUnit: string
     priceBasis: $Enums.ListingPriceBasis | null
     priceCurrency: string | null
     priceListed: Decimal | null
@@ -10688,8 +10670,6 @@ export namespace Prisma {
     purpose?: boolean
     status?: boolean
     currency?: boolean
-    displayPrice?: boolean
-    displayPriceUnit?: boolean
     priceBasis?: boolean
     priceCurrency?: boolean
     priceListed?: boolean
@@ -10739,8 +10719,6 @@ export namespace Prisma {
     purpose?: boolean
     status?: boolean
     currency?: boolean
-    displayPrice?: boolean
-    displayPriceUnit?: boolean
     priceBasis?: boolean
     priceCurrency?: boolean
     priceListed?: boolean
@@ -10775,8 +10753,6 @@ export namespace Prisma {
     purpose?: boolean
     status?: boolean
     currency?: boolean
-    displayPrice?: boolean
-    displayPriceUnit?: boolean
     priceBasis?: boolean
     priceCurrency?: boolean
     priceListed?: boolean
@@ -10811,8 +10787,6 @@ export namespace Prisma {
     purpose?: boolean
     status?: boolean
     currency?: boolean
-    displayPrice?: boolean
-    displayPriceUnit?: boolean
     priceBasis?: boolean
     priceCurrency?: boolean
     priceListed?: boolean
@@ -10836,7 +10810,7 @@ export namespace Prisma {
     customId?: boolean
   }
 
-  export type ListingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "title" | "description" | "media" | "type" | "purpose" | "status" | "currency" | "displayPrice" | "displayPriceUnit" | "priceBasis" | "priceCurrency" | "priceListed" | "priceNegotiable" | "geoLocation" | "location" | "details" | "roadAccessDetails" | "distancing" | "earnings" | "landDetails" | "plots" | "apartmentDetails" | "metaTags" | "amenities" | "createdAt" | "updatedAt" | "isFeatured" | "isApproved" | "isDeleted" | "customId", ExtArgs["result"]["listing"]>
+  export type ListingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "title" | "description" | "media" | "type" | "purpose" | "status" | "currency" | "priceBasis" | "priceCurrency" | "priceListed" | "priceNegotiable" | "geoLocation" | "location" | "details" | "roadAccessDetails" | "distancing" | "earnings" | "landDetails" | "plots" | "apartmentDetails" | "metaTags" | "amenities" | "createdAt" | "updatedAt" | "isFeatured" | "isApproved" | "isDeleted" | "customId", ExtArgs["result"]["listing"]>
   export type ListingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     locationRecord?: boolean | LocationDefaultArgs<ExtArgs>
     houseDetail?: boolean | Listing$houseDetailArgs<ExtArgs>
@@ -10891,8 +10865,6 @@ export namespace Prisma {
       purpose: $Enums.PropertyPurpose
       status: $Enums.PropertyStatus
       currency: string
-      displayPrice: Prisma.Decimal
-      displayPriceUnit: string
       priceBasis: $Enums.ListingPriceBasis | null
       priceCurrency: string | null
       priceListed: Prisma.Decimal | null
@@ -11361,8 +11333,6 @@ export namespace Prisma {
     readonly purpose: FieldRef<"Listing", 'PropertyPurpose'>
     readonly status: FieldRef<"Listing", 'PropertyStatus'>
     readonly currency: FieldRef<"Listing", 'String'>
-    readonly displayPrice: FieldRef<"Listing", 'Decimal'>
-    readonly displayPriceUnit: FieldRef<"Listing", 'String'>
     readonly priceBasis: FieldRef<"Listing", 'ListingPriceBasis'>
     readonly priceCurrency: FieldRef<"Listing", 'String'>
     readonly priceListed: FieldRef<"Listing", 'Decimal'>
@@ -68827,8 +68797,6 @@ export namespace Prisma {
     purpose: 'purpose',
     status: 'status',
     currency: 'currency',
-    displayPrice: 'displayPrice',
-    displayPriceUnit: 'displayPriceUnit',
     priceBasis: 'priceBasis',
     priceCurrency: 'priceCurrency',
     priceListed: 'priceListed',
@@ -69716,20 +69684,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Decimal'
-   */
-  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
-    
-
-
-  /**
-   * Reference to a field of type 'Decimal[]'
-   */
-  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
-    
-
-
-  /**
    * Reference to a field of type 'ListingPriceBasis'
    */
   export type EnumListingPriceBasisFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ListingPriceBasis'>
@@ -69740,6 +69694,20 @@ export namespace Prisma {
    * Reference to a field of type 'ListingPriceBasis[]'
    */
   export type ListEnumListingPriceBasisFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ListingPriceBasis[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal'
+   */
+  export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
+    
+
+
+  /**
+   * Reference to a field of type 'Decimal[]'
+   */
+  export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
     
 
 
@@ -70119,8 +70087,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFilter<"Listing"> | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFilter<"Listing"> | $Enums.PropertyStatus
     currency?: StringFilter<"Listing"> | string
-    displayPrice?: DecimalFilter<"Listing"> | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFilter<"Listing"> | string
     priceBasis?: EnumListingPriceBasisNullableFilter<"Listing"> | $Enums.ListingPriceBasis | null
     priceCurrency?: StringNullableFilter<"Listing"> | string | null
     priceListed?: DecimalNullableFilter<"Listing"> | Decimal | DecimalJsLike | number | string | null
@@ -70169,8 +70135,6 @@ export namespace Prisma {
     purpose?: SortOrder
     status?: SortOrder
     currency?: SortOrder
-    displayPrice?: SortOrder
-    displayPriceUnit?: SortOrder
     priceBasis?: SortOrderInput | SortOrder
     priceCurrency?: SortOrderInput | SortOrder
     priceListed?: SortOrderInput | SortOrder
@@ -70222,8 +70186,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFilter<"Listing"> | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFilter<"Listing"> | $Enums.PropertyStatus
     currency?: StringFilter<"Listing"> | string
-    displayPrice?: DecimalFilter<"Listing"> | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFilter<"Listing"> | string
     priceBasis?: EnumListingPriceBasisNullableFilter<"Listing"> | $Enums.ListingPriceBasis | null
     priceCurrency?: StringNullableFilter<"Listing"> | string | null
     priceListed?: DecimalNullableFilter<"Listing"> | Decimal | DecimalJsLike | number | string | null
@@ -70272,8 +70234,6 @@ export namespace Prisma {
     purpose?: SortOrder
     status?: SortOrder
     currency?: SortOrder
-    displayPrice?: SortOrder
-    displayPriceUnit?: SortOrder
     priceBasis?: SortOrderInput | SortOrder
     priceCurrency?: SortOrderInput | SortOrder
     priceListed?: SortOrderInput | SortOrder
@@ -70315,8 +70275,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeWithAggregatesFilter<"Listing"> | $Enums.PropertyPurpose
     status?: EnumPropertyStatusWithAggregatesFilter<"Listing"> | $Enums.PropertyStatus
     currency?: StringWithAggregatesFilter<"Listing"> | string
-    displayPrice?: DecimalWithAggregatesFilter<"Listing"> | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringWithAggregatesFilter<"Listing"> | string
     priceBasis?: EnumListingPriceBasisNullableWithAggregatesFilter<"Listing"> | $Enums.ListingPriceBasis | null
     priceCurrency?: StringNullableWithAggregatesFilter<"Listing"> | string | null
     priceListed?: DecimalNullableWithAggregatesFilter<"Listing"> | Decimal | DecimalJsLike | number | string | null
@@ -74344,8 +74302,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -74393,8 +74349,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -74442,8 +74396,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -74491,8 +74443,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -74540,8 +74490,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -74575,8 +74523,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -74609,8 +74555,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -79151,17 +79095,6 @@ export namespace Prisma {
     not?: NestedEnumPropertyStatusFilter<$PrismaModel> | $Enums.PropertyStatus
   }
 
-  export type DecimalFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
-  }
-
   export type EnumListingPriceBasisNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.ListingPriceBasis | EnumListingPriceBasisFieldRefInput<$PrismaModel> | null
     in?: $Enums.ListingPriceBasis[] | ListEnumListingPriceBasisFieldRefInput<$PrismaModel> | null
@@ -79303,8 +79236,6 @@ export namespace Prisma {
     purpose?: SortOrder
     status?: SortOrder
     currency?: SortOrder
-    displayPrice?: SortOrder
-    displayPriceUnit?: SortOrder
     priceBasis?: SortOrder
     priceCurrency?: SortOrder
     priceListed?: SortOrder
@@ -79329,7 +79260,6 @@ export namespace Prisma {
   }
 
   export type ListingAvgOrderByAggregateInput = {
-    displayPrice?: SortOrder
     priceListed?: SortOrder
   }
 
@@ -79342,8 +79272,6 @@ export namespace Prisma {
     purpose?: SortOrder
     status?: SortOrder
     currency?: SortOrder
-    displayPrice?: SortOrder
-    displayPriceUnit?: SortOrder
     priceBasis?: SortOrder
     priceCurrency?: SortOrder
     priceListed?: SortOrder
@@ -79367,8 +79295,6 @@ export namespace Prisma {
     purpose?: SortOrder
     status?: SortOrder
     currency?: SortOrder
-    displayPrice?: SortOrder
-    displayPriceUnit?: SortOrder
     priceBasis?: SortOrder
     priceCurrency?: SortOrder
     priceListed?: SortOrder
@@ -79384,7 +79310,6 @@ export namespace Prisma {
   }
 
   export type ListingSumOrderByAggregateInput = {
-    displayPrice?: SortOrder
     priceListed?: SortOrder
   }
 
@@ -79416,22 +79341,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumPropertyStatusFilter<$PrismaModel>
     _max?: NestedEnumPropertyStatusFilter<$PrismaModel>
-  }
-
-  export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedDecimalFilter<$PrismaModel>
-    _sum?: NestedDecimalFilter<$PrismaModel>
-    _min?: NestedDecimalFilter<$PrismaModel>
-    _max?: NestedDecimalFilter<$PrismaModel>
   }
 
   export type EnumListingPriceBasisNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -79508,6 +79417,17 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type DecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
   export type ListingHouseCountOrderByAggregateInput = {
@@ -79603,6 +79523,22 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type DecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
   }
 
   export type ListingApartmentCountOrderByAggregateInput = {
@@ -82666,14 +82602,6 @@ export namespace Prisma {
     set?: $Enums.PropertyStatus
   }
 
-  export type DecimalFieldUpdateOperationsInput = {
-    set?: Decimal | DecimalJsLike | number | string
-    increment?: Decimal | DecimalJsLike | number | string
-    decrement?: Decimal | DecimalJsLike | number | string
-    multiply?: Decimal | DecimalJsLike | number | string
-    divide?: Decimal | DecimalJsLike | number | string
-  }
-
   export type NullableEnumListingPriceBasisFieldUpdateOperationsInput = {
     set?: $Enums.ListingPriceBasis | null
   }
@@ -83112,6 +83040,14 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type DecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
   }
 
   export type ListingUpdateOneRequiredWithoutHouseDetailNestedInput = {
@@ -84911,17 +84847,6 @@ export namespace Prisma {
     not?: NestedEnumPropertyStatusFilter<$PrismaModel> | $Enums.PropertyStatus
   }
 
-  export type NestedDecimalFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
-  }
-
   export type NestedEnumListingPriceBasisNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.ListingPriceBasis | EnumListingPriceBasisFieldRefInput<$PrismaModel> | null
     in?: $Enums.ListingPriceBasis[] | ListEnumListingPriceBasisFieldRefInput<$PrismaModel> | null
@@ -84980,22 +84905,6 @@ export namespace Prisma {
     _max?: NestedEnumPropertyStatusFilter<$PrismaModel>
   }
 
-  export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
-    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedDecimalFilter<$PrismaModel>
-    _sum?: NestedDecimalFilter<$PrismaModel>
-    _min?: NestedDecimalFilter<$PrismaModel>
-    _max?: NestedDecimalFilter<$PrismaModel>
-  }
-
   export type NestedEnumListingPriceBasisNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.ListingPriceBasis | EnumListingPriceBasisFieldRefInput<$PrismaModel> | null
     in?: $Enums.ListingPriceBasis[] | ListEnumListingPriceBasisFieldRefInput<$PrismaModel> | null
@@ -85038,6 +84947,17 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type NestedDecimalFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -85063,6 +84983,22 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedDecimalWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>
+    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
+    not?: NestedDecimalWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedDecimalFilter<$PrismaModel>
+    _sum?: NestedDecimalFilter<$PrismaModel>
+    _min?: NestedDecimalFilter<$PrismaModel>
+    _max?: NestedDecimalFilter<$PrismaModel>
   }
 
   export type NestedEnumPropertyRepresentativeRoleFilter<$PrismaModel = never> = {
@@ -85287,8 +85223,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -85335,8 +85269,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -85474,8 +85406,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFilter<"Listing"> | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFilter<"Listing"> | $Enums.PropertyStatus
     currency?: StringFilter<"Listing"> | string
-    displayPrice?: DecimalFilter<"Listing"> | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFilter<"Listing"> | string
     priceBasis?: EnumListingPriceBasisNullableFilter<"Listing"> | $Enums.ListingPriceBasis | null
     priceCurrency?: StringNullableFilter<"Listing"> | string | null
     priceListed?: DecimalNullableFilter<"Listing"> | Decimal | DecimalJsLike | number | string | null
@@ -87335,8 +87265,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -87383,8 +87311,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -87436,8 +87362,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -87484,8 +87408,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -87548,8 +87470,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -87596,8 +87516,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -87655,8 +87573,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -87703,8 +87619,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -87751,8 +87665,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -87799,8 +87711,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -87863,8 +87773,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -87911,8 +87819,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -87959,8 +87865,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -88007,8 +87911,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -88071,8 +87973,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -88119,8 +88019,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -88167,8 +88065,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -88215,8 +88111,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -88279,8 +88173,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -88327,8 +88219,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -88375,8 +88265,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -88423,8 +88311,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -88487,8 +88373,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -88535,8 +88419,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -88583,8 +88465,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -88631,8 +88511,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -88695,8 +88573,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -88743,8 +88619,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -88791,8 +88665,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -88839,8 +88711,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -88936,8 +88806,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -88984,8 +88852,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -89071,8 +88937,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -89119,8 +88983,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -89242,8 +89104,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -89290,8 +89150,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -89403,8 +89261,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -89451,8 +89307,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -89515,8 +89369,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -89563,8 +89415,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -89611,8 +89461,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -89659,8 +89507,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -89959,8 +89805,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -90007,8 +89851,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -90820,8 +90662,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -90868,8 +90708,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -90932,8 +90770,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -90980,8 +90816,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -91028,8 +90862,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -91076,8 +90908,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -91140,8 +90970,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -91188,8 +91016,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -93560,8 +93386,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -93608,8 +93432,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -93711,8 +93533,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -93759,8 +93579,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -94437,8 +94255,6 @@ export namespace Prisma {
     purpose: $Enums.PropertyPurpose
     status?: $Enums.PropertyStatus
     currency: string
-    displayPrice: Decimal | DecimalJsLike | number | string
-    displayPriceUnit: string
     priceBasis?: $Enums.ListingPriceBasis | null
     priceCurrency?: string | null
     priceListed?: Decimal | DecimalJsLike | number | string | null
@@ -94502,8 +94318,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -94550,8 +94364,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
@@ -94598,8 +94410,6 @@ export namespace Prisma {
     purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
     status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
     currency?: StringFieldUpdateOperationsInput | string
-    displayPrice?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    displayPriceUnit?: StringFieldUpdateOperationsInput | string
     priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
     priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
     priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null

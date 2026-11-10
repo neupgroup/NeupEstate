@@ -341,8 +341,6 @@ Fields:
 > purpose: PropertyPurpose NOT NULL;
 > status: enum(PENDING, ACTIVE, SOLD, RENTED, ARCHIVED, AWAITING_CREATION, AWAITING_DELETION) NOT NULL, default: 'PENDING';
 > currency: varchar(10) NOT NULL;
-> displayPrice: numeric(18,2) NOT NULL;
-> displayPriceUnit: varchar(24) NOT NULL;
 > priceBasis: enum(total, perUnit, perMonth, perYear, perUnitPerMonth, perUnitPerYear);
 > priceCurrency: varchar(3), currency code;
 > priceListed: numeric(22,10);

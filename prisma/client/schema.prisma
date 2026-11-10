@@ -148,8 +148,6 @@ model Listing {
   purpose           PropertyPurpose
   status            PropertyStatus     @default(PENDING)
   currency          String             @db.VarChar(10)
-  displayPrice      Decimal            @db.Decimal(18, 2)
-  displayPriceUnit  String             @db.VarChar(24)
   priceBasis        ListingPriceBasis?
   priceCurrency     String?            @db.VarChar(3)
   priceListed       Decimal?           @db.Decimal(22, 10)

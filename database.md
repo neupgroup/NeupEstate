@@ -531,8 +531,6 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - purpose PropertyPurpose NOT NULL
 - status PropertyStatus NOT NULL, default 'PENDING'::"PropertyStatus"
 - currency varchar(10) NOT NULL
-- displayPrice numeric(18,2) NOT NULL
-- displayPriceUnit varchar(24) NOT NULL
 - geoLocation varchar(63) NOT NULL
 - location uuid NOT NULL, references locations.id
 - agency text

@@ -128,65 +128,6 @@ async function migrateListingPricing() {
         updated += 1;
       }
 
-    const { rows: legacyRows } = await pool.query(`
-      SELECT id AS listing_id, "displayPrice" AS amount, "displayPriceUnit" AS legacy_basis,
-             currency, pricing
-      FROM "listings"
-      WHERE "priceListed" IS NULL AND "displayPrice" > 0
-      ORDER BY id
-    `);
-    for (const row of legacyRows) {
-      const savedPricing = row.pricing && typeof row.pricing === 'object' ? row.pricing : {};
-      const basis = savedPricing.basis || row.legacy_basis || 'total';
-      const price = {
-        ...row,
-        basis,
-        currency: savedPricing.currency || row.currency,
-        priceUnit: row.legacy_basis,
-        areaUnit: savedPricing.basisUnits?.[basis],
-        frequency: savedPricing.basisFrequencies?.[basis],
-      };
-      if (String(price.currency).length > 3) {
-        console.warn(`SKIP ${row.listing_id}: currency ${JSON.stringify(price.currency)} does not fit the new three-character currency code field`);
-        skipped += 1;
-        continue;
-      }
-
-      let pricingBasis;
-      let squareMetersPerUnit;
-      try {
-        pricingBasis = getPricingBasis(price);
-        squareMetersPerUnit = getSquareMetersPerUnit(pricingBasis.areaUnit);
-      } catch (error) {
-        console.warn(`SKIP ${row.listing_id}: ${error.message}`);
-        skipped += 1;
-        continue;
-      }
-
-      let priceAmount = String(price.amount);
-      const frequency = String(price.frequency ?? '').trim().toLowerCase();
-      const periodDivisor = frequency === 'quarterly' ? '3' : (frequency === 'half-yearly' || frequency === 'half yearly') ? '6' : '1';
-      const conversionDivisor = squareMetersPerUnit === null
-        ? periodDivisor
-        : String(Number(squareMetersPerUnit) * Number(periodDivisor));
-      if (conversionDivisor !== '1') {
-        const { rows: amountRows } = await pool.query(
-          'SELECT ($1::numeric / $2::numeric)::numeric(22,10)::text AS amount',
-          [price.amount, conversionDivisor],
-        );
-        priceAmount = amountRows[0].amount;
-      }
-      const update = { listingId: row.listing_id, basis: pricingBasis.basis, currency: price.currency, priceAmount };
-      if (process.argv.includes('--verbose')) console.log(`${apply ? 'UPDATE' : 'WOULD UPDATE'} ${JSON.stringify(update)}`);
-      if (apply) {
-        await pool.query(`
-          UPDATE "listings"
-          SET "priceBasis" = $1::"ListingPriceBasis", "priceCurrency" = $2, "priceListed" = $3::numeric
-          WHERE "id" = $4 AND "priceListed" IS NULL
-        `, [pricingBasis.basis, price.currency, priceAmount, row.listing_id]);
-      }
-      updated += 1;
-    }
       if (apply) await pool.query('COMMIT');
     } catch (error) {
       if (apply) await pool.query('ROLLBACK');

@@ -163,8 +163,6 @@ exports.Prisma.ListingScalarFieldEnum = {
   purpose: 'purpose',
   status: 'status',
   currency: 'currency',
-  displayPrice: 'displayPrice',
-  displayPriceUnit: 'displayPriceUnit',
   priceBasis: 'priceBasis',
   priceCurrency: 'priceCurrency',
   priceListed: 'priceListed',
