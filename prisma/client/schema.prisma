@@ -639,35 +639,6 @@ model LeadsActivity {
 }
 
 // ============================================================================
-// Conversations
-// ============================================================================
-
-model Conversation {
-  id                   String   @id @default(cuid())
-  accountId            String?
-  customerName         String
-  customerPhone        String
-  customerEmail        String?
-  customerAvatarUrl    String?
-  notes                String?
-  assignedTo           String   @default("AI Assistant")
-  subject              String
-  lastMessageAt        DateTime @default(now())
-  lastMessageSnippet   String?
-  lastMessageSender    String   @default("agent")
-  isRead               Boolean  @default(true)
-  leadCategory         String   @default("New Inquiry")
-  leadScore            Int      @default(5)
-  aiInterventionActive Boolean  @default(true)
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
-
-  @@index([accountId])
-  @@index([lastMessageAt])
-  @@map("conversations")
-}
-
-// ============================================================================
 // User Preferences
 // ============================================================================
 

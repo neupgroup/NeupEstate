@@ -345,33 +345,6 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - divergence: model CompetitorTracking maps to table competitor_tracking
 - divergence based on fields: database has 4 fields; Prisma model has 4 persisted scalar fields; difference 0
 
-### public.conversations (Conversation)
-
-- purpose: Stores customer conversation thread metadata, assignment, read state, AI intervention status, and lead scoring.
-- usage: Used by conversation-service listing, creation, updates, deletion, and message grouping.
-
-- id text PK, NOT NULL
-- accountId text
-- customerName text NOT NULL
-- customerPhone text NOT NULL
-- customerEmail text
-- customerAvatarUrl text
-- notes text
-- assignedTo text NOT NULL, default 'AI Assistant'::text
-- subject text NOT NULL
-- lastMessageAt timestamp(3) NOT NULL, default CURRENT_TIMESTAMP
-- lastMessageSnippet text
-- lastMessageSender text NOT NULL, default 'agent'::text
-- isRead boolean NOT NULL, default true
-- leadCategory text NOT NULL, default 'New Inquiry'::text
-- leadScore integer NOT NULL, default 5
-- aiInterventionActive boolean NOT NULL, default true
-- createdAt timestamp(3) NOT NULL, default CURRENT_TIMESTAMP
-- updatedAt timestamp(3) NOT NULL
-
-- divergence: model Conversation maps to table conversations
-- divergence based on fields: database has 18 fields; Prisma model has 18 persisted scalar fields; difference 0
-
 ### public.faqs (FAQ)
 
 - purpose: Stores FAQ questions, answers, and categories.
@@ -453,20 +426,6 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - activityBy text NOT NULL
 
 - divergence: model LeadsActivity maps to table leads_activity
-- divergence based on fields: database has 5 fields; Prisma model has 5 persisted scalar fields; difference 0
-
-### public.messages (Message)
-
-- purpose: Stores individual messages inside conversation threads.
-- usage: Used by conversation-service message creation, listing, and deletion.
-
-- id text PK, NOT NULL
-- conversationId text NOT NULL, FK messages_conversationId_fkey -> public.conversations(id)
-- sender text NOT NULL
-- text text NOT NULL
-- timestamp timestamp(3) NOT NULL, default CURRENT_TIMESTAMP
-
-- divergence: model Message maps to table messages
 - divergence based on fields: database has 5 fields; Prisma model has 5 persisted scalar fields; difference 0
 
 ### public.mortgage_requests (MortgageRequest)

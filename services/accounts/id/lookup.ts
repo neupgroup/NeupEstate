@@ -393,7 +393,6 @@ export async function deleteAccountAndData(id: string): Promise<void> {
       prisma.authzAssetsAccessGrant.deleteMany({ where: { accountId: id } }),
       prisma.agencyAgentMap.deleteMany({ where: { OR: [{ agencyId: id }, { agentId: id }] } }),
       prisma.agencyMap.deleteMany({ where: { OR: [{ accountId: id }, { agencyAccountId: id }] } }),
-      prisma.conversation.deleteMany({ where: { accountId: id } }),
       prisma.requirement.deleteMany({ where: { userId: id } }),
       prisma.listingsSaved.deleteMany({ where: { accountId: id } }),
       prisma.listingsView.deleteMany({ where: { accountId: id } }),

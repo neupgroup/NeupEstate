@@ -448,27 +448,6 @@ exports.Prisma.LeadsActivityScalarFieldEnum = {
   activityBy: 'activityBy'
 };
 
-exports.Prisma.ConversationScalarFieldEnum = {
-  id: 'id',
-  accountId: 'accountId',
-  customerName: 'customerName',
-  customerPhone: 'customerPhone',
-  customerEmail: 'customerEmail',
-  customerAvatarUrl: 'customerAvatarUrl',
-  notes: 'notes',
-  assignedTo: 'assignedTo',
-  subject: 'subject',
-  lastMessageAt: 'lastMessageAt',
-  lastMessageSnippet: 'lastMessageSnippet',
-  lastMessageSender: 'lastMessageSender',
-  isRead: 'isRead',
-  leadCategory: 'leadCategory',
-  leadScore: 'leadScore',
-  aiInterventionActive: 'aiInterventionActive',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.UserPreferenceScalarFieldEnum = {
   id: 'id',
   accountId: 'accountId',
@@ -813,7 +792,6 @@ exports.Prisma.ModelName = {
   LeadsAssignments: 'LeadsAssignments',
   LeadsAssigned: 'LeadsAssigned',
   LeadsActivity: 'LeadsActivity',
-  Conversation: 'Conversation',
   UserPreference: 'UserPreference',
   MortgageRequest: 'MortgageRequest',
   SalesRequest: 'SalesRequest',

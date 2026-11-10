@@ -477,7 +477,7 @@ export default async function ManageReportPage({
               </div>
               <p className="mt-3 text-2xl font-semibold">{formatPercent(inquiryToVisitRate)}</p>
               <p className="mt-1 text-xs text-muted-foreground">
-                Measures visit intent after direct conversation starts
+                Measures visit intent after an inquiry
               </p>
             </div>
           </CardContent>

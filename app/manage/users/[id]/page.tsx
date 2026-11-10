@@ -36,7 +36,6 @@ export default async function UserDetailPage({ params }: { params: Promise<{ id:
             };
         }
     } else {
-        // Guest accounts do not have conversation records.
         userProfile = {
             id: account.id,
             name: account.display_name || 'Guest User',

@@ -227,27 +227,6 @@ Fields:
 > ourPropertyId: text;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 
-Table: conversations, Model: Conversation
-Fields:
-> id: text PK, NOT NULL;
-> accountId: text;
-> customerName: text NOT NULL;
-> customerPhone: text NOT NULL;
-> customerEmail: text;
-> customerAvatarUrl: text;
-> notes: text;
-> assignedTo: text NOT NULL, default: 'AI Assistant'::text;
-> subject: text NOT NULL;
-> lastMessageAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
-> lastMessageSnippet: text;
-> lastMessageSender: text NOT NULL, default: 'agent'::text;
-> isRead: boolean NOT NULL, default: true;
-> leadCategory: text NOT NULL, default: 'New Inquiry'::text;
-> leadScore: integer NOT NULL, default: 5;
-> aiInterventionActive: boolean NOT NULL, default: true;
-> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
-> updatedAt: timestamp(3) NOT NULL;
-
 Table: inquiries, Model: Inquiry
 Fields:
 > id: text PK, NOT NULL;
