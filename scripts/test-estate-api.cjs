@@ -124,7 +124,6 @@ async function main() {
     count: async () => 0,
     findMany: async (options) => { prismaOptions = options; return []; },
   };
-  mocks['@/services/problem-service'] = { logProblem: (error) => { throw error; } };
   mocks['@/inapp/database/adapters'] = { mapTypeToEnum: (value) => value.toUpperCase() };
   mocks['./shared'] = {
     PROPERTY_STATUS: { ACTIVE: 'ACTIVE' }, PROPERTY_INCLUDE: {},
@@ -141,7 +140,6 @@ async function main() {
     assert.equal(JSON.stringify(prismaOptions.where.AND[0].type.in), JSON.stringify(categories));
   }
   mocks['@/services/site-dev-log-service'] = { withRequestDevLog: (_, handler) => handler };
-  mocks['./problem-service'] = mocks['@/services/problem-service'];
   for (const [domain, serviceName, listName, countName, relation] of [
     ['agents', 'agent-service', 'getAgents', 'getAgentCount', 'agency'],
     ['agencies', 'agency-service', 'getPublicAgencyAccounts', 'getPublicAgencyAccountCount', 'agent'],

@@ -315,15 +315,6 @@ Fields:
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > updatedAt: timestamp(3) NOT NULL;
 
-Table: problems, Model: Problem
-Fields:
-> id: text PK, NOT NULL;
-> context: text NOT NULL;
-> message: text NOT NULL;
-> stack: text;
-> details: jsonb;
-> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
-
 Table: listings, Model: Listing
 Fields:
 > id: text PK, NOT NULL;

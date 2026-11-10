@@ -77,7 +77,6 @@
 - [ ] Add a Neup documentation block to [services/bridge-property-service.ts](/Users/neupkishor/Code/neup.estate/services/bridge-property-service.ts).
 - [ ] Add a Neup documentation block to [services/agency-service.ts](/Users/neupkishor/Code/neup.estate/services/agency-service.ts).
 - [ ] Add a Neup documentation block to [services/agency-agent-map-service.ts](/Users/neupkishor/Code/neup.estate/services/agency-agent-map-service.ts).
-- [ ] Add a Neup documentation block to [services/problem-service.ts](/Users/neupkishor/Code/neup.estate/services/problem-service.ts).
 - [ ] Add a Neup documentation block to [components/agent-results.tsx](/Users/neupkishor/Code/neup.estate/components/agent-results.tsx).
 - [ ] Add a Neup documentation block to [services/user-service.ts](/Users/neupkishor/Code/neup.estate/services/user-service.ts).
 - [ ] Add a Neup documentation block to [services/site-dev-log-service.ts](/Users/neupkishor/Code/neup.estate/services/site-dev-log-service.ts).

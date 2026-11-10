@@ -73,15 +73,6 @@ export const ListingFiltersSchema = z.object({
 });
 export type ListingFilters = z.infer<typeof ListingFiltersSchema>;
 
-export interface Problem {
-  id: string;
-  context: string;
-  message: string;
-  stack?: string;
-  createdAt: string; // ISO 8601 date string
-  details?: Record<string, any>;
-}
-
 export interface UserActivity {
   id: string;
   userId: string;

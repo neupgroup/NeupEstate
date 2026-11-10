@@ -59,11 +59,6 @@ export type PropertyLandDetail = $Result.DefaultSelection<Prisma.$PropertyLandDe
  */
 export type ListingCommercial = $Result.DefaultSelection<Prisma.$ListingCommercialPayload>
 /**
- * Model PropertyPrice
- * 
- */
-export type PropertyPrice = $Result.DefaultSelection<Prisma.$PropertyPricePayload>
-/**
  * Model PropertyOwner
  * 
  */
@@ -198,11 +193,6 @@ export type SalesRequest = $Result.DefaultSelection<Prisma.$SalesRequestPayload>
  * 
  */
 export type VisitRequest = $Result.DefaultSelection<Prisma.$VisitRequestPayload>
-/**
- * Model Problem
- * 
- */
-export type Problem = $Result.DefaultSelection<Prisma.$ProblemPayload>
 /**
  * Model SitemapEntry
  * 
@@ -629,16 +619,6 @@ export class PrismaClient<
   get listingCommercial(): Prisma.ListingCommercialDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.propertyPrice`: Exposes CRUD operations for the **PropertyPrice** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more PropertyPrices
-    * const propertyPrices = await prisma.propertyPrice.findMany()
-    * ```
-    */
-  get propertyPrice(): Prisma.PropertyPriceDelegate<ExtArgs, ClientOptions>;
-
-  /**
    * `prisma.propertyOwner`: Exposes CRUD operations for the **PropertyOwner** model.
     * Example usage:
     * ```ts
@@ -907,16 +887,6 @@ export class PrismaClient<
     * ```
     */
   get visitRequest(): Prisma.VisitRequestDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.problem`: Exposes CRUD operations for the **Problem** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Problems
-    * const problems = await prisma.problem.findMany()
-    * ```
-    */
-  get problem(): Prisma.ProblemDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.sitemapEntry`: Exposes CRUD operations for the **SitemapEntry** model.
@@ -1510,7 +1480,6 @@ export namespace Prisma {
     ListingApartment: 'ListingApartment',
     PropertyLandDetail: 'PropertyLandDetail',
     ListingCommercial: 'ListingCommercial',
-    PropertyPrice: 'PropertyPrice',
     PropertyOwner: 'PropertyOwner',
     ListingRepresentative: 'ListingRepresentative',
     ListingDocument: 'ListingDocument',
@@ -1538,7 +1507,6 @@ export namespace Prisma {
     MortgageRequest: 'MortgageRequest',
     SalesRequest: 'SalesRequest',
     VisitRequest: 'VisitRequest',
-    Problem: 'Problem',
     SitemapEntry: 'SitemapEntry',
     Inquiry: 'Inquiry',
     AuthzRole: 'AuthzRole',
@@ -1569,7 +1537,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "location" | "account" | "activity" | "listing" | "propertyLink" | "listingHouse" | "listingApartment" | "propertyLandDetail" | "listingCommercial" | "propertyPrice" | "propertyOwner" | "listingRepresentative" | "listingDocument" | "listingChange" | "agency" | "agencyMap" | "agencyAgentMap" | "agencyCustomization" | "agent" | "review" | "requirement" | "naturalSearch" | "savedProperty" | "listingsView" | "baseLead" | "clientContact" | "clientLink" | "sharedLeads" | "leadActivity" | "conversation" | "message" | "siteContent" | "userPreference" | "propertyRequest" | "mortgageRequest" | "salesRequest" | "visitRequest" | "problem" | "sitemapEntry" | "inquiry" | "authzRole" | "accountAccess" | "roleCapability" | "authzAccountAccessGrant" | "authzAssetsAccessGrant" | "competitor" | "competitorSource" | "competitorPage" | "competitorListing" | "propertyCompetitionMap" | "competitorTracking" | "intelligenceMapping" | "intelligenceAlert"
+      modelProps: "location" | "account" | "activity" | "listing" | "propertyLink" | "listingHouse" | "listingApartment" | "propertyLandDetail" | "listingCommercial" | "propertyOwner" | "listingRepresentative" | "listingDocument" | "listingChange" | "agency" | "agencyMap" | "agencyAgentMap" | "agencyCustomization" | "agent" | "review" | "requirement" | "naturalSearch" | "savedProperty" | "listingsView" | "baseLead" | "clientContact" | "clientLink" | "sharedLeads" | "leadActivity" | "conversation" | "message" | "siteContent" | "userPreference" | "propertyRequest" | "mortgageRequest" | "salesRequest" | "visitRequest" | "sitemapEntry" | "inquiry" | "authzRole" | "accountAccess" | "roleCapability" | "authzAccountAccessGrant" | "authzAssetsAccessGrant" | "competitor" | "competitorSource" | "competitorPage" | "competitorListing" | "propertyCompetitionMap" | "competitorTracking" | "intelligenceMapping" | "intelligenceAlert"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2236,80 +2204,6 @@ export namespace Prisma {
           count: {
             args: Prisma.ListingCommercialCountArgs<ExtArgs>
             result: $Utils.Optional<ListingCommercialCountAggregateOutputType> | number
-          }
-        }
-      }
-      PropertyPrice: {
-        payload: Prisma.$PropertyPricePayload<ExtArgs>
-        fields: Prisma.PropertyPriceFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.PropertyPriceFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PropertyPricePayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.PropertyPriceFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PropertyPricePayload>
-          }
-          findFirst: {
-            args: Prisma.PropertyPriceFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PropertyPricePayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.PropertyPriceFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PropertyPricePayload>
-          }
-          findMany: {
-            args: Prisma.PropertyPriceFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PropertyPricePayload>[]
-          }
-          create: {
-            args: Prisma.PropertyPriceCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PropertyPricePayload>
-          }
-          createMany: {
-            args: Prisma.PropertyPriceCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.PropertyPriceCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PropertyPricePayload>[]
-          }
-          delete: {
-            args: Prisma.PropertyPriceDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PropertyPricePayload>
-          }
-          update: {
-            args: Prisma.PropertyPriceUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PropertyPricePayload>
-          }
-          deleteMany: {
-            args: Prisma.PropertyPriceDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.PropertyPriceUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.PropertyPriceUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PropertyPricePayload>[]
-          }
-          upsert: {
-            args: Prisma.PropertyPriceUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$PropertyPricePayload>
-          }
-          aggregate: {
-            args: Prisma.PropertyPriceAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregatePropertyPrice>
-          }
-          groupBy: {
-            args: Prisma.PropertyPriceGroupByArgs<ExtArgs>
-            result: $Utils.Optional<PropertyPriceGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.PropertyPriceCountArgs<ExtArgs>
-            result: $Utils.Optional<PropertyPriceCountAggregateOutputType> | number
           }
         }
       }
@@ -4311,80 +4205,6 @@ export namespace Prisma {
           }
         }
       }
-      Problem: {
-        payload: Prisma.$ProblemPayload<ExtArgs>
-        fields: Prisma.ProblemFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.ProblemFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProblemPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.ProblemFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProblemPayload>
-          }
-          findFirst: {
-            args: Prisma.ProblemFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProblemPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.ProblemFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProblemPayload>
-          }
-          findMany: {
-            args: Prisma.ProblemFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProblemPayload>[]
-          }
-          create: {
-            args: Prisma.ProblemCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProblemPayload>
-          }
-          createMany: {
-            args: Prisma.ProblemCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.ProblemCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProblemPayload>[]
-          }
-          delete: {
-            args: Prisma.ProblemDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProblemPayload>
-          }
-          update: {
-            args: Prisma.ProblemUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProblemPayload>
-          }
-          deleteMany: {
-            args: Prisma.ProblemDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.ProblemUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.ProblemUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProblemPayload>[]
-          }
-          upsert: {
-            args: Prisma.ProblemUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ProblemPayload>
-          }
-          aggregate: {
-            args: Prisma.ProblemAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateProblem>
-          }
-          groupBy: {
-            args: Prisma.ProblemGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ProblemGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ProblemCountArgs<ExtArgs>
-            result: $Utils.Optional<ProblemCountAggregateOutputType> | number
-          }
-        }
-      }
       SitemapEntry: {
         payload: Prisma.$SitemapEntryPayload<ExtArgs>
         fields: Prisma.SitemapEntryFieldRefs
@@ -5612,7 +5432,6 @@ export namespace Prisma {
     listingApartment?: ListingApartmentOmit
     propertyLandDetail?: PropertyLandDetailOmit
     listingCommercial?: ListingCommercialOmit
-    propertyPrice?: PropertyPriceOmit
     propertyOwner?: PropertyOwnerOmit
     listingRepresentative?: ListingRepresentativeOmit
     listingDocument?: ListingDocumentOmit
@@ -5640,7 +5459,6 @@ export namespace Prisma {
     mortgageRequest?: MortgageRequestOmit
     salesRequest?: SalesRequestOmit
     visitRequest?: VisitRequestOmit
-    problem?: ProblemOmit
     sitemapEntry?: SitemapEntryOmit
     inquiry?: InquiryOmit
     authzRole?: AuthzRoleOmit
@@ -5915,7 +5733,6 @@ export namespace Prisma {
    */
 
   export type ListingCountOutputType = {
-    prices: number
     owners: number
     documents: number
     changes: number
@@ -5928,7 +5745,6 @@ export namespace Prisma {
   }
 
   export type ListingCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    prices?: boolean | ListingCountOutputTypeCountPricesArgs
     owners?: boolean | ListingCountOutputTypeCountOwnersArgs
     documents?: boolean | ListingCountOutputTypeCountDocumentsArgs
     changes?: boolean | ListingCountOutputTypeCountChangesArgs
@@ -5949,13 +5765,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the ListingCountOutputType
      */
     select?: ListingCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * ListingCountOutputType without action
-   */
-  export type ListingCountOutputTypeCountPricesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PropertyPriceWhereInput
   }
 
   /**
@@ -10437,7 +10246,6 @@ export namespace Prisma {
     apartmentDetail?: boolean | Listing$apartmentDetailArgs<ExtArgs>
     landDetail?: boolean | Listing$landDetailArgs<ExtArgs>
     commercialDetail?: boolean | Listing$commercialDetailArgs<ExtArgs>
-    prices?: boolean | Listing$pricesArgs<ExtArgs>
     owners?: boolean | Listing$ownersArgs<ExtArgs>
     documents?: boolean | Listing$documentsArgs<ExtArgs>
     changes?: boolean | Listing$changesArgs<ExtArgs>
@@ -10558,7 +10366,6 @@ export namespace Prisma {
     apartmentDetail?: boolean | Listing$apartmentDetailArgs<ExtArgs>
     landDetail?: boolean | Listing$landDetailArgs<ExtArgs>
     commercialDetail?: boolean | Listing$commercialDetailArgs<ExtArgs>
-    prices?: boolean | Listing$pricesArgs<ExtArgs>
     owners?: boolean | Listing$ownersArgs<ExtArgs>
     documents?: boolean | Listing$documentsArgs<ExtArgs>
     changes?: boolean | Listing$changesArgs<ExtArgs>
@@ -10585,7 +10392,6 @@ export namespace Prisma {
       apartmentDetail: Prisma.$ListingApartmentPayload<ExtArgs> | null
       landDetail: Prisma.$PropertyLandDetailPayload<ExtArgs> | null
       commercialDetail: Prisma.$ListingCommercialPayload<ExtArgs> | null
-      prices: Prisma.$PropertyPricePayload<ExtArgs>[]
       owners: Prisma.$PropertyOwnerPayload<ExtArgs>[]
       documents: Prisma.$ListingDocumentPayload<ExtArgs>[]
       changes: Prisma.$ListingChangePayload<ExtArgs>[]
@@ -11026,7 +10832,6 @@ export namespace Prisma {
     apartmentDetail<T extends Listing$apartmentDetailArgs<ExtArgs> = {}>(args?: Subset<T, Listing$apartmentDetailArgs<ExtArgs>>): Prisma__ListingApartmentClient<$Result.GetResult<Prisma.$ListingApartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     landDetail<T extends Listing$landDetailArgs<ExtArgs> = {}>(args?: Subset<T, Listing$landDetailArgs<ExtArgs>>): Prisma__PropertyLandDetailClient<$Result.GetResult<Prisma.$PropertyLandDetailPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     commercialDetail<T extends Listing$commercialDetailArgs<ExtArgs> = {}>(args?: Subset<T, Listing$commercialDetailArgs<ExtArgs>>): Prisma__ListingCommercialClient<$Result.GetResult<Prisma.$ListingCommercialPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    prices<T extends Listing$pricesArgs<ExtArgs> = {}>(args?: Subset<T, Listing$pricesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyPricePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     owners<T extends Listing$ownersArgs<ExtArgs> = {}>(args?: Subset<T, Listing$ownersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyOwnerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     documents<T extends Listing$documentsArgs<ExtArgs> = {}>(args?: Subset<T, Listing$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     changes<T extends Listing$changesArgs<ExtArgs> = {}>(args?: Subset<T, Listing$changesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingChangePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -11569,30 +11374,6 @@ export namespace Prisma {
      */
     include?: ListingCommercialInclude<ExtArgs> | null
     where?: ListingCommercialWhereInput
-  }
-
-  /**
-   * Listing.prices
-   */
-  export type Listing$pricesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PropertyPrice
-     */
-    select?: PropertyPriceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PropertyPrice
-     */
-    omit?: PropertyPriceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PropertyPriceInclude<ExtArgs> | null
-    where?: PropertyPriceWhereInput
-    orderBy?: PropertyPriceOrderByWithRelationInput | PropertyPriceOrderByWithRelationInput[]
-    cursor?: PropertyPriceWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PropertyPriceScalarFieldEnum | PropertyPriceScalarFieldEnum[]
   }
 
   /**
@@ -12916,7 +12697,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseMinAggregateOutputType = {
-    listingId: string | null
+    listingsId: string | null
     bedrooms: number | null
     bathrooms: number | null
     floors: number | null
@@ -12933,7 +12714,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseMaxAggregateOutputType = {
-    listingId: string | null
+    listingsId: string | null
     bedrooms: number | null
     bathrooms: number | null
     floors: number | null
@@ -12950,7 +12731,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseCountAggregateOutputType = {
-    listingId: number
+    listingsId: number
     bedrooms: number
     bathrooms: number
     floors: number
@@ -12997,7 +12778,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseMinAggregateInputType = {
-    listingId?: true
+    listingsId?: true
     bedrooms?: true
     bathrooms?: true
     floors?: true
@@ -13014,7 +12795,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseMaxAggregateInputType = {
-    listingId?: true
+    listingsId?: true
     bedrooms?: true
     bathrooms?: true
     floors?: true
@@ -13031,7 +12812,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseCountAggregateInputType = {
-    listingId?: true
+    listingsId?: true
     bedrooms?: true
     bathrooms?: true
     floors?: true
@@ -13135,7 +12916,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseGroupByOutputType = {
-    listingId: string
+    listingsId: string
     bedrooms: number
     bathrooms: number
     floors: number
@@ -13171,7 +12952,7 @@ export namespace Prisma {
 
 
   export type ListingHouseSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    listingId?: boolean
+    listingsId?: boolean
     bedrooms?: boolean
     bathrooms?: boolean
     floors?: boolean
@@ -13189,7 +12970,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["listingHouse"]>
 
   export type ListingHouseSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    listingId?: boolean
+    listingsId?: boolean
     bedrooms?: boolean
     bathrooms?: boolean
     floors?: boolean
@@ -13207,7 +12988,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["listingHouse"]>
 
   export type ListingHouseSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    listingId?: boolean
+    listingsId?: boolean
     bedrooms?: boolean
     bathrooms?: boolean
     floors?: boolean
@@ -13225,7 +13006,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["listingHouse"]>
 
   export type ListingHouseSelectScalar = {
-    listingId?: boolean
+    listingsId?: boolean
     bedrooms?: boolean
     bathrooms?: boolean
     floors?: boolean
@@ -13241,7 +13022,7 @@ export namespace Prisma {
     roadAccess?: boolean
   }
 
-  export type ListingHouseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"listingId" | "bedrooms" | "bathrooms" | "floors" | "kitchens" | "livingRooms" | "diningRooms" | "carParkingSpots" | "bikeParkingSpots" | "furnished" | "buildYear" | "area" | "facing" | "roadAccess", ExtArgs["result"]["listingHouse"]>
+  export type ListingHouseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"listingsId" | "bedrooms" | "bathrooms" | "floors" | "kitchens" | "livingRooms" | "diningRooms" | "carParkingSpots" | "bikeParkingSpots" | "furnished" | "buildYear" | "area" | "facing" | "roadAccess", ExtArgs["result"]["listingHouse"]>
   export type ListingHouseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     property?: boolean | ListingDefaultArgs<ExtArgs>
   }
@@ -13258,7 +13039,7 @@ export namespace Prisma {
       property: Prisma.$ListingPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
-      listingId: string
+      listingsId: string
       bedrooms: number
       bathrooms: number
       floors: number
@@ -13355,8 +13136,8 @@ export namespace Prisma {
      * // Get first 10 ListingHouses
      * const listingHouses = await prisma.listingHouse.findMany({ take: 10 })
      * 
-     * // Only select the `listingId`
-     * const listingHouseWithListingIdOnly = await prisma.listingHouse.findMany({ select: { listingId: true } })
+     * // Only select the `listingsId`
+     * const listingHouseWithListingsIdOnly = await prisma.listingHouse.findMany({ select: { listingsId: true } })
      * 
      */
     findMany<T extends ListingHouseFindManyArgs>(args?: SelectSubset<T, ListingHouseFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingHousePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -13400,9 +13181,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many ListingHouses and only return the `listingId`
-     * const listingHouseWithListingIdOnly = await prisma.listingHouse.createManyAndReturn({
-     *   select: { listingId: true },
+     * // Create many ListingHouses and only return the `listingsId`
+     * const listingHouseWithListingsIdOnly = await prisma.listingHouse.createManyAndReturn({
+     *   select: { listingsId: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -13491,9 +13272,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more ListingHouses and only return the `listingId`
-     * const listingHouseWithListingIdOnly = await prisma.listingHouse.updateManyAndReturn({
-     *   select: { listingId: true },
+     * // Update zero or more ListingHouses and only return the `listingsId`
+     * const listingHouseWithListingsIdOnly = await prisma.listingHouse.updateManyAndReturn({
+     *   select: { listingsId: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -13696,7 +13477,7 @@ export namespace Prisma {
    * Fields of the ListingHouse model
    */
   interface ListingHouseFieldRefs {
-    readonly listingId: FieldRef<"ListingHouse", 'String'>
+    readonly listingsId: FieldRef<"ListingHouse", 'String'>
     readonly bedrooms: FieldRef<"ListingHouse", 'Int'>
     readonly bathrooms: FieldRef<"ListingHouse", 'Int'>
     readonly floors: FieldRef<"ListingHouse", 'Int'>
@@ -14170,7 +13951,7 @@ export namespace Prisma {
   }
 
   export type ListingApartmentMinAggregateOutputType = {
-    propertyId: string | null
+    listingsId: string | null
     bedrooms: number | null
     bathrooms: number | null
     onFloor: number | null
@@ -14188,7 +13969,7 @@ export namespace Prisma {
   }
 
   export type ListingApartmentMaxAggregateOutputType = {
-    propertyId: string | null
+    listingsId: string | null
     bedrooms: number | null
     bathrooms: number | null
     onFloor: number | null
@@ -14206,7 +13987,7 @@ export namespace Prisma {
   }
 
   export type ListingApartmentCountAggregateOutputType = {
-    propertyId: number
+    listingsId: number
     bedrooms: number
     bathrooms: number
     onFloor: number
@@ -14254,7 +14035,7 @@ export namespace Prisma {
   }
 
   export type ListingApartmentMinAggregateInputType = {
-    propertyId?: true
+    listingsId?: true
     bedrooms?: true
     bathrooms?: true
     onFloor?: true
@@ -14272,7 +14053,7 @@ export namespace Prisma {
   }
 
   export type ListingApartmentMaxAggregateInputType = {
-    propertyId?: true
+    listingsId?: true
     bedrooms?: true
     bathrooms?: true
     onFloor?: true
@@ -14290,7 +14071,7 @@ export namespace Prisma {
   }
 
   export type ListingApartmentCountAggregateInputType = {
-    propertyId?: true
+    listingsId?: true
     bedrooms?: true
     bathrooms?: true
     onFloor?: true
@@ -14395,7 +14176,7 @@ export namespace Prisma {
   }
 
   export type ListingApartmentGroupByOutputType = {
-    propertyId: string
+    listingsId: string
     bedrooms: number
     bathrooms: number
     onFloor: number
@@ -14432,7 +14213,7 @@ export namespace Prisma {
 
 
   export type ListingApartmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    propertyId?: boolean
+    listingsId?: boolean
     bedrooms?: boolean
     bathrooms?: boolean
     onFloor?: boolean
@@ -14451,7 +14232,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["listingApartment"]>
 
   export type ListingApartmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    propertyId?: boolean
+    listingsId?: boolean
     bedrooms?: boolean
     bathrooms?: boolean
     onFloor?: boolean
@@ -14470,7 +14251,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["listingApartment"]>
 
   export type ListingApartmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    propertyId?: boolean
+    listingsId?: boolean
     bedrooms?: boolean
     bathrooms?: boolean
     onFloor?: boolean
@@ -14489,7 +14270,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["listingApartment"]>
 
   export type ListingApartmentSelectScalar = {
-    propertyId?: boolean
+    listingsId?: boolean
     bedrooms?: boolean
     bathrooms?: boolean
     onFloor?: boolean
@@ -14506,7 +14287,7 @@ export namespace Prisma {
     maintenanceFee?: boolean
   }
 
-  export type ListingApartmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"propertyId" | "bedrooms" | "bathrooms" | "onFloor" | "totalFloors" | "balconies" | "lifts" | "carParkingSpots" | "bikeParkingSpots" | "furnished" | "blockName" | "unitNumber" | "superArea" | "builtUpArea" | "maintenanceFee", ExtArgs["result"]["listingApartment"]>
+  export type ListingApartmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"listingsId" | "bedrooms" | "bathrooms" | "onFloor" | "totalFloors" | "balconies" | "lifts" | "carParkingSpots" | "bikeParkingSpots" | "furnished" | "blockName" | "unitNumber" | "superArea" | "builtUpArea" | "maintenanceFee", ExtArgs["result"]["listingApartment"]>
   export type ListingApartmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     property?: boolean | ListingDefaultArgs<ExtArgs>
   }
@@ -14523,7 +14304,7 @@ export namespace Prisma {
       property: Prisma.$ListingPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
-      propertyId: string
+      listingsId: string
       bedrooms: number
       bathrooms: number
       onFloor: number
@@ -14621,8 +14402,8 @@ export namespace Prisma {
      * // Get first 10 ListingApartments
      * const listingApartments = await prisma.listingApartment.findMany({ take: 10 })
      * 
-     * // Only select the `propertyId`
-     * const listingApartmentWithPropertyIdOnly = await prisma.listingApartment.findMany({ select: { propertyId: true } })
+     * // Only select the `listingsId`
+     * const listingApartmentWithListingsIdOnly = await prisma.listingApartment.findMany({ select: { listingsId: true } })
      * 
      */
     findMany<T extends ListingApartmentFindManyArgs>(args?: SelectSubset<T, ListingApartmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingApartmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -14666,9 +14447,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many ListingApartments and only return the `propertyId`
-     * const listingApartmentWithPropertyIdOnly = await prisma.listingApartment.createManyAndReturn({
-     *   select: { propertyId: true },
+     * // Create many ListingApartments and only return the `listingsId`
+     * const listingApartmentWithListingsIdOnly = await prisma.listingApartment.createManyAndReturn({
+     *   select: { listingsId: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -14757,9 +14538,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more ListingApartments and only return the `propertyId`
-     * const listingApartmentWithPropertyIdOnly = await prisma.listingApartment.updateManyAndReturn({
-     *   select: { propertyId: true },
+     * // Update zero or more ListingApartments and only return the `listingsId`
+     * const listingApartmentWithListingsIdOnly = await prisma.listingApartment.updateManyAndReturn({
+     *   select: { listingsId: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -14962,7 +14743,7 @@ export namespace Prisma {
    * Fields of the ListingApartment model
    */
   interface ListingApartmentFieldRefs {
-    readonly propertyId: FieldRef<"ListingApartment", 'String'>
+    readonly listingsId: FieldRef<"ListingApartment", 'String'>
     readonly bedrooms: FieldRef<"ListingApartment", 'Int'>
     readonly bathrooms: FieldRef<"ListingApartment", 'Int'>
     readonly onFloor: FieldRef<"ListingApartment", 'Int'>
@@ -16578,7 +16359,7 @@ export namespace Prisma {
   }
 
   export type ListingCommercialMinAggregateOutputType = {
-    propertyId: string | null
+    listingsId: string | null
     floor: number | null
     washrooms: number | null
     parkingSpots: number | null
@@ -16588,7 +16369,7 @@ export namespace Prisma {
   }
 
   export type ListingCommercialMaxAggregateOutputType = {
-    propertyId: string | null
+    listingsId: string | null
     floor: number | null
     washrooms: number | null
     parkingSpots: number | null
@@ -16598,7 +16379,7 @@ export namespace Prisma {
   }
 
   export type ListingCommercialCountAggregateOutputType = {
-    propertyId: number
+    listingsId: number
     floor: number
     washrooms: number
     parkingSpots: number
@@ -16626,7 +16407,7 @@ export namespace Prisma {
   }
 
   export type ListingCommercialMinAggregateInputType = {
-    propertyId?: true
+    listingsId?: true
     floor?: true
     washrooms?: true
     parkingSpots?: true
@@ -16636,7 +16417,7 @@ export namespace Prisma {
   }
 
   export type ListingCommercialMaxAggregateInputType = {
-    propertyId?: true
+    listingsId?: true
     floor?: true
     washrooms?: true
     parkingSpots?: true
@@ -16646,7 +16427,7 @@ export namespace Prisma {
   }
 
   export type ListingCommercialCountAggregateInputType = {
-    propertyId?: true
+    listingsId?: true
     floor?: true
     washrooms?: true
     parkingSpots?: true
@@ -16743,7 +16524,7 @@ export namespace Prisma {
   }
 
   export type ListingCommercialGroupByOutputType = {
-    propertyId: string
+    listingsId: string
     floor: number
     washrooms: number
     parkingSpots: number
@@ -16772,7 +16553,7 @@ export namespace Prisma {
 
 
   export type ListingCommercialSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    propertyId?: boolean
+    listingsId?: boolean
     floor?: boolean
     washrooms?: boolean
     parkingSpots?: boolean
@@ -16783,7 +16564,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["listingCommercial"]>
 
   export type ListingCommercialSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    propertyId?: boolean
+    listingsId?: boolean
     floor?: boolean
     washrooms?: boolean
     parkingSpots?: boolean
@@ -16794,7 +16575,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["listingCommercial"]>
 
   export type ListingCommercialSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    propertyId?: boolean
+    listingsId?: boolean
     floor?: boolean
     washrooms?: boolean
     parkingSpots?: boolean
@@ -16805,7 +16586,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["listingCommercial"]>
 
   export type ListingCommercialSelectScalar = {
-    propertyId?: boolean
+    listingsId?: boolean
     floor?: boolean
     washrooms?: boolean
     parkingSpots?: boolean
@@ -16814,7 +16595,7 @@ export namespace Prisma {
     buildingType?: boolean
   }
 
-  export type ListingCommercialOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"propertyId" | "floor" | "washrooms" | "parkingSpots" | "frontage" | "usableArea" | "buildingType", ExtArgs["result"]["listingCommercial"]>
+  export type ListingCommercialOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"listingsId" | "floor" | "washrooms" | "parkingSpots" | "frontage" | "usableArea" | "buildingType", ExtArgs["result"]["listingCommercial"]>
   export type ListingCommercialInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     property?: boolean | ListingDefaultArgs<ExtArgs>
   }
@@ -16831,7 +16612,7 @@ export namespace Prisma {
       property: Prisma.$ListingPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
-      propertyId: string
+      listingsId: string
       floor: number
       washrooms: number
       parkingSpots: number
@@ -16921,8 +16702,8 @@ export namespace Prisma {
      * // Get first 10 ListingCommercials
      * const listingCommercials = await prisma.listingCommercial.findMany({ take: 10 })
      * 
-     * // Only select the `propertyId`
-     * const listingCommercialWithPropertyIdOnly = await prisma.listingCommercial.findMany({ select: { propertyId: true } })
+     * // Only select the `listingsId`
+     * const listingCommercialWithListingsIdOnly = await prisma.listingCommercial.findMany({ select: { listingsId: true } })
      * 
      */
     findMany<T extends ListingCommercialFindManyArgs>(args?: SelectSubset<T, ListingCommercialFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingCommercialPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -16966,9 +16747,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many ListingCommercials and only return the `propertyId`
-     * const listingCommercialWithPropertyIdOnly = await prisma.listingCommercial.createManyAndReturn({
-     *   select: { propertyId: true },
+     * // Create many ListingCommercials and only return the `listingsId`
+     * const listingCommercialWithListingsIdOnly = await prisma.listingCommercial.createManyAndReturn({
+     *   select: { listingsId: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -17057,9 +16838,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more ListingCommercials and only return the `propertyId`
-     * const listingCommercialWithPropertyIdOnly = await prisma.listingCommercial.updateManyAndReturn({
-     *   select: { propertyId: true },
+     * // Update zero or more ListingCommercials and only return the `listingsId`
+     * const listingCommercialWithListingsIdOnly = await prisma.listingCommercial.updateManyAndReturn({
+     *   select: { listingsId: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -17262,7 +17043,7 @@ export namespace Prisma {
    * Fields of the ListingCommercial model
    */
   interface ListingCommercialFieldRefs {
-    readonly propertyId: FieldRef<"ListingCommercial", 'String'>
+    readonly listingsId: FieldRef<"ListingCommercial", 'String'>
     readonly floor: FieldRef<"ListingCommercial", 'Int'>
     readonly washrooms: FieldRef<"ListingCommercial", 'Int'>
     readonly parkingSpots: FieldRef<"ListingCommercial", 'Int'>
@@ -17685,1129 +17466,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ListingCommercialInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model PropertyPrice
-   */
-
-  export type AggregatePropertyPrice = {
-    _count: PropertyPriceCountAggregateOutputType | null
-    _avg: PropertyPriceAvgAggregateOutputType | null
-    _sum: PropertyPriceSumAggregateOutputType | null
-    _min: PropertyPriceMinAggregateOutputType | null
-    _max: PropertyPriceMaxAggregateOutputType | null
-  }
-
-  export type PropertyPriceAvgAggregateOutputType = {
-    price: Decimal | null
-  }
-
-  export type PropertyPriceSumAggregateOutputType = {
-    price: Decimal | null
-  }
-
-  export type PropertyPriceMinAggregateOutputType = {
-    id: string | null
-    propertyId: string | null
-    for: string | null
-    currency: string | null
-    unit: string | null
-    price: Decimal | null
-    priceUnit: string | null
-  }
-
-  export type PropertyPriceMaxAggregateOutputType = {
-    id: string | null
-    propertyId: string | null
-    for: string | null
-    currency: string | null
-    unit: string | null
-    price: Decimal | null
-    priceUnit: string | null
-  }
-
-  export type PropertyPriceCountAggregateOutputType = {
-    id: number
-    propertyId: number
-    for: number
-    currency: number
-    unit: number
-    price: number
-    priceUnit: number
-    _all: number
-  }
-
-
-  export type PropertyPriceAvgAggregateInputType = {
-    price?: true
-  }
-
-  export type PropertyPriceSumAggregateInputType = {
-    price?: true
-  }
-
-  export type PropertyPriceMinAggregateInputType = {
-    id?: true
-    propertyId?: true
-    for?: true
-    currency?: true
-    unit?: true
-    price?: true
-    priceUnit?: true
-  }
-
-  export type PropertyPriceMaxAggregateInputType = {
-    id?: true
-    propertyId?: true
-    for?: true
-    currency?: true
-    unit?: true
-    price?: true
-    priceUnit?: true
-  }
-
-  export type PropertyPriceCountAggregateInputType = {
-    id?: true
-    propertyId?: true
-    for?: true
-    currency?: true
-    unit?: true
-    price?: true
-    priceUnit?: true
-    _all?: true
-  }
-
-  export type PropertyPriceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which PropertyPrice to aggregate.
-     */
-    where?: PropertyPriceWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of PropertyPrices to fetch.
-     */
-    orderBy?: PropertyPriceOrderByWithRelationInput | PropertyPriceOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: PropertyPriceWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` PropertyPrices from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` PropertyPrices.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned PropertyPrices
-    **/
-    _count?: true | PropertyPriceCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: PropertyPriceAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: PropertyPriceSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: PropertyPriceMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: PropertyPriceMaxAggregateInputType
-  }
-
-  export type GetPropertyPriceAggregateType<T extends PropertyPriceAggregateArgs> = {
-        [P in keyof T & keyof AggregatePropertyPrice]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregatePropertyPrice[P]>
-      : GetScalarType<T[P], AggregatePropertyPrice[P]>
-  }
-
-
-
-
-  export type PropertyPriceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PropertyPriceWhereInput
-    orderBy?: PropertyPriceOrderByWithAggregationInput | PropertyPriceOrderByWithAggregationInput[]
-    by: PropertyPriceScalarFieldEnum[] | PropertyPriceScalarFieldEnum
-    having?: PropertyPriceScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: PropertyPriceCountAggregateInputType | true
-    _avg?: PropertyPriceAvgAggregateInputType
-    _sum?: PropertyPriceSumAggregateInputType
-    _min?: PropertyPriceMinAggregateInputType
-    _max?: PropertyPriceMaxAggregateInputType
-  }
-
-  export type PropertyPriceGroupByOutputType = {
-    id: string
-    propertyId: string
-    for: string
-    currency: string
-    unit: string
-    price: Decimal
-    priceUnit: string
-    _count: PropertyPriceCountAggregateOutputType | null
-    _avg: PropertyPriceAvgAggregateOutputType | null
-    _sum: PropertyPriceSumAggregateOutputType | null
-    _min: PropertyPriceMinAggregateOutputType | null
-    _max: PropertyPriceMaxAggregateOutputType | null
-  }
-
-  type GetPropertyPriceGroupByPayload<T extends PropertyPriceGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<PropertyPriceGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof PropertyPriceGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], PropertyPriceGroupByOutputType[P]>
-            : GetScalarType<T[P], PropertyPriceGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type PropertyPriceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    propertyId?: boolean
-    for?: boolean
-    currency?: boolean
-    unit?: boolean
-    price?: boolean
-    priceUnit?: boolean
-    property?: boolean | ListingDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["propertyPrice"]>
-
-  export type PropertyPriceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    propertyId?: boolean
-    for?: boolean
-    currency?: boolean
-    unit?: boolean
-    price?: boolean
-    priceUnit?: boolean
-    property?: boolean | ListingDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["propertyPrice"]>
-
-  export type PropertyPriceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    propertyId?: boolean
-    for?: boolean
-    currency?: boolean
-    unit?: boolean
-    price?: boolean
-    priceUnit?: boolean
-    property?: boolean | ListingDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["propertyPrice"]>
-
-  export type PropertyPriceSelectScalar = {
-    id?: boolean
-    propertyId?: boolean
-    for?: boolean
-    currency?: boolean
-    unit?: boolean
-    price?: boolean
-    priceUnit?: boolean
-  }
-
-  export type PropertyPriceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "propertyId" | "for" | "currency" | "unit" | "price" | "priceUnit", ExtArgs["result"]["propertyPrice"]>
-  export type PropertyPriceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    property?: boolean | ListingDefaultArgs<ExtArgs>
-  }
-  export type PropertyPriceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    property?: boolean | ListingDefaultArgs<ExtArgs>
-  }
-  export type PropertyPriceIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    property?: boolean | ListingDefaultArgs<ExtArgs>
-  }
-
-  export type $PropertyPricePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "PropertyPrice"
-    objects: {
-      property: Prisma.$ListingPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      propertyId: string
-      for: string
-      currency: string
-      unit: string
-      price: Prisma.Decimal
-      priceUnit: string
-    }, ExtArgs["result"]["propertyPrice"]>
-    composites: {}
-  }
-
-  type PropertyPriceGetPayload<S extends boolean | null | undefined | PropertyPriceDefaultArgs> = $Result.GetResult<Prisma.$PropertyPricePayload, S>
-
-  type PropertyPriceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<PropertyPriceFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: PropertyPriceCountAggregateInputType | true
-    }
-
-  export interface PropertyPriceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PropertyPrice'], meta: { name: 'PropertyPrice' } }
-    /**
-     * Find zero or one PropertyPrice that matches the filter.
-     * @param {PropertyPriceFindUniqueArgs} args - Arguments to find a PropertyPrice
-     * @example
-     * // Get one PropertyPrice
-     * const propertyPrice = await prisma.propertyPrice.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends PropertyPriceFindUniqueArgs>(args: SelectSubset<T, PropertyPriceFindUniqueArgs<ExtArgs>>): Prisma__PropertyPriceClient<$Result.GetResult<Prisma.$PropertyPricePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one PropertyPrice that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {PropertyPriceFindUniqueOrThrowArgs} args - Arguments to find a PropertyPrice
-     * @example
-     * // Get one PropertyPrice
-     * const propertyPrice = await prisma.propertyPrice.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends PropertyPriceFindUniqueOrThrowArgs>(args: SelectSubset<T, PropertyPriceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PropertyPriceClient<$Result.GetResult<Prisma.$PropertyPricePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first PropertyPrice that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PropertyPriceFindFirstArgs} args - Arguments to find a PropertyPrice
-     * @example
-     * // Get one PropertyPrice
-     * const propertyPrice = await prisma.propertyPrice.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends PropertyPriceFindFirstArgs>(args?: SelectSubset<T, PropertyPriceFindFirstArgs<ExtArgs>>): Prisma__PropertyPriceClient<$Result.GetResult<Prisma.$PropertyPricePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first PropertyPrice that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PropertyPriceFindFirstOrThrowArgs} args - Arguments to find a PropertyPrice
-     * @example
-     * // Get one PropertyPrice
-     * const propertyPrice = await prisma.propertyPrice.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends PropertyPriceFindFirstOrThrowArgs>(args?: SelectSubset<T, PropertyPriceFindFirstOrThrowArgs<ExtArgs>>): Prisma__PropertyPriceClient<$Result.GetResult<Prisma.$PropertyPricePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more PropertyPrices that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PropertyPriceFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all PropertyPrices
-     * const propertyPrices = await prisma.propertyPrice.findMany()
-     * 
-     * // Get first 10 PropertyPrices
-     * const propertyPrices = await prisma.propertyPrice.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const propertyPriceWithIdOnly = await prisma.propertyPrice.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends PropertyPriceFindManyArgs>(args?: SelectSubset<T, PropertyPriceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyPricePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a PropertyPrice.
-     * @param {PropertyPriceCreateArgs} args - Arguments to create a PropertyPrice.
-     * @example
-     * // Create one PropertyPrice
-     * const PropertyPrice = await prisma.propertyPrice.create({
-     *   data: {
-     *     // ... data to create a PropertyPrice
-     *   }
-     * })
-     * 
-     */
-    create<T extends PropertyPriceCreateArgs>(args: SelectSubset<T, PropertyPriceCreateArgs<ExtArgs>>): Prisma__PropertyPriceClient<$Result.GetResult<Prisma.$PropertyPricePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many PropertyPrices.
-     * @param {PropertyPriceCreateManyArgs} args - Arguments to create many PropertyPrices.
-     * @example
-     * // Create many PropertyPrices
-     * const propertyPrice = await prisma.propertyPrice.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends PropertyPriceCreateManyArgs>(args?: SelectSubset<T, PropertyPriceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many PropertyPrices and returns the data saved in the database.
-     * @param {PropertyPriceCreateManyAndReturnArgs} args - Arguments to create many PropertyPrices.
-     * @example
-     * // Create many PropertyPrices
-     * const propertyPrice = await prisma.propertyPrice.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many PropertyPrices and only return the `id`
-     * const propertyPriceWithIdOnly = await prisma.propertyPrice.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends PropertyPriceCreateManyAndReturnArgs>(args?: SelectSubset<T, PropertyPriceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyPricePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a PropertyPrice.
-     * @param {PropertyPriceDeleteArgs} args - Arguments to delete one PropertyPrice.
-     * @example
-     * // Delete one PropertyPrice
-     * const PropertyPrice = await prisma.propertyPrice.delete({
-     *   where: {
-     *     // ... filter to delete one PropertyPrice
-     *   }
-     * })
-     * 
-     */
-    delete<T extends PropertyPriceDeleteArgs>(args: SelectSubset<T, PropertyPriceDeleteArgs<ExtArgs>>): Prisma__PropertyPriceClient<$Result.GetResult<Prisma.$PropertyPricePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one PropertyPrice.
-     * @param {PropertyPriceUpdateArgs} args - Arguments to update one PropertyPrice.
-     * @example
-     * // Update one PropertyPrice
-     * const propertyPrice = await prisma.propertyPrice.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends PropertyPriceUpdateArgs>(args: SelectSubset<T, PropertyPriceUpdateArgs<ExtArgs>>): Prisma__PropertyPriceClient<$Result.GetResult<Prisma.$PropertyPricePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more PropertyPrices.
-     * @param {PropertyPriceDeleteManyArgs} args - Arguments to filter PropertyPrices to delete.
-     * @example
-     * // Delete a few PropertyPrices
-     * const { count } = await prisma.propertyPrice.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends PropertyPriceDeleteManyArgs>(args?: SelectSubset<T, PropertyPriceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more PropertyPrices.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PropertyPriceUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many PropertyPrices
-     * const propertyPrice = await prisma.propertyPrice.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends PropertyPriceUpdateManyArgs>(args: SelectSubset<T, PropertyPriceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more PropertyPrices and returns the data updated in the database.
-     * @param {PropertyPriceUpdateManyAndReturnArgs} args - Arguments to update many PropertyPrices.
-     * @example
-     * // Update many PropertyPrices
-     * const propertyPrice = await prisma.propertyPrice.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more PropertyPrices and only return the `id`
-     * const propertyPriceWithIdOnly = await prisma.propertyPrice.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends PropertyPriceUpdateManyAndReturnArgs>(args: SelectSubset<T, PropertyPriceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyPricePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one PropertyPrice.
-     * @param {PropertyPriceUpsertArgs} args - Arguments to update or create a PropertyPrice.
-     * @example
-     * // Update or create a PropertyPrice
-     * const propertyPrice = await prisma.propertyPrice.upsert({
-     *   create: {
-     *     // ... data to create a PropertyPrice
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the PropertyPrice we want to update
-     *   }
-     * })
-     */
-    upsert<T extends PropertyPriceUpsertArgs>(args: SelectSubset<T, PropertyPriceUpsertArgs<ExtArgs>>): Prisma__PropertyPriceClient<$Result.GetResult<Prisma.$PropertyPricePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of PropertyPrices.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PropertyPriceCountArgs} args - Arguments to filter PropertyPrices to count.
-     * @example
-     * // Count the number of PropertyPrices
-     * const count = await prisma.propertyPrice.count({
-     *   where: {
-     *     // ... the filter for the PropertyPrices we want to count
-     *   }
-     * })
-    **/
-    count<T extends PropertyPriceCountArgs>(
-      args?: Subset<T, PropertyPriceCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], PropertyPriceCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a PropertyPrice.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PropertyPriceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends PropertyPriceAggregateArgs>(args: Subset<T, PropertyPriceAggregateArgs>): Prisma.PrismaPromise<GetPropertyPriceAggregateType<T>>
-
-    /**
-     * Group by PropertyPrice.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PropertyPriceGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends PropertyPriceGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: PropertyPriceGroupByArgs['orderBy'] }
-        : { orderBy?: PropertyPriceGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, PropertyPriceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPropertyPriceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the PropertyPrice model
-   */
-  readonly fields: PropertyPriceFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for PropertyPrice.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__PropertyPriceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    property<T extends ListingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ListingDefaultArgs<ExtArgs>>): Prisma__ListingClient<$Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the PropertyPrice model
-   */
-  interface PropertyPriceFieldRefs {
-    readonly id: FieldRef<"PropertyPrice", 'String'>
-    readonly propertyId: FieldRef<"PropertyPrice", 'String'>
-    readonly for: FieldRef<"PropertyPrice", 'String'>
-    readonly currency: FieldRef<"PropertyPrice", 'String'>
-    readonly unit: FieldRef<"PropertyPrice", 'String'>
-    readonly price: FieldRef<"PropertyPrice", 'Decimal'>
-    readonly priceUnit: FieldRef<"PropertyPrice", 'String'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * PropertyPrice findUnique
-   */
-  export type PropertyPriceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PropertyPrice
-     */
-    select?: PropertyPriceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PropertyPrice
-     */
-    omit?: PropertyPriceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PropertyPriceInclude<ExtArgs> | null
-    /**
-     * Filter, which PropertyPrice to fetch.
-     */
-    where: PropertyPriceWhereUniqueInput
-  }
-
-  /**
-   * PropertyPrice findUniqueOrThrow
-   */
-  export type PropertyPriceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PropertyPrice
-     */
-    select?: PropertyPriceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PropertyPrice
-     */
-    omit?: PropertyPriceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PropertyPriceInclude<ExtArgs> | null
-    /**
-     * Filter, which PropertyPrice to fetch.
-     */
-    where: PropertyPriceWhereUniqueInput
-  }
-
-  /**
-   * PropertyPrice findFirst
-   */
-  export type PropertyPriceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PropertyPrice
-     */
-    select?: PropertyPriceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PropertyPrice
-     */
-    omit?: PropertyPriceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PropertyPriceInclude<ExtArgs> | null
-    /**
-     * Filter, which PropertyPrice to fetch.
-     */
-    where?: PropertyPriceWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of PropertyPrices to fetch.
-     */
-    orderBy?: PropertyPriceOrderByWithRelationInput | PropertyPriceOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for PropertyPrices.
-     */
-    cursor?: PropertyPriceWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` PropertyPrices from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` PropertyPrices.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of PropertyPrices.
-     */
-    distinct?: PropertyPriceScalarFieldEnum | PropertyPriceScalarFieldEnum[]
-  }
-
-  /**
-   * PropertyPrice findFirstOrThrow
-   */
-  export type PropertyPriceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PropertyPrice
-     */
-    select?: PropertyPriceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PropertyPrice
-     */
-    omit?: PropertyPriceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PropertyPriceInclude<ExtArgs> | null
-    /**
-     * Filter, which PropertyPrice to fetch.
-     */
-    where?: PropertyPriceWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of PropertyPrices to fetch.
-     */
-    orderBy?: PropertyPriceOrderByWithRelationInput | PropertyPriceOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for PropertyPrices.
-     */
-    cursor?: PropertyPriceWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` PropertyPrices from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` PropertyPrices.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of PropertyPrices.
-     */
-    distinct?: PropertyPriceScalarFieldEnum | PropertyPriceScalarFieldEnum[]
-  }
-
-  /**
-   * PropertyPrice findMany
-   */
-  export type PropertyPriceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PropertyPrice
-     */
-    select?: PropertyPriceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PropertyPrice
-     */
-    omit?: PropertyPriceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PropertyPriceInclude<ExtArgs> | null
-    /**
-     * Filter, which PropertyPrices to fetch.
-     */
-    where?: PropertyPriceWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of PropertyPrices to fetch.
-     */
-    orderBy?: PropertyPriceOrderByWithRelationInput | PropertyPriceOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing PropertyPrices.
-     */
-    cursor?: PropertyPriceWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` PropertyPrices from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` PropertyPrices.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of PropertyPrices.
-     */
-    distinct?: PropertyPriceScalarFieldEnum | PropertyPriceScalarFieldEnum[]
-  }
-
-  /**
-   * PropertyPrice create
-   */
-  export type PropertyPriceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PropertyPrice
-     */
-    select?: PropertyPriceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PropertyPrice
-     */
-    omit?: PropertyPriceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PropertyPriceInclude<ExtArgs> | null
-    /**
-     * The data needed to create a PropertyPrice.
-     */
-    data: XOR<PropertyPriceCreateInput, PropertyPriceUncheckedCreateInput>
-  }
-
-  /**
-   * PropertyPrice createMany
-   */
-  export type PropertyPriceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many PropertyPrices.
-     */
-    data: PropertyPriceCreateManyInput | PropertyPriceCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * PropertyPrice createManyAndReturn
-   */
-  export type PropertyPriceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PropertyPrice
-     */
-    select?: PropertyPriceSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the PropertyPrice
-     */
-    omit?: PropertyPriceOmit<ExtArgs> | null
-    /**
-     * The data used to create many PropertyPrices.
-     */
-    data: PropertyPriceCreateManyInput | PropertyPriceCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PropertyPriceIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * PropertyPrice update
-   */
-  export type PropertyPriceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PropertyPrice
-     */
-    select?: PropertyPriceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PropertyPrice
-     */
-    omit?: PropertyPriceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PropertyPriceInclude<ExtArgs> | null
-    /**
-     * The data needed to update a PropertyPrice.
-     */
-    data: XOR<PropertyPriceUpdateInput, PropertyPriceUncheckedUpdateInput>
-    /**
-     * Choose, which PropertyPrice to update.
-     */
-    where: PropertyPriceWhereUniqueInput
-  }
-
-  /**
-   * PropertyPrice updateMany
-   */
-  export type PropertyPriceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update PropertyPrices.
-     */
-    data: XOR<PropertyPriceUpdateManyMutationInput, PropertyPriceUncheckedUpdateManyInput>
-    /**
-     * Filter which PropertyPrices to update
-     */
-    where?: PropertyPriceWhereInput
-    /**
-     * Limit how many PropertyPrices to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * PropertyPrice updateManyAndReturn
-   */
-  export type PropertyPriceUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PropertyPrice
-     */
-    select?: PropertyPriceSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the PropertyPrice
-     */
-    omit?: PropertyPriceOmit<ExtArgs> | null
-    /**
-     * The data used to update PropertyPrices.
-     */
-    data: XOR<PropertyPriceUpdateManyMutationInput, PropertyPriceUncheckedUpdateManyInput>
-    /**
-     * Filter which PropertyPrices to update
-     */
-    where?: PropertyPriceWhereInput
-    /**
-     * Limit how many PropertyPrices to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PropertyPriceIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * PropertyPrice upsert
-   */
-  export type PropertyPriceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PropertyPrice
-     */
-    select?: PropertyPriceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PropertyPrice
-     */
-    omit?: PropertyPriceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PropertyPriceInclude<ExtArgs> | null
-    /**
-     * The filter to search for the PropertyPrice to update in case it exists.
-     */
-    where: PropertyPriceWhereUniqueInput
-    /**
-     * In case the PropertyPrice found by the `where` argument doesn't exist, create a new PropertyPrice with this data.
-     */
-    create: XOR<PropertyPriceCreateInput, PropertyPriceUncheckedCreateInput>
-    /**
-     * In case the PropertyPrice was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<PropertyPriceUpdateInput, PropertyPriceUncheckedUpdateInput>
-  }
-
-  /**
-   * PropertyPrice delete
-   */
-  export type PropertyPriceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PropertyPrice
-     */
-    select?: PropertyPriceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PropertyPrice
-     */
-    omit?: PropertyPriceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PropertyPriceInclude<ExtArgs> | null
-    /**
-     * Filter which PropertyPrice to delete.
-     */
-    where: PropertyPriceWhereUniqueInput
-  }
-
-  /**
-   * PropertyPrice deleteMany
-   */
-  export type PropertyPriceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which PropertyPrices to delete
-     */
-    where?: PropertyPriceWhereInput
-    /**
-     * Limit how many PropertyPrices to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * PropertyPrice without action
-   */
-  export type PropertyPriceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PropertyPrice
-     */
-    select?: PropertyPriceSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the PropertyPrice
-     */
-    omit?: PropertyPriceOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: PropertyPriceInclude<ExtArgs> | null
   }
 
 
@@ -48689,1015 +47347,6 @@ export namespace Prisma {
 
 
   /**
-   * Model Problem
-   */
-
-  export type AggregateProblem = {
-    _count: ProblemCountAggregateOutputType | null
-    _min: ProblemMinAggregateOutputType | null
-    _max: ProblemMaxAggregateOutputType | null
-  }
-
-  export type ProblemMinAggregateOutputType = {
-    id: string | null
-    context: string | null
-    message: string | null
-    stack: string | null
-    createdAt: Date | null
-  }
-
-  export type ProblemMaxAggregateOutputType = {
-    id: string | null
-    context: string | null
-    message: string | null
-    stack: string | null
-    createdAt: Date | null
-  }
-
-  export type ProblemCountAggregateOutputType = {
-    id: number
-    context: number
-    message: number
-    stack: number
-    details: number
-    createdAt: number
-    _all: number
-  }
-
-
-  export type ProblemMinAggregateInputType = {
-    id?: true
-    context?: true
-    message?: true
-    stack?: true
-    createdAt?: true
-  }
-
-  export type ProblemMaxAggregateInputType = {
-    id?: true
-    context?: true
-    message?: true
-    stack?: true
-    createdAt?: true
-  }
-
-  export type ProblemCountAggregateInputType = {
-    id?: true
-    context?: true
-    message?: true
-    stack?: true
-    details?: true
-    createdAt?: true
-    _all?: true
-  }
-
-  export type ProblemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Problem to aggregate.
-     */
-    where?: ProblemWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Problems to fetch.
-     */
-    orderBy?: ProblemOrderByWithRelationInput | ProblemOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: ProblemWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Problems from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Problems.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Problems
-    **/
-    _count?: true | ProblemCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: ProblemMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: ProblemMaxAggregateInputType
-  }
-
-  export type GetProblemAggregateType<T extends ProblemAggregateArgs> = {
-        [P in keyof T & keyof AggregateProblem]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateProblem[P]>
-      : GetScalarType<T[P], AggregateProblem[P]>
-  }
-
-
-
-
-  export type ProblemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProblemWhereInput
-    orderBy?: ProblemOrderByWithAggregationInput | ProblemOrderByWithAggregationInput[]
-    by: ProblemScalarFieldEnum[] | ProblemScalarFieldEnum
-    having?: ProblemScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: ProblemCountAggregateInputType | true
-    _min?: ProblemMinAggregateInputType
-    _max?: ProblemMaxAggregateInputType
-  }
-
-  export type ProblemGroupByOutputType = {
-    id: string
-    context: string
-    message: string
-    stack: string | null
-    details: JsonValue | null
-    createdAt: Date
-    _count: ProblemCountAggregateOutputType | null
-    _min: ProblemMinAggregateOutputType | null
-    _max: ProblemMaxAggregateOutputType | null
-  }
-
-  type GetProblemGroupByPayload<T extends ProblemGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<ProblemGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof ProblemGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], ProblemGroupByOutputType[P]>
-            : GetScalarType<T[P], ProblemGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type ProblemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    context?: boolean
-    message?: boolean
-    stack?: boolean
-    details?: boolean
-    createdAt?: boolean
-  }, ExtArgs["result"]["problem"]>
-
-  export type ProblemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    context?: boolean
-    message?: boolean
-    stack?: boolean
-    details?: boolean
-    createdAt?: boolean
-  }, ExtArgs["result"]["problem"]>
-
-  export type ProblemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    context?: boolean
-    message?: boolean
-    stack?: boolean
-    details?: boolean
-    createdAt?: boolean
-  }, ExtArgs["result"]["problem"]>
-
-  export type ProblemSelectScalar = {
-    id?: boolean
-    context?: boolean
-    message?: boolean
-    stack?: boolean
-    details?: boolean
-    createdAt?: boolean
-  }
-
-  export type ProblemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "context" | "message" | "stack" | "details" | "createdAt", ExtArgs["result"]["problem"]>
-
-  export type $ProblemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Problem"
-    objects: {}
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      context: string
-      message: string
-      stack: string | null
-      details: Prisma.JsonValue | null
-      createdAt: Date
-    }, ExtArgs["result"]["problem"]>
-    composites: {}
-  }
-
-  type ProblemGetPayload<S extends boolean | null | undefined | ProblemDefaultArgs> = $Result.GetResult<Prisma.$ProblemPayload, S>
-
-  type ProblemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<ProblemFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ProblemCountAggregateInputType | true
-    }
-
-  export interface ProblemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Problem'], meta: { name: 'Problem' } }
-    /**
-     * Find zero or one Problem that matches the filter.
-     * @param {ProblemFindUniqueArgs} args - Arguments to find a Problem
-     * @example
-     * // Get one Problem
-     * const problem = await prisma.problem.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends ProblemFindUniqueArgs>(args: SelectSubset<T, ProblemFindUniqueArgs<ExtArgs>>): Prisma__ProblemClient<$Result.GetResult<Prisma.$ProblemPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Problem that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {ProblemFindUniqueOrThrowArgs} args - Arguments to find a Problem
-     * @example
-     * // Get one Problem
-     * const problem = await prisma.problem.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends ProblemFindUniqueOrThrowArgs>(args: SelectSubset<T, ProblemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProblemClient<$Result.GetResult<Prisma.$ProblemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Problem that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProblemFindFirstArgs} args - Arguments to find a Problem
-     * @example
-     * // Get one Problem
-     * const problem = await prisma.problem.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends ProblemFindFirstArgs>(args?: SelectSubset<T, ProblemFindFirstArgs<ExtArgs>>): Prisma__ProblemClient<$Result.GetResult<Prisma.$ProblemPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Problem that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProblemFindFirstOrThrowArgs} args - Arguments to find a Problem
-     * @example
-     * // Get one Problem
-     * const problem = await prisma.problem.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends ProblemFindFirstOrThrowArgs>(args?: SelectSubset<T, ProblemFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProblemClient<$Result.GetResult<Prisma.$ProblemPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Problems that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProblemFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Problems
-     * const problems = await prisma.problem.findMany()
-     * 
-     * // Get first 10 Problems
-     * const problems = await prisma.problem.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const problemWithIdOnly = await prisma.problem.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends ProblemFindManyArgs>(args?: SelectSubset<T, ProblemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProblemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Problem.
-     * @param {ProblemCreateArgs} args - Arguments to create a Problem.
-     * @example
-     * // Create one Problem
-     * const Problem = await prisma.problem.create({
-     *   data: {
-     *     // ... data to create a Problem
-     *   }
-     * })
-     * 
-     */
-    create<T extends ProblemCreateArgs>(args: SelectSubset<T, ProblemCreateArgs<ExtArgs>>): Prisma__ProblemClient<$Result.GetResult<Prisma.$ProblemPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Problems.
-     * @param {ProblemCreateManyArgs} args - Arguments to create many Problems.
-     * @example
-     * // Create many Problems
-     * const problem = await prisma.problem.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends ProblemCreateManyArgs>(args?: SelectSubset<T, ProblemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Problems and returns the data saved in the database.
-     * @param {ProblemCreateManyAndReturnArgs} args - Arguments to create many Problems.
-     * @example
-     * // Create many Problems
-     * const problem = await prisma.problem.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Problems and only return the `id`
-     * const problemWithIdOnly = await prisma.problem.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends ProblemCreateManyAndReturnArgs>(args?: SelectSubset<T, ProblemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProblemPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Problem.
-     * @param {ProblemDeleteArgs} args - Arguments to delete one Problem.
-     * @example
-     * // Delete one Problem
-     * const Problem = await prisma.problem.delete({
-     *   where: {
-     *     // ... filter to delete one Problem
-     *   }
-     * })
-     * 
-     */
-    delete<T extends ProblemDeleteArgs>(args: SelectSubset<T, ProblemDeleteArgs<ExtArgs>>): Prisma__ProblemClient<$Result.GetResult<Prisma.$ProblemPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Problem.
-     * @param {ProblemUpdateArgs} args - Arguments to update one Problem.
-     * @example
-     * // Update one Problem
-     * const problem = await prisma.problem.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends ProblemUpdateArgs>(args: SelectSubset<T, ProblemUpdateArgs<ExtArgs>>): Prisma__ProblemClient<$Result.GetResult<Prisma.$ProblemPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Problems.
-     * @param {ProblemDeleteManyArgs} args - Arguments to filter Problems to delete.
-     * @example
-     * // Delete a few Problems
-     * const { count } = await prisma.problem.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends ProblemDeleteManyArgs>(args?: SelectSubset<T, ProblemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Problems.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProblemUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Problems
-     * const problem = await prisma.problem.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends ProblemUpdateManyArgs>(args: SelectSubset<T, ProblemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Problems and returns the data updated in the database.
-     * @param {ProblemUpdateManyAndReturnArgs} args - Arguments to update many Problems.
-     * @example
-     * // Update many Problems
-     * const problem = await prisma.problem.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Problems and only return the `id`
-     * const problemWithIdOnly = await prisma.problem.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends ProblemUpdateManyAndReturnArgs>(args: SelectSubset<T, ProblemUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProblemPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Problem.
-     * @param {ProblemUpsertArgs} args - Arguments to update or create a Problem.
-     * @example
-     * // Update or create a Problem
-     * const problem = await prisma.problem.upsert({
-     *   create: {
-     *     // ... data to create a Problem
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Problem we want to update
-     *   }
-     * })
-     */
-    upsert<T extends ProblemUpsertArgs>(args: SelectSubset<T, ProblemUpsertArgs<ExtArgs>>): Prisma__ProblemClient<$Result.GetResult<Prisma.$ProblemPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Problems.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProblemCountArgs} args - Arguments to filter Problems to count.
-     * @example
-     * // Count the number of Problems
-     * const count = await prisma.problem.count({
-     *   where: {
-     *     // ... the filter for the Problems we want to count
-     *   }
-     * })
-    **/
-    count<T extends ProblemCountArgs>(
-      args?: Subset<T, ProblemCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], ProblemCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Problem.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProblemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends ProblemAggregateArgs>(args: Subset<T, ProblemAggregateArgs>): Prisma.PrismaPromise<GetProblemAggregateType<T>>
-
-    /**
-     * Group by Problem.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ProblemGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends ProblemGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ProblemGroupByArgs['orderBy'] }
-        : { orderBy?: ProblemGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, ProblemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProblemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Problem model
-   */
-  readonly fields: ProblemFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Problem.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__ProblemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Problem model
-   */
-  interface ProblemFieldRefs {
-    readonly id: FieldRef<"Problem", 'String'>
-    readonly context: FieldRef<"Problem", 'String'>
-    readonly message: FieldRef<"Problem", 'String'>
-    readonly stack: FieldRef<"Problem", 'String'>
-    readonly details: FieldRef<"Problem", 'Json'>
-    readonly createdAt: FieldRef<"Problem", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Problem findUnique
-   */
-  export type ProblemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Problem
-     */
-    select?: ProblemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Problem
-     */
-    omit?: ProblemOmit<ExtArgs> | null
-    /**
-     * Filter, which Problem to fetch.
-     */
-    where: ProblemWhereUniqueInput
-  }
-
-  /**
-   * Problem findUniqueOrThrow
-   */
-  export type ProblemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Problem
-     */
-    select?: ProblemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Problem
-     */
-    omit?: ProblemOmit<ExtArgs> | null
-    /**
-     * Filter, which Problem to fetch.
-     */
-    where: ProblemWhereUniqueInput
-  }
-
-  /**
-   * Problem findFirst
-   */
-  export type ProblemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Problem
-     */
-    select?: ProblemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Problem
-     */
-    omit?: ProblemOmit<ExtArgs> | null
-    /**
-     * Filter, which Problem to fetch.
-     */
-    where?: ProblemWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Problems to fetch.
-     */
-    orderBy?: ProblemOrderByWithRelationInput | ProblemOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Problems.
-     */
-    cursor?: ProblemWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Problems from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Problems.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Problems.
-     */
-    distinct?: ProblemScalarFieldEnum | ProblemScalarFieldEnum[]
-  }
-
-  /**
-   * Problem findFirstOrThrow
-   */
-  export type ProblemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Problem
-     */
-    select?: ProblemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Problem
-     */
-    omit?: ProblemOmit<ExtArgs> | null
-    /**
-     * Filter, which Problem to fetch.
-     */
-    where?: ProblemWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Problems to fetch.
-     */
-    orderBy?: ProblemOrderByWithRelationInput | ProblemOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Problems.
-     */
-    cursor?: ProblemWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Problems from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Problems.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Problems.
-     */
-    distinct?: ProblemScalarFieldEnum | ProblemScalarFieldEnum[]
-  }
-
-  /**
-   * Problem findMany
-   */
-  export type ProblemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Problem
-     */
-    select?: ProblemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Problem
-     */
-    omit?: ProblemOmit<ExtArgs> | null
-    /**
-     * Filter, which Problems to fetch.
-     */
-    where?: ProblemWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Problems to fetch.
-     */
-    orderBy?: ProblemOrderByWithRelationInput | ProblemOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Problems.
-     */
-    cursor?: ProblemWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Problems from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Problems.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Problems.
-     */
-    distinct?: ProblemScalarFieldEnum | ProblemScalarFieldEnum[]
-  }
-
-  /**
-   * Problem create
-   */
-  export type ProblemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Problem
-     */
-    select?: ProblemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Problem
-     */
-    omit?: ProblemOmit<ExtArgs> | null
-    /**
-     * The data needed to create a Problem.
-     */
-    data: XOR<ProblemCreateInput, ProblemUncheckedCreateInput>
-  }
-
-  /**
-   * Problem createMany
-   */
-  export type ProblemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Problems.
-     */
-    data: ProblemCreateManyInput | ProblemCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Problem createManyAndReturn
-   */
-  export type ProblemCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Problem
-     */
-    select?: ProblemSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Problem
-     */
-    omit?: ProblemOmit<ExtArgs> | null
-    /**
-     * The data used to create many Problems.
-     */
-    data: ProblemCreateManyInput | ProblemCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Problem update
-   */
-  export type ProblemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Problem
-     */
-    select?: ProblemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Problem
-     */
-    omit?: ProblemOmit<ExtArgs> | null
-    /**
-     * The data needed to update a Problem.
-     */
-    data: XOR<ProblemUpdateInput, ProblemUncheckedUpdateInput>
-    /**
-     * Choose, which Problem to update.
-     */
-    where: ProblemWhereUniqueInput
-  }
-
-  /**
-   * Problem updateMany
-   */
-  export type ProblemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Problems.
-     */
-    data: XOR<ProblemUpdateManyMutationInput, ProblemUncheckedUpdateManyInput>
-    /**
-     * Filter which Problems to update
-     */
-    where?: ProblemWhereInput
-    /**
-     * Limit how many Problems to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Problem updateManyAndReturn
-   */
-  export type ProblemUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Problem
-     */
-    select?: ProblemSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Problem
-     */
-    omit?: ProblemOmit<ExtArgs> | null
-    /**
-     * The data used to update Problems.
-     */
-    data: XOR<ProblemUpdateManyMutationInput, ProblemUncheckedUpdateManyInput>
-    /**
-     * Filter which Problems to update
-     */
-    where?: ProblemWhereInput
-    /**
-     * Limit how many Problems to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Problem upsert
-   */
-  export type ProblemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Problem
-     */
-    select?: ProblemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Problem
-     */
-    omit?: ProblemOmit<ExtArgs> | null
-    /**
-     * The filter to search for the Problem to update in case it exists.
-     */
-    where: ProblemWhereUniqueInput
-    /**
-     * In case the Problem found by the `where` argument doesn't exist, create a new Problem with this data.
-     */
-    create: XOR<ProblemCreateInput, ProblemUncheckedCreateInput>
-    /**
-     * In case the Problem was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<ProblemUpdateInput, ProblemUncheckedUpdateInput>
-  }
-
-  /**
-   * Problem delete
-   */
-  export type ProblemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Problem
-     */
-    select?: ProblemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Problem
-     */
-    omit?: ProblemOmit<ExtArgs> | null
-    /**
-     * Filter which Problem to delete.
-     */
-    where: ProblemWhereUniqueInput
-  }
-
-  /**
-   * Problem deleteMany
-   */
-  export type ProblemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Problems to delete
-     */
-    where?: ProblemWhereInput
-    /**
-     * Limit how many Problems to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Problem without action
-   */
-  export type ProblemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Problem
-     */
-    select?: ProblemSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Problem
-     */
-    omit?: ProblemOmit<ExtArgs> | null
-  }
-
-
-  /**
    * Model SitemapEntry
    */
 
@@ -66270,7 +63919,7 @@ export namespace Prisma {
 
 
   export const ListingHouseScalarFieldEnum: {
-    listingId: 'listingId',
+    listingsId: 'listingsId',
     bedrooms: 'bedrooms',
     bathrooms: 'bathrooms',
     floors: 'floors',
@@ -66290,7 +63939,7 @@ export namespace Prisma {
 
 
   export const ListingApartmentScalarFieldEnum: {
-    propertyId: 'propertyId',
+    listingsId: 'listingsId',
     bedrooms: 'bedrooms',
     bathrooms: 'bathrooms',
     onFloor: 'onFloor',
@@ -66326,7 +63975,7 @@ export namespace Prisma {
 
 
   export const ListingCommercialScalarFieldEnum: {
-    propertyId: 'propertyId',
+    listingsId: 'listingsId',
     floor: 'floor',
     washrooms: 'washrooms',
     parkingSpots: 'parkingSpots',
@@ -66336,19 +63985,6 @@ export namespace Prisma {
   };
 
   export type ListingCommercialScalarFieldEnum = (typeof ListingCommercialScalarFieldEnum)[keyof typeof ListingCommercialScalarFieldEnum]
-
-
-  export const PropertyPriceScalarFieldEnum: {
-    id: 'id',
-    propertyId: 'propertyId',
-    for: 'for',
-    currency: 'currency',
-    unit: 'unit',
-    price: 'price',
-    priceUnit: 'priceUnit'
-  };
-
-  export type PropertyPriceScalarFieldEnum = (typeof PropertyPriceScalarFieldEnum)[keyof typeof PropertyPriceScalarFieldEnum]
 
 
   export const PropertyOwnerScalarFieldEnum: {
@@ -66735,18 +64371,6 @@ export namespace Prisma {
   };
 
   export type VisitRequestScalarFieldEnum = (typeof VisitRequestScalarFieldEnum)[keyof typeof VisitRequestScalarFieldEnum]
-
-
-  export const ProblemScalarFieldEnum: {
-    id: 'id',
-    context: 'context',
-    message: 'message',
-    stack: 'stack',
-    details: 'details',
-    createdAt: 'createdAt'
-  };
-
-  export type ProblemScalarFieldEnum = (typeof ProblemScalarFieldEnum)[keyof typeof ProblemScalarFieldEnum]
 
 
   export const SitemapEntryScalarFieldEnum: {
@@ -67515,7 +65139,6 @@ export namespace Prisma {
     apartmentDetail?: XOR<ListingApartmentNullableScalarRelationFilter, ListingApartmentWhereInput> | null
     landDetail?: XOR<PropertyLandDetailNullableScalarRelationFilter, PropertyLandDetailWhereInput> | null
     commercialDetail?: XOR<ListingCommercialNullableScalarRelationFilter, ListingCommercialWhereInput> | null
-    prices?: PropertyPriceListRelationFilter
     owners?: PropertyOwnerListRelationFilter
     documents?: ListingDocumentListRelationFilter
     changes?: ListingChangeListRelationFilter
@@ -67563,7 +65186,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentOrderByWithRelationInput
     landDetail?: PropertyLandDetailOrderByWithRelationInput
     commercialDetail?: ListingCommercialOrderByWithRelationInput
-    prices?: PropertyPriceOrderByRelationAggregateInput
     owners?: PropertyOwnerOrderByRelationAggregateInput
     documents?: ListingDocumentOrderByRelationAggregateInput
     changes?: ListingChangeOrderByRelationAggregateInput
@@ -67614,7 +65236,6 @@ export namespace Prisma {
     apartmentDetail?: XOR<ListingApartmentNullableScalarRelationFilter, ListingApartmentWhereInput> | null
     landDetail?: XOR<PropertyLandDetailNullableScalarRelationFilter, PropertyLandDetailWhereInput> | null
     commercialDetail?: XOR<ListingCommercialNullableScalarRelationFilter, ListingCommercialWhereInput> | null
-    prices?: PropertyPriceListRelationFilter
     owners?: PropertyOwnerListRelationFilter
     documents?: ListingDocumentListRelationFilter
     changes?: ListingChangeListRelationFilter
@@ -67752,7 +65373,7 @@ export namespace Prisma {
     AND?: ListingHouseWhereInput | ListingHouseWhereInput[]
     OR?: ListingHouseWhereInput[]
     NOT?: ListingHouseWhereInput | ListingHouseWhereInput[]
-    listingId?: StringFilter<"ListingHouse"> | string
+    listingsId?: StringFilter<"ListingHouse"> | string
     bedrooms?: IntFilter<"ListingHouse"> | number
     bathrooms?: IntFilter<"ListingHouse"> | number
     floors?: IntFilter<"ListingHouse"> | number
@@ -67770,7 +65391,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseOrderByWithRelationInput = {
-    listingId?: SortOrder
+    listingsId?: SortOrder
     bedrooms?: SortOrder
     bathrooms?: SortOrder
     floors?: SortOrder
@@ -67788,7 +65409,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseWhereUniqueInput = Prisma.AtLeast<{
-    listingId?: string
+    listingsId?: string
     AND?: ListingHouseWhereInput | ListingHouseWhereInput[]
     OR?: ListingHouseWhereInput[]
     NOT?: ListingHouseWhereInput | ListingHouseWhereInput[]
@@ -67806,10 +65427,10 @@ export namespace Prisma {
     facing?: StringFilter<"ListingHouse"> | string
     roadAccess?: DecimalFilter<"ListingHouse"> | Decimal | DecimalJsLike | number | string
     property?: XOR<ListingScalarRelationFilter, ListingWhereInput>
-  }, "listingId" | "listingId">
+  }, "listingsId" | "listingsId">
 
   export type ListingHouseOrderByWithAggregationInput = {
-    listingId?: SortOrder
+    listingsId?: SortOrder
     bedrooms?: SortOrder
     bathrooms?: SortOrder
     floors?: SortOrder
@@ -67834,7 +65455,7 @@ export namespace Prisma {
     AND?: ListingHouseScalarWhereWithAggregatesInput | ListingHouseScalarWhereWithAggregatesInput[]
     OR?: ListingHouseScalarWhereWithAggregatesInput[]
     NOT?: ListingHouseScalarWhereWithAggregatesInput | ListingHouseScalarWhereWithAggregatesInput[]
-    listingId?: StringWithAggregatesFilter<"ListingHouse"> | string
+    listingsId?: StringWithAggregatesFilter<"ListingHouse"> | string
     bedrooms?: IntWithAggregatesFilter<"ListingHouse"> | number
     bathrooms?: IntWithAggregatesFilter<"ListingHouse"> | number
     floors?: IntWithAggregatesFilter<"ListingHouse"> | number
@@ -67854,7 +65475,7 @@ export namespace Prisma {
     AND?: ListingApartmentWhereInput | ListingApartmentWhereInput[]
     OR?: ListingApartmentWhereInput[]
     NOT?: ListingApartmentWhereInput | ListingApartmentWhereInput[]
-    propertyId?: StringFilter<"ListingApartment"> | string
+    listingsId?: StringFilter<"ListingApartment"> | string
     bedrooms?: IntFilter<"ListingApartment"> | number
     bathrooms?: IntFilter<"ListingApartment"> | number
     onFloor?: IntFilter<"ListingApartment"> | number
@@ -67873,7 +65494,7 @@ export namespace Prisma {
   }
 
   export type ListingApartmentOrderByWithRelationInput = {
-    propertyId?: SortOrder
+    listingsId?: SortOrder
     bedrooms?: SortOrder
     bathrooms?: SortOrder
     onFloor?: SortOrder
@@ -67892,7 +65513,7 @@ export namespace Prisma {
   }
 
   export type ListingApartmentWhereUniqueInput = Prisma.AtLeast<{
-    propertyId?: string
+    listingsId?: string
     AND?: ListingApartmentWhereInput | ListingApartmentWhereInput[]
     OR?: ListingApartmentWhereInput[]
     NOT?: ListingApartmentWhereInput | ListingApartmentWhereInput[]
@@ -67911,10 +65532,10 @@ export namespace Prisma {
     builtUpArea?: DecimalFilter<"ListingApartment"> | Decimal | DecimalJsLike | number | string
     maintenanceFee?: DecimalFilter<"ListingApartment"> | Decimal | DecimalJsLike | number | string
     property?: XOR<ListingScalarRelationFilter, ListingWhereInput>
-  }, "propertyId" | "propertyId">
+  }, "listingsId" | "listingsId">
 
   export type ListingApartmentOrderByWithAggregationInput = {
-    propertyId?: SortOrder
+    listingsId?: SortOrder
     bedrooms?: SortOrder
     bathrooms?: SortOrder
     onFloor?: SortOrder
@@ -67940,7 +65561,7 @@ export namespace Prisma {
     AND?: ListingApartmentScalarWhereWithAggregatesInput | ListingApartmentScalarWhereWithAggregatesInput[]
     OR?: ListingApartmentScalarWhereWithAggregatesInput[]
     NOT?: ListingApartmentScalarWhereWithAggregatesInput | ListingApartmentScalarWhereWithAggregatesInput[]
-    propertyId?: StringWithAggregatesFilter<"ListingApartment"> | string
+    listingsId?: StringWithAggregatesFilter<"ListingApartment"> | string
     bedrooms?: IntWithAggregatesFilter<"ListingApartment"> | number
     bathrooms?: IntWithAggregatesFilter<"ListingApartment"> | number
     onFloor?: IntWithAggregatesFilter<"ListingApartment"> | number
@@ -68038,7 +65659,7 @@ export namespace Prisma {
     AND?: ListingCommercialWhereInput | ListingCommercialWhereInput[]
     OR?: ListingCommercialWhereInput[]
     NOT?: ListingCommercialWhereInput | ListingCommercialWhereInput[]
-    propertyId?: StringFilter<"ListingCommercial"> | string
+    listingsId?: StringFilter<"ListingCommercial"> | string
     floor?: IntFilter<"ListingCommercial"> | number
     washrooms?: IntFilter<"ListingCommercial"> | number
     parkingSpots?: IntFilter<"ListingCommercial"> | number
@@ -68049,7 +65670,7 @@ export namespace Prisma {
   }
 
   export type ListingCommercialOrderByWithRelationInput = {
-    propertyId?: SortOrder
+    listingsId?: SortOrder
     floor?: SortOrder
     washrooms?: SortOrder
     parkingSpots?: SortOrder
@@ -68060,7 +65681,7 @@ export namespace Prisma {
   }
 
   export type ListingCommercialWhereUniqueInput = Prisma.AtLeast<{
-    propertyId?: string
+    listingsId?: string
     AND?: ListingCommercialWhereInput | ListingCommercialWhereInput[]
     OR?: ListingCommercialWhereInput[]
     NOT?: ListingCommercialWhereInput | ListingCommercialWhereInput[]
@@ -68071,10 +65692,10 @@ export namespace Prisma {
     usableArea?: DecimalFilter<"ListingCommercial"> | Decimal | DecimalJsLike | number | string
     buildingType?: StringFilter<"ListingCommercial"> | string
     property?: XOR<ListingScalarRelationFilter, ListingWhereInput>
-  }, "propertyId" | "propertyId">
+  }, "listingsId" | "listingsId">
 
   export type ListingCommercialOrderByWithAggregationInput = {
-    propertyId?: SortOrder
+    listingsId?: SortOrder
     floor?: SortOrder
     washrooms?: SortOrder
     parkingSpots?: SortOrder
@@ -68092,80 +65713,13 @@ export namespace Prisma {
     AND?: ListingCommercialScalarWhereWithAggregatesInput | ListingCommercialScalarWhereWithAggregatesInput[]
     OR?: ListingCommercialScalarWhereWithAggregatesInput[]
     NOT?: ListingCommercialScalarWhereWithAggregatesInput | ListingCommercialScalarWhereWithAggregatesInput[]
-    propertyId?: StringWithAggregatesFilter<"ListingCommercial"> | string
+    listingsId?: StringWithAggregatesFilter<"ListingCommercial"> | string
     floor?: IntWithAggregatesFilter<"ListingCommercial"> | number
     washrooms?: IntWithAggregatesFilter<"ListingCommercial"> | number
     parkingSpots?: IntWithAggregatesFilter<"ListingCommercial"> | number
     frontage?: DecimalWithAggregatesFilter<"ListingCommercial"> | Decimal | DecimalJsLike | number | string
     usableArea?: DecimalWithAggregatesFilter<"ListingCommercial"> | Decimal | DecimalJsLike | number | string
     buildingType?: StringWithAggregatesFilter<"ListingCommercial"> | string
-  }
-
-  export type PropertyPriceWhereInput = {
-    AND?: PropertyPriceWhereInput | PropertyPriceWhereInput[]
-    OR?: PropertyPriceWhereInput[]
-    NOT?: PropertyPriceWhereInput | PropertyPriceWhereInput[]
-    id?: StringFilter<"PropertyPrice"> | string
-    propertyId?: StringFilter<"PropertyPrice"> | string
-    for?: StringFilter<"PropertyPrice"> | string
-    currency?: StringFilter<"PropertyPrice"> | string
-    unit?: StringFilter<"PropertyPrice"> | string
-    price?: DecimalFilter<"PropertyPrice"> | Decimal | DecimalJsLike | number | string
-    priceUnit?: StringFilter<"PropertyPrice"> | string
-    property?: XOR<ListingScalarRelationFilter, ListingWhereInput>
-  }
-
-  export type PropertyPriceOrderByWithRelationInput = {
-    id?: SortOrder
-    propertyId?: SortOrder
-    for?: SortOrder
-    currency?: SortOrder
-    unit?: SortOrder
-    price?: SortOrder
-    priceUnit?: SortOrder
-    property?: ListingOrderByWithRelationInput
-  }
-
-  export type PropertyPriceWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: PropertyPriceWhereInput | PropertyPriceWhereInput[]
-    OR?: PropertyPriceWhereInput[]
-    NOT?: PropertyPriceWhereInput | PropertyPriceWhereInput[]
-    propertyId?: StringFilter<"PropertyPrice"> | string
-    for?: StringFilter<"PropertyPrice"> | string
-    currency?: StringFilter<"PropertyPrice"> | string
-    unit?: StringFilter<"PropertyPrice"> | string
-    price?: DecimalFilter<"PropertyPrice"> | Decimal | DecimalJsLike | number | string
-    priceUnit?: StringFilter<"PropertyPrice"> | string
-    property?: XOR<ListingScalarRelationFilter, ListingWhereInput>
-  }, "id">
-
-  export type PropertyPriceOrderByWithAggregationInput = {
-    id?: SortOrder
-    propertyId?: SortOrder
-    for?: SortOrder
-    currency?: SortOrder
-    unit?: SortOrder
-    price?: SortOrder
-    priceUnit?: SortOrder
-    _count?: PropertyPriceCountOrderByAggregateInput
-    _avg?: PropertyPriceAvgOrderByAggregateInput
-    _max?: PropertyPriceMaxOrderByAggregateInput
-    _min?: PropertyPriceMinOrderByAggregateInput
-    _sum?: PropertyPriceSumOrderByAggregateInput
-  }
-
-  export type PropertyPriceScalarWhereWithAggregatesInput = {
-    AND?: PropertyPriceScalarWhereWithAggregatesInput | PropertyPriceScalarWhereWithAggregatesInput[]
-    OR?: PropertyPriceScalarWhereWithAggregatesInput[]
-    NOT?: PropertyPriceScalarWhereWithAggregatesInput | PropertyPriceScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"PropertyPrice"> | string
-    propertyId?: StringWithAggregatesFilter<"PropertyPrice"> | string
-    for?: StringWithAggregatesFilter<"PropertyPrice"> | string
-    currency?: StringWithAggregatesFilter<"PropertyPrice"> | string
-    unit?: StringWithAggregatesFilter<"PropertyPrice"> | string
-    price?: DecimalWithAggregatesFilter<"PropertyPrice"> | Decimal | DecimalJsLike | number | string
-    priceUnit?: StringWithAggregatesFilter<"PropertyPrice"> | string
   }
 
   export type PropertyOwnerWhereInput = {
@@ -70131,63 +67685,6 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"VisitRequest"> | Date | string
   }
 
-  export type ProblemWhereInput = {
-    AND?: ProblemWhereInput | ProblemWhereInput[]
-    OR?: ProblemWhereInput[]
-    NOT?: ProblemWhereInput | ProblemWhereInput[]
-    id?: StringFilter<"Problem"> | string
-    context?: StringFilter<"Problem"> | string
-    message?: StringFilter<"Problem"> | string
-    stack?: StringNullableFilter<"Problem"> | string | null
-    details?: JsonNullableFilter<"Problem">
-    createdAt?: DateTimeFilter<"Problem"> | Date | string
-  }
-
-  export type ProblemOrderByWithRelationInput = {
-    id?: SortOrder
-    context?: SortOrder
-    message?: SortOrder
-    stack?: SortOrderInput | SortOrder
-    details?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type ProblemWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: ProblemWhereInput | ProblemWhereInput[]
-    OR?: ProblemWhereInput[]
-    NOT?: ProblemWhereInput | ProblemWhereInput[]
-    context?: StringFilter<"Problem"> | string
-    message?: StringFilter<"Problem"> | string
-    stack?: StringNullableFilter<"Problem"> | string | null
-    details?: JsonNullableFilter<"Problem">
-    createdAt?: DateTimeFilter<"Problem"> | Date | string
-  }, "id">
-
-  export type ProblemOrderByWithAggregationInput = {
-    id?: SortOrder
-    context?: SortOrder
-    message?: SortOrder
-    stack?: SortOrderInput | SortOrder
-    details?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    _count?: ProblemCountOrderByAggregateInput
-    _max?: ProblemMaxOrderByAggregateInput
-    _min?: ProblemMinOrderByAggregateInput
-  }
-
-  export type ProblemScalarWhereWithAggregatesInput = {
-    AND?: ProblemScalarWhereWithAggregatesInput | ProblemScalarWhereWithAggregatesInput[]
-    OR?: ProblemScalarWhereWithAggregatesInput[]
-    NOT?: ProblemScalarWhereWithAggregatesInput | ProblemScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Problem"> | string
-    context?: StringWithAggregatesFilter<"Problem"> | string
-    message?: StringWithAggregatesFilter<"Problem"> | string
-    stack?: StringNullableWithAggregatesFilter<"Problem"> | string | null
-    details?: JsonNullableWithAggregatesFilter<"Problem">
-    createdAt?: DateTimeWithAggregatesFilter<"Problem"> | Date | string
-  }
-
   export type SitemapEntryWhereInput = {
     AND?: SitemapEntryWhereInput | SitemapEntryWhereInput[]
     OR?: SitemapEntryWhereInput[]
@@ -71554,7 +69051,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
@@ -71601,7 +69097,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceUncheckedCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
@@ -71648,7 +69143,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
@@ -71695,7 +69189,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUncheckedUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -71863,7 +69356,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseUncheckedCreateInput = {
-    listingId: string
+    listingsId: string
     bedrooms: number
     bathrooms: number
     floors: number
@@ -71897,7 +69390,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseUncheckedUpdateInput = {
-    listingId?: StringFieldUpdateOperationsInput | string
+    listingsId?: StringFieldUpdateOperationsInput | string
     bedrooms?: IntFieldUpdateOperationsInput | number
     bathrooms?: IntFieldUpdateOperationsInput | number
     floors?: IntFieldUpdateOperationsInput | number
@@ -71914,7 +69407,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseCreateManyInput = {
-    listingId: string
+    listingsId: string
     bedrooms: number
     bathrooms: number
     floors: number
@@ -71947,7 +69440,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseUncheckedUpdateManyInput = {
-    listingId?: StringFieldUpdateOperationsInput | string
+    listingsId?: StringFieldUpdateOperationsInput | string
     bedrooms?: IntFieldUpdateOperationsInput | number
     bathrooms?: IntFieldUpdateOperationsInput | number
     floors?: IntFieldUpdateOperationsInput | number
@@ -71982,7 +69475,7 @@ export namespace Prisma {
   }
 
   export type ListingApartmentUncheckedCreateInput = {
-    propertyId: string
+    listingsId: string
     bedrooms: number
     bathrooms: number
     onFloor: number
@@ -72018,7 +69511,7 @@ export namespace Prisma {
   }
 
   export type ListingApartmentUncheckedUpdateInput = {
-    propertyId?: StringFieldUpdateOperationsInput | string
+    listingsId?: StringFieldUpdateOperationsInput | string
     bedrooms?: IntFieldUpdateOperationsInput | number
     bathrooms?: IntFieldUpdateOperationsInput | number
     onFloor?: IntFieldUpdateOperationsInput | number
@@ -72036,7 +69529,7 @@ export namespace Prisma {
   }
 
   export type ListingApartmentCreateManyInput = {
-    propertyId: string
+    listingsId: string
     bedrooms: number
     bathrooms: number
     onFloor: number
@@ -72071,7 +69564,7 @@ export namespace Prisma {
   }
 
   export type ListingApartmentUncheckedUpdateManyInput = {
-    propertyId?: StringFieldUpdateOperationsInput | string
+    listingsId?: StringFieldUpdateOperationsInput | string
     bedrooms?: IntFieldUpdateOperationsInput | number
     bathrooms?: IntFieldUpdateOperationsInput | number
     onFloor?: IntFieldUpdateOperationsInput | number
@@ -72182,7 +69675,7 @@ export namespace Prisma {
   }
 
   export type ListingCommercialUncheckedCreateInput = {
-    propertyId: string
+    listingsId: string
     floor: number
     washrooms: number
     parkingSpots: number
@@ -72202,7 +69695,7 @@ export namespace Prisma {
   }
 
   export type ListingCommercialUncheckedUpdateInput = {
-    propertyId?: StringFieldUpdateOperationsInput | string
+    listingsId?: StringFieldUpdateOperationsInput | string
     floor?: IntFieldUpdateOperationsInput | number
     washrooms?: IntFieldUpdateOperationsInput | number
     parkingSpots?: IntFieldUpdateOperationsInput | number
@@ -72212,7 +69705,7 @@ export namespace Prisma {
   }
 
   export type ListingCommercialCreateManyInput = {
-    propertyId: string
+    listingsId: string
     floor: number
     washrooms: number
     parkingSpots: number
@@ -72231,82 +69724,13 @@ export namespace Prisma {
   }
 
   export type ListingCommercialUncheckedUpdateManyInput = {
-    propertyId?: StringFieldUpdateOperationsInput | string
+    listingsId?: StringFieldUpdateOperationsInput | string
     floor?: IntFieldUpdateOperationsInput | number
     washrooms?: IntFieldUpdateOperationsInput | number
     parkingSpots?: IntFieldUpdateOperationsInput | number
     frontage?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     usableArea?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     buildingType?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type PropertyPriceCreateInput = {
-    id?: string
-    for: string
-    currency: string
-    unit: string
-    price: Decimal | DecimalJsLike | number | string
-    priceUnit: string
-    property: ListingCreateNestedOneWithoutPricesInput
-  }
-
-  export type PropertyPriceUncheckedCreateInput = {
-    id?: string
-    propertyId: string
-    for: string
-    currency: string
-    unit: string
-    price: Decimal | DecimalJsLike | number | string
-    priceUnit: string
-  }
-
-  export type PropertyPriceUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    for?: StringFieldUpdateOperationsInput | string
-    currency?: StringFieldUpdateOperationsInput | string
-    unit?: StringFieldUpdateOperationsInput | string
-    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    priceUnit?: StringFieldUpdateOperationsInput | string
-    property?: ListingUpdateOneRequiredWithoutPricesNestedInput
-  }
-
-  export type PropertyPriceUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    propertyId?: StringFieldUpdateOperationsInput | string
-    for?: StringFieldUpdateOperationsInput | string
-    currency?: StringFieldUpdateOperationsInput | string
-    unit?: StringFieldUpdateOperationsInput | string
-    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    priceUnit?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type PropertyPriceCreateManyInput = {
-    id?: string
-    propertyId: string
-    for: string
-    currency: string
-    unit: string
-    price: Decimal | DecimalJsLike | number | string
-    priceUnit: string
-  }
-
-  export type PropertyPriceUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    for?: StringFieldUpdateOperationsInput | string
-    currency?: StringFieldUpdateOperationsInput | string
-    unit?: StringFieldUpdateOperationsInput | string
-    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    priceUnit?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type PropertyPriceUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    propertyId?: StringFieldUpdateOperationsInput | string
-    for?: StringFieldUpdateOperationsInput | string
-    currency?: StringFieldUpdateOperationsInput | string
-    unit?: StringFieldUpdateOperationsInput | string
-    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    priceUnit?: StringFieldUpdateOperationsInput | string
   }
 
   export type PropertyOwnerCreateInput = {
@@ -74453,69 +71877,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ProblemCreateInput = {
-    id?: string
-    context: string
-    message: string
-    stack?: string | null
-    details?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-  }
-
-  export type ProblemUncheckedCreateInput = {
-    id?: string
-    context: string
-    message: string
-    stack?: string | null
-    details?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-  }
-
-  export type ProblemUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    context?: StringFieldUpdateOperationsInput | string
-    message?: StringFieldUpdateOperationsInput | string
-    stack?: NullableStringFieldUpdateOperationsInput | string | null
-    details?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ProblemUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    context?: StringFieldUpdateOperationsInput | string
-    message?: StringFieldUpdateOperationsInput | string
-    stack?: NullableStringFieldUpdateOperationsInput | string | null
-    details?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ProblemCreateManyInput = {
-    id?: string
-    context: string
-    message: string
-    stack?: string | null
-    details?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-  }
-
-  export type ProblemUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    context?: StringFieldUpdateOperationsInput | string
-    message?: StringFieldUpdateOperationsInput | string
-    stack?: NullableStringFieldUpdateOperationsInput | string | null
-    details?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ProblemUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    context?: StringFieldUpdateOperationsInput | string
-    message?: StringFieldUpdateOperationsInput | string
-    stack?: NullableStringFieldUpdateOperationsInput | string | null
-    details?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type SitemapEntryCreateInput = {
     id?: string
     url: string
@@ -76186,12 +73547,6 @@ export namespace Prisma {
     isNot?: ListingCommercialWhereInput | null
   }
 
-  export type PropertyPriceListRelationFilter = {
-    every?: PropertyPriceWhereInput
-    some?: PropertyPriceWhereInput
-    none?: PropertyPriceWhereInput
-  }
-
   export type PropertyOwnerListRelationFilter = {
     every?: PropertyOwnerWhereInput
     some?: PropertyOwnerWhereInput
@@ -76226,10 +73581,6 @@ export namespace Prisma {
     every?: PropertyCompetitionMapWhereInput
     some?: PropertyCompetitionMapWhereInput
     none?: PropertyCompetitionMapWhereInput
-  }
-
-  export type PropertyPriceOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type PropertyOwnerOrderByRelationAggregateInput = {
@@ -76461,7 +73812,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseCountOrderByAggregateInput = {
-    listingId?: SortOrder
+    listingsId?: SortOrder
     bedrooms?: SortOrder
     bathrooms?: SortOrder
     floors?: SortOrder
@@ -76492,7 +73843,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseMaxOrderByAggregateInput = {
-    listingId?: SortOrder
+    listingsId?: SortOrder
     bedrooms?: SortOrder
     bathrooms?: SortOrder
     floors?: SortOrder
@@ -76509,7 +73860,7 @@ export namespace Prisma {
   }
 
   export type ListingHouseMinOrderByAggregateInput = {
-    listingId?: SortOrder
+    listingsId?: SortOrder
     bedrooms?: SortOrder
     bathrooms?: SortOrder
     floors?: SortOrder
@@ -76572,7 +73923,7 @@ export namespace Prisma {
   }
 
   export type ListingApartmentCountOrderByAggregateInput = {
-    propertyId?: SortOrder
+    listingsId?: SortOrder
     bedrooms?: SortOrder
     bathrooms?: SortOrder
     onFloor?: SortOrder
@@ -76604,7 +73955,7 @@ export namespace Prisma {
   }
 
   export type ListingApartmentMaxOrderByAggregateInput = {
-    propertyId?: SortOrder
+    listingsId?: SortOrder
     bedrooms?: SortOrder
     bathrooms?: SortOrder
     onFloor?: SortOrder
@@ -76622,7 +73973,7 @@ export namespace Prisma {
   }
 
   export type ListingApartmentMinOrderByAggregateInput = {
-    propertyId?: SortOrder
+    listingsId?: SortOrder
     bedrooms?: SortOrder
     bathrooms?: SortOrder
     onFloor?: SortOrder
@@ -76700,7 +74051,7 @@ export namespace Prisma {
   }
 
   export type ListingCommercialCountOrderByAggregateInput = {
-    propertyId?: SortOrder
+    listingsId?: SortOrder
     floor?: SortOrder
     washrooms?: SortOrder
     parkingSpots?: SortOrder
@@ -76718,7 +74069,7 @@ export namespace Prisma {
   }
 
   export type ListingCommercialMaxOrderByAggregateInput = {
-    propertyId?: SortOrder
+    listingsId?: SortOrder
     floor?: SortOrder
     washrooms?: SortOrder
     parkingSpots?: SortOrder
@@ -76728,7 +74079,7 @@ export namespace Prisma {
   }
 
   export type ListingCommercialMinOrderByAggregateInput = {
-    propertyId?: SortOrder
+    listingsId?: SortOrder
     floor?: SortOrder
     washrooms?: SortOrder
     parkingSpots?: SortOrder
@@ -76743,44 +74094,6 @@ export namespace Prisma {
     parkingSpots?: SortOrder
     frontage?: SortOrder
     usableArea?: SortOrder
-  }
-
-  export type PropertyPriceCountOrderByAggregateInput = {
-    id?: SortOrder
-    propertyId?: SortOrder
-    for?: SortOrder
-    currency?: SortOrder
-    unit?: SortOrder
-    price?: SortOrder
-    priceUnit?: SortOrder
-  }
-
-  export type PropertyPriceAvgOrderByAggregateInput = {
-    price?: SortOrder
-  }
-
-  export type PropertyPriceMaxOrderByAggregateInput = {
-    id?: SortOrder
-    propertyId?: SortOrder
-    for?: SortOrder
-    currency?: SortOrder
-    unit?: SortOrder
-    price?: SortOrder
-    priceUnit?: SortOrder
-  }
-
-  export type PropertyPriceMinOrderByAggregateInput = {
-    id?: SortOrder
-    propertyId?: SortOrder
-    for?: SortOrder
-    currency?: SortOrder
-    unit?: SortOrder
-    price?: SortOrder
-    priceUnit?: SortOrder
-  }
-
-  export type PropertyPriceSumOrderByAggregateInput = {
-    price?: SortOrder
   }
 
   export type BaseLeadScalarRelationFilter = {
@@ -77987,31 +75300,6 @@ export namespace Prisma {
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type ProblemCountOrderByAggregateInput = {
-    id?: SortOrder
-    context?: SortOrder
-    message?: SortOrder
-    stack?: SortOrder
-    details?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type ProblemMaxOrderByAggregateInput = {
-    id?: SortOrder
-    context?: SortOrder
-    message?: SortOrder
-    stack?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type ProblemMinOrderByAggregateInput = {
-    id?: SortOrder
-    context?: SortOrder
-    message?: SortOrder
-    stack?: SortOrder
-    createdAt?: SortOrder
   }
 
   export type FloatFilter<$PrismaModel = never> = {
@@ -79326,13 +76614,6 @@ export namespace Prisma {
     connect?: ListingCommercialWhereUniqueInput
   }
 
-  export type PropertyPriceCreateNestedManyWithoutPropertyInput = {
-    create?: XOR<PropertyPriceCreateWithoutPropertyInput, PropertyPriceUncheckedCreateWithoutPropertyInput> | PropertyPriceCreateWithoutPropertyInput[] | PropertyPriceUncheckedCreateWithoutPropertyInput[]
-    connectOrCreate?: PropertyPriceCreateOrConnectWithoutPropertyInput | PropertyPriceCreateOrConnectWithoutPropertyInput[]
-    createMany?: PropertyPriceCreateManyPropertyInputEnvelope
-    connect?: PropertyPriceWhereUniqueInput | PropertyPriceWhereUniqueInput[]
-  }
-
   export type PropertyOwnerCreateNestedManyWithoutPropertyInput = {
     create?: XOR<PropertyOwnerCreateWithoutPropertyInput, PropertyOwnerUncheckedCreateWithoutPropertyInput> | PropertyOwnerCreateWithoutPropertyInput[] | PropertyOwnerUncheckedCreateWithoutPropertyInput[]
     connectOrCreate?: PropertyOwnerCreateOrConnectWithoutPropertyInput | PropertyOwnerCreateOrConnectWithoutPropertyInput[]
@@ -79418,13 +76699,6 @@ export namespace Prisma {
     create?: XOR<ListingCommercialCreateWithoutPropertyInput, ListingCommercialUncheckedCreateWithoutPropertyInput>
     connectOrCreate?: ListingCommercialCreateOrConnectWithoutPropertyInput
     connect?: ListingCommercialWhereUniqueInput
-  }
-
-  export type PropertyPriceUncheckedCreateNestedManyWithoutPropertyInput = {
-    create?: XOR<PropertyPriceCreateWithoutPropertyInput, PropertyPriceUncheckedCreateWithoutPropertyInput> | PropertyPriceCreateWithoutPropertyInput[] | PropertyPriceUncheckedCreateWithoutPropertyInput[]
-    connectOrCreate?: PropertyPriceCreateOrConnectWithoutPropertyInput | PropertyPriceCreateOrConnectWithoutPropertyInput[]
-    createMany?: PropertyPriceCreateManyPropertyInputEnvelope
-    connect?: PropertyPriceWhereUniqueInput | PropertyPriceWhereUniqueInput[]
   }
 
   export type PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput = {
@@ -79578,20 +76852,6 @@ export namespace Prisma {
     delete?: ListingCommercialWhereInput | boolean
     connect?: ListingCommercialWhereUniqueInput
     update?: XOR<XOR<ListingCommercialUpdateToOneWithWhereWithoutPropertyInput, ListingCommercialUpdateWithoutPropertyInput>, ListingCommercialUncheckedUpdateWithoutPropertyInput>
-  }
-
-  export type PropertyPriceUpdateManyWithoutPropertyNestedInput = {
-    create?: XOR<PropertyPriceCreateWithoutPropertyInput, PropertyPriceUncheckedCreateWithoutPropertyInput> | PropertyPriceCreateWithoutPropertyInput[] | PropertyPriceUncheckedCreateWithoutPropertyInput[]
-    connectOrCreate?: PropertyPriceCreateOrConnectWithoutPropertyInput | PropertyPriceCreateOrConnectWithoutPropertyInput[]
-    upsert?: PropertyPriceUpsertWithWhereUniqueWithoutPropertyInput | PropertyPriceUpsertWithWhereUniqueWithoutPropertyInput[]
-    createMany?: PropertyPriceCreateManyPropertyInputEnvelope
-    set?: PropertyPriceWhereUniqueInput | PropertyPriceWhereUniqueInput[]
-    disconnect?: PropertyPriceWhereUniqueInput | PropertyPriceWhereUniqueInput[]
-    delete?: PropertyPriceWhereUniqueInput | PropertyPriceWhereUniqueInput[]
-    connect?: PropertyPriceWhereUniqueInput | PropertyPriceWhereUniqueInput[]
-    update?: PropertyPriceUpdateWithWhereUniqueWithoutPropertyInput | PropertyPriceUpdateWithWhereUniqueWithoutPropertyInput[]
-    updateMany?: PropertyPriceUpdateManyWithWhereWithoutPropertyInput | PropertyPriceUpdateManyWithWhereWithoutPropertyInput[]
-    deleteMany?: PropertyPriceScalarWhereInput | PropertyPriceScalarWhereInput[]
   }
 
   export type PropertyOwnerUpdateManyWithoutPropertyNestedInput = {
@@ -79758,20 +77018,6 @@ export namespace Prisma {
     delete?: ListingCommercialWhereInput | boolean
     connect?: ListingCommercialWhereUniqueInput
     update?: XOR<XOR<ListingCommercialUpdateToOneWithWhereWithoutPropertyInput, ListingCommercialUpdateWithoutPropertyInput>, ListingCommercialUncheckedUpdateWithoutPropertyInput>
-  }
-
-  export type PropertyPriceUncheckedUpdateManyWithoutPropertyNestedInput = {
-    create?: XOR<PropertyPriceCreateWithoutPropertyInput, PropertyPriceUncheckedCreateWithoutPropertyInput> | PropertyPriceCreateWithoutPropertyInput[] | PropertyPriceUncheckedCreateWithoutPropertyInput[]
-    connectOrCreate?: PropertyPriceCreateOrConnectWithoutPropertyInput | PropertyPriceCreateOrConnectWithoutPropertyInput[]
-    upsert?: PropertyPriceUpsertWithWhereUniqueWithoutPropertyInput | PropertyPriceUpsertWithWhereUniqueWithoutPropertyInput[]
-    createMany?: PropertyPriceCreateManyPropertyInputEnvelope
-    set?: PropertyPriceWhereUniqueInput | PropertyPriceWhereUniqueInput[]
-    disconnect?: PropertyPriceWhereUniqueInput | PropertyPriceWhereUniqueInput[]
-    delete?: PropertyPriceWhereUniqueInput | PropertyPriceWhereUniqueInput[]
-    connect?: PropertyPriceWhereUniqueInput | PropertyPriceWhereUniqueInput[]
-    update?: PropertyPriceUpdateWithWhereUniqueWithoutPropertyInput | PropertyPriceUpdateWithWhereUniqueWithoutPropertyInput[]
-    updateMany?: PropertyPriceUpdateManyWithWhereWithoutPropertyInput | PropertyPriceUpdateManyWithWhereWithoutPropertyInput[]
-    deleteMany?: PropertyPriceScalarWhereInput | PropertyPriceScalarWhereInput[]
   }
 
   export type PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput = {
@@ -79998,20 +77244,6 @@ export namespace Prisma {
     upsert?: ListingUpsertWithoutCommercialDetailInput
     connect?: ListingWhereUniqueInput
     update?: XOR<XOR<ListingUpdateToOneWithWhereWithoutCommercialDetailInput, ListingUpdateWithoutCommercialDetailInput>, ListingUncheckedUpdateWithoutCommercialDetailInput>
-  }
-
-  export type ListingCreateNestedOneWithoutPricesInput = {
-    create?: XOR<ListingCreateWithoutPricesInput, ListingUncheckedCreateWithoutPricesInput>
-    connectOrCreate?: ListingCreateOrConnectWithoutPricesInput
-    connect?: ListingWhereUniqueInput
-  }
-
-  export type ListingUpdateOneRequiredWithoutPricesNestedInput = {
-    create?: XOR<ListingCreateWithoutPricesInput, ListingUncheckedCreateWithoutPricesInput>
-    connectOrCreate?: ListingCreateOrConnectWithoutPricesInput
-    upsert?: ListingUpsertWithoutPricesInput
-    connect?: ListingWhereUniqueInput
-    update?: XOR<XOR<ListingUpdateToOneWithWhereWithoutPricesInput, ListingUpdateWithoutPricesInput>, ListingUncheckedUpdateWithoutPricesInput>
   }
 
   export type ListingCreateNestedOneWithoutOwnersInput = {
@@ -82001,7 +79233,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
@@ -82047,7 +79278,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceUncheckedCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
@@ -83239,34 +80469,6 @@ export namespace Prisma {
     create: XOR<ListingCommercialCreateWithoutPropertyInput, ListingCommercialUncheckedCreateWithoutPropertyInput>
   }
 
-  export type PropertyPriceCreateWithoutPropertyInput = {
-    id?: string
-    for: string
-    currency: string
-    unit: string
-    price: Decimal | DecimalJsLike | number | string
-    priceUnit: string
-  }
-
-  export type PropertyPriceUncheckedCreateWithoutPropertyInput = {
-    id?: string
-    for: string
-    currency: string
-    unit: string
-    price: Decimal | DecimalJsLike | number | string
-    priceUnit: string
-  }
-
-  export type PropertyPriceCreateOrConnectWithoutPropertyInput = {
-    where: PropertyPriceWhereUniqueInput
-    create: XOR<PropertyPriceCreateWithoutPropertyInput, PropertyPriceUncheckedCreateWithoutPropertyInput>
-  }
-
-  export type PropertyPriceCreateManyPropertyInputEnvelope = {
-    data: PropertyPriceCreateManyPropertyInput | PropertyPriceCreateManyPropertyInput[]
-    skipDuplicates?: boolean
-  }
-
   export type PropertyOwnerCreateWithoutPropertyInput = {
     id?: string
     isPrimaryOwner?: boolean
@@ -83676,35 +80878,6 @@ export namespace Prisma {
     buildingType?: StringFieldUpdateOperationsInput | string
   }
 
-  export type PropertyPriceUpsertWithWhereUniqueWithoutPropertyInput = {
-    where: PropertyPriceWhereUniqueInput
-    update: XOR<PropertyPriceUpdateWithoutPropertyInput, PropertyPriceUncheckedUpdateWithoutPropertyInput>
-    create: XOR<PropertyPriceCreateWithoutPropertyInput, PropertyPriceUncheckedCreateWithoutPropertyInput>
-  }
-
-  export type PropertyPriceUpdateWithWhereUniqueWithoutPropertyInput = {
-    where: PropertyPriceWhereUniqueInput
-    data: XOR<PropertyPriceUpdateWithoutPropertyInput, PropertyPriceUncheckedUpdateWithoutPropertyInput>
-  }
-
-  export type PropertyPriceUpdateManyWithWhereWithoutPropertyInput = {
-    where: PropertyPriceScalarWhereInput
-    data: XOR<PropertyPriceUpdateManyMutationInput, PropertyPriceUncheckedUpdateManyWithoutPropertyInput>
-  }
-
-  export type PropertyPriceScalarWhereInput = {
-    AND?: PropertyPriceScalarWhereInput | PropertyPriceScalarWhereInput[]
-    OR?: PropertyPriceScalarWhereInput[]
-    NOT?: PropertyPriceScalarWhereInput | PropertyPriceScalarWhereInput[]
-    id?: StringFilter<"PropertyPrice"> | string
-    propertyId?: StringFilter<"PropertyPrice"> | string
-    for?: StringFilter<"PropertyPrice"> | string
-    currency?: StringFilter<"PropertyPrice"> | string
-    unit?: StringFilter<"PropertyPrice"> | string
-    price?: DecimalFilter<"PropertyPrice"> | Decimal | DecimalJsLike | number | string
-    priceUnit?: StringFilter<"PropertyPrice"> | string
-  }
-
   export type PropertyOwnerUpsertWithWhereUniqueWithoutPropertyInput = {
     where: PropertyOwnerWhereUniqueInput
     update: XOR<PropertyOwnerUpdateWithoutPropertyInput, PropertyOwnerUncheckedUpdateWithoutPropertyInput>
@@ -83949,7 +81122,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
@@ -83995,7 +81167,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceUncheckedCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
@@ -84046,7 +81217,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
@@ -84092,7 +81262,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceUncheckedCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
@@ -84154,7 +81323,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
@@ -84200,7 +81368,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUncheckedUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -84257,7 +81424,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
@@ -84303,7 +81469,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUncheckedUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -84348,7 +81513,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
@@ -84394,7 +81558,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceUncheckedCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
@@ -84456,7 +81619,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
@@ -84502,7 +81664,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUncheckedUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -84548,7 +81709,6 @@ export namespace Prisma {
     houseDetail?: ListingHouseCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
@@ -84594,7 +81754,6 @@ export namespace Prisma {
     houseDetail?: ListingHouseUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceUncheckedCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
@@ -84656,7 +81815,6 @@ export namespace Prisma {
     houseDetail?: ListingHouseUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
@@ -84702,7 +81860,6 @@ export namespace Prisma {
     houseDetail?: ListingHouseUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUncheckedUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -84748,7 +81905,6 @@ export namespace Prisma {
     houseDetail?: ListingHouseCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
@@ -84794,7 +81950,6 @@ export namespace Prisma {
     houseDetail?: ListingHouseUncheckedCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceUncheckedCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
@@ -84856,7 +82011,6 @@ export namespace Prisma {
     houseDetail?: ListingHouseUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
@@ -84902,7 +82056,6 @@ export namespace Prisma {
     houseDetail?: ListingHouseUncheckedUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUncheckedUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -84948,7 +82101,6 @@ export namespace Prisma {
     houseDetail?: ListingHouseCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
@@ -84994,7 +82146,6 @@ export namespace Prisma {
     houseDetail?: ListingHouseUncheckedCreateNestedOneWithoutPropertyInput
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceUncheckedCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
@@ -85056,7 +82207,6 @@ export namespace Prisma {
     houseDetail?: ListingHouseUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
@@ -85102,207 +82252,6 @@ export namespace Prisma {
     houseDetail?: ListingHouseUncheckedUpdateOneWithoutPropertyNestedInput
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUncheckedUpdateManyWithoutPropertyNestedInput
-    owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
-    changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
-    links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
-    linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
-    views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
-    competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUncheckedUpdateManyWithoutPropertyNestedInput
-  }
-
-  export type ListingCreateWithoutPricesInput = {
-    id?: string
-    slug: string
-    title: string
-    description: string
-    media?: JsonNullValueInput | InputJsonValue
-    type: $Enums.PropertyType
-    purpose: $Enums.PropertyPurpose
-    status?: $Enums.PropertyStatus
-    currency: string
-    priceBasis?: $Enums.ListingPriceBasis | null
-    priceCurrency?: string | null
-    priceListed?: Decimal | DecimalJsLike | number | string | null
-    priceNegotiable?: boolean | null
-    geoLocation: string
-    details?: NullableJsonNullValueInput | InputJsonValue
-    roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
-    distancing?: NullableJsonNullValueInput | InputJsonValue
-    earnings?: NullableJsonNullValueInput | InputJsonValue
-    landDetails?: NullableJsonNullValueInput | InputJsonValue
-    plots?: NullableJsonNullValueInput | InputJsonValue
-    apartmentDetails?: NullableJsonNullValueInput | InputJsonValue
-    metaTags?: ListingCreatemetaTagsInput | string[]
-    amenities?: ListingCreateamenitiesInput | string[]
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    isFeatured?: boolean
-    isApproved?: boolean
-    isDeleted?: boolean
-    customId?: string | null
-    locationRecord: LocationCreateNestedOneWithoutListingsInput
-    houseDetail?: ListingHouseCreateNestedOneWithoutPropertyInput
-    apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
-    landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
-    commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
-    owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
-    changes?: ListingChangeCreateNestedManyWithoutPropertyInput
-    links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
-    linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
-    views?: ListingsViewCreateNestedManyWithoutPropertyInput
-    competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeCreateNestedManyWithoutPropertyInput
-  }
-
-  export type ListingUncheckedCreateWithoutPricesInput = {
-    id?: string
-    slug: string
-    title: string
-    description: string
-    media?: JsonNullValueInput | InputJsonValue
-    type: $Enums.PropertyType
-    purpose: $Enums.PropertyPurpose
-    status?: $Enums.PropertyStatus
-    currency: string
-    priceBasis?: $Enums.ListingPriceBasis | null
-    priceCurrency?: string | null
-    priceListed?: Decimal | DecimalJsLike | number | string | null
-    priceNegotiable?: boolean | null
-    geoLocation: string
-    location: string
-    details?: NullableJsonNullValueInput | InputJsonValue
-    roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
-    distancing?: NullableJsonNullValueInput | InputJsonValue
-    earnings?: NullableJsonNullValueInput | InputJsonValue
-    landDetails?: NullableJsonNullValueInput | InputJsonValue
-    plots?: NullableJsonNullValueInput | InputJsonValue
-    apartmentDetails?: NullableJsonNullValueInput | InputJsonValue
-    metaTags?: ListingCreatemetaTagsInput | string[]
-    amenities?: ListingCreateamenitiesInput | string[]
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    isFeatured?: boolean
-    isApproved?: boolean
-    isDeleted?: boolean
-    customId?: string | null
-    houseDetail?: ListingHouseUncheckedCreateNestedOneWithoutPropertyInput
-    apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
-    landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
-    commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
-    owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
-    changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
-    links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
-    linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
-    views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
-    competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutPropertyInput
-  }
-
-  export type ListingCreateOrConnectWithoutPricesInput = {
-    where: ListingWhereUniqueInput
-    create: XOR<ListingCreateWithoutPricesInput, ListingUncheckedCreateWithoutPricesInput>
-  }
-
-  export type ListingUpsertWithoutPricesInput = {
-    update: XOR<ListingUpdateWithoutPricesInput, ListingUncheckedUpdateWithoutPricesInput>
-    create: XOR<ListingCreateWithoutPricesInput, ListingUncheckedCreateWithoutPricesInput>
-    where?: ListingWhereInput
-  }
-
-  export type ListingUpdateToOneWithWhereWithoutPricesInput = {
-    where?: ListingWhereInput
-    data: XOR<ListingUpdateWithoutPricesInput, ListingUncheckedUpdateWithoutPricesInput>
-  }
-
-  export type ListingUpdateWithoutPricesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    media?: JsonNullValueInput | InputJsonValue
-    type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
-    purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
-    status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
-    currency?: StringFieldUpdateOperationsInput | string
-    priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
-    priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
-    priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    priceNegotiable?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    geoLocation?: StringFieldUpdateOperationsInput | string
-    details?: NullableJsonNullValueInput | InputJsonValue
-    roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
-    distancing?: NullableJsonNullValueInput | InputJsonValue
-    earnings?: NullableJsonNullValueInput | InputJsonValue
-    landDetails?: NullableJsonNullValueInput | InputJsonValue
-    plots?: NullableJsonNullValueInput | InputJsonValue
-    apartmentDetails?: NullableJsonNullValueInput | InputJsonValue
-    metaTags?: ListingUpdatemetaTagsInput | string[]
-    amenities?: ListingUpdateamenitiesInput | string[]
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isApproved?: BoolFieldUpdateOperationsInput | boolean
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    customId?: NullableStringFieldUpdateOperationsInput | string | null
-    locationRecord?: LocationUpdateOneRequiredWithoutListingsNestedInput
-    houseDetail?: ListingHouseUpdateOneWithoutPropertyNestedInput
-    apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
-    landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
-    commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
-    owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
-    changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
-    links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
-    linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
-    views?: ListingsViewUpdateManyWithoutPropertyNestedInput
-    competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUpdateManyWithoutPropertyNestedInput
-  }
-
-  export type ListingUncheckedUpdateWithoutPricesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    slug?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    media?: JsonNullValueInput | InputJsonValue
-    type?: EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
-    purpose?: EnumPropertyPurposeFieldUpdateOperationsInput | $Enums.PropertyPurpose
-    status?: EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
-    currency?: StringFieldUpdateOperationsInput | string
-    priceBasis?: NullableEnumListingPriceBasisFieldUpdateOperationsInput | $Enums.ListingPriceBasis | null
-    priceCurrency?: NullableStringFieldUpdateOperationsInput | string | null
-    priceListed?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
-    priceNegotiable?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    geoLocation?: StringFieldUpdateOperationsInput | string
-    location?: StringFieldUpdateOperationsInput | string
-    details?: NullableJsonNullValueInput | InputJsonValue
-    roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
-    distancing?: NullableJsonNullValueInput | InputJsonValue
-    earnings?: NullableJsonNullValueInput | InputJsonValue
-    landDetails?: NullableJsonNullValueInput | InputJsonValue
-    plots?: NullableJsonNullValueInput | InputJsonValue
-    apartmentDetails?: NullableJsonNullValueInput | InputJsonValue
-    metaTags?: ListingUpdatemetaTagsInput | string[]
-    amenities?: ListingUpdateamenitiesInput | string[]
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    isFeatured?: BoolFieldUpdateOperationsInput | boolean
-    isApproved?: BoolFieldUpdateOperationsInput | boolean
-    isDeleted?: BoolFieldUpdateOperationsInput | boolean
-    customId?: NullableStringFieldUpdateOperationsInput | string | null
-    houseDetail?: ListingHouseUncheckedUpdateOneWithoutPropertyNestedInput
-    apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
-    landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
-    commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -85349,7 +82298,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
@@ -85395,7 +82343,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceUncheckedCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
@@ -85490,7 +82437,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
@@ -85536,7 +82482,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUncheckedUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
@@ -85621,7 +82566,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
@@ -85667,7 +82611,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceUncheckedCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
@@ -85786,7 +82729,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
@@ -85832,7 +82774,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUncheckedUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -85941,7 +82882,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
@@ -85987,7 +82927,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceUncheckedCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
@@ -86049,7 +82988,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
@@ -86095,7 +83033,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUncheckedUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
@@ -86141,7 +83078,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
@@ -86187,7 +83123,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceUncheckedCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
@@ -86477,7 +83412,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
@@ -86523,7 +83457,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUncheckedUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
@@ -87318,7 +84251,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
@@ -87364,7 +84296,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceUncheckedCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
@@ -87426,7 +84357,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
@@ -87472,7 +84402,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUncheckedUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -87518,7 +84447,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
@@ -87564,7 +84492,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceUncheckedCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
@@ -87626,7 +84553,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
@@ -87672,7 +84598,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUncheckedUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -89602,7 +86527,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
@@ -89648,7 +86572,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
-    prices?: PropertyPriceUncheckedCreateNestedManyWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
     documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
@@ -89749,7 +86672,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
@@ -89795,7 +86717,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUncheckedUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -90525,7 +87446,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
@@ -90571,7 +87491,6 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
-    prices?: PropertyPriceUncheckedUpdateManyWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
     documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
@@ -91217,15 +88136,6 @@ export namespace Prisma {
     status?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type PropertyPriceCreateManyPropertyInput = {
-    id?: string
-    for: string
-    currency: string
-    unit: string
-    price: Decimal | DecimalJsLike | number | string
-    priceUnit: string
-  }
-
   export type PropertyOwnerCreateManyPropertyInput = {
     id?: string
     ownerClientId: string
@@ -91292,33 +88202,6 @@ export namespace Prisma {
     representativeId: string
     role: $Enums.PropertyRepresentativeRole
     status?: string | null
-  }
-
-  export type PropertyPriceUpdateWithoutPropertyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    for?: StringFieldUpdateOperationsInput | string
-    currency?: StringFieldUpdateOperationsInput | string
-    unit?: StringFieldUpdateOperationsInput | string
-    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    priceUnit?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type PropertyPriceUncheckedUpdateWithoutPropertyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    for?: StringFieldUpdateOperationsInput | string
-    currency?: StringFieldUpdateOperationsInput | string
-    unit?: StringFieldUpdateOperationsInput | string
-    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    priceUnit?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type PropertyPriceUncheckedUpdateManyWithoutPropertyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    for?: StringFieldUpdateOperationsInput | string
-    currency?: StringFieldUpdateOperationsInput | string
-    unit?: StringFieldUpdateOperationsInput | string
-    price?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    priceUnit?: StringFieldUpdateOperationsInput | string
   }
 
   export type PropertyOwnerUpdateWithoutPropertyInput = {

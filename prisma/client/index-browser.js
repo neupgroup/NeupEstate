@@ -193,7 +193,7 @@ exports.Prisma.PropertyLinkScalarFieldEnum = {
 };
 
 exports.Prisma.ListingHouseScalarFieldEnum = {
-  listingId: 'listingId',
+  listingsId: 'listingsId',
   bedrooms: 'bedrooms',
   bathrooms: 'bathrooms',
   floors: 'floors',
@@ -210,7 +210,7 @@ exports.Prisma.ListingHouseScalarFieldEnum = {
 };
 
 exports.Prisma.ListingApartmentScalarFieldEnum = {
-  propertyId: 'propertyId',
+  listingsId: 'listingsId',
   bedrooms: 'bedrooms',
   bathrooms: 'bathrooms',
   onFloor: 'onFloor',
@@ -240,23 +240,13 @@ exports.Prisma.PropertyLandDetailScalarFieldEnum = {
 };
 
 exports.Prisma.ListingCommercialScalarFieldEnum = {
-  propertyId: 'propertyId',
+  listingsId: 'listingsId',
   floor: 'floor',
   washrooms: 'washrooms',
   parkingSpots: 'parkingSpots',
   frontage: 'frontage',
   usableArea: 'usableArea',
   buildingType: 'buildingType'
-};
-
-exports.Prisma.PropertyPriceScalarFieldEnum = {
-  id: 'id',
-  propertyId: 'propertyId',
-  for: 'for',
-  currency: 'currency',
-  unit: 'unit',
-  price: 'price',
-  priceUnit: 'priceUnit'
 };
 
 exports.Prisma.PropertyOwnerScalarFieldEnum = {
@@ -564,15 +554,6 @@ exports.Prisma.VisitRequestScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.ProblemScalarFieldEnum = {
-  id: 'id',
-  context: 'context',
-  message: 'message',
-  stack: 'stack',
-  details: 'details',
-  createdAt: 'createdAt'
-};
-
 exports.Prisma.SitemapEntryScalarFieldEnum = {
   id: 'id',
   url: 'url',
@@ -839,7 +820,6 @@ exports.Prisma.ModelName = {
   ListingApartment: 'ListingApartment',
   PropertyLandDetail: 'PropertyLandDetail',
   ListingCommercial: 'ListingCommercial',
-  PropertyPrice: 'PropertyPrice',
   PropertyOwner: 'PropertyOwner',
   ListingRepresentative: 'ListingRepresentative',
   ListingDocument: 'ListingDocument',
@@ -867,7 +847,6 @@ exports.Prisma.ModelName = {
   MortgageRequest: 'MortgageRequest',
   SalesRequest: 'SalesRequest',
   VisitRequest: 'VisitRequest',
-  Problem: 'Problem',
   SitemapEntry: 'SitemapEntry',
   Inquiry: 'Inquiry',
   AuthzRole: 'AuthzRole',

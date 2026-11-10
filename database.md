@@ -490,21 +490,6 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - divergence: model MortgageRequest maps to table mortgage_requests
 - divergence based on fields: database has 12 fields; Prisma model has 12 persisted scalar fields; difference 0
 
-### public.problems (Problem)
-
-- purpose: Stores application problem/error reports with context, stack, and details.
-- usage: Used by problem-service for diagnostics and cleanup.
-
-- id text PK, NOT NULL
-- context text NOT NULL
-- message text NOT NULL
-- stack text
-- details jsonb
-- createdAt timestamp(3) NOT NULL, default CURRENT_TIMESTAMP
-
-- divergence: model Problem maps to table problems
-- divergence based on fields: database has 6 fields; Prisma model has 6 persisted scalar fields; difference 0
-
 ### public.property (Property)
 
 - purpose: Main real-estate listing table containing searchable/display listing data, status, location, pricing, and structured details.

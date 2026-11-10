@@ -789,17 +789,6 @@ model VisitRequest {
 // System / Misc (retained from existing DB)
 // ============================================================================
 
-model Problem {
-  id        String   @id @default(cuid())
-  context   String
-  message   String
-  stack     String?
-  details   Json?
-  createdAt DateTime @default(now())
-
-  @@map("problems")
-}
-
 model SitemapEntry {
   id        String    @id @default(cuid())
   url       String    @unique
