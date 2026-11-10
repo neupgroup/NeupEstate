@@ -292,14 +292,6 @@ Fields:
 > activityOn: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > activityBy: text NOT NULL;
 
-Table: messages, Model: Message
-Fields:
-> id: text PK, NOT NULL;
-> conversationId: text NOT NULL, references conversations.id;
-> sender: text NOT NULL;
-> text: text NOT NULL;
-> timestamp: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
-
 Table: mortgage_requests, Model: MortgageRequest
 Fields:
 > id: text PK, NOT NULL;
