@@ -228,7 +228,7 @@ exports.Prisma.ListingApartmentScalarFieldEnum = {
 };
 
 exports.Prisma.PropertyLandDetailScalarFieldEnum = {
-  propertyId: 'propertyId',
+  listingsId: 'listingsId',
   area: 'area',
   facing: 'facing',
   roadAccess: 'roadAccess',

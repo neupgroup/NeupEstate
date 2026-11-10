@@ -15419,7 +15419,7 @@ export namespace Prisma {
   }
 
   export type PropertyLandDetailMinAggregateOutputType = {
-    propertyId: string | null
+    listingsId: string | null
     area: Decimal | null
     facing: string | null
     roadAccess: Decimal | null
@@ -15431,7 +15431,7 @@ export namespace Prisma {
   }
 
   export type PropertyLandDetailMaxAggregateOutputType = {
-    propertyId: string | null
+    listingsId: string | null
     area: Decimal | null
     facing: string | null
     roadAccess: Decimal | null
@@ -15443,7 +15443,7 @@ export namespace Prisma {
   }
 
   export type PropertyLandDetailCountAggregateOutputType = {
-    propertyId: number
+    listingsId: number
     area: number
     facing: number
     roadAccess: number
@@ -15467,7 +15467,7 @@ export namespace Prisma {
   }
 
   export type PropertyLandDetailMinAggregateInputType = {
-    propertyId?: true
+    listingsId?: true
     area?: true
     facing?: true
     roadAccess?: true
@@ -15479,7 +15479,7 @@ export namespace Prisma {
   }
 
   export type PropertyLandDetailMaxAggregateInputType = {
-    propertyId?: true
+    listingsId?: true
     area?: true
     facing?: true
     roadAccess?: true
@@ -15491,7 +15491,7 @@ export namespace Prisma {
   }
 
   export type PropertyLandDetailCountAggregateInputType = {
-    propertyId?: true
+    listingsId?: true
     area?: true
     facing?: true
     roadAccess?: true
@@ -15590,7 +15590,7 @@ export namespace Prisma {
   }
 
   export type PropertyLandDetailGroupByOutputType = {
-    propertyId: string
+    listingsId: string
     area: Decimal
     facing: string
     roadAccess: Decimal
@@ -15621,7 +15621,7 @@ export namespace Prisma {
 
 
   export type PropertyLandDetailSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    propertyId?: boolean
+    listingsId?: boolean
     area?: boolean
     facing?: boolean
     roadAccess?: boolean
@@ -15634,7 +15634,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["propertyLandDetail"]>
 
   export type PropertyLandDetailSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    propertyId?: boolean
+    listingsId?: boolean
     area?: boolean
     facing?: boolean
     roadAccess?: boolean
@@ -15647,7 +15647,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["propertyLandDetail"]>
 
   export type PropertyLandDetailSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    propertyId?: boolean
+    listingsId?: boolean
     area?: boolean
     facing?: boolean
     roadAccess?: boolean
@@ -15660,7 +15660,7 @@ export namespace Prisma {
   }, ExtArgs["result"]["propertyLandDetail"]>
 
   export type PropertyLandDetailSelectScalar = {
-    propertyId?: boolean
+    listingsId?: boolean
     area?: boolean
     facing?: boolean
     roadAccess?: boolean
@@ -15671,7 +15671,7 @@ export namespace Prisma {
     boundaryWall?: boolean
   }
 
-  export type PropertyLandDetailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"propertyId" | "area" | "facing" | "roadAccess" | "plotShape" | "cornerPlot" | "waterAvailable" | "electricityAvailable" | "boundaryWall", ExtArgs["result"]["propertyLandDetail"]>
+  export type PropertyLandDetailOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"listingsId" | "area" | "facing" | "roadAccess" | "plotShape" | "cornerPlot" | "waterAvailable" | "electricityAvailable" | "boundaryWall", ExtArgs["result"]["propertyLandDetail"]>
   export type PropertyLandDetailInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     property?: boolean | ListingDefaultArgs<ExtArgs>
   }
@@ -15688,7 +15688,7 @@ export namespace Prisma {
       property: Prisma.$ListingPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
-      propertyId: string
+      listingsId: string
       area: Prisma.Decimal
       facing: string
       roadAccess: Prisma.Decimal
@@ -15780,8 +15780,8 @@ export namespace Prisma {
      * // Get first 10 PropertyLandDetails
      * const propertyLandDetails = await prisma.propertyLandDetail.findMany({ take: 10 })
      * 
-     * // Only select the `propertyId`
-     * const propertyLandDetailWithPropertyIdOnly = await prisma.propertyLandDetail.findMany({ select: { propertyId: true } })
+     * // Only select the `listingsId`
+     * const propertyLandDetailWithListingsIdOnly = await prisma.propertyLandDetail.findMany({ select: { listingsId: true } })
      * 
      */
     findMany<T extends PropertyLandDetailFindManyArgs>(args?: SelectSubset<T, PropertyLandDetailFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyLandDetailPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
@@ -15825,9 +15825,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Create many PropertyLandDetails and only return the `propertyId`
-     * const propertyLandDetailWithPropertyIdOnly = await prisma.propertyLandDetail.createManyAndReturn({
-     *   select: { propertyId: true },
+     * // Create many PropertyLandDetails and only return the `listingsId`
+     * const propertyLandDetailWithListingsIdOnly = await prisma.propertyLandDetail.createManyAndReturn({
+     *   select: { listingsId: true },
      *   data: [
      *     // ... provide data here
      *   ]
@@ -15916,9 +15916,9 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more PropertyLandDetails and only return the `propertyId`
-     * const propertyLandDetailWithPropertyIdOnly = await prisma.propertyLandDetail.updateManyAndReturn({
-     *   select: { propertyId: true },
+     * // Update zero or more PropertyLandDetails and only return the `listingsId`
+     * const propertyLandDetailWithListingsIdOnly = await prisma.propertyLandDetail.updateManyAndReturn({
+     *   select: { listingsId: true },
      *   where: {
      *     // ... provide filter here
      *   },
@@ -16121,7 +16121,7 @@ export namespace Prisma {
    * Fields of the PropertyLandDetail model
    */
   interface PropertyLandDetailFieldRefs {
-    readonly propertyId: FieldRef<"PropertyLandDetail", 'String'>
+    readonly listingsId: FieldRef<"PropertyLandDetail", 'String'>
     readonly area: FieldRef<"PropertyLandDetail", 'Decimal'>
     readonly facing: FieldRef<"PropertyLandDetail", 'String'>
     readonly roadAccess: FieldRef<"PropertyLandDetail", 'Decimal'>
@@ -66311,7 +66311,7 @@ export namespace Prisma {
 
 
   export const PropertyLandDetailScalarFieldEnum: {
-    propertyId: 'propertyId',
+    listingsId: 'listingsId',
     area: 'area',
     facing: 'facing',
     roadAccess: 'roadAccess',
@@ -67961,7 +67961,7 @@ export namespace Prisma {
     AND?: PropertyLandDetailWhereInput | PropertyLandDetailWhereInput[]
     OR?: PropertyLandDetailWhereInput[]
     NOT?: PropertyLandDetailWhereInput | PropertyLandDetailWhereInput[]
-    propertyId?: StringFilter<"PropertyLandDetail"> | string
+    listingsId?: StringFilter<"PropertyLandDetail"> | string
     area?: DecimalFilter<"PropertyLandDetail"> | Decimal | DecimalJsLike | number | string
     facing?: StringFilter<"PropertyLandDetail"> | string
     roadAccess?: DecimalFilter<"PropertyLandDetail"> | Decimal | DecimalJsLike | number | string
@@ -67974,7 +67974,7 @@ export namespace Prisma {
   }
 
   export type PropertyLandDetailOrderByWithRelationInput = {
-    propertyId?: SortOrder
+    listingsId?: SortOrder
     area?: SortOrder
     facing?: SortOrder
     roadAccess?: SortOrder
@@ -67987,7 +67987,7 @@ export namespace Prisma {
   }
 
   export type PropertyLandDetailWhereUniqueInput = Prisma.AtLeast<{
-    propertyId?: string
+    listingsId?: string
     AND?: PropertyLandDetailWhereInput | PropertyLandDetailWhereInput[]
     OR?: PropertyLandDetailWhereInput[]
     NOT?: PropertyLandDetailWhereInput | PropertyLandDetailWhereInput[]
@@ -68000,10 +68000,10 @@ export namespace Prisma {
     electricityAvailable?: BoolFilter<"PropertyLandDetail"> | boolean
     boundaryWall?: BoolFilter<"PropertyLandDetail"> | boolean
     property?: XOR<ListingScalarRelationFilter, ListingWhereInput>
-  }, "propertyId" | "propertyId">
+  }, "listingsId" | "listingsId">
 
   export type PropertyLandDetailOrderByWithAggregationInput = {
-    propertyId?: SortOrder
+    listingsId?: SortOrder
     area?: SortOrder
     facing?: SortOrder
     roadAccess?: SortOrder
@@ -68023,7 +68023,7 @@ export namespace Prisma {
     AND?: PropertyLandDetailScalarWhereWithAggregatesInput | PropertyLandDetailScalarWhereWithAggregatesInput[]
     OR?: PropertyLandDetailScalarWhereWithAggregatesInput[]
     NOT?: PropertyLandDetailScalarWhereWithAggregatesInput | PropertyLandDetailScalarWhereWithAggregatesInput[]
-    propertyId?: StringWithAggregatesFilter<"PropertyLandDetail"> | string
+    listingsId?: StringWithAggregatesFilter<"PropertyLandDetail"> | string
     area?: DecimalWithAggregatesFilter<"PropertyLandDetail"> | Decimal | DecimalJsLike | number | string
     facing?: StringWithAggregatesFilter<"PropertyLandDetail"> | string
     roadAccess?: DecimalWithAggregatesFilter<"PropertyLandDetail"> | Decimal | DecimalJsLike | number | string
@@ -72101,7 +72101,7 @@ export namespace Prisma {
   }
 
   export type PropertyLandDetailUncheckedCreateInput = {
-    propertyId: string
+    listingsId: string
     area: Decimal | DecimalJsLike | number | string
     facing: string
     roadAccess: Decimal | DecimalJsLike | number | string
@@ -72125,7 +72125,7 @@ export namespace Prisma {
   }
 
   export type PropertyLandDetailUncheckedUpdateInput = {
-    propertyId?: StringFieldUpdateOperationsInput | string
+    listingsId?: StringFieldUpdateOperationsInput | string
     area?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     facing?: StringFieldUpdateOperationsInput | string
     roadAccess?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -72137,7 +72137,7 @@ export namespace Prisma {
   }
 
   export type PropertyLandDetailCreateManyInput = {
-    propertyId: string
+    listingsId: string
     area: Decimal | DecimalJsLike | number | string
     facing: string
     roadAccess: Decimal | DecimalJsLike | number | string
@@ -72160,7 +72160,7 @@ export namespace Prisma {
   }
 
   export type PropertyLandDetailUncheckedUpdateManyInput = {
-    propertyId?: StringFieldUpdateOperationsInput | string
+    listingsId?: StringFieldUpdateOperationsInput | string
     area?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     facing?: StringFieldUpdateOperationsInput | string
     roadAccess?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
@@ -76654,7 +76654,7 @@ export namespace Prisma {
   }
 
   export type PropertyLandDetailCountOrderByAggregateInput = {
-    propertyId?: SortOrder
+    listingsId?: SortOrder
     area?: SortOrder
     facing?: SortOrder
     roadAccess?: SortOrder
@@ -76671,7 +76671,7 @@ export namespace Prisma {
   }
 
   export type PropertyLandDetailMaxOrderByAggregateInput = {
-    propertyId?: SortOrder
+    listingsId?: SortOrder
     area?: SortOrder
     facing?: SortOrder
     roadAccess?: SortOrder
@@ -76683,7 +76683,7 @@ export namespace Prisma {
   }
 
   export type PropertyLandDetailMinOrderByAggregateInput = {
-    propertyId?: SortOrder
+    listingsId?: SortOrder
     area?: SortOrder
     facing?: SortOrder
     roadAccess?: SortOrder

@@ -289,8 +289,8 @@ export async function upsertDetailTable(propertyId: string, type: ListingTypeVal
     });
   } else if (type === PROPERTY_TYPE.LAND) {
     await prisma.propertyLandDetail.upsert({
-      where: { propertyId },
-      create: { propertyId, area, facing: d.facing ?? '', roadAccess: d.roadAccess ?? 0, plotShape: '', cornerPlot: false, waterAvailable: false, electricityAvailable: false, boundaryWall: false },
+      where: { listingsId: propertyId },
+      create: { listingsId: propertyId, area, facing: d.facing ?? '', roadAccess: d.roadAccess ?? 0, plotShape: '', cornerPlot: false, waterAvailable: false, electricityAvailable: false, boundaryWall: false },
       update: { area, facing: d.facing ?? '', roadAccess: d.roadAccess ?? 0 },
     });
   } else if (type === PROPERTY_TYPE.COMMERCIAL) {

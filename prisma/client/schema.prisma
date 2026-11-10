@@ -248,7 +248,7 @@ model ListingApartment {
 }
 
 model PropertyLandDetail {
-  propertyId           String  @id @unique
+  listingsId           String  @id @unique(map: "listings_details__land_listings_id_key") @map("listings_id")
   area                 Decimal @db.Decimal(18, 8)
   facing               String  @db.VarChar(50)
   roadAccess           Decimal @db.Decimal(18, 8)
@@ -258,9 +258,9 @@ model PropertyLandDetail {
   electricityAvailable Boolean
   boundaryWall         Boolean
 
-  property Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  property Listing @relation(fields: [listingsId], references: [id], onDelete: Cascade)
 
-  @@map("property_land_detail")
+  @@map("listings_details__land")
 }
 
 model ListingCommercial {
