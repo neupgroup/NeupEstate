@@ -204,7 +204,7 @@ model PropertyLink {
 }
 
 model ListingHouse {
-  listingId        String   @id @unique(map: "listings_house_listing_id_key")
+  listingsId       String   @id @unique(map: "listings_details__house_listings_id_key") @map("listings_id")
   bedrooms         Int
   bathrooms        Int
   floors           Int
@@ -219,13 +219,13 @@ model ListingHouse {
   facing           String   @db.VarChar(50)
   roadAccess       Decimal  @db.Decimal(18, 8)
 
-  property         Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  property         Listing @relation(fields: [listingsId], references: [id], onDelete: Cascade)
 
-  @@map("listings_house")
+  @@map("listings_details__house")
 }
 
 model ListingApartment {
-  propertyId       String   @id @unique(map: "listings_apartment_property_id_key")
+  listingsId       String   @id @unique(map: "listings_details__apartment_listings_id_key") @map("listings_id")
   bedrooms         Int
   bathrooms        Int
   onFloor          Int
@@ -241,9 +241,9 @@ model ListingApartment {
   builtUpArea      Decimal  @db.Decimal(18, 8)
   maintenanceFee   Decimal  @db.Decimal(18, 8)
 
-  property         Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  property         Listing @relation(fields: [listingsId], references: [id], onDelete: Cascade)
 
-  @@map("listings_apartment")
+  @@map("listings_details__apartment")
 }
 
 model PropertyLandDetail {
@@ -263,7 +263,7 @@ model PropertyLandDetail {
 }
 
 model ListingCommercial {
-  propertyId    String   @id @unique(map: "listings_commercial_property_id_key")
+  listingsId    String   @id @unique(map: "listings_details__commercial_listings_id_key") @map("listings_id")
   floor         Int
   washrooms     Int
   parkingSpots  Int
@@ -271,9 +271,9 @@ model ListingCommercial {
   usableArea    Decimal  @db.Decimal(18, 8)
   buildingType  String   @db.VarChar(100)
 
-  property      Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  property      Listing @relation(fields: [listingsId], references: [id], onDelete: Cascade)
 
-  @@map("listings_commercial")
+  @@map("listings_details__commercial")
 }
 
 model PropertyOwner {

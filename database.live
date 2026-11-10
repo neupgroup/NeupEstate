@@ -357,9 +357,9 @@ Fields:
 > customId: text;
 > details: jsonb;
 
-Table: listings_apartment, Model: ListingApartment
+Table: listings_details__apartment, Model: ListingApartment
 Fields:
-> propertyId: text PK, NOT NULL, UNIQUE listings_apartment_property_id_key(propertyId), references listings.id;
+> listings_id: text PK, NOT NULL, UNIQUE listings_details__apartment_listings_id_key(listings_id), references listings.id;
 > bedrooms: integer NOT NULL;
 > bathrooms: integer NOT NULL;
 > onFloor: integer NOT NULL;
@@ -375,9 +375,9 @@ Fields:
 > builtUpArea: numeric(18,8) NOT NULL;
 > maintenanceFee: numeric(18,8) NOT NULL;
 
-Table: listings_commercial, Model: ListingCommercial
+Table: listings_details__commercial, Model: ListingCommercial
 Fields:
-> propertyId: text PK, NOT NULL, UNIQUE listings_commercial_property_id_key(propertyId), references listings.id;
+> listings_id: text PK, NOT NULL, UNIQUE listings_details__commercial_listings_id_key(listings_id), references listings.id;
 > floor: integer NOT NULL;
 > washrooms: integer NOT NULL;
 > parkingSpots: integer NOT NULL;
@@ -402,9 +402,9 @@ Fields:
 > urls: jsonb NOT NULL;
 > sortOrder: integer NOT NULL, default: 0;
 
-Table: listings_house, Model: ListingHouse
+Table: listings_details__house, Model: ListingHouse
 Fields:
-> listingId: text PK, NOT NULL, UNIQUE listings_house_listing_id_key(listingId), references listings.id;
+> listings_id: text PK, NOT NULL, UNIQUE listings_details__house_listings_id_key(listings_id), references listings.id;
 > bedrooms: integer NOT NULL;
 > bathrooms: integer NOT NULL;
 > floors: integer NOT NULL;
