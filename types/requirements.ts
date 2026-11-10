@@ -28,6 +28,13 @@ export const RequirementSchema = z.object({
   requiredTime: UrgencySchema.optional(),
   purpose: ListingPurposeSchema.optional(),
   loan: z.boolean().default(false).optional(),
+  requestName: z.string().optional(),
+  requestEmail: z.string().email().optional(),
+  requestPhone: z.string().optional(),
+  minBedrooms: z.number().optional(),
+  minBathrooms: z.number().optional(),
+  requestRemarks: z.string().optional(),
+  requestStatus: z.enum(['new', 'contacted', 'closed']).optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });

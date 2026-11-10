@@ -9,18 +9,19 @@ import type { ListingRequest, CreateListingRequestFormValues } from '@/types';
 export async function createListingRequest(data: CreateListingRequestFormValues): Promise<string> {
 
     try {
-        const request = await prisma.propertyRequest.create({
+        const request = await prisma.requirement.create({
             data: {
-                name: data.name,
-                email: data.email,
-                phone: data.phone,
+                userId: data.submittedBy ?? '',
+                requestName: data.name,
+                requestEmail: data.email,
+                requestPhone: data.phone,
                 location: data.location,
-                propertyType: data.propertyType,
-                bedrooms: data.bedrooms,
-                bathrooms: data.bathrooms,
-                budget: data.budget,
-                remarks: data.remarks,
-                status: 'new',
+                propertyType: data.propertyType ? [data.propertyType] : [],
+                maxBudget: data.budget,
+                minBedrooms: data.bedrooms,
+                minBathrooms: data.bathrooms,
+                requestRemarks: data.remarks,
+                requestStatus: 'new',
             },
         });
         return request.id;
@@ -32,21 +33,25 @@ export async function createListingRequest(data: CreateListingRequestFormValues)
 export async function getListingRequests({ limit = 20, offset = 0 }: { limit?: number; offset?: number } = {}): Promise<ListingRequest[]> {
 
     try {
-        const requests = await prisma.propertyRequest.findMany({
+        const requests = await prisma.requirement.findMany({
+            where: { requestStatus: { not: null } },
             orderBy: { createdAt: 'desc' },
             take: limit,
             skip: offset,
         });
         return requests.map(r => ({
-            ...r,
-            phone: r.phone ?? undefined,
+            id: r.id,
+            name: r.requestName ?? '',
+            email: r.requestEmail ?? '',
+            phone: r.requestPhone ?? undefined,
             location: r.location ?? undefined,
-            propertyType: r.propertyType as ListingRequest['propertyType'],
-            bedrooms: r.bedrooms ?? undefined,
-            bathrooms: r.bathrooms ?? undefined,
-            budget: r.budget ?? undefined,
-            remarks: r.remarks ?? undefined,
-            status: r.status as ListingRequest['status'],
+            propertyType: r.propertyType[0] as ListingRequest['propertyType'],
+            bedrooms: r.minBedrooms ?? undefined,
+            bathrooms: r.minBathrooms ?? undefined,
+            budget: r.maxBudget ?? undefined,
+            remarks: r.requestRemarks ?? undefined,
+            submittedBy: r.userId,
+            status: r.requestStatus as ListingRequest['status'],
             createdAt: r.createdAt.toISOString(),
         }));
     } catch (error) {

@@ -258,7 +258,7 @@ exports.Prisma.PropertyOwnerScalarFieldEnum = {
 
 exports.Prisma.ListingRepresentativeScalarFieldEnum = {
   id: 'id',
-  propertyId: 'propertyId',
+  listingId: 'listingId',
   representativeId: 'representativeId',
   role: 'role',
   status: 'status'
@@ -370,6 +370,13 @@ exports.Prisma.RequirementScalarFieldEnum = {
   requiredTime: 'requiredTime',
   paymentMethod: 'paymentMethod',
   loan: 'loan',
+  requestName: 'requestName',
+  requestEmail: 'requestEmail',
+  requestPhone: 'requestPhone',
+  minBedrooms: 'minBedrooms',
+  minBathrooms: 'minBathrooms',
+  requestRemarks: 'requestRemarks',
+  requestStatus: 'requestStatus',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -462,23 +469,6 @@ exports.Prisma.ConversationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.MessageScalarFieldEnum = {
-  id: 'id',
-  conversationId: 'conversationId',
-  sender: 'sender',
-  text: 'text',
-  timestamp: 'timestamp'
-};
-
-exports.Prisma.SiteContentScalarFieldEnum = {
-  id: 'id',
-  key: 'key',
-  value: 'value',
-  section: 'section',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.UserPreferenceScalarFieldEnum = {
   id: 'id',
   accountId: 'accountId',
@@ -492,22 +482,6 @@ exports.Prisma.UserPreferenceScalarFieldEnum = {
   totalMortgageRequests: 'totalMortgageRequests',
   totalShares: 'totalShares',
   totalTimeSpentInSeconds: 'totalTimeSpentInSeconds'
-};
-
-exports.Prisma.PropertyRequestScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  email: 'email',
-  phone: 'phone',
-  location: 'location',
-  propertyType: 'propertyType',
-  bedrooms: 'bedrooms',
-  bathrooms: 'bathrooms',
-  budget: 'budget',
-  remarks: 'remarks',
-  status: 'status',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.MortgageRequestScalarFieldEnum = {
@@ -840,10 +814,7 @@ exports.Prisma.ModelName = {
   SharedLeads: 'SharedLeads',
   LeadActivity: 'LeadActivity',
   Conversation: 'Conversation',
-  Message: 'Message',
-  SiteContent: 'SiteContent',
   UserPreference: 'UserPreference',
-  PropertyRequest: 'PropertyRequest',
   MortgageRequest: 'MortgageRequest',
   SalesRequest: 'SalesRequest',
   VisitRequest: 'VisitRequest',

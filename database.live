@@ -450,22 +450,6 @@ Fields:
 > role: enum(propertyOwner, listingOwner, listingParty, listingOwner.propertyOwner) NOT NULL;
 > status: text;
 
-Table: property_requests, Model: PropertyRequest
-Fields:
-> id: text PK, NOT NULL;
-> name: text NOT NULL;
-> email: text NOT NULL;
-> phone: text;
-> location: text;
-> propertyType: text;
-> bedrooms: integer;
-> bathrooms: integer;
-> budget: integer;
-> remarks: text;
-> status: text NOT NULL, default: 'new'::text;
-> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
-> updatedAt: timestamp(3) NOT NULL;
-
 Table: listings_views, Model: ListingsView
 Fields:
 > id: text PK, NOT NULL;
@@ -489,6 +473,13 @@ Fields:
 > requiredTime: text;
 > paymentMethod: text[] default ARRAY[]::text[];
 > loan: boolean NOT NULL, default: false;
+> requestName: text;
+> requestEmail: text;
+> requestPhone: text;
+> minBedrooms: integer;
+> minBathrooms: integer;
+> requestRemarks: text;
+> requestStatus: text, INDEX requirements_requestStatus_idx(requestStatus);
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > updatedAt: timestamp(3) NOT NULL;
 

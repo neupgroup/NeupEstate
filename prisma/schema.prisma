@@ -480,10 +480,18 @@ model Requirement {
   requiredTime  String?
   paymentMethod String[] @default([])
   loan          Boolean  @default(false)
+  requestName   String?
+  requestEmail  String?
+  requestPhone  String?
+  minBedrooms   Int?
+  minBathrooms  Int?
+  requestRemarks String?
+  requestStatus String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
   @@index([userId])
+  @@index([requestStatus])
   @@map("requirements")
 }
 
@@ -683,24 +691,6 @@ model UserPreference {
 // ============================================================================
 // Requests
 // ============================================================================
-
-model PropertyRequest {
-  id           String   @id @default(cuid())
-  name         String
-  email        String
-  phone        String?
-  location     String?
-  propertyType String?
-  bedrooms     Int?
-  bathrooms    Int?
-  budget       Int?
-  remarks      String?
-  status       String   @default("new")
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  @@map("property_requests")
-}
 
 model MortgageRequest {
   id             String   @id @default(cuid())

@@ -115,7 +115,7 @@ model Account {
   createdListingChanges           ListingChange[]         @relation("ListingChangeCreatedBy")
   propertyChangesForProfile       ListingChange[]         @relation("ListingChangeCreatedFor")
   propertyChangesByWorkingProfile ListingChange[]         @relation("ListingChangeWorkingProfile")
-  propertyRepresentatives         ListingRepresentative[]
+  listingRepresentatives          ListingRepresentative[]
 
   @@index([workingProfile])
   @@map("accounts")
@@ -293,17 +293,17 @@ model PropertyOwner {
 
 model ListingRepresentative {
   id               String                     @id @default(cuid())
-  propertyId       String                     @map("property_id")
+  listingId        String                     @map("listing_id")
   representativeId String                     @map("representative_id")
   role             PropertyRepresentativeRole
   status           String?
 
-  property       Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  listing        Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
   representative Account @relation(fields: [representativeId], references: [id], onDelete: Cascade)
 
-  @@index([propertyId])
+  @@index([listingId])
   @@index([representativeId])
-  @@map("property_representatives")
+  @@map("listing_representatives")
 }
 
 model ListingDocument {
@@ -469,21 +469,29 @@ model Review {
 // ============================================================================
 
 model Requirement {
-  id            String   @id @default(cuid())
-  userId        String
-  minBudget     Int?
-  maxBudget     Int?
-  location      String?
-  propertyType  String[] @default([])
-  purpose       String?
-  urgency       String?
-  requiredTime  String?
-  paymentMethod String[] @default([])
-  loan          Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id             String   @id @default(cuid())
+  userId         String
+  minBudget      Int?
+  maxBudget      Int?
+  location       String?
+  propertyType   String[] @default([])
+  purpose        String?
+  urgency        String?
+  requiredTime   String?
+  paymentMethod  String[] @default([])
+  loan           Boolean  @default(false)
+  requestName    String?
+  requestEmail   String?
+  requestPhone   String?
+  minBedrooms    Int?
+  minBathrooms   Int?
+  requestRemarks String?
+  requestStatus  String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@index([userId])
+  @@index([requestStatus])
   @@map("requirements")
 }
 
@@ -566,7 +574,7 @@ model BaseLead {
 
   @@index([belongsTo])
   @@index([lastName])
-  @@map("base_lead")
+  @@map("lead_base")
 }
 
 model ClientContact {
@@ -579,7 +587,7 @@ model ClientContact {
 
   @@index([clientId])
   @@index([type])
-  @@map("client_contact")
+  @@map("lead_contacts")
 }
 
 model ClientLink {
@@ -591,7 +599,7 @@ model ClientLink {
 
   @@index([trackerId])
   @@index([clientId])
-  @@map("client_link")
+  @@map("lead_links")
 }
 
 model SharedLeads {
@@ -612,7 +620,7 @@ model SharedLeads {
   @@index([type])
   @@index([priority])
   @@index([owner])
-  @@map("shared_leads")
+  @@map("lead_shared")
 }
 
 model LeadActivity {
@@ -631,7 +639,7 @@ model LeadActivity {
 }
 
 // ============================================================================
-// Conversations & Messages
+// Conversations
 // ============================================================================
 
 model Conversation {
@@ -654,40 +662,9 @@ model Conversation {
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
 
-  messages Message[]
-
   @@index([accountId])
   @@index([lastMessageAt])
   @@map("conversations")
-}
-
-model Message {
-  id             String   @id @default(cuid())
-  conversationId String
-  sender         String
-  text           String
-  timestamp      DateTime @default(now())
-
-  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-
-  @@index([conversationId])
-  @@map("messages")
-}
-
-// ============================================================================
-// Site Content
-// ============================================================================
-
-model SiteContent {
-  id        String   @id @default(cuid())
-  key       String   @unique
-  value     String
-  section   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([section])
-  @@map("site_content")
 }
 
 // ============================================================================
@@ -714,24 +691,6 @@ model UserPreference {
 // ============================================================================
 // Requests
 // ============================================================================
-
-model PropertyRequest {
-  id           String   @id @default(cuid())
-  name         String
-  email        String
-  phone        String?
-  location     String?
-  propertyType String?
-  bedrooms     Int?
-  bathrooms    Int?
-  budget       Int?
-  remarks      String?
-  status       String   @default("new")
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  @@map("property_requests")
-}
 
 model MortgageRequest {
   id             String   @id @default(cuid())
