@@ -265,7 +265,7 @@ export async function POST(req: NextRequest) {
 
   const { propertyId } = await req.json();
 
-  await prisma.savedProperty.create({
+  await prisma.listingsSaved.create({
     data: {
       accountId,
       propertyId,
@@ -451,7 +451,7 @@ export async function saveProperty(propertyId: string) {
   }
 
   try {
-    await prisma.savedProperty.create({
+    await prisma.listingsSaved.create({
       data: {
         accountId,
         propertyId,

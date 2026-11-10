@@ -180,10 +180,10 @@ async function getAgencyReportData(agencyAccountId: string) {
             viewedAt: { gte: thirtyDaysAgo },
           },
         }),
-        prisma.savedProperty.count({
+        prisma.listingsSaved.count({
           where: { propertyId: { in: propertyIds } },
         }),
-        prisma.savedProperty.count({
+        prisma.listingsSaved.count({
           where: {
             propertyId: { in: propertyIds },
             savedAt: { gte: thirtyDaysAgo },

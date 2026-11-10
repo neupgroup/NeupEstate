@@ -516,7 +516,7 @@ Fields:
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > updatedAt: timestamp(3) NOT NULL;
 
-Table: saved_property, Model: SavedProperty
+Table: listings_saved, Model: ListingsSaved
 Fields:
 > id: text PK, NOT NULL;
 > accountId: text NOT NULL;

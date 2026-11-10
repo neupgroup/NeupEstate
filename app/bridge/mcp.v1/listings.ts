@@ -70,7 +70,7 @@ export function registerListingTools(server: McpServer, actorAccountId: string, 
       const where = { accountId: actorAccountId };
       const [data, total] = await Promise.all([
         getListingsSaved(actorAccountId, offset, limit),
-        prisma.savedProperty.count({ where }),
+        prisma.listingsSaved.count({ where }),
       ]);
       return mcpSuccess({
         data,

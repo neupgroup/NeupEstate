@@ -317,7 +317,7 @@ async function buildNativeScopeSummary(
       },
       select: { viewedAt: true },
     }),
-    prisma.savedProperty.findMany({
+    prisma.listingsSaved.findMany({
       where: {
         accountId: accountFilter,
         propertyId: propertyFilter,

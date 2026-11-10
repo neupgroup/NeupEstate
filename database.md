@@ -829,7 +829,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - divergence: model SalesRequest maps to table sales_requests
 - divergence based on fields: database has 10 fields; Prisma model has 10 persisted scalar fields; difference 0
 
-### public.saved_property (SavedProperty)
+### public.listings_saved (ListingsSaved)
 
 - purpose: Stores saved/bookmarked properties for accounts.
 - usage: Used by saved-property user workflows, property relations, and account cleanup.
@@ -839,7 +839,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - propertyId text NOT NULL, FK saved_property_propertyId_fkey -> public.property(id)
 - savedAt timestamp(3) NOT NULL, default CURRENT_TIMESTAMP
 
-- divergence: model SavedProperty maps to table saved_property
+- divergence: model ListingsSaved maps to table listings_saved
 - divergence based on fields: database has 4 fields; Prisma model has 4 persisted scalar fields; difference 0
 
 ### public.shared_leads (SharedLeads)

@@ -70,8 +70,8 @@ export async function GET(request: NextRequest) {
     const { limit, offset } = getPagination(request);
     const where = { accountId };
     const [data, total] = await Promise.all([
-      prisma.savedProperty.findMany({ where, orderBy: { savedAt: 'desc' }, skip: offset, take: limit }),
-      prisma.savedProperty.count({ where }),
+      prisma.listingsSaved.findMany({ where, orderBy: { savedAt: 'desc' }, skip: offset, take: limit }),
+      prisma.listingsSaved.count({ where }),
     ]);
     return NextResponse.json({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } });
   } catch (error) {
@@ -97,8 +97,8 @@ export async function POST(request: NextRequest) {
     if (!parsed.success) return NextResponse.json({ success: false, error: 'Invalid saved property.', details: parsed.error.flatten().fieldErrors }, { status: 400 });
     const property = await prisma.listing.findUnique({ where: { id: parsed.data.propertyId }, select: { id: true } });
     if (!property) return NextResponse.json({ success: false, error: 'Property not found.' }, { status: 404 });
-    const existing = await prisma.savedProperty.findFirst({ where: { accountId, propertyId: parsed.data.propertyId } });
-    const data = existing ?? await prisma.savedProperty.create({ data: { accountId, propertyId: parsed.data.propertyId } });
+    const existing = await prisma.listingsSaved.findFirst({ where: { accountId, propertyId: parsed.data.propertyId } });
+    const data = existing ?? await prisma.listingsSaved.create({ data: { accountId, propertyId: parsed.data.propertyId } });
     return NextResponse.json({ success: true, data }, { status: existing ? 200 : 201 });
   } catch (error) {
     return errorResponse(error);
@@ -116,7 +116,7 @@ export async function DELETE(request: NextRequest) {
     if (Boolean(id) === Boolean(propertyId)) {
       return NextResponse.json({ success: false, error: 'Provide exactly one of id or propertyId.' }, { status: 400 });
     }
-    const result = await prisma.savedProperty.deleteMany({ where: { accountId, ...(id ? { id } : { propertyId: propertyId! }) } });
+    const result = await prisma.listingsSaved.deleteMany({ where: { accountId, ...(id ? { id } : { propertyId: propertyId! }) } });
     if (!result.count) return NextResponse.json({ success: false, error: 'Saved property not found.' }, { status: 404 });
     return NextResponse.json({ success: true, ...(id ? { id } : { propertyId }) });
   } catch (error) {

@@ -388,7 +388,7 @@ exports.Prisma.NaturalSearchScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
-exports.Prisma.SavedPropertyScalarFieldEnum = {
+exports.Prisma.ListingsSavedScalarFieldEnum = {
   id: 'id',
   accountId: 'accountId',
   propertyId: 'propertyId',
@@ -806,7 +806,7 @@ exports.Prisma.ModelName = {
   Review: 'Review',
   Requirement: 'Requirement',
   NaturalSearch: 'NaturalSearch',
-  SavedProperty: 'SavedProperty',
+  ListingsSaved: 'ListingsSaved',
   ListingsView: 'ListingsView',
   BaseLead: 'BaseLead',
   ClientContact: 'ClientContact',

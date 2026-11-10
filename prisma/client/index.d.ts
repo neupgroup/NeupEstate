@@ -119,10 +119,10 @@ export type Requirement = $Result.DefaultSelection<Prisma.$RequirementPayload>
  */
 export type NaturalSearch = $Result.DefaultSelection<Prisma.$NaturalSearchPayload>
 /**
- * Model SavedProperty
+ * Model ListingsSaved
  * 
  */
-export type SavedProperty = $Result.DefaultSelection<Prisma.$SavedPropertyPayload>
+export type ListingsSaved = $Result.DefaultSelection<Prisma.$ListingsSavedPayload>
 /**
  * Model ListingsView
  * 
@@ -724,14 +724,14 @@ export class PrismaClient<
   get naturalSearch(): Prisma.NaturalSearchDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.savedProperty`: Exposes CRUD operations for the **SavedProperty** model.
+   * `prisma.listingsSaved`: Exposes CRUD operations for the **ListingsSaved** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more SavedProperties
-    * const savedProperties = await prisma.savedProperty.findMany()
+    * // Fetch zero or more ListingsSaveds
+    * const listingsSaveds = await prisma.listingsSaved.findMany()
     * ```
     */
-  get savedProperty(): Prisma.SavedPropertyDelegate<ExtArgs, ClientOptions>;
+  get listingsSaved(): Prisma.ListingsSavedDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.listingsView`: Exposes CRUD operations for the **ListingsView** model.
@@ -1447,7 +1447,7 @@ export namespace Prisma {
     Review: 'Review',
     Requirement: 'Requirement',
     NaturalSearch: 'NaturalSearch',
-    SavedProperty: 'SavedProperty',
+    ListingsSaved: 'ListingsSaved',
     ListingsView: 'ListingsView',
     BaseLead: 'BaseLead',
     ClientContact: 'ClientContact',
@@ -1489,7 +1489,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "location" | "account" | "activity" | "listing" | "propertyLink" | "listingHouse" | "listingApartment" | "propertyLandDetail" | "listingCommercial" | "propertyOwner" | "listingRepresentative" | "listingDocument" | "listingChange" | "agency" | "agencyMap" | "agencyAgentMap" | "agencyCustomization" | "agent" | "review" | "requirement" | "naturalSearch" | "savedProperty" | "listingsView" | "baseLead" | "clientContact" | "clientLink" | "sharedLeads" | "leadActivity" | "conversation" | "userPreference" | "mortgageRequest" | "salesRequest" | "visitRequest" | "sitemapEntry" | "inquiry" | "authzRole" | "accountAccess" | "roleCapability" | "authzAccountAccessGrant" | "authzAssetsAccessGrant" | "competitor" | "competitorSource" | "competitorPage" | "competitorListing" | "propertyCompetitionMap" | "competitorTracking" | "intelligenceMapping" | "intelligenceAlert"
+      modelProps: "location" | "account" | "activity" | "listing" | "propertyLink" | "listingHouse" | "listingApartment" | "propertyLandDetail" | "listingCommercial" | "propertyOwner" | "listingRepresentative" | "listingDocument" | "listingChange" | "agency" | "agencyMap" | "agencyAgentMap" | "agencyCustomization" | "agent" | "review" | "requirement" | "naturalSearch" | "listingsSaved" | "listingsView" | "baseLead" | "clientContact" | "clientLink" | "sharedLeads" | "leadActivity" | "conversation" | "userPreference" | "mortgageRequest" | "salesRequest" | "visitRequest" | "sitemapEntry" | "inquiry" | "authzRole" | "accountAccess" | "roleCapability" | "authzAccountAccessGrant" | "authzAssetsAccessGrant" | "competitor" | "competitorSource" | "competitorPage" | "competitorListing" | "propertyCompetitionMap" | "competitorTracking" | "intelligenceMapping" | "intelligenceAlert"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3047,77 +3047,77 @@ export namespace Prisma {
           }
         }
       }
-      SavedProperty: {
-        payload: Prisma.$SavedPropertyPayload<ExtArgs>
-        fields: Prisma.SavedPropertyFieldRefs
+      ListingsSaved: {
+        payload: Prisma.$ListingsSavedPayload<ExtArgs>
+        fields: Prisma.ListingsSavedFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.SavedPropertyFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SavedPropertyPayload> | null
+            args: Prisma.ListingsSavedFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsSavedPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.SavedPropertyFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SavedPropertyPayload>
+            args: Prisma.ListingsSavedFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsSavedPayload>
           }
           findFirst: {
-            args: Prisma.SavedPropertyFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SavedPropertyPayload> | null
+            args: Prisma.ListingsSavedFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsSavedPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.SavedPropertyFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SavedPropertyPayload>
+            args: Prisma.ListingsSavedFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsSavedPayload>
           }
           findMany: {
-            args: Prisma.SavedPropertyFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SavedPropertyPayload>[]
+            args: Prisma.ListingsSavedFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsSavedPayload>[]
           }
           create: {
-            args: Prisma.SavedPropertyCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SavedPropertyPayload>
+            args: Prisma.ListingsSavedCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsSavedPayload>
           }
           createMany: {
-            args: Prisma.SavedPropertyCreateManyArgs<ExtArgs>
+            args: Prisma.ListingsSavedCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.SavedPropertyCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SavedPropertyPayload>[]
+            args: Prisma.ListingsSavedCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsSavedPayload>[]
           }
           delete: {
-            args: Prisma.SavedPropertyDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SavedPropertyPayload>
+            args: Prisma.ListingsSavedDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsSavedPayload>
           }
           update: {
-            args: Prisma.SavedPropertyUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SavedPropertyPayload>
+            args: Prisma.ListingsSavedUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsSavedPayload>
           }
           deleteMany: {
-            args: Prisma.SavedPropertyDeleteManyArgs<ExtArgs>
+            args: Prisma.ListingsSavedDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.SavedPropertyUpdateManyArgs<ExtArgs>
+            args: Prisma.ListingsSavedUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.SavedPropertyUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SavedPropertyPayload>[]
+            args: Prisma.ListingsSavedUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsSavedPayload>[]
           }
           upsert: {
-            args: Prisma.SavedPropertyUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SavedPropertyPayload>
+            args: Prisma.ListingsSavedUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsSavedPayload>
           }
           aggregate: {
-            args: Prisma.SavedPropertyAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateSavedProperty>
+            args: Prisma.ListingsSavedAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateListingsSaved>
           }
           groupBy: {
-            args: Prisma.SavedPropertyGroupByArgs<ExtArgs>
-            result: $Utils.Optional<SavedPropertyGroupByOutputType>[]
+            args: Prisma.ListingsSavedGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ListingsSavedGroupByOutputType>[]
           }
           count: {
-            args: Prisma.SavedPropertyCountArgs<ExtArgs>
-            result: $Utils.Optional<SavedPropertyCountAggregateOutputType> | number
+            args: Prisma.ListingsSavedCountArgs<ExtArgs>
+            result: $Utils.Optional<ListingsSavedCountAggregateOutputType> | number
           }
         }
       }
@@ -5174,7 +5174,7 @@ export namespace Prisma {
     review?: ReviewOmit
     requirement?: RequirementOmit
     naturalSearch?: NaturalSearchOmit
-    savedProperty?: SavedPropertyOmit
+    listingsSaved?: ListingsSavedOmit
     listingsView?: ListingsViewOmit
     baseLead?: BaseLeadOmit
     clientContact?: ClientContactOmit
@@ -5533,7 +5533,7 @@ export namespace Prisma {
    * ListingCountOutputType without action
    */
   export type ListingCountOutputTypeCountSavedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SavedPropertyWhereInput
+    where?: ListingsSavedWhereInput
   }
 
   /**
@@ -10093,7 +10093,7 @@ export namespace Prisma {
       changes: Prisma.$ListingChangePayload<ExtArgs>[]
       links: Prisma.$PropertyLinkPayload<ExtArgs>[]
       linkedBy: Prisma.$PropertyLinkPayload<ExtArgs>[]
-      savedBy: Prisma.$SavedPropertyPayload<ExtArgs>[]
+      savedBy: Prisma.$ListingsSavedPayload<ExtArgs>[]
       views: Prisma.$ListingsViewPayload<ExtArgs>[]
       competitionMaps: Prisma.$PropertyCompetitionMapPayload<ExtArgs>[]
       representatives: Prisma.$ListingRepresentativePayload<ExtArgs>[]
@@ -10533,7 +10533,7 @@ export namespace Prisma {
     changes<T extends Listing$changesArgs<ExtArgs> = {}>(args?: Subset<T, Listing$changesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingChangePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     links<T extends Listing$linksArgs<ExtArgs> = {}>(args?: Subset<T, Listing$linksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     linkedBy<T extends Listing$linkedByArgs<ExtArgs> = {}>(args?: Subset<T, Listing$linkedByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    savedBy<T extends Listing$savedByArgs<ExtArgs> = {}>(args?: Subset<T, Listing$savedByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedPropertyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    savedBy<T extends Listing$savedByArgs<ExtArgs> = {}>(args?: Subset<T, Listing$savedByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingsSavedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     views<T extends Listing$viewsArgs<ExtArgs> = {}>(args?: Subset<T, Listing$viewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingsViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     competitionMaps<T extends Listing$competitionMapsArgs<ExtArgs> = {}>(args?: Subset<T, Listing$competitionMapsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyCompetitionMapPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     representatives<T extends Listing$representativesArgs<ExtArgs> = {}>(args?: Subset<T, Listing$representativesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingRepresentativePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -11197,23 +11197,23 @@ export namespace Prisma {
    */
   export type Listing$savedByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SavedProperty
+     * Select specific fields to fetch from the ListingsSaved
      */
-    select?: SavedPropertySelect<ExtArgs> | null
+    select?: ListingsSavedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SavedProperty
+     * Omit specific fields from the ListingsSaved
      */
-    omit?: SavedPropertyOmit<ExtArgs> | null
+    omit?: ListingsSavedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SavedPropertyInclude<ExtArgs> | null
-    where?: SavedPropertyWhereInput
-    orderBy?: SavedPropertyOrderByWithRelationInput | SavedPropertyOrderByWithRelationInput[]
-    cursor?: SavedPropertyWhereUniqueInput
+    include?: ListingsSavedInclude<ExtArgs> | null
+    where?: ListingsSavedWhereInput
+    orderBy?: ListingsSavedOrderByWithRelationInput | ListingsSavedOrderByWithRelationInput[]
+    cursor?: ListingsSavedWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: SavedPropertyScalarFieldEnum | SavedPropertyScalarFieldEnum[]
+    distinct?: ListingsSavedScalarFieldEnum | ListingsSavedScalarFieldEnum[]
   }
 
   /**
@@ -30532,30 +30532,30 @@ export namespace Prisma {
 
 
   /**
-   * Model SavedProperty
+   * Model ListingsSaved
    */
 
-  export type AggregateSavedProperty = {
-    _count: SavedPropertyCountAggregateOutputType | null
-    _min: SavedPropertyMinAggregateOutputType | null
-    _max: SavedPropertyMaxAggregateOutputType | null
+  export type AggregateListingsSaved = {
+    _count: ListingsSavedCountAggregateOutputType | null
+    _min: ListingsSavedMinAggregateOutputType | null
+    _max: ListingsSavedMaxAggregateOutputType | null
   }
 
-  export type SavedPropertyMinAggregateOutputType = {
+  export type ListingsSavedMinAggregateOutputType = {
     id: string | null
     accountId: string | null
     propertyId: string | null
     savedAt: Date | null
   }
 
-  export type SavedPropertyMaxAggregateOutputType = {
+  export type ListingsSavedMaxAggregateOutputType = {
     id: string | null
     accountId: string | null
     propertyId: string | null
     savedAt: Date | null
   }
 
-  export type SavedPropertyCountAggregateOutputType = {
+  export type ListingsSavedCountAggregateOutputType = {
     id: number
     accountId: number
     propertyId: number
@@ -30564,21 +30564,21 @@ export namespace Prisma {
   }
 
 
-  export type SavedPropertyMinAggregateInputType = {
+  export type ListingsSavedMinAggregateInputType = {
     id?: true
     accountId?: true
     propertyId?: true
     savedAt?: true
   }
 
-  export type SavedPropertyMaxAggregateInputType = {
+  export type ListingsSavedMaxAggregateInputType = {
     id?: true
     accountId?: true
     propertyId?: true
     savedAt?: true
   }
 
-  export type SavedPropertyCountAggregateInputType = {
+  export type ListingsSavedCountAggregateInputType = {
     id?: true
     accountId?: true
     propertyId?: true
@@ -30586,146 +30586,146 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type SavedPropertyAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsSavedAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which SavedProperty to aggregate.
+     * Filter which ListingsSaved to aggregate.
      */
-    where?: SavedPropertyWhereInput
+    where?: ListingsSavedWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of SavedProperties to fetch.
+     * Determine the order of ListingsSaveds to fetch.
      */
-    orderBy?: SavedPropertyOrderByWithRelationInput | SavedPropertyOrderByWithRelationInput[]
+    orderBy?: ListingsSavedOrderByWithRelationInput | ListingsSavedOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: SavedPropertyWhereUniqueInput
+    cursor?: ListingsSavedWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` SavedProperties from the position of the cursor.
+     * Take `±n` ListingsSaveds from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` SavedProperties.
+     * Skip the first `n` ListingsSaveds.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned SavedProperties
+     * Count returned ListingsSaveds
     **/
-    _count?: true | SavedPropertyCountAggregateInputType
+    _count?: true | ListingsSavedCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: SavedPropertyMinAggregateInputType
+    _min?: ListingsSavedMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: SavedPropertyMaxAggregateInputType
+    _max?: ListingsSavedMaxAggregateInputType
   }
 
-  export type GetSavedPropertyAggregateType<T extends SavedPropertyAggregateArgs> = {
-        [P in keyof T & keyof AggregateSavedProperty]: P extends '_count' | 'count'
+  export type GetListingsSavedAggregateType<T extends ListingsSavedAggregateArgs> = {
+        [P in keyof T & keyof AggregateListingsSaved]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateSavedProperty[P]>
-      : GetScalarType<T[P], AggregateSavedProperty[P]>
+        : GetScalarType<T[P], AggregateListingsSaved[P]>
+      : GetScalarType<T[P], AggregateListingsSaved[P]>
   }
 
 
 
 
-  export type SavedPropertyGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SavedPropertyWhereInput
-    orderBy?: SavedPropertyOrderByWithAggregationInput | SavedPropertyOrderByWithAggregationInput[]
-    by: SavedPropertyScalarFieldEnum[] | SavedPropertyScalarFieldEnum
-    having?: SavedPropertyScalarWhereWithAggregatesInput
+  export type ListingsSavedGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ListingsSavedWhereInput
+    orderBy?: ListingsSavedOrderByWithAggregationInput | ListingsSavedOrderByWithAggregationInput[]
+    by: ListingsSavedScalarFieldEnum[] | ListingsSavedScalarFieldEnum
+    having?: ListingsSavedScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: SavedPropertyCountAggregateInputType | true
-    _min?: SavedPropertyMinAggregateInputType
-    _max?: SavedPropertyMaxAggregateInputType
+    _count?: ListingsSavedCountAggregateInputType | true
+    _min?: ListingsSavedMinAggregateInputType
+    _max?: ListingsSavedMaxAggregateInputType
   }
 
-  export type SavedPropertyGroupByOutputType = {
+  export type ListingsSavedGroupByOutputType = {
     id: string
     accountId: string
     propertyId: string
     savedAt: Date
-    _count: SavedPropertyCountAggregateOutputType | null
-    _min: SavedPropertyMinAggregateOutputType | null
-    _max: SavedPropertyMaxAggregateOutputType | null
+    _count: ListingsSavedCountAggregateOutputType | null
+    _min: ListingsSavedMinAggregateOutputType | null
+    _max: ListingsSavedMaxAggregateOutputType | null
   }
 
-  type GetSavedPropertyGroupByPayload<T extends SavedPropertyGroupByArgs> = Prisma.PrismaPromise<
+  type GetListingsSavedGroupByPayload<T extends ListingsSavedGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<SavedPropertyGroupByOutputType, T['by']> &
+      PickEnumerable<ListingsSavedGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof SavedPropertyGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof ListingsSavedGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], SavedPropertyGroupByOutputType[P]>
-            : GetScalarType<T[P], SavedPropertyGroupByOutputType[P]>
+              : GetScalarType<T[P], ListingsSavedGroupByOutputType[P]>
+            : GetScalarType<T[P], ListingsSavedGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type SavedPropertySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type ListingsSavedSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     accountId?: boolean
     propertyId?: boolean
     savedAt?: boolean
     property?: boolean | ListingDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["savedProperty"]>
+  }, ExtArgs["result"]["listingsSaved"]>
 
-  export type SavedPropertySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type ListingsSavedSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     accountId?: boolean
     propertyId?: boolean
     savedAt?: boolean
     property?: boolean | ListingDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["savedProperty"]>
+  }, ExtArgs["result"]["listingsSaved"]>
 
-  export type SavedPropertySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type ListingsSavedSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     accountId?: boolean
     propertyId?: boolean
     savedAt?: boolean
     property?: boolean | ListingDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["savedProperty"]>
+  }, ExtArgs["result"]["listingsSaved"]>
 
-  export type SavedPropertySelectScalar = {
+  export type ListingsSavedSelectScalar = {
     id?: boolean
     accountId?: boolean
     propertyId?: boolean
     savedAt?: boolean
   }
 
-  export type SavedPropertyOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "accountId" | "propertyId" | "savedAt", ExtArgs["result"]["savedProperty"]>
-  export type SavedPropertyInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsSavedOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "accountId" | "propertyId" | "savedAt", ExtArgs["result"]["listingsSaved"]>
+  export type ListingsSavedInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     property?: boolean | ListingDefaultArgs<ExtArgs>
   }
-  export type SavedPropertyIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsSavedIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     property?: boolean | ListingDefaultArgs<ExtArgs>
   }
-  export type SavedPropertyIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsSavedIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     property?: boolean | ListingDefaultArgs<ExtArgs>
   }
 
-  export type $SavedPropertyPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "SavedProperty"
+  export type $ListingsSavedPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ListingsSaved"
     objects: {
       property: Prisma.$ListingPayload<ExtArgs>
     }
@@ -30734,136 +30734,136 @@ export namespace Prisma {
       accountId: string
       propertyId: string
       savedAt: Date
-    }, ExtArgs["result"]["savedProperty"]>
+    }, ExtArgs["result"]["listingsSaved"]>
     composites: {}
   }
 
-  type SavedPropertyGetPayload<S extends boolean | null | undefined | SavedPropertyDefaultArgs> = $Result.GetResult<Prisma.$SavedPropertyPayload, S>
+  type ListingsSavedGetPayload<S extends boolean | null | undefined | ListingsSavedDefaultArgs> = $Result.GetResult<Prisma.$ListingsSavedPayload, S>
 
-  type SavedPropertyCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<SavedPropertyFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: SavedPropertyCountAggregateInputType | true
+  type ListingsSavedCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ListingsSavedFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ListingsSavedCountAggregateInputType | true
     }
 
-  export interface SavedPropertyDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SavedProperty'], meta: { name: 'SavedProperty' } }
+  export interface ListingsSavedDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ListingsSaved'], meta: { name: 'ListingsSaved' } }
     /**
-     * Find zero or one SavedProperty that matches the filter.
-     * @param {SavedPropertyFindUniqueArgs} args - Arguments to find a SavedProperty
+     * Find zero or one ListingsSaved that matches the filter.
+     * @param {ListingsSavedFindUniqueArgs} args - Arguments to find a ListingsSaved
      * @example
-     * // Get one SavedProperty
-     * const savedProperty = await prisma.savedProperty.findUnique({
+     * // Get one ListingsSaved
+     * const listingsSaved = await prisma.listingsSaved.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends SavedPropertyFindUniqueArgs>(args: SelectSubset<T, SavedPropertyFindUniqueArgs<ExtArgs>>): Prisma__SavedPropertyClient<$Result.GetResult<Prisma.$SavedPropertyPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends ListingsSavedFindUniqueArgs>(args: SelectSubset<T, ListingsSavedFindUniqueArgs<ExtArgs>>): Prisma__ListingsSavedClient<$Result.GetResult<Prisma.$ListingsSavedPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one SavedProperty that matches the filter or throw an error with `error.code='P2025'`
+     * Find one ListingsSaved that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {SavedPropertyFindUniqueOrThrowArgs} args - Arguments to find a SavedProperty
+     * @param {ListingsSavedFindUniqueOrThrowArgs} args - Arguments to find a ListingsSaved
      * @example
-     * // Get one SavedProperty
-     * const savedProperty = await prisma.savedProperty.findUniqueOrThrow({
+     * // Get one ListingsSaved
+     * const listingsSaved = await prisma.listingsSaved.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends SavedPropertyFindUniqueOrThrowArgs>(args: SelectSubset<T, SavedPropertyFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SavedPropertyClient<$Result.GetResult<Prisma.$SavedPropertyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends ListingsSavedFindUniqueOrThrowArgs>(args: SelectSubset<T, ListingsSavedFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ListingsSavedClient<$Result.GetResult<Prisma.$ListingsSavedPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first SavedProperty that matches the filter.
+     * Find the first ListingsSaved that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {SavedPropertyFindFirstArgs} args - Arguments to find a SavedProperty
+     * @param {ListingsSavedFindFirstArgs} args - Arguments to find a ListingsSaved
      * @example
-     * // Get one SavedProperty
-     * const savedProperty = await prisma.savedProperty.findFirst({
+     * // Get one ListingsSaved
+     * const listingsSaved = await prisma.listingsSaved.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends SavedPropertyFindFirstArgs>(args?: SelectSubset<T, SavedPropertyFindFirstArgs<ExtArgs>>): Prisma__SavedPropertyClient<$Result.GetResult<Prisma.$SavedPropertyPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends ListingsSavedFindFirstArgs>(args?: SelectSubset<T, ListingsSavedFindFirstArgs<ExtArgs>>): Prisma__ListingsSavedClient<$Result.GetResult<Prisma.$ListingsSavedPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first SavedProperty that matches the filter or
+     * Find the first ListingsSaved that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {SavedPropertyFindFirstOrThrowArgs} args - Arguments to find a SavedProperty
+     * @param {ListingsSavedFindFirstOrThrowArgs} args - Arguments to find a ListingsSaved
      * @example
-     * // Get one SavedProperty
-     * const savedProperty = await prisma.savedProperty.findFirstOrThrow({
+     * // Get one ListingsSaved
+     * const listingsSaved = await prisma.listingsSaved.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends SavedPropertyFindFirstOrThrowArgs>(args?: SelectSubset<T, SavedPropertyFindFirstOrThrowArgs<ExtArgs>>): Prisma__SavedPropertyClient<$Result.GetResult<Prisma.$SavedPropertyPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends ListingsSavedFindFirstOrThrowArgs>(args?: SelectSubset<T, ListingsSavedFindFirstOrThrowArgs<ExtArgs>>): Prisma__ListingsSavedClient<$Result.GetResult<Prisma.$ListingsSavedPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more SavedProperties that matches the filter.
+     * Find zero or more ListingsSaveds that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {SavedPropertyFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {ListingsSavedFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all SavedProperties
-     * const savedProperties = await prisma.savedProperty.findMany()
+     * // Get all ListingsSaveds
+     * const listingsSaveds = await prisma.listingsSaved.findMany()
      * 
-     * // Get first 10 SavedProperties
-     * const savedProperties = await prisma.savedProperty.findMany({ take: 10 })
+     * // Get first 10 ListingsSaveds
+     * const listingsSaveds = await prisma.listingsSaved.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const savedPropertyWithIdOnly = await prisma.savedProperty.findMany({ select: { id: true } })
+     * const listingsSavedWithIdOnly = await prisma.listingsSaved.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends SavedPropertyFindManyArgs>(args?: SelectSubset<T, SavedPropertyFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedPropertyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends ListingsSavedFindManyArgs>(args?: SelectSubset<T, ListingsSavedFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingsSavedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a SavedProperty.
-     * @param {SavedPropertyCreateArgs} args - Arguments to create a SavedProperty.
+     * Create a ListingsSaved.
+     * @param {ListingsSavedCreateArgs} args - Arguments to create a ListingsSaved.
      * @example
-     * // Create one SavedProperty
-     * const SavedProperty = await prisma.savedProperty.create({
+     * // Create one ListingsSaved
+     * const ListingsSaved = await prisma.listingsSaved.create({
      *   data: {
-     *     // ... data to create a SavedProperty
+     *     // ... data to create a ListingsSaved
      *   }
      * })
      * 
      */
-    create<T extends SavedPropertyCreateArgs>(args: SelectSubset<T, SavedPropertyCreateArgs<ExtArgs>>): Prisma__SavedPropertyClient<$Result.GetResult<Prisma.$SavedPropertyPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends ListingsSavedCreateArgs>(args: SelectSubset<T, ListingsSavedCreateArgs<ExtArgs>>): Prisma__ListingsSavedClient<$Result.GetResult<Prisma.$ListingsSavedPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many SavedProperties.
-     * @param {SavedPropertyCreateManyArgs} args - Arguments to create many SavedProperties.
+     * Create many ListingsSaveds.
+     * @param {ListingsSavedCreateManyArgs} args - Arguments to create many ListingsSaveds.
      * @example
-     * // Create many SavedProperties
-     * const savedProperty = await prisma.savedProperty.createMany({
+     * // Create many ListingsSaveds
+     * const listingsSaved = await prisma.listingsSaved.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends SavedPropertyCreateManyArgs>(args?: SelectSubset<T, SavedPropertyCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends ListingsSavedCreateManyArgs>(args?: SelectSubset<T, ListingsSavedCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many SavedProperties and returns the data saved in the database.
-     * @param {SavedPropertyCreateManyAndReturnArgs} args - Arguments to create many SavedProperties.
+     * Create many ListingsSaveds and returns the data saved in the database.
+     * @param {ListingsSavedCreateManyAndReturnArgs} args - Arguments to create many ListingsSaveds.
      * @example
-     * // Create many SavedProperties
-     * const savedProperty = await prisma.savedProperty.createManyAndReturn({
+     * // Create many ListingsSaveds
+     * const listingsSaved = await prisma.listingsSaved.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many SavedProperties and only return the `id`
-     * const savedPropertyWithIdOnly = await prisma.savedProperty.createManyAndReturn({
+     * // Create many ListingsSaveds and only return the `id`
+     * const listingsSavedWithIdOnly = await prisma.listingsSaved.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -30873,28 +30873,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends SavedPropertyCreateManyAndReturnArgs>(args?: SelectSubset<T, SavedPropertyCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedPropertyPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends ListingsSavedCreateManyAndReturnArgs>(args?: SelectSubset<T, ListingsSavedCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingsSavedPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a SavedProperty.
-     * @param {SavedPropertyDeleteArgs} args - Arguments to delete one SavedProperty.
+     * Delete a ListingsSaved.
+     * @param {ListingsSavedDeleteArgs} args - Arguments to delete one ListingsSaved.
      * @example
-     * // Delete one SavedProperty
-     * const SavedProperty = await prisma.savedProperty.delete({
+     * // Delete one ListingsSaved
+     * const ListingsSaved = await prisma.listingsSaved.delete({
      *   where: {
-     *     // ... filter to delete one SavedProperty
+     *     // ... filter to delete one ListingsSaved
      *   }
      * })
      * 
      */
-    delete<T extends SavedPropertyDeleteArgs>(args: SelectSubset<T, SavedPropertyDeleteArgs<ExtArgs>>): Prisma__SavedPropertyClient<$Result.GetResult<Prisma.$SavedPropertyPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends ListingsSavedDeleteArgs>(args: SelectSubset<T, ListingsSavedDeleteArgs<ExtArgs>>): Prisma__ListingsSavedClient<$Result.GetResult<Prisma.$ListingsSavedPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one SavedProperty.
-     * @param {SavedPropertyUpdateArgs} args - Arguments to update one SavedProperty.
+     * Update one ListingsSaved.
+     * @param {ListingsSavedUpdateArgs} args - Arguments to update one ListingsSaved.
      * @example
-     * // Update one SavedProperty
-     * const savedProperty = await prisma.savedProperty.update({
+     * // Update one ListingsSaved
+     * const listingsSaved = await prisma.listingsSaved.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -30904,30 +30904,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends SavedPropertyUpdateArgs>(args: SelectSubset<T, SavedPropertyUpdateArgs<ExtArgs>>): Prisma__SavedPropertyClient<$Result.GetResult<Prisma.$SavedPropertyPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends ListingsSavedUpdateArgs>(args: SelectSubset<T, ListingsSavedUpdateArgs<ExtArgs>>): Prisma__ListingsSavedClient<$Result.GetResult<Prisma.$ListingsSavedPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more SavedProperties.
-     * @param {SavedPropertyDeleteManyArgs} args - Arguments to filter SavedProperties to delete.
+     * Delete zero or more ListingsSaveds.
+     * @param {ListingsSavedDeleteManyArgs} args - Arguments to filter ListingsSaveds to delete.
      * @example
-     * // Delete a few SavedProperties
-     * const { count } = await prisma.savedProperty.deleteMany({
+     * // Delete a few ListingsSaveds
+     * const { count } = await prisma.listingsSaved.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends SavedPropertyDeleteManyArgs>(args?: SelectSubset<T, SavedPropertyDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends ListingsSavedDeleteManyArgs>(args?: SelectSubset<T, ListingsSavedDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more SavedProperties.
+     * Update zero or more ListingsSaveds.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {SavedPropertyUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {ListingsSavedUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many SavedProperties
-     * const savedProperty = await prisma.savedProperty.updateMany({
+     * // Update many ListingsSaveds
+     * const listingsSaved = await prisma.listingsSaved.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -30937,14 +30937,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends SavedPropertyUpdateManyArgs>(args: SelectSubset<T, SavedPropertyUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends ListingsSavedUpdateManyArgs>(args: SelectSubset<T, ListingsSavedUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more SavedProperties and returns the data updated in the database.
-     * @param {SavedPropertyUpdateManyAndReturnArgs} args - Arguments to update many SavedProperties.
+     * Update zero or more ListingsSaveds and returns the data updated in the database.
+     * @param {ListingsSavedUpdateManyAndReturnArgs} args - Arguments to update many ListingsSaveds.
      * @example
-     * // Update many SavedProperties
-     * const savedProperty = await prisma.savedProperty.updateManyAndReturn({
+     * // Update many ListingsSaveds
+     * const listingsSaved = await prisma.listingsSaved.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -30953,8 +30953,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more SavedProperties and only return the `id`
-     * const savedPropertyWithIdOnly = await prisma.savedProperty.updateManyAndReturn({
+     * // Update zero or more ListingsSaveds and only return the `id`
+     * const listingsSavedWithIdOnly = await prisma.listingsSaved.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -30967,56 +30967,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends SavedPropertyUpdateManyAndReturnArgs>(args: SelectSubset<T, SavedPropertyUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SavedPropertyPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends ListingsSavedUpdateManyAndReturnArgs>(args: SelectSubset<T, ListingsSavedUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingsSavedPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one SavedProperty.
-     * @param {SavedPropertyUpsertArgs} args - Arguments to update or create a SavedProperty.
+     * Create or update one ListingsSaved.
+     * @param {ListingsSavedUpsertArgs} args - Arguments to update or create a ListingsSaved.
      * @example
-     * // Update or create a SavedProperty
-     * const savedProperty = await prisma.savedProperty.upsert({
+     * // Update or create a ListingsSaved
+     * const listingsSaved = await prisma.listingsSaved.upsert({
      *   create: {
-     *     // ... data to create a SavedProperty
+     *     // ... data to create a ListingsSaved
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the SavedProperty we want to update
+     *     // ... the filter for the ListingsSaved we want to update
      *   }
      * })
      */
-    upsert<T extends SavedPropertyUpsertArgs>(args: SelectSubset<T, SavedPropertyUpsertArgs<ExtArgs>>): Prisma__SavedPropertyClient<$Result.GetResult<Prisma.$SavedPropertyPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends ListingsSavedUpsertArgs>(args: SelectSubset<T, ListingsSavedUpsertArgs<ExtArgs>>): Prisma__ListingsSavedClient<$Result.GetResult<Prisma.$ListingsSavedPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of SavedProperties.
+     * Count the number of ListingsSaveds.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {SavedPropertyCountArgs} args - Arguments to filter SavedProperties to count.
+     * @param {ListingsSavedCountArgs} args - Arguments to filter ListingsSaveds to count.
      * @example
-     * // Count the number of SavedProperties
-     * const count = await prisma.savedProperty.count({
+     * // Count the number of ListingsSaveds
+     * const count = await prisma.listingsSaved.count({
      *   where: {
-     *     // ... the filter for the SavedProperties we want to count
+     *     // ... the filter for the ListingsSaveds we want to count
      *   }
      * })
     **/
-    count<T extends SavedPropertyCountArgs>(
-      args?: Subset<T, SavedPropertyCountArgs>,
+    count<T extends ListingsSavedCountArgs>(
+      args?: Subset<T, ListingsSavedCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], SavedPropertyCountAggregateOutputType>
+          : GetScalarType<T['select'], ListingsSavedCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a SavedProperty.
+     * Allows you to perform aggregations operations on a ListingsSaved.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {SavedPropertyAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {ListingsSavedAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -31036,13 +31036,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends SavedPropertyAggregateArgs>(args: Subset<T, SavedPropertyAggregateArgs>): Prisma.PrismaPromise<GetSavedPropertyAggregateType<T>>
+    aggregate<T extends ListingsSavedAggregateArgs>(args: Subset<T, ListingsSavedAggregateArgs>): Prisma.PrismaPromise<GetListingsSavedAggregateType<T>>
 
     /**
-     * Group by SavedProperty.
+     * Group by ListingsSaved.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {SavedPropertyGroupByArgs} args - Group by arguments.
+     * @param {ListingsSavedGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -31057,14 +31057,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends SavedPropertyGroupByArgs,
+      T extends ListingsSavedGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: SavedPropertyGroupByArgs['orderBy'] }
-        : { orderBy?: SavedPropertyGroupByArgs['orderBy'] },
+        ? { orderBy: ListingsSavedGroupByArgs['orderBy'] }
+        : { orderBy?: ListingsSavedGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -31113,20 +31113,20 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, SavedPropertyGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSavedPropertyGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, ListingsSavedGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetListingsSavedGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the SavedProperty model
+   * Fields of the ListingsSaved model
    */
-  readonly fields: SavedPropertyFieldRefs;
+  readonly fields: ListingsSavedFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for SavedProperty.
+   * The delegate class that acts as a "Promise-like" for ListingsSaved.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__SavedPropertyClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__ListingsSavedClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     property<T extends ListingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ListingDefaultArgs<ExtArgs>>): Prisma__ListingClient<$Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
@@ -31155,429 +31155,429 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the SavedProperty model
+   * Fields of the ListingsSaved model
    */
-  interface SavedPropertyFieldRefs {
-    readonly id: FieldRef<"SavedProperty", 'String'>
-    readonly accountId: FieldRef<"SavedProperty", 'String'>
-    readonly propertyId: FieldRef<"SavedProperty", 'String'>
-    readonly savedAt: FieldRef<"SavedProperty", 'DateTime'>
+  interface ListingsSavedFieldRefs {
+    readonly id: FieldRef<"ListingsSaved", 'String'>
+    readonly accountId: FieldRef<"ListingsSaved", 'String'>
+    readonly propertyId: FieldRef<"ListingsSaved", 'String'>
+    readonly savedAt: FieldRef<"ListingsSaved", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * SavedProperty findUnique
+   * ListingsSaved findUnique
    */
-  export type SavedPropertyFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsSavedFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SavedProperty
+     * Select specific fields to fetch from the ListingsSaved
      */
-    select?: SavedPropertySelect<ExtArgs> | null
+    select?: ListingsSavedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SavedProperty
+     * Omit specific fields from the ListingsSaved
      */
-    omit?: SavedPropertyOmit<ExtArgs> | null
+    omit?: ListingsSavedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SavedPropertyInclude<ExtArgs> | null
+    include?: ListingsSavedInclude<ExtArgs> | null
     /**
-     * Filter, which SavedProperty to fetch.
+     * Filter, which ListingsSaved to fetch.
      */
-    where: SavedPropertyWhereUniqueInput
+    where: ListingsSavedWhereUniqueInput
   }
 
   /**
-   * SavedProperty findUniqueOrThrow
+   * ListingsSaved findUniqueOrThrow
    */
-  export type SavedPropertyFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsSavedFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SavedProperty
+     * Select specific fields to fetch from the ListingsSaved
      */
-    select?: SavedPropertySelect<ExtArgs> | null
+    select?: ListingsSavedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SavedProperty
+     * Omit specific fields from the ListingsSaved
      */
-    omit?: SavedPropertyOmit<ExtArgs> | null
+    omit?: ListingsSavedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SavedPropertyInclude<ExtArgs> | null
+    include?: ListingsSavedInclude<ExtArgs> | null
     /**
-     * Filter, which SavedProperty to fetch.
+     * Filter, which ListingsSaved to fetch.
      */
-    where: SavedPropertyWhereUniqueInput
+    where: ListingsSavedWhereUniqueInput
   }
 
   /**
-   * SavedProperty findFirst
+   * ListingsSaved findFirst
    */
-  export type SavedPropertyFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsSavedFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SavedProperty
+     * Select specific fields to fetch from the ListingsSaved
      */
-    select?: SavedPropertySelect<ExtArgs> | null
+    select?: ListingsSavedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SavedProperty
+     * Omit specific fields from the ListingsSaved
      */
-    omit?: SavedPropertyOmit<ExtArgs> | null
+    omit?: ListingsSavedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SavedPropertyInclude<ExtArgs> | null
+    include?: ListingsSavedInclude<ExtArgs> | null
     /**
-     * Filter, which SavedProperty to fetch.
+     * Filter, which ListingsSaved to fetch.
      */
-    where?: SavedPropertyWhereInput
+    where?: ListingsSavedWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of SavedProperties to fetch.
+     * Determine the order of ListingsSaveds to fetch.
      */
-    orderBy?: SavedPropertyOrderByWithRelationInput | SavedPropertyOrderByWithRelationInput[]
+    orderBy?: ListingsSavedOrderByWithRelationInput | ListingsSavedOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for SavedProperties.
+     * Sets the position for searching for ListingsSaveds.
      */
-    cursor?: SavedPropertyWhereUniqueInput
+    cursor?: ListingsSavedWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` SavedProperties from the position of the cursor.
+     * Take `±n` ListingsSaveds from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` SavedProperties.
+     * Skip the first `n` ListingsSaveds.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of SavedProperties.
+     * Filter by unique combinations of ListingsSaveds.
      */
-    distinct?: SavedPropertyScalarFieldEnum | SavedPropertyScalarFieldEnum[]
+    distinct?: ListingsSavedScalarFieldEnum | ListingsSavedScalarFieldEnum[]
   }
 
   /**
-   * SavedProperty findFirstOrThrow
+   * ListingsSaved findFirstOrThrow
    */
-  export type SavedPropertyFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsSavedFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SavedProperty
+     * Select specific fields to fetch from the ListingsSaved
      */
-    select?: SavedPropertySelect<ExtArgs> | null
+    select?: ListingsSavedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SavedProperty
+     * Omit specific fields from the ListingsSaved
      */
-    omit?: SavedPropertyOmit<ExtArgs> | null
+    omit?: ListingsSavedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SavedPropertyInclude<ExtArgs> | null
+    include?: ListingsSavedInclude<ExtArgs> | null
     /**
-     * Filter, which SavedProperty to fetch.
+     * Filter, which ListingsSaved to fetch.
      */
-    where?: SavedPropertyWhereInput
+    where?: ListingsSavedWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of SavedProperties to fetch.
+     * Determine the order of ListingsSaveds to fetch.
      */
-    orderBy?: SavedPropertyOrderByWithRelationInput | SavedPropertyOrderByWithRelationInput[]
+    orderBy?: ListingsSavedOrderByWithRelationInput | ListingsSavedOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for SavedProperties.
+     * Sets the position for searching for ListingsSaveds.
      */
-    cursor?: SavedPropertyWhereUniqueInput
+    cursor?: ListingsSavedWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` SavedProperties from the position of the cursor.
+     * Take `±n` ListingsSaveds from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` SavedProperties.
+     * Skip the first `n` ListingsSaveds.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of SavedProperties.
+     * Filter by unique combinations of ListingsSaveds.
      */
-    distinct?: SavedPropertyScalarFieldEnum | SavedPropertyScalarFieldEnum[]
+    distinct?: ListingsSavedScalarFieldEnum | ListingsSavedScalarFieldEnum[]
   }
 
   /**
-   * SavedProperty findMany
+   * ListingsSaved findMany
    */
-  export type SavedPropertyFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsSavedFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SavedProperty
+     * Select specific fields to fetch from the ListingsSaved
      */
-    select?: SavedPropertySelect<ExtArgs> | null
+    select?: ListingsSavedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SavedProperty
+     * Omit specific fields from the ListingsSaved
      */
-    omit?: SavedPropertyOmit<ExtArgs> | null
+    omit?: ListingsSavedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SavedPropertyInclude<ExtArgs> | null
+    include?: ListingsSavedInclude<ExtArgs> | null
     /**
-     * Filter, which SavedProperties to fetch.
+     * Filter, which ListingsSaveds to fetch.
      */
-    where?: SavedPropertyWhereInput
+    where?: ListingsSavedWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of SavedProperties to fetch.
+     * Determine the order of ListingsSaveds to fetch.
      */
-    orderBy?: SavedPropertyOrderByWithRelationInput | SavedPropertyOrderByWithRelationInput[]
+    orderBy?: ListingsSavedOrderByWithRelationInput | ListingsSavedOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing SavedProperties.
+     * Sets the position for listing ListingsSaveds.
      */
-    cursor?: SavedPropertyWhereUniqueInput
+    cursor?: ListingsSavedWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` SavedProperties from the position of the cursor.
+     * Take `±n` ListingsSaveds from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` SavedProperties.
+     * Skip the first `n` ListingsSaveds.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of SavedProperties.
+     * Filter by unique combinations of ListingsSaveds.
      */
-    distinct?: SavedPropertyScalarFieldEnum | SavedPropertyScalarFieldEnum[]
+    distinct?: ListingsSavedScalarFieldEnum | ListingsSavedScalarFieldEnum[]
   }
 
   /**
-   * SavedProperty create
+   * ListingsSaved create
    */
-  export type SavedPropertyCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsSavedCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SavedProperty
+     * Select specific fields to fetch from the ListingsSaved
      */
-    select?: SavedPropertySelect<ExtArgs> | null
+    select?: ListingsSavedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SavedProperty
+     * Omit specific fields from the ListingsSaved
      */
-    omit?: SavedPropertyOmit<ExtArgs> | null
+    omit?: ListingsSavedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SavedPropertyInclude<ExtArgs> | null
+    include?: ListingsSavedInclude<ExtArgs> | null
     /**
-     * The data needed to create a SavedProperty.
+     * The data needed to create a ListingsSaved.
      */
-    data: XOR<SavedPropertyCreateInput, SavedPropertyUncheckedCreateInput>
+    data: XOR<ListingsSavedCreateInput, ListingsSavedUncheckedCreateInput>
   }
 
   /**
-   * SavedProperty createMany
+   * ListingsSaved createMany
    */
-  export type SavedPropertyCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsSavedCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many SavedProperties.
+     * The data used to create many ListingsSaveds.
      */
-    data: SavedPropertyCreateManyInput | SavedPropertyCreateManyInput[]
+    data: ListingsSavedCreateManyInput | ListingsSavedCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * SavedProperty createManyAndReturn
+   * ListingsSaved createManyAndReturn
    */
-  export type SavedPropertyCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsSavedCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SavedProperty
+     * Select specific fields to fetch from the ListingsSaved
      */
-    select?: SavedPropertySelectCreateManyAndReturn<ExtArgs> | null
+    select?: ListingsSavedSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the SavedProperty
+     * Omit specific fields from the ListingsSaved
      */
-    omit?: SavedPropertyOmit<ExtArgs> | null
+    omit?: ListingsSavedOmit<ExtArgs> | null
     /**
-     * The data used to create many SavedProperties.
+     * The data used to create many ListingsSaveds.
      */
-    data: SavedPropertyCreateManyInput | SavedPropertyCreateManyInput[]
+    data: ListingsSavedCreateManyInput | ListingsSavedCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SavedPropertyIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: ListingsSavedIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * SavedProperty update
+   * ListingsSaved update
    */
-  export type SavedPropertyUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsSavedUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SavedProperty
+     * Select specific fields to fetch from the ListingsSaved
      */
-    select?: SavedPropertySelect<ExtArgs> | null
+    select?: ListingsSavedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SavedProperty
+     * Omit specific fields from the ListingsSaved
      */
-    omit?: SavedPropertyOmit<ExtArgs> | null
+    omit?: ListingsSavedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SavedPropertyInclude<ExtArgs> | null
+    include?: ListingsSavedInclude<ExtArgs> | null
     /**
-     * The data needed to update a SavedProperty.
+     * The data needed to update a ListingsSaved.
      */
-    data: XOR<SavedPropertyUpdateInput, SavedPropertyUncheckedUpdateInput>
+    data: XOR<ListingsSavedUpdateInput, ListingsSavedUncheckedUpdateInput>
     /**
-     * Choose, which SavedProperty to update.
+     * Choose, which ListingsSaved to update.
      */
-    where: SavedPropertyWhereUniqueInput
+    where: ListingsSavedWhereUniqueInput
   }
 
   /**
-   * SavedProperty updateMany
+   * ListingsSaved updateMany
    */
-  export type SavedPropertyUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsSavedUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update SavedProperties.
+     * The data used to update ListingsSaveds.
      */
-    data: XOR<SavedPropertyUpdateManyMutationInput, SavedPropertyUncheckedUpdateManyInput>
+    data: XOR<ListingsSavedUpdateManyMutationInput, ListingsSavedUncheckedUpdateManyInput>
     /**
-     * Filter which SavedProperties to update
+     * Filter which ListingsSaveds to update
      */
-    where?: SavedPropertyWhereInput
+    where?: ListingsSavedWhereInput
     /**
-     * Limit how many SavedProperties to update.
+     * Limit how many ListingsSaveds to update.
      */
     limit?: number
   }
 
   /**
-   * SavedProperty updateManyAndReturn
+   * ListingsSaved updateManyAndReturn
    */
-  export type SavedPropertyUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsSavedUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SavedProperty
+     * Select specific fields to fetch from the ListingsSaved
      */
-    select?: SavedPropertySelectUpdateManyAndReturn<ExtArgs> | null
+    select?: ListingsSavedSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the SavedProperty
+     * Omit specific fields from the ListingsSaved
      */
-    omit?: SavedPropertyOmit<ExtArgs> | null
+    omit?: ListingsSavedOmit<ExtArgs> | null
     /**
-     * The data used to update SavedProperties.
+     * The data used to update ListingsSaveds.
      */
-    data: XOR<SavedPropertyUpdateManyMutationInput, SavedPropertyUncheckedUpdateManyInput>
+    data: XOR<ListingsSavedUpdateManyMutationInput, ListingsSavedUncheckedUpdateManyInput>
     /**
-     * Filter which SavedProperties to update
+     * Filter which ListingsSaveds to update
      */
-    where?: SavedPropertyWhereInput
+    where?: ListingsSavedWhereInput
     /**
-     * Limit how many SavedProperties to update.
+     * Limit how many ListingsSaveds to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SavedPropertyIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: ListingsSavedIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * SavedProperty upsert
+   * ListingsSaved upsert
    */
-  export type SavedPropertyUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsSavedUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SavedProperty
+     * Select specific fields to fetch from the ListingsSaved
      */
-    select?: SavedPropertySelect<ExtArgs> | null
+    select?: ListingsSavedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SavedProperty
+     * Omit specific fields from the ListingsSaved
      */
-    omit?: SavedPropertyOmit<ExtArgs> | null
+    omit?: ListingsSavedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SavedPropertyInclude<ExtArgs> | null
+    include?: ListingsSavedInclude<ExtArgs> | null
     /**
-     * The filter to search for the SavedProperty to update in case it exists.
+     * The filter to search for the ListingsSaved to update in case it exists.
      */
-    where: SavedPropertyWhereUniqueInput
+    where: ListingsSavedWhereUniqueInput
     /**
-     * In case the SavedProperty found by the `where` argument doesn't exist, create a new SavedProperty with this data.
+     * In case the ListingsSaved found by the `where` argument doesn't exist, create a new ListingsSaved with this data.
      */
-    create: XOR<SavedPropertyCreateInput, SavedPropertyUncheckedCreateInput>
+    create: XOR<ListingsSavedCreateInput, ListingsSavedUncheckedCreateInput>
     /**
-     * In case the SavedProperty was found with the provided `where` argument, update it with this data.
+     * In case the ListingsSaved was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<SavedPropertyUpdateInput, SavedPropertyUncheckedUpdateInput>
+    update: XOR<ListingsSavedUpdateInput, ListingsSavedUncheckedUpdateInput>
   }
 
   /**
-   * SavedProperty delete
+   * ListingsSaved delete
    */
-  export type SavedPropertyDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsSavedDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SavedProperty
+     * Select specific fields to fetch from the ListingsSaved
      */
-    select?: SavedPropertySelect<ExtArgs> | null
+    select?: ListingsSavedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SavedProperty
+     * Omit specific fields from the ListingsSaved
      */
-    omit?: SavedPropertyOmit<ExtArgs> | null
+    omit?: ListingsSavedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SavedPropertyInclude<ExtArgs> | null
+    include?: ListingsSavedInclude<ExtArgs> | null
     /**
-     * Filter which SavedProperty to delete.
+     * Filter which ListingsSaved to delete.
      */
-    where: SavedPropertyWhereUniqueInput
+    where: ListingsSavedWhereUniqueInput
   }
 
   /**
-   * SavedProperty deleteMany
+   * ListingsSaved deleteMany
    */
-  export type SavedPropertyDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsSavedDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which SavedProperties to delete
+     * Filter which ListingsSaveds to delete
      */
-    where?: SavedPropertyWhereInput
+    where?: ListingsSavedWhereInput
     /**
-     * Limit how many SavedProperties to delete.
+     * Limit how many ListingsSaveds to delete.
      */
     limit?: number
   }
 
   /**
-   * SavedProperty without action
+   * ListingsSaved without action
    */
-  export type SavedPropertyDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsSavedDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SavedProperty
+     * Select specific fields to fetch from the ListingsSaved
      */
-    select?: SavedPropertySelect<ExtArgs> | null
+    select?: ListingsSavedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SavedProperty
+     * Omit specific fields from the ListingsSaved
      */
-    omit?: SavedPropertyOmit<ExtArgs> | null
+    omit?: ListingsSavedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SavedPropertyInclude<ExtArgs> | null
+    include?: ListingsSavedInclude<ExtArgs> | null
   }
 
 
@@ -60660,14 +60660,14 @@ export namespace Prisma {
   export type NaturalSearchScalarFieldEnum = (typeof NaturalSearchScalarFieldEnum)[keyof typeof NaturalSearchScalarFieldEnum]
 
 
-  export const SavedPropertyScalarFieldEnum: {
+  export const ListingsSavedScalarFieldEnum: {
     id: 'id',
     accountId: 'accountId',
     propertyId: 'propertyId',
     savedAt: 'savedAt'
   };
 
-  export type SavedPropertyScalarFieldEnum = (typeof SavedPropertyScalarFieldEnum)[keyof typeof SavedPropertyScalarFieldEnum]
+  export type ListingsSavedScalarFieldEnum = (typeof ListingsSavedScalarFieldEnum)[keyof typeof ListingsSavedScalarFieldEnum]
 
 
   export const ListingsViewScalarFieldEnum: {
@@ -61607,7 +61607,7 @@ export namespace Prisma {
     changes?: ListingChangeListRelationFilter
     links?: PropertyLinkListRelationFilter
     linkedBy?: PropertyLinkListRelationFilter
-    savedBy?: SavedPropertyListRelationFilter
+    savedBy?: ListingsSavedListRelationFilter
     views?: ListingsViewListRelationFilter
     competitionMaps?: PropertyCompetitionMapListRelationFilter
     representatives?: ListingRepresentativeListRelationFilter
@@ -61654,7 +61654,7 @@ export namespace Prisma {
     changes?: ListingChangeOrderByRelationAggregateInput
     links?: PropertyLinkOrderByRelationAggregateInput
     linkedBy?: PropertyLinkOrderByRelationAggregateInput
-    savedBy?: SavedPropertyOrderByRelationAggregateInput
+    savedBy?: ListingsSavedOrderByRelationAggregateInput
     views?: ListingsViewOrderByRelationAggregateInput
     competitionMaps?: PropertyCompetitionMapOrderByRelationAggregateInput
     representatives?: ListingRepresentativeOrderByRelationAggregateInput
@@ -61704,7 +61704,7 @@ export namespace Prisma {
     changes?: ListingChangeListRelationFilter
     links?: PropertyLinkListRelationFilter
     linkedBy?: PropertyLinkListRelationFilter
-    savedBy?: SavedPropertyListRelationFilter
+    savedBy?: ListingsSavedListRelationFilter
     views?: ListingsViewListRelationFilter
     competitionMaps?: PropertyCompetitionMapListRelationFilter
     representatives?: ListingRepresentativeListRelationFilter
@@ -63083,18 +63083,18 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"NaturalSearch"> | Date | string
   }
 
-  export type SavedPropertyWhereInput = {
-    AND?: SavedPropertyWhereInput | SavedPropertyWhereInput[]
-    OR?: SavedPropertyWhereInput[]
-    NOT?: SavedPropertyWhereInput | SavedPropertyWhereInput[]
-    id?: StringFilter<"SavedProperty"> | string
-    accountId?: StringFilter<"SavedProperty"> | string
-    propertyId?: StringFilter<"SavedProperty"> | string
-    savedAt?: DateTimeFilter<"SavedProperty"> | Date | string
+  export type ListingsSavedWhereInput = {
+    AND?: ListingsSavedWhereInput | ListingsSavedWhereInput[]
+    OR?: ListingsSavedWhereInput[]
+    NOT?: ListingsSavedWhereInput | ListingsSavedWhereInput[]
+    id?: StringFilter<"ListingsSaved"> | string
+    accountId?: StringFilter<"ListingsSaved"> | string
+    propertyId?: StringFilter<"ListingsSaved"> | string
+    savedAt?: DateTimeFilter<"ListingsSaved"> | Date | string
     property?: XOR<ListingScalarRelationFilter, ListingWhereInput>
   }
 
-  export type SavedPropertyOrderByWithRelationInput = {
+  export type ListingsSavedOrderByWithRelationInput = {
     id?: SortOrder
     accountId?: SortOrder
     propertyId?: SortOrder
@@ -63102,35 +63102,35 @@ export namespace Prisma {
     property?: ListingOrderByWithRelationInput
   }
 
-  export type SavedPropertyWhereUniqueInput = Prisma.AtLeast<{
+  export type ListingsSavedWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    AND?: SavedPropertyWhereInput | SavedPropertyWhereInput[]
-    OR?: SavedPropertyWhereInput[]
-    NOT?: SavedPropertyWhereInput | SavedPropertyWhereInput[]
-    accountId?: StringFilter<"SavedProperty"> | string
-    propertyId?: StringFilter<"SavedProperty"> | string
-    savedAt?: DateTimeFilter<"SavedProperty"> | Date | string
+    AND?: ListingsSavedWhereInput | ListingsSavedWhereInput[]
+    OR?: ListingsSavedWhereInput[]
+    NOT?: ListingsSavedWhereInput | ListingsSavedWhereInput[]
+    accountId?: StringFilter<"ListingsSaved"> | string
+    propertyId?: StringFilter<"ListingsSaved"> | string
+    savedAt?: DateTimeFilter<"ListingsSaved"> | Date | string
     property?: XOR<ListingScalarRelationFilter, ListingWhereInput>
   }, "id">
 
-  export type SavedPropertyOrderByWithAggregationInput = {
+  export type ListingsSavedOrderByWithAggregationInput = {
     id?: SortOrder
     accountId?: SortOrder
     propertyId?: SortOrder
     savedAt?: SortOrder
-    _count?: SavedPropertyCountOrderByAggregateInput
-    _max?: SavedPropertyMaxOrderByAggregateInput
-    _min?: SavedPropertyMinOrderByAggregateInput
+    _count?: ListingsSavedCountOrderByAggregateInput
+    _max?: ListingsSavedMaxOrderByAggregateInput
+    _min?: ListingsSavedMinOrderByAggregateInput
   }
 
-  export type SavedPropertyScalarWhereWithAggregatesInput = {
-    AND?: SavedPropertyScalarWhereWithAggregatesInput | SavedPropertyScalarWhereWithAggregatesInput[]
-    OR?: SavedPropertyScalarWhereWithAggregatesInput[]
-    NOT?: SavedPropertyScalarWhereWithAggregatesInput | SavedPropertyScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"SavedProperty"> | string
-    accountId?: StringWithAggregatesFilter<"SavedProperty"> | string
-    propertyId?: StringWithAggregatesFilter<"SavedProperty"> | string
-    savedAt?: DateTimeWithAggregatesFilter<"SavedProperty"> | Date | string
+  export type ListingsSavedScalarWhereWithAggregatesInput = {
+    AND?: ListingsSavedScalarWhereWithAggregatesInput | ListingsSavedScalarWhereWithAggregatesInput[]
+    OR?: ListingsSavedScalarWhereWithAggregatesInput[]
+    NOT?: ListingsSavedScalarWhereWithAggregatesInput | ListingsSavedScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ListingsSaved"> | string
+    accountId?: StringWithAggregatesFilter<"ListingsSaved"> | string
+    propertyId?: StringWithAggregatesFilter<"ListingsSaved"> | string
+    savedAt?: DateTimeWithAggregatesFilter<"ListingsSaved"> | Date | string
   }
 
   export type ListingsViewWhereInput = {
@@ -65345,7 +65345,7 @@ export namespace Prisma {
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
@@ -65391,7 +65391,7 @@ export namespace Prisma {
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
@@ -65437,7 +65437,7 @@ export namespace Prisma {
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
@@ -65483,7 +65483,7 @@ export namespace Prisma {
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
@@ -66989,48 +66989,48 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type SavedPropertyCreateInput = {
+  export type ListingsSavedCreateInput = {
     id?: string
     accountId: string
     savedAt?: Date | string
     property: ListingCreateNestedOneWithoutSavedByInput
   }
 
-  export type SavedPropertyUncheckedCreateInput = {
+  export type ListingsSavedUncheckedCreateInput = {
     id?: string
     accountId: string
     propertyId: string
     savedAt?: Date | string
   }
 
-  export type SavedPropertyUpdateInput = {
+  export type ListingsSavedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     accountId?: StringFieldUpdateOperationsInput | string
     savedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     property?: ListingUpdateOneRequiredWithoutSavedByNestedInput
   }
 
-  export type SavedPropertyUncheckedUpdateInput = {
+  export type ListingsSavedUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     accountId?: StringFieldUpdateOperationsInput | string
     propertyId?: StringFieldUpdateOperationsInput | string
     savedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type SavedPropertyCreateManyInput = {
+  export type ListingsSavedCreateManyInput = {
     id?: string
     accountId: string
     propertyId: string
     savedAt?: Date | string
   }
 
-  export type SavedPropertyUpdateManyMutationInput = {
+  export type ListingsSavedUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     accountId?: StringFieldUpdateOperationsInput | string
     savedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type SavedPropertyUncheckedUpdateManyInput = {
+  export type ListingsSavedUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     accountId?: StringFieldUpdateOperationsInput | string
     propertyId?: StringFieldUpdateOperationsInput | string
@@ -69669,10 +69669,10 @@ export namespace Prisma {
     none?: PropertyLinkWhereInput
   }
 
-  export type SavedPropertyListRelationFilter = {
-    every?: SavedPropertyWhereInput
-    some?: SavedPropertyWhereInput
-    none?: SavedPropertyWhereInput
+  export type ListingsSavedListRelationFilter = {
+    every?: ListingsSavedWhereInput
+    some?: ListingsSavedWhereInput
+    none?: ListingsSavedWhereInput
   }
 
   export type ListingsViewListRelationFilter = {
@@ -69699,7 +69699,7 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type SavedPropertyOrderByRelationAggregateInput = {
+  export type ListingsSavedOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -70778,21 +70778,21 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
-  export type SavedPropertyCountOrderByAggregateInput = {
+  export type ListingsSavedCountOrderByAggregateInput = {
     id?: SortOrder
     accountId?: SortOrder
     propertyId?: SortOrder
     savedAt?: SortOrder
   }
 
-  export type SavedPropertyMaxOrderByAggregateInput = {
+  export type ListingsSavedMaxOrderByAggregateInput = {
     id?: SortOrder
     accountId?: SortOrder
     propertyId?: SortOrder
     savedAt?: SortOrder
   }
 
-  export type SavedPropertyMinOrderByAggregateInput = {
+  export type ListingsSavedMinOrderByAggregateInput = {
     id?: SortOrder
     accountId?: SortOrder
     propertyId?: SortOrder
@@ -72652,11 +72652,11 @@ export namespace Prisma {
     connect?: PropertyLinkWhereUniqueInput | PropertyLinkWhereUniqueInput[]
   }
 
-  export type SavedPropertyCreateNestedManyWithoutPropertyInput = {
-    create?: XOR<SavedPropertyCreateWithoutPropertyInput, SavedPropertyUncheckedCreateWithoutPropertyInput> | SavedPropertyCreateWithoutPropertyInput[] | SavedPropertyUncheckedCreateWithoutPropertyInput[]
-    connectOrCreate?: SavedPropertyCreateOrConnectWithoutPropertyInput | SavedPropertyCreateOrConnectWithoutPropertyInput[]
-    createMany?: SavedPropertyCreateManyPropertyInputEnvelope
-    connect?: SavedPropertyWhereUniqueInput | SavedPropertyWhereUniqueInput[]
+  export type ListingsSavedCreateNestedManyWithoutPropertyInput = {
+    create?: XOR<ListingsSavedCreateWithoutPropertyInput, ListingsSavedUncheckedCreateWithoutPropertyInput> | ListingsSavedCreateWithoutPropertyInput[] | ListingsSavedUncheckedCreateWithoutPropertyInput[]
+    connectOrCreate?: ListingsSavedCreateOrConnectWithoutPropertyInput | ListingsSavedCreateOrConnectWithoutPropertyInput[]
+    createMany?: ListingsSavedCreateManyPropertyInputEnvelope
+    connect?: ListingsSavedWhereUniqueInput | ListingsSavedWhereUniqueInput[]
   }
 
   export type ListingsViewCreateNestedManyWithoutPropertyInput = {
@@ -72739,11 +72739,11 @@ export namespace Prisma {
     connect?: PropertyLinkWhereUniqueInput | PropertyLinkWhereUniqueInput[]
   }
 
-  export type SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput = {
-    create?: XOR<SavedPropertyCreateWithoutPropertyInput, SavedPropertyUncheckedCreateWithoutPropertyInput> | SavedPropertyCreateWithoutPropertyInput[] | SavedPropertyUncheckedCreateWithoutPropertyInput[]
-    connectOrCreate?: SavedPropertyCreateOrConnectWithoutPropertyInput | SavedPropertyCreateOrConnectWithoutPropertyInput[]
-    createMany?: SavedPropertyCreateManyPropertyInputEnvelope
-    connect?: SavedPropertyWhereUniqueInput | SavedPropertyWhereUniqueInput[]
+  export type ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput = {
+    create?: XOR<ListingsSavedCreateWithoutPropertyInput, ListingsSavedUncheckedCreateWithoutPropertyInput> | ListingsSavedCreateWithoutPropertyInput[] | ListingsSavedUncheckedCreateWithoutPropertyInput[]
+    connectOrCreate?: ListingsSavedCreateOrConnectWithoutPropertyInput | ListingsSavedCreateOrConnectWithoutPropertyInput[]
+    createMany?: ListingsSavedCreateManyPropertyInputEnvelope
+    connect?: ListingsSavedWhereUniqueInput | ListingsSavedWhereUniqueInput[]
   }
 
   export type ListingsViewUncheckedCreateNestedManyWithoutPropertyInput = {
@@ -72927,18 +72927,18 @@ export namespace Prisma {
     deleteMany?: PropertyLinkScalarWhereInput | PropertyLinkScalarWhereInput[]
   }
 
-  export type SavedPropertyUpdateManyWithoutPropertyNestedInput = {
-    create?: XOR<SavedPropertyCreateWithoutPropertyInput, SavedPropertyUncheckedCreateWithoutPropertyInput> | SavedPropertyCreateWithoutPropertyInput[] | SavedPropertyUncheckedCreateWithoutPropertyInput[]
-    connectOrCreate?: SavedPropertyCreateOrConnectWithoutPropertyInput | SavedPropertyCreateOrConnectWithoutPropertyInput[]
-    upsert?: SavedPropertyUpsertWithWhereUniqueWithoutPropertyInput | SavedPropertyUpsertWithWhereUniqueWithoutPropertyInput[]
-    createMany?: SavedPropertyCreateManyPropertyInputEnvelope
-    set?: SavedPropertyWhereUniqueInput | SavedPropertyWhereUniqueInput[]
-    disconnect?: SavedPropertyWhereUniqueInput | SavedPropertyWhereUniqueInput[]
-    delete?: SavedPropertyWhereUniqueInput | SavedPropertyWhereUniqueInput[]
-    connect?: SavedPropertyWhereUniqueInput | SavedPropertyWhereUniqueInput[]
-    update?: SavedPropertyUpdateWithWhereUniqueWithoutPropertyInput | SavedPropertyUpdateWithWhereUniqueWithoutPropertyInput[]
-    updateMany?: SavedPropertyUpdateManyWithWhereWithoutPropertyInput | SavedPropertyUpdateManyWithWhereWithoutPropertyInput[]
-    deleteMany?: SavedPropertyScalarWhereInput | SavedPropertyScalarWhereInput[]
+  export type ListingsSavedUpdateManyWithoutPropertyNestedInput = {
+    create?: XOR<ListingsSavedCreateWithoutPropertyInput, ListingsSavedUncheckedCreateWithoutPropertyInput> | ListingsSavedCreateWithoutPropertyInput[] | ListingsSavedUncheckedCreateWithoutPropertyInput[]
+    connectOrCreate?: ListingsSavedCreateOrConnectWithoutPropertyInput | ListingsSavedCreateOrConnectWithoutPropertyInput[]
+    upsert?: ListingsSavedUpsertWithWhereUniqueWithoutPropertyInput | ListingsSavedUpsertWithWhereUniqueWithoutPropertyInput[]
+    createMany?: ListingsSavedCreateManyPropertyInputEnvelope
+    set?: ListingsSavedWhereUniqueInput | ListingsSavedWhereUniqueInput[]
+    disconnect?: ListingsSavedWhereUniqueInput | ListingsSavedWhereUniqueInput[]
+    delete?: ListingsSavedWhereUniqueInput | ListingsSavedWhereUniqueInput[]
+    connect?: ListingsSavedWhereUniqueInput | ListingsSavedWhereUniqueInput[]
+    update?: ListingsSavedUpdateWithWhereUniqueWithoutPropertyInput | ListingsSavedUpdateWithWhereUniqueWithoutPropertyInput[]
+    updateMany?: ListingsSavedUpdateManyWithWhereWithoutPropertyInput | ListingsSavedUpdateManyWithWhereWithoutPropertyInput[]
+    deleteMany?: ListingsSavedScalarWhereInput | ListingsSavedScalarWhereInput[]
   }
 
   export type ListingsViewUpdateManyWithoutPropertyNestedInput = {
@@ -73093,18 +73093,18 @@ export namespace Prisma {
     deleteMany?: PropertyLinkScalarWhereInput | PropertyLinkScalarWhereInput[]
   }
 
-  export type SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput = {
-    create?: XOR<SavedPropertyCreateWithoutPropertyInput, SavedPropertyUncheckedCreateWithoutPropertyInput> | SavedPropertyCreateWithoutPropertyInput[] | SavedPropertyUncheckedCreateWithoutPropertyInput[]
-    connectOrCreate?: SavedPropertyCreateOrConnectWithoutPropertyInput | SavedPropertyCreateOrConnectWithoutPropertyInput[]
-    upsert?: SavedPropertyUpsertWithWhereUniqueWithoutPropertyInput | SavedPropertyUpsertWithWhereUniqueWithoutPropertyInput[]
-    createMany?: SavedPropertyCreateManyPropertyInputEnvelope
-    set?: SavedPropertyWhereUniqueInput | SavedPropertyWhereUniqueInput[]
-    disconnect?: SavedPropertyWhereUniqueInput | SavedPropertyWhereUniqueInput[]
-    delete?: SavedPropertyWhereUniqueInput | SavedPropertyWhereUniqueInput[]
-    connect?: SavedPropertyWhereUniqueInput | SavedPropertyWhereUniqueInput[]
-    update?: SavedPropertyUpdateWithWhereUniqueWithoutPropertyInput | SavedPropertyUpdateWithWhereUniqueWithoutPropertyInput[]
-    updateMany?: SavedPropertyUpdateManyWithWhereWithoutPropertyInput | SavedPropertyUpdateManyWithWhereWithoutPropertyInput[]
-    deleteMany?: SavedPropertyScalarWhereInput | SavedPropertyScalarWhereInput[]
+  export type ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput = {
+    create?: XOR<ListingsSavedCreateWithoutPropertyInput, ListingsSavedUncheckedCreateWithoutPropertyInput> | ListingsSavedCreateWithoutPropertyInput[] | ListingsSavedUncheckedCreateWithoutPropertyInput[]
+    connectOrCreate?: ListingsSavedCreateOrConnectWithoutPropertyInput | ListingsSavedCreateOrConnectWithoutPropertyInput[]
+    upsert?: ListingsSavedUpsertWithWhereUniqueWithoutPropertyInput | ListingsSavedUpsertWithWhereUniqueWithoutPropertyInput[]
+    createMany?: ListingsSavedCreateManyPropertyInputEnvelope
+    set?: ListingsSavedWhereUniqueInput | ListingsSavedWhereUniqueInput[]
+    disconnect?: ListingsSavedWhereUniqueInput | ListingsSavedWhereUniqueInput[]
+    delete?: ListingsSavedWhereUniqueInput | ListingsSavedWhereUniqueInput[]
+    connect?: ListingsSavedWhereUniqueInput | ListingsSavedWhereUniqueInput[]
+    update?: ListingsSavedUpdateWithWhereUniqueWithoutPropertyInput | ListingsSavedUpdateWithWhereUniqueWithoutPropertyInput[]
+    updateMany?: ListingsSavedUpdateManyWithWhereWithoutPropertyInput | ListingsSavedUpdateManyWithWhereWithoutPropertyInput[]
+    deleteMany?: ListingsSavedScalarWhereInput | ListingsSavedScalarWhereInput[]
   }
 
   export type ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput = {
@@ -75185,7 +75185,7 @@ export namespace Prisma {
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
@@ -75230,7 +75230,7 @@ export namespace Prisma {
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
@@ -76542,25 +76542,25 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type SavedPropertyCreateWithoutPropertyInput = {
+  export type ListingsSavedCreateWithoutPropertyInput = {
     id?: string
     accountId: string
     savedAt?: Date | string
   }
 
-  export type SavedPropertyUncheckedCreateWithoutPropertyInput = {
+  export type ListingsSavedUncheckedCreateWithoutPropertyInput = {
     id?: string
     accountId: string
     savedAt?: Date | string
   }
 
-  export type SavedPropertyCreateOrConnectWithoutPropertyInput = {
-    where: SavedPropertyWhereUniqueInput
-    create: XOR<SavedPropertyCreateWithoutPropertyInput, SavedPropertyUncheckedCreateWithoutPropertyInput>
+  export type ListingsSavedCreateOrConnectWithoutPropertyInput = {
+    where: ListingsSavedWhereUniqueInput
+    create: XOR<ListingsSavedCreateWithoutPropertyInput, ListingsSavedUncheckedCreateWithoutPropertyInput>
   }
 
-  export type SavedPropertyCreateManyPropertyInputEnvelope = {
-    data: SavedPropertyCreateManyPropertyInput | SavedPropertyCreateManyPropertyInput[]
+  export type ListingsSavedCreateManyPropertyInputEnvelope = {
+    data: ListingsSavedCreateManyPropertyInput | ListingsSavedCreateManyPropertyInput[]
     skipDuplicates?: boolean
   }
 
@@ -76935,30 +76935,30 @@ export namespace Prisma {
     data: XOR<PropertyLinkUpdateManyMutationInput, PropertyLinkUncheckedUpdateManyWithoutSecondaryInput>
   }
 
-  export type SavedPropertyUpsertWithWhereUniqueWithoutPropertyInput = {
-    where: SavedPropertyWhereUniqueInput
-    update: XOR<SavedPropertyUpdateWithoutPropertyInput, SavedPropertyUncheckedUpdateWithoutPropertyInput>
-    create: XOR<SavedPropertyCreateWithoutPropertyInput, SavedPropertyUncheckedCreateWithoutPropertyInput>
+  export type ListingsSavedUpsertWithWhereUniqueWithoutPropertyInput = {
+    where: ListingsSavedWhereUniqueInput
+    update: XOR<ListingsSavedUpdateWithoutPropertyInput, ListingsSavedUncheckedUpdateWithoutPropertyInput>
+    create: XOR<ListingsSavedCreateWithoutPropertyInput, ListingsSavedUncheckedCreateWithoutPropertyInput>
   }
 
-  export type SavedPropertyUpdateWithWhereUniqueWithoutPropertyInput = {
-    where: SavedPropertyWhereUniqueInput
-    data: XOR<SavedPropertyUpdateWithoutPropertyInput, SavedPropertyUncheckedUpdateWithoutPropertyInput>
+  export type ListingsSavedUpdateWithWhereUniqueWithoutPropertyInput = {
+    where: ListingsSavedWhereUniqueInput
+    data: XOR<ListingsSavedUpdateWithoutPropertyInput, ListingsSavedUncheckedUpdateWithoutPropertyInput>
   }
 
-  export type SavedPropertyUpdateManyWithWhereWithoutPropertyInput = {
-    where: SavedPropertyScalarWhereInput
-    data: XOR<SavedPropertyUpdateManyMutationInput, SavedPropertyUncheckedUpdateManyWithoutPropertyInput>
+  export type ListingsSavedUpdateManyWithWhereWithoutPropertyInput = {
+    where: ListingsSavedScalarWhereInput
+    data: XOR<ListingsSavedUpdateManyMutationInput, ListingsSavedUncheckedUpdateManyWithoutPropertyInput>
   }
 
-  export type SavedPropertyScalarWhereInput = {
-    AND?: SavedPropertyScalarWhereInput | SavedPropertyScalarWhereInput[]
-    OR?: SavedPropertyScalarWhereInput[]
-    NOT?: SavedPropertyScalarWhereInput | SavedPropertyScalarWhereInput[]
-    id?: StringFilter<"SavedProperty"> | string
-    accountId?: StringFilter<"SavedProperty"> | string
-    propertyId?: StringFilter<"SavedProperty"> | string
-    savedAt?: DateTimeFilter<"SavedProperty"> | Date | string
+  export type ListingsSavedScalarWhereInput = {
+    AND?: ListingsSavedScalarWhereInput | ListingsSavedScalarWhereInput[]
+    OR?: ListingsSavedScalarWhereInput[]
+    NOT?: ListingsSavedScalarWhereInput | ListingsSavedScalarWhereInput[]
+    id?: StringFilter<"ListingsSaved"> | string
+    accountId?: StringFilter<"ListingsSaved"> | string
+    propertyId?: StringFilter<"ListingsSaved"> | string
+    savedAt?: DateTimeFilter<"ListingsSaved"> | Date | string
   }
 
   export type ListingsViewUpsertWithWhereUniqueWithoutPropertyInput = {
@@ -77073,7 +77073,7 @@ export namespace Prisma {
     documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
@@ -77118,7 +77118,7 @@ export namespace Prisma {
     documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
@@ -77168,7 +77168,7 @@ export namespace Prisma {
     documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
-    savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
@@ -77213,7 +77213,7 @@ export namespace Prisma {
     documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
-    savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
@@ -77274,7 +77274,7 @@ export namespace Prisma {
     documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
@@ -77319,7 +77319,7 @@ export namespace Prisma {
     documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
@@ -77375,7 +77375,7 @@ export namespace Prisma {
     documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
-    savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
@@ -77420,7 +77420,7 @@ export namespace Prisma {
     documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
-    savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
@@ -77465,7 +77465,7 @@ export namespace Prisma {
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
@@ -77510,7 +77510,7 @@ export namespace Prisma {
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
@@ -77571,7 +77571,7 @@ export namespace Prisma {
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
@@ -77616,7 +77616,7 @@ export namespace Prisma {
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
@@ -77661,7 +77661,7 @@ export namespace Prisma {
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
@@ -77706,7 +77706,7 @@ export namespace Prisma {
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
@@ -77767,7 +77767,7 @@ export namespace Prisma {
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
@@ -77812,7 +77812,7 @@ export namespace Prisma {
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
@@ -77857,7 +77857,7 @@ export namespace Prisma {
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
@@ -77902,7 +77902,7 @@ export namespace Prisma {
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
@@ -77963,7 +77963,7 @@ export namespace Prisma {
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
@@ -78008,7 +78008,7 @@ export namespace Prisma {
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
@@ -78053,7 +78053,7 @@ export namespace Prisma {
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
@@ -78098,7 +78098,7 @@ export namespace Prisma {
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
@@ -78159,7 +78159,7 @@ export namespace Prisma {
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
@@ -78204,7 +78204,7 @@ export namespace Prisma {
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
@@ -78249,7 +78249,7 @@ export namespace Prisma {
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
@@ -78294,7 +78294,7 @@ export namespace Prisma {
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
@@ -78388,7 +78388,7 @@ export namespace Prisma {
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
@@ -78433,7 +78433,7 @@ export namespace Prisma {
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
@@ -78518,7 +78518,7 @@ export namespace Prisma {
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
   }
@@ -78563,7 +78563,7 @@ export namespace Prisma {
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
   }
@@ -78681,7 +78681,7 @@ export namespace Prisma {
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
   }
@@ -78726,7 +78726,7 @@ export namespace Prisma {
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
   }
@@ -78833,7 +78833,7 @@ export namespace Prisma {
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
@@ -78878,7 +78878,7 @@ export namespace Prisma {
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
@@ -78939,7 +78939,7 @@ export namespace Prisma {
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
@@ -78984,7 +78984,7 @@ export namespace Prisma {
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
@@ -79029,7 +79029,7 @@ export namespace Prisma {
     documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
@@ -79074,7 +79074,7 @@ export namespace Prisma {
     documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
@@ -79363,7 +79363,7 @@ export namespace Prisma {
     documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
@@ -79408,7 +79408,7 @@ export namespace Prisma {
     documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
@@ -80399,7 +80399,7 @@ export namespace Prisma {
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
   }
@@ -80444,7 +80444,7 @@ export namespace Prisma {
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
   }
@@ -80505,7 +80505,7 @@ export namespace Prisma {
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
   }
@@ -80550,7 +80550,7 @@ export namespace Prisma {
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
   }
@@ -82328,7 +82328,7 @@ export namespace Prisma {
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
   }
@@ -82373,7 +82373,7 @@ export namespace Prisma {
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
-    savedBy?: SavedPropertyUncheckedCreateNestedManyWithoutPropertyInput
+    savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
   }
@@ -82473,7 +82473,7 @@ export namespace Prisma {
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
   }
@@ -82518,7 +82518,7 @@ export namespace Prisma {
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
   }
@@ -83247,7 +83247,7 @@ export namespace Prisma {
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
@@ -83292,7 +83292,7 @@ export namespace Prisma {
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
-    savedBy?: SavedPropertyUncheckedUpdateManyWithoutPropertyNestedInput
+    savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
     representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
@@ -83970,7 +83970,7 @@ export namespace Prisma {
     primaryId: string
   }
 
-  export type SavedPropertyCreateManyPropertyInput = {
+  export type ListingsSavedCreateManyPropertyInput = {
     id?: string
     accountId: string
     savedAt?: Date | string
@@ -84114,19 +84114,19 @@ export namespace Prisma {
     primaryId?: StringFieldUpdateOperationsInput | string
   }
 
-  export type SavedPropertyUpdateWithoutPropertyInput = {
+  export type ListingsSavedUpdateWithoutPropertyInput = {
     id?: StringFieldUpdateOperationsInput | string
     accountId?: StringFieldUpdateOperationsInput | string
     savedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type SavedPropertyUncheckedUpdateWithoutPropertyInput = {
+  export type ListingsSavedUncheckedUpdateWithoutPropertyInput = {
     id?: StringFieldUpdateOperationsInput | string
     accountId?: StringFieldUpdateOperationsInput | string
     savedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type SavedPropertyUncheckedUpdateManyWithoutPropertyInput = {
+  export type ListingsSavedUncheckedUpdateManyWithoutPropertyInput = {
     id?: StringFieldUpdateOperationsInput | string
     accountId?: StringFieldUpdateOperationsInput | string
     savedAt?: DateTimeFieldUpdateOperationsInput | Date | string

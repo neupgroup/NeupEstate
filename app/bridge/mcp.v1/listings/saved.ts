@@ -16,7 +16,7 @@ export function registerSavedListingsTool(server: McpToolServer, actorAccountId:
       await requirePermission(PERMISSIONS.estate.listing.save);
       const [data, total] = await Promise.all([
         getListingsSaved(actorAccountId, offset, limit),
-        prisma.savedProperty.count({ where: { accountId: actorAccountId } }),
+        prisma.listingsSaved.count({ where: { accountId: actorAccountId } }),
       ]);
       return mcpSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } }, format);
     } catch (error) { return mcpError(error, 'Failed to list saved properties.'); }

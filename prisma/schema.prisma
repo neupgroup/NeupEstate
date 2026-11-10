@@ -179,7 +179,7 @@ model Listing {
   changes            ListingChange[]
   links              PropertyLink[]           @relation("PrimaryLinks")
   linkedBy           PropertyLink[]           @relation("SecondaryLinks")
-  savedBy            SavedProperty[]
+  savedBy            ListingsSaved[]
   views              ListingsView[]
   competitionMaps    PropertyCompetitionMap[]
   representatives    ListingRepresentative[]
@@ -509,7 +509,7 @@ model NaturalSearch {
 // Favourites and Views
 // ============================================================================
 
-model SavedProperty {
+model ListingsSaved {
   id         String   @id @default(cuid())
   accountId  String
   propertyId String
@@ -519,7 +519,7 @@ model SavedProperty {
 
   @@index([accountId])
   @@index([propertyId])
-  @@map("saved_property")
+  @@map("listings_saved")
 }
 
 model ListingsView {

@@ -509,7 +509,7 @@ async function listAccountListings(
   const page = normalizeAccountListingPage(offset, limit);
   try {
     if (collection === 'saved') {
-      const saved = await prisma.savedProperty.findMany({
+      const saved = await prisma.listingsSaved.findMany({
         where: { accountId, property: { isApproved: true, isDeleted: false } },
         orderBy: { savedAt: 'desc' },
         distinct: ['propertyId'],

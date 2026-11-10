@@ -203,7 +203,7 @@ export async function getListingLogs(propertyId: string): Promise<Array<{
  */
 export async function isListingSaved(userId: string, propertyId: string): Promise<boolean> {
   try {
-    const existing = await prisma.savedProperty.findFirst({ where: { accountId: userId, propertyId } });
+    const existing = await prisma.listingsSaved.findFirst({ where: { accountId: userId, propertyId } });
     return Boolean(existing);
   } catch (e) { return false; }
 }
@@ -217,12 +217,12 @@ export async function isListingSaved(userId: string, propertyId: string): Promis
  */
 export async function toggleSavedListing(userId: string, propertyId: string): Promise<{ saved: boolean }> {
   try {
-    const existing = await prisma.savedProperty.findFirst({ where: { accountId: userId, propertyId } });
+    const existing = await prisma.listingsSaved.findFirst({ where: { accountId: userId, propertyId } });
     if (existing) {
-      await prisma.savedProperty.deleteMany({ where: { accountId: userId, propertyId } });
+      await prisma.listingsSaved.deleteMany({ where: { accountId: userId, propertyId } });
       return { saved: false };
     }
-    await prisma.savedProperty.create({ data: { accountId: userId, propertyId } });
+    await prisma.listingsSaved.create({ data: { accountId: userId, propertyId } });
     return { saved: true };
   } catch (e) { throw new Error('Failed to toggle saved property.'); }
 }
@@ -236,7 +236,7 @@ export async function toggleSavedListing(userId: string, propertyId: string): Pr
  */
 export async function getSavedListings(userId: string): Promise<Listing[]> {
   try {
-    const saved = await prisma.savedProperty.findMany({ where: { accountId: userId }, include: { property: { include: PROPERTY_INCLUDE } }, orderBy: { savedAt: 'desc' } });
+    const saved = await prisma.listingsSaved.findMany({ where: { accountId: userId }, include: { property: { include: PROPERTY_INCLUDE } }, orderBy: { savedAt: 'desc' } });
     return saved.map((e) => e.property).filter(Boolean).map(mapRecord).filter(onlyActive);
   } catch (e) { return []; }
 }
@@ -250,7 +250,7 @@ export async function getSavedListings(userId: string): Promise<Listing[]> {
  */
 export async function getLatestSavedListings(limit = 20): Promise<SavedListingEntry[]> {
   try {
-    const saved = await prisma.savedProperty.findMany({ orderBy: { savedAt: 'desc' }, take: limit, include: { property: { include: PROPERTY_INCLUDE } } });
+    const saved = await prisma.listingsSaved.findMany({ orderBy: { savedAt: 'desc' }, take: limit, include: { property: { include: PROPERTY_INCLUDE } } });
     return saved.map((e) => ({
       userId: e.accountId,
       userName: 'Unknown User',
@@ -270,7 +270,7 @@ export async function getLatestSavedListings(limit = 20): Promise<SavedListingEn
  */
 export async function getUsersBySavedListing(propertyId: string) {
   try {
-    return await prisma.savedProperty.findMany({ where: { propertyId }, orderBy: { savedAt: 'desc' } });
+    return await prisma.listingsSaved.findMany({ where: { propertyId }, orderBy: { savedAt: 'desc' } });
   } catch (e) { return []; }
 }
 
