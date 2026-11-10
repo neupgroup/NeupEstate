@@ -219,11 +219,6 @@ export type Inquiry = $Result.DefaultSelection<Prisma.$InquiryPayload>
  */
 export type AuthzRole = $Result.DefaultSelection<Prisma.$AuthzRolePayload>
 /**
- * Model Application
- * 
- */
-export type Application = $Result.DefaultSelection<Prisma.$ApplicationPayload>
-/**
  * Model AccountAccess
  * 
  */
@@ -954,16 +949,6 @@ export class PrismaClient<
   get authzRole(): Prisma.AuthzRoleDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.application`: Exposes CRUD operations for the **Application** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Applications
-    * const applications = await prisma.application.findMany()
-    * ```
-    */
-  get application(): Prisma.ApplicationDelegate<ExtArgs, ClientOptions>;
-
-  /**
    * `prisma.accountAccess`: Exposes CRUD operations for the **AccountAccess** model.
     * Example usage:
     * ```ts
@@ -1557,7 +1542,6 @@ export namespace Prisma {
     SitemapEntry: 'SitemapEntry',
     Inquiry: 'Inquiry',
     AuthzRole: 'AuthzRole',
-    Application: 'Application',
     AccountAccess: 'AccountAccess',
     RoleCapability: 'RoleCapability',
     AuthzAccountAccessGrant: 'AuthzAccountAccessGrant',
@@ -1585,7 +1569,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "location" | "account" | "activity" | "listing" | "propertyLink" | "listingHouse" | "listingApartment" | "propertyLandDetail" | "listingCommercial" | "propertyPrice" | "propertyOwner" | "listingRepresentative" | "listingDocument" | "listingChange" | "agency" | "agencyMap" | "agencyAgentMap" | "agencyCustomization" | "agent" | "review" | "requirement" | "naturalSearch" | "savedProperty" | "listingsView" | "baseLead" | "clientContact" | "clientLink" | "sharedLeads" | "leadActivity" | "conversation" | "message" | "siteContent" | "userPreference" | "propertyRequest" | "mortgageRequest" | "salesRequest" | "visitRequest" | "problem" | "sitemapEntry" | "inquiry" | "authzRole" | "application" | "accountAccess" | "roleCapability" | "authzAccountAccessGrant" | "authzAssetsAccessGrant" | "competitor" | "competitorSource" | "competitorPage" | "competitorListing" | "propertyCompetitionMap" | "competitorTracking" | "intelligenceMapping" | "intelligenceAlert"
+      modelProps: "location" | "account" | "activity" | "listing" | "propertyLink" | "listingHouse" | "listingApartment" | "propertyLandDetail" | "listingCommercial" | "propertyPrice" | "propertyOwner" | "listingRepresentative" | "listingDocument" | "listingChange" | "agency" | "agencyMap" | "agencyAgentMap" | "agencyCustomization" | "agent" | "review" | "requirement" | "naturalSearch" | "savedProperty" | "listingsView" | "baseLead" | "clientContact" | "clientLink" | "sharedLeads" | "leadActivity" | "conversation" | "message" | "siteContent" | "userPreference" | "propertyRequest" | "mortgageRequest" | "salesRequest" | "visitRequest" | "problem" | "sitemapEntry" | "inquiry" | "authzRole" | "accountAccess" | "roleCapability" | "authzAccountAccessGrant" | "authzAssetsAccessGrant" | "competitor" | "competitorSource" | "competitorPage" | "competitorListing" | "propertyCompetitionMap" | "competitorTracking" | "intelligenceMapping" | "intelligenceAlert"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4623,80 +4607,6 @@ export namespace Prisma {
           }
         }
       }
-      Application: {
-        payload: Prisma.$ApplicationPayload<ExtArgs>
-        fields: Prisma.ApplicationFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.ApplicationFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ApplicationPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.ApplicationFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ApplicationPayload>
-          }
-          findFirst: {
-            args: Prisma.ApplicationFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ApplicationPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.ApplicationFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ApplicationPayload>
-          }
-          findMany: {
-            args: Prisma.ApplicationFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ApplicationPayload>[]
-          }
-          create: {
-            args: Prisma.ApplicationCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ApplicationPayload>
-          }
-          createMany: {
-            args: Prisma.ApplicationCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.ApplicationCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ApplicationPayload>[]
-          }
-          delete: {
-            args: Prisma.ApplicationDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ApplicationPayload>
-          }
-          update: {
-            args: Prisma.ApplicationUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ApplicationPayload>
-          }
-          deleteMany: {
-            args: Prisma.ApplicationDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.ApplicationUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.ApplicationUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ApplicationPayload>[]
-          }
-          upsert: {
-            args: Prisma.ApplicationUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ApplicationPayload>
-          }
-          aggregate: {
-            args: Prisma.ApplicationAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateApplication>
-          }
-          groupBy: {
-            args: Prisma.ApplicationGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ApplicationGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ApplicationCountArgs<ExtArgs>
-            result: $Utils.Optional<ApplicationCountAggregateOutputType> | number
-          }
-        }
-      }
       AccountAccess: {
         payload: Prisma.$AccountAccessPayload<ExtArgs>
         fields: Prisma.AccountAccessFieldRefs
@@ -5734,7 +5644,6 @@ export namespace Prisma {
     sitemapEntry?: SitemapEntryOmit
     inquiry?: InquiryOmit
     authzRole?: AuthzRoleOmit
-    application?: ApplicationOmit
     accountAccess?: AccountAccessOmit
     roleCapability?: RoleCapabilityOmit
     authzAccountAccessGrant?: AuthzAccountAccessGrantOmit
@@ -5869,7 +5778,6 @@ export namespace Prisma {
   export type AccountCountOutputType = {
     accessRows: number
     workingProfileOf: number
-    developedApplications: number
     agencyAgentMapAsAgency: number
     agencyAgentMapAsAgent: number
     baseLeadsBelongingTo: number
@@ -5886,7 +5794,6 @@ export namespace Prisma {
   export type AccountCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accessRows?: boolean | AccountCountOutputTypeCountAccessRowsArgs
     workingProfileOf?: boolean | AccountCountOutputTypeCountWorkingProfileOfArgs
-    developedApplications?: boolean | AccountCountOutputTypeCountDevelopedApplicationsArgs
     agencyAgentMapAsAgency?: boolean | AccountCountOutputTypeCountAgencyAgentMapAsAgencyArgs
     agencyAgentMapAsAgent?: boolean | AccountCountOutputTypeCountAgencyAgentMapAsAgentArgs
     baseLeadsBelongingTo?: boolean | AccountCountOutputTypeCountBaseLeadsBelongingToArgs
@@ -5923,13 +5830,6 @@ export namespace Prisma {
    */
   export type AccountCountOutputTypeCountWorkingProfileOfArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AccountWhereInput
-  }
-
-  /**
-   * AccountCountOutputType without action
-   */
-  export type AccountCountOutputTypeCountDevelopedApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ApplicationWhereInput
   }
 
   /**
@@ -6288,12 +6188,10 @@ export namespace Prisma {
 
   export type AuthzRoleCountOutputType = {
     accessRows: number
-    defaultForApplications: number
   }
 
   export type AuthzRoleCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accessRows?: boolean | AuthzRoleCountOutputTypeCountAccessRowsArgs
-    defaultForApplications?: boolean | AuthzRoleCountOutputTypeCountDefaultForApplicationsArgs
   }
 
   // Custom InputTypes
@@ -6312,44 +6210,6 @@ export namespace Prisma {
    */
   export type AuthzRoleCountOutputTypeCountAccessRowsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AccountAccessWhereInput
-  }
-
-  /**
-   * AuthzRoleCountOutputType without action
-   */
-  export type AuthzRoleCountOutputTypeCountDefaultForApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ApplicationWhereInput
-  }
-
-
-  /**
-   * Count Type ApplicationCountOutputType
-   */
-
-  export type ApplicationCountOutputType = {
-    childApplications: number
-  }
-
-  export type ApplicationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    childApplications?: boolean | ApplicationCountOutputTypeCountChildApplicationsArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * ApplicationCountOutputType without action
-   */
-  export type ApplicationCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ApplicationCountOutputType
-     */
-    select?: ApplicationCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * ApplicationCountOutputType without action
-   */
-  export type ApplicationCountOutputTypeCountChildApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ApplicationWhereInput
   }
 
 
@@ -7894,7 +7754,6 @@ export namespace Prisma {
     accessRows?: boolean | Account$accessRowsArgs<ExtArgs>
     workingProfileAccount?: boolean | Account$workingProfileAccountArgs<ExtArgs>
     workingProfileOf?: boolean | Account$workingProfileOfArgs<ExtArgs>
-    developedApplications?: boolean | Account$developedApplicationsArgs<ExtArgs>
     agencyAgentMapAsAgency?: boolean | Account$agencyAgentMapAsAgencyArgs<ExtArgs>
     agencyAgentMapAsAgent?: boolean | Account$agencyAgentMapAsAgentArgs<ExtArgs>
     baseLeadsBelongingTo?: boolean | Account$baseLeadsBelongingToArgs<ExtArgs>
@@ -7958,7 +7817,6 @@ export namespace Prisma {
     accessRows?: boolean | Account$accessRowsArgs<ExtArgs>
     workingProfileAccount?: boolean | Account$workingProfileAccountArgs<ExtArgs>
     workingProfileOf?: boolean | Account$workingProfileOfArgs<ExtArgs>
-    developedApplications?: boolean | Account$developedApplicationsArgs<ExtArgs>
     agencyAgentMapAsAgency?: boolean | Account$agencyAgentMapAsAgencyArgs<ExtArgs>
     agencyAgentMapAsAgent?: boolean | Account$agencyAgentMapAsAgentArgs<ExtArgs>
     baseLeadsBelongingTo?: boolean | Account$baseLeadsBelongingToArgs<ExtArgs>
@@ -7985,7 +7843,6 @@ export namespace Prisma {
       accessRows: Prisma.$AccountAccessPayload<ExtArgs>[]
       workingProfileAccount: Prisma.$AccountPayload<ExtArgs> | null
       workingProfileOf: Prisma.$AccountPayload<ExtArgs>[]
-      developedApplications: Prisma.$ApplicationPayload<ExtArgs>[]
       agencyAgentMapAsAgency: Prisma.$AgencyAgentMapPayload<ExtArgs>[]
       agencyAgentMapAsAgent: Prisma.$AgencyAgentMapPayload<ExtArgs>[]
       baseLeadsBelongingTo: Prisma.$BaseLeadPayload<ExtArgs>[]
@@ -8407,7 +8264,6 @@ export namespace Prisma {
     accessRows<T extends Account$accessRowsArgs<ExtArgs> = {}>(args?: Subset<T, Account$accessRowsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     workingProfileAccount<T extends Account$workingProfileAccountArgs<ExtArgs> = {}>(args?: Subset<T, Account$workingProfileAccountArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     workingProfileOf<T extends Account$workingProfileOfArgs<ExtArgs> = {}>(args?: Subset<T, Account$workingProfileOfArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    developedApplications<T extends Account$developedApplicationsArgs<ExtArgs> = {}>(args?: Subset<T, Account$developedApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     agencyAgentMapAsAgency<T extends Account$agencyAgentMapAsAgencyArgs<ExtArgs> = {}>(args?: Subset<T, Account$agencyAgentMapAsAgencyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgencyAgentMapPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     agencyAgentMapAsAgent<T extends Account$agencyAgentMapAsAgentArgs<ExtArgs> = {}>(args?: Subset<T, Account$agencyAgentMapAsAgentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgencyAgentMapPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     baseLeadsBelongingTo<T extends Account$baseLeadsBelongingToArgs<ExtArgs> = {}>(args?: Subset<T, Account$baseLeadsBelongingToArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BaseLeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -8924,30 +8780,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AccountScalarFieldEnum | AccountScalarFieldEnum[]
-  }
-
-  /**
-   * Account.developedApplications
-   */
-  export type Account$developedApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Application
-     */
-    select?: ApplicationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Application
-     */
-    omit?: ApplicationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApplicationInclude<ExtArgs> | null
-    where?: ApplicationWhereInput
-    orderBy?: ApplicationOrderByWithRelationInput | ApplicationOrderByWithRelationInput[]
-    cursor?: ApplicationWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ApplicationScalarFieldEnum | ApplicationScalarFieldEnum[]
   }
 
   /**
@@ -52187,7 +52019,6 @@ export namespace Prisma {
     permissions?: boolean
     updatedOn?: boolean
     accessRows?: boolean | AuthzRole$accessRowsArgs<ExtArgs>
-    defaultForApplications?: boolean | AuthzRole$defaultForApplicationsArgs<ExtArgs>
     _count?: boolean | AuthzRoleCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["authzRole"]>
 
@@ -52233,7 +52064,6 @@ export namespace Prisma {
   export type AuthzRoleOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "appId" | "scope" | "acquisitionType" | "approvalPolicy" | "applicableFor" | "permissions" | "updatedOn", ExtArgs["result"]["authzRole"]>
   export type AuthzRoleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accessRows?: boolean | AuthzRole$accessRowsArgs<ExtArgs>
-    defaultForApplications?: boolean | AuthzRole$defaultForApplicationsArgs<ExtArgs>
     _count?: boolean | AuthzRoleCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type AuthzRoleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -52243,7 +52073,6 @@ export namespace Prisma {
     name: "AuthzRole"
     objects: {
       accessRows: Prisma.$AccountAccessPayload<ExtArgs>[]
-      defaultForApplications: Prisma.$ApplicationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -52651,7 +52480,6 @@ export namespace Prisma {
   export interface Prisma__AuthzRoleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     accessRows<T extends AuthzRole$accessRowsArgs<ExtArgs> = {}>(args?: Subset<T, AuthzRole$accessRowsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountAccessPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    defaultForApplications<T extends AuthzRole$defaultForApplicationsArgs<ExtArgs> = {}>(args?: Subset<T, AuthzRole$defaultForApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -53108,30 +52936,6 @@ export namespace Prisma {
   }
 
   /**
-   * AuthzRole.defaultForApplications
-   */
-  export type AuthzRole$defaultForApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Application
-     */
-    select?: ApplicationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Application
-     */
-    omit?: ApplicationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApplicationInclude<ExtArgs> | null
-    where?: ApplicationWhereInput
-    orderBy?: ApplicationOrderByWithRelationInput | ApplicationOrderByWithRelationInput[]
-    cursor?: ApplicationWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ApplicationScalarFieldEnum | ApplicationScalarFieldEnum[]
-  }
-
-  /**
    * AuthzRole without action
    */
   export type AuthzRoleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -53147,1308 +52951,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: AuthzRoleInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Application
-   */
-
-  export type AggregateApplication = {
-    _count: ApplicationCountAggregateOutputType | null
-    _avg: ApplicationAvgAggregateOutputType | null
-    _sum: ApplicationSumAggregateOutputType | null
-    _min: ApplicationMinAggregateOutputType | null
-    _max: ApplicationMaxAggregateOutputType | null
-  }
-
-  export type ApplicationAvgAggregateOutputType = {
-    party: number | null
-  }
-
-  export type ApplicationSumAggregateOutputType = {
-    party: number | null
-  }
-
-  export type ApplicationMinAggregateOutputType = {
-    id: string | null
-    name: string | null
-    description: string | null
-    icon: string | null
-    website: string | null
-    appSecret: string | null
-    createdAt: Date | null
-    status: string | null
-    party: number | null
-    permissionType: string | null
-    developerAccountId: string | null
-    parentApplicationId: string | null
-    defaultRoleId: string | null
-  }
-
-  export type ApplicationMaxAggregateOutputType = {
-    id: string | null
-    name: string | null
-    description: string | null
-    icon: string | null
-    website: string | null
-    appSecret: string | null
-    createdAt: Date | null
-    status: string | null
-    party: number | null
-    permissionType: string | null
-    developerAccountId: string | null
-    parentApplicationId: string | null
-    defaultRoleId: string | null
-  }
-
-  export type ApplicationCountAggregateOutputType = {
-    id: number
-    name: number
-    description: number
-    icon: number
-    website: number
-    appSecret: number
-    createdAt: number
-    endpoints: number
-    status: number
-    responseFields: number
-    tokenFields: number
-    details: number
-    party: number
-    permissionType: number
-    developerAccountId: number
-    parentApplicationId: number
-    defaultRoleId: number
-    _all: number
-  }
-
-
-  export type ApplicationAvgAggregateInputType = {
-    party?: true
-  }
-
-  export type ApplicationSumAggregateInputType = {
-    party?: true
-  }
-
-  export type ApplicationMinAggregateInputType = {
-    id?: true
-    name?: true
-    description?: true
-    icon?: true
-    website?: true
-    appSecret?: true
-    createdAt?: true
-    status?: true
-    party?: true
-    permissionType?: true
-    developerAccountId?: true
-    parentApplicationId?: true
-    defaultRoleId?: true
-  }
-
-  export type ApplicationMaxAggregateInputType = {
-    id?: true
-    name?: true
-    description?: true
-    icon?: true
-    website?: true
-    appSecret?: true
-    createdAt?: true
-    status?: true
-    party?: true
-    permissionType?: true
-    developerAccountId?: true
-    parentApplicationId?: true
-    defaultRoleId?: true
-  }
-
-  export type ApplicationCountAggregateInputType = {
-    id?: true
-    name?: true
-    description?: true
-    icon?: true
-    website?: true
-    appSecret?: true
-    createdAt?: true
-    endpoints?: true
-    status?: true
-    responseFields?: true
-    tokenFields?: true
-    details?: true
-    party?: true
-    permissionType?: true
-    developerAccountId?: true
-    parentApplicationId?: true
-    defaultRoleId?: true
-    _all?: true
-  }
-
-  export type ApplicationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Application to aggregate.
-     */
-    where?: ApplicationWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Applications to fetch.
-     */
-    orderBy?: ApplicationOrderByWithRelationInput | ApplicationOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: ApplicationWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Applications from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Applications.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Applications
-    **/
-    _count?: true | ApplicationCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: ApplicationAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: ApplicationSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: ApplicationMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: ApplicationMaxAggregateInputType
-  }
-
-  export type GetApplicationAggregateType<T extends ApplicationAggregateArgs> = {
-        [P in keyof T & keyof AggregateApplication]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateApplication[P]>
-      : GetScalarType<T[P], AggregateApplication[P]>
-  }
-
-
-
-
-  export type ApplicationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ApplicationWhereInput
-    orderBy?: ApplicationOrderByWithAggregationInput | ApplicationOrderByWithAggregationInput[]
-    by: ApplicationScalarFieldEnum[] | ApplicationScalarFieldEnum
-    having?: ApplicationScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: ApplicationCountAggregateInputType | true
-    _avg?: ApplicationAvgAggregateInputType
-    _sum?: ApplicationSumAggregateInputType
-    _min?: ApplicationMinAggregateInputType
-    _max?: ApplicationMaxAggregateInputType
-  }
-
-  export type ApplicationGroupByOutputType = {
-    id: string
-    name: string
-    description: string | null
-    icon: string | null
-    website: string | null
-    appSecret: string | null
-    createdAt: Date
-    endpoints: JsonValue | null
-    status: string
-    responseFields: string[]
-    tokenFields: string[]
-    details: JsonValue | null
-    party: number
-    permissionType: string
-    developerAccountId: string
-    parentApplicationId: string
-    defaultRoleId: string | null
-    _count: ApplicationCountAggregateOutputType | null
-    _avg: ApplicationAvgAggregateOutputType | null
-    _sum: ApplicationSumAggregateOutputType | null
-    _min: ApplicationMinAggregateOutputType | null
-    _max: ApplicationMaxAggregateOutputType | null
-  }
-
-  type GetApplicationGroupByPayload<T extends ApplicationGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<ApplicationGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof ApplicationGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], ApplicationGroupByOutputType[P]>
-            : GetScalarType<T[P], ApplicationGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type ApplicationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    description?: boolean
-    icon?: boolean
-    website?: boolean
-    appSecret?: boolean
-    createdAt?: boolean
-    endpoints?: boolean
-    status?: boolean
-    responseFields?: boolean
-    tokenFields?: boolean
-    details?: boolean
-    party?: boolean
-    permissionType?: boolean
-    developerAccountId?: boolean
-    parentApplicationId?: boolean
-    defaultRoleId?: boolean
-    developerAccount?: boolean | AccountDefaultArgs<ExtArgs>
-    parentApplication?: boolean | ApplicationDefaultArgs<ExtArgs>
-    childApplications?: boolean | Application$childApplicationsArgs<ExtArgs>
-    defaultRole?: boolean | Application$defaultRoleArgs<ExtArgs>
-    _count?: boolean | ApplicationCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["application"]>
-
-  export type ApplicationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    description?: boolean
-    icon?: boolean
-    website?: boolean
-    appSecret?: boolean
-    createdAt?: boolean
-    endpoints?: boolean
-    status?: boolean
-    responseFields?: boolean
-    tokenFields?: boolean
-    details?: boolean
-    party?: boolean
-    permissionType?: boolean
-    developerAccountId?: boolean
-    parentApplicationId?: boolean
-    defaultRoleId?: boolean
-    developerAccount?: boolean | AccountDefaultArgs<ExtArgs>
-    parentApplication?: boolean | ApplicationDefaultArgs<ExtArgs>
-    defaultRole?: boolean | Application$defaultRoleArgs<ExtArgs>
-  }, ExtArgs["result"]["application"]>
-
-  export type ApplicationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    description?: boolean
-    icon?: boolean
-    website?: boolean
-    appSecret?: boolean
-    createdAt?: boolean
-    endpoints?: boolean
-    status?: boolean
-    responseFields?: boolean
-    tokenFields?: boolean
-    details?: boolean
-    party?: boolean
-    permissionType?: boolean
-    developerAccountId?: boolean
-    parentApplicationId?: boolean
-    defaultRoleId?: boolean
-    developerAccount?: boolean | AccountDefaultArgs<ExtArgs>
-    parentApplication?: boolean | ApplicationDefaultArgs<ExtArgs>
-    defaultRole?: boolean | Application$defaultRoleArgs<ExtArgs>
-  }, ExtArgs["result"]["application"]>
-
-  export type ApplicationSelectScalar = {
-    id?: boolean
-    name?: boolean
-    description?: boolean
-    icon?: boolean
-    website?: boolean
-    appSecret?: boolean
-    createdAt?: boolean
-    endpoints?: boolean
-    status?: boolean
-    responseFields?: boolean
-    tokenFields?: boolean
-    details?: boolean
-    party?: boolean
-    permissionType?: boolean
-    developerAccountId?: boolean
-    parentApplicationId?: boolean
-    defaultRoleId?: boolean
-  }
-
-  export type ApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "icon" | "website" | "appSecret" | "createdAt" | "endpoints" | "status" | "responseFields" | "tokenFields" | "details" | "party" | "permissionType" | "developerAccountId" | "parentApplicationId" | "defaultRoleId", ExtArgs["result"]["application"]>
-  export type ApplicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    developerAccount?: boolean | AccountDefaultArgs<ExtArgs>
-    parentApplication?: boolean | ApplicationDefaultArgs<ExtArgs>
-    childApplications?: boolean | Application$childApplicationsArgs<ExtArgs>
-    defaultRole?: boolean | Application$defaultRoleArgs<ExtArgs>
-    _count?: boolean | ApplicationCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type ApplicationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    developerAccount?: boolean | AccountDefaultArgs<ExtArgs>
-    parentApplication?: boolean | ApplicationDefaultArgs<ExtArgs>
-    defaultRole?: boolean | Application$defaultRoleArgs<ExtArgs>
-  }
-  export type ApplicationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    developerAccount?: boolean | AccountDefaultArgs<ExtArgs>
-    parentApplication?: boolean | ApplicationDefaultArgs<ExtArgs>
-    defaultRole?: boolean | Application$defaultRoleArgs<ExtArgs>
-  }
-
-  export type $ApplicationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Application"
-    objects: {
-      developerAccount: Prisma.$AccountPayload<ExtArgs>
-      parentApplication: Prisma.$ApplicationPayload<ExtArgs>
-      childApplications: Prisma.$ApplicationPayload<ExtArgs>[]
-      defaultRole: Prisma.$AuthzRolePayload<ExtArgs> | null
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      name: string
-      description: string | null
-      icon: string | null
-      website: string | null
-      appSecret: string | null
-      createdAt: Date
-      endpoints: Prisma.JsonValue | null
-      status: string
-      responseFields: string[]
-      tokenFields: string[]
-      details: Prisma.JsonValue | null
-      party: number
-      permissionType: string
-      developerAccountId: string
-      parentApplicationId: string
-      defaultRoleId: string | null
-    }, ExtArgs["result"]["application"]>
-    composites: {}
-  }
-
-  type ApplicationGetPayload<S extends boolean | null | undefined | ApplicationDefaultArgs> = $Result.GetResult<Prisma.$ApplicationPayload, S>
-
-  type ApplicationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<ApplicationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ApplicationCountAggregateInputType | true
-    }
-
-  export interface ApplicationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Application'], meta: { name: 'Application' } }
-    /**
-     * Find zero or one Application that matches the filter.
-     * @param {ApplicationFindUniqueArgs} args - Arguments to find a Application
-     * @example
-     * // Get one Application
-     * const application = await prisma.application.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends ApplicationFindUniqueArgs>(args: SelectSubset<T, ApplicationFindUniqueArgs<ExtArgs>>): Prisma__ApplicationClient<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Application that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {ApplicationFindUniqueOrThrowArgs} args - Arguments to find a Application
-     * @example
-     * // Get one Application
-     * const application = await prisma.application.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends ApplicationFindUniqueOrThrowArgs>(args: SelectSubset<T, ApplicationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ApplicationClient<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Application that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ApplicationFindFirstArgs} args - Arguments to find a Application
-     * @example
-     * // Get one Application
-     * const application = await prisma.application.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends ApplicationFindFirstArgs>(args?: SelectSubset<T, ApplicationFindFirstArgs<ExtArgs>>): Prisma__ApplicationClient<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Application that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ApplicationFindFirstOrThrowArgs} args - Arguments to find a Application
-     * @example
-     * // Get one Application
-     * const application = await prisma.application.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends ApplicationFindFirstOrThrowArgs>(args?: SelectSubset<T, ApplicationFindFirstOrThrowArgs<ExtArgs>>): Prisma__ApplicationClient<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Applications that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ApplicationFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Applications
-     * const applications = await prisma.application.findMany()
-     * 
-     * // Get first 10 Applications
-     * const applications = await prisma.application.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const applicationWithIdOnly = await prisma.application.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends ApplicationFindManyArgs>(args?: SelectSubset<T, ApplicationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Application.
-     * @param {ApplicationCreateArgs} args - Arguments to create a Application.
-     * @example
-     * // Create one Application
-     * const Application = await prisma.application.create({
-     *   data: {
-     *     // ... data to create a Application
-     *   }
-     * })
-     * 
-     */
-    create<T extends ApplicationCreateArgs>(args: SelectSubset<T, ApplicationCreateArgs<ExtArgs>>): Prisma__ApplicationClient<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Applications.
-     * @param {ApplicationCreateManyArgs} args - Arguments to create many Applications.
-     * @example
-     * // Create many Applications
-     * const application = await prisma.application.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends ApplicationCreateManyArgs>(args?: SelectSubset<T, ApplicationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Applications and returns the data saved in the database.
-     * @param {ApplicationCreateManyAndReturnArgs} args - Arguments to create many Applications.
-     * @example
-     * // Create many Applications
-     * const application = await prisma.application.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Applications and only return the `id`
-     * const applicationWithIdOnly = await prisma.application.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends ApplicationCreateManyAndReturnArgs>(args?: SelectSubset<T, ApplicationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Application.
-     * @param {ApplicationDeleteArgs} args - Arguments to delete one Application.
-     * @example
-     * // Delete one Application
-     * const Application = await prisma.application.delete({
-     *   where: {
-     *     // ... filter to delete one Application
-     *   }
-     * })
-     * 
-     */
-    delete<T extends ApplicationDeleteArgs>(args: SelectSubset<T, ApplicationDeleteArgs<ExtArgs>>): Prisma__ApplicationClient<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Application.
-     * @param {ApplicationUpdateArgs} args - Arguments to update one Application.
-     * @example
-     * // Update one Application
-     * const application = await prisma.application.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends ApplicationUpdateArgs>(args: SelectSubset<T, ApplicationUpdateArgs<ExtArgs>>): Prisma__ApplicationClient<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Applications.
-     * @param {ApplicationDeleteManyArgs} args - Arguments to filter Applications to delete.
-     * @example
-     * // Delete a few Applications
-     * const { count } = await prisma.application.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends ApplicationDeleteManyArgs>(args?: SelectSubset<T, ApplicationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Applications.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ApplicationUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Applications
-     * const application = await prisma.application.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends ApplicationUpdateManyArgs>(args: SelectSubset<T, ApplicationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Applications and returns the data updated in the database.
-     * @param {ApplicationUpdateManyAndReturnArgs} args - Arguments to update many Applications.
-     * @example
-     * // Update many Applications
-     * const application = await prisma.application.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Applications and only return the `id`
-     * const applicationWithIdOnly = await prisma.application.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends ApplicationUpdateManyAndReturnArgs>(args: SelectSubset<T, ApplicationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Application.
-     * @param {ApplicationUpsertArgs} args - Arguments to update or create a Application.
-     * @example
-     * // Update or create a Application
-     * const application = await prisma.application.upsert({
-     *   create: {
-     *     // ... data to create a Application
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Application we want to update
-     *   }
-     * })
-     */
-    upsert<T extends ApplicationUpsertArgs>(args: SelectSubset<T, ApplicationUpsertArgs<ExtArgs>>): Prisma__ApplicationClient<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Applications.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ApplicationCountArgs} args - Arguments to filter Applications to count.
-     * @example
-     * // Count the number of Applications
-     * const count = await prisma.application.count({
-     *   where: {
-     *     // ... the filter for the Applications we want to count
-     *   }
-     * })
-    **/
-    count<T extends ApplicationCountArgs>(
-      args?: Subset<T, ApplicationCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], ApplicationCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Application.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ApplicationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends ApplicationAggregateArgs>(args: Subset<T, ApplicationAggregateArgs>): Prisma.PrismaPromise<GetApplicationAggregateType<T>>
-
-    /**
-     * Group by Application.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ApplicationGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends ApplicationGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ApplicationGroupByArgs['orderBy'] }
-        : { orderBy?: ApplicationGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, ApplicationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetApplicationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Application model
-   */
-  readonly fields: ApplicationFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Application.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__ApplicationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    developerAccount<T extends AccountDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AccountDefaultArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    parentApplication<T extends ApplicationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ApplicationDefaultArgs<ExtArgs>>): Prisma__ApplicationClient<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    childApplications<T extends Application$childApplicationsArgs<ExtArgs> = {}>(args?: Subset<T, Application$childApplicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    defaultRole<T extends Application$defaultRoleArgs<ExtArgs> = {}>(args?: Subset<T, Application$defaultRoleArgs<ExtArgs>>): Prisma__AuthzRoleClient<$Result.GetResult<Prisma.$AuthzRolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Application model
-   */
-  interface ApplicationFieldRefs {
-    readonly id: FieldRef<"Application", 'String'>
-    readonly name: FieldRef<"Application", 'String'>
-    readonly description: FieldRef<"Application", 'String'>
-    readonly icon: FieldRef<"Application", 'String'>
-    readonly website: FieldRef<"Application", 'String'>
-    readonly appSecret: FieldRef<"Application", 'String'>
-    readonly createdAt: FieldRef<"Application", 'DateTime'>
-    readonly endpoints: FieldRef<"Application", 'Json'>
-    readonly status: FieldRef<"Application", 'String'>
-    readonly responseFields: FieldRef<"Application", 'String[]'>
-    readonly tokenFields: FieldRef<"Application", 'String[]'>
-    readonly details: FieldRef<"Application", 'Json'>
-    readonly party: FieldRef<"Application", 'Int'>
-    readonly permissionType: FieldRef<"Application", 'String'>
-    readonly developerAccountId: FieldRef<"Application", 'String'>
-    readonly parentApplicationId: FieldRef<"Application", 'String'>
-    readonly defaultRoleId: FieldRef<"Application", 'String'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Application findUnique
-   */
-  export type ApplicationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Application
-     */
-    select?: ApplicationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Application
-     */
-    omit?: ApplicationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApplicationInclude<ExtArgs> | null
-    /**
-     * Filter, which Application to fetch.
-     */
-    where: ApplicationWhereUniqueInput
-  }
-
-  /**
-   * Application findUniqueOrThrow
-   */
-  export type ApplicationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Application
-     */
-    select?: ApplicationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Application
-     */
-    omit?: ApplicationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApplicationInclude<ExtArgs> | null
-    /**
-     * Filter, which Application to fetch.
-     */
-    where: ApplicationWhereUniqueInput
-  }
-
-  /**
-   * Application findFirst
-   */
-  export type ApplicationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Application
-     */
-    select?: ApplicationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Application
-     */
-    omit?: ApplicationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApplicationInclude<ExtArgs> | null
-    /**
-     * Filter, which Application to fetch.
-     */
-    where?: ApplicationWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Applications to fetch.
-     */
-    orderBy?: ApplicationOrderByWithRelationInput | ApplicationOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Applications.
-     */
-    cursor?: ApplicationWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Applications from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Applications.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Applications.
-     */
-    distinct?: ApplicationScalarFieldEnum | ApplicationScalarFieldEnum[]
-  }
-
-  /**
-   * Application findFirstOrThrow
-   */
-  export type ApplicationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Application
-     */
-    select?: ApplicationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Application
-     */
-    omit?: ApplicationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApplicationInclude<ExtArgs> | null
-    /**
-     * Filter, which Application to fetch.
-     */
-    where?: ApplicationWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Applications to fetch.
-     */
-    orderBy?: ApplicationOrderByWithRelationInput | ApplicationOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Applications.
-     */
-    cursor?: ApplicationWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Applications from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Applications.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Applications.
-     */
-    distinct?: ApplicationScalarFieldEnum | ApplicationScalarFieldEnum[]
-  }
-
-  /**
-   * Application findMany
-   */
-  export type ApplicationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Application
-     */
-    select?: ApplicationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Application
-     */
-    omit?: ApplicationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApplicationInclude<ExtArgs> | null
-    /**
-     * Filter, which Applications to fetch.
-     */
-    where?: ApplicationWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Applications to fetch.
-     */
-    orderBy?: ApplicationOrderByWithRelationInput | ApplicationOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Applications.
-     */
-    cursor?: ApplicationWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Applications from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Applications.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Applications.
-     */
-    distinct?: ApplicationScalarFieldEnum | ApplicationScalarFieldEnum[]
-  }
-
-  /**
-   * Application create
-   */
-  export type ApplicationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Application
-     */
-    select?: ApplicationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Application
-     */
-    omit?: ApplicationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApplicationInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Application.
-     */
-    data: XOR<ApplicationCreateInput, ApplicationUncheckedCreateInput>
-  }
-
-  /**
-   * Application createMany
-   */
-  export type ApplicationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Applications.
-     */
-    data: ApplicationCreateManyInput | ApplicationCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Application createManyAndReturn
-   */
-  export type ApplicationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Application
-     */
-    select?: ApplicationSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Application
-     */
-    omit?: ApplicationOmit<ExtArgs> | null
-    /**
-     * The data used to create many Applications.
-     */
-    data: ApplicationCreateManyInput | ApplicationCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApplicationIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Application update
-   */
-  export type ApplicationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Application
-     */
-    select?: ApplicationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Application
-     */
-    omit?: ApplicationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApplicationInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Application.
-     */
-    data: XOR<ApplicationUpdateInput, ApplicationUncheckedUpdateInput>
-    /**
-     * Choose, which Application to update.
-     */
-    where: ApplicationWhereUniqueInput
-  }
-
-  /**
-   * Application updateMany
-   */
-  export type ApplicationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Applications.
-     */
-    data: XOR<ApplicationUpdateManyMutationInput, ApplicationUncheckedUpdateManyInput>
-    /**
-     * Filter which Applications to update
-     */
-    where?: ApplicationWhereInput
-    /**
-     * Limit how many Applications to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Application updateManyAndReturn
-   */
-  export type ApplicationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Application
-     */
-    select?: ApplicationSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Application
-     */
-    omit?: ApplicationOmit<ExtArgs> | null
-    /**
-     * The data used to update Applications.
-     */
-    data: XOR<ApplicationUpdateManyMutationInput, ApplicationUncheckedUpdateManyInput>
-    /**
-     * Filter which Applications to update
-     */
-    where?: ApplicationWhereInput
-    /**
-     * Limit how many Applications to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApplicationIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Application upsert
-   */
-  export type ApplicationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Application
-     */
-    select?: ApplicationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Application
-     */
-    omit?: ApplicationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApplicationInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Application to update in case it exists.
-     */
-    where: ApplicationWhereUniqueInput
-    /**
-     * In case the Application found by the `where` argument doesn't exist, create a new Application with this data.
-     */
-    create: XOR<ApplicationCreateInput, ApplicationUncheckedCreateInput>
-    /**
-     * In case the Application was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<ApplicationUpdateInput, ApplicationUncheckedUpdateInput>
-  }
-
-  /**
-   * Application delete
-   */
-  export type ApplicationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Application
-     */
-    select?: ApplicationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Application
-     */
-    omit?: ApplicationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApplicationInclude<ExtArgs> | null
-    /**
-     * Filter which Application to delete.
-     */
-    where: ApplicationWhereUniqueInput
-  }
-
-  /**
-   * Application deleteMany
-   */
-  export type ApplicationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Applications to delete
-     */
-    where?: ApplicationWhereInput
-    /**
-     * Limit how many Applications to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Application.childApplications
-   */
-  export type Application$childApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Application
-     */
-    select?: ApplicationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Application
-     */
-    omit?: ApplicationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApplicationInclude<ExtArgs> | null
-    where?: ApplicationWhereInput
-    orderBy?: ApplicationOrderByWithRelationInput | ApplicationOrderByWithRelationInput[]
-    cursor?: ApplicationWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ApplicationScalarFieldEnum | ApplicationScalarFieldEnum[]
-  }
-
-  /**
-   * Application.defaultRole
-   */
-  export type Application$defaultRoleArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the AuthzRole
-     */
-    select?: AuthzRoleSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the AuthzRole
-     */
-    omit?: AuthzRoleOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: AuthzRoleInclude<ExtArgs> | null
-    where?: AuthzRoleWhereInput
-  }
-
-  /**
-   * Application without action
-   */
-  export type ApplicationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Application
-     */
-    select?: ApplicationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Application
-     */
-    omit?: ApplicationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApplicationInclude<ExtArgs> | null
   }
 
 
@@ -68292,29 +66794,6 @@ export namespace Prisma {
   export type AuthzRoleScalarFieldEnum = (typeof AuthzRoleScalarFieldEnum)[keyof typeof AuthzRoleScalarFieldEnum]
 
 
-  export const ApplicationScalarFieldEnum: {
-    id: 'id',
-    name: 'name',
-    description: 'description',
-    icon: 'icon',
-    website: 'website',
-    appSecret: 'appSecret',
-    createdAt: 'createdAt',
-    endpoints: 'endpoints',
-    status: 'status',
-    responseFields: 'responseFields',
-    tokenFields: 'tokenFields',
-    details: 'details',
-    party: 'party',
-    permissionType: 'permissionType',
-    developerAccountId: 'developerAccountId',
-    parentApplicationId: 'parentApplicationId',
-    defaultRoleId: 'defaultRoleId'
-  };
-
-  export type ApplicationScalarFieldEnum = (typeof ApplicationScalarFieldEnum)[keyof typeof ApplicationScalarFieldEnum]
-
-
   export const AccountAccessScalarFieldEnum: {
     accountId: 'accountId',
     appId: 'appId',
@@ -68834,7 +67313,6 @@ export namespace Prisma {
     accessRows?: AccountAccessListRelationFilter
     workingProfileAccount?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
     workingProfileOf?: AccountListRelationFilter
-    developedApplications?: ApplicationListRelationFilter
     agencyAgentMapAsAgency?: AgencyAgentMapListRelationFilter
     agencyAgentMapAsAgent?: AgencyAgentMapListRelationFilter
     baseLeadsBelongingTo?: BaseLeadListRelationFilter
@@ -68863,7 +67341,6 @@ export namespace Prisma {
     accessRows?: AccountAccessOrderByRelationAggregateInput
     workingProfileAccount?: AccountOrderByWithRelationInput
     workingProfileOf?: AccountOrderByRelationAggregateInput
-    developedApplications?: ApplicationOrderByRelationAggregateInput
     agencyAgentMapAsAgency?: AgencyAgentMapOrderByRelationAggregateInput
     agencyAgentMapAsAgent?: AgencyAgentMapOrderByRelationAggregateInput
     baseLeadsBelongingTo?: BaseLeadOrderByRelationAggregateInput
@@ -68895,7 +67372,6 @@ export namespace Prisma {
     accessRows?: AccountAccessListRelationFilter
     workingProfileAccount?: XOR<AccountNullableScalarRelationFilter, AccountWhereInput> | null
     workingProfileOf?: AccountListRelationFilter
-    developedApplications?: ApplicationListRelationFilter
     agencyAgentMapAsAgency?: AgencyAgentMapListRelationFilter
     agencyAgentMapAsAgent?: AgencyAgentMapListRelationFilter
     baseLeadsBelongingTo?: BaseLeadListRelationFilter
@@ -71868,7 +70344,6 @@ export namespace Prisma {
     permissions?: JsonNullableFilter<"AuthzRole">
     updatedOn?: DateTimeFilter<"AuthzRole"> | Date | string
     accessRows?: AccountAccessListRelationFilter
-    defaultForApplications?: ApplicationListRelationFilter
   }
 
   export type AuthzRoleOrderByWithRelationInput = {
@@ -71883,7 +70358,6 @@ export namespace Prisma {
     permissions?: SortOrderInput | SortOrder
     updatedOn?: SortOrder
     accessRows?: AccountAccessOrderByRelationAggregateInput
-    defaultForApplications?: ApplicationOrderByRelationAggregateInput
   }
 
   export type AuthzRoleWhereUniqueInput = Prisma.AtLeast<{
@@ -71901,7 +70375,6 @@ export namespace Prisma {
     permissions?: JsonNullableFilter<"AuthzRole">
     updatedOn?: DateTimeFilter<"AuthzRole"> | Date | string
     accessRows?: AccountAccessListRelationFilter
-    defaultForApplications?: ApplicationListRelationFilter
   }, "id">
 
   export type AuthzRoleOrderByWithAggregationInput = {
@@ -71934,132 +70407,6 @@ export namespace Prisma {
     applicableFor?: JsonNullableWithAggregatesFilter<"AuthzRole">
     permissions?: JsonNullableWithAggregatesFilter<"AuthzRole">
     updatedOn?: DateTimeWithAggregatesFilter<"AuthzRole"> | Date | string
-  }
-
-  export type ApplicationWhereInput = {
-    AND?: ApplicationWhereInput | ApplicationWhereInput[]
-    OR?: ApplicationWhereInput[]
-    NOT?: ApplicationWhereInput | ApplicationWhereInput[]
-    id?: StringFilter<"Application"> | string
-    name?: StringFilter<"Application"> | string
-    description?: StringNullableFilter<"Application"> | string | null
-    icon?: StringNullableFilter<"Application"> | string | null
-    website?: StringNullableFilter<"Application"> | string | null
-    appSecret?: StringNullableFilter<"Application"> | string | null
-    createdAt?: DateTimeFilter<"Application"> | Date | string
-    endpoints?: JsonNullableFilter<"Application">
-    status?: StringFilter<"Application"> | string
-    responseFields?: StringNullableListFilter<"Application">
-    tokenFields?: StringNullableListFilter<"Application">
-    details?: JsonNullableFilter<"Application">
-    party?: IntFilter<"Application"> | number
-    permissionType?: StringFilter<"Application"> | string
-    developerAccountId?: StringFilter<"Application"> | string
-    parentApplicationId?: StringFilter<"Application"> | string
-    defaultRoleId?: StringNullableFilter<"Application"> | string | null
-    developerAccount?: XOR<AccountScalarRelationFilter, AccountWhereInput>
-    parentApplication?: XOR<ApplicationScalarRelationFilter, ApplicationWhereInput>
-    childApplications?: ApplicationListRelationFilter
-    defaultRole?: XOR<AuthzRoleNullableScalarRelationFilter, AuthzRoleWhereInput> | null
-  }
-
-  export type ApplicationOrderByWithRelationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrderInput | SortOrder
-    icon?: SortOrderInput | SortOrder
-    website?: SortOrderInput | SortOrder
-    appSecret?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    endpoints?: SortOrderInput | SortOrder
-    status?: SortOrder
-    responseFields?: SortOrder
-    tokenFields?: SortOrder
-    details?: SortOrderInput | SortOrder
-    party?: SortOrder
-    permissionType?: SortOrder
-    developerAccountId?: SortOrder
-    parentApplicationId?: SortOrder
-    defaultRoleId?: SortOrderInput | SortOrder
-    developerAccount?: AccountOrderByWithRelationInput
-    parentApplication?: ApplicationOrderByWithRelationInput
-    childApplications?: ApplicationOrderByRelationAggregateInput
-    defaultRole?: AuthzRoleOrderByWithRelationInput
-  }
-
-  export type ApplicationWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: ApplicationWhereInput | ApplicationWhereInput[]
-    OR?: ApplicationWhereInput[]
-    NOT?: ApplicationWhereInput | ApplicationWhereInput[]
-    name?: StringFilter<"Application"> | string
-    description?: StringNullableFilter<"Application"> | string | null
-    icon?: StringNullableFilter<"Application"> | string | null
-    website?: StringNullableFilter<"Application"> | string | null
-    appSecret?: StringNullableFilter<"Application"> | string | null
-    createdAt?: DateTimeFilter<"Application"> | Date | string
-    endpoints?: JsonNullableFilter<"Application">
-    status?: StringFilter<"Application"> | string
-    responseFields?: StringNullableListFilter<"Application">
-    tokenFields?: StringNullableListFilter<"Application">
-    details?: JsonNullableFilter<"Application">
-    party?: IntFilter<"Application"> | number
-    permissionType?: StringFilter<"Application"> | string
-    developerAccountId?: StringFilter<"Application"> | string
-    parentApplicationId?: StringFilter<"Application"> | string
-    defaultRoleId?: StringNullableFilter<"Application"> | string | null
-    developerAccount?: XOR<AccountScalarRelationFilter, AccountWhereInput>
-    parentApplication?: XOR<ApplicationScalarRelationFilter, ApplicationWhereInput>
-    childApplications?: ApplicationListRelationFilter
-    defaultRole?: XOR<AuthzRoleNullableScalarRelationFilter, AuthzRoleWhereInput> | null
-  }, "id">
-
-  export type ApplicationOrderByWithAggregationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrderInput | SortOrder
-    icon?: SortOrderInput | SortOrder
-    website?: SortOrderInput | SortOrder
-    appSecret?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    endpoints?: SortOrderInput | SortOrder
-    status?: SortOrder
-    responseFields?: SortOrder
-    tokenFields?: SortOrder
-    details?: SortOrderInput | SortOrder
-    party?: SortOrder
-    permissionType?: SortOrder
-    developerAccountId?: SortOrder
-    parentApplicationId?: SortOrder
-    defaultRoleId?: SortOrderInput | SortOrder
-    _count?: ApplicationCountOrderByAggregateInput
-    _avg?: ApplicationAvgOrderByAggregateInput
-    _max?: ApplicationMaxOrderByAggregateInput
-    _min?: ApplicationMinOrderByAggregateInput
-    _sum?: ApplicationSumOrderByAggregateInput
-  }
-
-  export type ApplicationScalarWhereWithAggregatesInput = {
-    AND?: ApplicationScalarWhereWithAggregatesInput | ApplicationScalarWhereWithAggregatesInput[]
-    OR?: ApplicationScalarWhereWithAggregatesInput[]
-    NOT?: ApplicationScalarWhereWithAggregatesInput | ApplicationScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Application"> | string
-    name?: StringWithAggregatesFilter<"Application"> | string
-    description?: StringNullableWithAggregatesFilter<"Application"> | string | null
-    icon?: StringNullableWithAggregatesFilter<"Application"> | string | null
-    website?: StringNullableWithAggregatesFilter<"Application"> | string | null
-    appSecret?: StringNullableWithAggregatesFilter<"Application"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"Application"> | Date | string
-    endpoints?: JsonNullableWithAggregatesFilter<"Application">
-    status?: StringWithAggregatesFilter<"Application"> | string
-    responseFields?: StringNullableListFilter<"Application">
-    tokenFields?: StringNullableListFilter<"Application">
-    details?: JsonNullableWithAggregatesFilter<"Application">
-    party?: IntWithAggregatesFilter<"Application"> | number
-    permissionType?: StringWithAggregatesFilter<"Application"> | string
-    developerAccountId?: StringWithAggregatesFilter<"Application"> | string
-    parentApplicationId?: StringWithAggregatesFilter<"Application"> | string
-    defaultRoleId?: StringNullableWithAggregatesFilter<"Application"> | string | null
   }
 
   export type AccountAccessWhereInput = {
@@ -72974,7 +71321,6 @@ export namespace Prisma {
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
@@ -73002,7 +71348,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
@@ -73030,7 +71375,6 @@ export namespace Prisma {
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
@@ -73058,7 +71402,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
@@ -76346,7 +74689,6 @@ export namespace Prisma {
     permissions?: NullableJsonNullValueInput | InputJsonValue
     updatedOn?: Date | string
     accessRows?: AccountAccessCreateNestedManyWithoutRoleInput
-    defaultForApplications?: ApplicationCreateNestedManyWithoutDefaultRoleInput
   }
 
   export type AuthzRoleUncheckedCreateInput = {
@@ -76361,7 +74703,6 @@ export namespace Prisma {
     permissions?: NullableJsonNullValueInput | InputJsonValue
     updatedOn?: Date | string
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutRoleInput
-    defaultForApplications?: ApplicationUncheckedCreateNestedManyWithoutDefaultRoleInput
   }
 
   export type AuthzRoleUpdateInput = {
@@ -76376,7 +74717,6 @@ export namespace Prisma {
     permissions?: NullableJsonNullValueInput | InputJsonValue
     updatedOn?: DateTimeFieldUpdateOperationsInput | Date | string
     accessRows?: AccountAccessUpdateManyWithoutRoleNestedInput
-    defaultForApplications?: ApplicationUpdateManyWithoutDefaultRoleNestedInput
   }
 
   export type AuthzRoleUncheckedUpdateInput = {
@@ -76391,7 +74731,6 @@ export namespace Prisma {
     permissions?: NullableJsonNullValueInput | InputJsonValue
     updatedOn?: DateTimeFieldUpdateOperationsInput | Date | string
     accessRows?: AccountAccessUncheckedUpdateManyWithoutRoleNestedInput
-    defaultForApplications?: ApplicationUncheckedUpdateManyWithoutDefaultRoleNestedInput
   }
 
   export type AuthzRoleCreateManyInput = {
@@ -76431,147 +74770,6 @@ export namespace Prisma {
     applicableFor?: NullableJsonNullValueInput | InputJsonValue
     permissions?: NullableJsonNullValueInput | InputJsonValue
     updatedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ApplicationCreateInput = {
-    id: string
-    name: string
-    description?: string | null
-    icon?: string | null
-    website?: string | null
-    appSecret?: string | null
-    createdAt?: Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: string
-    responseFields?: ApplicationCreateresponseFieldsInput | string[]
-    tokenFields?: ApplicationCreatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: number
-    permissionType: string
-    developerAccount: AccountCreateNestedOneWithoutDevelopedApplicationsInput
-    parentApplication: ApplicationCreateNestedOneWithoutChildApplicationsInput
-    childApplications?: ApplicationCreateNestedManyWithoutParentApplicationInput
-    defaultRole?: AuthzRoleCreateNestedOneWithoutDefaultForApplicationsInput
-  }
-
-  export type ApplicationUncheckedCreateInput = {
-    id: string
-    name: string
-    description?: string | null
-    icon?: string | null
-    website?: string | null
-    appSecret?: string | null
-    createdAt?: Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: string
-    responseFields?: ApplicationCreateresponseFieldsInput | string[]
-    tokenFields?: ApplicationCreatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: number
-    permissionType: string
-    developerAccountId: string
-    parentApplicationId: string
-    defaultRoleId?: string | null
-    childApplications?: ApplicationUncheckedCreateNestedManyWithoutParentApplicationInput
-  }
-
-  export type ApplicationUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    icon?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    appSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    responseFields?: ApplicationUpdateresponseFieldsInput | string[]
-    tokenFields?: ApplicationUpdatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: IntFieldUpdateOperationsInput | number
-    permissionType?: StringFieldUpdateOperationsInput | string
-    developerAccount?: AccountUpdateOneRequiredWithoutDevelopedApplicationsNestedInput
-    parentApplication?: ApplicationUpdateOneRequiredWithoutChildApplicationsNestedInput
-    childApplications?: ApplicationUpdateManyWithoutParentApplicationNestedInput
-    defaultRole?: AuthzRoleUpdateOneWithoutDefaultForApplicationsNestedInput
-  }
-
-  export type ApplicationUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    icon?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    appSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    responseFields?: ApplicationUpdateresponseFieldsInput | string[]
-    tokenFields?: ApplicationUpdatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: IntFieldUpdateOperationsInput | number
-    permissionType?: StringFieldUpdateOperationsInput | string
-    developerAccountId?: StringFieldUpdateOperationsInput | string
-    parentApplicationId?: StringFieldUpdateOperationsInput | string
-    defaultRoleId?: NullableStringFieldUpdateOperationsInput | string | null
-    childApplications?: ApplicationUncheckedUpdateManyWithoutParentApplicationNestedInput
-  }
-
-  export type ApplicationCreateManyInput = {
-    id: string
-    name: string
-    description?: string | null
-    icon?: string | null
-    website?: string | null
-    appSecret?: string | null
-    createdAt?: Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: string
-    responseFields?: ApplicationCreateresponseFieldsInput | string[]
-    tokenFields?: ApplicationCreatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: number
-    permissionType: string
-    developerAccountId: string
-    parentApplicationId: string
-    defaultRoleId?: string | null
-  }
-
-  export type ApplicationUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    icon?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    appSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    responseFields?: ApplicationUpdateresponseFieldsInput | string[]
-    tokenFields?: ApplicationUpdatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: IntFieldUpdateOperationsInput | number
-    permissionType?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type ApplicationUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    icon?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    appSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    responseFields?: ApplicationUpdateresponseFieldsInput | string[]
-    tokenFields?: ApplicationUpdatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: IntFieldUpdateOperationsInput | number
-    permissionType?: StringFieldUpdateOperationsInput | string
-    developerAccountId?: StringFieldUpdateOperationsInput | string
-    parentApplicationId?: StringFieldUpdateOperationsInput | string
-    defaultRoleId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AccountAccessCreateInput = {
@@ -77674,12 +75872,6 @@ export namespace Prisma {
     none?: AccountWhereInput
   }
 
-  export type ApplicationListRelationFilter = {
-    every?: ApplicationWhereInput
-    some?: ApplicationWhereInput
-    none?: ApplicationWhereInput
-  }
-
   export type AgencyAgentMapListRelationFilter = {
     every?: AgencyAgentMapWhereInput
     some?: AgencyAgentMapWhereInput
@@ -77727,10 +75919,6 @@ export namespace Prisma {
   }
 
   export type AccountOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ApplicationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -79965,76 +78153,6 @@ export namespace Prisma {
     updatedOn?: SortOrder
   }
 
-  export type ApplicationScalarRelationFilter = {
-    is?: ApplicationWhereInput
-    isNot?: ApplicationWhereInput
-  }
-
-  export type AuthzRoleNullableScalarRelationFilter = {
-    is?: AuthzRoleWhereInput | null
-    isNot?: AuthzRoleWhereInput | null
-  }
-
-  export type ApplicationCountOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
-    icon?: SortOrder
-    website?: SortOrder
-    appSecret?: SortOrder
-    createdAt?: SortOrder
-    endpoints?: SortOrder
-    status?: SortOrder
-    responseFields?: SortOrder
-    tokenFields?: SortOrder
-    details?: SortOrder
-    party?: SortOrder
-    permissionType?: SortOrder
-    developerAccountId?: SortOrder
-    parentApplicationId?: SortOrder
-    defaultRoleId?: SortOrder
-  }
-
-  export type ApplicationAvgOrderByAggregateInput = {
-    party?: SortOrder
-  }
-
-  export type ApplicationMaxOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
-    icon?: SortOrder
-    website?: SortOrder
-    appSecret?: SortOrder
-    createdAt?: SortOrder
-    status?: SortOrder
-    party?: SortOrder
-    permissionType?: SortOrder
-    developerAccountId?: SortOrder
-    parentApplicationId?: SortOrder
-    defaultRoleId?: SortOrder
-  }
-
-  export type ApplicationMinOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
-    icon?: SortOrder
-    website?: SortOrder
-    appSecret?: SortOrder
-    createdAt?: SortOrder
-    status?: SortOrder
-    party?: SortOrder
-    permissionType?: SortOrder
-    developerAccountId?: SortOrder
-    parentApplicationId?: SortOrder
-    defaultRoleId?: SortOrder
-  }
-
-  export type ApplicationSumOrderByAggregateInput = {
-    party?: SortOrder
-  }
-
   export type AuthzRoleScalarRelationFilter = {
     is?: AuthzRoleWhereInput
     isNot?: AuthzRoleWhereInput
@@ -80624,13 +78742,6 @@ export namespace Prisma {
     connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
   }
 
-  export type ApplicationCreateNestedManyWithoutDeveloperAccountInput = {
-    create?: XOR<ApplicationCreateWithoutDeveloperAccountInput, ApplicationUncheckedCreateWithoutDeveloperAccountInput> | ApplicationCreateWithoutDeveloperAccountInput[] | ApplicationUncheckedCreateWithoutDeveloperAccountInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutDeveloperAccountInput | ApplicationCreateOrConnectWithoutDeveloperAccountInput[]
-    createMany?: ApplicationCreateManyDeveloperAccountInputEnvelope
-    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-  }
-
   export type AgencyAgentMapCreateNestedManyWithoutAgencyInput = {
     create?: XOR<AgencyAgentMapCreateWithoutAgencyInput, AgencyAgentMapUncheckedCreateWithoutAgencyInput> | AgencyAgentMapCreateWithoutAgencyInput[] | AgencyAgentMapUncheckedCreateWithoutAgencyInput[]
     connectOrCreate?: AgencyAgentMapCreateOrConnectWithoutAgencyInput | AgencyAgentMapCreateOrConnectWithoutAgencyInput[]
@@ -80720,13 +78831,6 @@ export namespace Prisma {
     connectOrCreate?: AccountCreateOrConnectWithoutWorkingProfileAccountInput | AccountCreateOrConnectWithoutWorkingProfileAccountInput[]
     createMany?: AccountCreateManyWorkingProfileAccountInputEnvelope
     connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-  }
-
-  export type ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput = {
-    create?: XOR<ApplicationCreateWithoutDeveloperAccountInput, ApplicationUncheckedCreateWithoutDeveloperAccountInput> | ApplicationCreateWithoutDeveloperAccountInput[] | ApplicationUncheckedCreateWithoutDeveloperAccountInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutDeveloperAccountInput | ApplicationCreateOrConnectWithoutDeveloperAccountInput[]
-    createMany?: ApplicationCreateManyDeveloperAccountInputEnvelope
-    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
   }
 
   export type AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput = {
@@ -80846,20 +78950,6 @@ export namespace Prisma {
     update?: AccountUpdateWithWhereUniqueWithoutWorkingProfileAccountInput | AccountUpdateWithWhereUniqueWithoutWorkingProfileAccountInput[]
     updateMany?: AccountUpdateManyWithWhereWithoutWorkingProfileAccountInput | AccountUpdateManyWithWhereWithoutWorkingProfileAccountInput[]
     deleteMany?: AccountScalarWhereInput | AccountScalarWhereInput[]
-  }
-
-  export type ApplicationUpdateManyWithoutDeveloperAccountNestedInput = {
-    create?: XOR<ApplicationCreateWithoutDeveloperAccountInput, ApplicationUncheckedCreateWithoutDeveloperAccountInput> | ApplicationCreateWithoutDeveloperAccountInput[] | ApplicationUncheckedCreateWithoutDeveloperAccountInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutDeveloperAccountInput | ApplicationCreateOrConnectWithoutDeveloperAccountInput[]
-    upsert?: ApplicationUpsertWithWhereUniqueWithoutDeveloperAccountInput | ApplicationUpsertWithWhereUniqueWithoutDeveloperAccountInput[]
-    createMany?: ApplicationCreateManyDeveloperAccountInputEnvelope
-    set?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    disconnect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    delete?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    update?: ApplicationUpdateWithWhereUniqueWithoutDeveloperAccountInput | ApplicationUpdateWithWhereUniqueWithoutDeveloperAccountInput[]
-    updateMany?: ApplicationUpdateManyWithWhereWithoutDeveloperAccountInput | ApplicationUpdateManyWithWhereWithoutDeveloperAccountInput[]
-    deleteMany?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
   }
 
   export type AgencyAgentMapUpdateManyWithoutAgencyNestedInput = {
@@ -81042,20 +79132,6 @@ export namespace Prisma {
     update?: AccountUpdateWithWhereUniqueWithoutWorkingProfileAccountInput | AccountUpdateWithWhereUniqueWithoutWorkingProfileAccountInput[]
     updateMany?: AccountUpdateManyWithWhereWithoutWorkingProfileAccountInput | AccountUpdateManyWithWhereWithoutWorkingProfileAccountInput[]
     deleteMany?: AccountScalarWhereInput | AccountScalarWhereInput[]
-  }
-
-  export type ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput = {
-    create?: XOR<ApplicationCreateWithoutDeveloperAccountInput, ApplicationUncheckedCreateWithoutDeveloperAccountInput> | ApplicationCreateWithoutDeveloperAccountInput[] | ApplicationUncheckedCreateWithoutDeveloperAccountInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutDeveloperAccountInput | ApplicationCreateOrConnectWithoutDeveloperAccountInput[]
-    upsert?: ApplicationUpsertWithWhereUniqueWithoutDeveloperAccountInput | ApplicationUpsertWithWhereUniqueWithoutDeveloperAccountInput[]
-    createMany?: ApplicationCreateManyDeveloperAccountInputEnvelope
-    set?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    disconnect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    delete?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    update?: ApplicationUpdateWithWhereUniqueWithoutDeveloperAccountInput | ApplicationUpdateWithWhereUniqueWithoutDeveloperAccountInput[]
-    updateMany?: ApplicationUpdateManyWithWhereWithoutDeveloperAccountInput | ApplicationUpdateManyWithWhereWithoutDeveloperAccountInput[]
-    deleteMany?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
   }
 
   export type AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput = {
@@ -82694,25 +80770,11 @@ export namespace Prisma {
     connect?: AccountAccessWhereUniqueInput | AccountAccessWhereUniqueInput[]
   }
 
-  export type ApplicationCreateNestedManyWithoutDefaultRoleInput = {
-    create?: XOR<ApplicationCreateWithoutDefaultRoleInput, ApplicationUncheckedCreateWithoutDefaultRoleInput> | ApplicationCreateWithoutDefaultRoleInput[] | ApplicationUncheckedCreateWithoutDefaultRoleInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutDefaultRoleInput | ApplicationCreateOrConnectWithoutDefaultRoleInput[]
-    createMany?: ApplicationCreateManyDefaultRoleInputEnvelope
-    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-  }
-
   export type AccountAccessUncheckedCreateNestedManyWithoutRoleInput = {
     create?: XOR<AccountAccessCreateWithoutRoleInput, AccountAccessUncheckedCreateWithoutRoleInput> | AccountAccessCreateWithoutRoleInput[] | AccountAccessUncheckedCreateWithoutRoleInput[]
     connectOrCreate?: AccountAccessCreateOrConnectWithoutRoleInput | AccountAccessCreateOrConnectWithoutRoleInput[]
     createMany?: AccountAccessCreateManyRoleInputEnvelope
     connect?: AccountAccessWhereUniqueInput | AccountAccessWhereUniqueInput[]
-  }
-
-  export type ApplicationUncheckedCreateNestedManyWithoutDefaultRoleInput = {
-    create?: XOR<ApplicationCreateWithoutDefaultRoleInput, ApplicationUncheckedCreateWithoutDefaultRoleInput> | ApplicationCreateWithoutDefaultRoleInput[] | ApplicationUncheckedCreateWithoutDefaultRoleInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutDefaultRoleInput | ApplicationCreateOrConnectWithoutDefaultRoleInput[]
-    createMany?: ApplicationCreateManyDefaultRoleInputEnvelope
-    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
   }
 
   export type AccountAccessUpdateManyWithoutRoleNestedInput = {
@@ -82729,20 +80791,6 @@ export namespace Prisma {
     deleteMany?: AccountAccessScalarWhereInput | AccountAccessScalarWhereInput[]
   }
 
-  export type ApplicationUpdateManyWithoutDefaultRoleNestedInput = {
-    create?: XOR<ApplicationCreateWithoutDefaultRoleInput, ApplicationUncheckedCreateWithoutDefaultRoleInput> | ApplicationCreateWithoutDefaultRoleInput[] | ApplicationUncheckedCreateWithoutDefaultRoleInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutDefaultRoleInput | ApplicationCreateOrConnectWithoutDefaultRoleInput[]
-    upsert?: ApplicationUpsertWithWhereUniqueWithoutDefaultRoleInput | ApplicationUpsertWithWhereUniqueWithoutDefaultRoleInput[]
-    createMany?: ApplicationCreateManyDefaultRoleInputEnvelope
-    set?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    disconnect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    delete?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    update?: ApplicationUpdateWithWhereUniqueWithoutDefaultRoleInput | ApplicationUpdateWithWhereUniqueWithoutDefaultRoleInput[]
-    updateMany?: ApplicationUpdateManyWithWhereWithoutDefaultRoleInput | ApplicationUpdateManyWithWhereWithoutDefaultRoleInput[]
-    deleteMany?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
-  }
-
   export type AccountAccessUncheckedUpdateManyWithoutRoleNestedInput = {
     create?: XOR<AccountAccessCreateWithoutRoleInput, AccountAccessUncheckedCreateWithoutRoleInput> | AccountAccessCreateWithoutRoleInput[] | AccountAccessUncheckedCreateWithoutRoleInput[]
     connectOrCreate?: AccountAccessCreateOrConnectWithoutRoleInput | AccountAccessCreateOrConnectWithoutRoleInput[]
@@ -82755,124 +80803,6 @@ export namespace Prisma {
     update?: AccountAccessUpdateWithWhereUniqueWithoutRoleInput | AccountAccessUpdateWithWhereUniqueWithoutRoleInput[]
     updateMany?: AccountAccessUpdateManyWithWhereWithoutRoleInput | AccountAccessUpdateManyWithWhereWithoutRoleInput[]
     deleteMany?: AccountAccessScalarWhereInput | AccountAccessScalarWhereInput[]
-  }
-
-  export type ApplicationUncheckedUpdateManyWithoutDefaultRoleNestedInput = {
-    create?: XOR<ApplicationCreateWithoutDefaultRoleInput, ApplicationUncheckedCreateWithoutDefaultRoleInput> | ApplicationCreateWithoutDefaultRoleInput[] | ApplicationUncheckedCreateWithoutDefaultRoleInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutDefaultRoleInput | ApplicationCreateOrConnectWithoutDefaultRoleInput[]
-    upsert?: ApplicationUpsertWithWhereUniqueWithoutDefaultRoleInput | ApplicationUpsertWithWhereUniqueWithoutDefaultRoleInput[]
-    createMany?: ApplicationCreateManyDefaultRoleInputEnvelope
-    set?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    disconnect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    delete?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    update?: ApplicationUpdateWithWhereUniqueWithoutDefaultRoleInput | ApplicationUpdateWithWhereUniqueWithoutDefaultRoleInput[]
-    updateMany?: ApplicationUpdateManyWithWhereWithoutDefaultRoleInput | ApplicationUpdateManyWithWhereWithoutDefaultRoleInput[]
-    deleteMany?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
-  }
-
-  export type ApplicationCreateresponseFieldsInput = {
-    set: string[]
-  }
-
-  export type ApplicationCreatetokenFieldsInput = {
-    set: string[]
-  }
-
-  export type AccountCreateNestedOneWithoutDevelopedApplicationsInput = {
-    create?: XOR<AccountCreateWithoutDevelopedApplicationsInput, AccountUncheckedCreateWithoutDevelopedApplicationsInput>
-    connectOrCreate?: AccountCreateOrConnectWithoutDevelopedApplicationsInput
-    connect?: AccountWhereUniqueInput
-  }
-
-  export type ApplicationCreateNestedOneWithoutChildApplicationsInput = {
-    create?: XOR<ApplicationCreateWithoutChildApplicationsInput, ApplicationUncheckedCreateWithoutChildApplicationsInput>
-    connectOrCreate?: ApplicationCreateOrConnectWithoutChildApplicationsInput
-    connect?: ApplicationWhereUniqueInput
-  }
-
-  export type ApplicationCreateNestedManyWithoutParentApplicationInput = {
-    create?: XOR<ApplicationCreateWithoutParentApplicationInput, ApplicationUncheckedCreateWithoutParentApplicationInput> | ApplicationCreateWithoutParentApplicationInput[] | ApplicationUncheckedCreateWithoutParentApplicationInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutParentApplicationInput | ApplicationCreateOrConnectWithoutParentApplicationInput[]
-    createMany?: ApplicationCreateManyParentApplicationInputEnvelope
-    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-  }
-
-  export type AuthzRoleCreateNestedOneWithoutDefaultForApplicationsInput = {
-    create?: XOR<AuthzRoleCreateWithoutDefaultForApplicationsInput, AuthzRoleUncheckedCreateWithoutDefaultForApplicationsInput>
-    connectOrCreate?: AuthzRoleCreateOrConnectWithoutDefaultForApplicationsInput
-    connect?: AuthzRoleWhereUniqueInput
-  }
-
-  export type ApplicationUncheckedCreateNestedManyWithoutParentApplicationInput = {
-    create?: XOR<ApplicationCreateWithoutParentApplicationInput, ApplicationUncheckedCreateWithoutParentApplicationInput> | ApplicationCreateWithoutParentApplicationInput[] | ApplicationUncheckedCreateWithoutParentApplicationInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutParentApplicationInput | ApplicationCreateOrConnectWithoutParentApplicationInput[]
-    createMany?: ApplicationCreateManyParentApplicationInputEnvelope
-    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-  }
-
-  export type ApplicationUpdateresponseFieldsInput = {
-    set?: string[]
-    push?: string | string[]
-  }
-
-  export type ApplicationUpdatetokenFieldsInput = {
-    set?: string[]
-    push?: string | string[]
-  }
-
-  export type AccountUpdateOneRequiredWithoutDevelopedApplicationsNestedInput = {
-    create?: XOR<AccountCreateWithoutDevelopedApplicationsInput, AccountUncheckedCreateWithoutDevelopedApplicationsInput>
-    connectOrCreate?: AccountCreateOrConnectWithoutDevelopedApplicationsInput
-    upsert?: AccountUpsertWithoutDevelopedApplicationsInput
-    connect?: AccountWhereUniqueInput
-    update?: XOR<XOR<AccountUpdateToOneWithWhereWithoutDevelopedApplicationsInput, AccountUpdateWithoutDevelopedApplicationsInput>, AccountUncheckedUpdateWithoutDevelopedApplicationsInput>
-  }
-
-  export type ApplicationUpdateOneRequiredWithoutChildApplicationsNestedInput = {
-    create?: XOR<ApplicationCreateWithoutChildApplicationsInput, ApplicationUncheckedCreateWithoutChildApplicationsInput>
-    connectOrCreate?: ApplicationCreateOrConnectWithoutChildApplicationsInput
-    upsert?: ApplicationUpsertWithoutChildApplicationsInput
-    connect?: ApplicationWhereUniqueInput
-    update?: XOR<XOR<ApplicationUpdateToOneWithWhereWithoutChildApplicationsInput, ApplicationUpdateWithoutChildApplicationsInput>, ApplicationUncheckedUpdateWithoutChildApplicationsInput>
-  }
-
-  export type ApplicationUpdateManyWithoutParentApplicationNestedInput = {
-    create?: XOR<ApplicationCreateWithoutParentApplicationInput, ApplicationUncheckedCreateWithoutParentApplicationInput> | ApplicationCreateWithoutParentApplicationInput[] | ApplicationUncheckedCreateWithoutParentApplicationInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutParentApplicationInput | ApplicationCreateOrConnectWithoutParentApplicationInput[]
-    upsert?: ApplicationUpsertWithWhereUniqueWithoutParentApplicationInput | ApplicationUpsertWithWhereUniqueWithoutParentApplicationInput[]
-    createMany?: ApplicationCreateManyParentApplicationInputEnvelope
-    set?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    disconnect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    delete?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    update?: ApplicationUpdateWithWhereUniqueWithoutParentApplicationInput | ApplicationUpdateWithWhereUniqueWithoutParentApplicationInput[]
-    updateMany?: ApplicationUpdateManyWithWhereWithoutParentApplicationInput | ApplicationUpdateManyWithWhereWithoutParentApplicationInput[]
-    deleteMany?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
-  }
-
-  export type AuthzRoleUpdateOneWithoutDefaultForApplicationsNestedInput = {
-    create?: XOR<AuthzRoleCreateWithoutDefaultForApplicationsInput, AuthzRoleUncheckedCreateWithoutDefaultForApplicationsInput>
-    connectOrCreate?: AuthzRoleCreateOrConnectWithoutDefaultForApplicationsInput
-    upsert?: AuthzRoleUpsertWithoutDefaultForApplicationsInput
-    disconnect?: AuthzRoleWhereInput | boolean
-    delete?: AuthzRoleWhereInput | boolean
-    connect?: AuthzRoleWhereUniqueInput
-    update?: XOR<XOR<AuthzRoleUpdateToOneWithWhereWithoutDefaultForApplicationsInput, AuthzRoleUpdateWithoutDefaultForApplicationsInput>, AuthzRoleUncheckedUpdateWithoutDefaultForApplicationsInput>
-  }
-
-  export type ApplicationUncheckedUpdateManyWithoutParentApplicationNestedInput = {
-    create?: XOR<ApplicationCreateWithoutParentApplicationInput, ApplicationUncheckedCreateWithoutParentApplicationInput> | ApplicationCreateWithoutParentApplicationInput[] | ApplicationUncheckedCreateWithoutParentApplicationInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutParentApplicationInput | ApplicationCreateOrConnectWithoutParentApplicationInput[]
-    upsert?: ApplicationUpsertWithWhereUniqueWithoutParentApplicationInput | ApplicationUpsertWithWhereUniqueWithoutParentApplicationInput[]
-    createMany?: ApplicationCreateManyParentApplicationInputEnvelope
-    set?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    disconnect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    delete?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    update?: ApplicationUpdateWithWhereUniqueWithoutParentApplicationInput | ApplicationUpdateWithWhereUniqueWithoutParentApplicationInput[]
-    updateMany?: ApplicationUpdateManyWithWhereWithoutParentApplicationInput | ApplicationUpdateManyWithWhereWithoutParentApplicationInput[]
-    deleteMany?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
   }
 
   export type AccountCreateNestedOneWithoutAccessRowsInput = {
@@ -84288,7 +82218,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
-    developedApplications?: ApplicationCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
@@ -84315,7 +82244,6 @@ export namespace Prisma {
     workingProfile?: string | null
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
-    developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
@@ -84347,7 +82275,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
@@ -84374,7 +82301,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
@@ -84395,56 +82321,6 @@ export namespace Prisma {
 
   export type AccountCreateManyWorkingProfileAccountInputEnvelope = {
     data: AccountCreateManyWorkingProfileAccountInput | AccountCreateManyWorkingProfileAccountInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type ApplicationCreateWithoutDeveloperAccountInput = {
-    id: string
-    name: string
-    description?: string | null
-    icon?: string | null
-    website?: string | null
-    appSecret?: string | null
-    createdAt?: Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: string
-    responseFields?: ApplicationCreateresponseFieldsInput | string[]
-    tokenFields?: ApplicationCreatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: number
-    permissionType: string
-    parentApplication: ApplicationCreateNestedOneWithoutChildApplicationsInput
-    childApplications?: ApplicationCreateNestedManyWithoutParentApplicationInput
-    defaultRole?: AuthzRoleCreateNestedOneWithoutDefaultForApplicationsInput
-  }
-
-  export type ApplicationUncheckedCreateWithoutDeveloperAccountInput = {
-    id: string
-    name: string
-    description?: string | null
-    icon?: string | null
-    website?: string | null
-    appSecret?: string | null
-    createdAt?: Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: string
-    responseFields?: ApplicationCreateresponseFieldsInput | string[]
-    tokenFields?: ApplicationCreatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: number
-    permissionType: string
-    parentApplicationId: string
-    defaultRoleId?: string | null
-    childApplications?: ApplicationUncheckedCreateNestedManyWithoutParentApplicationInput
-  }
-
-  export type ApplicationCreateOrConnectWithoutDeveloperAccountInput = {
-    where: ApplicationWhereUniqueInput
-    create: XOR<ApplicationCreateWithoutDeveloperAccountInput, ApplicationUncheckedCreateWithoutDeveloperAccountInput>
-  }
-
-  export type ApplicationCreateManyDeveloperAccountInputEnvelope = {
-    data: ApplicationCreateManyDeveloperAccountInput | ApplicationCreateManyDeveloperAccountInput[]
     skipDuplicates?: boolean
   }
 
@@ -84864,7 +82740,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
-    developedApplications?: ApplicationUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
@@ -84891,7 +82766,6 @@ export namespace Prisma {
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
-    developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
@@ -84936,45 +82810,6 @@ export namespace Prisma {
     bio?: StringNullableFilter<"Account"> | string | null
     workingProfile?: StringNullableFilter<"Account"> | string | null
     moreDetails?: JsonNullableFilter<"Account">
-  }
-
-  export type ApplicationUpsertWithWhereUniqueWithoutDeveloperAccountInput = {
-    where: ApplicationWhereUniqueInput
-    update: XOR<ApplicationUpdateWithoutDeveloperAccountInput, ApplicationUncheckedUpdateWithoutDeveloperAccountInput>
-    create: XOR<ApplicationCreateWithoutDeveloperAccountInput, ApplicationUncheckedCreateWithoutDeveloperAccountInput>
-  }
-
-  export type ApplicationUpdateWithWhereUniqueWithoutDeveloperAccountInput = {
-    where: ApplicationWhereUniqueInput
-    data: XOR<ApplicationUpdateWithoutDeveloperAccountInput, ApplicationUncheckedUpdateWithoutDeveloperAccountInput>
-  }
-
-  export type ApplicationUpdateManyWithWhereWithoutDeveloperAccountInput = {
-    where: ApplicationScalarWhereInput
-    data: XOR<ApplicationUpdateManyMutationInput, ApplicationUncheckedUpdateManyWithoutDeveloperAccountInput>
-  }
-
-  export type ApplicationScalarWhereInput = {
-    AND?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
-    OR?: ApplicationScalarWhereInput[]
-    NOT?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
-    id?: StringFilter<"Application"> | string
-    name?: StringFilter<"Application"> | string
-    description?: StringNullableFilter<"Application"> | string | null
-    icon?: StringNullableFilter<"Application"> | string | null
-    website?: StringNullableFilter<"Application"> | string | null
-    appSecret?: StringNullableFilter<"Application"> | string | null
-    createdAt?: DateTimeFilter<"Application"> | Date | string
-    endpoints?: JsonNullableFilter<"Application">
-    status?: StringFilter<"Application"> | string
-    responseFields?: StringNullableListFilter<"Application">
-    tokenFields?: StringNullableListFilter<"Application">
-    details?: JsonNullableFilter<"Application">
-    party?: IntFilter<"Application"> | number
-    permissionType?: StringFilter<"Application"> | string
-    developerAccountId?: StringFilter<"Application"> | string
-    parentApplicationId?: StringFilter<"Application"> | string
-    defaultRoleId?: StringNullableFilter<"Application"> | string | null
   }
 
   export type AgencyAgentMapUpsertWithWhereUniqueWithoutAgencyInput = {
@@ -87862,7 +85697,6 @@ export namespace Prisma {
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
@@ -87889,7 +85723,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
@@ -88035,7 +85868,6 @@ export namespace Prisma {
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
@@ -88062,7 +85894,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
@@ -88386,7 +86217,6 @@ export namespace Prisma {
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
@@ -88413,7 +86243,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
@@ -88445,7 +86274,6 @@ export namespace Prisma {
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
@@ -88472,7 +86300,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
@@ -88504,7 +86331,6 @@ export namespace Prisma {
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
@@ -88531,7 +86357,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
@@ -88563,7 +86388,6 @@ export namespace Prisma {
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
@@ -88590,7 +86414,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
@@ -88736,7 +86559,6 @@ export namespace Prisma {
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
@@ -88763,7 +86585,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
@@ -88801,7 +86622,6 @@ export namespace Prisma {
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
@@ -88828,7 +86648,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
@@ -88866,7 +86685,6 @@ export namespace Prisma {
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
@@ -88893,7 +86711,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
@@ -88931,7 +86748,6 @@ export namespace Prisma {
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
@@ -88958,7 +86774,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
@@ -89166,7 +86981,6 @@ export namespace Prisma {
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
     ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
@@ -89193,7 +87007,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
     ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
@@ -89225,7 +87038,6 @@ export namespace Prisma {
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
     ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
@@ -89252,7 +87064,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
     ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
@@ -89295,7 +87106,6 @@ export namespace Prisma {
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
     ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
@@ -89322,7 +87132,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
     ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
@@ -89360,7 +87169,6 @@ export namespace Prisma {
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
     ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
@@ -89387,7 +87195,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
     ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
@@ -89986,7 +87793,6 @@ export namespace Prisma {
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
     ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
@@ -90013,7 +87819,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
     ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
@@ -90139,7 +87944,6 @@ export namespace Prisma {
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
     ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
@@ -90166,7 +87970,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
     ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
@@ -90370,7 +88173,6 @@ export namespace Prisma {
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
@@ -90397,7 +88199,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
@@ -90503,7 +88304,6 @@ export namespace Prisma {
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
@@ -90530,7 +88330,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
@@ -90803,56 +88602,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ApplicationCreateWithoutDefaultRoleInput = {
-    id: string
-    name: string
-    description?: string | null
-    icon?: string | null
-    website?: string | null
-    appSecret?: string | null
-    createdAt?: Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: string
-    responseFields?: ApplicationCreateresponseFieldsInput | string[]
-    tokenFields?: ApplicationCreatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: number
-    permissionType: string
-    developerAccount: AccountCreateNestedOneWithoutDevelopedApplicationsInput
-    parentApplication: ApplicationCreateNestedOneWithoutChildApplicationsInput
-    childApplications?: ApplicationCreateNestedManyWithoutParentApplicationInput
-  }
-
-  export type ApplicationUncheckedCreateWithoutDefaultRoleInput = {
-    id: string
-    name: string
-    description?: string | null
-    icon?: string | null
-    website?: string | null
-    appSecret?: string | null
-    createdAt?: Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: string
-    responseFields?: ApplicationCreateresponseFieldsInput | string[]
-    tokenFields?: ApplicationCreatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: number
-    permissionType: string
-    developerAccountId: string
-    parentApplicationId: string
-    childApplications?: ApplicationUncheckedCreateNestedManyWithoutParentApplicationInput
-  }
-
-  export type ApplicationCreateOrConnectWithoutDefaultRoleInput = {
-    where: ApplicationWhereUniqueInput
-    create: XOR<ApplicationCreateWithoutDefaultRoleInput, ApplicationUncheckedCreateWithoutDefaultRoleInput>
-  }
-
-  export type ApplicationCreateManyDefaultRoleInputEnvelope = {
-    data: ApplicationCreateManyDefaultRoleInput | ApplicationCreateManyDefaultRoleInput[]
-    skipDuplicates?: boolean
-  }
-
   export type AccountAccessUpsertWithWhereUniqueWithoutRoleInput = {
     where: AccountAccessWhereUniqueInput
     update: XOR<AccountAccessUpdateWithoutRoleInput, AccountAccessUncheckedUpdateWithoutRoleInput>
@@ -90869,380 +88618,6 @@ export namespace Prisma {
     data: XOR<AccountAccessUpdateManyMutationInput, AccountAccessUncheckedUpdateManyWithoutRoleInput>
   }
 
-  export type ApplicationUpsertWithWhereUniqueWithoutDefaultRoleInput = {
-    where: ApplicationWhereUniqueInput
-    update: XOR<ApplicationUpdateWithoutDefaultRoleInput, ApplicationUncheckedUpdateWithoutDefaultRoleInput>
-    create: XOR<ApplicationCreateWithoutDefaultRoleInput, ApplicationUncheckedCreateWithoutDefaultRoleInput>
-  }
-
-  export type ApplicationUpdateWithWhereUniqueWithoutDefaultRoleInput = {
-    where: ApplicationWhereUniqueInput
-    data: XOR<ApplicationUpdateWithoutDefaultRoleInput, ApplicationUncheckedUpdateWithoutDefaultRoleInput>
-  }
-
-  export type ApplicationUpdateManyWithWhereWithoutDefaultRoleInput = {
-    where: ApplicationScalarWhereInput
-    data: XOR<ApplicationUpdateManyMutationInput, ApplicationUncheckedUpdateManyWithoutDefaultRoleInput>
-  }
-
-  export type AccountCreateWithoutDevelopedApplicationsInput = {
-    id: string
-    neupId?: string | null
-    accountType: string
-    createdOn?: Date | string
-    accessedOn?: Date | string
-    displayName?: string | null
-    displayImage?: string | null
-    coverImage?: string | null
-    bio?: string | null
-    moreDetails?: NullableJsonNullValueInput | InputJsonValue
-    accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
-    workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
-    workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
-    agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
-    agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
-    intelligenceMappings?: IntelligenceMappingCreateNestedManyWithoutAccountInput
-    intelligenceAlerts?: IntelligenceAlertCreateNestedManyWithoutAccountInput
-    propertyChanges?: ListingChangeCreateNestedManyWithoutAccountInput
-    createdListingChanges?: ListingChangeCreateNestedManyWithoutCreatedByInput
-    propertyChangesForProfile?: ListingChangeCreateNestedManyWithoutCreatedForInput
-    propertyChangesByWorkingProfile?: ListingChangeCreateNestedManyWithoutWorkingProfileInput
-    propertyRepresentatives?: ListingRepresentativeCreateNestedManyWithoutRepresentativeInput
-  }
-
-  export type AccountUncheckedCreateWithoutDevelopedApplicationsInput = {
-    id: string
-    neupId?: string | null
-    accountType: string
-    createdOn?: Date | string
-    accessedOn?: Date | string
-    displayName?: string | null
-    displayImage?: string | null
-    coverImage?: string | null
-    bio?: string | null
-    workingProfile?: string | null
-    moreDetails?: NullableJsonNullValueInput | InputJsonValue
-    accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
-    workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
-    agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
-    agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
-    intelligenceMappings?: IntelligenceMappingUncheckedCreateNestedManyWithoutAccountInput
-    intelligenceAlerts?: IntelligenceAlertUncheckedCreateNestedManyWithoutAccountInput
-    propertyChanges?: ListingChangeUncheckedCreateNestedManyWithoutAccountInput
-    createdListingChanges?: ListingChangeUncheckedCreateNestedManyWithoutCreatedByInput
-    propertyChangesForProfile?: ListingChangeUncheckedCreateNestedManyWithoutCreatedForInput
-    propertyChangesByWorkingProfile?: ListingChangeUncheckedCreateNestedManyWithoutWorkingProfileInput
-    propertyRepresentatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutRepresentativeInput
-  }
-
-  export type AccountCreateOrConnectWithoutDevelopedApplicationsInput = {
-    where: AccountWhereUniqueInput
-    create: XOR<AccountCreateWithoutDevelopedApplicationsInput, AccountUncheckedCreateWithoutDevelopedApplicationsInput>
-  }
-
-  export type ApplicationCreateWithoutChildApplicationsInput = {
-    id: string
-    name: string
-    description?: string | null
-    icon?: string | null
-    website?: string | null
-    appSecret?: string | null
-    createdAt?: Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: string
-    responseFields?: ApplicationCreateresponseFieldsInput | string[]
-    tokenFields?: ApplicationCreatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: number
-    permissionType: string
-    developerAccount: AccountCreateNestedOneWithoutDevelopedApplicationsInput
-    parentApplication: ApplicationCreateNestedOneWithoutChildApplicationsInput
-    defaultRole?: AuthzRoleCreateNestedOneWithoutDefaultForApplicationsInput
-  }
-
-  export type ApplicationUncheckedCreateWithoutChildApplicationsInput = {
-    id: string
-    name: string
-    description?: string | null
-    icon?: string | null
-    website?: string | null
-    appSecret?: string | null
-    createdAt?: Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: string
-    responseFields?: ApplicationCreateresponseFieldsInput | string[]
-    tokenFields?: ApplicationCreatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: number
-    permissionType: string
-    developerAccountId: string
-    parentApplicationId: string
-    defaultRoleId?: string | null
-  }
-
-  export type ApplicationCreateOrConnectWithoutChildApplicationsInput = {
-    where: ApplicationWhereUniqueInput
-    create: XOR<ApplicationCreateWithoutChildApplicationsInput, ApplicationUncheckedCreateWithoutChildApplicationsInput>
-  }
-
-  export type ApplicationCreateWithoutParentApplicationInput = {
-    id: string
-    name: string
-    description?: string | null
-    icon?: string | null
-    website?: string | null
-    appSecret?: string | null
-    createdAt?: Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: string
-    responseFields?: ApplicationCreateresponseFieldsInput | string[]
-    tokenFields?: ApplicationCreatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: number
-    permissionType: string
-    developerAccount: AccountCreateNestedOneWithoutDevelopedApplicationsInput
-    childApplications?: ApplicationCreateNestedManyWithoutParentApplicationInput
-    defaultRole?: AuthzRoleCreateNestedOneWithoutDefaultForApplicationsInput
-  }
-
-  export type ApplicationUncheckedCreateWithoutParentApplicationInput = {
-    id: string
-    name: string
-    description?: string | null
-    icon?: string | null
-    website?: string | null
-    appSecret?: string | null
-    createdAt?: Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: string
-    responseFields?: ApplicationCreateresponseFieldsInput | string[]
-    tokenFields?: ApplicationCreatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: number
-    permissionType: string
-    developerAccountId: string
-    defaultRoleId?: string | null
-    childApplications?: ApplicationUncheckedCreateNestedManyWithoutParentApplicationInput
-  }
-
-  export type ApplicationCreateOrConnectWithoutParentApplicationInput = {
-    where: ApplicationWhereUniqueInput
-    create: XOR<ApplicationCreateWithoutParentApplicationInput, ApplicationUncheckedCreateWithoutParentApplicationInput>
-  }
-
-  export type ApplicationCreateManyParentApplicationInputEnvelope = {
-    data: ApplicationCreateManyParentApplicationInput | ApplicationCreateManyParentApplicationInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type AuthzRoleCreateWithoutDefaultForApplicationsInput = {
-    id?: string
-    name: string
-    description?: string | null
-    appId: string
-    scope?: string | null
-    acquisitionType?: string | null
-    approvalPolicy?: string | null
-    applicableFor?: NullableJsonNullValueInput | InputJsonValue
-    permissions?: NullableJsonNullValueInput | InputJsonValue
-    updatedOn?: Date | string
-    accessRows?: AccountAccessCreateNestedManyWithoutRoleInput
-  }
-
-  export type AuthzRoleUncheckedCreateWithoutDefaultForApplicationsInput = {
-    id?: string
-    name: string
-    description?: string | null
-    appId: string
-    scope?: string | null
-    acquisitionType?: string | null
-    approvalPolicy?: string | null
-    applicableFor?: NullableJsonNullValueInput | InputJsonValue
-    permissions?: NullableJsonNullValueInput | InputJsonValue
-    updatedOn?: Date | string
-    accessRows?: AccountAccessUncheckedCreateNestedManyWithoutRoleInput
-  }
-
-  export type AuthzRoleCreateOrConnectWithoutDefaultForApplicationsInput = {
-    where: AuthzRoleWhereUniqueInput
-    create: XOR<AuthzRoleCreateWithoutDefaultForApplicationsInput, AuthzRoleUncheckedCreateWithoutDefaultForApplicationsInput>
-  }
-
-  export type AccountUpsertWithoutDevelopedApplicationsInput = {
-    update: XOR<AccountUpdateWithoutDevelopedApplicationsInput, AccountUncheckedUpdateWithoutDevelopedApplicationsInput>
-    create: XOR<AccountCreateWithoutDevelopedApplicationsInput, AccountUncheckedCreateWithoutDevelopedApplicationsInput>
-    where?: AccountWhereInput
-  }
-
-  export type AccountUpdateToOneWithWhereWithoutDevelopedApplicationsInput = {
-    where?: AccountWhereInput
-    data: XOR<AccountUpdateWithoutDevelopedApplicationsInput, AccountUncheckedUpdateWithoutDevelopedApplicationsInput>
-  }
-
-  export type AccountUpdateWithoutDevelopedApplicationsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    neupId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountType?: StringFieldUpdateOperationsInput | string
-    createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accessedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    displayName?: NullableStringFieldUpdateOperationsInput | string | null
-    displayImage?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    moreDetails?: NullableJsonNullValueInput | InputJsonValue
-    accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
-    workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
-    workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
-    agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
-    agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
-    intelligenceMappings?: IntelligenceMappingUpdateManyWithoutAccountNestedInput
-    intelligenceAlerts?: IntelligenceAlertUpdateManyWithoutAccountNestedInput
-    propertyChanges?: ListingChangeUpdateManyWithoutAccountNestedInput
-    createdListingChanges?: ListingChangeUpdateManyWithoutCreatedByNestedInput
-    propertyChangesForProfile?: ListingChangeUpdateManyWithoutCreatedForNestedInput
-    propertyChangesByWorkingProfile?: ListingChangeUpdateManyWithoutWorkingProfileNestedInput
-    propertyRepresentatives?: ListingRepresentativeUpdateManyWithoutRepresentativeNestedInput
-  }
-
-  export type AccountUncheckedUpdateWithoutDevelopedApplicationsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    neupId?: NullableStringFieldUpdateOperationsInput | string | null
-    accountType?: StringFieldUpdateOperationsInput | string
-    createdOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accessedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    displayName?: NullableStringFieldUpdateOperationsInput | string | null
-    displayImage?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
-    moreDetails?: NullableJsonNullValueInput | InputJsonValue
-    accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
-    workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
-    agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
-    agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
-    intelligenceMappings?: IntelligenceMappingUncheckedUpdateManyWithoutAccountNestedInput
-    intelligenceAlerts?: IntelligenceAlertUncheckedUpdateManyWithoutAccountNestedInput
-    propertyChanges?: ListingChangeUncheckedUpdateManyWithoutAccountNestedInput
-    createdListingChanges?: ListingChangeUncheckedUpdateManyWithoutCreatedByNestedInput
-    propertyChangesForProfile?: ListingChangeUncheckedUpdateManyWithoutCreatedForNestedInput
-    propertyChangesByWorkingProfile?: ListingChangeUncheckedUpdateManyWithoutWorkingProfileNestedInput
-    propertyRepresentatives?: ListingRepresentativeUncheckedUpdateManyWithoutRepresentativeNestedInput
-  }
-
-  export type ApplicationUpsertWithoutChildApplicationsInput = {
-    update: XOR<ApplicationUpdateWithoutChildApplicationsInput, ApplicationUncheckedUpdateWithoutChildApplicationsInput>
-    create: XOR<ApplicationCreateWithoutChildApplicationsInput, ApplicationUncheckedCreateWithoutChildApplicationsInput>
-    where?: ApplicationWhereInput
-  }
-
-  export type ApplicationUpdateToOneWithWhereWithoutChildApplicationsInput = {
-    where?: ApplicationWhereInput
-    data: XOR<ApplicationUpdateWithoutChildApplicationsInput, ApplicationUncheckedUpdateWithoutChildApplicationsInput>
-  }
-
-  export type ApplicationUpdateWithoutChildApplicationsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    icon?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    appSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    responseFields?: ApplicationUpdateresponseFieldsInput | string[]
-    tokenFields?: ApplicationUpdatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: IntFieldUpdateOperationsInput | number
-    permissionType?: StringFieldUpdateOperationsInput | string
-    developerAccount?: AccountUpdateOneRequiredWithoutDevelopedApplicationsNestedInput
-    parentApplication?: ApplicationUpdateOneRequiredWithoutChildApplicationsNestedInput
-    defaultRole?: AuthzRoleUpdateOneWithoutDefaultForApplicationsNestedInput
-  }
-
-  export type ApplicationUncheckedUpdateWithoutChildApplicationsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    icon?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    appSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    responseFields?: ApplicationUpdateresponseFieldsInput | string[]
-    tokenFields?: ApplicationUpdatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: IntFieldUpdateOperationsInput | number
-    permissionType?: StringFieldUpdateOperationsInput | string
-    developerAccountId?: StringFieldUpdateOperationsInput | string
-    parentApplicationId?: StringFieldUpdateOperationsInput | string
-    defaultRoleId?: NullableStringFieldUpdateOperationsInput | string | null
-  }
-
-  export type ApplicationUpsertWithWhereUniqueWithoutParentApplicationInput = {
-    where: ApplicationWhereUniqueInput
-    update: XOR<ApplicationUpdateWithoutParentApplicationInput, ApplicationUncheckedUpdateWithoutParentApplicationInput>
-    create: XOR<ApplicationCreateWithoutParentApplicationInput, ApplicationUncheckedCreateWithoutParentApplicationInput>
-  }
-
-  export type ApplicationUpdateWithWhereUniqueWithoutParentApplicationInput = {
-    where: ApplicationWhereUniqueInput
-    data: XOR<ApplicationUpdateWithoutParentApplicationInput, ApplicationUncheckedUpdateWithoutParentApplicationInput>
-  }
-
-  export type ApplicationUpdateManyWithWhereWithoutParentApplicationInput = {
-    where: ApplicationScalarWhereInput
-    data: XOR<ApplicationUpdateManyMutationInput, ApplicationUncheckedUpdateManyWithoutParentApplicationInput>
-  }
-
-  export type AuthzRoleUpsertWithoutDefaultForApplicationsInput = {
-    update: XOR<AuthzRoleUpdateWithoutDefaultForApplicationsInput, AuthzRoleUncheckedUpdateWithoutDefaultForApplicationsInput>
-    create: XOR<AuthzRoleCreateWithoutDefaultForApplicationsInput, AuthzRoleUncheckedCreateWithoutDefaultForApplicationsInput>
-    where?: AuthzRoleWhereInput
-  }
-
-  export type AuthzRoleUpdateToOneWithWhereWithoutDefaultForApplicationsInput = {
-    where?: AuthzRoleWhereInput
-    data: XOR<AuthzRoleUpdateWithoutDefaultForApplicationsInput, AuthzRoleUncheckedUpdateWithoutDefaultForApplicationsInput>
-  }
-
-  export type AuthzRoleUpdateWithoutDefaultForApplicationsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    appId?: StringFieldUpdateOperationsInput | string
-    scope?: NullableStringFieldUpdateOperationsInput | string | null
-    acquisitionType?: NullableStringFieldUpdateOperationsInput | string | null
-    approvalPolicy?: NullableStringFieldUpdateOperationsInput | string | null
-    applicableFor?: NullableJsonNullValueInput | InputJsonValue
-    permissions?: NullableJsonNullValueInput | InputJsonValue
-    updatedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accessRows?: AccountAccessUpdateManyWithoutRoleNestedInput
-  }
-
-  export type AuthzRoleUncheckedUpdateWithoutDefaultForApplicationsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    appId?: StringFieldUpdateOperationsInput | string
-    scope?: NullableStringFieldUpdateOperationsInput | string | null
-    acquisitionType?: NullableStringFieldUpdateOperationsInput | string | null
-    approvalPolicy?: NullableStringFieldUpdateOperationsInput | string | null
-    applicableFor?: NullableJsonNullValueInput | InputJsonValue
-    permissions?: NullableJsonNullValueInput | InputJsonValue
-    updatedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    accessRows?: AccountAccessUncheckedUpdateManyWithoutRoleNestedInput
-  }
-
   export type AccountCreateWithoutAccessRowsInput = {
     id: string
     neupId?: string | null
@@ -91256,7 +88631,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
@@ -91283,7 +88657,6 @@ export namespace Prisma {
     workingProfile?: string | null
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
@@ -91313,7 +88686,6 @@ export namespace Prisma {
     applicableFor?: NullableJsonNullValueInput | InputJsonValue
     permissions?: NullableJsonNullValueInput | InputJsonValue
     updatedOn?: Date | string
-    defaultForApplications?: ApplicationCreateNestedManyWithoutDefaultRoleInput
   }
 
   export type AuthzRoleUncheckedCreateWithoutAccessRowsInput = {
@@ -91327,7 +88699,6 @@ export namespace Prisma {
     applicableFor?: NullableJsonNullValueInput | InputJsonValue
     permissions?: NullableJsonNullValueInput | InputJsonValue
     updatedOn?: Date | string
-    defaultForApplications?: ApplicationUncheckedCreateNestedManyWithoutDefaultRoleInput
   }
 
   export type AuthzRoleCreateOrConnectWithoutAccessRowsInput = {
@@ -91359,7 +88730,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
@@ -91386,7 +88756,6 @@ export namespace Prisma {
     workingProfile?: NullableStringFieldUpdateOperationsInput | string | null
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
@@ -91422,7 +88791,6 @@ export namespace Prisma {
     applicableFor?: NullableJsonNullValueInput | InputJsonValue
     permissions?: NullableJsonNullValueInput | InputJsonValue
     updatedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    defaultForApplications?: ApplicationUpdateManyWithoutDefaultRoleNestedInput
   }
 
   export type AuthzRoleUncheckedUpdateWithoutAccessRowsInput = {
@@ -91436,7 +88804,6 @@ export namespace Prisma {
     applicableFor?: NullableJsonNullValueInput | InputJsonValue
     permissions?: NullableJsonNullValueInput | InputJsonValue
     updatedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-    defaultForApplications?: ApplicationUncheckedUpdateManyWithoutDefaultRoleNestedInput
   }
 
   export type CompetitorSourceCreateWithoutCompetitorInput = {
@@ -92578,7 +89945,6 @@ export namespace Prisma {
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
@@ -92605,7 +89971,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
@@ -92707,7 +90072,6 @@ export namespace Prisma {
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
@@ -92734,7 +90098,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
@@ -92845,7 +90208,6 @@ export namespace Prisma {
     accessRows?: AccountAccessCreateNestedManyWithoutAccountInput
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
@@ -92872,7 +90234,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
-    developedApplications?: ApplicationUncheckedCreateNestedManyWithoutDeveloperAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
     baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
@@ -92983,7 +90344,6 @@ export namespace Prisma {
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
@@ -93010,7 +90370,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
@@ -93275,25 +90634,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
   }
 
-  export type ApplicationCreateManyDeveloperAccountInput = {
-    id: string
-    name: string
-    description?: string | null
-    icon?: string | null
-    website?: string | null
-    appSecret?: string | null
-    createdAt?: Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: string
-    responseFields?: ApplicationCreateresponseFieldsInput | string[]
-    tokenFields?: ApplicationCreatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: number
-    permissionType: string
-    parentApplicationId: string
-    defaultRoleId?: string | null
-  }
-
   export type AgencyAgentMapCreateManyAgencyInput = {
     id?: string
     agentId: string
@@ -93447,7 +90787,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
@@ -93474,7 +90813,6 @@ export namespace Prisma {
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
-    developedApplications?: ApplicationUncheckedUpdateManyWithoutDeveloperAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
     baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
@@ -93499,65 +90837,6 @@ export namespace Prisma {
     coverImage?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
     moreDetails?: NullableJsonNullValueInput | InputJsonValue
-  }
-
-  export type ApplicationUpdateWithoutDeveloperAccountInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    icon?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    appSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    responseFields?: ApplicationUpdateresponseFieldsInput | string[]
-    tokenFields?: ApplicationUpdatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: IntFieldUpdateOperationsInput | number
-    permissionType?: StringFieldUpdateOperationsInput | string
-    parentApplication?: ApplicationUpdateOneRequiredWithoutChildApplicationsNestedInput
-    childApplications?: ApplicationUpdateManyWithoutParentApplicationNestedInput
-    defaultRole?: AuthzRoleUpdateOneWithoutDefaultForApplicationsNestedInput
-  }
-
-  export type ApplicationUncheckedUpdateWithoutDeveloperAccountInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    icon?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    appSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    responseFields?: ApplicationUpdateresponseFieldsInput | string[]
-    tokenFields?: ApplicationUpdatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: IntFieldUpdateOperationsInput | number
-    permissionType?: StringFieldUpdateOperationsInput | string
-    parentApplicationId?: StringFieldUpdateOperationsInput | string
-    defaultRoleId?: NullableStringFieldUpdateOperationsInput | string | null
-    childApplications?: ApplicationUncheckedUpdateManyWithoutParentApplicationNestedInput
-  }
-
-  export type ApplicationUncheckedUpdateManyWithoutDeveloperAccountInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    icon?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    appSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    responseFields?: ApplicationUpdateresponseFieldsInput | string[]
-    tokenFields?: ApplicationUpdatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: IntFieldUpdateOperationsInput | number
-    permissionType?: StringFieldUpdateOperationsInput | string
-    parentApplicationId?: StringFieldUpdateOperationsInput | string
-    defaultRoleId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AgencyAgentMapUpdateWithoutAgencyInput = {
@@ -94478,25 +91757,6 @@ export namespace Prisma {
     updatedOn?: Date | string
   }
 
-  export type ApplicationCreateManyDefaultRoleInput = {
-    id: string
-    name: string
-    description?: string | null
-    icon?: string | null
-    website?: string | null
-    appSecret?: string | null
-    createdAt?: Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: string
-    responseFields?: ApplicationCreateresponseFieldsInput | string[]
-    tokenFields?: ApplicationCreatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: number
-    permissionType: string
-    developerAccountId: string
-    parentApplicationId: string
-  }
-
   export type AccountAccessUpdateWithoutRoleInput = {
     appId?: StringFieldUpdateOperationsInput | string
     updatedOn?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -94513,143 +91773,6 @@ export namespace Prisma {
     accountId?: StringFieldUpdateOperationsInput | string
     appId?: StringFieldUpdateOperationsInput | string
     updatedOn?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ApplicationUpdateWithoutDefaultRoleInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    icon?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    appSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    responseFields?: ApplicationUpdateresponseFieldsInput | string[]
-    tokenFields?: ApplicationUpdatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: IntFieldUpdateOperationsInput | number
-    permissionType?: StringFieldUpdateOperationsInput | string
-    developerAccount?: AccountUpdateOneRequiredWithoutDevelopedApplicationsNestedInput
-    parentApplication?: ApplicationUpdateOneRequiredWithoutChildApplicationsNestedInput
-    childApplications?: ApplicationUpdateManyWithoutParentApplicationNestedInput
-  }
-
-  export type ApplicationUncheckedUpdateWithoutDefaultRoleInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    icon?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    appSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    responseFields?: ApplicationUpdateresponseFieldsInput | string[]
-    tokenFields?: ApplicationUpdatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: IntFieldUpdateOperationsInput | number
-    permissionType?: StringFieldUpdateOperationsInput | string
-    developerAccountId?: StringFieldUpdateOperationsInput | string
-    parentApplicationId?: StringFieldUpdateOperationsInput | string
-    childApplications?: ApplicationUncheckedUpdateManyWithoutParentApplicationNestedInput
-  }
-
-  export type ApplicationUncheckedUpdateManyWithoutDefaultRoleInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    icon?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    appSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    responseFields?: ApplicationUpdateresponseFieldsInput | string[]
-    tokenFields?: ApplicationUpdatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: IntFieldUpdateOperationsInput | number
-    permissionType?: StringFieldUpdateOperationsInput | string
-    developerAccountId?: StringFieldUpdateOperationsInput | string
-    parentApplicationId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type ApplicationCreateManyParentApplicationInput = {
-    id: string
-    name: string
-    description?: string | null
-    icon?: string | null
-    website?: string | null
-    appSecret?: string | null
-    createdAt?: Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: string
-    responseFields?: ApplicationCreateresponseFieldsInput | string[]
-    tokenFields?: ApplicationCreatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: number
-    permissionType: string
-    developerAccountId: string
-    defaultRoleId?: string | null
-  }
-
-  export type ApplicationUpdateWithoutParentApplicationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    icon?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    appSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    responseFields?: ApplicationUpdateresponseFieldsInput | string[]
-    tokenFields?: ApplicationUpdatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: IntFieldUpdateOperationsInput | number
-    permissionType?: StringFieldUpdateOperationsInput | string
-    developerAccount?: AccountUpdateOneRequiredWithoutDevelopedApplicationsNestedInput
-    childApplications?: ApplicationUpdateManyWithoutParentApplicationNestedInput
-    defaultRole?: AuthzRoleUpdateOneWithoutDefaultForApplicationsNestedInput
-  }
-
-  export type ApplicationUncheckedUpdateWithoutParentApplicationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    icon?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    appSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    responseFields?: ApplicationUpdateresponseFieldsInput | string[]
-    tokenFields?: ApplicationUpdatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: IntFieldUpdateOperationsInput | number
-    permissionType?: StringFieldUpdateOperationsInput | string
-    developerAccountId?: StringFieldUpdateOperationsInput | string
-    defaultRoleId?: NullableStringFieldUpdateOperationsInput | string | null
-    childApplications?: ApplicationUncheckedUpdateManyWithoutParentApplicationNestedInput
-  }
-
-  export type ApplicationUncheckedUpdateManyWithoutParentApplicationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    icon?: NullableStringFieldUpdateOperationsInput | string | null
-    website?: NullableStringFieldUpdateOperationsInput | string | null
-    appSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    endpoints?: NullableJsonNullValueInput | InputJsonValue
-    status?: StringFieldUpdateOperationsInput | string
-    responseFields?: ApplicationUpdateresponseFieldsInput | string[]
-    tokenFields?: ApplicationUpdatetokenFieldsInput | string[]
-    details?: NullableJsonNullValueInput | InputJsonValue
-    party?: IntFieldUpdateOperationsInput | number
-    permissionType?: StringFieldUpdateOperationsInput | string
-    developerAccountId?: StringFieldUpdateOperationsInput | string
-    defaultRoleId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CompetitorSourceCreateManyCompetitorInput = {
