@@ -576,18 +576,6 @@ Fields:
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > updatedAt: timestamp(3) NOT NULL;
 
-Table: SharedLead, Model: no Prisma model
-Fields:
-> id: text PK, NOT NULL;
-> baseLead_id: text NOT NULL, references base_lead.id;
-> type: LeadType NOT NULL;
-> requirements: jsonb;
-> priority: LeadPriority NOT NULL, default: 'MEDIUM'::"LeadPriority";
-> leadOwner: text references accounts.id;
-> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
-> updatedAt: timestamp(3) NOT NULL;
-> ownerId: text NOT NULL, references accounts.id;
-
 Table: site_content, Model: SiteContent
 Fields:
 > id: text PK, NOT NULL;
