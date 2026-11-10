@@ -53,7 +53,7 @@ export async function getLeadActivity(leadId: string) {
                 where: { id: leadId },
                 include: { baseLead: { include: CLIENT_INCLUDE } },
             }),
-            prisma.leadActivity.findMany({
+            prisma.leadsActivity.findMany({
                 where: { leadId },
                 orderBy: { activityOn: 'desc' },
             }),

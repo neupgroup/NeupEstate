@@ -21,7 +21,7 @@ export interface UpdateLeadActivityInput {
 
 export async function updateLeadActivity(id: string, input: UpdateLeadActivityInput): Promise<string> {
     try {
-        const current = await prisma.leadActivity.findUnique({
+        const current = await prisma.leadsActivity.findUnique({
             where: { id },
             select: { data: true },
         });
@@ -40,7 +40,7 @@ export async function updateLeadActivity(id: string, input: UpdateLeadActivityIn
             })
             : null;
 
-        await prisma.leadActivity.update({
+        await prisma.leadsActivity.update({
             where: { id },
             data: {
                 activityOn: input.activityOn ? new Date(input.activityOn) : undefined,

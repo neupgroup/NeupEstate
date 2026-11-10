@@ -12,7 +12,7 @@ import { LeadPriority, LeadType, Prisma } from '@neup/core/database/prisma';
 // ::end
 
 async function replaceClientContacts(tx: Prisma.TransactionClient, clientId: string, contacts: Array<{ type: string; value?: string | null }>) {
-    await tx.clientContact.deleteMany({
+    await tx.leadsContacts.deleteMany({
         where: {
             clientId,
             type: { in: contacts.map((contact) => contact.type) },
@@ -25,7 +25,7 @@ async function replaceClientContacts(tx: Prisma.TransactionClient, clientId: str
 
     if (!nextContacts.length) return;
 
-    await tx.clientContact.createMany({
+    await tx.leadsContacts.createMany({
         data: nextContacts.map((contact) => ({
             clientId,
             type: contact.type,
@@ -74,7 +74,7 @@ export async function saveClient(data: {
             ]);
 
             if (data.accountId) {
-                await tx.clientLink.create({
+                await tx.leadsAssignments.create({
                     data: {
                         trackerId: data.accountId,
                         clientId: created.id,

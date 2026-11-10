@@ -234,29 +234,29 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - divergence: model Lead maps to table leads; model fields not in table: belongsTo
 - divergence based on fields: database has 7 fields; Prisma model has 8 persisted scalar fields; difference -1
 
-### public.client_contact (ClientContact)
+### public.leads_contacts (LeadsContacts)
 
 - purpose: Stores normalized contact methods for a base lead/client.
 - usage: Used through lead/client management relationships for phone, email, and other contact values.
 
 - id text PK, NOT NULL
-- client_id text NOT NULL, FK client_contact_client_id_fkey -> public.base_lead(id)
+- client_id text NOT NULL, FK client_contact_client_id_fkey -> public.leads(id)
 - type text NOT NULL
 - value text NOT NULL
 
-- divergence: model ClientContact maps to table client_contact; mapped fields: clientId->client_id
+- divergence: model LeadsContacts maps to table leads_contacts; mapped fields: clientId->client_id
 - divergence based on fields: database has 4 fields; Prisma model has 4 persisted scalar fields; difference 0
 
-### public.client_link (ClientLink)
+### public.leads_assignments (LeadsAssignments)
 
 - purpose: Links tracked users/accounts to base leads.
 - usage: Used by lead search and account deletion cleanup for tracker-based lead linkage.
 
 - id text PK, NOT NULL
 - trackerId text NOT NULL
-- clientId text NOT NULL, FK client_link_clientId_fkey -> public.base_lead(id)
+- clientId text NOT NULL, FK client_link_clientId_fkey -> public.leads(id)
 
-- divergence: model ClientLink maps to table client_link
+- divergence: model LeadsAssignments maps to table leads_assignments
 - divergence based on fields: database has 3 fields; Prisma model has 3 persisted scalar fields; difference 0
 
 ### public.competitors (Competitor)
@@ -441,18 +441,18 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - divergence: model IntelligenceMapping maps to table intelligence_mapping; mapped fields: accountId->account_id, cLocation->c_location, cMinBudget->c_min_budget, cMaxBudget->c_max_budget, cCompetitorId->c_competitor, cType->c_type, cPurpose->c_purpose
 - divergence based on fields: database has 10 fields; Prisma model has 10 persisted scalar fields; difference 0
 
-### public.lead_activity (LeadActivity)
+### public.leads_activity (LeadsActivity)
 
 - purpose: Stores activity history for shared leads.
 - usage: Used through shared lead activity relationships for lead timeline/audit data.
 
 - id text PK, NOT NULL
-- leadId text NOT NULL, FK lead_activity_leadId_fkey -> public.shared_leads(id)
+- leadId text NOT NULL, FK leads_activity_leadId_fkey -> public.leads_assigned(id)
 - data jsonb NOT NULL
 - activityOn timestamp(3) NOT NULL, default CURRENT_TIMESTAMP
 - activityBy text NOT NULL
 
-- divergence: model LeadActivity maps to table lead_activity
+- divergence: model LeadsActivity maps to table leads_activity
 - divergence based on fields: database has 5 fields; Prisma model has 5 persisted scalar fields; difference 0
 
 ### public.messages (Message)

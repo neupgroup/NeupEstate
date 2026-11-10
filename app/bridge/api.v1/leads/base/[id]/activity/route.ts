@@ -90,7 +90,7 @@ export async function GET(_request: NextRequest, context: RouteContext) {
     stage = 'activity-query';
     const sharedLeadIds = baseLead.sharedLeads.map((lead) => lead.id);
     const activities = sharedLeadIds.length
-      ? await prisma.leadActivity.findMany({
+      ? await prisma.leadsActivity.findMany({
           where: { leadId: { in: sharedLeadIds } },
           orderBy: { activityOn: 'desc' },
         })

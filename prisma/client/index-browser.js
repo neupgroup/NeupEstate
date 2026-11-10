@@ -416,14 +416,14 @@ exports.Prisma.LeadScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.ClientContactScalarFieldEnum = {
+exports.Prisma.LeadsContactsScalarFieldEnum = {
   id: 'id',
   clientId: 'clientId',
   type: 'type',
   value: 'value'
 };
 
-exports.Prisma.ClientLinkScalarFieldEnum = {
+exports.Prisma.LeadsAssignmentsScalarFieldEnum = {
   id: 'id',
   trackerId: 'trackerId',
   clientId: 'clientId'
@@ -440,7 +440,7 @@ exports.Prisma.LeadsAssignedScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.LeadActivityScalarFieldEnum = {
+exports.Prisma.LeadsActivityScalarFieldEnum = {
   id: 'id',
   leadId: 'leadId',
   data: 'data',
@@ -809,10 +809,10 @@ exports.Prisma.ModelName = {
   ListingsSaved: 'ListingsSaved',
   ListingsView: 'ListingsView',
   Lead: 'Lead',
-  ClientContact: 'ClientContact',
-  ClientLink: 'ClientLink',
+  LeadsContacts: 'LeadsContacts',
+  LeadsAssignments: 'LeadsAssignments',
   LeadsAssigned: 'LeadsAssigned',
-  LeadActivity: 'LeadActivity',
+  LeadsActivity: 'LeadsActivity',
   Conversation: 'Conversation',
   UserPreference: 'UserPreference',
   MortgageRequest: 'MortgageRequest',

@@ -12,7 +12,7 @@ import { prisma } from '@neup/core/database/prisma';
 
 export async function deleteLeadActivity(id: string): Promise<string> {
     try {
-        await prisma.leadActivity.delete({
+        await prisma.leadsActivity.delete({
             where: { id },
         });
 

@@ -31,7 +31,7 @@ export async function createLeadActivity(input: CreateLeadActivityInput): Promis
             })
             : null;
 
-        const activity = await prisma.leadActivity.create({
+        const activity = await prisma.leadsActivity.create({
             data: {
                 leadId: input.leadId,
                 activityBy: input.activityBy,

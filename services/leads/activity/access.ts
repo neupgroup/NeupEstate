@@ -32,7 +32,7 @@ export async function getVisibleLead(leadId: string, accountId: string) {
 
 /** Returns a shared lead's activity timeline, newest activity first. */
 export async function getLeadActivities(leadId: string) {
-  return prisma.leadActivity.findMany({
+  return prisma.leadsActivity.findMany({
     where: { leadId },
     orderBy: { activityOn: 'desc' },
   });
@@ -47,7 +47,7 @@ export async function addLeadActivity(input: AddLeadActivityInput) {
       : Promise.resolve(null),
   ]);
 
-  return prisma.leadActivity.create({
+  return prisma.leadsActivity.create({
     data: {
       leadId: input.leadId,
       activityBy: account?.displayName?.trim() || input.accountId,

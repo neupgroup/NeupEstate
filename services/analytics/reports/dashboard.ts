@@ -325,7 +325,7 @@ async function buildNativeScopeSummary(
       },
       select: { savedAt: true },
     }),
-    prisma.clientLink.findMany({
+    prisma.leadsAssignments.findMany({
       where: { trackerId: accountFilter },
       select: { id: true },
     }),

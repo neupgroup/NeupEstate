@@ -566,9 +566,9 @@ model Lead {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  links     ClientLink[]
+  links     LeadsAssignments[]
   sharedLeads LeadsAssigned[]
-  contacts  ClientContact[]
+  contacts  LeadsContacts[]
   propertyOwners PropertyOwner[]
   belongsToAccount Account @relation("BaseLeadBelongsTo", fields: [belongsTo], references: [id], onDelete: Restrict)
 
@@ -577,7 +577,7 @@ model Lead {
   @@map("leads")
 }
 
-model ClientContact {
+model LeadsContacts {
   id       String    @id @default(cuid())
   clientId String    @map("client_id")
   type     String
@@ -585,21 +585,21 @@ model ClientContact {
 
   client   Lead     @relation(fields: [clientId], references: [id], onDelete: Cascade)
 
-  @@index([clientId])
-  @@index([type])
-  @@map("lead_contacts")
+  @@index([clientId], map: "leads_contacts_client_id_idx")
+  @@index([type], map: "leads_contacts_type_idx")
+  @@map("leads_contacts")
 }
 
-model ClientLink {
+model LeadsAssignments {
   id        String    @id @default(cuid())
   trackerId String
   clientId  String
 
   client    Lead     @relation(fields: [clientId], references: [id], onDelete: Cascade)
 
-  @@index([trackerId])
-  @@index([clientId])
-  @@map("lead_links")
+  @@index([trackerId], map: "leads_assignments_trackerId_idx")
+  @@index([clientId], map: "leads_assignments_clientId_idx")
+  @@map("leads_assignments")
 }
 
 model LeadsAssigned {
@@ -614,7 +614,7 @@ model LeadsAssigned {
 
   baseLead    Lead         @relation(fields: [baseLeadId], references: [id], onDelete: Cascade)
   ownerAccount Account     @relation("SharedLeadsOwner", fields: [owner], references: [id], onDelete: Restrict)
-  activities  LeadActivity[]
+  activities  LeadsActivity[]
 
   @@index([baseLeadId])
   @@index([type])
@@ -623,7 +623,7 @@ model LeadsAssigned {
   @@map("leads_assigned")
 }
 
-model LeadActivity {
+model LeadsActivity {
   id         String     @id @default(cuid())
   leadId     String
   data       Json
@@ -632,10 +632,10 @@ model LeadActivity {
 
   lead       LeadsAssigned @relation(fields: [leadId], references: [id], onDelete: Cascade)
 
-  @@index([leadId])
-  @@index([activityOn])
-  @@index([activityBy])
-  @@map("lead_activity")
+  @@index([leadId], map: "leads_activity_leadId_idx")
+  @@index([activityOn], map: "leads_activity_activityOn_idx")
+  @@index([activityBy], map: "leads_activity_activityBy_idx")
+  @@map("leads_activity")
 }
 
 // ============================================================================
