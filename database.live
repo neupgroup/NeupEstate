@@ -377,7 +377,7 @@ Fields:
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > updatedAt: timestamp(3) NOT NULL;
 
-Table: listing_documents, Model: ListingDocument
+Table: listings_documents, Model: ListingsDocuments
 Fields:
 > id: text PK, NOT NULL;
 > propertyId: text NOT NULL, references listings.id;

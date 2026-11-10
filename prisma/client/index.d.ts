@@ -69,10 +69,10 @@ export type PropertyOwner = $Result.DefaultSelection<Prisma.$PropertyOwnerPayloa
  */
 export type ListingRepresentative = $Result.DefaultSelection<Prisma.$ListingRepresentativePayload>
 /**
- * Model ListingDocument
+ * Model ListingsDocuments
  * 
  */
-export type ListingDocument = $Result.DefaultSelection<Prisma.$ListingDocumentPayload>
+export type ListingsDocuments = $Result.DefaultSelection<Prisma.$ListingsDocumentsPayload>
 /**
  * Model ListingChange
  * 
@@ -624,14 +624,14 @@ export class PrismaClient<
   get listingRepresentative(): Prisma.ListingRepresentativeDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.listingDocument`: Exposes CRUD operations for the **ListingDocument** model.
+   * `prisma.listingsDocuments`: Exposes CRUD operations for the **ListingsDocuments** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more ListingDocuments
-    * const listingDocuments = await prisma.listingDocument.findMany()
+    * // Fetch zero or more ListingsDocuments
+    * const listingsDocuments = await prisma.listingsDocuments.findMany()
     * ```
     */
-  get listingDocument(): Prisma.ListingDocumentDelegate<ExtArgs, ClientOptions>;
+  get listingsDocuments(): Prisma.ListingsDocumentsDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.listingChange`: Exposes CRUD operations for the **ListingChange** model.
@@ -1437,7 +1437,7 @@ export namespace Prisma {
     ListingCommercial: 'ListingCommercial',
     PropertyOwner: 'PropertyOwner',
     ListingRepresentative: 'ListingRepresentative',
-    ListingDocument: 'ListingDocument',
+    ListingsDocuments: 'ListingsDocuments',
     ListingChange: 'ListingChange',
     Agency: 'Agency',
     AgencyMap: 'AgencyMap',
@@ -1489,7 +1489,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "location" | "account" | "activity" | "listing" | "propertyLink" | "listingHouse" | "listingApartment" | "propertyLandDetail" | "listingCommercial" | "propertyOwner" | "listingRepresentative" | "listingDocument" | "listingChange" | "agency" | "agencyMap" | "agencyAgentMap" | "agencyCustomization" | "agent" | "review" | "requirement" | "naturalSearch" | "listingsSaved" | "listingsView" | "baseLead" | "clientContact" | "clientLink" | "sharedLeads" | "leadActivity" | "conversation" | "userPreference" | "mortgageRequest" | "salesRequest" | "visitRequest" | "sitemapEntry" | "inquiry" | "authzRole" | "accountAccess" | "roleCapability" | "authzAccountAccessGrant" | "authzAssetsAccessGrant" | "competitor" | "competitorSource" | "competitorPage" | "competitorListing" | "propertyCompetitionMap" | "competitorTracking" | "intelligenceMapping" | "intelligenceAlert"
+      modelProps: "location" | "account" | "activity" | "listing" | "propertyLink" | "listingHouse" | "listingApartment" | "propertyLandDetail" | "listingCommercial" | "propertyOwner" | "listingRepresentative" | "listingsDocuments" | "listingChange" | "agency" | "agencyMap" | "agencyAgentMap" | "agencyCustomization" | "agent" | "review" | "requirement" | "naturalSearch" | "listingsSaved" | "listingsView" | "baseLead" | "clientContact" | "clientLink" | "sharedLeads" | "leadActivity" | "conversation" | "userPreference" | "mortgageRequest" | "salesRequest" | "visitRequest" | "sitemapEntry" | "inquiry" | "authzRole" | "accountAccess" | "roleCapability" | "authzAccountAccessGrant" | "authzAssetsAccessGrant" | "competitor" | "competitorSource" | "competitorPage" | "competitorListing" | "propertyCompetitionMap" | "competitorTracking" | "intelligenceMapping" | "intelligenceAlert"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2307,77 +2307,77 @@ export namespace Prisma {
           }
         }
       }
-      ListingDocument: {
-        payload: Prisma.$ListingDocumentPayload<ExtArgs>
-        fields: Prisma.ListingDocumentFieldRefs
+      ListingsDocuments: {
+        payload: Prisma.$ListingsDocumentsPayload<ExtArgs>
+        fields: Prisma.ListingsDocumentsFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.ListingDocumentFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingDocumentPayload> | null
+            args: Prisma.ListingsDocumentsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsDocumentsPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.ListingDocumentFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingDocumentPayload>
+            args: Prisma.ListingsDocumentsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsDocumentsPayload>
           }
           findFirst: {
-            args: Prisma.ListingDocumentFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingDocumentPayload> | null
+            args: Prisma.ListingsDocumentsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsDocumentsPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.ListingDocumentFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingDocumentPayload>
+            args: Prisma.ListingsDocumentsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsDocumentsPayload>
           }
           findMany: {
-            args: Prisma.ListingDocumentFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingDocumentPayload>[]
+            args: Prisma.ListingsDocumentsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsDocumentsPayload>[]
           }
           create: {
-            args: Prisma.ListingDocumentCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingDocumentPayload>
+            args: Prisma.ListingsDocumentsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsDocumentsPayload>
           }
           createMany: {
-            args: Prisma.ListingDocumentCreateManyArgs<ExtArgs>
+            args: Prisma.ListingsDocumentsCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.ListingDocumentCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingDocumentPayload>[]
+            args: Prisma.ListingsDocumentsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsDocumentsPayload>[]
           }
           delete: {
-            args: Prisma.ListingDocumentDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingDocumentPayload>
+            args: Prisma.ListingsDocumentsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsDocumentsPayload>
           }
           update: {
-            args: Prisma.ListingDocumentUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingDocumentPayload>
+            args: Prisma.ListingsDocumentsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsDocumentsPayload>
           }
           deleteMany: {
-            args: Prisma.ListingDocumentDeleteManyArgs<ExtArgs>
+            args: Prisma.ListingsDocumentsDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.ListingDocumentUpdateManyArgs<ExtArgs>
+            args: Prisma.ListingsDocumentsUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.ListingDocumentUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingDocumentPayload>[]
+            args: Prisma.ListingsDocumentsUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsDocumentsPayload>[]
           }
           upsert: {
-            args: Prisma.ListingDocumentUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingDocumentPayload>
+            args: Prisma.ListingsDocumentsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsDocumentsPayload>
           }
           aggregate: {
-            args: Prisma.ListingDocumentAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateListingDocument>
+            args: Prisma.ListingsDocumentsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateListingsDocuments>
           }
           groupBy: {
-            args: Prisma.ListingDocumentGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ListingDocumentGroupByOutputType>[]
+            args: Prisma.ListingsDocumentsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ListingsDocumentsGroupByOutputType>[]
           }
           count: {
-            args: Prisma.ListingDocumentCountArgs<ExtArgs>
-            result: $Utils.Optional<ListingDocumentCountAggregateOutputType> | number
+            args: Prisma.ListingsDocumentsCountArgs<ExtArgs>
+            result: $Utils.Optional<ListingsDocumentsCountAggregateOutputType> | number
           }
         }
       }
@@ -5164,7 +5164,7 @@ export namespace Prisma {
     listingCommercial?: ListingCommercialOmit
     propertyOwner?: PropertyOwnerOmit
     listingRepresentative?: ListingRepresentativeOmit
-    listingDocument?: ListingDocumentOmit
+    listingsDocuments?: ListingsDocumentsOmit
     listingChange?: ListingChangeOmit
     agency?: AgencyOmit
     agencyMap?: AgencyMapOmit
@@ -5505,7 +5505,7 @@ export namespace Prisma {
    * ListingCountOutputType without action
    */
   export type ListingCountOutputTypeCountDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ListingDocumentWhereInput
+    where?: ListingsDocumentsWhereInput
   }
 
   /**
@@ -10089,7 +10089,7 @@ export namespace Prisma {
       landDetail: Prisma.$PropertyLandDetailPayload<ExtArgs> | null
       commercialDetail: Prisma.$ListingCommercialPayload<ExtArgs> | null
       owners: Prisma.$PropertyOwnerPayload<ExtArgs>[]
-      documents: Prisma.$ListingDocumentPayload<ExtArgs>[]
+      documents: Prisma.$ListingsDocumentsPayload<ExtArgs>[]
       changes: Prisma.$ListingChangePayload<ExtArgs>[]
       links: Prisma.$PropertyLinkPayload<ExtArgs>[]
       linkedBy: Prisma.$PropertyLinkPayload<ExtArgs>[]
@@ -10529,7 +10529,7 @@ export namespace Prisma {
     landDetail<T extends Listing$landDetailArgs<ExtArgs> = {}>(args?: Subset<T, Listing$landDetailArgs<ExtArgs>>): Prisma__PropertyLandDetailClient<$Result.GetResult<Prisma.$PropertyLandDetailPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     commercialDetail<T extends Listing$commercialDetailArgs<ExtArgs> = {}>(args?: Subset<T, Listing$commercialDetailArgs<ExtArgs>>): Prisma__ListingCommercialClient<$Result.GetResult<Prisma.$ListingCommercialPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     owners<T extends Listing$ownersArgs<ExtArgs> = {}>(args?: Subset<T, Listing$ownersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyOwnerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    documents<T extends Listing$documentsArgs<ExtArgs> = {}>(args?: Subset<T, Listing$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    documents<T extends Listing$documentsArgs<ExtArgs> = {}>(args?: Subset<T, Listing$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingsDocumentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     changes<T extends Listing$changesArgs<ExtArgs> = {}>(args?: Subset<T, Listing$changesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingChangePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     links<T extends Listing$linksArgs<ExtArgs> = {}>(args?: Subset<T, Listing$linksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     linkedBy<T extends Listing$linkedByArgs<ExtArgs> = {}>(args?: Subset<T, Listing$linkedByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -11101,23 +11101,23 @@ export namespace Prisma {
    */
   export type Listing$documentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingDocument
+     * Select specific fields to fetch from the ListingsDocuments
      */
-    select?: ListingDocumentSelect<ExtArgs> | null
+    select?: ListingsDocumentsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingDocument
+     * Omit specific fields from the ListingsDocuments
      */
-    omit?: ListingDocumentOmit<ExtArgs> | null
+    omit?: ListingsDocumentsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingDocumentInclude<ExtArgs> | null
-    where?: ListingDocumentWhereInput
-    orderBy?: ListingDocumentOrderByWithRelationInput | ListingDocumentOrderByWithRelationInput[]
-    cursor?: ListingDocumentWhereUniqueInput
+    include?: ListingsDocumentsInclude<ExtArgs> | null
+    where?: ListingsDocumentsWhereInput
+    orderBy?: ListingsDocumentsOrderByWithRelationInput | ListingsDocumentsOrderByWithRelationInput[]
+    cursor?: ListingsDocumentsWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: ListingDocumentScalarFieldEnum | ListingDocumentScalarFieldEnum[]
+    distinct?: ListingsDocumentsScalarFieldEnum | ListingsDocumentsScalarFieldEnum[]
   }
 
   /**
@@ -19295,40 +19295,40 @@ export namespace Prisma {
 
 
   /**
-   * Model ListingDocument
+   * Model ListingsDocuments
    */
 
-  export type AggregateListingDocument = {
-    _count: ListingDocumentCountAggregateOutputType | null
-    _avg: ListingDocumentAvgAggregateOutputType | null
-    _sum: ListingDocumentSumAggregateOutputType | null
-    _min: ListingDocumentMinAggregateOutputType | null
-    _max: ListingDocumentMaxAggregateOutputType | null
+  export type AggregateListingsDocuments = {
+    _count: ListingsDocumentsCountAggregateOutputType | null
+    _avg: ListingsDocumentsAvgAggregateOutputType | null
+    _sum: ListingsDocumentsSumAggregateOutputType | null
+    _min: ListingsDocumentsMinAggregateOutputType | null
+    _max: ListingsDocumentsMaxAggregateOutputType | null
   }
 
-  export type ListingDocumentAvgAggregateOutputType = {
+  export type ListingsDocumentsAvgAggregateOutputType = {
     sortOrder: number | null
   }
 
-  export type ListingDocumentSumAggregateOutputType = {
+  export type ListingsDocumentsSumAggregateOutputType = {
     sortOrder: number | null
   }
 
-  export type ListingDocumentMinAggregateOutputType = {
+  export type ListingsDocumentsMinAggregateOutputType = {
     id: string | null
     propertyId: string | null
     name: string | null
     sortOrder: number | null
   }
 
-  export type ListingDocumentMaxAggregateOutputType = {
+  export type ListingsDocumentsMaxAggregateOutputType = {
     id: string | null
     propertyId: string | null
     name: string | null
     sortOrder: number | null
   }
 
-  export type ListingDocumentCountAggregateOutputType = {
+  export type ListingsDocumentsCountAggregateOutputType = {
     id: number
     propertyId: number
     name: number
@@ -19338,29 +19338,29 @@ export namespace Prisma {
   }
 
 
-  export type ListingDocumentAvgAggregateInputType = {
+  export type ListingsDocumentsAvgAggregateInputType = {
     sortOrder?: true
   }
 
-  export type ListingDocumentSumAggregateInputType = {
+  export type ListingsDocumentsSumAggregateInputType = {
     sortOrder?: true
   }
 
-  export type ListingDocumentMinAggregateInputType = {
+  export type ListingsDocumentsMinAggregateInputType = {
     id?: true
     propertyId?: true
     name?: true
     sortOrder?: true
   }
 
-  export type ListingDocumentMaxAggregateInputType = {
+  export type ListingsDocumentsMaxAggregateInputType = {
     id?: true
     propertyId?: true
     name?: true
     sortOrder?: true
   }
 
-  export type ListingDocumentCountAggregateInputType = {
+  export type ListingsDocumentsCountAggregateInputType = {
     id?: true
     propertyId?: true
     name?: true
@@ -19369,147 +19369,147 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type ListingDocumentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsDocumentsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which ListingDocument to aggregate.
+     * Filter which ListingsDocuments to aggregate.
      */
-    where?: ListingDocumentWhereInput
+    where?: ListingsDocumentsWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ListingDocuments to fetch.
+     * Determine the order of ListingsDocuments to fetch.
      */
-    orderBy?: ListingDocumentOrderByWithRelationInput | ListingDocumentOrderByWithRelationInput[]
+    orderBy?: ListingsDocumentsOrderByWithRelationInput | ListingsDocumentsOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: ListingDocumentWhereUniqueInput
+    cursor?: ListingsDocumentsWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ListingDocuments from the position of the cursor.
+     * Take `±n` ListingsDocuments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ListingDocuments.
+     * Skip the first `n` ListingsDocuments.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned ListingDocuments
+     * Count returned ListingsDocuments
     **/
-    _count?: true | ListingDocumentCountAggregateInputType
+    _count?: true | ListingsDocumentsCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: ListingDocumentAvgAggregateInputType
+    _avg?: ListingsDocumentsAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: ListingDocumentSumAggregateInputType
+    _sum?: ListingsDocumentsSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: ListingDocumentMinAggregateInputType
+    _min?: ListingsDocumentsMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: ListingDocumentMaxAggregateInputType
+    _max?: ListingsDocumentsMaxAggregateInputType
   }
 
-  export type GetListingDocumentAggregateType<T extends ListingDocumentAggregateArgs> = {
-        [P in keyof T & keyof AggregateListingDocument]: P extends '_count' | 'count'
+  export type GetListingsDocumentsAggregateType<T extends ListingsDocumentsAggregateArgs> = {
+        [P in keyof T & keyof AggregateListingsDocuments]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateListingDocument[P]>
-      : GetScalarType<T[P], AggregateListingDocument[P]>
+        : GetScalarType<T[P], AggregateListingsDocuments[P]>
+      : GetScalarType<T[P], AggregateListingsDocuments[P]>
   }
 
 
 
 
-  export type ListingDocumentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ListingDocumentWhereInput
-    orderBy?: ListingDocumentOrderByWithAggregationInput | ListingDocumentOrderByWithAggregationInput[]
-    by: ListingDocumentScalarFieldEnum[] | ListingDocumentScalarFieldEnum
-    having?: ListingDocumentScalarWhereWithAggregatesInput
+  export type ListingsDocumentsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ListingsDocumentsWhereInput
+    orderBy?: ListingsDocumentsOrderByWithAggregationInput | ListingsDocumentsOrderByWithAggregationInput[]
+    by: ListingsDocumentsScalarFieldEnum[] | ListingsDocumentsScalarFieldEnum
+    having?: ListingsDocumentsScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: ListingDocumentCountAggregateInputType | true
-    _avg?: ListingDocumentAvgAggregateInputType
-    _sum?: ListingDocumentSumAggregateInputType
-    _min?: ListingDocumentMinAggregateInputType
-    _max?: ListingDocumentMaxAggregateInputType
+    _count?: ListingsDocumentsCountAggregateInputType | true
+    _avg?: ListingsDocumentsAvgAggregateInputType
+    _sum?: ListingsDocumentsSumAggregateInputType
+    _min?: ListingsDocumentsMinAggregateInputType
+    _max?: ListingsDocumentsMaxAggregateInputType
   }
 
-  export type ListingDocumentGroupByOutputType = {
+  export type ListingsDocumentsGroupByOutputType = {
     id: string
     propertyId: string
     name: string
     urls: JsonValue
     sortOrder: number
-    _count: ListingDocumentCountAggregateOutputType | null
-    _avg: ListingDocumentAvgAggregateOutputType | null
-    _sum: ListingDocumentSumAggregateOutputType | null
-    _min: ListingDocumentMinAggregateOutputType | null
-    _max: ListingDocumentMaxAggregateOutputType | null
+    _count: ListingsDocumentsCountAggregateOutputType | null
+    _avg: ListingsDocumentsAvgAggregateOutputType | null
+    _sum: ListingsDocumentsSumAggregateOutputType | null
+    _min: ListingsDocumentsMinAggregateOutputType | null
+    _max: ListingsDocumentsMaxAggregateOutputType | null
   }
 
-  type GetListingDocumentGroupByPayload<T extends ListingDocumentGroupByArgs> = Prisma.PrismaPromise<
+  type GetListingsDocumentsGroupByPayload<T extends ListingsDocumentsGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<ListingDocumentGroupByOutputType, T['by']> &
+      PickEnumerable<ListingsDocumentsGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof ListingDocumentGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof ListingsDocumentsGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], ListingDocumentGroupByOutputType[P]>
-            : GetScalarType<T[P], ListingDocumentGroupByOutputType[P]>
+              : GetScalarType<T[P], ListingsDocumentsGroupByOutputType[P]>
+            : GetScalarType<T[P], ListingsDocumentsGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type ListingDocumentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type ListingsDocumentsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     propertyId?: boolean
     name?: boolean
     urls?: boolean
     sortOrder?: boolean
     property?: boolean | ListingDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["listingDocument"]>
+  }, ExtArgs["result"]["listingsDocuments"]>
 
-  export type ListingDocumentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type ListingsDocumentsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     propertyId?: boolean
     name?: boolean
     urls?: boolean
     sortOrder?: boolean
     property?: boolean | ListingDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["listingDocument"]>
+  }, ExtArgs["result"]["listingsDocuments"]>
 
-  export type ListingDocumentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type ListingsDocumentsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     propertyId?: boolean
     name?: boolean
     urls?: boolean
     sortOrder?: boolean
     property?: boolean | ListingDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["listingDocument"]>
+  }, ExtArgs["result"]["listingsDocuments"]>
 
-  export type ListingDocumentSelectScalar = {
+  export type ListingsDocumentsSelectScalar = {
     id?: boolean
     propertyId?: boolean
     name?: boolean
@@ -19517,19 +19517,19 @@ export namespace Prisma {
     sortOrder?: boolean
   }
 
-  export type ListingDocumentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "propertyId" | "name" | "urls" | "sortOrder", ExtArgs["result"]["listingDocument"]>
-  export type ListingDocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsDocumentsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "propertyId" | "name" | "urls" | "sortOrder", ExtArgs["result"]["listingsDocuments"]>
+  export type ListingsDocumentsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     property?: boolean | ListingDefaultArgs<ExtArgs>
   }
-  export type ListingDocumentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsDocumentsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     property?: boolean | ListingDefaultArgs<ExtArgs>
   }
-  export type ListingDocumentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsDocumentsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     property?: boolean | ListingDefaultArgs<ExtArgs>
   }
 
-  export type $ListingDocumentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "ListingDocument"
+  export type $ListingsDocumentsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ListingsDocuments"
     objects: {
       property: Prisma.$ListingPayload<ExtArgs>
     }
@@ -19539,136 +19539,136 @@ export namespace Prisma {
       name: string
       urls: Prisma.JsonValue
       sortOrder: number
-    }, ExtArgs["result"]["listingDocument"]>
+    }, ExtArgs["result"]["listingsDocuments"]>
     composites: {}
   }
 
-  type ListingDocumentGetPayload<S extends boolean | null | undefined | ListingDocumentDefaultArgs> = $Result.GetResult<Prisma.$ListingDocumentPayload, S>
+  type ListingsDocumentsGetPayload<S extends boolean | null | undefined | ListingsDocumentsDefaultArgs> = $Result.GetResult<Prisma.$ListingsDocumentsPayload, S>
 
-  type ListingDocumentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<ListingDocumentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ListingDocumentCountAggregateInputType | true
+  type ListingsDocumentsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ListingsDocumentsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ListingsDocumentsCountAggregateInputType | true
     }
 
-  export interface ListingDocumentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ListingDocument'], meta: { name: 'ListingDocument' } }
+  export interface ListingsDocumentsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ListingsDocuments'], meta: { name: 'ListingsDocuments' } }
     /**
-     * Find zero or one ListingDocument that matches the filter.
-     * @param {ListingDocumentFindUniqueArgs} args - Arguments to find a ListingDocument
+     * Find zero or one ListingsDocuments that matches the filter.
+     * @param {ListingsDocumentsFindUniqueArgs} args - Arguments to find a ListingsDocuments
      * @example
-     * // Get one ListingDocument
-     * const listingDocument = await prisma.listingDocument.findUnique({
+     * // Get one ListingsDocuments
+     * const listingsDocuments = await prisma.listingsDocuments.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends ListingDocumentFindUniqueArgs>(args: SelectSubset<T, ListingDocumentFindUniqueArgs<ExtArgs>>): Prisma__ListingDocumentClient<$Result.GetResult<Prisma.$ListingDocumentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends ListingsDocumentsFindUniqueArgs>(args: SelectSubset<T, ListingsDocumentsFindUniqueArgs<ExtArgs>>): Prisma__ListingsDocumentsClient<$Result.GetResult<Prisma.$ListingsDocumentsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one ListingDocument that matches the filter or throw an error with `error.code='P2025'`
+     * Find one ListingsDocuments that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {ListingDocumentFindUniqueOrThrowArgs} args - Arguments to find a ListingDocument
+     * @param {ListingsDocumentsFindUniqueOrThrowArgs} args - Arguments to find a ListingsDocuments
      * @example
-     * // Get one ListingDocument
-     * const listingDocument = await prisma.listingDocument.findUniqueOrThrow({
+     * // Get one ListingsDocuments
+     * const listingsDocuments = await prisma.listingsDocuments.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends ListingDocumentFindUniqueOrThrowArgs>(args: SelectSubset<T, ListingDocumentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ListingDocumentClient<$Result.GetResult<Prisma.$ListingDocumentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends ListingsDocumentsFindUniqueOrThrowArgs>(args: SelectSubset<T, ListingsDocumentsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ListingsDocumentsClient<$Result.GetResult<Prisma.$ListingsDocumentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first ListingDocument that matches the filter.
+     * Find the first ListingsDocuments that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingDocumentFindFirstArgs} args - Arguments to find a ListingDocument
+     * @param {ListingsDocumentsFindFirstArgs} args - Arguments to find a ListingsDocuments
      * @example
-     * // Get one ListingDocument
-     * const listingDocument = await prisma.listingDocument.findFirst({
+     * // Get one ListingsDocuments
+     * const listingsDocuments = await prisma.listingsDocuments.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends ListingDocumentFindFirstArgs>(args?: SelectSubset<T, ListingDocumentFindFirstArgs<ExtArgs>>): Prisma__ListingDocumentClient<$Result.GetResult<Prisma.$ListingDocumentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends ListingsDocumentsFindFirstArgs>(args?: SelectSubset<T, ListingsDocumentsFindFirstArgs<ExtArgs>>): Prisma__ListingsDocumentsClient<$Result.GetResult<Prisma.$ListingsDocumentsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first ListingDocument that matches the filter or
+     * Find the first ListingsDocuments that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingDocumentFindFirstOrThrowArgs} args - Arguments to find a ListingDocument
+     * @param {ListingsDocumentsFindFirstOrThrowArgs} args - Arguments to find a ListingsDocuments
      * @example
-     * // Get one ListingDocument
-     * const listingDocument = await prisma.listingDocument.findFirstOrThrow({
+     * // Get one ListingsDocuments
+     * const listingsDocuments = await prisma.listingsDocuments.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends ListingDocumentFindFirstOrThrowArgs>(args?: SelectSubset<T, ListingDocumentFindFirstOrThrowArgs<ExtArgs>>): Prisma__ListingDocumentClient<$Result.GetResult<Prisma.$ListingDocumentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends ListingsDocumentsFindFirstOrThrowArgs>(args?: SelectSubset<T, ListingsDocumentsFindFirstOrThrowArgs<ExtArgs>>): Prisma__ListingsDocumentsClient<$Result.GetResult<Prisma.$ListingsDocumentsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more ListingDocuments that matches the filter.
+     * Find zero or more ListingsDocuments that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingDocumentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {ListingsDocumentsFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all ListingDocuments
-     * const listingDocuments = await prisma.listingDocument.findMany()
+     * // Get all ListingsDocuments
+     * const listingsDocuments = await prisma.listingsDocuments.findMany()
      * 
-     * // Get first 10 ListingDocuments
-     * const listingDocuments = await prisma.listingDocument.findMany({ take: 10 })
+     * // Get first 10 ListingsDocuments
+     * const listingsDocuments = await prisma.listingsDocuments.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const listingDocumentWithIdOnly = await prisma.listingDocument.findMany({ select: { id: true } })
+     * const listingsDocumentsWithIdOnly = await prisma.listingsDocuments.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends ListingDocumentFindManyArgs>(args?: SelectSubset<T, ListingDocumentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends ListingsDocumentsFindManyArgs>(args?: SelectSubset<T, ListingsDocumentsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingsDocumentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a ListingDocument.
-     * @param {ListingDocumentCreateArgs} args - Arguments to create a ListingDocument.
+     * Create a ListingsDocuments.
+     * @param {ListingsDocumentsCreateArgs} args - Arguments to create a ListingsDocuments.
      * @example
-     * // Create one ListingDocument
-     * const ListingDocument = await prisma.listingDocument.create({
+     * // Create one ListingsDocuments
+     * const ListingsDocuments = await prisma.listingsDocuments.create({
      *   data: {
-     *     // ... data to create a ListingDocument
+     *     // ... data to create a ListingsDocuments
      *   }
      * })
      * 
      */
-    create<T extends ListingDocumentCreateArgs>(args: SelectSubset<T, ListingDocumentCreateArgs<ExtArgs>>): Prisma__ListingDocumentClient<$Result.GetResult<Prisma.$ListingDocumentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends ListingsDocumentsCreateArgs>(args: SelectSubset<T, ListingsDocumentsCreateArgs<ExtArgs>>): Prisma__ListingsDocumentsClient<$Result.GetResult<Prisma.$ListingsDocumentsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many ListingDocuments.
-     * @param {ListingDocumentCreateManyArgs} args - Arguments to create many ListingDocuments.
+     * Create many ListingsDocuments.
+     * @param {ListingsDocumentsCreateManyArgs} args - Arguments to create many ListingsDocuments.
      * @example
-     * // Create many ListingDocuments
-     * const listingDocument = await prisma.listingDocument.createMany({
+     * // Create many ListingsDocuments
+     * const listingsDocuments = await prisma.listingsDocuments.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends ListingDocumentCreateManyArgs>(args?: SelectSubset<T, ListingDocumentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends ListingsDocumentsCreateManyArgs>(args?: SelectSubset<T, ListingsDocumentsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many ListingDocuments and returns the data saved in the database.
-     * @param {ListingDocumentCreateManyAndReturnArgs} args - Arguments to create many ListingDocuments.
+     * Create many ListingsDocuments and returns the data saved in the database.
+     * @param {ListingsDocumentsCreateManyAndReturnArgs} args - Arguments to create many ListingsDocuments.
      * @example
-     * // Create many ListingDocuments
-     * const listingDocument = await prisma.listingDocument.createManyAndReturn({
+     * // Create many ListingsDocuments
+     * const listingsDocuments = await prisma.listingsDocuments.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many ListingDocuments and only return the `id`
-     * const listingDocumentWithIdOnly = await prisma.listingDocument.createManyAndReturn({
+     * // Create many ListingsDocuments and only return the `id`
+     * const listingsDocumentsWithIdOnly = await prisma.listingsDocuments.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -19678,28 +19678,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends ListingDocumentCreateManyAndReturnArgs>(args?: SelectSubset<T, ListingDocumentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingDocumentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends ListingsDocumentsCreateManyAndReturnArgs>(args?: SelectSubset<T, ListingsDocumentsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingsDocumentsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a ListingDocument.
-     * @param {ListingDocumentDeleteArgs} args - Arguments to delete one ListingDocument.
+     * Delete a ListingsDocuments.
+     * @param {ListingsDocumentsDeleteArgs} args - Arguments to delete one ListingsDocuments.
      * @example
-     * // Delete one ListingDocument
-     * const ListingDocument = await prisma.listingDocument.delete({
+     * // Delete one ListingsDocuments
+     * const ListingsDocuments = await prisma.listingsDocuments.delete({
      *   where: {
-     *     // ... filter to delete one ListingDocument
+     *     // ... filter to delete one ListingsDocuments
      *   }
      * })
      * 
      */
-    delete<T extends ListingDocumentDeleteArgs>(args: SelectSubset<T, ListingDocumentDeleteArgs<ExtArgs>>): Prisma__ListingDocumentClient<$Result.GetResult<Prisma.$ListingDocumentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends ListingsDocumentsDeleteArgs>(args: SelectSubset<T, ListingsDocumentsDeleteArgs<ExtArgs>>): Prisma__ListingsDocumentsClient<$Result.GetResult<Prisma.$ListingsDocumentsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one ListingDocument.
-     * @param {ListingDocumentUpdateArgs} args - Arguments to update one ListingDocument.
+     * Update one ListingsDocuments.
+     * @param {ListingsDocumentsUpdateArgs} args - Arguments to update one ListingsDocuments.
      * @example
-     * // Update one ListingDocument
-     * const listingDocument = await prisma.listingDocument.update({
+     * // Update one ListingsDocuments
+     * const listingsDocuments = await prisma.listingsDocuments.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -19709,30 +19709,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends ListingDocumentUpdateArgs>(args: SelectSubset<T, ListingDocumentUpdateArgs<ExtArgs>>): Prisma__ListingDocumentClient<$Result.GetResult<Prisma.$ListingDocumentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends ListingsDocumentsUpdateArgs>(args: SelectSubset<T, ListingsDocumentsUpdateArgs<ExtArgs>>): Prisma__ListingsDocumentsClient<$Result.GetResult<Prisma.$ListingsDocumentsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more ListingDocuments.
-     * @param {ListingDocumentDeleteManyArgs} args - Arguments to filter ListingDocuments to delete.
+     * Delete zero or more ListingsDocuments.
+     * @param {ListingsDocumentsDeleteManyArgs} args - Arguments to filter ListingsDocuments to delete.
      * @example
-     * // Delete a few ListingDocuments
-     * const { count } = await prisma.listingDocument.deleteMany({
+     * // Delete a few ListingsDocuments
+     * const { count } = await prisma.listingsDocuments.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends ListingDocumentDeleteManyArgs>(args?: SelectSubset<T, ListingDocumentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends ListingsDocumentsDeleteManyArgs>(args?: SelectSubset<T, ListingsDocumentsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more ListingDocuments.
+     * Update zero or more ListingsDocuments.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingDocumentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {ListingsDocumentsUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many ListingDocuments
-     * const listingDocument = await prisma.listingDocument.updateMany({
+     * // Update many ListingsDocuments
+     * const listingsDocuments = await prisma.listingsDocuments.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -19742,14 +19742,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends ListingDocumentUpdateManyArgs>(args: SelectSubset<T, ListingDocumentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends ListingsDocumentsUpdateManyArgs>(args: SelectSubset<T, ListingsDocumentsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more ListingDocuments and returns the data updated in the database.
-     * @param {ListingDocumentUpdateManyAndReturnArgs} args - Arguments to update many ListingDocuments.
+     * Update zero or more ListingsDocuments and returns the data updated in the database.
+     * @param {ListingsDocumentsUpdateManyAndReturnArgs} args - Arguments to update many ListingsDocuments.
      * @example
-     * // Update many ListingDocuments
-     * const listingDocument = await prisma.listingDocument.updateManyAndReturn({
+     * // Update many ListingsDocuments
+     * const listingsDocuments = await prisma.listingsDocuments.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -19758,8 +19758,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more ListingDocuments and only return the `id`
-     * const listingDocumentWithIdOnly = await prisma.listingDocument.updateManyAndReturn({
+     * // Update zero or more ListingsDocuments and only return the `id`
+     * const listingsDocumentsWithIdOnly = await prisma.listingsDocuments.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -19772,56 +19772,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends ListingDocumentUpdateManyAndReturnArgs>(args: SelectSubset<T, ListingDocumentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingDocumentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends ListingsDocumentsUpdateManyAndReturnArgs>(args: SelectSubset<T, ListingsDocumentsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingsDocumentsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one ListingDocument.
-     * @param {ListingDocumentUpsertArgs} args - Arguments to update or create a ListingDocument.
+     * Create or update one ListingsDocuments.
+     * @param {ListingsDocumentsUpsertArgs} args - Arguments to update or create a ListingsDocuments.
      * @example
-     * // Update or create a ListingDocument
-     * const listingDocument = await prisma.listingDocument.upsert({
+     * // Update or create a ListingsDocuments
+     * const listingsDocuments = await prisma.listingsDocuments.upsert({
      *   create: {
-     *     // ... data to create a ListingDocument
+     *     // ... data to create a ListingsDocuments
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the ListingDocument we want to update
+     *     // ... the filter for the ListingsDocuments we want to update
      *   }
      * })
      */
-    upsert<T extends ListingDocumentUpsertArgs>(args: SelectSubset<T, ListingDocumentUpsertArgs<ExtArgs>>): Prisma__ListingDocumentClient<$Result.GetResult<Prisma.$ListingDocumentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends ListingsDocumentsUpsertArgs>(args: SelectSubset<T, ListingsDocumentsUpsertArgs<ExtArgs>>): Prisma__ListingsDocumentsClient<$Result.GetResult<Prisma.$ListingsDocumentsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of ListingDocuments.
+     * Count the number of ListingsDocuments.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingDocumentCountArgs} args - Arguments to filter ListingDocuments to count.
+     * @param {ListingsDocumentsCountArgs} args - Arguments to filter ListingsDocuments to count.
      * @example
-     * // Count the number of ListingDocuments
-     * const count = await prisma.listingDocument.count({
+     * // Count the number of ListingsDocuments
+     * const count = await prisma.listingsDocuments.count({
      *   where: {
-     *     // ... the filter for the ListingDocuments we want to count
+     *     // ... the filter for the ListingsDocuments we want to count
      *   }
      * })
     **/
-    count<T extends ListingDocumentCountArgs>(
-      args?: Subset<T, ListingDocumentCountArgs>,
+    count<T extends ListingsDocumentsCountArgs>(
+      args?: Subset<T, ListingsDocumentsCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], ListingDocumentCountAggregateOutputType>
+          : GetScalarType<T['select'], ListingsDocumentsCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a ListingDocument.
+     * Allows you to perform aggregations operations on a ListingsDocuments.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingDocumentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {ListingsDocumentsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -19841,13 +19841,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends ListingDocumentAggregateArgs>(args: Subset<T, ListingDocumentAggregateArgs>): Prisma.PrismaPromise<GetListingDocumentAggregateType<T>>
+    aggregate<T extends ListingsDocumentsAggregateArgs>(args: Subset<T, ListingsDocumentsAggregateArgs>): Prisma.PrismaPromise<GetListingsDocumentsAggregateType<T>>
 
     /**
-     * Group by ListingDocument.
+     * Group by ListingsDocuments.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingDocumentGroupByArgs} args - Group by arguments.
+     * @param {ListingsDocumentsGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -19862,14 +19862,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends ListingDocumentGroupByArgs,
+      T extends ListingsDocumentsGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ListingDocumentGroupByArgs['orderBy'] }
-        : { orderBy?: ListingDocumentGroupByArgs['orderBy'] },
+        ? { orderBy: ListingsDocumentsGroupByArgs['orderBy'] }
+        : { orderBy?: ListingsDocumentsGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -19918,20 +19918,20 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, ListingDocumentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetListingDocumentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, ListingsDocumentsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetListingsDocumentsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the ListingDocument model
+   * Fields of the ListingsDocuments model
    */
-  readonly fields: ListingDocumentFieldRefs;
+  readonly fields: ListingsDocumentsFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for ListingDocument.
+   * The delegate class that acts as a "Promise-like" for ListingsDocuments.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__ListingDocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__ListingsDocumentsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     property<T extends ListingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ListingDefaultArgs<ExtArgs>>): Prisma__ListingClient<$Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
@@ -19960,430 +19960,430 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the ListingDocument model
+   * Fields of the ListingsDocuments model
    */
-  interface ListingDocumentFieldRefs {
-    readonly id: FieldRef<"ListingDocument", 'String'>
-    readonly propertyId: FieldRef<"ListingDocument", 'String'>
-    readonly name: FieldRef<"ListingDocument", 'String'>
-    readonly urls: FieldRef<"ListingDocument", 'Json'>
-    readonly sortOrder: FieldRef<"ListingDocument", 'Int'>
+  interface ListingsDocumentsFieldRefs {
+    readonly id: FieldRef<"ListingsDocuments", 'String'>
+    readonly propertyId: FieldRef<"ListingsDocuments", 'String'>
+    readonly name: FieldRef<"ListingsDocuments", 'String'>
+    readonly urls: FieldRef<"ListingsDocuments", 'Json'>
+    readonly sortOrder: FieldRef<"ListingsDocuments", 'Int'>
   }
     
 
   // Custom InputTypes
   /**
-   * ListingDocument findUnique
+   * ListingsDocuments findUnique
    */
-  export type ListingDocumentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsDocumentsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingDocument
+     * Select specific fields to fetch from the ListingsDocuments
      */
-    select?: ListingDocumentSelect<ExtArgs> | null
+    select?: ListingsDocumentsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingDocument
+     * Omit specific fields from the ListingsDocuments
      */
-    omit?: ListingDocumentOmit<ExtArgs> | null
+    omit?: ListingsDocumentsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingDocumentInclude<ExtArgs> | null
+    include?: ListingsDocumentsInclude<ExtArgs> | null
     /**
-     * Filter, which ListingDocument to fetch.
+     * Filter, which ListingsDocuments to fetch.
      */
-    where: ListingDocumentWhereUniqueInput
+    where: ListingsDocumentsWhereUniqueInput
   }
 
   /**
-   * ListingDocument findUniqueOrThrow
+   * ListingsDocuments findUniqueOrThrow
    */
-  export type ListingDocumentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsDocumentsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingDocument
+     * Select specific fields to fetch from the ListingsDocuments
      */
-    select?: ListingDocumentSelect<ExtArgs> | null
+    select?: ListingsDocumentsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingDocument
+     * Omit specific fields from the ListingsDocuments
      */
-    omit?: ListingDocumentOmit<ExtArgs> | null
+    omit?: ListingsDocumentsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingDocumentInclude<ExtArgs> | null
+    include?: ListingsDocumentsInclude<ExtArgs> | null
     /**
-     * Filter, which ListingDocument to fetch.
+     * Filter, which ListingsDocuments to fetch.
      */
-    where: ListingDocumentWhereUniqueInput
+    where: ListingsDocumentsWhereUniqueInput
   }
 
   /**
-   * ListingDocument findFirst
+   * ListingsDocuments findFirst
    */
-  export type ListingDocumentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsDocumentsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingDocument
+     * Select specific fields to fetch from the ListingsDocuments
      */
-    select?: ListingDocumentSelect<ExtArgs> | null
+    select?: ListingsDocumentsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingDocument
+     * Omit specific fields from the ListingsDocuments
      */
-    omit?: ListingDocumentOmit<ExtArgs> | null
+    omit?: ListingsDocumentsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingDocumentInclude<ExtArgs> | null
+    include?: ListingsDocumentsInclude<ExtArgs> | null
     /**
-     * Filter, which ListingDocument to fetch.
+     * Filter, which ListingsDocuments to fetch.
      */
-    where?: ListingDocumentWhereInput
+    where?: ListingsDocumentsWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ListingDocuments to fetch.
+     * Determine the order of ListingsDocuments to fetch.
      */
-    orderBy?: ListingDocumentOrderByWithRelationInput | ListingDocumentOrderByWithRelationInput[]
+    orderBy?: ListingsDocumentsOrderByWithRelationInput | ListingsDocumentsOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for ListingDocuments.
+     * Sets the position for searching for ListingsDocuments.
      */
-    cursor?: ListingDocumentWhereUniqueInput
+    cursor?: ListingsDocumentsWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ListingDocuments from the position of the cursor.
+     * Take `±n` ListingsDocuments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ListingDocuments.
+     * Skip the first `n` ListingsDocuments.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of ListingDocuments.
+     * Filter by unique combinations of ListingsDocuments.
      */
-    distinct?: ListingDocumentScalarFieldEnum | ListingDocumentScalarFieldEnum[]
+    distinct?: ListingsDocumentsScalarFieldEnum | ListingsDocumentsScalarFieldEnum[]
   }
 
   /**
-   * ListingDocument findFirstOrThrow
+   * ListingsDocuments findFirstOrThrow
    */
-  export type ListingDocumentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsDocumentsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingDocument
+     * Select specific fields to fetch from the ListingsDocuments
      */
-    select?: ListingDocumentSelect<ExtArgs> | null
+    select?: ListingsDocumentsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingDocument
+     * Omit specific fields from the ListingsDocuments
      */
-    omit?: ListingDocumentOmit<ExtArgs> | null
+    omit?: ListingsDocumentsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingDocumentInclude<ExtArgs> | null
+    include?: ListingsDocumentsInclude<ExtArgs> | null
     /**
-     * Filter, which ListingDocument to fetch.
+     * Filter, which ListingsDocuments to fetch.
      */
-    where?: ListingDocumentWhereInput
+    where?: ListingsDocumentsWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ListingDocuments to fetch.
+     * Determine the order of ListingsDocuments to fetch.
      */
-    orderBy?: ListingDocumentOrderByWithRelationInput | ListingDocumentOrderByWithRelationInput[]
+    orderBy?: ListingsDocumentsOrderByWithRelationInput | ListingsDocumentsOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for ListingDocuments.
+     * Sets the position for searching for ListingsDocuments.
      */
-    cursor?: ListingDocumentWhereUniqueInput
+    cursor?: ListingsDocumentsWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ListingDocuments from the position of the cursor.
+     * Take `±n` ListingsDocuments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ListingDocuments.
+     * Skip the first `n` ListingsDocuments.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of ListingDocuments.
+     * Filter by unique combinations of ListingsDocuments.
      */
-    distinct?: ListingDocumentScalarFieldEnum | ListingDocumentScalarFieldEnum[]
+    distinct?: ListingsDocumentsScalarFieldEnum | ListingsDocumentsScalarFieldEnum[]
   }
 
   /**
-   * ListingDocument findMany
+   * ListingsDocuments findMany
    */
-  export type ListingDocumentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsDocumentsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingDocument
+     * Select specific fields to fetch from the ListingsDocuments
      */
-    select?: ListingDocumentSelect<ExtArgs> | null
+    select?: ListingsDocumentsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingDocument
+     * Omit specific fields from the ListingsDocuments
      */
-    omit?: ListingDocumentOmit<ExtArgs> | null
+    omit?: ListingsDocumentsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingDocumentInclude<ExtArgs> | null
+    include?: ListingsDocumentsInclude<ExtArgs> | null
     /**
-     * Filter, which ListingDocuments to fetch.
+     * Filter, which ListingsDocuments to fetch.
      */
-    where?: ListingDocumentWhereInput
+    where?: ListingsDocumentsWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ListingDocuments to fetch.
+     * Determine the order of ListingsDocuments to fetch.
      */
-    orderBy?: ListingDocumentOrderByWithRelationInput | ListingDocumentOrderByWithRelationInput[]
+    orderBy?: ListingsDocumentsOrderByWithRelationInput | ListingsDocumentsOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing ListingDocuments.
+     * Sets the position for listing ListingsDocuments.
      */
-    cursor?: ListingDocumentWhereUniqueInput
+    cursor?: ListingsDocumentsWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ListingDocuments from the position of the cursor.
+     * Take `±n` ListingsDocuments from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ListingDocuments.
+     * Skip the first `n` ListingsDocuments.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of ListingDocuments.
+     * Filter by unique combinations of ListingsDocuments.
      */
-    distinct?: ListingDocumentScalarFieldEnum | ListingDocumentScalarFieldEnum[]
+    distinct?: ListingsDocumentsScalarFieldEnum | ListingsDocumentsScalarFieldEnum[]
   }
 
   /**
-   * ListingDocument create
+   * ListingsDocuments create
    */
-  export type ListingDocumentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsDocumentsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingDocument
+     * Select specific fields to fetch from the ListingsDocuments
      */
-    select?: ListingDocumentSelect<ExtArgs> | null
+    select?: ListingsDocumentsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingDocument
+     * Omit specific fields from the ListingsDocuments
      */
-    omit?: ListingDocumentOmit<ExtArgs> | null
+    omit?: ListingsDocumentsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingDocumentInclude<ExtArgs> | null
+    include?: ListingsDocumentsInclude<ExtArgs> | null
     /**
-     * The data needed to create a ListingDocument.
+     * The data needed to create a ListingsDocuments.
      */
-    data: XOR<ListingDocumentCreateInput, ListingDocumentUncheckedCreateInput>
+    data: XOR<ListingsDocumentsCreateInput, ListingsDocumentsUncheckedCreateInput>
   }
 
   /**
-   * ListingDocument createMany
+   * ListingsDocuments createMany
    */
-  export type ListingDocumentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsDocumentsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many ListingDocuments.
+     * The data used to create many ListingsDocuments.
      */
-    data: ListingDocumentCreateManyInput | ListingDocumentCreateManyInput[]
+    data: ListingsDocumentsCreateManyInput | ListingsDocumentsCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * ListingDocument createManyAndReturn
+   * ListingsDocuments createManyAndReturn
    */
-  export type ListingDocumentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsDocumentsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingDocument
+     * Select specific fields to fetch from the ListingsDocuments
      */
-    select?: ListingDocumentSelectCreateManyAndReturn<ExtArgs> | null
+    select?: ListingsDocumentsSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingDocument
+     * Omit specific fields from the ListingsDocuments
      */
-    omit?: ListingDocumentOmit<ExtArgs> | null
+    omit?: ListingsDocumentsOmit<ExtArgs> | null
     /**
-     * The data used to create many ListingDocuments.
+     * The data used to create many ListingsDocuments.
      */
-    data: ListingDocumentCreateManyInput | ListingDocumentCreateManyInput[]
+    data: ListingsDocumentsCreateManyInput | ListingsDocumentsCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingDocumentIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: ListingsDocumentsIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * ListingDocument update
+   * ListingsDocuments update
    */
-  export type ListingDocumentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsDocumentsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingDocument
+     * Select specific fields to fetch from the ListingsDocuments
      */
-    select?: ListingDocumentSelect<ExtArgs> | null
+    select?: ListingsDocumentsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingDocument
+     * Omit specific fields from the ListingsDocuments
      */
-    omit?: ListingDocumentOmit<ExtArgs> | null
+    omit?: ListingsDocumentsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingDocumentInclude<ExtArgs> | null
+    include?: ListingsDocumentsInclude<ExtArgs> | null
     /**
-     * The data needed to update a ListingDocument.
+     * The data needed to update a ListingsDocuments.
      */
-    data: XOR<ListingDocumentUpdateInput, ListingDocumentUncheckedUpdateInput>
+    data: XOR<ListingsDocumentsUpdateInput, ListingsDocumentsUncheckedUpdateInput>
     /**
-     * Choose, which ListingDocument to update.
+     * Choose, which ListingsDocuments to update.
      */
-    where: ListingDocumentWhereUniqueInput
+    where: ListingsDocumentsWhereUniqueInput
   }
 
   /**
-   * ListingDocument updateMany
+   * ListingsDocuments updateMany
    */
-  export type ListingDocumentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsDocumentsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update ListingDocuments.
+     * The data used to update ListingsDocuments.
      */
-    data: XOR<ListingDocumentUpdateManyMutationInput, ListingDocumentUncheckedUpdateManyInput>
+    data: XOR<ListingsDocumentsUpdateManyMutationInput, ListingsDocumentsUncheckedUpdateManyInput>
     /**
-     * Filter which ListingDocuments to update
+     * Filter which ListingsDocuments to update
      */
-    where?: ListingDocumentWhereInput
+    where?: ListingsDocumentsWhereInput
     /**
-     * Limit how many ListingDocuments to update.
+     * Limit how many ListingsDocuments to update.
      */
     limit?: number
   }
 
   /**
-   * ListingDocument updateManyAndReturn
+   * ListingsDocuments updateManyAndReturn
    */
-  export type ListingDocumentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsDocumentsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingDocument
+     * Select specific fields to fetch from the ListingsDocuments
      */
-    select?: ListingDocumentSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: ListingsDocumentsSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingDocument
+     * Omit specific fields from the ListingsDocuments
      */
-    omit?: ListingDocumentOmit<ExtArgs> | null
+    omit?: ListingsDocumentsOmit<ExtArgs> | null
     /**
-     * The data used to update ListingDocuments.
+     * The data used to update ListingsDocuments.
      */
-    data: XOR<ListingDocumentUpdateManyMutationInput, ListingDocumentUncheckedUpdateManyInput>
+    data: XOR<ListingsDocumentsUpdateManyMutationInput, ListingsDocumentsUncheckedUpdateManyInput>
     /**
-     * Filter which ListingDocuments to update
+     * Filter which ListingsDocuments to update
      */
-    where?: ListingDocumentWhereInput
+    where?: ListingsDocumentsWhereInput
     /**
-     * Limit how many ListingDocuments to update.
+     * Limit how many ListingsDocuments to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingDocumentIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: ListingsDocumentsIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * ListingDocument upsert
+   * ListingsDocuments upsert
    */
-  export type ListingDocumentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsDocumentsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingDocument
+     * Select specific fields to fetch from the ListingsDocuments
      */
-    select?: ListingDocumentSelect<ExtArgs> | null
+    select?: ListingsDocumentsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingDocument
+     * Omit specific fields from the ListingsDocuments
      */
-    omit?: ListingDocumentOmit<ExtArgs> | null
+    omit?: ListingsDocumentsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingDocumentInclude<ExtArgs> | null
+    include?: ListingsDocumentsInclude<ExtArgs> | null
     /**
-     * The filter to search for the ListingDocument to update in case it exists.
+     * The filter to search for the ListingsDocuments to update in case it exists.
      */
-    where: ListingDocumentWhereUniqueInput
+    where: ListingsDocumentsWhereUniqueInput
     /**
-     * In case the ListingDocument found by the `where` argument doesn't exist, create a new ListingDocument with this data.
+     * In case the ListingsDocuments found by the `where` argument doesn't exist, create a new ListingsDocuments with this data.
      */
-    create: XOR<ListingDocumentCreateInput, ListingDocumentUncheckedCreateInput>
+    create: XOR<ListingsDocumentsCreateInput, ListingsDocumentsUncheckedCreateInput>
     /**
-     * In case the ListingDocument was found with the provided `where` argument, update it with this data.
+     * In case the ListingsDocuments was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<ListingDocumentUpdateInput, ListingDocumentUncheckedUpdateInput>
+    update: XOR<ListingsDocumentsUpdateInput, ListingsDocumentsUncheckedUpdateInput>
   }
 
   /**
-   * ListingDocument delete
+   * ListingsDocuments delete
    */
-  export type ListingDocumentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsDocumentsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingDocument
+     * Select specific fields to fetch from the ListingsDocuments
      */
-    select?: ListingDocumentSelect<ExtArgs> | null
+    select?: ListingsDocumentsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingDocument
+     * Omit specific fields from the ListingsDocuments
      */
-    omit?: ListingDocumentOmit<ExtArgs> | null
+    omit?: ListingsDocumentsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingDocumentInclude<ExtArgs> | null
+    include?: ListingsDocumentsInclude<ExtArgs> | null
     /**
-     * Filter which ListingDocument to delete.
+     * Filter which ListingsDocuments to delete.
      */
-    where: ListingDocumentWhereUniqueInput
+    where: ListingsDocumentsWhereUniqueInput
   }
 
   /**
-   * ListingDocument deleteMany
+   * ListingsDocuments deleteMany
    */
-  export type ListingDocumentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsDocumentsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which ListingDocuments to delete
+     * Filter which ListingsDocuments to delete
      */
-    where?: ListingDocumentWhereInput
+    where?: ListingsDocumentsWhereInput
     /**
-     * Limit how many ListingDocuments to delete.
+     * Limit how many ListingsDocuments to delete.
      */
     limit?: number
   }
 
   /**
-   * ListingDocument without action
+   * ListingsDocuments without action
    */
-  export type ListingDocumentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsDocumentsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingDocument
+     * Select specific fields to fetch from the ListingsDocuments
      */
-    select?: ListingDocumentSelect<ExtArgs> | null
+    select?: ListingsDocumentsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingDocument
+     * Omit specific fields from the ListingsDocuments
      */
-    omit?: ListingDocumentOmit<ExtArgs> | null
+    omit?: ListingsDocumentsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingDocumentInclude<ExtArgs> | null
+    include?: ListingsDocumentsInclude<ExtArgs> | null
   }
 
 
@@ -60506,7 +60506,7 @@ export namespace Prisma {
   export type ListingRepresentativeScalarFieldEnum = (typeof ListingRepresentativeScalarFieldEnum)[keyof typeof ListingRepresentativeScalarFieldEnum]
 
 
-  export const ListingDocumentScalarFieldEnum: {
+  export const ListingsDocumentsScalarFieldEnum: {
     id: 'id',
     propertyId: 'propertyId',
     name: 'name',
@@ -60514,7 +60514,7 @@ export namespace Prisma {
     sortOrder: 'sortOrder'
   };
 
-  export type ListingDocumentScalarFieldEnum = (typeof ListingDocumentScalarFieldEnum)[keyof typeof ListingDocumentScalarFieldEnum]
+  export type ListingsDocumentsScalarFieldEnum = (typeof ListingsDocumentsScalarFieldEnum)[keyof typeof ListingsDocumentsScalarFieldEnum]
 
 
   export const ListingChangeScalarFieldEnum: {
@@ -61603,7 +61603,7 @@ export namespace Prisma {
     landDetail?: XOR<PropertyLandDetailNullableScalarRelationFilter, PropertyLandDetailWhereInput> | null
     commercialDetail?: XOR<ListingCommercialNullableScalarRelationFilter, ListingCommercialWhereInput> | null
     owners?: PropertyOwnerListRelationFilter
-    documents?: ListingDocumentListRelationFilter
+    documents?: ListingsDocumentsListRelationFilter
     changes?: ListingChangeListRelationFilter
     links?: PropertyLinkListRelationFilter
     linkedBy?: PropertyLinkListRelationFilter
@@ -61650,7 +61650,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailOrderByWithRelationInput
     commercialDetail?: ListingCommercialOrderByWithRelationInput
     owners?: PropertyOwnerOrderByRelationAggregateInput
-    documents?: ListingDocumentOrderByRelationAggregateInput
+    documents?: ListingsDocumentsOrderByRelationAggregateInput
     changes?: ListingChangeOrderByRelationAggregateInput
     links?: PropertyLinkOrderByRelationAggregateInput
     linkedBy?: PropertyLinkOrderByRelationAggregateInput
@@ -61700,7 +61700,7 @@ export namespace Prisma {
     landDetail?: XOR<PropertyLandDetailNullableScalarRelationFilter, PropertyLandDetailWhereInput> | null
     commercialDetail?: XOR<ListingCommercialNullableScalarRelationFilter, ListingCommercialWhereInput> | null
     owners?: PropertyOwnerListRelationFilter
-    documents?: ListingDocumentListRelationFilter
+    documents?: ListingsDocumentsListRelationFilter
     changes?: ListingChangeListRelationFilter
     links?: PropertyLinkListRelationFilter
     linkedBy?: PropertyLinkListRelationFilter
@@ -62297,19 +62297,19 @@ export namespace Prisma {
     status?: StringNullableWithAggregatesFilter<"ListingRepresentative"> | string | null
   }
 
-  export type ListingDocumentWhereInput = {
-    AND?: ListingDocumentWhereInput | ListingDocumentWhereInput[]
-    OR?: ListingDocumentWhereInput[]
-    NOT?: ListingDocumentWhereInput | ListingDocumentWhereInput[]
-    id?: StringFilter<"ListingDocument"> | string
-    propertyId?: StringFilter<"ListingDocument"> | string
-    name?: StringFilter<"ListingDocument"> | string
-    urls?: JsonFilter<"ListingDocument">
-    sortOrder?: IntFilter<"ListingDocument"> | number
+  export type ListingsDocumentsWhereInput = {
+    AND?: ListingsDocumentsWhereInput | ListingsDocumentsWhereInput[]
+    OR?: ListingsDocumentsWhereInput[]
+    NOT?: ListingsDocumentsWhereInput | ListingsDocumentsWhereInput[]
+    id?: StringFilter<"ListingsDocuments"> | string
+    propertyId?: StringFilter<"ListingsDocuments"> | string
+    name?: StringFilter<"ListingsDocuments"> | string
+    urls?: JsonFilter<"ListingsDocuments">
+    sortOrder?: IntFilter<"ListingsDocuments"> | number
     property?: XOR<ListingScalarRelationFilter, ListingWhereInput>
   }
 
-  export type ListingDocumentOrderByWithRelationInput = {
+  export type ListingsDocumentsOrderByWithRelationInput = {
     id?: SortOrder
     propertyId?: SortOrder
     name?: SortOrder
@@ -62318,40 +62318,40 @@ export namespace Prisma {
     property?: ListingOrderByWithRelationInput
   }
 
-  export type ListingDocumentWhereUniqueInput = Prisma.AtLeast<{
+  export type ListingsDocumentsWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    AND?: ListingDocumentWhereInput | ListingDocumentWhereInput[]
-    OR?: ListingDocumentWhereInput[]
-    NOT?: ListingDocumentWhereInput | ListingDocumentWhereInput[]
-    propertyId?: StringFilter<"ListingDocument"> | string
-    name?: StringFilter<"ListingDocument"> | string
-    urls?: JsonFilter<"ListingDocument">
-    sortOrder?: IntFilter<"ListingDocument"> | number
+    AND?: ListingsDocumentsWhereInput | ListingsDocumentsWhereInput[]
+    OR?: ListingsDocumentsWhereInput[]
+    NOT?: ListingsDocumentsWhereInput | ListingsDocumentsWhereInput[]
+    propertyId?: StringFilter<"ListingsDocuments"> | string
+    name?: StringFilter<"ListingsDocuments"> | string
+    urls?: JsonFilter<"ListingsDocuments">
+    sortOrder?: IntFilter<"ListingsDocuments"> | number
     property?: XOR<ListingScalarRelationFilter, ListingWhereInput>
   }, "id">
 
-  export type ListingDocumentOrderByWithAggregationInput = {
+  export type ListingsDocumentsOrderByWithAggregationInput = {
     id?: SortOrder
     propertyId?: SortOrder
     name?: SortOrder
     urls?: SortOrder
     sortOrder?: SortOrder
-    _count?: ListingDocumentCountOrderByAggregateInput
-    _avg?: ListingDocumentAvgOrderByAggregateInput
-    _max?: ListingDocumentMaxOrderByAggregateInput
-    _min?: ListingDocumentMinOrderByAggregateInput
-    _sum?: ListingDocumentSumOrderByAggregateInput
+    _count?: ListingsDocumentsCountOrderByAggregateInput
+    _avg?: ListingsDocumentsAvgOrderByAggregateInput
+    _max?: ListingsDocumentsMaxOrderByAggregateInput
+    _min?: ListingsDocumentsMinOrderByAggregateInput
+    _sum?: ListingsDocumentsSumOrderByAggregateInput
   }
 
-  export type ListingDocumentScalarWhereWithAggregatesInput = {
-    AND?: ListingDocumentScalarWhereWithAggregatesInput | ListingDocumentScalarWhereWithAggregatesInput[]
-    OR?: ListingDocumentScalarWhereWithAggregatesInput[]
-    NOT?: ListingDocumentScalarWhereWithAggregatesInput | ListingDocumentScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"ListingDocument"> | string
-    propertyId?: StringWithAggregatesFilter<"ListingDocument"> | string
-    name?: StringWithAggregatesFilter<"ListingDocument"> | string
-    urls?: JsonWithAggregatesFilter<"ListingDocument">
-    sortOrder?: IntWithAggregatesFilter<"ListingDocument"> | number
+  export type ListingsDocumentsScalarWhereWithAggregatesInput = {
+    AND?: ListingsDocumentsScalarWhereWithAggregatesInput | ListingsDocumentsScalarWhereWithAggregatesInput[]
+    OR?: ListingsDocumentsScalarWhereWithAggregatesInput[]
+    NOT?: ListingsDocumentsScalarWhereWithAggregatesInput | ListingsDocumentsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ListingsDocuments"> | string
+    propertyId?: StringWithAggregatesFilter<"ListingsDocuments"> | string
+    name?: StringWithAggregatesFilter<"ListingsDocuments"> | string
+    urls?: JsonWithAggregatesFilter<"ListingsDocuments">
+    sortOrder?: IntWithAggregatesFilter<"ListingsDocuments"> | number
   }
 
   export type ListingChangeWhereInput = {
@@ -65341,7 +65341,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
@@ -65387,7 +65387,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
@@ -65433,7 +65433,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
@@ -65479,7 +65479,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
@@ -66123,7 +66123,7 @@ export namespace Prisma {
     status?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type ListingDocumentCreateInput = {
+  export type ListingsDocumentsCreateInput = {
     id?: string
     name: string
     urls: JsonNullValueInput | InputJsonValue
@@ -66131,7 +66131,7 @@ export namespace Prisma {
     property: ListingCreateNestedOneWithoutDocumentsInput
   }
 
-  export type ListingDocumentUncheckedCreateInput = {
+  export type ListingsDocumentsUncheckedCreateInput = {
     id?: string
     propertyId: string
     name: string
@@ -66139,7 +66139,7 @@ export namespace Prisma {
     sortOrder?: number
   }
 
-  export type ListingDocumentUpdateInput = {
+  export type ListingsDocumentsUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     urls?: JsonNullValueInput | InputJsonValue
@@ -66147,7 +66147,7 @@ export namespace Prisma {
     property?: ListingUpdateOneRequiredWithoutDocumentsNestedInput
   }
 
-  export type ListingDocumentUncheckedUpdateInput = {
+  export type ListingsDocumentsUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     propertyId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -66155,7 +66155,7 @@ export namespace Prisma {
     sortOrder?: IntFieldUpdateOperationsInput | number
   }
 
-  export type ListingDocumentCreateManyInput = {
+  export type ListingsDocumentsCreateManyInput = {
     id?: string
     propertyId: string
     name: string
@@ -66163,14 +66163,14 @@ export namespace Prisma {
     sortOrder?: number
   }
 
-  export type ListingDocumentUpdateManyMutationInput = {
+  export type ListingsDocumentsUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     urls?: JsonNullValueInput | InputJsonValue
     sortOrder?: IntFieldUpdateOperationsInput | number
   }
 
-  export type ListingDocumentUncheckedUpdateManyInput = {
+  export type ListingsDocumentsUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     propertyId?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -69657,10 +69657,10 @@ export namespace Prisma {
     none?: PropertyOwnerWhereInput
   }
 
-  export type ListingDocumentListRelationFilter = {
-    every?: ListingDocumentWhereInput
-    some?: ListingDocumentWhereInput
-    none?: ListingDocumentWhereInput
+  export type ListingsDocumentsListRelationFilter = {
+    every?: ListingsDocumentsWhereInput
+    some?: ListingsDocumentsWhereInput
+    none?: ListingsDocumentsWhereInput
   }
 
   export type PropertyLinkListRelationFilter = {
@@ -69691,7 +69691,7 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type ListingDocumentOrderByRelationAggregateInput = {
+  export type ListingsDocumentsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -70277,7 +70277,7 @@ export namespace Prisma {
     _max?: NestedEnumPropertyRepresentativeRoleFilter<$PrismaModel>
   }
 
-  export type ListingDocumentCountOrderByAggregateInput = {
+  export type ListingsDocumentsCountOrderByAggregateInput = {
     id?: SortOrder
     propertyId?: SortOrder
     name?: SortOrder
@@ -70285,25 +70285,25 @@ export namespace Prisma {
     sortOrder?: SortOrder
   }
 
-  export type ListingDocumentAvgOrderByAggregateInput = {
+  export type ListingsDocumentsAvgOrderByAggregateInput = {
     sortOrder?: SortOrder
   }
 
-  export type ListingDocumentMaxOrderByAggregateInput = {
+  export type ListingsDocumentsMaxOrderByAggregateInput = {
     id?: SortOrder
     propertyId?: SortOrder
     name?: SortOrder
     sortOrder?: SortOrder
   }
 
-  export type ListingDocumentMinOrderByAggregateInput = {
+  export type ListingsDocumentsMinOrderByAggregateInput = {
     id?: SortOrder
     propertyId?: SortOrder
     name?: SortOrder
     sortOrder?: SortOrder
   }
 
-  export type ListingDocumentSumOrderByAggregateInput = {
+  export type ListingsDocumentsSumOrderByAggregateInput = {
     sortOrder?: SortOrder
   }
 
@@ -72624,11 +72624,11 @@ export namespace Prisma {
     connect?: PropertyOwnerWhereUniqueInput | PropertyOwnerWhereUniqueInput[]
   }
 
-  export type ListingDocumentCreateNestedManyWithoutPropertyInput = {
-    create?: XOR<ListingDocumentCreateWithoutPropertyInput, ListingDocumentUncheckedCreateWithoutPropertyInput> | ListingDocumentCreateWithoutPropertyInput[] | ListingDocumentUncheckedCreateWithoutPropertyInput[]
-    connectOrCreate?: ListingDocumentCreateOrConnectWithoutPropertyInput | ListingDocumentCreateOrConnectWithoutPropertyInput[]
-    createMany?: ListingDocumentCreateManyPropertyInputEnvelope
-    connect?: ListingDocumentWhereUniqueInput | ListingDocumentWhereUniqueInput[]
+  export type ListingsDocumentsCreateNestedManyWithoutPropertyInput = {
+    create?: XOR<ListingsDocumentsCreateWithoutPropertyInput, ListingsDocumentsUncheckedCreateWithoutPropertyInput> | ListingsDocumentsCreateWithoutPropertyInput[] | ListingsDocumentsUncheckedCreateWithoutPropertyInput[]
+    connectOrCreate?: ListingsDocumentsCreateOrConnectWithoutPropertyInput | ListingsDocumentsCreateOrConnectWithoutPropertyInput[]
+    createMany?: ListingsDocumentsCreateManyPropertyInputEnvelope
+    connect?: ListingsDocumentsWhereUniqueInput | ListingsDocumentsWhereUniqueInput[]
   }
 
   export type ListingChangeCreateNestedManyWithoutPropertyInput = {
@@ -72711,11 +72711,11 @@ export namespace Prisma {
     connect?: PropertyOwnerWhereUniqueInput | PropertyOwnerWhereUniqueInput[]
   }
 
-  export type ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput = {
-    create?: XOR<ListingDocumentCreateWithoutPropertyInput, ListingDocumentUncheckedCreateWithoutPropertyInput> | ListingDocumentCreateWithoutPropertyInput[] | ListingDocumentUncheckedCreateWithoutPropertyInput[]
-    connectOrCreate?: ListingDocumentCreateOrConnectWithoutPropertyInput | ListingDocumentCreateOrConnectWithoutPropertyInput[]
-    createMany?: ListingDocumentCreateManyPropertyInputEnvelope
-    connect?: ListingDocumentWhereUniqueInput | ListingDocumentWhereUniqueInput[]
+  export type ListingsDocumentsUncheckedCreateNestedManyWithoutPropertyInput = {
+    create?: XOR<ListingsDocumentsCreateWithoutPropertyInput, ListingsDocumentsUncheckedCreateWithoutPropertyInput> | ListingsDocumentsCreateWithoutPropertyInput[] | ListingsDocumentsUncheckedCreateWithoutPropertyInput[]
+    connectOrCreate?: ListingsDocumentsCreateOrConnectWithoutPropertyInput | ListingsDocumentsCreateOrConnectWithoutPropertyInput[]
+    createMany?: ListingsDocumentsCreateManyPropertyInputEnvelope
+    connect?: ListingsDocumentsWhereUniqueInput | ListingsDocumentsWhereUniqueInput[]
   }
 
   export type ListingChangeUncheckedCreateNestedManyWithoutPropertyInput = {
@@ -72871,18 +72871,18 @@ export namespace Prisma {
     deleteMany?: PropertyOwnerScalarWhereInput | PropertyOwnerScalarWhereInput[]
   }
 
-  export type ListingDocumentUpdateManyWithoutPropertyNestedInput = {
-    create?: XOR<ListingDocumentCreateWithoutPropertyInput, ListingDocumentUncheckedCreateWithoutPropertyInput> | ListingDocumentCreateWithoutPropertyInput[] | ListingDocumentUncheckedCreateWithoutPropertyInput[]
-    connectOrCreate?: ListingDocumentCreateOrConnectWithoutPropertyInput | ListingDocumentCreateOrConnectWithoutPropertyInput[]
-    upsert?: ListingDocumentUpsertWithWhereUniqueWithoutPropertyInput | ListingDocumentUpsertWithWhereUniqueWithoutPropertyInput[]
-    createMany?: ListingDocumentCreateManyPropertyInputEnvelope
-    set?: ListingDocumentWhereUniqueInput | ListingDocumentWhereUniqueInput[]
-    disconnect?: ListingDocumentWhereUniqueInput | ListingDocumentWhereUniqueInput[]
-    delete?: ListingDocumentWhereUniqueInput | ListingDocumentWhereUniqueInput[]
-    connect?: ListingDocumentWhereUniqueInput | ListingDocumentWhereUniqueInput[]
-    update?: ListingDocumentUpdateWithWhereUniqueWithoutPropertyInput | ListingDocumentUpdateWithWhereUniqueWithoutPropertyInput[]
-    updateMany?: ListingDocumentUpdateManyWithWhereWithoutPropertyInput | ListingDocumentUpdateManyWithWhereWithoutPropertyInput[]
-    deleteMany?: ListingDocumentScalarWhereInput | ListingDocumentScalarWhereInput[]
+  export type ListingsDocumentsUpdateManyWithoutPropertyNestedInput = {
+    create?: XOR<ListingsDocumentsCreateWithoutPropertyInput, ListingsDocumentsUncheckedCreateWithoutPropertyInput> | ListingsDocumentsCreateWithoutPropertyInput[] | ListingsDocumentsUncheckedCreateWithoutPropertyInput[]
+    connectOrCreate?: ListingsDocumentsCreateOrConnectWithoutPropertyInput | ListingsDocumentsCreateOrConnectWithoutPropertyInput[]
+    upsert?: ListingsDocumentsUpsertWithWhereUniqueWithoutPropertyInput | ListingsDocumentsUpsertWithWhereUniqueWithoutPropertyInput[]
+    createMany?: ListingsDocumentsCreateManyPropertyInputEnvelope
+    set?: ListingsDocumentsWhereUniqueInput | ListingsDocumentsWhereUniqueInput[]
+    disconnect?: ListingsDocumentsWhereUniqueInput | ListingsDocumentsWhereUniqueInput[]
+    delete?: ListingsDocumentsWhereUniqueInput | ListingsDocumentsWhereUniqueInput[]
+    connect?: ListingsDocumentsWhereUniqueInput | ListingsDocumentsWhereUniqueInput[]
+    update?: ListingsDocumentsUpdateWithWhereUniqueWithoutPropertyInput | ListingsDocumentsUpdateWithWhereUniqueWithoutPropertyInput[]
+    updateMany?: ListingsDocumentsUpdateManyWithWhereWithoutPropertyInput | ListingsDocumentsUpdateManyWithWhereWithoutPropertyInput[]
+    deleteMany?: ListingsDocumentsScalarWhereInput | ListingsDocumentsScalarWhereInput[]
   }
 
   export type ListingChangeUpdateManyWithoutPropertyNestedInput = {
@@ -73037,18 +73037,18 @@ export namespace Prisma {
     deleteMany?: PropertyOwnerScalarWhereInput | PropertyOwnerScalarWhereInput[]
   }
 
-  export type ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput = {
-    create?: XOR<ListingDocumentCreateWithoutPropertyInput, ListingDocumentUncheckedCreateWithoutPropertyInput> | ListingDocumentCreateWithoutPropertyInput[] | ListingDocumentUncheckedCreateWithoutPropertyInput[]
-    connectOrCreate?: ListingDocumentCreateOrConnectWithoutPropertyInput | ListingDocumentCreateOrConnectWithoutPropertyInput[]
-    upsert?: ListingDocumentUpsertWithWhereUniqueWithoutPropertyInput | ListingDocumentUpsertWithWhereUniqueWithoutPropertyInput[]
-    createMany?: ListingDocumentCreateManyPropertyInputEnvelope
-    set?: ListingDocumentWhereUniqueInput | ListingDocumentWhereUniqueInput[]
-    disconnect?: ListingDocumentWhereUniqueInput | ListingDocumentWhereUniqueInput[]
-    delete?: ListingDocumentWhereUniqueInput | ListingDocumentWhereUniqueInput[]
-    connect?: ListingDocumentWhereUniqueInput | ListingDocumentWhereUniqueInput[]
-    update?: ListingDocumentUpdateWithWhereUniqueWithoutPropertyInput | ListingDocumentUpdateWithWhereUniqueWithoutPropertyInput[]
-    updateMany?: ListingDocumentUpdateManyWithWhereWithoutPropertyInput | ListingDocumentUpdateManyWithWhereWithoutPropertyInput[]
-    deleteMany?: ListingDocumentScalarWhereInput | ListingDocumentScalarWhereInput[]
+  export type ListingsDocumentsUncheckedUpdateManyWithoutPropertyNestedInput = {
+    create?: XOR<ListingsDocumentsCreateWithoutPropertyInput, ListingsDocumentsUncheckedCreateWithoutPropertyInput> | ListingsDocumentsCreateWithoutPropertyInput[] | ListingsDocumentsUncheckedCreateWithoutPropertyInput[]
+    connectOrCreate?: ListingsDocumentsCreateOrConnectWithoutPropertyInput | ListingsDocumentsCreateOrConnectWithoutPropertyInput[]
+    upsert?: ListingsDocumentsUpsertWithWhereUniqueWithoutPropertyInput | ListingsDocumentsUpsertWithWhereUniqueWithoutPropertyInput[]
+    createMany?: ListingsDocumentsCreateManyPropertyInputEnvelope
+    set?: ListingsDocumentsWhereUniqueInput | ListingsDocumentsWhereUniqueInput[]
+    disconnect?: ListingsDocumentsWhereUniqueInput | ListingsDocumentsWhereUniqueInput[]
+    delete?: ListingsDocumentsWhereUniqueInput | ListingsDocumentsWhereUniqueInput[]
+    connect?: ListingsDocumentsWhereUniqueInput | ListingsDocumentsWhereUniqueInput[]
+    update?: ListingsDocumentsUpdateWithWhereUniqueWithoutPropertyInput | ListingsDocumentsUpdateWithWhereUniqueWithoutPropertyInput[]
+    updateMany?: ListingsDocumentsUpdateManyWithWhereWithoutPropertyInput | ListingsDocumentsUpdateManyWithWhereWithoutPropertyInput[]
+    deleteMany?: ListingsDocumentsScalarWhereInput | ListingsDocumentsScalarWhereInput[]
   }
 
   export type ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput = {
@@ -75181,7 +75181,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
@@ -75226,7 +75226,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
@@ -76438,27 +76438,27 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ListingDocumentCreateWithoutPropertyInput = {
+  export type ListingsDocumentsCreateWithoutPropertyInput = {
     id?: string
     name: string
     urls: JsonNullValueInput | InputJsonValue
     sortOrder?: number
   }
 
-  export type ListingDocumentUncheckedCreateWithoutPropertyInput = {
+  export type ListingsDocumentsUncheckedCreateWithoutPropertyInput = {
     id?: string
     name: string
     urls: JsonNullValueInput | InputJsonValue
     sortOrder?: number
   }
 
-  export type ListingDocumentCreateOrConnectWithoutPropertyInput = {
-    where: ListingDocumentWhereUniqueInput
-    create: XOR<ListingDocumentCreateWithoutPropertyInput, ListingDocumentUncheckedCreateWithoutPropertyInput>
+  export type ListingsDocumentsCreateOrConnectWithoutPropertyInput = {
+    where: ListingsDocumentsWhereUniqueInput
+    create: XOR<ListingsDocumentsCreateWithoutPropertyInput, ListingsDocumentsUncheckedCreateWithoutPropertyInput>
   }
 
-  export type ListingDocumentCreateManyPropertyInputEnvelope = {
-    data: ListingDocumentCreateManyPropertyInput | ListingDocumentCreateManyPropertyInput[]
+  export type ListingsDocumentsCreateManyPropertyInputEnvelope = {
+    data: ListingsDocumentsCreateManyPropertyInput | ListingsDocumentsCreateManyPropertyInput[]
     skipDuplicates?: boolean
   }
 
@@ -76851,31 +76851,31 @@ export namespace Prisma {
     isPrimaryOwner?: BoolFilter<"PropertyOwner"> | boolean
   }
 
-  export type ListingDocumentUpsertWithWhereUniqueWithoutPropertyInput = {
-    where: ListingDocumentWhereUniqueInput
-    update: XOR<ListingDocumentUpdateWithoutPropertyInput, ListingDocumentUncheckedUpdateWithoutPropertyInput>
-    create: XOR<ListingDocumentCreateWithoutPropertyInput, ListingDocumentUncheckedCreateWithoutPropertyInput>
+  export type ListingsDocumentsUpsertWithWhereUniqueWithoutPropertyInput = {
+    where: ListingsDocumentsWhereUniqueInput
+    update: XOR<ListingsDocumentsUpdateWithoutPropertyInput, ListingsDocumentsUncheckedUpdateWithoutPropertyInput>
+    create: XOR<ListingsDocumentsCreateWithoutPropertyInput, ListingsDocumentsUncheckedCreateWithoutPropertyInput>
   }
 
-  export type ListingDocumentUpdateWithWhereUniqueWithoutPropertyInput = {
-    where: ListingDocumentWhereUniqueInput
-    data: XOR<ListingDocumentUpdateWithoutPropertyInput, ListingDocumentUncheckedUpdateWithoutPropertyInput>
+  export type ListingsDocumentsUpdateWithWhereUniqueWithoutPropertyInput = {
+    where: ListingsDocumentsWhereUniqueInput
+    data: XOR<ListingsDocumentsUpdateWithoutPropertyInput, ListingsDocumentsUncheckedUpdateWithoutPropertyInput>
   }
 
-  export type ListingDocumentUpdateManyWithWhereWithoutPropertyInput = {
-    where: ListingDocumentScalarWhereInput
-    data: XOR<ListingDocumentUpdateManyMutationInput, ListingDocumentUncheckedUpdateManyWithoutPropertyInput>
+  export type ListingsDocumentsUpdateManyWithWhereWithoutPropertyInput = {
+    where: ListingsDocumentsScalarWhereInput
+    data: XOR<ListingsDocumentsUpdateManyMutationInput, ListingsDocumentsUncheckedUpdateManyWithoutPropertyInput>
   }
 
-  export type ListingDocumentScalarWhereInput = {
-    AND?: ListingDocumentScalarWhereInput | ListingDocumentScalarWhereInput[]
-    OR?: ListingDocumentScalarWhereInput[]
-    NOT?: ListingDocumentScalarWhereInput | ListingDocumentScalarWhereInput[]
-    id?: StringFilter<"ListingDocument"> | string
-    propertyId?: StringFilter<"ListingDocument"> | string
-    name?: StringFilter<"ListingDocument"> | string
-    urls?: JsonFilter<"ListingDocument">
-    sortOrder?: IntFilter<"ListingDocument"> | number
+  export type ListingsDocumentsScalarWhereInput = {
+    AND?: ListingsDocumentsScalarWhereInput | ListingsDocumentsScalarWhereInput[]
+    OR?: ListingsDocumentsScalarWhereInput[]
+    NOT?: ListingsDocumentsScalarWhereInput | ListingsDocumentsScalarWhereInput[]
+    id?: StringFilter<"ListingsDocuments"> | string
+    propertyId?: StringFilter<"ListingsDocuments"> | string
+    name?: StringFilter<"ListingsDocuments"> | string
+    urls?: JsonFilter<"ListingsDocuments">
+    sortOrder?: IntFilter<"ListingsDocuments"> | number
   }
 
   export type ListingChangeUpsertWithWhereUniqueWithoutPropertyInput = {
@@ -77070,7 +77070,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
     savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
@@ -77115,7 +77115,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
     savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
@@ -77165,7 +77165,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
@@ -77210,7 +77210,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
@@ -77271,7 +77271,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
     savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
@@ -77316,7 +77316,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
     savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
@@ -77372,7 +77372,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
@@ -77417,7 +77417,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
@@ -77461,7 +77461,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
@@ -77506,7 +77506,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
@@ -77567,7 +77567,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
@@ -77612,7 +77612,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
@@ -77657,7 +77657,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
@@ -77702,7 +77702,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
@@ -77763,7 +77763,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
@@ -77808,7 +77808,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
@@ -77853,7 +77853,7 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
@@ -77898,7 +77898,7 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
@@ -77959,7 +77959,7 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
@@ -78004,7 +78004,7 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
@@ -78049,7 +78049,7 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
@@ -78094,7 +78094,7 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
@@ -78155,7 +78155,7 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
@@ -78200,7 +78200,7 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
@@ -78245,7 +78245,7 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
-    documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
@@ -78290,7 +78290,7 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedCreateNestedOneWithoutPropertyInput
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
-    documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
@@ -78384,7 +78384,7 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
-    documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
@@ -78429,7 +78429,7 @@ export namespace Prisma {
     apartmentDetail?: ListingApartmentUncheckedUpdateOneWithoutPropertyNestedInput
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
-    documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
@@ -78514,7 +78514,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
@@ -78559,7 +78559,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
@@ -78677,7 +78677,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
@@ -78722,7 +78722,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
@@ -79026,7 +79026,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
     savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
@@ -79071,7 +79071,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
     savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
@@ -79360,7 +79360,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
     savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
@@ -79405,7 +79405,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
     savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
@@ -80199,7 +80199,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
@@ -80244,7 +80244,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
@@ -80305,7 +80305,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
@@ -80350,7 +80350,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
@@ -80395,7 +80395,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
@@ -80440,7 +80440,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
@@ -80501,7 +80501,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
@@ -80546,7 +80546,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
@@ -82324,7 +82324,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
@@ -82369,7 +82369,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUncheckedCreateNestedOneWithoutPropertyInput
     commercialDetail?: ListingCommercialUncheckedCreateNestedOneWithoutPropertyInput
     owners?: PropertyOwnerUncheckedCreateNestedManyWithoutPropertyInput
-    documents?: ListingDocumentUncheckedCreateNestedManyWithoutPropertyInput
+    documents?: ListingsDocumentsUncheckedCreateNestedManyWithoutPropertyInput
     changes?: ListingChangeUncheckedCreateNestedManyWithoutPropertyInput
     links?: PropertyLinkUncheckedCreateNestedManyWithoutPrimaryInput
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
@@ -82469,7 +82469,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
@@ -82514,7 +82514,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
@@ -83243,7 +83243,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
@@ -83288,7 +83288,7 @@ export namespace Prisma {
     landDetail?: PropertyLandDetailUncheckedUpdateOneWithoutPropertyNestedInput
     commercialDetail?: ListingCommercialUncheckedUpdateOneWithoutPropertyNestedInput
     owners?: PropertyOwnerUncheckedUpdateManyWithoutPropertyNestedInput
-    documents?: ListingDocumentUncheckedUpdateManyWithoutPropertyNestedInput
+    documents?: ListingsDocumentsUncheckedUpdateManyWithoutPropertyNestedInput
     changes?: ListingChangeUncheckedUpdateManyWithoutPropertyNestedInput
     links?: PropertyLinkUncheckedUpdateManyWithoutPrimaryNestedInput
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
@@ -83938,7 +83938,7 @@ export namespace Prisma {
     isPrimaryOwner?: boolean
   }
 
-  export type ListingDocumentCreateManyPropertyInput = {
+  export type ListingsDocumentsCreateManyPropertyInput = {
     id?: string
     name: string
     urls: JsonNullValueInput | InputJsonValue
@@ -84018,21 +84018,21 @@ export namespace Prisma {
     isPrimaryOwner?: BoolFieldUpdateOperationsInput | boolean
   }
 
-  export type ListingDocumentUpdateWithoutPropertyInput = {
+  export type ListingsDocumentsUpdateWithoutPropertyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     urls?: JsonNullValueInput | InputJsonValue
     sortOrder?: IntFieldUpdateOperationsInput | number
   }
 
-  export type ListingDocumentUncheckedUpdateWithoutPropertyInput = {
+  export type ListingsDocumentsUncheckedUpdateWithoutPropertyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     urls?: JsonNullValueInput | InputJsonValue
     sortOrder?: IntFieldUpdateOperationsInput | number
   }
 
-  export type ListingDocumentUncheckedUpdateManyWithoutPropertyInput = {
+  export type ListingsDocumentsUncheckedUpdateManyWithoutPropertyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     urls?: JsonNullValueInput | InputJsonValue

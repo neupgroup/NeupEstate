@@ -175,7 +175,7 @@ model Listing {
   landDetail       PropertyLandDetail?
   commercialDetail ListingCommercial?
   owners           PropertyOwner[]
-  documents        ListingDocument[]
+  documents        ListingsDocuments[]
   changes          ListingChange[]
   links            PropertyLink[]           @relation("PrimaryLinks")
   linkedBy         PropertyLink[]           @relation("SecondaryLinks")
@@ -306,7 +306,7 @@ model ListingRepresentative {
   @@map("listing_representatives")
 }
 
-model ListingDocument {
+model ListingsDocuments {
   id         String @id @default(cuid())
   propertyId String
   name       String
@@ -315,8 +315,8 @@ model ListingDocument {
 
   property Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
-  @@index([propertyId], map: "listing_documents_property_id_idx")
-  @@map("listing_documents")
+  @@index([propertyId], map: "listings_documents_property_id_idx")
+  @@map("listings_documents")
 }
 
 model ListingChange {

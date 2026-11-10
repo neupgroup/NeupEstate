@@ -264,7 +264,7 @@ exports.Prisma.ListingRepresentativeScalarFieldEnum = {
   status: 'status'
 };
 
-exports.Prisma.ListingDocumentScalarFieldEnum = {
+exports.Prisma.ListingsDocumentsScalarFieldEnum = {
   id: 'id',
   propertyId: 'propertyId',
   name: 'name',
@@ -796,7 +796,7 @@ exports.Prisma.ModelName = {
   ListingCommercial: 'ListingCommercial',
   PropertyOwner: 'PropertyOwner',
   ListingRepresentative: 'ListingRepresentative',
-  ListingDocument: 'ListingDocument',
+  ListingsDocuments: 'ListingsDocuments',
   ListingChange: 'ListingChange',
   Agency: 'Agency',
   AgencyMap: 'AgencyMap',
