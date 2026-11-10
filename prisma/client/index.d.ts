@@ -10424,7 +10424,6 @@ export namespace Prisma {
     geoLocation: number
     location: number
     details: number
-    pricing: number
     roadAccessDetails: number
     distancing: number
     earnings: number
@@ -10522,7 +10521,6 @@ export namespace Prisma {
     geoLocation?: true
     location?: true
     details?: true
-    pricing?: true
     roadAccessDetails?: true
     distancing?: true
     earnings?: true
@@ -10645,7 +10643,6 @@ export namespace Prisma {
     geoLocation: string
     location: string
     details: JsonValue | null
-    pricing: JsonValue | null
     roadAccessDetails: JsonValue | null
     distancing: JsonValue | null
     earnings: JsonValue | null
@@ -10700,7 +10697,6 @@ export namespace Prisma {
     geoLocation?: boolean
     location?: boolean
     details?: boolean
-    pricing?: boolean
     roadAccessDetails?: boolean
     distancing?: boolean
     earnings?: boolean
@@ -10752,7 +10748,6 @@ export namespace Prisma {
     geoLocation?: boolean
     location?: boolean
     details?: boolean
-    pricing?: boolean
     roadAccessDetails?: boolean
     distancing?: boolean
     earnings?: boolean
@@ -10789,7 +10784,6 @@ export namespace Prisma {
     geoLocation?: boolean
     location?: boolean
     details?: boolean
-    pricing?: boolean
     roadAccessDetails?: boolean
     distancing?: boolean
     earnings?: boolean
@@ -10826,7 +10820,6 @@ export namespace Prisma {
     geoLocation?: boolean
     location?: boolean
     details?: boolean
-    pricing?: boolean
     roadAccessDetails?: boolean
     distancing?: boolean
     earnings?: boolean
@@ -10843,7 +10836,7 @@ export namespace Prisma {
     customId?: boolean
   }
 
-  export type ListingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "title" | "description" | "media" | "type" | "purpose" | "status" | "currency" | "displayPrice" | "displayPriceUnit" | "priceBasis" | "priceCurrency" | "priceListed" | "priceNegotiable" | "geoLocation" | "location" | "details" | "pricing" | "roadAccessDetails" | "distancing" | "earnings" | "landDetails" | "plots" | "apartmentDetails" | "metaTags" | "amenities" | "createdAt" | "updatedAt" | "isFeatured" | "isApproved" | "isDeleted" | "customId", ExtArgs["result"]["listing"]>
+  export type ListingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "title" | "description" | "media" | "type" | "purpose" | "status" | "currency" | "displayPrice" | "displayPriceUnit" | "priceBasis" | "priceCurrency" | "priceListed" | "priceNegotiable" | "geoLocation" | "location" | "details" | "roadAccessDetails" | "distancing" | "earnings" | "landDetails" | "plots" | "apartmentDetails" | "metaTags" | "amenities" | "createdAt" | "updatedAt" | "isFeatured" | "isApproved" | "isDeleted" | "customId", ExtArgs["result"]["listing"]>
   export type ListingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     locationRecord?: boolean | LocationDefaultArgs<ExtArgs>
     houseDetail?: boolean | Listing$houseDetailArgs<ExtArgs>
@@ -10907,7 +10900,6 @@ export namespace Prisma {
       geoLocation: string
       location: string
       details: Prisma.JsonValue | null
-      pricing: Prisma.JsonValue | null
       roadAccessDetails: Prisma.JsonValue | null
       distancing: Prisma.JsonValue | null
       earnings: Prisma.JsonValue | null
@@ -11378,7 +11370,6 @@ export namespace Prisma {
     readonly geoLocation: FieldRef<"Listing", 'String'>
     readonly location: FieldRef<"Listing", 'String'>
     readonly details: FieldRef<"Listing", 'Json'>
-    readonly pricing: FieldRef<"Listing", 'Json'>
     readonly roadAccessDetails: FieldRef<"Listing", 'Json'>
     readonly distancing: FieldRef<"Listing", 'Json'>
     readonly earnings: FieldRef<"Listing", 'Json'>
@@ -68845,7 +68836,6 @@ export namespace Prisma {
     geoLocation: 'geoLocation',
     location: 'location',
     details: 'details',
-    pricing: 'pricing',
     roadAccessDetails: 'roadAccessDetails',
     distancing: 'distancing',
     earnings: 'earnings',
@@ -70138,7 +70128,6 @@ export namespace Prisma {
     geoLocation?: StringFilter<"Listing"> | string
     location?: UuidFilter<"Listing"> | string
     details?: JsonNullableFilter<"Listing">
-    pricing?: JsonNullableFilter<"Listing">
     roadAccessDetails?: JsonNullableFilter<"Listing">
     distancing?: JsonNullableFilter<"Listing">
     earnings?: JsonNullableFilter<"Listing">
@@ -70189,7 +70178,6 @@ export namespace Prisma {
     geoLocation?: SortOrder
     location?: SortOrder
     details?: SortOrderInput | SortOrder
-    pricing?: SortOrderInput | SortOrder
     roadAccessDetails?: SortOrderInput | SortOrder
     distancing?: SortOrderInput | SortOrder
     earnings?: SortOrderInput | SortOrder
@@ -70243,7 +70231,6 @@ export namespace Prisma {
     geoLocation?: StringFilter<"Listing"> | string
     location?: UuidFilter<"Listing"> | string
     details?: JsonNullableFilter<"Listing">
-    pricing?: JsonNullableFilter<"Listing">
     roadAccessDetails?: JsonNullableFilter<"Listing">
     distancing?: JsonNullableFilter<"Listing">
     earnings?: JsonNullableFilter<"Listing">
@@ -70294,7 +70281,6 @@ export namespace Prisma {
     geoLocation?: SortOrder
     location?: SortOrder
     details?: SortOrderInput | SortOrder
-    pricing?: SortOrderInput | SortOrder
     roadAccessDetails?: SortOrderInput | SortOrder
     distancing?: SortOrderInput | SortOrder
     earnings?: SortOrderInput | SortOrder
@@ -70338,7 +70324,6 @@ export namespace Prisma {
     geoLocation?: StringWithAggregatesFilter<"Listing"> | string
     location?: UuidWithAggregatesFilter<"Listing"> | string
     details?: JsonNullableWithAggregatesFilter<"Listing">
-    pricing?: JsonNullableWithAggregatesFilter<"Listing">
     roadAccessDetails?: JsonNullableWithAggregatesFilter<"Listing">
     distancing?: JsonNullableWithAggregatesFilter<"Listing">
     earnings?: JsonNullableWithAggregatesFilter<"Listing">
@@ -74367,7 +74352,6 @@ export namespace Prisma {
     priceNegotiable?: boolean | null
     geoLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -74418,7 +74402,6 @@ export namespace Prisma {
     geoLocation: string
     location: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -74467,7 +74450,6 @@ export namespace Prisma {
     priceNegotiable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     geoLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -74518,7 +74500,6 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -74568,7 +74549,6 @@ export namespace Prisma {
     geoLocation: string
     location: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -74603,7 +74583,6 @@ export namespace Prisma {
     priceNegotiable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     geoLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -74639,7 +74618,6 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -79334,7 +79312,6 @@ export namespace Prisma {
     geoLocation?: SortOrder
     location?: SortOrder
     details?: SortOrder
-    pricing?: SortOrder
     roadAccessDetails?: SortOrder
     distancing?: SortOrder
     earnings?: SortOrder
@@ -85318,7 +85295,6 @@ export namespace Prisma {
     priceNegotiable?: boolean | null
     geoLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -85367,7 +85343,6 @@ export namespace Prisma {
     priceNegotiable?: boolean | null
     geoLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -85508,7 +85483,6 @@ export namespace Prisma {
     geoLocation?: StringFilter<"Listing"> | string
     location?: UuidFilter<"Listing"> | string
     details?: JsonNullableFilter<"Listing">
-    pricing?: JsonNullableFilter<"Listing">
     roadAccessDetails?: JsonNullableFilter<"Listing">
     distancing?: JsonNullableFilter<"Listing">
     earnings?: JsonNullableFilter<"Listing">
@@ -87369,7 +87343,6 @@ export namespace Prisma {
     priceNegotiable?: boolean | null
     geoLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -87419,7 +87392,6 @@ export namespace Prisma {
     geoLocation: string
     location: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -87472,7 +87444,6 @@ export namespace Prisma {
     priceNegotiable?: boolean | null
     geoLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -87522,7 +87493,6 @@ export namespace Prisma {
     geoLocation: string
     location: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -87586,7 +87556,6 @@ export namespace Prisma {
     priceNegotiable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     geoLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -87636,7 +87605,6 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -87695,7 +87663,6 @@ export namespace Prisma {
     priceNegotiable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     geoLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -87745,7 +87712,6 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -87793,7 +87759,6 @@ export namespace Prisma {
     priceNegotiable?: boolean | null
     geoLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -87843,7 +87808,6 @@ export namespace Prisma {
     geoLocation: string
     location: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -87907,7 +87871,6 @@ export namespace Prisma {
     priceNegotiable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     geoLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -87957,7 +87920,6 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -88005,7 +87967,6 @@ export namespace Prisma {
     priceNegotiable?: boolean | null
     geoLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -88055,7 +88016,6 @@ export namespace Prisma {
     geoLocation: string
     location: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -88119,7 +88079,6 @@ export namespace Prisma {
     priceNegotiable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     geoLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -88169,7 +88128,6 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -88217,7 +88175,6 @@ export namespace Prisma {
     priceNegotiable?: boolean | null
     geoLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -88267,7 +88224,6 @@ export namespace Prisma {
     geoLocation: string
     location: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -88331,7 +88287,6 @@ export namespace Prisma {
     priceNegotiable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     geoLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -88381,7 +88336,6 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -88429,7 +88383,6 @@ export namespace Prisma {
     priceNegotiable?: boolean | null
     geoLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -88479,7 +88432,6 @@ export namespace Prisma {
     geoLocation: string
     location: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -88543,7 +88495,6 @@ export namespace Prisma {
     priceNegotiable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     geoLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -88593,7 +88544,6 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -88641,7 +88591,6 @@ export namespace Prisma {
     priceNegotiable?: boolean | null
     geoLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -88691,7 +88640,6 @@ export namespace Prisma {
     geoLocation: string
     location: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -88755,7 +88703,6 @@ export namespace Prisma {
     priceNegotiable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     geoLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -88805,7 +88752,6 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -88853,7 +88799,6 @@ export namespace Prisma {
     priceNegotiable?: boolean | null
     geoLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -88903,7 +88848,6 @@ export namespace Prisma {
     geoLocation: string
     location: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -89000,7 +88944,6 @@ export namespace Prisma {
     priceNegotiable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     geoLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -89050,7 +88993,6 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -89137,7 +89079,6 @@ export namespace Prisma {
     priceNegotiable?: boolean | null
     geoLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -89187,7 +89128,6 @@ export namespace Prisma {
     geoLocation: string
     location: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -89310,7 +89250,6 @@ export namespace Prisma {
     priceNegotiable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     geoLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -89360,7 +89299,6 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -89473,7 +89411,6 @@ export namespace Prisma {
     priceNegotiable?: boolean | null
     geoLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -89523,7 +89460,6 @@ export namespace Prisma {
     geoLocation: string
     location: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -89587,7 +89523,6 @@ export namespace Prisma {
     priceNegotiable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     geoLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -89637,7 +89572,6 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -89685,7 +89619,6 @@ export namespace Prisma {
     priceNegotiable?: boolean | null
     geoLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -89735,7 +89668,6 @@ export namespace Prisma {
     geoLocation: string
     location: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -90035,7 +89967,6 @@ export namespace Prisma {
     priceNegotiable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     geoLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -90085,7 +90016,6 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -90898,7 +90828,6 @@ export namespace Prisma {
     priceNegotiable?: boolean | null
     geoLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -90948,7 +90877,6 @@ export namespace Prisma {
     geoLocation: string
     location: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -91012,7 +90940,6 @@ export namespace Prisma {
     priceNegotiable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     geoLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -91062,7 +90989,6 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -91110,7 +91036,6 @@ export namespace Prisma {
     priceNegotiable?: boolean | null
     geoLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -91160,7 +91085,6 @@ export namespace Prisma {
     geoLocation: string
     location: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -91224,7 +91148,6 @@ export namespace Prisma {
     priceNegotiable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     geoLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -91274,7 +91197,6 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -93646,7 +93568,6 @@ export namespace Prisma {
     priceNegotiable?: boolean | null
     geoLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -93696,7 +93617,6 @@ export namespace Prisma {
     geoLocation: string
     location: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -93799,7 +93719,6 @@ export namespace Prisma {
     priceNegotiable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     geoLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -93849,7 +93768,6 @@ export namespace Prisma {
     geoLocation?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -94527,7 +94445,6 @@ export namespace Prisma {
     priceNegotiable?: boolean | null
     geoLocation: string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -94593,7 +94510,6 @@ export namespace Prisma {
     priceNegotiable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     geoLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -94642,7 +94558,6 @@ export namespace Prisma {
     priceNegotiable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     geoLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue
@@ -94691,7 +94606,6 @@ export namespace Prisma {
     priceNegotiable?: NullableBoolFieldUpdateOperationsInput | boolean | null
     geoLocation?: StringFieldUpdateOperationsInput | string
     details?: NullableJsonNullValueInput | InputJsonValue
-    pricing?: NullableJsonNullValueInput | InputJsonValue
     roadAccessDetails?: NullableJsonNullValueInput | InputJsonValue
     distancing?: NullableJsonNullValueInput | InputJsonValue
     earnings?: NullableJsonNullValueInput | InputJsonValue

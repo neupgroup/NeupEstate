@@ -349,7 +349,6 @@ Fields:
 > priceNegotiable: boolean;
 > geoLocation: varchar(63) NOT NULL;
 > location: uuid NOT NULL, references locations.id, ON DELETE RESTRICT, ON UPDATE CASCADE;
-> pricing: jsonb;
 > roadAccessDetails: jsonb;
 > distancing: jsonb;
 > earnings: jsonb;

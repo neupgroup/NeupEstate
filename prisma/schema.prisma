@@ -158,7 +158,6 @@ model Listing {
   location           String          @db.Uuid
   locationRecord     Location        @relation(fields: [location], references: [id], onDelete: Restrict, onUpdate: Cascade)
   details            Json?
-  pricing            Json?
   roadAccessDetails  Json?
   distancing         Json?
   earnings           Json?

@@ -18,7 +18,7 @@ import { PERMISSIONS } from '@/services/permission-names';;
 import { prisma } from '@neup/core/database/prisma';
 import type { ListingLogStatus } from '@/prisma/client';
 import { resolveListingCreateContext } from '@/services/listings/create/context';
-import { requireIdentity, formatLocationString, firstPositivePrice, cleanPricing, deepMergeJson, normalizeOwnerEntries, normalizeListingChangeData, mapListingToCreateFormValues } from '@/services/listings/action-helpers';
+import { requireIdentity, formatLocationString, firstPositivePrice, cleanPricing, cleanPricingMetadata, deepMergeJson, normalizeOwnerEntries, normalizeListingChangeData, mapListingToCreateFormValues } from '@/services/listings/action-helpers';
 
 type ListingChangeDraftStatus =
   | 'creation_draft'
@@ -938,6 +938,7 @@ export async function updateListingAction(
       price: resolvedPrice,
       details: {
         priceDisplayMode,
+        ...(pricing ? { pricing: cleanPricingMetadata(pricing) } : {}),
         showMap: validatedData.showMap ?? true,
         showOwnerInformation: validatedData.showOwnerInformation ?? true,
         isPrivate: validatedData.isPrivate ?? false,

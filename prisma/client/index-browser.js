@@ -172,7 +172,6 @@ exports.Prisma.ListingScalarFieldEnum = {
   geoLocation: 'geoLocation',
   location: 'location',
   details: 'details',
-  pricing: 'pricing',
   roadAccessDetails: 'roadAccessDetails',
   distancing: 'distancing',
   earnings: 'earnings',

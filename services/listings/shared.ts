@@ -447,6 +447,7 @@ export function normalizeStringArray(value: unknown): string[] {
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
 export function mapRecord(record: any): Listing {
+  const { pricing: storedPricing, ...listingDetails } = isRecord(record.details) ? record.details : {};
   const purpose  = mapPurposeFromEnum(record.purpose) as Listing['purpose'];
   const category = mapTypeFromEnum(record.type)       as Listing['category'];
 
@@ -458,7 +459,7 @@ export function mapRecord(record: any): Listing {
   const priceAmount = record.priceListed == null ? null : Number(record.priceListed);
   const priceCurrency = record.priceCurrency ?? null;
   const priceBasis = record.priceBasis ?? null;
-  const pricingMetadata = getListingPricingMetadata(record.pricing);
+  const pricingMetadata = getListingPricingMetadata(storedPricing);
   const pricing = pricingMetadata ?? undefined;
 
   const { latitude, longitude } = parseGeoLocation(record.geoLocation);
@@ -559,7 +560,7 @@ export function mapRecord(record: any): Listing {
     apartmentDetails: record.apartmentDetails || undefined,
     structuredLocation: record.details?.structuredLocation,
     pricing: pricing as Listing['pricing'],
-    details:          record.details || undefined,
+    details:          Object.keys(listingDetails).length ? listingDetails : undefined,
     roadAccessDetails: record.roadAccessDetails || undefined,
     distancing:       record.distancing || undefined,
     earnings:         record.earnings || undefined,

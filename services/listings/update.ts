@@ -30,6 +30,7 @@ function buildListingDetails(d: Partial<CreateListingInput> & Record<string, any
 
   return {
     ...baseDetails,
+    ...(d.pricing ? { pricing: cleanPricingMetadata(d.pricing) } : {}),
     ...(isPlainObject(d.structuredLocation) ? { structuredLocation: d.structuredLocation } : {}),
     attachedBathrooms: typeof d.attachedBathrooms === 'number'
       ? d.attachedBathrooms
@@ -121,7 +122,6 @@ function buildCoreData(d: Partial<CreateListingInput> & Record<string, any>) {
     isApproved:        d.isApproved ?? false,
     amenities:         Array.isArray(d.amenities) ? d.amenities : [],
     metaTags:          Array.isArray(d.metaTags) ? d.metaTags : [],
-    pricing:           cleanPricingMetadata(d.pricing),
     details:           buildListingDetails(d),
     roadAccessDetails: d.roadAccessDetails ?? null,
     distancing:        d.distancing ?? null,
