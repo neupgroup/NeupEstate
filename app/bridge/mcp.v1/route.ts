@@ -72,8 +72,8 @@ function createMcpServer(actorAccountId: string, format?: string): McpServer {
       await requirePermission(PERMISSIONS.crm.lead.view);
       const where = await canViewAllTeamLeads(actorAccountId) ? {} : { owner: actorAccountId };
       const [data, total] = await Promise.all([
-        prisma.sharedLeads.findMany({ where, include: { baseLead: { include: { contacts: true } } }, orderBy: { createdAt: 'desc' }, skip: offset, take: limit }),
-        prisma.sharedLeads.count({ where }),
+        prisma.leadsAssigned.findMany({ where, include: { baseLead: { include: { contacts: true } } }, orderBy: { createdAt: 'desc' }, skip: offset, take: limit }),
+        prisma.leadsAssigned.count({ where }),
       ]);
       return toolSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } }, format);
     } catch (error) { return toolFailure(error, 'Failed to list team leads.'); }

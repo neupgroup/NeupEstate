@@ -16,7 +16,7 @@ export interface AddLeadActivityInput {
 /** Checks whether an account can access a shared lead's activity timeline. */
 export async function getVisibleLead(leadId: string, accountId: string) {
   const [lead, account, agencyLinks] = await Promise.all([
-    prisma.sharedLeads.findUnique({ where: { id: leadId }, select: { id: true, owner: true } }),
+    prisma.leadsAssigned.findUnique({ where: { id: leadId }, select: { id: true, owner: true } }),
     prisma.account.findUnique({ where: { id: accountId }, select: { accountType: true } }),
     prisma.agencyAgentMap.findMany({
       where: { agentId: accountId },

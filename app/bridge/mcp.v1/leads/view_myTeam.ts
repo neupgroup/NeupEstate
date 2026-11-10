@@ -25,8 +25,8 @@ export function registerViewMyTeamTool(server: McpToolServer, actorAccountId: st
       const ownerIds = [...new Set([actorAccountId, ...members.map((member) => member.agentId)])];
       const where = { owner: { in: ownerIds } };
       const [data, total] = await Promise.all([
-        prisma.sharedLeads.findMany({ where, include: { baseLead: { include: { contacts: true } } }, orderBy: { createdAt: 'desc' }, skip: offset, take: limit }),
-        prisma.sharedLeads.count({ where }),
+        prisma.leadsAssigned.findMany({ where, include: { baseLead: { include: { contacts: true } } }, orderBy: { createdAt: 'desc' }, skip: offset, take: limit }),
+        prisma.leadsAssigned.count({ where }),
       ]);
       return mcpSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } }, format, responseFormats);
     } catch (error) { return mcpError(error, 'Failed to list team leads.'); }

@@ -50,7 +50,7 @@ export async function searchClients(query: string) {
     try {
         const q = query.trim();
         if (!q) return [];
-        const clients = await prisma.baseLead.findMany({
+        const clients = await prisma.lead.findMany({
             where: {
                 OR: [
                     { firstName: { contains: q, mode: 'insensitive' } },
@@ -72,7 +72,7 @@ export async function searchClients(query: string) {
 
 export async function getBaseLeads() {
     try {
-        const leads = await prisma.sharedLeads.findMany({
+        const leads = await prisma.leadsAssigned.findMany({
             include: { baseLead: { include: CLIENT_INCLUDE } },
             orderBy: { createdAt: 'desc' },
         });
@@ -84,7 +84,7 @@ export async function getBaseLeads() {
 
 export async function getSharedLeads() {
     try {
-        const leads = await prisma.sharedLeads.findMany({
+        const leads = await prisma.leadsAssigned.findMany({
             include: { baseLead: { include: CLIENT_INCLUDE } },
             orderBy: { createdAt: 'desc' },
         });
@@ -96,7 +96,7 @@ export async function getSharedLeads() {
 
 export async function getMyLeads(accountId: string) {
     try {
-        const leads = await prisma.sharedLeads.findMany({
+        const leads = await prisma.leadsAssigned.findMany({
             where: { owner: accountId },
             include: { baseLead: { include: CLIENT_INCLUDE } },
             orderBy: { createdAt: 'desc' },
@@ -109,7 +109,7 @@ export async function getMyLeads(accountId: string) {
 
 export async function getBaseClientById(id: string) {
     try {
-        const client = await prisma.baseLead.findUnique({
+        const client = await prisma.lead.findUnique({
             where: { id },
             include: {
                 contacts: true,
@@ -126,7 +126,7 @@ export async function getBaseClientById(id: string) {
 
 export async function getLeadById(id: string) {
     try {
-        const lead = await prisma.sharedLeads.findUnique({
+        const lead = await prisma.leadsAssigned.findUnique({
             where: { id },
             include: { baseLead: { include: CLIENT_INCLUDE }, activities: { orderBy: { activityOn: 'desc' } } },
         });

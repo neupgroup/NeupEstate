@@ -58,7 +58,7 @@ export async function saveClient(data: {
 }): Promise<string> {
     try {
         const c = await prisma.$transaction(async (tx) => {
-            const created = await tx.baseLead.create({
+            const created = await tx.lead.create({
                 data: {
                     belongsTo: data.accountId,
                     firstName: data.firstName,
@@ -96,7 +96,7 @@ export async function createLead(data: CreateLeadInput): Promise<string> {
 
         if (!clientId) {
             const c = await prisma.$transaction(async (tx) => {
-                const created = await tx.baseLead.create({
+                const created = await tx.lead.create({
                     data: {
                         firstName: data.firstName!,
                         lastName:  data.lastName!,
@@ -116,7 +116,7 @@ export async function createLead(data: CreateLeadInput): Promise<string> {
             clientId = c.id;
         }
 
-        const lead = await prisma.sharedLeads.create({
+        const lead = await prisma.leadsAssigned.create({
             data: {
                 baseLeadId: clientId,
                 type:        data.type,

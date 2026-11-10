@@ -68,7 +68,7 @@ export async function GET(_request: NextRequest, context: RouteContext) {
 
     stage = 'base-lead-visibility-check';
     const [baseLead, account, agencyLinks] = await Promise.all([
-      prisma.baseLead.findUnique({
+      prisma.lead.findUnique({
         where: { id },
         select: {
           id: true,

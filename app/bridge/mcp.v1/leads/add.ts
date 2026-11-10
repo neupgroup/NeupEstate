@@ -27,7 +27,7 @@ export function registerAddLeadTool(server: McpToolServer, actorAccountId: strin
     try {
       await requirePermission(PERMISSIONS.crm.lead.create);
       if (input.existingClientId) {
-        const client = await prisma.baseLead.findFirst({ where: { id: input.existingClientId, belongsTo: actorAccountId }, select: { id: true } });
+        const client = await prisma.lead.findFirst({ where: { id: input.existingClientId, belongsTo: actorAccountId }, select: { id: true } });
         if (!client) return mcpError('Client not found or not owned by this account.');
       } else if (!input.firstName || !input.lastName) {
         return mcpError('firstName and lastName are required when creating a new client.');

@@ -39,8 +39,8 @@ export function registerViewMyOrganizationTool(server: McpToolServer, actorAccou
       const accountIds = await getOrganizationAccountIds(actorAccountId);
       const where = { OR: [{ owner: { in: accountIds } }, { baseLead: { belongsTo: { in: accountIds } } }] };
       const [data, total] = await Promise.all([
-        prisma.sharedLeads.findMany({ where, include: { baseLead: { include: { contacts: true } } }, orderBy: { createdAt: 'desc' }, skip: offset, take: limit }),
-        prisma.sharedLeads.count({ where }),
+        prisma.leadsAssigned.findMany({ where, include: { baseLead: { include: { contacts: true } } }, orderBy: { createdAt: 'desc' }, skip: offset, take: limit }),
+        prisma.leadsAssigned.count({ where }),
       ]);
       return mcpSuccess({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } }, format, responseFormats);
     } catch (error) { return mcpError(error, 'Failed to list organization leads.'); }

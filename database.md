@@ -218,7 +218,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - divergence: model RoleCapability maps to table authz_role_capability; mapped fields: roleId->role_id, capabilityId->capability_id, denormalizedCapability->denormalized_capability, roleName->role_name
 - divergence based on fields: database has 6 fields; Prisma model has 6 persisted scalar fields; difference 0
 
-### public.base_lead (BaseLead)
+### public.leads (Lead)
 
 - purpose: Stores reusable lead/client identity and contact payload shared by lead workflows.
 - usage: Used by lead search, client contacts, client links, property owners, and shared lead records.
@@ -231,7 +231,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - createdAt timestamp(3) NOT NULL, default CURRENT_TIMESTAMP
 - updatedAt timestamp(3) NOT NULL
 
-- divergence: model BaseLead maps to table base_lead; model fields not in table: belongsTo
+- divergence: model Lead maps to table leads; model fields not in table: belongsTo
 - divergence based on fields: database has 7 fields; Prisma model has 8 persisted scalar fields; difference -1
 
 ### public.client_contact (ClientContact)
@@ -842,7 +842,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - divergence: model ListingsSaved maps to table listings_saved
 - divergence based on fields: database has 4 fields; Prisma model has 4 persisted scalar fields; difference 0
 
-### public.shared_leads (SharedLeads)
+### public.leads_assigned (LeadsAssigned)
 
 - purpose: Stores shared lead opportunities with type, requirements, priority, and owner.
 - usage: Used by lead search, lead detail, lead activity, and owner-account relationships.
@@ -856,7 +856,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - createdAt timestamp(3) NOT NULL, default CURRENT_TIMESTAMP
 - updatedAt timestamp(3) NOT NULL
 
-- divergence: model SharedLeads maps to table shared_leads
+- divergence: model LeadsAssigned maps to table leads_assigned
 - divergence based on fields: database has 8 fields; Prisma model has 8 persisted scalar fields; difference 0
 
 ### public.SharedLead (no Prisma model)

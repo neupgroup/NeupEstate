@@ -28,10 +28,10 @@ export function registerTransferLeadTool(server: McpToolServer, actorAccountId: 
     try {
       await requirePermission(PERMISSIONS.crm.lead.create);
       const { accountIds, canManage } = await getAcceptedOrganizationMembers(actorAccountId);
-      const lead = await prisma.sharedLeads.findUnique({ where: { id: leadId }, select: { id: true, owner: true } });
+      const lead = await prisma.leadsAssigned.findUnique({ where: { id: leadId }, select: { id: true, owner: true } });
       if (!lead || !accountIds.includes(lead.owner) || (!canManage && lead.owner !== actorAccountId)) return mcpError('Lead not found or not transferable by this account.');
       if (!accountIds.includes(targetAccountId)) return mcpError('Target account is not an accepted member of your organization.');
-      const updated = await prisma.sharedLeads.update({ where: { id: leadId }, data: { owner: targetAccountId } });
+      const updated = await prisma.leadsAssigned.update({ where: { id: leadId }, data: { owner: targetAccountId } });
       return mcpSuccess({ success: true, data: updated }, format);
     } catch (error) { return mcpError(error, 'Failed to transfer lead.'); }
   });

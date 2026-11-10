@@ -129,10 +129,10 @@ export type ListingsSaved = $Result.DefaultSelection<Prisma.$ListingsSavedPayloa
  */
 export type ListingsView = $Result.DefaultSelection<Prisma.$ListingsViewPayload>
 /**
- * Model BaseLead
+ * Model Lead
  * 
  */
-export type BaseLead = $Result.DefaultSelection<Prisma.$BaseLeadPayload>
+export type Lead = $Result.DefaultSelection<Prisma.$LeadPayload>
 /**
  * Model ClientContact
  * 
@@ -144,10 +144,10 @@ export type ClientContact = $Result.DefaultSelection<Prisma.$ClientContactPayloa
  */
 export type ClientLink = $Result.DefaultSelection<Prisma.$ClientLinkPayload>
 /**
- * Model SharedLeads
+ * Model LeadsAssigned
  * 
  */
-export type SharedLeads = $Result.DefaultSelection<Prisma.$SharedLeadsPayload>
+export type LeadsAssigned = $Result.DefaultSelection<Prisma.$LeadsAssignedPayload>
 /**
  * Model LeadActivity
  * 
@@ -744,14 +744,14 @@ export class PrismaClient<
   get listingsView(): Prisma.ListingsViewDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.baseLead`: Exposes CRUD operations for the **BaseLead** model.
+   * `prisma.lead`: Exposes CRUD operations for the **Lead** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more BaseLeads
-    * const baseLeads = await prisma.baseLead.findMany()
+    * // Fetch zero or more Leads
+    * const leads = await prisma.lead.findMany()
     * ```
     */
-  get baseLead(): Prisma.BaseLeadDelegate<ExtArgs, ClientOptions>;
+  get lead(): Prisma.LeadDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.clientContact`: Exposes CRUD operations for the **ClientContact** model.
@@ -774,14 +774,14 @@ export class PrismaClient<
   get clientLink(): Prisma.ClientLinkDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.sharedLeads`: Exposes CRUD operations for the **SharedLeads** model.
+   * `prisma.leadsAssigned`: Exposes CRUD operations for the **LeadsAssigned** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more SharedLeads
-    * const sharedLeads = await prisma.sharedLeads.findMany()
+    * // Fetch zero or more LeadsAssigneds
+    * const leadsAssigneds = await prisma.leadsAssigned.findMany()
     * ```
     */
-  get sharedLeads(): Prisma.SharedLeadsDelegate<ExtArgs, ClientOptions>;
+  get leadsAssigned(): Prisma.LeadsAssignedDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.leadActivity`: Exposes CRUD operations for the **LeadActivity** model.
@@ -1449,10 +1449,10 @@ export namespace Prisma {
     NaturalSearch: 'NaturalSearch',
     ListingsSaved: 'ListingsSaved',
     ListingsView: 'ListingsView',
-    BaseLead: 'BaseLead',
+    Lead: 'Lead',
     ClientContact: 'ClientContact',
     ClientLink: 'ClientLink',
-    SharedLeads: 'SharedLeads',
+    LeadsAssigned: 'LeadsAssigned',
     LeadActivity: 'LeadActivity',
     Conversation: 'Conversation',
     UserPreference: 'UserPreference',
@@ -1489,7 +1489,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "location" | "account" | "activity" | "listing" | "propertyLink" | "listingHouse" | "listingApartment" | "propertyLandDetail" | "listingCommercial" | "propertyOwner" | "listingsRepresentatives" | "listingsDocuments" | "listingChange" | "agency" | "agencyMap" | "agencyAgentMap" | "agencyCustomization" | "agent" | "review" | "requirement" | "naturalSearch" | "listingsSaved" | "listingsView" | "baseLead" | "clientContact" | "clientLink" | "sharedLeads" | "leadActivity" | "conversation" | "userPreference" | "mortgageRequest" | "salesRequest" | "visitRequest" | "sitemapEntry" | "inquiry" | "authzRole" | "accountAccess" | "roleCapability" | "authzAccountAccessGrant" | "authzAssetsAccessGrant" | "competitor" | "competitorSource" | "competitorPage" | "competitorListing" | "propertyCompetitionMap" | "competitorTracking" | "intelligenceMapping" | "intelligenceAlert"
+      modelProps: "location" | "account" | "activity" | "listing" | "propertyLink" | "listingHouse" | "listingApartment" | "propertyLandDetail" | "listingCommercial" | "propertyOwner" | "listingsRepresentatives" | "listingsDocuments" | "listingChange" | "agency" | "agencyMap" | "agencyAgentMap" | "agencyCustomization" | "agent" | "review" | "requirement" | "naturalSearch" | "listingsSaved" | "listingsView" | "lead" | "clientContact" | "clientLink" | "leadsAssigned" | "leadActivity" | "conversation" | "userPreference" | "mortgageRequest" | "salesRequest" | "visitRequest" | "sitemapEntry" | "inquiry" | "authzRole" | "accountAccess" | "roleCapability" | "authzAccountAccessGrant" | "authzAssetsAccessGrant" | "competitor" | "competitorSource" | "competitorPage" | "competitorListing" | "propertyCompetitionMap" | "competitorTracking" | "intelligenceMapping" | "intelligenceAlert"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3195,77 +3195,77 @@ export namespace Prisma {
           }
         }
       }
-      BaseLead: {
-        payload: Prisma.$BaseLeadPayload<ExtArgs>
-        fields: Prisma.BaseLeadFieldRefs
+      Lead: {
+        payload: Prisma.$LeadPayload<ExtArgs>
+        fields: Prisma.LeadFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.BaseLeadFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BaseLeadPayload> | null
+            args: Prisma.LeadFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.BaseLeadFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BaseLeadPayload>
+            args: Prisma.LeadFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadPayload>
           }
           findFirst: {
-            args: Prisma.BaseLeadFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BaseLeadPayload> | null
+            args: Prisma.LeadFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.BaseLeadFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BaseLeadPayload>
+            args: Prisma.LeadFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadPayload>
           }
           findMany: {
-            args: Prisma.BaseLeadFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BaseLeadPayload>[]
+            args: Prisma.LeadFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadPayload>[]
           }
           create: {
-            args: Prisma.BaseLeadCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BaseLeadPayload>
+            args: Prisma.LeadCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadPayload>
           }
           createMany: {
-            args: Prisma.BaseLeadCreateManyArgs<ExtArgs>
+            args: Prisma.LeadCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.BaseLeadCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BaseLeadPayload>[]
+            args: Prisma.LeadCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadPayload>[]
           }
           delete: {
-            args: Prisma.BaseLeadDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BaseLeadPayload>
+            args: Prisma.LeadDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadPayload>
           }
           update: {
-            args: Prisma.BaseLeadUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BaseLeadPayload>
+            args: Prisma.LeadUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadPayload>
           }
           deleteMany: {
-            args: Prisma.BaseLeadDeleteManyArgs<ExtArgs>
+            args: Prisma.LeadDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.BaseLeadUpdateManyArgs<ExtArgs>
+            args: Prisma.LeadUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.BaseLeadUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BaseLeadPayload>[]
+            args: Prisma.LeadUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadPayload>[]
           }
           upsert: {
-            args: Prisma.BaseLeadUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$BaseLeadPayload>
+            args: Prisma.LeadUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadPayload>
           }
           aggregate: {
-            args: Prisma.BaseLeadAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateBaseLead>
+            args: Prisma.LeadAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLead>
           }
           groupBy: {
-            args: Prisma.BaseLeadGroupByArgs<ExtArgs>
-            result: $Utils.Optional<BaseLeadGroupByOutputType>[]
+            args: Prisma.LeadGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LeadGroupByOutputType>[]
           }
           count: {
-            args: Prisma.BaseLeadCountArgs<ExtArgs>
-            result: $Utils.Optional<BaseLeadCountAggregateOutputType> | number
+            args: Prisma.LeadCountArgs<ExtArgs>
+            result: $Utils.Optional<LeadCountAggregateOutputType> | number
           }
         }
       }
@@ -3417,77 +3417,77 @@ export namespace Prisma {
           }
         }
       }
-      SharedLeads: {
-        payload: Prisma.$SharedLeadsPayload<ExtArgs>
-        fields: Prisma.SharedLeadsFieldRefs
+      LeadsAssigned: {
+        payload: Prisma.$LeadsAssignedPayload<ExtArgs>
+        fields: Prisma.LeadsAssignedFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.SharedLeadsFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SharedLeadsPayload> | null
+            args: Prisma.LeadsAssignedFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadsAssignedPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.SharedLeadsFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SharedLeadsPayload>
+            args: Prisma.LeadsAssignedFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadsAssignedPayload>
           }
           findFirst: {
-            args: Prisma.SharedLeadsFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SharedLeadsPayload> | null
+            args: Prisma.LeadsAssignedFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadsAssignedPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.SharedLeadsFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SharedLeadsPayload>
+            args: Prisma.LeadsAssignedFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadsAssignedPayload>
           }
           findMany: {
-            args: Prisma.SharedLeadsFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SharedLeadsPayload>[]
+            args: Prisma.LeadsAssignedFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadsAssignedPayload>[]
           }
           create: {
-            args: Prisma.SharedLeadsCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SharedLeadsPayload>
+            args: Prisma.LeadsAssignedCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadsAssignedPayload>
           }
           createMany: {
-            args: Prisma.SharedLeadsCreateManyArgs<ExtArgs>
+            args: Prisma.LeadsAssignedCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.SharedLeadsCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SharedLeadsPayload>[]
+            args: Prisma.LeadsAssignedCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadsAssignedPayload>[]
           }
           delete: {
-            args: Prisma.SharedLeadsDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SharedLeadsPayload>
+            args: Prisma.LeadsAssignedDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadsAssignedPayload>
           }
           update: {
-            args: Prisma.SharedLeadsUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SharedLeadsPayload>
+            args: Prisma.LeadsAssignedUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadsAssignedPayload>
           }
           deleteMany: {
-            args: Prisma.SharedLeadsDeleteManyArgs<ExtArgs>
+            args: Prisma.LeadsAssignedDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.SharedLeadsUpdateManyArgs<ExtArgs>
+            args: Prisma.LeadsAssignedUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.SharedLeadsUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SharedLeadsPayload>[]
+            args: Prisma.LeadsAssignedUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadsAssignedPayload>[]
           }
           upsert: {
-            args: Prisma.SharedLeadsUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SharedLeadsPayload>
+            args: Prisma.LeadsAssignedUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LeadsAssignedPayload>
           }
           aggregate: {
-            args: Prisma.SharedLeadsAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateSharedLeads>
+            args: Prisma.LeadsAssignedAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLeadsAssigned>
           }
           groupBy: {
-            args: Prisma.SharedLeadsGroupByArgs<ExtArgs>
-            result: $Utils.Optional<SharedLeadsGroupByOutputType>[]
+            args: Prisma.LeadsAssignedGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LeadsAssignedGroupByOutputType>[]
           }
           count: {
-            args: Prisma.SharedLeadsCountArgs<ExtArgs>
-            result: $Utils.Optional<SharedLeadsCountAggregateOutputType> | number
+            args: Prisma.LeadsAssignedCountArgs<ExtArgs>
+            result: $Utils.Optional<LeadsAssignedCountAggregateOutputType> | number
           }
         }
       }
@@ -5176,10 +5176,10 @@ export namespace Prisma {
     naturalSearch?: NaturalSearchOmit
     listingsSaved?: ListingsSavedOmit
     listingsView?: ListingsViewOmit
-    baseLead?: BaseLeadOmit
+    lead?: LeadOmit
     clientContact?: ClientContactOmit
     clientLink?: ClientLinkOmit
-    sharedLeads?: SharedLeadsOmit
+    leadsAssigned?: LeadsAssignedOmit
     leadActivity?: LeadActivityOmit
     conversation?: ConversationOmit
     userPreference?: UserPreferenceOmit
@@ -5395,14 +5395,14 @@ export namespace Prisma {
    * AccountCountOutputType without action
    */
   export type AccountCountOutputTypeCountBaseLeadsBelongingToArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: BaseLeadWhereInput
+    where?: LeadWhereInput
   }
 
   /**
    * AccountCountOutputType without action
    */
   export type AccountCountOutputTypeCountOwnedSharedLeadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SharedLeadsWhereInput
+    where?: LeadsAssignedWhereInput
   }
 
   /**
@@ -5599,90 +5599,90 @@ export namespace Prisma {
 
 
   /**
-   * Count Type BaseLeadCountOutputType
+   * Count Type LeadCountOutputType
    */
 
-  export type BaseLeadCountOutputType = {
+  export type LeadCountOutputType = {
     links: number
     sharedLeads: number
     contacts: number
     propertyOwners: number
   }
 
-  export type BaseLeadCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    links?: boolean | BaseLeadCountOutputTypeCountLinksArgs
-    sharedLeads?: boolean | BaseLeadCountOutputTypeCountSharedLeadsArgs
-    contacts?: boolean | BaseLeadCountOutputTypeCountContactsArgs
-    propertyOwners?: boolean | BaseLeadCountOutputTypeCountPropertyOwnersArgs
+  export type LeadCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    links?: boolean | LeadCountOutputTypeCountLinksArgs
+    sharedLeads?: boolean | LeadCountOutputTypeCountSharedLeadsArgs
+    contacts?: boolean | LeadCountOutputTypeCountContactsArgs
+    propertyOwners?: boolean | LeadCountOutputTypeCountPropertyOwnersArgs
   }
 
   // Custom InputTypes
   /**
-   * BaseLeadCountOutputType without action
+   * LeadCountOutputType without action
    */
-  export type BaseLeadCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the BaseLeadCountOutputType
+     * Select specific fields to fetch from the LeadCountOutputType
      */
-    select?: BaseLeadCountOutputTypeSelect<ExtArgs> | null
+    select?: LeadCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * BaseLeadCountOutputType without action
+   * LeadCountOutputType without action
    */
-  export type BaseLeadCountOutputTypeCountLinksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadCountOutputTypeCountLinksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ClientLinkWhereInput
   }
 
   /**
-   * BaseLeadCountOutputType without action
+   * LeadCountOutputType without action
    */
-  export type BaseLeadCountOutputTypeCountSharedLeadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SharedLeadsWhereInput
+  export type LeadCountOutputTypeCountSharedLeadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LeadsAssignedWhereInput
   }
 
   /**
-   * BaseLeadCountOutputType without action
+   * LeadCountOutputType without action
    */
-  export type BaseLeadCountOutputTypeCountContactsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadCountOutputTypeCountContactsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ClientContactWhereInput
   }
 
   /**
-   * BaseLeadCountOutputType without action
+   * LeadCountOutputType without action
    */
-  export type BaseLeadCountOutputTypeCountPropertyOwnersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadCountOutputTypeCountPropertyOwnersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PropertyOwnerWhereInput
   }
 
 
   /**
-   * Count Type SharedLeadsCountOutputType
+   * Count Type LeadsAssignedCountOutputType
    */
 
-  export type SharedLeadsCountOutputType = {
+  export type LeadsAssignedCountOutputType = {
     activities: number
   }
 
-  export type SharedLeadsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    activities?: boolean | SharedLeadsCountOutputTypeCountActivitiesArgs
+  export type LeadsAssignedCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    activities?: boolean | LeadsAssignedCountOutputTypeCountActivitiesArgs
   }
 
   // Custom InputTypes
   /**
-   * SharedLeadsCountOutputType without action
+   * LeadsAssignedCountOutputType without action
    */
-  export type SharedLeadsCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadsAssignedCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SharedLeadsCountOutputType
+     * Select specific fields to fetch from the LeadsAssignedCountOutputType
      */
-    select?: SharedLeadsCountOutputTypeSelect<ExtArgs> | null
+    select?: LeadsAssignedCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * SharedLeadsCountOutputType without action
+   * LeadsAssignedCountOutputType without action
    */
-  export type SharedLeadsCountOutputTypeCountActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadsAssignedCountOutputTypeCountActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: LeadActivityWhereInput
   }
 
@@ -7350,8 +7350,8 @@ export namespace Prisma {
       workingProfileOf: Prisma.$AccountPayload<ExtArgs>[]
       agencyAgentMapAsAgency: Prisma.$AgencyAgentMapPayload<ExtArgs>[]
       agencyAgentMapAsAgent: Prisma.$AgencyAgentMapPayload<ExtArgs>[]
-      baseLeadsBelongingTo: Prisma.$BaseLeadPayload<ExtArgs>[]
-      ownedSharedLeads: Prisma.$SharedLeadsPayload<ExtArgs>[]
+      baseLeadsBelongingTo: Prisma.$LeadPayload<ExtArgs>[]
+      ownedSharedLeads: Prisma.$LeadsAssignedPayload<ExtArgs>[]
       intelligenceMappings: Prisma.$IntelligenceMappingPayload<ExtArgs>[]
       intelligenceAlerts: Prisma.$IntelligenceAlertPayload<ExtArgs>[]
       propertyChanges: Prisma.$ListingChangePayload<ExtArgs>[]
@@ -7771,8 +7771,8 @@ export namespace Prisma {
     workingProfileOf<T extends Account$workingProfileOfArgs<ExtArgs> = {}>(args?: Subset<T, Account$workingProfileOfArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     agencyAgentMapAsAgency<T extends Account$agencyAgentMapAsAgencyArgs<ExtArgs> = {}>(args?: Subset<T, Account$agencyAgentMapAsAgencyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgencyAgentMapPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     agencyAgentMapAsAgent<T extends Account$agencyAgentMapAsAgentArgs<ExtArgs> = {}>(args?: Subset<T, Account$agencyAgentMapAsAgentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AgencyAgentMapPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    baseLeadsBelongingTo<T extends Account$baseLeadsBelongingToArgs<ExtArgs> = {}>(args?: Subset<T, Account$baseLeadsBelongingToArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BaseLeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    ownedSharedLeads<T extends Account$ownedSharedLeadsArgs<ExtArgs> = {}>(args?: Subset<T, Account$ownedSharedLeadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SharedLeadsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    baseLeadsBelongingTo<T extends Account$baseLeadsBelongingToArgs<ExtArgs> = {}>(args?: Subset<T, Account$baseLeadsBelongingToArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    ownedSharedLeads<T extends Account$ownedSharedLeadsArgs<ExtArgs> = {}>(args?: Subset<T, Account$ownedSharedLeadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadsAssignedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     intelligenceMappings<T extends Account$intelligenceMappingsArgs<ExtArgs> = {}>(args?: Subset<T, Account$intelligenceMappingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IntelligenceMappingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     intelligenceAlerts<T extends Account$intelligenceAlertsArgs<ExtArgs> = {}>(args?: Subset<T, Account$intelligenceAlertsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$IntelligenceAlertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     propertyChanges<T extends Account$propertyChangesArgs<ExtArgs> = {}>(args?: Subset<T, Account$propertyChangesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingChangePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -8340,23 +8340,23 @@ export namespace Prisma {
    */
   export type Account$baseLeadsBelongingToArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the BaseLead
+     * Select specific fields to fetch from the Lead
      */
-    select?: BaseLeadSelect<ExtArgs> | null
+    select?: LeadSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the BaseLead
+     * Omit specific fields from the Lead
      */
-    omit?: BaseLeadOmit<ExtArgs> | null
+    omit?: LeadOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: BaseLeadInclude<ExtArgs> | null
-    where?: BaseLeadWhereInput
-    orderBy?: BaseLeadOrderByWithRelationInput | BaseLeadOrderByWithRelationInput[]
-    cursor?: BaseLeadWhereUniqueInput
+    include?: LeadInclude<ExtArgs> | null
+    where?: LeadWhereInput
+    orderBy?: LeadOrderByWithRelationInput | LeadOrderByWithRelationInput[]
+    cursor?: LeadWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: BaseLeadScalarFieldEnum | BaseLeadScalarFieldEnum[]
+    distinct?: LeadScalarFieldEnum | LeadScalarFieldEnum[]
   }
 
   /**
@@ -8364,23 +8364,23 @@ export namespace Prisma {
    */
   export type Account$ownedSharedLeadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SharedLeads
+     * Select specific fields to fetch from the LeadsAssigned
      */
-    select?: SharedLeadsSelect<ExtArgs> | null
+    select?: LeadsAssignedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SharedLeads
+     * Omit specific fields from the LeadsAssigned
      */
-    omit?: SharedLeadsOmit<ExtArgs> | null
+    omit?: LeadsAssignedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SharedLeadsInclude<ExtArgs> | null
-    where?: SharedLeadsWhereInput
-    orderBy?: SharedLeadsOrderByWithRelationInput | SharedLeadsOrderByWithRelationInput[]
-    cursor?: SharedLeadsWhereUniqueInput
+    include?: LeadsAssignedInclude<ExtArgs> | null
+    where?: LeadsAssignedWhereInput
+    orderBy?: LeadsAssignedOrderByWithRelationInput | LeadsAssignedOrderByWithRelationInput[]
+    cursor?: LeadsAssignedWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: SharedLeadsScalarFieldEnum | SharedLeadsScalarFieldEnum[]
+    distinct?: LeadsAssignedScalarFieldEnum | LeadsAssignedScalarFieldEnum[]
   }
 
   /**
@@ -17322,7 +17322,7 @@ export namespace Prisma {
     ownerClientId?: boolean
     isPrimaryOwner?: boolean
     property?: boolean | ListingDefaultArgs<ExtArgs>
-    ownerClient?: boolean | BaseLeadDefaultArgs<ExtArgs>
+    ownerClient?: boolean | LeadDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["propertyOwner"]>
 
   export type PropertyOwnerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -17331,7 +17331,7 @@ export namespace Prisma {
     ownerClientId?: boolean
     isPrimaryOwner?: boolean
     property?: boolean | ListingDefaultArgs<ExtArgs>
-    ownerClient?: boolean | BaseLeadDefaultArgs<ExtArgs>
+    ownerClient?: boolean | LeadDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["propertyOwner"]>
 
   export type PropertyOwnerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -17340,7 +17340,7 @@ export namespace Prisma {
     ownerClientId?: boolean
     isPrimaryOwner?: boolean
     property?: boolean | ListingDefaultArgs<ExtArgs>
-    ownerClient?: boolean | BaseLeadDefaultArgs<ExtArgs>
+    ownerClient?: boolean | LeadDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["propertyOwner"]>
 
   export type PropertyOwnerSelectScalar = {
@@ -17353,22 +17353,22 @@ export namespace Prisma {
   export type PropertyOwnerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "propertyId" | "ownerClientId" | "isPrimaryOwner", ExtArgs["result"]["propertyOwner"]>
   export type PropertyOwnerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     property?: boolean | ListingDefaultArgs<ExtArgs>
-    ownerClient?: boolean | BaseLeadDefaultArgs<ExtArgs>
+    ownerClient?: boolean | LeadDefaultArgs<ExtArgs>
   }
   export type PropertyOwnerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     property?: boolean | ListingDefaultArgs<ExtArgs>
-    ownerClient?: boolean | BaseLeadDefaultArgs<ExtArgs>
+    ownerClient?: boolean | LeadDefaultArgs<ExtArgs>
   }
   export type PropertyOwnerIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     property?: boolean | ListingDefaultArgs<ExtArgs>
-    ownerClient?: boolean | BaseLeadDefaultArgs<ExtArgs>
+    ownerClient?: boolean | LeadDefaultArgs<ExtArgs>
   }
 
   export type $PropertyOwnerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "PropertyOwner"
     objects: {
       property: Prisma.$ListingPayload<ExtArgs>
-      ownerClient: Prisma.$BaseLeadPayload<ExtArgs>
+      ownerClient: Prisma.$LeadPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -17770,7 +17770,7 @@ export namespace Prisma {
   export interface Prisma__PropertyOwnerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     property<T extends ListingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ListingDefaultArgs<ExtArgs>>): Prisma__ListingClient<$Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    ownerClient<T extends BaseLeadDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BaseLeadDefaultArgs<ExtArgs>>): Prisma__BaseLeadClient<$Result.GetResult<Prisma.$BaseLeadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    ownerClient<T extends LeadDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LeadDefaultArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -32705,16 +32705,16 @@ export namespace Prisma {
 
 
   /**
-   * Model BaseLead
+   * Model Lead
    */
 
-  export type AggregateBaseLead = {
-    _count: BaseLeadCountAggregateOutputType | null
-    _min: BaseLeadMinAggregateOutputType | null
-    _max: BaseLeadMaxAggregateOutputType | null
+  export type AggregateLead = {
+    _count: LeadCountAggregateOutputType | null
+    _min: LeadMinAggregateOutputType | null
+    _max: LeadMaxAggregateOutputType | null
   }
 
-  export type BaseLeadMinAggregateOutputType = {
+  export type LeadMinAggregateOutputType = {
     id: string | null
     belongsTo: string | null
     firstName: string | null
@@ -32724,7 +32724,7 @@ export namespace Prisma {
     updatedAt: Date | null
   }
 
-  export type BaseLeadMaxAggregateOutputType = {
+  export type LeadMaxAggregateOutputType = {
     id: string | null
     belongsTo: string | null
     firstName: string | null
@@ -32734,7 +32734,7 @@ export namespace Prisma {
     updatedAt: Date | null
   }
 
-  export type BaseLeadCountAggregateOutputType = {
+  export type LeadCountAggregateOutputType = {
     id: number
     belongsTo: number
     firstName: number
@@ -32747,7 +32747,7 @@ export namespace Prisma {
   }
 
 
-  export type BaseLeadMinAggregateInputType = {
+  export type LeadMinAggregateInputType = {
     id?: true
     belongsTo?: true
     firstName?: true
@@ -32757,7 +32757,7 @@ export namespace Prisma {
     updatedAt?: true
   }
 
-  export type BaseLeadMaxAggregateInputType = {
+  export type LeadMaxAggregateInputType = {
     id?: true
     belongsTo?: true
     firstName?: true
@@ -32767,7 +32767,7 @@ export namespace Prisma {
     updatedAt?: true
   }
 
-  export type BaseLeadCountAggregateInputType = {
+  export type LeadCountAggregateInputType = {
     id?: true
     belongsTo?: true
     firstName?: true
@@ -32779,79 +32779,79 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type BaseLeadAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which BaseLead to aggregate.
+     * Filter which Lead to aggregate.
      */
-    where?: BaseLeadWhereInput
+    where?: LeadWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of BaseLeads to fetch.
+     * Determine the order of Leads to fetch.
      */
-    orderBy?: BaseLeadOrderByWithRelationInput | BaseLeadOrderByWithRelationInput[]
+    orderBy?: LeadOrderByWithRelationInput | LeadOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: BaseLeadWhereUniqueInput
+    cursor?: LeadWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` BaseLeads from the position of the cursor.
+     * Take `±n` Leads from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` BaseLeads.
+     * Skip the first `n` Leads.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned BaseLeads
+     * Count returned Leads
     **/
-    _count?: true | BaseLeadCountAggregateInputType
+    _count?: true | LeadCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: BaseLeadMinAggregateInputType
+    _min?: LeadMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: BaseLeadMaxAggregateInputType
+    _max?: LeadMaxAggregateInputType
   }
 
-  export type GetBaseLeadAggregateType<T extends BaseLeadAggregateArgs> = {
-        [P in keyof T & keyof AggregateBaseLead]: P extends '_count' | 'count'
+  export type GetLeadAggregateType<T extends LeadAggregateArgs> = {
+        [P in keyof T & keyof AggregateLead]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateBaseLead[P]>
-      : GetScalarType<T[P], AggregateBaseLead[P]>
+        : GetScalarType<T[P], AggregateLead[P]>
+      : GetScalarType<T[P], AggregateLead[P]>
   }
 
 
 
 
-  export type BaseLeadGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: BaseLeadWhereInput
-    orderBy?: BaseLeadOrderByWithAggregationInput | BaseLeadOrderByWithAggregationInput[]
-    by: BaseLeadScalarFieldEnum[] | BaseLeadScalarFieldEnum
-    having?: BaseLeadScalarWhereWithAggregatesInput
+  export type LeadGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LeadWhereInput
+    orderBy?: LeadOrderByWithAggregationInput | LeadOrderByWithAggregationInput[]
+    by: LeadScalarFieldEnum[] | LeadScalarFieldEnum
+    having?: LeadScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: BaseLeadCountAggregateInputType | true
-    _min?: BaseLeadMinAggregateInputType
-    _max?: BaseLeadMaxAggregateInputType
+    _count?: LeadCountAggregateInputType | true
+    _min?: LeadMinAggregateInputType
+    _max?: LeadMaxAggregateInputType
   }
 
-  export type BaseLeadGroupByOutputType = {
+  export type LeadGroupByOutputType = {
     id: string
     belongsTo: string
     firstName: string
@@ -32860,26 +32860,26 @@ export namespace Prisma {
     source: string | null
     createdAt: Date
     updatedAt: Date
-    _count: BaseLeadCountAggregateOutputType | null
-    _min: BaseLeadMinAggregateOutputType | null
-    _max: BaseLeadMaxAggregateOutputType | null
+    _count: LeadCountAggregateOutputType | null
+    _min: LeadMinAggregateOutputType | null
+    _max: LeadMaxAggregateOutputType | null
   }
 
-  type GetBaseLeadGroupByPayload<T extends BaseLeadGroupByArgs> = Prisma.PrismaPromise<
+  type GetLeadGroupByPayload<T extends LeadGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<BaseLeadGroupByOutputType, T['by']> &
+      PickEnumerable<LeadGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof BaseLeadGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof LeadGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], BaseLeadGroupByOutputType[P]>
-            : GetScalarType<T[P], BaseLeadGroupByOutputType[P]>
+              : GetScalarType<T[P], LeadGroupByOutputType[P]>
+            : GetScalarType<T[P], LeadGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type BaseLeadSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type LeadSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     belongsTo?: boolean
     firstName?: boolean
@@ -32888,27 +32888,15 @@ export namespace Prisma {
     source?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    links?: boolean | BaseLead$linksArgs<ExtArgs>
-    sharedLeads?: boolean | BaseLead$sharedLeadsArgs<ExtArgs>
-    contacts?: boolean | BaseLead$contactsArgs<ExtArgs>
-    propertyOwners?: boolean | BaseLead$propertyOwnersArgs<ExtArgs>
+    links?: boolean | Lead$linksArgs<ExtArgs>
+    sharedLeads?: boolean | Lead$sharedLeadsArgs<ExtArgs>
+    contacts?: boolean | Lead$contactsArgs<ExtArgs>
+    propertyOwners?: boolean | Lead$propertyOwnersArgs<ExtArgs>
     belongsToAccount?: boolean | AccountDefaultArgs<ExtArgs>
-    _count?: boolean | BaseLeadCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["baseLead"]>
+    _count?: boolean | LeadCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["lead"]>
 
-  export type BaseLeadSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    belongsTo?: boolean
-    firstName?: boolean
-    lastName?: boolean
-    contact?: boolean
-    source?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    belongsToAccount?: boolean | AccountDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["baseLead"]>
-
-  export type BaseLeadSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type LeadSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     belongsTo?: boolean
     firstName?: boolean
@@ -32918,9 +32906,21 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     belongsToAccount?: boolean | AccountDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["baseLead"]>
+  }, ExtArgs["result"]["lead"]>
 
-  export type BaseLeadSelectScalar = {
+  export type LeadSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    belongsTo?: boolean
+    firstName?: boolean
+    lastName?: boolean
+    contact?: boolean
+    source?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    belongsToAccount?: boolean | AccountDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["lead"]>
+
+  export type LeadSelectScalar = {
     id?: boolean
     belongsTo?: boolean
     firstName?: boolean
@@ -32931,27 +32931,27 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type BaseLeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "belongsTo" | "firstName" | "lastName" | "contact" | "source" | "createdAt" | "updatedAt", ExtArgs["result"]["baseLead"]>
-  export type BaseLeadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    links?: boolean | BaseLead$linksArgs<ExtArgs>
-    sharedLeads?: boolean | BaseLead$sharedLeadsArgs<ExtArgs>
-    contacts?: boolean | BaseLead$contactsArgs<ExtArgs>
-    propertyOwners?: boolean | BaseLead$propertyOwnersArgs<ExtArgs>
+  export type LeadOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "belongsTo" | "firstName" | "lastName" | "contact" | "source" | "createdAt" | "updatedAt", ExtArgs["result"]["lead"]>
+  export type LeadInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    links?: boolean | Lead$linksArgs<ExtArgs>
+    sharedLeads?: boolean | Lead$sharedLeadsArgs<ExtArgs>
+    contacts?: boolean | Lead$contactsArgs<ExtArgs>
+    propertyOwners?: boolean | Lead$propertyOwnersArgs<ExtArgs>
     belongsToAccount?: boolean | AccountDefaultArgs<ExtArgs>
-    _count?: boolean | BaseLeadCountOutputTypeDefaultArgs<ExtArgs>
+    _count?: boolean | LeadCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type BaseLeadIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     belongsToAccount?: boolean | AccountDefaultArgs<ExtArgs>
   }
-  export type BaseLeadIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     belongsToAccount?: boolean | AccountDefaultArgs<ExtArgs>
   }
 
-  export type $BaseLeadPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "BaseLead"
+  export type $LeadPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Lead"
     objects: {
       links: Prisma.$ClientLinkPayload<ExtArgs>[]
-      sharedLeads: Prisma.$SharedLeadsPayload<ExtArgs>[]
+      sharedLeads: Prisma.$LeadsAssignedPayload<ExtArgs>[]
       contacts: Prisma.$ClientContactPayload<ExtArgs>[]
       propertyOwners: Prisma.$PropertyOwnerPayload<ExtArgs>[]
       belongsToAccount: Prisma.$AccountPayload<ExtArgs>
@@ -32965,136 +32965,136 @@ export namespace Prisma {
       source: string | null
       createdAt: Date
       updatedAt: Date
-    }, ExtArgs["result"]["baseLead"]>
+    }, ExtArgs["result"]["lead"]>
     composites: {}
   }
 
-  type BaseLeadGetPayload<S extends boolean | null | undefined | BaseLeadDefaultArgs> = $Result.GetResult<Prisma.$BaseLeadPayload, S>
+  type LeadGetPayload<S extends boolean | null | undefined | LeadDefaultArgs> = $Result.GetResult<Prisma.$LeadPayload, S>
 
-  type BaseLeadCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<BaseLeadFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: BaseLeadCountAggregateInputType | true
+  type LeadCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LeadFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LeadCountAggregateInputType | true
     }
 
-  export interface BaseLeadDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BaseLead'], meta: { name: 'BaseLead' } }
+  export interface LeadDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Lead'], meta: { name: 'Lead' } }
     /**
-     * Find zero or one BaseLead that matches the filter.
-     * @param {BaseLeadFindUniqueArgs} args - Arguments to find a BaseLead
+     * Find zero or one Lead that matches the filter.
+     * @param {LeadFindUniqueArgs} args - Arguments to find a Lead
      * @example
-     * // Get one BaseLead
-     * const baseLead = await prisma.baseLead.findUnique({
+     * // Get one Lead
+     * const lead = await prisma.lead.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends BaseLeadFindUniqueArgs>(args: SelectSubset<T, BaseLeadFindUniqueArgs<ExtArgs>>): Prisma__BaseLeadClient<$Result.GetResult<Prisma.$BaseLeadPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends LeadFindUniqueArgs>(args: SelectSubset<T, LeadFindUniqueArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one BaseLead that matches the filter or throw an error with `error.code='P2025'`
+     * Find one Lead that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {BaseLeadFindUniqueOrThrowArgs} args - Arguments to find a BaseLead
+     * @param {LeadFindUniqueOrThrowArgs} args - Arguments to find a Lead
      * @example
-     * // Get one BaseLead
-     * const baseLead = await prisma.baseLead.findUniqueOrThrow({
+     * // Get one Lead
+     * const lead = await prisma.lead.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends BaseLeadFindUniqueOrThrowArgs>(args: SelectSubset<T, BaseLeadFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BaseLeadClient<$Result.GetResult<Prisma.$BaseLeadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends LeadFindUniqueOrThrowArgs>(args: SelectSubset<T, LeadFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first BaseLead that matches the filter.
+     * Find the first Lead that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BaseLeadFindFirstArgs} args - Arguments to find a BaseLead
+     * @param {LeadFindFirstArgs} args - Arguments to find a Lead
      * @example
-     * // Get one BaseLead
-     * const baseLead = await prisma.baseLead.findFirst({
+     * // Get one Lead
+     * const lead = await prisma.lead.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends BaseLeadFindFirstArgs>(args?: SelectSubset<T, BaseLeadFindFirstArgs<ExtArgs>>): Prisma__BaseLeadClient<$Result.GetResult<Prisma.$BaseLeadPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends LeadFindFirstArgs>(args?: SelectSubset<T, LeadFindFirstArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first BaseLead that matches the filter or
+     * Find the first Lead that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BaseLeadFindFirstOrThrowArgs} args - Arguments to find a BaseLead
+     * @param {LeadFindFirstOrThrowArgs} args - Arguments to find a Lead
      * @example
-     * // Get one BaseLead
-     * const baseLead = await prisma.baseLead.findFirstOrThrow({
+     * // Get one Lead
+     * const lead = await prisma.lead.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends BaseLeadFindFirstOrThrowArgs>(args?: SelectSubset<T, BaseLeadFindFirstOrThrowArgs<ExtArgs>>): Prisma__BaseLeadClient<$Result.GetResult<Prisma.$BaseLeadPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends LeadFindFirstOrThrowArgs>(args?: SelectSubset<T, LeadFindFirstOrThrowArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more BaseLeads that matches the filter.
+     * Find zero or more Leads that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BaseLeadFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {LeadFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all BaseLeads
-     * const baseLeads = await prisma.baseLead.findMany()
+     * // Get all Leads
+     * const leads = await prisma.lead.findMany()
      * 
-     * // Get first 10 BaseLeads
-     * const baseLeads = await prisma.baseLead.findMany({ take: 10 })
+     * // Get first 10 Leads
+     * const leads = await prisma.lead.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const baseLeadWithIdOnly = await prisma.baseLead.findMany({ select: { id: true } })
+     * const leadWithIdOnly = await prisma.lead.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends BaseLeadFindManyArgs>(args?: SelectSubset<T, BaseLeadFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BaseLeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends LeadFindManyArgs>(args?: SelectSubset<T, LeadFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a BaseLead.
-     * @param {BaseLeadCreateArgs} args - Arguments to create a BaseLead.
+     * Create a Lead.
+     * @param {LeadCreateArgs} args - Arguments to create a Lead.
      * @example
-     * // Create one BaseLead
-     * const BaseLead = await prisma.baseLead.create({
+     * // Create one Lead
+     * const Lead = await prisma.lead.create({
      *   data: {
-     *     // ... data to create a BaseLead
+     *     // ... data to create a Lead
      *   }
      * })
      * 
      */
-    create<T extends BaseLeadCreateArgs>(args: SelectSubset<T, BaseLeadCreateArgs<ExtArgs>>): Prisma__BaseLeadClient<$Result.GetResult<Prisma.$BaseLeadPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends LeadCreateArgs>(args: SelectSubset<T, LeadCreateArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many BaseLeads.
-     * @param {BaseLeadCreateManyArgs} args - Arguments to create many BaseLeads.
+     * Create many Leads.
+     * @param {LeadCreateManyArgs} args - Arguments to create many Leads.
      * @example
-     * // Create many BaseLeads
-     * const baseLead = await prisma.baseLead.createMany({
+     * // Create many Leads
+     * const lead = await prisma.lead.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends BaseLeadCreateManyArgs>(args?: SelectSubset<T, BaseLeadCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends LeadCreateManyArgs>(args?: SelectSubset<T, LeadCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many BaseLeads and returns the data saved in the database.
-     * @param {BaseLeadCreateManyAndReturnArgs} args - Arguments to create many BaseLeads.
+     * Create many Leads and returns the data saved in the database.
+     * @param {LeadCreateManyAndReturnArgs} args - Arguments to create many Leads.
      * @example
-     * // Create many BaseLeads
-     * const baseLead = await prisma.baseLead.createManyAndReturn({
+     * // Create many Leads
+     * const lead = await prisma.lead.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many BaseLeads and only return the `id`
-     * const baseLeadWithIdOnly = await prisma.baseLead.createManyAndReturn({
+     * // Create many Leads and only return the `id`
+     * const leadWithIdOnly = await prisma.lead.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -33104,28 +33104,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends BaseLeadCreateManyAndReturnArgs>(args?: SelectSubset<T, BaseLeadCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BaseLeadPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends LeadCreateManyAndReturnArgs>(args?: SelectSubset<T, LeadCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a BaseLead.
-     * @param {BaseLeadDeleteArgs} args - Arguments to delete one BaseLead.
+     * Delete a Lead.
+     * @param {LeadDeleteArgs} args - Arguments to delete one Lead.
      * @example
-     * // Delete one BaseLead
-     * const BaseLead = await prisma.baseLead.delete({
+     * // Delete one Lead
+     * const Lead = await prisma.lead.delete({
      *   where: {
-     *     // ... filter to delete one BaseLead
+     *     // ... filter to delete one Lead
      *   }
      * })
      * 
      */
-    delete<T extends BaseLeadDeleteArgs>(args: SelectSubset<T, BaseLeadDeleteArgs<ExtArgs>>): Prisma__BaseLeadClient<$Result.GetResult<Prisma.$BaseLeadPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends LeadDeleteArgs>(args: SelectSubset<T, LeadDeleteArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one BaseLead.
-     * @param {BaseLeadUpdateArgs} args - Arguments to update one BaseLead.
+     * Update one Lead.
+     * @param {LeadUpdateArgs} args - Arguments to update one Lead.
      * @example
-     * // Update one BaseLead
-     * const baseLead = await prisma.baseLead.update({
+     * // Update one Lead
+     * const lead = await prisma.lead.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -33135,30 +33135,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends BaseLeadUpdateArgs>(args: SelectSubset<T, BaseLeadUpdateArgs<ExtArgs>>): Prisma__BaseLeadClient<$Result.GetResult<Prisma.$BaseLeadPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends LeadUpdateArgs>(args: SelectSubset<T, LeadUpdateArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more BaseLeads.
-     * @param {BaseLeadDeleteManyArgs} args - Arguments to filter BaseLeads to delete.
+     * Delete zero or more Leads.
+     * @param {LeadDeleteManyArgs} args - Arguments to filter Leads to delete.
      * @example
-     * // Delete a few BaseLeads
-     * const { count } = await prisma.baseLead.deleteMany({
+     * // Delete a few Leads
+     * const { count } = await prisma.lead.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends BaseLeadDeleteManyArgs>(args?: SelectSubset<T, BaseLeadDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends LeadDeleteManyArgs>(args?: SelectSubset<T, LeadDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more BaseLeads.
+     * Update zero or more Leads.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BaseLeadUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {LeadUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many BaseLeads
-     * const baseLead = await prisma.baseLead.updateMany({
+     * // Update many Leads
+     * const lead = await prisma.lead.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -33168,14 +33168,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends BaseLeadUpdateManyArgs>(args: SelectSubset<T, BaseLeadUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends LeadUpdateManyArgs>(args: SelectSubset<T, LeadUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more BaseLeads and returns the data updated in the database.
-     * @param {BaseLeadUpdateManyAndReturnArgs} args - Arguments to update many BaseLeads.
+     * Update zero or more Leads and returns the data updated in the database.
+     * @param {LeadUpdateManyAndReturnArgs} args - Arguments to update many Leads.
      * @example
-     * // Update many BaseLeads
-     * const baseLead = await prisma.baseLead.updateManyAndReturn({
+     * // Update many Leads
+     * const lead = await prisma.lead.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -33184,8 +33184,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more BaseLeads and only return the `id`
-     * const baseLeadWithIdOnly = await prisma.baseLead.updateManyAndReturn({
+     * // Update zero or more Leads and only return the `id`
+     * const leadWithIdOnly = await prisma.lead.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -33198,56 +33198,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends BaseLeadUpdateManyAndReturnArgs>(args: SelectSubset<T, BaseLeadUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BaseLeadPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends LeadUpdateManyAndReturnArgs>(args: SelectSubset<T, LeadUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one BaseLead.
-     * @param {BaseLeadUpsertArgs} args - Arguments to update or create a BaseLead.
+     * Create or update one Lead.
+     * @param {LeadUpsertArgs} args - Arguments to update or create a Lead.
      * @example
-     * // Update or create a BaseLead
-     * const baseLead = await prisma.baseLead.upsert({
+     * // Update or create a Lead
+     * const lead = await prisma.lead.upsert({
      *   create: {
-     *     // ... data to create a BaseLead
+     *     // ... data to create a Lead
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the BaseLead we want to update
+     *     // ... the filter for the Lead we want to update
      *   }
      * })
      */
-    upsert<T extends BaseLeadUpsertArgs>(args: SelectSubset<T, BaseLeadUpsertArgs<ExtArgs>>): Prisma__BaseLeadClient<$Result.GetResult<Prisma.$BaseLeadPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends LeadUpsertArgs>(args: SelectSubset<T, LeadUpsertArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of BaseLeads.
+     * Count the number of Leads.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BaseLeadCountArgs} args - Arguments to filter BaseLeads to count.
+     * @param {LeadCountArgs} args - Arguments to filter Leads to count.
      * @example
-     * // Count the number of BaseLeads
-     * const count = await prisma.baseLead.count({
+     * // Count the number of Leads
+     * const count = await prisma.lead.count({
      *   where: {
-     *     // ... the filter for the BaseLeads we want to count
+     *     // ... the filter for the Leads we want to count
      *   }
      * })
     **/
-    count<T extends BaseLeadCountArgs>(
-      args?: Subset<T, BaseLeadCountArgs>,
+    count<T extends LeadCountArgs>(
+      args?: Subset<T, LeadCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], BaseLeadCountAggregateOutputType>
+          : GetScalarType<T['select'], LeadCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a BaseLead.
+     * Allows you to perform aggregations operations on a Lead.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BaseLeadAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {LeadAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -33267,13 +33267,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends BaseLeadAggregateArgs>(args: Subset<T, BaseLeadAggregateArgs>): Prisma.PrismaPromise<GetBaseLeadAggregateType<T>>
+    aggregate<T extends LeadAggregateArgs>(args: Subset<T, LeadAggregateArgs>): Prisma.PrismaPromise<GetLeadAggregateType<T>>
 
     /**
-     * Group by BaseLead.
+     * Group by Lead.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {BaseLeadGroupByArgs} args - Group by arguments.
+     * @param {LeadGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -33288,14 +33288,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends BaseLeadGroupByArgs,
+      T extends LeadGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: BaseLeadGroupByArgs['orderBy'] }
-        : { orderBy?: BaseLeadGroupByArgs['orderBy'] },
+        ? { orderBy: LeadGroupByArgs['orderBy'] }
+        : { orderBy?: LeadGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -33344,25 +33344,25 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, BaseLeadGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBaseLeadGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, LeadGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLeadGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the BaseLead model
+   * Fields of the Lead model
    */
-  readonly fields: BaseLeadFieldRefs;
+  readonly fields: LeadFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for BaseLead.
+   * The delegate class that acts as a "Promise-like" for Lead.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__BaseLeadClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__LeadClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    links<T extends BaseLead$linksArgs<ExtArgs> = {}>(args?: Subset<T, BaseLead$linksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClientLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    sharedLeads<T extends BaseLead$sharedLeadsArgs<ExtArgs> = {}>(args?: Subset<T, BaseLead$sharedLeadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SharedLeadsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    contacts<T extends BaseLead$contactsArgs<ExtArgs> = {}>(args?: Subset<T, BaseLead$contactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClientContactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    propertyOwners<T extends BaseLead$propertyOwnersArgs<ExtArgs> = {}>(args?: Subset<T, BaseLead$propertyOwnersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyOwnerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    links<T extends Lead$linksArgs<ExtArgs> = {}>(args?: Subset<T, Lead$linksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClientLinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sharedLeads<T extends Lead$sharedLeadsArgs<ExtArgs> = {}>(args?: Subset<T, Lead$sharedLeadsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadsAssignedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    contacts<T extends Lead$contactsArgs<ExtArgs> = {}>(args?: Subset<T, Lead$contactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ClientContactPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    propertyOwners<T extends Lead$propertyOwnersArgs<ExtArgs> = {}>(args?: Subset<T, Lead$propertyOwnersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyOwnerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     belongsToAccount<T extends AccountDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AccountDefaultArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -33390,421 +33390,421 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the BaseLead model
+   * Fields of the Lead model
    */
-  interface BaseLeadFieldRefs {
-    readonly id: FieldRef<"BaseLead", 'String'>
-    readonly belongsTo: FieldRef<"BaseLead", 'String'>
-    readonly firstName: FieldRef<"BaseLead", 'String'>
-    readonly lastName: FieldRef<"BaseLead", 'String'>
-    readonly contact: FieldRef<"BaseLead", 'Json'>
-    readonly source: FieldRef<"BaseLead", 'String'>
-    readonly createdAt: FieldRef<"BaseLead", 'DateTime'>
-    readonly updatedAt: FieldRef<"BaseLead", 'DateTime'>
+  interface LeadFieldRefs {
+    readonly id: FieldRef<"Lead", 'String'>
+    readonly belongsTo: FieldRef<"Lead", 'String'>
+    readonly firstName: FieldRef<"Lead", 'String'>
+    readonly lastName: FieldRef<"Lead", 'String'>
+    readonly contact: FieldRef<"Lead", 'Json'>
+    readonly source: FieldRef<"Lead", 'String'>
+    readonly createdAt: FieldRef<"Lead", 'DateTime'>
+    readonly updatedAt: FieldRef<"Lead", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * BaseLead findUnique
+   * Lead findUnique
    */
-  export type BaseLeadFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the BaseLead
+     * Select specific fields to fetch from the Lead
      */
-    select?: BaseLeadSelect<ExtArgs> | null
+    select?: LeadSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the BaseLead
+     * Omit specific fields from the Lead
      */
-    omit?: BaseLeadOmit<ExtArgs> | null
+    omit?: LeadOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: BaseLeadInclude<ExtArgs> | null
+    include?: LeadInclude<ExtArgs> | null
     /**
-     * Filter, which BaseLead to fetch.
+     * Filter, which Lead to fetch.
      */
-    where: BaseLeadWhereUniqueInput
+    where: LeadWhereUniqueInput
   }
 
   /**
-   * BaseLead findUniqueOrThrow
+   * Lead findUniqueOrThrow
    */
-  export type BaseLeadFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the BaseLead
+     * Select specific fields to fetch from the Lead
      */
-    select?: BaseLeadSelect<ExtArgs> | null
+    select?: LeadSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the BaseLead
+     * Omit specific fields from the Lead
      */
-    omit?: BaseLeadOmit<ExtArgs> | null
+    omit?: LeadOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: BaseLeadInclude<ExtArgs> | null
+    include?: LeadInclude<ExtArgs> | null
     /**
-     * Filter, which BaseLead to fetch.
+     * Filter, which Lead to fetch.
      */
-    where: BaseLeadWhereUniqueInput
+    where: LeadWhereUniqueInput
   }
 
   /**
-   * BaseLead findFirst
+   * Lead findFirst
    */
-  export type BaseLeadFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the BaseLead
+     * Select specific fields to fetch from the Lead
      */
-    select?: BaseLeadSelect<ExtArgs> | null
+    select?: LeadSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the BaseLead
+     * Omit specific fields from the Lead
      */
-    omit?: BaseLeadOmit<ExtArgs> | null
+    omit?: LeadOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: BaseLeadInclude<ExtArgs> | null
+    include?: LeadInclude<ExtArgs> | null
     /**
-     * Filter, which BaseLead to fetch.
+     * Filter, which Lead to fetch.
      */
-    where?: BaseLeadWhereInput
+    where?: LeadWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of BaseLeads to fetch.
+     * Determine the order of Leads to fetch.
      */
-    orderBy?: BaseLeadOrderByWithRelationInput | BaseLeadOrderByWithRelationInput[]
+    orderBy?: LeadOrderByWithRelationInput | LeadOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for BaseLeads.
+     * Sets the position for searching for Leads.
      */
-    cursor?: BaseLeadWhereUniqueInput
+    cursor?: LeadWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` BaseLeads from the position of the cursor.
+     * Take `±n` Leads from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` BaseLeads.
+     * Skip the first `n` Leads.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of BaseLeads.
+     * Filter by unique combinations of Leads.
      */
-    distinct?: BaseLeadScalarFieldEnum | BaseLeadScalarFieldEnum[]
+    distinct?: LeadScalarFieldEnum | LeadScalarFieldEnum[]
   }
 
   /**
-   * BaseLead findFirstOrThrow
+   * Lead findFirstOrThrow
    */
-  export type BaseLeadFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the BaseLead
+     * Select specific fields to fetch from the Lead
      */
-    select?: BaseLeadSelect<ExtArgs> | null
+    select?: LeadSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the BaseLead
+     * Omit specific fields from the Lead
      */
-    omit?: BaseLeadOmit<ExtArgs> | null
+    omit?: LeadOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: BaseLeadInclude<ExtArgs> | null
+    include?: LeadInclude<ExtArgs> | null
     /**
-     * Filter, which BaseLead to fetch.
+     * Filter, which Lead to fetch.
      */
-    where?: BaseLeadWhereInput
+    where?: LeadWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of BaseLeads to fetch.
+     * Determine the order of Leads to fetch.
      */
-    orderBy?: BaseLeadOrderByWithRelationInput | BaseLeadOrderByWithRelationInput[]
+    orderBy?: LeadOrderByWithRelationInput | LeadOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for BaseLeads.
+     * Sets the position for searching for Leads.
      */
-    cursor?: BaseLeadWhereUniqueInput
+    cursor?: LeadWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` BaseLeads from the position of the cursor.
+     * Take `±n` Leads from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` BaseLeads.
+     * Skip the first `n` Leads.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of BaseLeads.
+     * Filter by unique combinations of Leads.
      */
-    distinct?: BaseLeadScalarFieldEnum | BaseLeadScalarFieldEnum[]
+    distinct?: LeadScalarFieldEnum | LeadScalarFieldEnum[]
   }
 
   /**
-   * BaseLead findMany
+   * Lead findMany
    */
-  export type BaseLeadFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the BaseLead
+     * Select specific fields to fetch from the Lead
      */
-    select?: BaseLeadSelect<ExtArgs> | null
+    select?: LeadSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the BaseLead
+     * Omit specific fields from the Lead
      */
-    omit?: BaseLeadOmit<ExtArgs> | null
+    omit?: LeadOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: BaseLeadInclude<ExtArgs> | null
+    include?: LeadInclude<ExtArgs> | null
     /**
-     * Filter, which BaseLeads to fetch.
+     * Filter, which Leads to fetch.
      */
-    where?: BaseLeadWhereInput
+    where?: LeadWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of BaseLeads to fetch.
+     * Determine the order of Leads to fetch.
      */
-    orderBy?: BaseLeadOrderByWithRelationInput | BaseLeadOrderByWithRelationInput[]
+    orderBy?: LeadOrderByWithRelationInput | LeadOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing BaseLeads.
+     * Sets the position for listing Leads.
      */
-    cursor?: BaseLeadWhereUniqueInput
+    cursor?: LeadWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` BaseLeads from the position of the cursor.
+     * Take `±n` Leads from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` BaseLeads.
+     * Skip the first `n` Leads.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of BaseLeads.
+     * Filter by unique combinations of Leads.
      */
-    distinct?: BaseLeadScalarFieldEnum | BaseLeadScalarFieldEnum[]
+    distinct?: LeadScalarFieldEnum | LeadScalarFieldEnum[]
   }
 
   /**
-   * BaseLead create
+   * Lead create
    */
-  export type BaseLeadCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the BaseLead
+     * Select specific fields to fetch from the Lead
      */
-    select?: BaseLeadSelect<ExtArgs> | null
+    select?: LeadSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the BaseLead
+     * Omit specific fields from the Lead
      */
-    omit?: BaseLeadOmit<ExtArgs> | null
+    omit?: LeadOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: BaseLeadInclude<ExtArgs> | null
+    include?: LeadInclude<ExtArgs> | null
     /**
-     * The data needed to create a BaseLead.
+     * The data needed to create a Lead.
      */
-    data: XOR<BaseLeadCreateInput, BaseLeadUncheckedCreateInput>
+    data: XOR<LeadCreateInput, LeadUncheckedCreateInput>
   }
 
   /**
-   * BaseLead createMany
+   * Lead createMany
    */
-  export type BaseLeadCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many BaseLeads.
+     * The data used to create many Leads.
      */
-    data: BaseLeadCreateManyInput | BaseLeadCreateManyInput[]
+    data: LeadCreateManyInput | LeadCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * BaseLead createManyAndReturn
+   * Lead createManyAndReturn
    */
-  export type BaseLeadCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the BaseLead
+     * Select specific fields to fetch from the Lead
      */
-    select?: BaseLeadSelectCreateManyAndReturn<ExtArgs> | null
+    select?: LeadSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the BaseLead
+     * Omit specific fields from the Lead
      */
-    omit?: BaseLeadOmit<ExtArgs> | null
+    omit?: LeadOmit<ExtArgs> | null
     /**
-     * The data used to create many BaseLeads.
+     * The data used to create many Leads.
      */
-    data: BaseLeadCreateManyInput | BaseLeadCreateManyInput[]
+    data: LeadCreateManyInput | LeadCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: BaseLeadIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: LeadIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * BaseLead update
+   * Lead update
    */
-  export type BaseLeadUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the BaseLead
+     * Select specific fields to fetch from the Lead
      */
-    select?: BaseLeadSelect<ExtArgs> | null
+    select?: LeadSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the BaseLead
+     * Omit specific fields from the Lead
      */
-    omit?: BaseLeadOmit<ExtArgs> | null
+    omit?: LeadOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: BaseLeadInclude<ExtArgs> | null
+    include?: LeadInclude<ExtArgs> | null
     /**
-     * The data needed to update a BaseLead.
+     * The data needed to update a Lead.
      */
-    data: XOR<BaseLeadUpdateInput, BaseLeadUncheckedUpdateInput>
+    data: XOR<LeadUpdateInput, LeadUncheckedUpdateInput>
     /**
-     * Choose, which BaseLead to update.
+     * Choose, which Lead to update.
      */
-    where: BaseLeadWhereUniqueInput
+    where: LeadWhereUniqueInput
   }
 
   /**
-   * BaseLead updateMany
+   * Lead updateMany
    */
-  export type BaseLeadUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update BaseLeads.
+     * The data used to update Leads.
      */
-    data: XOR<BaseLeadUpdateManyMutationInput, BaseLeadUncheckedUpdateManyInput>
+    data: XOR<LeadUpdateManyMutationInput, LeadUncheckedUpdateManyInput>
     /**
-     * Filter which BaseLeads to update
+     * Filter which Leads to update
      */
-    where?: BaseLeadWhereInput
+    where?: LeadWhereInput
     /**
-     * Limit how many BaseLeads to update.
+     * Limit how many Leads to update.
      */
     limit?: number
   }
 
   /**
-   * BaseLead updateManyAndReturn
+   * Lead updateManyAndReturn
    */
-  export type BaseLeadUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the BaseLead
+     * Select specific fields to fetch from the Lead
      */
-    select?: BaseLeadSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: LeadSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the BaseLead
+     * Omit specific fields from the Lead
      */
-    omit?: BaseLeadOmit<ExtArgs> | null
+    omit?: LeadOmit<ExtArgs> | null
     /**
-     * The data used to update BaseLeads.
+     * The data used to update Leads.
      */
-    data: XOR<BaseLeadUpdateManyMutationInput, BaseLeadUncheckedUpdateManyInput>
+    data: XOR<LeadUpdateManyMutationInput, LeadUncheckedUpdateManyInput>
     /**
-     * Filter which BaseLeads to update
+     * Filter which Leads to update
      */
-    where?: BaseLeadWhereInput
+    where?: LeadWhereInput
     /**
-     * Limit how many BaseLeads to update.
+     * Limit how many Leads to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: BaseLeadIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: LeadIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * BaseLead upsert
+   * Lead upsert
    */
-  export type BaseLeadUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the BaseLead
+     * Select specific fields to fetch from the Lead
      */
-    select?: BaseLeadSelect<ExtArgs> | null
+    select?: LeadSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the BaseLead
+     * Omit specific fields from the Lead
      */
-    omit?: BaseLeadOmit<ExtArgs> | null
+    omit?: LeadOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: BaseLeadInclude<ExtArgs> | null
+    include?: LeadInclude<ExtArgs> | null
     /**
-     * The filter to search for the BaseLead to update in case it exists.
+     * The filter to search for the Lead to update in case it exists.
      */
-    where: BaseLeadWhereUniqueInput
+    where: LeadWhereUniqueInput
     /**
-     * In case the BaseLead found by the `where` argument doesn't exist, create a new BaseLead with this data.
+     * In case the Lead found by the `where` argument doesn't exist, create a new Lead with this data.
      */
-    create: XOR<BaseLeadCreateInput, BaseLeadUncheckedCreateInput>
+    create: XOR<LeadCreateInput, LeadUncheckedCreateInput>
     /**
-     * In case the BaseLead was found with the provided `where` argument, update it with this data.
+     * In case the Lead was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<BaseLeadUpdateInput, BaseLeadUncheckedUpdateInput>
+    update: XOR<LeadUpdateInput, LeadUncheckedUpdateInput>
   }
 
   /**
-   * BaseLead delete
+   * Lead delete
    */
-  export type BaseLeadDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the BaseLead
+     * Select specific fields to fetch from the Lead
      */
-    select?: BaseLeadSelect<ExtArgs> | null
+    select?: LeadSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the BaseLead
+     * Omit specific fields from the Lead
      */
-    omit?: BaseLeadOmit<ExtArgs> | null
+    omit?: LeadOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: BaseLeadInclude<ExtArgs> | null
+    include?: LeadInclude<ExtArgs> | null
     /**
-     * Filter which BaseLead to delete.
+     * Filter which Lead to delete.
      */
-    where: BaseLeadWhereUniqueInput
+    where: LeadWhereUniqueInput
   }
 
   /**
-   * BaseLead deleteMany
+   * Lead deleteMany
    */
-  export type BaseLeadDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which BaseLeads to delete
+     * Filter which Leads to delete
      */
-    where?: BaseLeadWhereInput
+    where?: LeadWhereInput
     /**
-     * Limit how many BaseLeads to delete.
+     * Limit how many Leads to delete.
      */
     limit?: number
   }
 
   /**
-   * BaseLead.links
+   * Lead.links
    */
-  export type BaseLead$linksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Lead$linksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the ClientLink
      */
@@ -33826,33 +33826,33 @@ export namespace Prisma {
   }
 
   /**
-   * BaseLead.sharedLeads
+   * Lead.sharedLeads
    */
-  export type BaseLead$sharedLeadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Lead$sharedLeadsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SharedLeads
+     * Select specific fields to fetch from the LeadsAssigned
      */
-    select?: SharedLeadsSelect<ExtArgs> | null
+    select?: LeadsAssignedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SharedLeads
+     * Omit specific fields from the LeadsAssigned
      */
-    omit?: SharedLeadsOmit<ExtArgs> | null
+    omit?: LeadsAssignedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SharedLeadsInclude<ExtArgs> | null
-    where?: SharedLeadsWhereInput
-    orderBy?: SharedLeadsOrderByWithRelationInput | SharedLeadsOrderByWithRelationInput[]
-    cursor?: SharedLeadsWhereUniqueInput
+    include?: LeadsAssignedInclude<ExtArgs> | null
+    where?: LeadsAssignedWhereInput
+    orderBy?: LeadsAssignedOrderByWithRelationInput | LeadsAssignedOrderByWithRelationInput[]
+    cursor?: LeadsAssignedWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: SharedLeadsScalarFieldEnum | SharedLeadsScalarFieldEnum[]
+    distinct?: LeadsAssignedScalarFieldEnum | LeadsAssignedScalarFieldEnum[]
   }
 
   /**
-   * BaseLead.contacts
+   * Lead.contacts
    */
-  export type BaseLead$contactsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Lead$contactsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the ClientContact
      */
@@ -33874,9 +33874,9 @@ export namespace Prisma {
   }
 
   /**
-   * BaseLead.propertyOwners
+   * Lead.propertyOwners
    */
-  export type BaseLead$propertyOwnersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Lead$propertyOwnersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the PropertyOwner
      */
@@ -33898,21 +33898,21 @@ export namespace Prisma {
   }
 
   /**
-   * BaseLead without action
+   * Lead without action
    */
-  export type BaseLeadDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the BaseLead
+     * Select specific fields to fetch from the Lead
      */
-    select?: BaseLeadSelect<ExtArgs> | null
+    select?: LeadSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the BaseLead
+     * Omit specific fields from the Lead
      */
-    omit?: BaseLeadOmit<ExtArgs> | null
+    omit?: LeadOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: BaseLeadInclude<ExtArgs> | null
+    include?: LeadInclude<ExtArgs> | null
   }
 
 
@@ -34072,7 +34072,7 @@ export namespace Prisma {
     clientId?: boolean
     type?: boolean
     value?: boolean
-    client?: boolean | BaseLeadDefaultArgs<ExtArgs>
+    client?: boolean | LeadDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["clientContact"]>
 
   export type ClientContactSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -34080,7 +34080,7 @@ export namespace Prisma {
     clientId?: boolean
     type?: boolean
     value?: boolean
-    client?: boolean | BaseLeadDefaultArgs<ExtArgs>
+    client?: boolean | LeadDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["clientContact"]>
 
   export type ClientContactSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -34088,7 +34088,7 @@ export namespace Prisma {
     clientId?: boolean
     type?: boolean
     value?: boolean
-    client?: boolean | BaseLeadDefaultArgs<ExtArgs>
+    client?: boolean | LeadDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["clientContact"]>
 
   export type ClientContactSelectScalar = {
@@ -34100,19 +34100,19 @@ export namespace Prisma {
 
   export type ClientContactOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "clientId" | "type" | "value", ExtArgs["result"]["clientContact"]>
   export type ClientContactInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    client?: boolean | BaseLeadDefaultArgs<ExtArgs>
+    client?: boolean | LeadDefaultArgs<ExtArgs>
   }
   export type ClientContactIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    client?: boolean | BaseLeadDefaultArgs<ExtArgs>
+    client?: boolean | LeadDefaultArgs<ExtArgs>
   }
   export type ClientContactIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    client?: boolean | BaseLeadDefaultArgs<ExtArgs>
+    client?: boolean | LeadDefaultArgs<ExtArgs>
   }
 
   export type $ClientContactPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ClientContact"
     objects: {
-      client: Prisma.$BaseLeadPayload<ExtArgs>
+      client: Prisma.$LeadPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -34513,7 +34513,7 @@ export namespace Prisma {
    */
   export interface Prisma__ClientContactClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    client<T extends BaseLeadDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BaseLeadDefaultArgs<ExtArgs>>): Prisma__BaseLeadClient<$Result.GetResult<Prisma.$BaseLeadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    client<T extends LeadDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LeadDefaultArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -35114,21 +35114,21 @@ export namespace Prisma {
     id?: boolean
     trackerId?: boolean
     clientId?: boolean
-    client?: boolean | BaseLeadDefaultArgs<ExtArgs>
+    client?: boolean | LeadDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["clientLink"]>
 
   export type ClientLinkSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     trackerId?: boolean
     clientId?: boolean
-    client?: boolean | BaseLeadDefaultArgs<ExtArgs>
+    client?: boolean | LeadDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["clientLink"]>
 
   export type ClientLinkSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     trackerId?: boolean
     clientId?: boolean
-    client?: boolean | BaseLeadDefaultArgs<ExtArgs>
+    client?: boolean | LeadDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["clientLink"]>
 
   export type ClientLinkSelectScalar = {
@@ -35139,19 +35139,19 @@ export namespace Prisma {
 
   export type ClientLinkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "trackerId" | "clientId", ExtArgs["result"]["clientLink"]>
   export type ClientLinkInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    client?: boolean | BaseLeadDefaultArgs<ExtArgs>
+    client?: boolean | LeadDefaultArgs<ExtArgs>
   }
   export type ClientLinkIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    client?: boolean | BaseLeadDefaultArgs<ExtArgs>
+    client?: boolean | LeadDefaultArgs<ExtArgs>
   }
   export type ClientLinkIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    client?: boolean | BaseLeadDefaultArgs<ExtArgs>
+    client?: boolean | LeadDefaultArgs<ExtArgs>
   }
 
   export type $ClientLinkPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ClientLink"
     objects: {
-      client: Prisma.$BaseLeadPayload<ExtArgs>
+      client: Prisma.$LeadPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -35551,7 +35551,7 @@ export namespace Prisma {
    */
   export interface Prisma__ClientLinkClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    client<T extends BaseLeadDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BaseLeadDefaultArgs<ExtArgs>>): Prisma__BaseLeadClient<$Result.GetResult<Prisma.$BaseLeadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    client<T extends LeadDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LeadDefaultArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -36004,16 +36004,16 @@ export namespace Prisma {
 
 
   /**
-   * Model SharedLeads
+   * Model LeadsAssigned
    */
 
-  export type AggregateSharedLeads = {
-    _count: SharedLeadsCountAggregateOutputType | null
-    _min: SharedLeadsMinAggregateOutputType | null
-    _max: SharedLeadsMaxAggregateOutputType | null
+  export type AggregateLeadsAssigned = {
+    _count: LeadsAssignedCountAggregateOutputType | null
+    _min: LeadsAssignedMinAggregateOutputType | null
+    _max: LeadsAssignedMaxAggregateOutputType | null
   }
 
-  export type SharedLeadsMinAggregateOutputType = {
+  export type LeadsAssignedMinAggregateOutputType = {
     id: string | null
     baseLeadId: string | null
     type: $Enums.LeadType | null
@@ -36023,7 +36023,7 @@ export namespace Prisma {
     updatedAt: Date | null
   }
 
-  export type SharedLeadsMaxAggregateOutputType = {
+  export type LeadsAssignedMaxAggregateOutputType = {
     id: string | null
     baseLeadId: string | null
     type: $Enums.LeadType | null
@@ -36033,7 +36033,7 @@ export namespace Prisma {
     updatedAt: Date | null
   }
 
-  export type SharedLeadsCountAggregateOutputType = {
+  export type LeadsAssignedCountAggregateOutputType = {
     id: number
     baseLeadId: number
     type: number
@@ -36046,7 +36046,7 @@ export namespace Prisma {
   }
 
 
-  export type SharedLeadsMinAggregateInputType = {
+  export type LeadsAssignedMinAggregateInputType = {
     id?: true
     baseLeadId?: true
     type?: true
@@ -36056,7 +36056,7 @@ export namespace Prisma {
     updatedAt?: true
   }
 
-  export type SharedLeadsMaxAggregateInputType = {
+  export type LeadsAssignedMaxAggregateInputType = {
     id?: true
     baseLeadId?: true
     type?: true
@@ -36066,7 +36066,7 @@ export namespace Prisma {
     updatedAt?: true
   }
 
-  export type SharedLeadsCountAggregateInputType = {
+  export type LeadsAssignedCountAggregateInputType = {
     id?: true
     baseLeadId?: true
     type?: true
@@ -36078,79 +36078,79 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type SharedLeadsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadsAssignedAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which SharedLeads to aggregate.
+     * Filter which LeadsAssigned to aggregate.
      */
-    where?: SharedLeadsWhereInput
+    where?: LeadsAssignedWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of SharedLeads to fetch.
+     * Determine the order of LeadsAssigneds to fetch.
      */
-    orderBy?: SharedLeadsOrderByWithRelationInput | SharedLeadsOrderByWithRelationInput[]
+    orderBy?: LeadsAssignedOrderByWithRelationInput | LeadsAssignedOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: SharedLeadsWhereUniqueInput
+    cursor?: LeadsAssignedWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` SharedLeads from the position of the cursor.
+     * Take `±n` LeadsAssigneds from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` SharedLeads.
+     * Skip the first `n` LeadsAssigneds.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned SharedLeads
+     * Count returned LeadsAssigneds
     **/
-    _count?: true | SharedLeadsCountAggregateInputType
+    _count?: true | LeadsAssignedCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: SharedLeadsMinAggregateInputType
+    _min?: LeadsAssignedMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: SharedLeadsMaxAggregateInputType
+    _max?: LeadsAssignedMaxAggregateInputType
   }
 
-  export type GetSharedLeadsAggregateType<T extends SharedLeadsAggregateArgs> = {
-        [P in keyof T & keyof AggregateSharedLeads]: P extends '_count' | 'count'
+  export type GetLeadsAssignedAggregateType<T extends LeadsAssignedAggregateArgs> = {
+        [P in keyof T & keyof AggregateLeadsAssigned]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateSharedLeads[P]>
-      : GetScalarType<T[P], AggregateSharedLeads[P]>
+        : GetScalarType<T[P], AggregateLeadsAssigned[P]>
+      : GetScalarType<T[P], AggregateLeadsAssigned[P]>
   }
 
 
 
 
-  export type SharedLeadsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SharedLeadsWhereInput
-    orderBy?: SharedLeadsOrderByWithAggregationInput | SharedLeadsOrderByWithAggregationInput[]
-    by: SharedLeadsScalarFieldEnum[] | SharedLeadsScalarFieldEnum
-    having?: SharedLeadsScalarWhereWithAggregatesInput
+  export type LeadsAssignedGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LeadsAssignedWhereInput
+    orderBy?: LeadsAssignedOrderByWithAggregationInput | LeadsAssignedOrderByWithAggregationInput[]
+    by: LeadsAssignedScalarFieldEnum[] | LeadsAssignedScalarFieldEnum
+    having?: LeadsAssignedScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: SharedLeadsCountAggregateInputType | true
-    _min?: SharedLeadsMinAggregateInputType
-    _max?: SharedLeadsMaxAggregateInputType
+    _count?: LeadsAssignedCountAggregateInputType | true
+    _min?: LeadsAssignedMinAggregateInputType
+    _max?: LeadsAssignedMaxAggregateInputType
   }
 
-  export type SharedLeadsGroupByOutputType = {
+  export type LeadsAssignedGroupByOutputType = {
     id: string
     baseLeadId: string
     type: $Enums.LeadType
@@ -36159,26 +36159,26 @@ export namespace Prisma {
     owner: string
     createdAt: Date
     updatedAt: Date
-    _count: SharedLeadsCountAggregateOutputType | null
-    _min: SharedLeadsMinAggregateOutputType | null
-    _max: SharedLeadsMaxAggregateOutputType | null
+    _count: LeadsAssignedCountAggregateOutputType | null
+    _min: LeadsAssignedMinAggregateOutputType | null
+    _max: LeadsAssignedMaxAggregateOutputType | null
   }
 
-  type GetSharedLeadsGroupByPayload<T extends SharedLeadsGroupByArgs> = Prisma.PrismaPromise<
+  type GetLeadsAssignedGroupByPayload<T extends LeadsAssignedGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<SharedLeadsGroupByOutputType, T['by']> &
+      PickEnumerable<LeadsAssignedGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof SharedLeadsGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof LeadsAssignedGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], SharedLeadsGroupByOutputType[P]>
-            : GetScalarType<T[P], SharedLeadsGroupByOutputType[P]>
+              : GetScalarType<T[P], LeadsAssignedGroupByOutputType[P]>
+            : GetScalarType<T[P], LeadsAssignedGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type SharedLeadsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type LeadsAssignedSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     baseLeadId?: boolean
     type?: boolean
@@ -36187,13 +36187,13 @@ export namespace Prisma {
     owner?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    baseLead?: boolean | BaseLeadDefaultArgs<ExtArgs>
+    baseLead?: boolean | LeadDefaultArgs<ExtArgs>
     ownerAccount?: boolean | AccountDefaultArgs<ExtArgs>
-    activities?: boolean | SharedLeads$activitiesArgs<ExtArgs>
-    _count?: boolean | SharedLeadsCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["sharedLeads"]>
+    activities?: boolean | LeadsAssigned$activitiesArgs<ExtArgs>
+    _count?: boolean | LeadsAssignedCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["leadsAssigned"]>
 
-  export type SharedLeadsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type LeadsAssignedSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     baseLeadId?: boolean
     type?: boolean
@@ -36202,11 +36202,11 @@ export namespace Prisma {
     owner?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    baseLead?: boolean | BaseLeadDefaultArgs<ExtArgs>
+    baseLead?: boolean | LeadDefaultArgs<ExtArgs>
     ownerAccount?: boolean | AccountDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["sharedLeads"]>
+  }, ExtArgs["result"]["leadsAssigned"]>
 
-  export type SharedLeadsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type LeadsAssignedSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     baseLeadId?: boolean
     type?: boolean
@@ -36215,11 +36215,11 @@ export namespace Prisma {
     owner?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    baseLead?: boolean | BaseLeadDefaultArgs<ExtArgs>
+    baseLead?: boolean | LeadDefaultArgs<ExtArgs>
     ownerAccount?: boolean | AccountDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["sharedLeads"]>
+  }, ExtArgs["result"]["leadsAssigned"]>
 
-  export type SharedLeadsSelectScalar = {
+  export type LeadsAssignedSelectScalar = {
     id?: boolean
     baseLeadId?: boolean
     type?: boolean
@@ -36230,26 +36230,26 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type SharedLeadsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "baseLeadId" | "type" | "requirements" | "priority" | "owner" | "createdAt" | "updatedAt", ExtArgs["result"]["sharedLeads"]>
-  export type SharedLeadsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    baseLead?: boolean | BaseLeadDefaultArgs<ExtArgs>
+  export type LeadsAssignedOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "baseLeadId" | "type" | "requirements" | "priority" | "owner" | "createdAt" | "updatedAt", ExtArgs["result"]["leadsAssigned"]>
+  export type LeadsAssignedInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    baseLead?: boolean | LeadDefaultArgs<ExtArgs>
     ownerAccount?: boolean | AccountDefaultArgs<ExtArgs>
-    activities?: boolean | SharedLeads$activitiesArgs<ExtArgs>
-    _count?: boolean | SharedLeadsCountOutputTypeDefaultArgs<ExtArgs>
+    activities?: boolean | LeadsAssigned$activitiesArgs<ExtArgs>
+    _count?: boolean | LeadsAssignedCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type SharedLeadsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    baseLead?: boolean | BaseLeadDefaultArgs<ExtArgs>
+  export type LeadsAssignedIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    baseLead?: boolean | LeadDefaultArgs<ExtArgs>
     ownerAccount?: boolean | AccountDefaultArgs<ExtArgs>
   }
-  export type SharedLeadsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    baseLead?: boolean | BaseLeadDefaultArgs<ExtArgs>
+  export type LeadsAssignedIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    baseLead?: boolean | LeadDefaultArgs<ExtArgs>
     ownerAccount?: boolean | AccountDefaultArgs<ExtArgs>
   }
 
-  export type $SharedLeadsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "SharedLeads"
+  export type $LeadsAssignedPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LeadsAssigned"
     objects: {
-      baseLead: Prisma.$BaseLeadPayload<ExtArgs>
+      baseLead: Prisma.$LeadPayload<ExtArgs>
       ownerAccount: Prisma.$AccountPayload<ExtArgs>
       activities: Prisma.$LeadActivityPayload<ExtArgs>[]
     }
@@ -36262,136 +36262,136 @@ export namespace Prisma {
       owner: string
       createdAt: Date
       updatedAt: Date
-    }, ExtArgs["result"]["sharedLeads"]>
+    }, ExtArgs["result"]["leadsAssigned"]>
     composites: {}
   }
 
-  type SharedLeadsGetPayload<S extends boolean | null | undefined | SharedLeadsDefaultArgs> = $Result.GetResult<Prisma.$SharedLeadsPayload, S>
+  type LeadsAssignedGetPayload<S extends boolean | null | undefined | LeadsAssignedDefaultArgs> = $Result.GetResult<Prisma.$LeadsAssignedPayload, S>
 
-  type SharedLeadsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<SharedLeadsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: SharedLeadsCountAggregateInputType | true
+  type LeadsAssignedCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LeadsAssignedFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LeadsAssignedCountAggregateInputType | true
     }
 
-  export interface SharedLeadsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SharedLeads'], meta: { name: 'SharedLeads' } }
+  export interface LeadsAssignedDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LeadsAssigned'], meta: { name: 'LeadsAssigned' } }
     /**
-     * Find zero or one SharedLeads that matches the filter.
-     * @param {SharedLeadsFindUniqueArgs} args - Arguments to find a SharedLeads
+     * Find zero or one LeadsAssigned that matches the filter.
+     * @param {LeadsAssignedFindUniqueArgs} args - Arguments to find a LeadsAssigned
      * @example
-     * // Get one SharedLeads
-     * const sharedLeads = await prisma.sharedLeads.findUnique({
+     * // Get one LeadsAssigned
+     * const leadsAssigned = await prisma.leadsAssigned.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends SharedLeadsFindUniqueArgs>(args: SelectSubset<T, SharedLeadsFindUniqueArgs<ExtArgs>>): Prisma__SharedLeadsClient<$Result.GetResult<Prisma.$SharedLeadsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends LeadsAssignedFindUniqueArgs>(args: SelectSubset<T, LeadsAssignedFindUniqueArgs<ExtArgs>>): Prisma__LeadsAssignedClient<$Result.GetResult<Prisma.$LeadsAssignedPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one SharedLeads that matches the filter or throw an error with `error.code='P2025'`
+     * Find one LeadsAssigned that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {SharedLeadsFindUniqueOrThrowArgs} args - Arguments to find a SharedLeads
+     * @param {LeadsAssignedFindUniqueOrThrowArgs} args - Arguments to find a LeadsAssigned
      * @example
-     * // Get one SharedLeads
-     * const sharedLeads = await prisma.sharedLeads.findUniqueOrThrow({
+     * // Get one LeadsAssigned
+     * const leadsAssigned = await prisma.leadsAssigned.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends SharedLeadsFindUniqueOrThrowArgs>(args: SelectSubset<T, SharedLeadsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SharedLeadsClient<$Result.GetResult<Prisma.$SharedLeadsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends LeadsAssignedFindUniqueOrThrowArgs>(args: SelectSubset<T, LeadsAssignedFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LeadsAssignedClient<$Result.GetResult<Prisma.$LeadsAssignedPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first SharedLeads that matches the filter.
+     * Find the first LeadsAssigned that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {SharedLeadsFindFirstArgs} args - Arguments to find a SharedLeads
+     * @param {LeadsAssignedFindFirstArgs} args - Arguments to find a LeadsAssigned
      * @example
-     * // Get one SharedLeads
-     * const sharedLeads = await prisma.sharedLeads.findFirst({
+     * // Get one LeadsAssigned
+     * const leadsAssigned = await prisma.leadsAssigned.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends SharedLeadsFindFirstArgs>(args?: SelectSubset<T, SharedLeadsFindFirstArgs<ExtArgs>>): Prisma__SharedLeadsClient<$Result.GetResult<Prisma.$SharedLeadsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends LeadsAssignedFindFirstArgs>(args?: SelectSubset<T, LeadsAssignedFindFirstArgs<ExtArgs>>): Prisma__LeadsAssignedClient<$Result.GetResult<Prisma.$LeadsAssignedPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first SharedLeads that matches the filter or
+     * Find the first LeadsAssigned that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {SharedLeadsFindFirstOrThrowArgs} args - Arguments to find a SharedLeads
+     * @param {LeadsAssignedFindFirstOrThrowArgs} args - Arguments to find a LeadsAssigned
      * @example
-     * // Get one SharedLeads
-     * const sharedLeads = await prisma.sharedLeads.findFirstOrThrow({
+     * // Get one LeadsAssigned
+     * const leadsAssigned = await prisma.leadsAssigned.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends SharedLeadsFindFirstOrThrowArgs>(args?: SelectSubset<T, SharedLeadsFindFirstOrThrowArgs<ExtArgs>>): Prisma__SharedLeadsClient<$Result.GetResult<Prisma.$SharedLeadsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends LeadsAssignedFindFirstOrThrowArgs>(args?: SelectSubset<T, LeadsAssignedFindFirstOrThrowArgs<ExtArgs>>): Prisma__LeadsAssignedClient<$Result.GetResult<Prisma.$LeadsAssignedPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more SharedLeads that matches the filter.
+     * Find zero or more LeadsAssigneds that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {SharedLeadsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {LeadsAssignedFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all SharedLeads
-     * const sharedLeads = await prisma.sharedLeads.findMany()
+     * // Get all LeadsAssigneds
+     * const leadsAssigneds = await prisma.leadsAssigned.findMany()
      * 
-     * // Get first 10 SharedLeads
-     * const sharedLeads = await prisma.sharedLeads.findMany({ take: 10 })
+     * // Get first 10 LeadsAssigneds
+     * const leadsAssigneds = await prisma.leadsAssigned.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const sharedLeadsWithIdOnly = await prisma.sharedLeads.findMany({ select: { id: true } })
+     * const leadsAssignedWithIdOnly = await prisma.leadsAssigned.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends SharedLeadsFindManyArgs>(args?: SelectSubset<T, SharedLeadsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SharedLeadsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends LeadsAssignedFindManyArgs>(args?: SelectSubset<T, LeadsAssignedFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadsAssignedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a SharedLeads.
-     * @param {SharedLeadsCreateArgs} args - Arguments to create a SharedLeads.
+     * Create a LeadsAssigned.
+     * @param {LeadsAssignedCreateArgs} args - Arguments to create a LeadsAssigned.
      * @example
-     * // Create one SharedLeads
-     * const SharedLeads = await prisma.sharedLeads.create({
+     * // Create one LeadsAssigned
+     * const LeadsAssigned = await prisma.leadsAssigned.create({
      *   data: {
-     *     // ... data to create a SharedLeads
+     *     // ... data to create a LeadsAssigned
      *   }
      * })
      * 
      */
-    create<T extends SharedLeadsCreateArgs>(args: SelectSubset<T, SharedLeadsCreateArgs<ExtArgs>>): Prisma__SharedLeadsClient<$Result.GetResult<Prisma.$SharedLeadsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends LeadsAssignedCreateArgs>(args: SelectSubset<T, LeadsAssignedCreateArgs<ExtArgs>>): Prisma__LeadsAssignedClient<$Result.GetResult<Prisma.$LeadsAssignedPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many SharedLeads.
-     * @param {SharedLeadsCreateManyArgs} args - Arguments to create many SharedLeads.
+     * Create many LeadsAssigneds.
+     * @param {LeadsAssignedCreateManyArgs} args - Arguments to create many LeadsAssigneds.
      * @example
-     * // Create many SharedLeads
-     * const sharedLeads = await prisma.sharedLeads.createMany({
+     * // Create many LeadsAssigneds
+     * const leadsAssigned = await prisma.leadsAssigned.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends SharedLeadsCreateManyArgs>(args?: SelectSubset<T, SharedLeadsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends LeadsAssignedCreateManyArgs>(args?: SelectSubset<T, LeadsAssignedCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many SharedLeads and returns the data saved in the database.
-     * @param {SharedLeadsCreateManyAndReturnArgs} args - Arguments to create many SharedLeads.
+     * Create many LeadsAssigneds and returns the data saved in the database.
+     * @param {LeadsAssignedCreateManyAndReturnArgs} args - Arguments to create many LeadsAssigneds.
      * @example
-     * // Create many SharedLeads
-     * const sharedLeads = await prisma.sharedLeads.createManyAndReturn({
+     * // Create many LeadsAssigneds
+     * const leadsAssigned = await prisma.leadsAssigned.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many SharedLeads and only return the `id`
-     * const sharedLeadsWithIdOnly = await prisma.sharedLeads.createManyAndReturn({
+     * // Create many LeadsAssigneds and only return the `id`
+     * const leadsAssignedWithIdOnly = await prisma.leadsAssigned.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -36401,28 +36401,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends SharedLeadsCreateManyAndReturnArgs>(args?: SelectSubset<T, SharedLeadsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SharedLeadsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends LeadsAssignedCreateManyAndReturnArgs>(args?: SelectSubset<T, LeadsAssignedCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadsAssignedPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a SharedLeads.
-     * @param {SharedLeadsDeleteArgs} args - Arguments to delete one SharedLeads.
+     * Delete a LeadsAssigned.
+     * @param {LeadsAssignedDeleteArgs} args - Arguments to delete one LeadsAssigned.
      * @example
-     * // Delete one SharedLeads
-     * const SharedLeads = await prisma.sharedLeads.delete({
+     * // Delete one LeadsAssigned
+     * const LeadsAssigned = await prisma.leadsAssigned.delete({
      *   where: {
-     *     // ... filter to delete one SharedLeads
+     *     // ... filter to delete one LeadsAssigned
      *   }
      * })
      * 
      */
-    delete<T extends SharedLeadsDeleteArgs>(args: SelectSubset<T, SharedLeadsDeleteArgs<ExtArgs>>): Prisma__SharedLeadsClient<$Result.GetResult<Prisma.$SharedLeadsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends LeadsAssignedDeleteArgs>(args: SelectSubset<T, LeadsAssignedDeleteArgs<ExtArgs>>): Prisma__LeadsAssignedClient<$Result.GetResult<Prisma.$LeadsAssignedPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one SharedLeads.
-     * @param {SharedLeadsUpdateArgs} args - Arguments to update one SharedLeads.
+     * Update one LeadsAssigned.
+     * @param {LeadsAssignedUpdateArgs} args - Arguments to update one LeadsAssigned.
      * @example
-     * // Update one SharedLeads
-     * const sharedLeads = await prisma.sharedLeads.update({
+     * // Update one LeadsAssigned
+     * const leadsAssigned = await prisma.leadsAssigned.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -36432,30 +36432,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends SharedLeadsUpdateArgs>(args: SelectSubset<T, SharedLeadsUpdateArgs<ExtArgs>>): Prisma__SharedLeadsClient<$Result.GetResult<Prisma.$SharedLeadsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends LeadsAssignedUpdateArgs>(args: SelectSubset<T, LeadsAssignedUpdateArgs<ExtArgs>>): Prisma__LeadsAssignedClient<$Result.GetResult<Prisma.$LeadsAssignedPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more SharedLeads.
-     * @param {SharedLeadsDeleteManyArgs} args - Arguments to filter SharedLeads to delete.
+     * Delete zero or more LeadsAssigneds.
+     * @param {LeadsAssignedDeleteManyArgs} args - Arguments to filter LeadsAssigneds to delete.
      * @example
-     * // Delete a few SharedLeads
-     * const { count } = await prisma.sharedLeads.deleteMany({
+     * // Delete a few LeadsAssigneds
+     * const { count } = await prisma.leadsAssigned.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends SharedLeadsDeleteManyArgs>(args?: SelectSubset<T, SharedLeadsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends LeadsAssignedDeleteManyArgs>(args?: SelectSubset<T, LeadsAssignedDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more SharedLeads.
+     * Update zero or more LeadsAssigneds.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {SharedLeadsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {LeadsAssignedUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many SharedLeads
-     * const sharedLeads = await prisma.sharedLeads.updateMany({
+     * // Update many LeadsAssigneds
+     * const leadsAssigned = await prisma.leadsAssigned.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -36465,14 +36465,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends SharedLeadsUpdateManyArgs>(args: SelectSubset<T, SharedLeadsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends LeadsAssignedUpdateManyArgs>(args: SelectSubset<T, LeadsAssignedUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more SharedLeads and returns the data updated in the database.
-     * @param {SharedLeadsUpdateManyAndReturnArgs} args - Arguments to update many SharedLeads.
+     * Update zero or more LeadsAssigneds and returns the data updated in the database.
+     * @param {LeadsAssignedUpdateManyAndReturnArgs} args - Arguments to update many LeadsAssigneds.
      * @example
-     * // Update many SharedLeads
-     * const sharedLeads = await prisma.sharedLeads.updateManyAndReturn({
+     * // Update many LeadsAssigneds
+     * const leadsAssigned = await prisma.leadsAssigned.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -36481,8 +36481,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more SharedLeads and only return the `id`
-     * const sharedLeadsWithIdOnly = await prisma.sharedLeads.updateManyAndReturn({
+     * // Update zero or more LeadsAssigneds and only return the `id`
+     * const leadsAssignedWithIdOnly = await prisma.leadsAssigned.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -36495,56 +36495,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends SharedLeadsUpdateManyAndReturnArgs>(args: SelectSubset<T, SharedLeadsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SharedLeadsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends LeadsAssignedUpdateManyAndReturnArgs>(args: SelectSubset<T, LeadsAssignedUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadsAssignedPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one SharedLeads.
-     * @param {SharedLeadsUpsertArgs} args - Arguments to update or create a SharedLeads.
+     * Create or update one LeadsAssigned.
+     * @param {LeadsAssignedUpsertArgs} args - Arguments to update or create a LeadsAssigned.
      * @example
-     * // Update or create a SharedLeads
-     * const sharedLeads = await prisma.sharedLeads.upsert({
+     * // Update or create a LeadsAssigned
+     * const leadsAssigned = await prisma.leadsAssigned.upsert({
      *   create: {
-     *     // ... data to create a SharedLeads
+     *     // ... data to create a LeadsAssigned
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the SharedLeads we want to update
+     *     // ... the filter for the LeadsAssigned we want to update
      *   }
      * })
      */
-    upsert<T extends SharedLeadsUpsertArgs>(args: SelectSubset<T, SharedLeadsUpsertArgs<ExtArgs>>): Prisma__SharedLeadsClient<$Result.GetResult<Prisma.$SharedLeadsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends LeadsAssignedUpsertArgs>(args: SelectSubset<T, LeadsAssignedUpsertArgs<ExtArgs>>): Prisma__LeadsAssignedClient<$Result.GetResult<Prisma.$LeadsAssignedPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of SharedLeads.
+     * Count the number of LeadsAssigneds.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {SharedLeadsCountArgs} args - Arguments to filter SharedLeads to count.
+     * @param {LeadsAssignedCountArgs} args - Arguments to filter LeadsAssigneds to count.
      * @example
-     * // Count the number of SharedLeads
-     * const count = await prisma.sharedLeads.count({
+     * // Count the number of LeadsAssigneds
+     * const count = await prisma.leadsAssigned.count({
      *   where: {
-     *     // ... the filter for the SharedLeads we want to count
+     *     // ... the filter for the LeadsAssigneds we want to count
      *   }
      * })
     **/
-    count<T extends SharedLeadsCountArgs>(
-      args?: Subset<T, SharedLeadsCountArgs>,
+    count<T extends LeadsAssignedCountArgs>(
+      args?: Subset<T, LeadsAssignedCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], SharedLeadsCountAggregateOutputType>
+          : GetScalarType<T['select'], LeadsAssignedCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a SharedLeads.
+     * Allows you to perform aggregations operations on a LeadsAssigned.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {SharedLeadsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {LeadsAssignedAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -36564,13 +36564,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends SharedLeadsAggregateArgs>(args: Subset<T, SharedLeadsAggregateArgs>): Prisma.PrismaPromise<GetSharedLeadsAggregateType<T>>
+    aggregate<T extends LeadsAssignedAggregateArgs>(args: Subset<T, LeadsAssignedAggregateArgs>): Prisma.PrismaPromise<GetLeadsAssignedAggregateType<T>>
 
     /**
-     * Group by SharedLeads.
+     * Group by LeadsAssigned.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {SharedLeadsGroupByArgs} args - Group by arguments.
+     * @param {LeadsAssignedGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -36585,14 +36585,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends SharedLeadsGroupByArgs,
+      T extends LeadsAssignedGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: SharedLeadsGroupByArgs['orderBy'] }
-        : { orderBy?: SharedLeadsGroupByArgs['orderBy'] },
+        ? { orderBy: LeadsAssignedGroupByArgs['orderBy'] }
+        : { orderBy?: LeadsAssignedGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -36641,24 +36641,24 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, SharedLeadsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSharedLeadsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, LeadsAssignedGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLeadsAssignedGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the SharedLeads model
+   * Fields of the LeadsAssigned model
    */
-  readonly fields: SharedLeadsFieldRefs;
+  readonly fields: LeadsAssignedFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for SharedLeads.
+   * The delegate class that acts as a "Promise-like" for LeadsAssigned.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__SharedLeadsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__LeadsAssignedClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    baseLead<T extends BaseLeadDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BaseLeadDefaultArgs<ExtArgs>>): Prisma__BaseLeadClient<$Result.GetResult<Prisma.$BaseLeadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    baseLead<T extends LeadDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LeadDefaultArgs<ExtArgs>>): Prisma__LeadClient<$Result.GetResult<Prisma.$LeadPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     ownerAccount<T extends AccountDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AccountDefaultArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    activities<T extends SharedLeads$activitiesArgs<ExtArgs> = {}>(args?: Subset<T, SharedLeads$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    activities<T extends LeadsAssigned$activitiesArgs<ExtArgs> = {}>(args?: Subset<T, LeadsAssigned$activitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LeadActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -36685,421 +36685,421 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the SharedLeads model
+   * Fields of the LeadsAssigned model
    */
-  interface SharedLeadsFieldRefs {
-    readonly id: FieldRef<"SharedLeads", 'String'>
-    readonly baseLeadId: FieldRef<"SharedLeads", 'String'>
-    readonly type: FieldRef<"SharedLeads", 'LeadType'>
-    readonly requirements: FieldRef<"SharedLeads", 'Json'>
-    readonly priority: FieldRef<"SharedLeads", 'LeadPriority'>
-    readonly owner: FieldRef<"SharedLeads", 'String'>
-    readonly createdAt: FieldRef<"SharedLeads", 'DateTime'>
-    readonly updatedAt: FieldRef<"SharedLeads", 'DateTime'>
+  interface LeadsAssignedFieldRefs {
+    readonly id: FieldRef<"LeadsAssigned", 'String'>
+    readonly baseLeadId: FieldRef<"LeadsAssigned", 'String'>
+    readonly type: FieldRef<"LeadsAssigned", 'LeadType'>
+    readonly requirements: FieldRef<"LeadsAssigned", 'Json'>
+    readonly priority: FieldRef<"LeadsAssigned", 'LeadPriority'>
+    readonly owner: FieldRef<"LeadsAssigned", 'String'>
+    readonly createdAt: FieldRef<"LeadsAssigned", 'DateTime'>
+    readonly updatedAt: FieldRef<"LeadsAssigned", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * SharedLeads findUnique
+   * LeadsAssigned findUnique
    */
-  export type SharedLeadsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadsAssignedFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SharedLeads
+     * Select specific fields to fetch from the LeadsAssigned
      */
-    select?: SharedLeadsSelect<ExtArgs> | null
+    select?: LeadsAssignedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SharedLeads
+     * Omit specific fields from the LeadsAssigned
      */
-    omit?: SharedLeadsOmit<ExtArgs> | null
+    omit?: LeadsAssignedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SharedLeadsInclude<ExtArgs> | null
+    include?: LeadsAssignedInclude<ExtArgs> | null
     /**
-     * Filter, which SharedLeads to fetch.
+     * Filter, which LeadsAssigned to fetch.
      */
-    where: SharedLeadsWhereUniqueInput
+    where: LeadsAssignedWhereUniqueInput
   }
 
   /**
-   * SharedLeads findUniqueOrThrow
+   * LeadsAssigned findUniqueOrThrow
    */
-  export type SharedLeadsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadsAssignedFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SharedLeads
+     * Select specific fields to fetch from the LeadsAssigned
      */
-    select?: SharedLeadsSelect<ExtArgs> | null
+    select?: LeadsAssignedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SharedLeads
+     * Omit specific fields from the LeadsAssigned
      */
-    omit?: SharedLeadsOmit<ExtArgs> | null
+    omit?: LeadsAssignedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SharedLeadsInclude<ExtArgs> | null
+    include?: LeadsAssignedInclude<ExtArgs> | null
     /**
-     * Filter, which SharedLeads to fetch.
+     * Filter, which LeadsAssigned to fetch.
      */
-    where: SharedLeadsWhereUniqueInput
+    where: LeadsAssignedWhereUniqueInput
   }
 
   /**
-   * SharedLeads findFirst
+   * LeadsAssigned findFirst
    */
-  export type SharedLeadsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadsAssignedFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SharedLeads
+     * Select specific fields to fetch from the LeadsAssigned
      */
-    select?: SharedLeadsSelect<ExtArgs> | null
+    select?: LeadsAssignedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SharedLeads
+     * Omit specific fields from the LeadsAssigned
      */
-    omit?: SharedLeadsOmit<ExtArgs> | null
+    omit?: LeadsAssignedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SharedLeadsInclude<ExtArgs> | null
+    include?: LeadsAssignedInclude<ExtArgs> | null
     /**
-     * Filter, which SharedLeads to fetch.
+     * Filter, which LeadsAssigned to fetch.
      */
-    where?: SharedLeadsWhereInput
+    where?: LeadsAssignedWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of SharedLeads to fetch.
+     * Determine the order of LeadsAssigneds to fetch.
      */
-    orderBy?: SharedLeadsOrderByWithRelationInput | SharedLeadsOrderByWithRelationInput[]
+    orderBy?: LeadsAssignedOrderByWithRelationInput | LeadsAssignedOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for SharedLeads.
+     * Sets the position for searching for LeadsAssigneds.
      */
-    cursor?: SharedLeadsWhereUniqueInput
+    cursor?: LeadsAssignedWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` SharedLeads from the position of the cursor.
+     * Take `±n` LeadsAssigneds from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` SharedLeads.
+     * Skip the first `n` LeadsAssigneds.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of SharedLeads.
+     * Filter by unique combinations of LeadsAssigneds.
      */
-    distinct?: SharedLeadsScalarFieldEnum | SharedLeadsScalarFieldEnum[]
+    distinct?: LeadsAssignedScalarFieldEnum | LeadsAssignedScalarFieldEnum[]
   }
 
   /**
-   * SharedLeads findFirstOrThrow
+   * LeadsAssigned findFirstOrThrow
    */
-  export type SharedLeadsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadsAssignedFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SharedLeads
+     * Select specific fields to fetch from the LeadsAssigned
      */
-    select?: SharedLeadsSelect<ExtArgs> | null
+    select?: LeadsAssignedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SharedLeads
+     * Omit specific fields from the LeadsAssigned
      */
-    omit?: SharedLeadsOmit<ExtArgs> | null
+    omit?: LeadsAssignedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SharedLeadsInclude<ExtArgs> | null
+    include?: LeadsAssignedInclude<ExtArgs> | null
     /**
-     * Filter, which SharedLeads to fetch.
+     * Filter, which LeadsAssigned to fetch.
      */
-    where?: SharedLeadsWhereInput
+    where?: LeadsAssignedWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of SharedLeads to fetch.
+     * Determine the order of LeadsAssigneds to fetch.
      */
-    orderBy?: SharedLeadsOrderByWithRelationInput | SharedLeadsOrderByWithRelationInput[]
+    orderBy?: LeadsAssignedOrderByWithRelationInput | LeadsAssignedOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for SharedLeads.
+     * Sets the position for searching for LeadsAssigneds.
      */
-    cursor?: SharedLeadsWhereUniqueInput
+    cursor?: LeadsAssignedWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` SharedLeads from the position of the cursor.
+     * Take `±n` LeadsAssigneds from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` SharedLeads.
+     * Skip the first `n` LeadsAssigneds.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of SharedLeads.
+     * Filter by unique combinations of LeadsAssigneds.
      */
-    distinct?: SharedLeadsScalarFieldEnum | SharedLeadsScalarFieldEnum[]
+    distinct?: LeadsAssignedScalarFieldEnum | LeadsAssignedScalarFieldEnum[]
   }
 
   /**
-   * SharedLeads findMany
+   * LeadsAssigned findMany
    */
-  export type SharedLeadsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadsAssignedFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SharedLeads
+     * Select specific fields to fetch from the LeadsAssigned
      */
-    select?: SharedLeadsSelect<ExtArgs> | null
+    select?: LeadsAssignedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SharedLeads
+     * Omit specific fields from the LeadsAssigned
      */
-    omit?: SharedLeadsOmit<ExtArgs> | null
+    omit?: LeadsAssignedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SharedLeadsInclude<ExtArgs> | null
+    include?: LeadsAssignedInclude<ExtArgs> | null
     /**
-     * Filter, which SharedLeads to fetch.
+     * Filter, which LeadsAssigneds to fetch.
      */
-    where?: SharedLeadsWhereInput
+    where?: LeadsAssignedWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of SharedLeads to fetch.
+     * Determine the order of LeadsAssigneds to fetch.
      */
-    orderBy?: SharedLeadsOrderByWithRelationInput | SharedLeadsOrderByWithRelationInput[]
+    orderBy?: LeadsAssignedOrderByWithRelationInput | LeadsAssignedOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing SharedLeads.
+     * Sets the position for listing LeadsAssigneds.
      */
-    cursor?: SharedLeadsWhereUniqueInput
+    cursor?: LeadsAssignedWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` SharedLeads from the position of the cursor.
+     * Take `±n` LeadsAssigneds from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` SharedLeads.
+     * Skip the first `n` LeadsAssigneds.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of SharedLeads.
+     * Filter by unique combinations of LeadsAssigneds.
      */
-    distinct?: SharedLeadsScalarFieldEnum | SharedLeadsScalarFieldEnum[]
+    distinct?: LeadsAssignedScalarFieldEnum | LeadsAssignedScalarFieldEnum[]
   }
 
   /**
-   * SharedLeads create
+   * LeadsAssigned create
    */
-  export type SharedLeadsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadsAssignedCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SharedLeads
+     * Select specific fields to fetch from the LeadsAssigned
      */
-    select?: SharedLeadsSelect<ExtArgs> | null
+    select?: LeadsAssignedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SharedLeads
+     * Omit specific fields from the LeadsAssigned
      */
-    omit?: SharedLeadsOmit<ExtArgs> | null
+    omit?: LeadsAssignedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SharedLeadsInclude<ExtArgs> | null
+    include?: LeadsAssignedInclude<ExtArgs> | null
     /**
-     * The data needed to create a SharedLeads.
+     * The data needed to create a LeadsAssigned.
      */
-    data: XOR<SharedLeadsCreateInput, SharedLeadsUncheckedCreateInput>
+    data: XOR<LeadsAssignedCreateInput, LeadsAssignedUncheckedCreateInput>
   }
 
   /**
-   * SharedLeads createMany
+   * LeadsAssigned createMany
    */
-  export type SharedLeadsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadsAssignedCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many SharedLeads.
+     * The data used to create many LeadsAssigneds.
      */
-    data: SharedLeadsCreateManyInput | SharedLeadsCreateManyInput[]
+    data: LeadsAssignedCreateManyInput | LeadsAssignedCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * SharedLeads createManyAndReturn
+   * LeadsAssigned createManyAndReturn
    */
-  export type SharedLeadsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadsAssignedCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SharedLeads
+     * Select specific fields to fetch from the LeadsAssigned
      */
-    select?: SharedLeadsSelectCreateManyAndReturn<ExtArgs> | null
+    select?: LeadsAssignedSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the SharedLeads
+     * Omit specific fields from the LeadsAssigned
      */
-    omit?: SharedLeadsOmit<ExtArgs> | null
+    omit?: LeadsAssignedOmit<ExtArgs> | null
     /**
-     * The data used to create many SharedLeads.
+     * The data used to create many LeadsAssigneds.
      */
-    data: SharedLeadsCreateManyInput | SharedLeadsCreateManyInput[]
+    data: LeadsAssignedCreateManyInput | LeadsAssignedCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SharedLeadsIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: LeadsAssignedIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * SharedLeads update
+   * LeadsAssigned update
    */
-  export type SharedLeadsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadsAssignedUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SharedLeads
+     * Select specific fields to fetch from the LeadsAssigned
      */
-    select?: SharedLeadsSelect<ExtArgs> | null
+    select?: LeadsAssignedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SharedLeads
+     * Omit specific fields from the LeadsAssigned
      */
-    omit?: SharedLeadsOmit<ExtArgs> | null
+    omit?: LeadsAssignedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SharedLeadsInclude<ExtArgs> | null
+    include?: LeadsAssignedInclude<ExtArgs> | null
     /**
-     * The data needed to update a SharedLeads.
+     * The data needed to update a LeadsAssigned.
      */
-    data: XOR<SharedLeadsUpdateInput, SharedLeadsUncheckedUpdateInput>
+    data: XOR<LeadsAssignedUpdateInput, LeadsAssignedUncheckedUpdateInput>
     /**
-     * Choose, which SharedLeads to update.
+     * Choose, which LeadsAssigned to update.
      */
-    where: SharedLeadsWhereUniqueInput
+    where: LeadsAssignedWhereUniqueInput
   }
 
   /**
-   * SharedLeads updateMany
+   * LeadsAssigned updateMany
    */
-  export type SharedLeadsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadsAssignedUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update SharedLeads.
+     * The data used to update LeadsAssigneds.
      */
-    data: XOR<SharedLeadsUpdateManyMutationInput, SharedLeadsUncheckedUpdateManyInput>
+    data: XOR<LeadsAssignedUpdateManyMutationInput, LeadsAssignedUncheckedUpdateManyInput>
     /**
-     * Filter which SharedLeads to update
+     * Filter which LeadsAssigneds to update
      */
-    where?: SharedLeadsWhereInput
+    where?: LeadsAssignedWhereInput
     /**
-     * Limit how many SharedLeads to update.
+     * Limit how many LeadsAssigneds to update.
      */
     limit?: number
   }
 
   /**
-   * SharedLeads updateManyAndReturn
+   * LeadsAssigned updateManyAndReturn
    */
-  export type SharedLeadsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadsAssignedUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SharedLeads
+     * Select specific fields to fetch from the LeadsAssigned
      */
-    select?: SharedLeadsSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: LeadsAssignedSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the SharedLeads
+     * Omit specific fields from the LeadsAssigned
      */
-    omit?: SharedLeadsOmit<ExtArgs> | null
+    omit?: LeadsAssignedOmit<ExtArgs> | null
     /**
-     * The data used to update SharedLeads.
+     * The data used to update LeadsAssigneds.
      */
-    data: XOR<SharedLeadsUpdateManyMutationInput, SharedLeadsUncheckedUpdateManyInput>
+    data: XOR<LeadsAssignedUpdateManyMutationInput, LeadsAssignedUncheckedUpdateManyInput>
     /**
-     * Filter which SharedLeads to update
+     * Filter which LeadsAssigneds to update
      */
-    where?: SharedLeadsWhereInput
+    where?: LeadsAssignedWhereInput
     /**
-     * Limit how many SharedLeads to update.
+     * Limit how many LeadsAssigneds to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SharedLeadsIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: LeadsAssignedIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * SharedLeads upsert
+   * LeadsAssigned upsert
    */
-  export type SharedLeadsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadsAssignedUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SharedLeads
+     * Select specific fields to fetch from the LeadsAssigned
      */
-    select?: SharedLeadsSelect<ExtArgs> | null
+    select?: LeadsAssignedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SharedLeads
+     * Omit specific fields from the LeadsAssigned
      */
-    omit?: SharedLeadsOmit<ExtArgs> | null
+    omit?: LeadsAssignedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SharedLeadsInclude<ExtArgs> | null
+    include?: LeadsAssignedInclude<ExtArgs> | null
     /**
-     * The filter to search for the SharedLeads to update in case it exists.
+     * The filter to search for the LeadsAssigned to update in case it exists.
      */
-    where: SharedLeadsWhereUniqueInput
+    where: LeadsAssignedWhereUniqueInput
     /**
-     * In case the SharedLeads found by the `where` argument doesn't exist, create a new SharedLeads with this data.
+     * In case the LeadsAssigned found by the `where` argument doesn't exist, create a new LeadsAssigned with this data.
      */
-    create: XOR<SharedLeadsCreateInput, SharedLeadsUncheckedCreateInput>
+    create: XOR<LeadsAssignedCreateInput, LeadsAssignedUncheckedCreateInput>
     /**
-     * In case the SharedLeads was found with the provided `where` argument, update it with this data.
+     * In case the LeadsAssigned was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<SharedLeadsUpdateInput, SharedLeadsUncheckedUpdateInput>
+    update: XOR<LeadsAssignedUpdateInput, LeadsAssignedUncheckedUpdateInput>
   }
 
   /**
-   * SharedLeads delete
+   * LeadsAssigned delete
    */
-  export type SharedLeadsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadsAssignedDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SharedLeads
+     * Select specific fields to fetch from the LeadsAssigned
      */
-    select?: SharedLeadsSelect<ExtArgs> | null
+    select?: LeadsAssignedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SharedLeads
+     * Omit specific fields from the LeadsAssigned
      */
-    omit?: SharedLeadsOmit<ExtArgs> | null
+    omit?: LeadsAssignedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SharedLeadsInclude<ExtArgs> | null
+    include?: LeadsAssignedInclude<ExtArgs> | null
     /**
-     * Filter which SharedLeads to delete.
+     * Filter which LeadsAssigned to delete.
      */
-    where: SharedLeadsWhereUniqueInput
+    where: LeadsAssignedWhereUniqueInput
   }
 
   /**
-   * SharedLeads deleteMany
+   * LeadsAssigned deleteMany
    */
-  export type SharedLeadsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadsAssignedDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which SharedLeads to delete
+     * Filter which LeadsAssigneds to delete
      */
-    where?: SharedLeadsWhereInput
+    where?: LeadsAssignedWhereInput
     /**
-     * Limit how many SharedLeads to delete.
+     * Limit how many LeadsAssigneds to delete.
      */
     limit?: number
   }
 
   /**
-   * SharedLeads.activities
+   * LeadsAssigned.activities
    */
-  export type SharedLeads$activitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadsAssigned$activitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the LeadActivity
      */
@@ -37121,21 +37121,21 @@ export namespace Prisma {
   }
 
   /**
-   * SharedLeads without action
+   * LeadsAssigned without action
    */
-  export type SharedLeadsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type LeadsAssignedDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SharedLeads
+     * Select specific fields to fetch from the LeadsAssigned
      */
-    select?: SharedLeadsSelect<ExtArgs> | null
+    select?: LeadsAssignedSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the SharedLeads
+     * Omit specific fields from the LeadsAssigned
      */
-    omit?: SharedLeadsOmit<ExtArgs> | null
+    omit?: LeadsAssignedOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: SharedLeadsInclude<ExtArgs> | null
+    include?: LeadsAssignedInclude<ExtArgs> | null
   }
 
 
@@ -37299,7 +37299,7 @@ export namespace Prisma {
     data?: boolean
     activityOn?: boolean
     activityBy?: boolean
-    lead?: boolean | SharedLeadsDefaultArgs<ExtArgs>
+    lead?: boolean | LeadsAssignedDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["leadActivity"]>
 
   export type LeadActivitySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -37308,7 +37308,7 @@ export namespace Prisma {
     data?: boolean
     activityOn?: boolean
     activityBy?: boolean
-    lead?: boolean | SharedLeadsDefaultArgs<ExtArgs>
+    lead?: boolean | LeadsAssignedDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["leadActivity"]>
 
   export type LeadActivitySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -37317,7 +37317,7 @@ export namespace Prisma {
     data?: boolean
     activityOn?: boolean
     activityBy?: boolean
-    lead?: boolean | SharedLeadsDefaultArgs<ExtArgs>
+    lead?: boolean | LeadsAssignedDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["leadActivity"]>
 
   export type LeadActivitySelectScalar = {
@@ -37330,19 +37330,19 @@ export namespace Prisma {
 
   export type LeadActivityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "leadId" | "data" | "activityOn" | "activityBy", ExtArgs["result"]["leadActivity"]>
   export type LeadActivityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    lead?: boolean | SharedLeadsDefaultArgs<ExtArgs>
+    lead?: boolean | LeadsAssignedDefaultArgs<ExtArgs>
   }
   export type LeadActivityIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    lead?: boolean | SharedLeadsDefaultArgs<ExtArgs>
+    lead?: boolean | LeadsAssignedDefaultArgs<ExtArgs>
   }
   export type LeadActivityIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    lead?: boolean | SharedLeadsDefaultArgs<ExtArgs>
+    lead?: boolean | LeadsAssignedDefaultArgs<ExtArgs>
   }
 
   export type $LeadActivityPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "LeadActivity"
     objects: {
-      lead: Prisma.$SharedLeadsPayload<ExtArgs>
+      lead: Prisma.$LeadsAssignedPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -37744,7 +37744,7 @@ export namespace Prisma {
    */
   export interface Prisma__LeadActivityClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    lead<T extends SharedLeadsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SharedLeadsDefaultArgs<ExtArgs>>): Prisma__SharedLeadsClient<$Result.GetResult<Prisma.$SharedLeadsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    lead<T extends LeadsAssignedDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LeadsAssignedDefaultArgs<ExtArgs>>): Prisma__LeadsAssignedClient<$Result.GetResult<Prisma.$LeadsAssignedPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -60683,7 +60683,7 @@ export namespace Prisma {
   export type ListingsViewScalarFieldEnum = (typeof ListingsViewScalarFieldEnum)[keyof typeof ListingsViewScalarFieldEnum]
 
 
-  export const BaseLeadScalarFieldEnum: {
+  export const LeadScalarFieldEnum: {
     id: 'id',
     belongsTo: 'belongsTo',
     firstName: 'firstName',
@@ -60694,7 +60694,7 @@ export namespace Prisma {
     updatedAt: 'updatedAt'
   };
 
-  export type BaseLeadScalarFieldEnum = (typeof BaseLeadScalarFieldEnum)[keyof typeof BaseLeadScalarFieldEnum]
+  export type LeadScalarFieldEnum = (typeof LeadScalarFieldEnum)[keyof typeof LeadScalarFieldEnum]
 
 
   export const ClientContactScalarFieldEnum: {
@@ -60716,7 +60716,7 @@ export namespace Prisma {
   export type ClientLinkScalarFieldEnum = (typeof ClientLinkScalarFieldEnum)[keyof typeof ClientLinkScalarFieldEnum]
 
 
-  export const SharedLeadsScalarFieldEnum: {
+  export const LeadsAssignedScalarFieldEnum: {
     id: 'id',
     baseLeadId: 'baseLeadId',
     type: 'type',
@@ -60727,7 +60727,7 @@ export namespace Prisma {
     updatedAt: 'updatedAt'
   };
 
-  export type SharedLeadsScalarFieldEnum = (typeof SharedLeadsScalarFieldEnum)[keyof typeof SharedLeadsScalarFieldEnum]
+  export type LeadsAssignedScalarFieldEnum = (typeof LeadsAssignedScalarFieldEnum)[keyof typeof LeadsAssignedScalarFieldEnum]
 
 
   export const LeadActivityScalarFieldEnum: {
@@ -61402,8 +61402,8 @@ export namespace Prisma {
     workingProfileOf?: AccountListRelationFilter
     agencyAgentMapAsAgency?: AgencyAgentMapListRelationFilter
     agencyAgentMapAsAgent?: AgencyAgentMapListRelationFilter
-    baseLeadsBelongingTo?: BaseLeadListRelationFilter
-    ownedSharedLeads?: SharedLeadsListRelationFilter
+    baseLeadsBelongingTo?: LeadListRelationFilter
+    ownedSharedLeads?: LeadsAssignedListRelationFilter
     intelligenceMappings?: IntelligenceMappingListRelationFilter
     intelligenceAlerts?: IntelligenceAlertListRelationFilter
     propertyChanges?: ListingChangeListRelationFilter
@@ -61430,8 +61430,8 @@ export namespace Prisma {
     workingProfileOf?: AccountOrderByRelationAggregateInput
     agencyAgentMapAsAgency?: AgencyAgentMapOrderByRelationAggregateInput
     agencyAgentMapAsAgent?: AgencyAgentMapOrderByRelationAggregateInput
-    baseLeadsBelongingTo?: BaseLeadOrderByRelationAggregateInput
-    ownedSharedLeads?: SharedLeadsOrderByRelationAggregateInput
+    baseLeadsBelongingTo?: LeadOrderByRelationAggregateInput
+    ownedSharedLeads?: LeadsAssignedOrderByRelationAggregateInput
     intelligenceMappings?: IntelligenceMappingOrderByRelationAggregateInput
     intelligenceAlerts?: IntelligenceAlertOrderByRelationAggregateInput
     propertyChanges?: ListingChangeOrderByRelationAggregateInput
@@ -61461,8 +61461,8 @@ export namespace Prisma {
     workingProfileOf?: AccountListRelationFilter
     agencyAgentMapAsAgency?: AgencyAgentMapListRelationFilter
     agencyAgentMapAsAgent?: AgencyAgentMapListRelationFilter
-    baseLeadsBelongingTo?: BaseLeadListRelationFilter
-    ownedSharedLeads?: SharedLeadsListRelationFilter
+    baseLeadsBelongingTo?: LeadListRelationFilter
+    ownedSharedLeads?: LeadsAssignedListRelationFilter
     intelligenceMappings?: IntelligenceMappingListRelationFilter
     intelligenceAlerts?: IntelligenceAlertListRelationFilter
     propertyChanges?: ListingChangeListRelationFilter
@@ -62194,7 +62194,7 @@ export namespace Prisma {
     ownerClientId?: StringFilter<"PropertyOwner"> | string
     isPrimaryOwner?: BoolFilter<"PropertyOwner"> | boolean
     property?: XOR<ListingScalarRelationFilter, ListingWhereInput>
-    ownerClient?: XOR<BaseLeadScalarRelationFilter, BaseLeadWhereInput>
+    ownerClient?: XOR<LeadScalarRelationFilter, LeadWhereInput>
   }
 
   export type PropertyOwnerOrderByWithRelationInput = {
@@ -62203,7 +62203,7 @@ export namespace Prisma {
     ownerClientId?: SortOrder
     isPrimaryOwner?: SortOrder
     property?: ListingOrderByWithRelationInput
-    ownerClient?: BaseLeadOrderByWithRelationInput
+    ownerClient?: LeadOrderByWithRelationInput
   }
 
   export type PropertyOwnerWhereUniqueInput = Prisma.AtLeast<{
@@ -62216,7 +62216,7 @@ export namespace Prisma {
     ownerClientId?: StringFilter<"PropertyOwner"> | string
     isPrimaryOwner?: BoolFilter<"PropertyOwner"> | boolean
     property?: XOR<ListingScalarRelationFilter, ListingWhereInput>
-    ownerClient?: XOR<BaseLeadScalarRelationFilter, BaseLeadWhereInput>
+    ownerClient?: XOR<LeadScalarRelationFilter, LeadWhereInput>
   }, "id" | "propertyId_ownerClientId">
 
   export type PropertyOwnerOrderByWithAggregationInput = {
@@ -63200,26 +63200,26 @@ export namespace Prisma {
     viewedOn?: StringWithAggregatesFilter<"ListingsView"> | string
   }
 
-  export type BaseLeadWhereInput = {
-    AND?: BaseLeadWhereInput | BaseLeadWhereInput[]
-    OR?: BaseLeadWhereInput[]
-    NOT?: BaseLeadWhereInput | BaseLeadWhereInput[]
-    id?: StringFilter<"BaseLead"> | string
-    belongsTo?: StringFilter<"BaseLead"> | string
-    firstName?: StringFilter<"BaseLead"> | string
-    lastName?: StringFilter<"BaseLead"> | string
-    contact?: JsonFilter<"BaseLead">
-    source?: StringNullableFilter<"BaseLead"> | string | null
-    createdAt?: DateTimeFilter<"BaseLead"> | Date | string
-    updatedAt?: DateTimeFilter<"BaseLead"> | Date | string
+  export type LeadWhereInput = {
+    AND?: LeadWhereInput | LeadWhereInput[]
+    OR?: LeadWhereInput[]
+    NOT?: LeadWhereInput | LeadWhereInput[]
+    id?: StringFilter<"Lead"> | string
+    belongsTo?: StringFilter<"Lead"> | string
+    firstName?: StringFilter<"Lead"> | string
+    lastName?: StringFilter<"Lead"> | string
+    contact?: JsonFilter<"Lead">
+    source?: StringNullableFilter<"Lead"> | string | null
+    createdAt?: DateTimeFilter<"Lead"> | Date | string
+    updatedAt?: DateTimeFilter<"Lead"> | Date | string
     links?: ClientLinkListRelationFilter
-    sharedLeads?: SharedLeadsListRelationFilter
+    sharedLeads?: LeadsAssignedListRelationFilter
     contacts?: ClientContactListRelationFilter
     propertyOwners?: PropertyOwnerListRelationFilter
     belongsToAccount?: XOR<AccountScalarRelationFilter, AccountWhereInput>
   }
 
-  export type BaseLeadOrderByWithRelationInput = {
+  export type LeadOrderByWithRelationInput = {
     id?: SortOrder
     belongsTo?: SortOrder
     firstName?: SortOrder
@@ -63229,32 +63229,32 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     links?: ClientLinkOrderByRelationAggregateInput
-    sharedLeads?: SharedLeadsOrderByRelationAggregateInput
+    sharedLeads?: LeadsAssignedOrderByRelationAggregateInput
     contacts?: ClientContactOrderByRelationAggregateInput
     propertyOwners?: PropertyOwnerOrderByRelationAggregateInput
     belongsToAccount?: AccountOrderByWithRelationInput
   }
 
-  export type BaseLeadWhereUniqueInput = Prisma.AtLeast<{
+  export type LeadWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    AND?: BaseLeadWhereInput | BaseLeadWhereInput[]
-    OR?: BaseLeadWhereInput[]
-    NOT?: BaseLeadWhereInput | BaseLeadWhereInput[]
-    belongsTo?: StringFilter<"BaseLead"> | string
-    firstName?: StringFilter<"BaseLead"> | string
-    lastName?: StringFilter<"BaseLead"> | string
-    contact?: JsonFilter<"BaseLead">
-    source?: StringNullableFilter<"BaseLead"> | string | null
-    createdAt?: DateTimeFilter<"BaseLead"> | Date | string
-    updatedAt?: DateTimeFilter<"BaseLead"> | Date | string
+    AND?: LeadWhereInput | LeadWhereInput[]
+    OR?: LeadWhereInput[]
+    NOT?: LeadWhereInput | LeadWhereInput[]
+    belongsTo?: StringFilter<"Lead"> | string
+    firstName?: StringFilter<"Lead"> | string
+    lastName?: StringFilter<"Lead"> | string
+    contact?: JsonFilter<"Lead">
+    source?: StringNullableFilter<"Lead"> | string | null
+    createdAt?: DateTimeFilter<"Lead"> | Date | string
+    updatedAt?: DateTimeFilter<"Lead"> | Date | string
     links?: ClientLinkListRelationFilter
-    sharedLeads?: SharedLeadsListRelationFilter
+    sharedLeads?: LeadsAssignedListRelationFilter
     contacts?: ClientContactListRelationFilter
     propertyOwners?: PropertyOwnerListRelationFilter
     belongsToAccount?: XOR<AccountScalarRelationFilter, AccountWhereInput>
   }, "id">
 
-  export type BaseLeadOrderByWithAggregationInput = {
+  export type LeadOrderByWithAggregationInput = {
     id?: SortOrder
     belongsTo?: SortOrder
     firstName?: SortOrder
@@ -63263,23 +63263,23 @@ export namespace Prisma {
     source?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    _count?: BaseLeadCountOrderByAggregateInput
-    _max?: BaseLeadMaxOrderByAggregateInput
-    _min?: BaseLeadMinOrderByAggregateInput
+    _count?: LeadCountOrderByAggregateInput
+    _max?: LeadMaxOrderByAggregateInput
+    _min?: LeadMinOrderByAggregateInput
   }
 
-  export type BaseLeadScalarWhereWithAggregatesInput = {
-    AND?: BaseLeadScalarWhereWithAggregatesInput | BaseLeadScalarWhereWithAggregatesInput[]
-    OR?: BaseLeadScalarWhereWithAggregatesInput[]
-    NOT?: BaseLeadScalarWhereWithAggregatesInput | BaseLeadScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"BaseLead"> | string
-    belongsTo?: StringWithAggregatesFilter<"BaseLead"> | string
-    firstName?: StringWithAggregatesFilter<"BaseLead"> | string
-    lastName?: StringWithAggregatesFilter<"BaseLead"> | string
-    contact?: JsonWithAggregatesFilter<"BaseLead">
-    source?: StringNullableWithAggregatesFilter<"BaseLead"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"BaseLead"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"BaseLead"> | Date | string
+  export type LeadScalarWhereWithAggregatesInput = {
+    AND?: LeadScalarWhereWithAggregatesInput | LeadScalarWhereWithAggregatesInput[]
+    OR?: LeadScalarWhereWithAggregatesInput[]
+    NOT?: LeadScalarWhereWithAggregatesInput | LeadScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Lead"> | string
+    belongsTo?: StringWithAggregatesFilter<"Lead"> | string
+    firstName?: StringWithAggregatesFilter<"Lead"> | string
+    lastName?: StringWithAggregatesFilter<"Lead"> | string
+    contact?: JsonWithAggregatesFilter<"Lead">
+    source?: StringNullableWithAggregatesFilter<"Lead"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Lead"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Lead"> | Date | string
   }
 
   export type ClientContactWhereInput = {
@@ -63290,7 +63290,7 @@ export namespace Prisma {
     clientId?: StringFilter<"ClientContact"> | string
     type?: StringFilter<"ClientContact"> | string
     value?: StringFilter<"ClientContact"> | string
-    client?: XOR<BaseLeadScalarRelationFilter, BaseLeadWhereInput>
+    client?: XOR<LeadScalarRelationFilter, LeadWhereInput>
   }
 
   export type ClientContactOrderByWithRelationInput = {
@@ -63298,7 +63298,7 @@ export namespace Prisma {
     clientId?: SortOrder
     type?: SortOrder
     value?: SortOrder
-    client?: BaseLeadOrderByWithRelationInput
+    client?: LeadOrderByWithRelationInput
   }
 
   export type ClientContactWhereUniqueInput = Prisma.AtLeast<{
@@ -63309,7 +63309,7 @@ export namespace Prisma {
     clientId?: StringFilter<"ClientContact"> | string
     type?: StringFilter<"ClientContact"> | string
     value?: StringFilter<"ClientContact"> | string
-    client?: XOR<BaseLeadScalarRelationFilter, BaseLeadWhereInput>
+    client?: XOR<LeadScalarRelationFilter, LeadWhereInput>
   }, "id">
 
   export type ClientContactOrderByWithAggregationInput = {
@@ -63339,14 +63339,14 @@ export namespace Prisma {
     id?: StringFilter<"ClientLink"> | string
     trackerId?: StringFilter<"ClientLink"> | string
     clientId?: StringFilter<"ClientLink"> | string
-    client?: XOR<BaseLeadScalarRelationFilter, BaseLeadWhereInput>
+    client?: XOR<LeadScalarRelationFilter, LeadWhereInput>
   }
 
   export type ClientLinkOrderByWithRelationInput = {
     id?: SortOrder
     trackerId?: SortOrder
     clientId?: SortOrder
-    client?: BaseLeadOrderByWithRelationInput
+    client?: LeadOrderByWithRelationInput
   }
 
   export type ClientLinkWhereUniqueInput = Prisma.AtLeast<{
@@ -63356,7 +63356,7 @@ export namespace Prisma {
     NOT?: ClientLinkWhereInput | ClientLinkWhereInput[]
     trackerId?: StringFilter<"ClientLink"> | string
     clientId?: StringFilter<"ClientLink"> | string
-    client?: XOR<BaseLeadScalarRelationFilter, BaseLeadWhereInput>
+    client?: XOR<LeadScalarRelationFilter, LeadWhereInput>
   }, "id">
 
   export type ClientLinkOrderByWithAggregationInput = {
@@ -63377,24 +63377,24 @@ export namespace Prisma {
     clientId?: StringWithAggregatesFilter<"ClientLink"> | string
   }
 
-  export type SharedLeadsWhereInput = {
-    AND?: SharedLeadsWhereInput | SharedLeadsWhereInput[]
-    OR?: SharedLeadsWhereInput[]
-    NOT?: SharedLeadsWhereInput | SharedLeadsWhereInput[]
-    id?: StringFilter<"SharedLeads"> | string
-    baseLeadId?: StringFilter<"SharedLeads"> | string
-    type?: EnumLeadTypeFilter<"SharedLeads"> | $Enums.LeadType
-    requirements?: JsonNullableFilter<"SharedLeads">
-    priority?: EnumLeadPriorityFilter<"SharedLeads"> | $Enums.LeadPriority
-    owner?: StringFilter<"SharedLeads"> | string
-    createdAt?: DateTimeFilter<"SharedLeads"> | Date | string
-    updatedAt?: DateTimeFilter<"SharedLeads"> | Date | string
-    baseLead?: XOR<BaseLeadScalarRelationFilter, BaseLeadWhereInput>
+  export type LeadsAssignedWhereInput = {
+    AND?: LeadsAssignedWhereInput | LeadsAssignedWhereInput[]
+    OR?: LeadsAssignedWhereInput[]
+    NOT?: LeadsAssignedWhereInput | LeadsAssignedWhereInput[]
+    id?: StringFilter<"LeadsAssigned"> | string
+    baseLeadId?: StringFilter<"LeadsAssigned"> | string
+    type?: EnumLeadTypeFilter<"LeadsAssigned"> | $Enums.LeadType
+    requirements?: JsonNullableFilter<"LeadsAssigned">
+    priority?: EnumLeadPriorityFilter<"LeadsAssigned"> | $Enums.LeadPriority
+    owner?: StringFilter<"LeadsAssigned"> | string
+    createdAt?: DateTimeFilter<"LeadsAssigned"> | Date | string
+    updatedAt?: DateTimeFilter<"LeadsAssigned"> | Date | string
+    baseLead?: XOR<LeadScalarRelationFilter, LeadWhereInput>
     ownerAccount?: XOR<AccountScalarRelationFilter, AccountWhereInput>
     activities?: LeadActivityListRelationFilter
   }
 
-  export type SharedLeadsOrderByWithRelationInput = {
+  export type LeadsAssignedOrderByWithRelationInput = {
     id?: SortOrder
     baseLeadId?: SortOrder
     type?: SortOrder
@@ -63403,29 +63403,29 @@ export namespace Prisma {
     owner?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    baseLead?: BaseLeadOrderByWithRelationInput
+    baseLead?: LeadOrderByWithRelationInput
     ownerAccount?: AccountOrderByWithRelationInput
     activities?: LeadActivityOrderByRelationAggregateInput
   }
 
-  export type SharedLeadsWhereUniqueInput = Prisma.AtLeast<{
+  export type LeadsAssignedWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    AND?: SharedLeadsWhereInput | SharedLeadsWhereInput[]
-    OR?: SharedLeadsWhereInput[]
-    NOT?: SharedLeadsWhereInput | SharedLeadsWhereInput[]
-    baseLeadId?: StringFilter<"SharedLeads"> | string
-    type?: EnumLeadTypeFilter<"SharedLeads"> | $Enums.LeadType
-    requirements?: JsonNullableFilter<"SharedLeads">
-    priority?: EnumLeadPriorityFilter<"SharedLeads"> | $Enums.LeadPriority
-    owner?: StringFilter<"SharedLeads"> | string
-    createdAt?: DateTimeFilter<"SharedLeads"> | Date | string
-    updatedAt?: DateTimeFilter<"SharedLeads"> | Date | string
-    baseLead?: XOR<BaseLeadScalarRelationFilter, BaseLeadWhereInput>
+    AND?: LeadsAssignedWhereInput | LeadsAssignedWhereInput[]
+    OR?: LeadsAssignedWhereInput[]
+    NOT?: LeadsAssignedWhereInput | LeadsAssignedWhereInput[]
+    baseLeadId?: StringFilter<"LeadsAssigned"> | string
+    type?: EnumLeadTypeFilter<"LeadsAssigned"> | $Enums.LeadType
+    requirements?: JsonNullableFilter<"LeadsAssigned">
+    priority?: EnumLeadPriorityFilter<"LeadsAssigned"> | $Enums.LeadPriority
+    owner?: StringFilter<"LeadsAssigned"> | string
+    createdAt?: DateTimeFilter<"LeadsAssigned"> | Date | string
+    updatedAt?: DateTimeFilter<"LeadsAssigned"> | Date | string
+    baseLead?: XOR<LeadScalarRelationFilter, LeadWhereInput>
     ownerAccount?: XOR<AccountScalarRelationFilter, AccountWhereInput>
     activities?: LeadActivityListRelationFilter
   }, "id">
 
-  export type SharedLeadsOrderByWithAggregationInput = {
+  export type LeadsAssignedOrderByWithAggregationInput = {
     id?: SortOrder
     baseLeadId?: SortOrder
     type?: SortOrder
@@ -63434,23 +63434,23 @@ export namespace Prisma {
     owner?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    _count?: SharedLeadsCountOrderByAggregateInput
-    _max?: SharedLeadsMaxOrderByAggregateInput
-    _min?: SharedLeadsMinOrderByAggregateInput
+    _count?: LeadsAssignedCountOrderByAggregateInput
+    _max?: LeadsAssignedMaxOrderByAggregateInput
+    _min?: LeadsAssignedMinOrderByAggregateInput
   }
 
-  export type SharedLeadsScalarWhereWithAggregatesInput = {
-    AND?: SharedLeadsScalarWhereWithAggregatesInput | SharedLeadsScalarWhereWithAggregatesInput[]
-    OR?: SharedLeadsScalarWhereWithAggregatesInput[]
-    NOT?: SharedLeadsScalarWhereWithAggregatesInput | SharedLeadsScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"SharedLeads"> | string
-    baseLeadId?: StringWithAggregatesFilter<"SharedLeads"> | string
-    type?: EnumLeadTypeWithAggregatesFilter<"SharedLeads"> | $Enums.LeadType
-    requirements?: JsonNullableWithAggregatesFilter<"SharedLeads">
-    priority?: EnumLeadPriorityWithAggregatesFilter<"SharedLeads"> | $Enums.LeadPriority
-    owner?: StringWithAggregatesFilter<"SharedLeads"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"SharedLeads"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"SharedLeads"> | Date | string
+  export type LeadsAssignedScalarWhereWithAggregatesInput = {
+    AND?: LeadsAssignedScalarWhereWithAggregatesInput | LeadsAssignedScalarWhereWithAggregatesInput[]
+    OR?: LeadsAssignedScalarWhereWithAggregatesInput[]
+    NOT?: LeadsAssignedScalarWhereWithAggregatesInput | LeadsAssignedScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LeadsAssigned"> | string
+    baseLeadId?: StringWithAggregatesFilter<"LeadsAssigned"> | string
+    type?: EnumLeadTypeWithAggregatesFilter<"LeadsAssigned"> | $Enums.LeadType
+    requirements?: JsonNullableWithAggregatesFilter<"LeadsAssigned">
+    priority?: EnumLeadPriorityWithAggregatesFilter<"LeadsAssigned"> | $Enums.LeadPriority
+    owner?: StringWithAggregatesFilter<"LeadsAssigned"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"LeadsAssigned"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"LeadsAssigned"> | Date | string
   }
 
   export type LeadActivityWhereInput = {
@@ -63462,7 +63462,7 @@ export namespace Prisma {
     data?: JsonFilter<"LeadActivity">
     activityOn?: DateTimeFilter<"LeadActivity"> | Date | string
     activityBy?: StringFilter<"LeadActivity"> | string
-    lead?: XOR<SharedLeadsScalarRelationFilter, SharedLeadsWhereInput>
+    lead?: XOR<LeadsAssignedScalarRelationFilter, LeadsAssignedWhereInput>
   }
 
   export type LeadActivityOrderByWithRelationInput = {
@@ -63471,7 +63471,7 @@ export namespace Prisma {
     data?: SortOrder
     activityOn?: SortOrder
     activityBy?: SortOrder
-    lead?: SharedLeadsOrderByWithRelationInput
+    lead?: LeadsAssignedOrderByWithRelationInput
   }
 
   export type LeadActivityWhereUniqueInput = Prisma.AtLeast<{
@@ -63483,7 +63483,7 @@ export namespace Prisma {
     data?: JsonFilter<"LeadActivity">
     activityOn?: DateTimeFilter<"LeadActivity"> | Date | string
     activityBy?: StringFilter<"LeadActivity"> | string
-    lead?: XOR<SharedLeadsScalarRelationFilter, SharedLeadsWhereInput>
+    lead?: XOR<LeadsAssignedScalarRelationFilter, LeadsAssignedWhereInput>
   }, "id">
 
   export type LeadActivityOrderByWithAggregationInput = {
@@ -65109,8 +65109,8 @@ export namespace Prisma {
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeCreateNestedManyWithoutAccountInput
@@ -65136,8 +65136,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedUncheckedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingUncheckedCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertUncheckedCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeUncheckedCreateNestedManyWithoutAccountInput
@@ -65163,8 +65163,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUpdateManyWithoutAccountNestedInput
@@ -65190,8 +65190,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUncheckedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUncheckedUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUncheckedUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUncheckedUpdateManyWithoutAccountNestedInput
@@ -66026,7 +66026,7 @@ export namespace Prisma {
     id?: string
     isPrimaryOwner?: boolean
     property: ListingCreateNestedOneWithoutOwnersInput
-    ownerClient: BaseLeadCreateNestedOneWithoutPropertyOwnersInput
+    ownerClient: LeadCreateNestedOneWithoutPropertyOwnersInput
   }
 
   export type PropertyOwnerUncheckedCreateInput = {
@@ -66040,7 +66040,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     isPrimaryOwner?: BoolFieldUpdateOperationsInput | boolean
     property?: ListingUpdateOneRequiredWithoutOwnersNestedInput
-    ownerClient?: BaseLeadUpdateOneRequiredWithoutPropertyOwnersNestedInput
+    ownerClient?: LeadUpdateOneRequiredWithoutPropertyOwnersNestedInput
   }
 
   export type PropertyOwnerUncheckedUpdateInput = {
@@ -67106,7 +67106,7 @@ export namespace Prisma {
     viewedOn?: StringFieldUpdateOperationsInput | string
   }
 
-  export type BaseLeadCreateInput = {
+  export type LeadCreateInput = {
     id?: string
     firstName: string
     lastName: string
@@ -67115,13 +67115,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     links?: ClientLinkCreateNestedManyWithoutClientInput
-    sharedLeads?: SharedLeadsCreateNestedManyWithoutBaseLeadInput
+    sharedLeads?: LeadsAssignedCreateNestedManyWithoutBaseLeadInput
     contacts?: ClientContactCreateNestedManyWithoutClientInput
     propertyOwners?: PropertyOwnerCreateNestedManyWithoutOwnerClientInput
     belongsToAccount: AccountCreateNestedOneWithoutBaseLeadsBelongingToInput
   }
 
-  export type BaseLeadUncheckedCreateInput = {
+  export type LeadUncheckedCreateInput = {
     id?: string
     belongsTo: string
     firstName: string
@@ -67131,12 +67131,12 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     links?: ClientLinkUncheckedCreateNestedManyWithoutClientInput
-    sharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutBaseLeadInput
+    sharedLeads?: LeadsAssignedUncheckedCreateNestedManyWithoutBaseLeadInput
     contacts?: ClientContactUncheckedCreateNestedManyWithoutClientInput
     propertyOwners?: PropertyOwnerUncheckedCreateNestedManyWithoutOwnerClientInput
   }
 
-  export type BaseLeadUpdateInput = {
+  export type LeadUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
@@ -67145,13 +67145,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     links?: ClientLinkUpdateManyWithoutClientNestedInput
-    sharedLeads?: SharedLeadsUpdateManyWithoutBaseLeadNestedInput
+    sharedLeads?: LeadsAssignedUpdateManyWithoutBaseLeadNestedInput
     contacts?: ClientContactUpdateManyWithoutClientNestedInput
     propertyOwners?: PropertyOwnerUpdateManyWithoutOwnerClientNestedInput
     belongsToAccount?: AccountUpdateOneRequiredWithoutBaseLeadsBelongingToNestedInput
   }
 
-  export type BaseLeadUncheckedUpdateInput = {
+  export type LeadUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     belongsTo?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
@@ -67161,12 +67161,12 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     links?: ClientLinkUncheckedUpdateManyWithoutClientNestedInput
-    sharedLeads?: SharedLeadsUncheckedUpdateManyWithoutBaseLeadNestedInput
+    sharedLeads?: LeadsAssignedUncheckedUpdateManyWithoutBaseLeadNestedInput
     contacts?: ClientContactUncheckedUpdateManyWithoutClientNestedInput
     propertyOwners?: PropertyOwnerUncheckedUpdateManyWithoutOwnerClientNestedInput
   }
 
-  export type BaseLeadCreateManyInput = {
+  export type LeadCreateManyInput = {
     id?: string
     belongsTo: string
     firstName: string
@@ -67177,7 +67177,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type BaseLeadUpdateManyMutationInput = {
+  export type LeadUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
@@ -67187,7 +67187,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type BaseLeadUncheckedUpdateManyInput = {
+  export type LeadUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     belongsTo?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
@@ -67202,7 +67202,7 @@ export namespace Prisma {
     id?: string
     type: string
     value: string
-    client: BaseLeadCreateNestedOneWithoutContactsInput
+    client: LeadCreateNestedOneWithoutContactsInput
   }
 
   export type ClientContactUncheckedCreateInput = {
@@ -67216,7 +67216,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
-    client?: BaseLeadUpdateOneRequiredWithoutContactsNestedInput
+    client?: LeadUpdateOneRequiredWithoutContactsNestedInput
   }
 
   export type ClientContactUncheckedUpdateInput = {
@@ -67249,7 +67249,7 @@ export namespace Prisma {
   export type ClientLinkCreateInput = {
     id?: string
     trackerId: string
-    client: BaseLeadCreateNestedOneWithoutLinksInput
+    client: LeadCreateNestedOneWithoutLinksInput
   }
 
   export type ClientLinkUncheckedCreateInput = {
@@ -67261,7 +67261,7 @@ export namespace Prisma {
   export type ClientLinkUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     trackerId?: StringFieldUpdateOperationsInput | string
-    client?: BaseLeadUpdateOneRequiredWithoutLinksNestedInput
+    client?: LeadUpdateOneRequiredWithoutLinksNestedInput
   }
 
   export type ClientLinkUncheckedUpdateInput = {
@@ -67287,19 +67287,19 @@ export namespace Prisma {
     clientId?: StringFieldUpdateOperationsInput | string
   }
 
-  export type SharedLeadsCreateInput = {
+  export type LeadsAssignedCreateInput = {
     id?: string
     type: $Enums.LeadType
     requirements?: NullableJsonNullValueInput | InputJsonValue
     priority?: $Enums.LeadPriority
     createdAt?: Date | string
     updatedAt?: Date | string
-    baseLead: BaseLeadCreateNestedOneWithoutSharedLeadsInput
+    baseLead: LeadCreateNestedOneWithoutSharedLeadsInput
     ownerAccount: AccountCreateNestedOneWithoutOwnedSharedLeadsInput
     activities?: LeadActivityCreateNestedManyWithoutLeadInput
   }
 
-  export type SharedLeadsUncheckedCreateInput = {
+  export type LeadsAssignedUncheckedCreateInput = {
     id?: string
     baseLeadId: string
     type: $Enums.LeadType
@@ -67311,19 +67311,19 @@ export namespace Prisma {
     activities?: LeadActivityUncheckedCreateNestedManyWithoutLeadInput
   }
 
-  export type SharedLeadsUpdateInput = {
+  export type LeadsAssignedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumLeadTypeFieldUpdateOperationsInput | $Enums.LeadType
     requirements?: NullableJsonNullValueInput | InputJsonValue
     priority?: EnumLeadPriorityFieldUpdateOperationsInput | $Enums.LeadPriority
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    baseLead?: BaseLeadUpdateOneRequiredWithoutSharedLeadsNestedInput
+    baseLead?: LeadUpdateOneRequiredWithoutSharedLeadsNestedInput
     ownerAccount?: AccountUpdateOneRequiredWithoutOwnedSharedLeadsNestedInput
     activities?: LeadActivityUpdateManyWithoutLeadNestedInput
   }
 
-  export type SharedLeadsUncheckedUpdateInput = {
+  export type LeadsAssignedUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     baseLeadId?: StringFieldUpdateOperationsInput | string
     type?: EnumLeadTypeFieldUpdateOperationsInput | $Enums.LeadType
@@ -67335,7 +67335,7 @@ export namespace Prisma {
     activities?: LeadActivityUncheckedUpdateManyWithoutLeadNestedInput
   }
 
-  export type SharedLeadsCreateManyInput = {
+  export type LeadsAssignedCreateManyInput = {
     id?: string
     baseLeadId: string
     type: $Enums.LeadType
@@ -67346,7 +67346,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type SharedLeadsUpdateManyMutationInput = {
+  export type LeadsAssignedUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumLeadTypeFieldUpdateOperationsInput | $Enums.LeadType
     requirements?: NullableJsonNullValueInput | InputJsonValue
@@ -67355,7 +67355,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type SharedLeadsUncheckedUpdateManyInput = {
+  export type LeadsAssignedUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     baseLeadId?: StringFieldUpdateOperationsInput | string
     type?: EnumLeadTypeFieldUpdateOperationsInput | $Enums.LeadType
@@ -67371,7 +67371,7 @@ export namespace Prisma {
     data: JsonNullValueInput | InputJsonValue
     activityOn?: Date | string
     activityBy: string
-    lead: SharedLeadsCreateNestedOneWithoutActivitiesInput
+    lead: LeadsAssignedCreateNestedOneWithoutActivitiesInput
   }
 
   export type LeadActivityUncheckedCreateInput = {
@@ -67387,7 +67387,7 @@ export namespace Prisma {
     data?: JsonNullValueInput | InputJsonValue
     activityOn?: DateTimeFieldUpdateOperationsInput | Date | string
     activityBy?: StringFieldUpdateOperationsInput | string
-    lead?: SharedLeadsUpdateOneRequiredWithoutActivitiesNestedInput
+    lead?: LeadsAssignedUpdateOneRequiredWithoutActivitiesNestedInput
   }
 
   export type LeadActivityUncheckedUpdateInput = {
@@ -69343,16 +69343,16 @@ export namespace Prisma {
     none?: AgencyAgentMapWhereInput
   }
 
-  export type BaseLeadListRelationFilter = {
-    every?: BaseLeadWhereInput
-    some?: BaseLeadWhereInput
-    none?: BaseLeadWhereInput
+  export type LeadListRelationFilter = {
+    every?: LeadWhereInput
+    some?: LeadWhereInput
+    none?: LeadWhereInput
   }
 
-  export type SharedLeadsListRelationFilter = {
-    every?: SharedLeadsWhereInput
-    some?: SharedLeadsWhereInput
-    none?: SharedLeadsWhereInput
+  export type LeadsAssignedListRelationFilter = {
+    every?: LeadsAssignedWhereInput
+    some?: LeadsAssignedWhereInput
+    none?: LeadsAssignedWhereInput
   }
 
   export type IntelligenceMappingListRelationFilter = {
@@ -69391,11 +69391,11 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type BaseLeadOrderByRelationAggregateInput = {
+  export type LeadOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
-  export type SharedLeadsOrderByRelationAggregateInput = {
+  export type LeadsAssignedOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -70200,9 +70200,9 @@ export namespace Prisma {
     usableArea?: SortOrder
   }
 
-  export type BaseLeadScalarRelationFilter = {
-    is?: BaseLeadWhereInput
-    isNot?: BaseLeadWhereInput
+  export type LeadScalarRelationFilter = {
+    is?: LeadWhereInput
+    isNot?: LeadWhereInput
   }
 
   export type PropertyOwnerPropertyIdOwnerClientIdCompoundUniqueInput = {
@@ -70857,7 +70857,7 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type BaseLeadCountOrderByAggregateInput = {
+  export type LeadCountOrderByAggregateInput = {
     id?: SortOrder
     belongsTo?: SortOrder
     firstName?: SortOrder
@@ -70868,7 +70868,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type BaseLeadMaxOrderByAggregateInput = {
+  export type LeadMaxOrderByAggregateInput = {
     id?: SortOrder
     belongsTo?: SortOrder
     firstName?: SortOrder
@@ -70878,7 +70878,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type BaseLeadMinOrderByAggregateInput = {
+  export type LeadMinOrderByAggregateInput = {
     id?: SortOrder
     belongsTo?: SortOrder
     firstName?: SortOrder
@@ -70951,7 +70951,7 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type SharedLeadsCountOrderByAggregateInput = {
+  export type LeadsAssignedCountOrderByAggregateInput = {
     id?: SortOrder
     baseLeadId?: SortOrder
     type?: SortOrder
@@ -70962,7 +70962,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type SharedLeadsMaxOrderByAggregateInput = {
+  export type LeadsAssignedMaxOrderByAggregateInput = {
     id?: SortOrder
     baseLeadId?: SortOrder
     type?: SortOrder
@@ -70972,7 +70972,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type SharedLeadsMinOrderByAggregateInput = {
+  export type LeadsAssignedMinOrderByAggregateInput = {
     id?: SortOrder
     baseLeadId?: SortOrder
     type?: SortOrder
@@ -71002,9 +71002,9 @@ export namespace Prisma {
     _max?: NestedEnumLeadPriorityFilter<$PrismaModel>
   }
 
-  export type SharedLeadsScalarRelationFilter = {
-    is?: SharedLeadsWhereInput
-    isNot?: SharedLeadsWhereInput
+  export type LeadsAssignedScalarRelationFilter = {
+    is?: LeadsAssignedWhereInput
+    isNot?: LeadsAssignedWhereInput
   }
 
   export type LeadActivityCountOrderByAggregateInput = {
@@ -72047,18 +72047,18 @@ export namespace Prisma {
     connect?: AgencyAgentMapWhereUniqueInput | AgencyAgentMapWhereUniqueInput[]
   }
 
-  export type BaseLeadCreateNestedManyWithoutBelongsToAccountInput = {
-    create?: XOR<BaseLeadCreateWithoutBelongsToAccountInput, BaseLeadUncheckedCreateWithoutBelongsToAccountInput> | BaseLeadCreateWithoutBelongsToAccountInput[] | BaseLeadUncheckedCreateWithoutBelongsToAccountInput[]
-    connectOrCreate?: BaseLeadCreateOrConnectWithoutBelongsToAccountInput | BaseLeadCreateOrConnectWithoutBelongsToAccountInput[]
-    createMany?: BaseLeadCreateManyBelongsToAccountInputEnvelope
-    connect?: BaseLeadWhereUniqueInput | BaseLeadWhereUniqueInput[]
+  export type LeadCreateNestedManyWithoutBelongsToAccountInput = {
+    create?: XOR<LeadCreateWithoutBelongsToAccountInput, LeadUncheckedCreateWithoutBelongsToAccountInput> | LeadCreateWithoutBelongsToAccountInput[] | LeadUncheckedCreateWithoutBelongsToAccountInput[]
+    connectOrCreate?: LeadCreateOrConnectWithoutBelongsToAccountInput | LeadCreateOrConnectWithoutBelongsToAccountInput[]
+    createMany?: LeadCreateManyBelongsToAccountInputEnvelope
+    connect?: LeadWhereUniqueInput | LeadWhereUniqueInput[]
   }
 
-  export type SharedLeadsCreateNestedManyWithoutOwnerAccountInput = {
-    create?: XOR<SharedLeadsCreateWithoutOwnerAccountInput, SharedLeadsUncheckedCreateWithoutOwnerAccountInput> | SharedLeadsCreateWithoutOwnerAccountInput[] | SharedLeadsUncheckedCreateWithoutOwnerAccountInput[]
-    connectOrCreate?: SharedLeadsCreateOrConnectWithoutOwnerAccountInput | SharedLeadsCreateOrConnectWithoutOwnerAccountInput[]
-    createMany?: SharedLeadsCreateManyOwnerAccountInputEnvelope
-    connect?: SharedLeadsWhereUniqueInput | SharedLeadsWhereUniqueInput[]
+  export type LeadsAssignedCreateNestedManyWithoutOwnerAccountInput = {
+    create?: XOR<LeadsAssignedCreateWithoutOwnerAccountInput, LeadsAssignedUncheckedCreateWithoutOwnerAccountInput> | LeadsAssignedCreateWithoutOwnerAccountInput[] | LeadsAssignedUncheckedCreateWithoutOwnerAccountInput[]
+    connectOrCreate?: LeadsAssignedCreateOrConnectWithoutOwnerAccountInput | LeadsAssignedCreateOrConnectWithoutOwnerAccountInput[]
+    createMany?: LeadsAssignedCreateManyOwnerAccountInputEnvelope
+    connect?: LeadsAssignedWhereUniqueInput | LeadsAssignedWhereUniqueInput[]
   }
 
   export type IntelligenceMappingCreateNestedManyWithoutAccountInput = {
@@ -72138,18 +72138,18 @@ export namespace Prisma {
     connect?: AgencyAgentMapWhereUniqueInput | AgencyAgentMapWhereUniqueInput[]
   }
 
-  export type BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput = {
-    create?: XOR<BaseLeadCreateWithoutBelongsToAccountInput, BaseLeadUncheckedCreateWithoutBelongsToAccountInput> | BaseLeadCreateWithoutBelongsToAccountInput[] | BaseLeadUncheckedCreateWithoutBelongsToAccountInput[]
-    connectOrCreate?: BaseLeadCreateOrConnectWithoutBelongsToAccountInput | BaseLeadCreateOrConnectWithoutBelongsToAccountInput[]
-    createMany?: BaseLeadCreateManyBelongsToAccountInputEnvelope
-    connect?: BaseLeadWhereUniqueInput | BaseLeadWhereUniqueInput[]
+  export type LeadUncheckedCreateNestedManyWithoutBelongsToAccountInput = {
+    create?: XOR<LeadCreateWithoutBelongsToAccountInput, LeadUncheckedCreateWithoutBelongsToAccountInput> | LeadCreateWithoutBelongsToAccountInput[] | LeadUncheckedCreateWithoutBelongsToAccountInput[]
+    connectOrCreate?: LeadCreateOrConnectWithoutBelongsToAccountInput | LeadCreateOrConnectWithoutBelongsToAccountInput[]
+    createMany?: LeadCreateManyBelongsToAccountInputEnvelope
+    connect?: LeadWhereUniqueInput | LeadWhereUniqueInput[]
   }
 
-  export type SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput = {
-    create?: XOR<SharedLeadsCreateWithoutOwnerAccountInput, SharedLeadsUncheckedCreateWithoutOwnerAccountInput> | SharedLeadsCreateWithoutOwnerAccountInput[] | SharedLeadsUncheckedCreateWithoutOwnerAccountInput[]
-    connectOrCreate?: SharedLeadsCreateOrConnectWithoutOwnerAccountInput | SharedLeadsCreateOrConnectWithoutOwnerAccountInput[]
-    createMany?: SharedLeadsCreateManyOwnerAccountInputEnvelope
-    connect?: SharedLeadsWhereUniqueInput | SharedLeadsWhereUniqueInput[]
+  export type LeadsAssignedUncheckedCreateNestedManyWithoutOwnerAccountInput = {
+    create?: XOR<LeadsAssignedCreateWithoutOwnerAccountInput, LeadsAssignedUncheckedCreateWithoutOwnerAccountInput> | LeadsAssignedCreateWithoutOwnerAccountInput[] | LeadsAssignedUncheckedCreateWithoutOwnerAccountInput[]
+    connectOrCreate?: LeadsAssignedCreateOrConnectWithoutOwnerAccountInput | LeadsAssignedCreateOrConnectWithoutOwnerAccountInput[]
+    createMany?: LeadsAssignedCreateManyOwnerAccountInputEnvelope
+    connect?: LeadsAssignedWhereUniqueInput | LeadsAssignedWhereUniqueInput[]
   }
 
   export type IntelligenceMappingUncheckedCreateNestedManyWithoutAccountInput = {
@@ -72271,32 +72271,32 @@ export namespace Prisma {
     deleteMany?: AgencyAgentMapScalarWhereInput | AgencyAgentMapScalarWhereInput[]
   }
 
-  export type BaseLeadUpdateManyWithoutBelongsToAccountNestedInput = {
-    create?: XOR<BaseLeadCreateWithoutBelongsToAccountInput, BaseLeadUncheckedCreateWithoutBelongsToAccountInput> | BaseLeadCreateWithoutBelongsToAccountInput[] | BaseLeadUncheckedCreateWithoutBelongsToAccountInput[]
-    connectOrCreate?: BaseLeadCreateOrConnectWithoutBelongsToAccountInput | BaseLeadCreateOrConnectWithoutBelongsToAccountInput[]
-    upsert?: BaseLeadUpsertWithWhereUniqueWithoutBelongsToAccountInput | BaseLeadUpsertWithWhereUniqueWithoutBelongsToAccountInput[]
-    createMany?: BaseLeadCreateManyBelongsToAccountInputEnvelope
-    set?: BaseLeadWhereUniqueInput | BaseLeadWhereUniqueInput[]
-    disconnect?: BaseLeadWhereUniqueInput | BaseLeadWhereUniqueInput[]
-    delete?: BaseLeadWhereUniqueInput | BaseLeadWhereUniqueInput[]
-    connect?: BaseLeadWhereUniqueInput | BaseLeadWhereUniqueInput[]
-    update?: BaseLeadUpdateWithWhereUniqueWithoutBelongsToAccountInput | BaseLeadUpdateWithWhereUniqueWithoutBelongsToAccountInput[]
-    updateMany?: BaseLeadUpdateManyWithWhereWithoutBelongsToAccountInput | BaseLeadUpdateManyWithWhereWithoutBelongsToAccountInput[]
-    deleteMany?: BaseLeadScalarWhereInput | BaseLeadScalarWhereInput[]
+  export type LeadUpdateManyWithoutBelongsToAccountNestedInput = {
+    create?: XOR<LeadCreateWithoutBelongsToAccountInput, LeadUncheckedCreateWithoutBelongsToAccountInput> | LeadCreateWithoutBelongsToAccountInput[] | LeadUncheckedCreateWithoutBelongsToAccountInput[]
+    connectOrCreate?: LeadCreateOrConnectWithoutBelongsToAccountInput | LeadCreateOrConnectWithoutBelongsToAccountInput[]
+    upsert?: LeadUpsertWithWhereUniqueWithoutBelongsToAccountInput | LeadUpsertWithWhereUniqueWithoutBelongsToAccountInput[]
+    createMany?: LeadCreateManyBelongsToAccountInputEnvelope
+    set?: LeadWhereUniqueInput | LeadWhereUniqueInput[]
+    disconnect?: LeadWhereUniqueInput | LeadWhereUniqueInput[]
+    delete?: LeadWhereUniqueInput | LeadWhereUniqueInput[]
+    connect?: LeadWhereUniqueInput | LeadWhereUniqueInput[]
+    update?: LeadUpdateWithWhereUniqueWithoutBelongsToAccountInput | LeadUpdateWithWhereUniqueWithoutBelongsToAccountInput[]
+    updateMany?: LeadUpdateManyWithWhereWithoutBelongsToAccountInput | LeadUpdateManyWithWhereWithoutBelongsToAccountInput[]
+    deleteMany?: LeadScalarWhereInput | LeadScalarWhereInput[]
   }
 
-  export type SharedLeadsUpdateManyWithoutOwnerAccountNestedInput = {
-    create?: XOR<SharedLeadsCreateWithoutOwnerAccountInput, SharedLeadsUncheckedCreateWithoutOwnerAccountInput> | SharedLeadsCreateWithoutOwnerAccountInput[] | SharedLeadsUncheckedCreateWithoutOwnerAccountInput[]
-    connectOrCreate?: SharedLeadsCreateOrConnectWithoutOwnerAccountInput | SharedLeadsCreateOrConnectWithoutOwnerAccountInput[]
-    upsert?: SharedLeadsUpsertWithWhereUniqueWithoutOwnerAccountInput | SharedLeadsUpsertWithWhereUniqueWithoutOwnerAccountInput[]
-    createMany?: SharedLeadsCreateManyOwnerAccountInputEnvelope
-    set?: SharedLeadsWhereUniqueInput | SharedLeadsWhereUniqueInput[]
-    disconnect?: SharedLeadsWhereUniqueInput | SharedLeadsWhereUniqueInput[]
-    delete?: SharedLeadsWhereUniqueInput | SharedLeadsWhereUniqueInput[]
-    connect?: SharedLeadsWhereUniqueInput | SharedLeadsWhereUniqueInput[]
-    update?: SharedLeadsUpdateWithWhereUniqueWithoutOwnerAccountInput | SharedLeadsUpdateWithWhereUniqueWithoutOwnerAccountInput[]
-    updateMany?: SharedLeadsUpdateManyWithWhereWithoutOwnerAccountInput | SharedLeadsUpdateManyWithWhereWithoutOwnerAccountInput[]
-    deleteMany?: SharedLeadsScalarWhereInput | SharedLeadsScalarWhereInput[]
+  export type LeadsAssignedUpdateManyWithoutOwnerAccountNestedInput = {
+    create?: XOR<LeadsAssignedCreateWithoutOwnerAccountInput, LeadsAssignedUncheckedCreateWithoutOwnerAccountInput> | LeadsAssignedCreateWithoutOwnerAccountInput[] | LeadsAssignedUncheckedCreateWithoutOwnerAccountInput[]
+    connectOrCreate?: LeadsAssignedCreateOrConnectWithoutOwnerAccountInput | LeadsAssignedCreateOrConnectWithoutOwnerAccountInput[]
+    upsert?: LeadsAssignedUpsertWithWhereUniqueWithoutOwnerAccountInput | LeadsAssignedUpsertWithWhereUniqueWithoutOwnerAccountInput[]
+    createMany?: LeadsAssignedCreateManyOwnerAccountInputEnvelope
+    set?: LeadsAssignedWhereUniqueInput | LeadsAssignedWhereUniqueInput[]
+    disconnect?: LeadsAssignedWhereUniqueInput | LeadsAssignedWhereUniqueInput[]
+    delete?: LeadsAssignedWhereUniqueInput | LeadsAssignedWhereUniqueInput[]
+    connect?: LeadsAssignedWhereUniqueInput | LeadsAssignedWhereUniqueInput[]
+    update?: LeadsAssignedUpdateWithWhereUniqueWithoutOwnerAccountInput | LeadsAssignedUpdateWithWhereUniqueWithoutOwnerAccountInput[]
+    updateMany?: LeadsAssignedUpdateManyWithWhereWithoutOwnerAccountInput | LeadsAssignedUpdateManyWithWhereWithoutOwnerAccountInput[]
+    deleteMany?: LeadsAssignedScalarWhereInput | LeadsAssignedScalarWhereInput[]
   }
 
   export type IntelligenceMappingUpdateManyWithoutAccountNestedInput = {
@@ -72453,32 +72453,32 @@ export namespace Prisma {
     deleteMany?: AgencyAgentMapScalarWhereInput | AgencyAgentMapScalarWhereInput[]
   }
 
-  export type BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput = {
-    create?: XOR<BaseLeadCreateWithoutBelongsToAccountInput, BaseLeadUncheckedCreateWithoutBelongsToAccountInput> | BaseLeadCreateWithoutBelongsToAccountInput[] | BaseLeadUncheckedCreateWithoutBelongsToAccountInput[]
-    connectOrCreate?: BaseLeadCreateOrConnectWithoutBelongsToAccountInput | BaseLeadCreateOrConnectWithoutBelongsToAccountInput[]
-    upsert?: BaseLeadUpsertWithWhereUniqueWithoutBelongsToAccountInput | BaseLeadUpsertWithWhereUniqueWithoutBelongsToAccountInput[]
-    createMany?: BaseLeadCreateManyBelongsToAccountInputEnvelope
-    set?: BaseLeadWhereUniqueInput | BaseLeadWhereUniqueInput[]
-    disconnect?: BaseLeadWhereUniqueInput | BaseLeadWhereUniqueInput[]
-    delete?: BaseLeadWhereUniqueInput | BaseLeadWhereUniqueInput[]
-    connect?: BaseLeadWhereUniqueInput | BaseLeadWhereUniqueInput[]
-    update?: BaseLeadUpdateWithWhereUniqueWithoutBelongsToAccountInput | BaseLeadUpdateWithWhereUniqueWithoutBelongsToAccountInput[]
-    updateMany?: BaseLeadUpdateManyWithWhereWithoutBelongsToAccountInput | BaseLeadUpdateManyWithWhereWithoutBelongsToAccountInput[]
-    deleteMany?: BaseLeadScalarWhereInput | BaseLeadScalarWhereInput[]
+  export type LeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput = {
+    create?: XOR<LeadCreateWithoutBelongsToAccountInput, LeadUncheckedCreateWithoutBelongsToAccountInput> | LeadCreateWithoutBelongsToAccountInput[] | LeadUncheckedCreateWithoutBelongsToAccountInput[]
+    connectOrCreate?: LeadCreateOrConnectWithoutBelongsToAccountInput | LeadCreateOrConnectWithoutBelongsToAccountInput[]
+    upsert?: LeadUpsertWithWhereUniqueWithoutBelongsToAccountInput | LeadUpsertWithWhereUniqueWithoutBelongsToAccountInput[]
+    createMany?: LeadCreateManyBelongsToAccountInputEnvelope
+    set?: LeadWhereUniqueInput | LeadWhereUniqueInput[]
+    disconnect?: LeadWhereUniqueInput | LeadWhereUniqueInput[]
+    delete?: LeadWhereUniqueInput | LeadWhereUniqueInput[]
+    connect?: LeadWhereUniqueInput | LeadWhereUniqueInput[]
+    update?: LeadUpdateWithWhereUniqueWithoutBelongsToAccountInput | LeadUpdateWithWhereUniqueWithoutBelongsToAccountInput[]
+    updateMany?: LeadUpdateManyWithWhereWithoutBelongsToAccountInput | LeadUpdateManyWithWhereWithoutBelongsToAccountInput[]
+    deleteMany?: LeadScalarWhereInput | LeadScalarWhereInput[]
   }
 
-  export type SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput = {
-    create?: XOR<SharedLeadsCreateWithoutOwnerAccountInput, SharedLeadsUncheckedCreateWithoutOwnerAccountInput> | SharedLeadsCreateWithoutOwnerAccountInput[] | SharedLeadsUncheckedCreateWithoutOwnerAccountInput[]
-    connectOrCreate?: SharedLeadsCreateOrConnectWithoutOwnerAccountInput | SharedLeadsCreateOrConnectWithoutOwnerAccountInput[]
-    upsert?: SharedLeadsUpsertWithWhereUniqueWithoutOwnerAccountInput | SharedLeadsUpsertWithWhereUniqueWithoutOwnerAccountInput[]
-    createMany?: SharedLeadsCreateManyOwnerAccountInputEnvelope
-    set?: SharedLeadsWhereUniqueInput | SharedLeadsWhereUniqueInput[]
-    disconnect?: SharedLeadsWhereUniqueInput | SharedLeadsWhereUniqueInput[]
-    delete?: SharedLeadsWhereUniqueInput | SharedLeadsWhereUniqueInput[]
-    connect?: SharedLeadsWhereUniqueInput | SharedLeadsWhereUniqueInput[]
-    update?: SharedLeadsUpdateWithWhereUniqueWithoutOwnerAccountInput | SharedLeadsUpdateWithWhereUniqueWithoutOwnerAccountInput[]
-    updateMany?: SharedLeadsUpdateManyWithWhereWithoutOwnerAccountInput | SharedLeadsUpdateManyWithWhereWithoutOwnerAccountInput[]
-    deleteMany?: SharedLeadsScalarWhereInput | SharedLeadsScalarWhereInput[]
+  export type LeadsAssignedUncheckedUpdateManyWithoutOwnerAccountNestedInput = {
+    create?: XOR<LeadsAssignedCreateWithoutOwnerAccountInput, LeadsAssignedUncheckedCreateWithoutOwnerAccountInput> | LeadsAssignedCreateWithoutOwnerAccountInput[] | LeadsAssignedUncheckedCreateWithoutOwnerAccountInput[]
+    connectOrCreate?: LeadsAssignedCreateOrConnectWithoutOwnerAccountInput | LeadsAssignedCreateOrConnectWithoutOwnerAccountInput[]
+    upsert?: LeadsAssignedUpsertWithWhereUniqueWithoutOwnerAccountInput | LeadsAssignedUpsertWithWhereUniqueWithoutOwnerAccountInput[]
+    createMany?: LeadsAssignedCreateManyOwnerAccountInputEnvelope
+    set?: LeadsAssignedWhereUniqueInput | LeadsAssignedWhereUniqueInput[]
+    disconnect?: LeadsAssignedWhereUniqueInput | LeadsAssignedWhereUniqueInput[]
+    delete?: LeadsAssignedWhereUniqueInput | LeadsAssignedWhereUniqueInput[]
+    connect?: LeadsAssignedWhereUniqueInput | LeadsAssignedWhereUniqueInput[]
+    update?: LeadsAssignedUpdateWithWhereUniqueWithoutOwnerAccountInput | LeadsAssignedUpdateWithWhereUniqueWithoutOwnerAccountInput[]
+    updateMany?: LeadsAssignedUpdateManyWithWhereWithoutOwnerAccountInput | LeadsAssignedUpdateManyWithWhereWithoutOwnerAccountInput[]
+    deleteMany?: LeadsAssignedScalarWhereInput | LeadsAssignedScalarWhereInput[]
   }
 
   export type IntelligenceMappingUncheckedUpdateManyWithoutAccountNestedInput = {
@@ -73255,10 +73255,10 @@ export namespace Prisma {
     connect?: ListingWhereUniqueInput
   }
 
-  export type BaseLeadCreateNestedOneWithoutPropertyOwnersInput = {
-    create?: XOR<BaseLeadCreateWithoutPropertyOwnersInput, BaseLeadUncheckedCreateWithoutPropertyOwnersInput>
-    connectOrCreate?: BaseLeadCreateOrConnectWithoutPropertyOwnersInput
-    connect?: BaseLeadWhereUniqueInput
+  export type LeadCreateNestedOneWithoutPropertyOwnersInput = {
+    create?: XOR<LeadCreateWithoutPropertyOwnersInput, LeadUncheckedCreateWithoutPropertyOwnersInput>
+    connectOrCreate?: LeadCreateOrConnectWithoutPropertyOwnersInput
+    connect?: LeadWhereUniqueInput
   }
 
   export type ListingUpdateOneRequiredWithoutOwnersNestedInput = {
@@ -73269,12 +73269,12 @@ export namespace Prisma {
     update?: XOR<XOR<ListingUpdateToOneWithWhereWithoutOwnersInput, ListingUpdateWithoutOwnersInput>, ListingUncheckedUpdateWithoutOwnersInput>
   }
 
-  export type BaseLeadUpdateOneRequiredWithoutPropertyOwnersNestedInput = {
-    create?: XOR<BaseLeadCreateWithoutPropertyOwnersInput, BaseLeadUncheckedCreateWithoutPropertyOwnersInput>
-    connectOrCreate?: BaseLeadCreateOrConnectWithoutPropertyOwnersInput
-    upsert?: BaseLeadUpsertWithoutPropertyOwnersInput
-    connect?: BaseLeadWhereUniqueInput
-    update?: XOR<XOR<BaseLeadUpdateToOneWithWhereWithoutPropertyOwnersInput, BaseLeadUpdateWithoutPropertyOwnersInput>, BaseLeadUncheckedUpdateWithoutPropertyOwnersInput>
+  export type LeadUpdateOneRequiredWithoutPropertyOwnersNestedInput = {
+    create?: XOR<LeadCreateWithoutPropertyOwnersInput, LeadUncheckedCreateWithoutPropertyOwnersInput>
+    connectOrCreate?: LeadCreateOrConnectWithoutPropertyOwnersInput
+    upsert?: LeadUpsertWithoutPropertyOwnersInput
+    connect?: LeadWhereUniqueInput
+    update?: XOR<XOR<LeadUpdateToOneWithWhereWithoutPropertyOwnersInput, LeadUpdateWithoutPropertyOwnersInput>, LeadUncheckedUpdateWithoutPropertyOwnersInput>
   }
 
   export type ListingCreateNestedOneWithoutRepresentativesInput = {
@@ -73630,11 +73630,11 @@ export namespace Prisma {
     connect?: ClientLinkWhereUniqueInput | ClientLinkWhereUniqueInput[]
   }
 
-  export type SharedLeadsCreateNestedManyWithoutBaseLeadInput = {
-    create?: XOR<SharedLeadsCreateWithoutBaseLeadInput, SharedLeadsUncheckedCreateWithoutBaseLeadInput> | SharedLeadsCreateWithoutBaseLeadInput[] | SharedLeadsUncheckedCreateWithoutBaseLeadInput[]
-    connectOrCreate?: SharedLeadsCreateOrConnectWithoutBaseLeadInput | SharedLeadsCreateOrConnectWithoutBaseLeadInput[]
-    createMany?: SharedLeadsCreateManyBaseLeadInputEnvelope
-    connect?: SharedLeadsWhereUniqueInput | SharedLeadsWhereUniqueInput[]
+  export type LeadsAssignedCreateNestedManyWithoutBaseLeadInput = {
+    create?: XOR<LeadsAssignedCreateWithoutBaseLeadInput, LeadsAssignedUncheckedCreateWithoutBaseLeadInput> | LeadsAssignedCreateWithoutBaseLeadInput[] | LeadsAssignedUncheckedCreateWithoutBaseLeadInput[]
+    connectOrCreate?: LeadsAssignedCreateOrConnectWithoutBaseLeadInput | LeadsAssignedCreateOrConnectWithoutBaseLeadInput[]
+    createMany?: LeadsAssignedCreateManyBaseLeadInputEnvelope
+    connect?: LeadsAssignedWhereUniqueInput | LeadsAssignedWhereUniqueInput[]
   }
 
   export type ClientContactCreateNestedManyWithoutClientInput = {
@@ -73664,11 +73664,11 @@ export namespace Prisma {
     connect?: ClientLinkWhereUniqueInput | ClientLinkWhereUniqueInput[]
   }
 
-  export type SharedLeadsUncheckedCreateNestedManyWithoutBaseLeadInput = {
-    create?: XOR<SharedLeadsCreateWithoutBaseLeadInput, SharedLeadsUncheckedCreateWithoutBaseLeadInput> | SharedLeadsCreateWithoutBaseLeadInput[] | SharedLeadsUncheckedCreateWithoutBaseLeadInput[]
-    connectOrCreate?: SharedLeadsCreateOrConnectWithoutBaseLeadInput | SharedLeadsCreateOrConnectWithoutBaseLeadInput[]
-    createMany?: SharedLeadsCreateManyBaseLeadInputEnvelope
-    connect?: SharedLeadsWhereUniqueInput | SharedLeadsWhereUniqueInput[]
+  export type LeadsAssignedUncheckedCreateNestedManyWithoutBaseLeadInput = {
+    create?: XOR<LeadsAssignedCreateWithoutBaseLeadInput, LeadsAssignedUncheckedCreateWithoutBaseLeadInput> | LeadsAssignedCreateWithoutBaseLeadInput[] | LeadsAssignedUncheckedCreateWithoutBaseLeadInput[]
+    connectOrCreate?: LeadsAssignedCreateOrConnectWithoutBaseLeadInput | LeadsAssignedCreateOrConnectWithoutBaseLeadInput[]
+    createMany?: LeadsAssignedCreateManyBaseLeadInputEnvelope
+    connect?: LeadsAssignedWhereUniqueInput | LeadsAssignedWhereUniqueInput[]
   }
 
   export type ClientContactUncheckedCreateNestedManyWithoutClientInput = {
@@ -73699,18 +73699,18 @@ export namespace Prisma {
     deleteMany?: ClientLinkScalarWhereInput | ClientLinkScalarWhereInput[]
   }
 
-  export type SharedLeadsUpdateManyWithoutBaseLeadNestedInput = {
-    create?: XOR<SharedLeadsCreateWithoutBaseLeadInput, SharedLeadsUncheckedCreateWithoutBaseLeadInput> | SharedLeadsCreateWithoutBaseLeadInput[] | SharedLeadsUncheckedCreateWithoutBaseLeadInput[]
-    connectOrCreate?: SharedLeadsCreateOrConnectWithoutBaseLeadInput | SharedLeadsCreateOrConnectWithoutBaseLeadInput[]
-    upsert?: SharedLeadsUpsertWithWhereUniqueWithoutBaseLeadInput | SharedLeadsUpsertWithWhereUniqueWithoutBaseLeadInput[]
-    createMany?: SharedLeadsCreateManyBaseLeadInputEnvelope
-    set?: SharedLeadsWhereUniqueInput | SharedLeadsWhereUniqueInput[]
-    disconnect?: SharedLeadsWhereUniqueInput | SharedLeadsWhereUniqueInput[]
-    delete?: SharedLeadsWhereUniqueInput | SharedLeadsWhereUniqueInput[]
-    connect?: SharedLeadsWhereUniqueInput | SharedLeadsWhereUniqueInput[]
-    update?: SharedLeadsUpdateWithWhereUniqueWithoutBaseLeadInput | SharedLeadsUpdateWithWhereUniqueWithoutBaseLeadInput[]
-    updateMany?: SharedLeadsUpdateManyWithWhereWithoutBaseLeadInput | SharedLeadsUpdateManyWithWhereWithoutBaseLeadInput[]
-    deleteMany?: SharedLeadsScalarWhereInput | SharedLeadsScalarWhereInput[]
+  export type LeadsAssignedUpdateManyWithoutBaseLeadNestedInput = {
+    create?: XOR<LeadsAssignedCreateWithoutBaseLeadInput, LeadsAssignedUncheckedCreateWithoutBaseLeadInput> | LeadsAssignedCreateWithoutBaseLeadInput[] | LeadsAssignedUncheckedCreateWithoutBaseLeadInput[]
+    connectOrCreate?: LeadsAssignedCreateOrConnectWithoutBaseLeadInput | LeadsAssignedCreateOrConnectWithoutBaseLeadInput[]
+    upsert?: LeadsAssignedUpsertWithWhereUniqueWithoutBaseLeadInput | LeadsAssignedUpsertWithWhereUniqueWithoutBaseLeadInput[]
+    createMany?: LeadsAssignedCreateManyBaseLeadInputEnvelope
+    set?: LeadsAssignedWhereUniqueInput | LeadsAssignedWhereUniqueInput[]
+    disconnect?: LeadsAssignedWhereUniqueInput | LeadsAssignedWhereUniqueInput[]
+    delete?: LeadsAssignedWhereUniqueInput | LeadsAssignedWhereUniqueInput[]
+    connect?: LeadsAssignedWhereUniqueInput | LeadsAssignedWhereUniqueInput[]
+    update?: LeadsAssignedUpdateWithWhereUniqueWithoutBaseLeadInput | LeadsAssignedUpdateWithWhereUniqueWithoutBaseLeadInput[]
+    updateMany?: LeadsAssignedUpdateManyWithWhereWithoutBaseLeadInput | LeadsAssignedUpdateManyWithWhereWithoutBaseLeadInput[]
+    deleteMany?: LeadsAssignedScalarWhereInput | LeadsAssignedScalarWhereInput[]
   }
 
   export type ClientContactUpdateManyWithoutClientNestedInput = {
@@ -73763,18 +73763,18 @@ export namespace Prisma {
     deleteMany?: ClientLinkScalarWhereInput | ClientLinkScalarWhereInput[]
   }
 
-  export type SharedLeadsUncheckedUpdateManyWithoutBaseLeadNestedInput = {
-    create?: XOR<SharedLeadsCreateWithoutBaseLeadInput, SharedLeadsUncheckedCreateWithoutBaseLeadInput> | SharedLeadsCreateWithoutBaseLeadInput[] | SharedLeadsUncheckedCreateWithoutBaseLeadInput[]
-    connectOrCreate?: SharedLeadsCreateOrConnectWithoutBaseLeadInput | SharedLeadsCreateOrConnectWithoutBaseLeadInput[]
-    upsert?: SharedLeadsUpsertWithWhereUniqueWithoutBaseLeadInput | SharedLeadsUpsertWithWhereUniqueWithoutBaseLeadInput[]
-    createMany?: SharedLeadsCreateManyBaseLeadInputEnvelope
-    set?: SharedLeadsWhereUniqueInput | SharedLeadsWhereUniqueInput[]
-    disconnect?: SharedLeadsWhereUniqueInput | SharedLeadsWhereUniqueInput[]
-    delete?: SharedLeadsWhereUniqueInput | SharedLeadsWhereUniqueInput[]
-    connect?: SharedLeadsWhereUniqueInput | SharedLeadsWhereUniqueInput[]
-    update?: SharedLeadsUpdateWithWhereUniqueWithoutBaseLeadInput | SharedLeadsUpdateWithWhereUniqueWithoutBaseLeadInput[]
-    updateMany?: SharedLeadsUpdateManyWithWhereWithoutBaseLeadInput | SharedLeadsUpdateManyWithWhereWithoutBaseLeadInput[]
-    deleteMany?: SharedLeadsScalarWhereInput | SharedLeadsScalarWhereInput[]
+  export type LeadsAssignedUncheckedUpdateManyWithoutBaseLeadNestedInput = {
+    create?: XOR<LeadsAssignedCreateWithoutBaseLeadInput, LeadsAssignedUncheckedCreateWithoutBaseLeadInput> | LeadsAssignedCreateWithoutBaseLeadInput[] | LeadsAssignedUncheckedCreateWithoutBaseLeadInput[]
+    connectOrCreate?: LeadsAssignedCreateOrConnectWithoutBaseLeadInput | LeadsAssignedCreateOrConnectWithoutBaseLeadInput[]
+    upsert?: LeadsAssignedUpsertWithWhereUniqueWithoutBaseLeadInput | LeadsAssignedUpsertWithWhereUniqueWithoutBaseLeadInput[]
+    createMany?: LeadsAssignedCreateManyBaseLeadInputEnvelope
+    set?: LeadsAssignedWhereUniqueInput | LeadsAssignedWhereUniqueInput[]
+    disconnect?: LeadsAssignedWhereUniqueInput | LeadsAssignedWhereUniqueInput[]
+    delete?: LeadsAssignedWhereUniqueInput | LeadsAssignedWhereUniqueInput[]
+    connect?: LeadsAssignedWhereUniqueInput | LeadsAssignedWhereUniqueInput[]
+    update?: LeadsAssignedUpdateWithWhereUniqueWithoutBaseLeadInput | LeadsAssignedUpdateWithWhereUniqueWithoutBaseLeadInput[]
+    updateMany?: LeadsAssignedUpdateManyWithWhereWithoutBaseLeadInput | LeadsAssignedUpdateManyWithWhereWithoutBaseLeadInput[]
+    deleteMany?: LeadsAssignedScalarWhereInput | LeadsAssignedScalarWhereInput[]
   }
 
   export type ClientContactUncheckedUpdateManyWithoutClientNestedInput = {
@@ -73805,38 +73805,38 @@ export namespace Prisma {
     deleteMany?: PropertyOwnerScalarWhereInput | PropertyOwnerScalarWhereInput[]
   }
 
-  export type BaseLeadCreateNestedOneWithoutContactsInput = {
-    create?: XOR<BaseLeadCreateWithoutContactsInput, BaseLeadUncheckedCreateWithoutContactsInput>
-    connectOrCreate?: BaseLeadCreateOrConnectWithoutContactsInput
-    connect?: BaseLeadWhereUniqueInput
+  export type LeadCreateNestedOneWithoutContactsInput = {
+    create?: XOR<LeadCreateWithoutContactsInput, LeadUncheckedCreateWithoutContactsInput>
+    connectOrCreate?: LeadCreateOrConnectWithoutContactsInput
+    connect?: LeadWhereUniqueInput
   }
 
-  export type BaseLeadUpdateOneRequiredWithoutContactsNestedInput = {
-    create?: XOR<BaseLeadCreateWithoutContactsInput, BaseLeadUncheckedCreateWithoutContactsInput>
-    connectOrCreate?: BaseLeadCreateOrConnectWithoutContactsInput
-    upsert?: BaseLeadUpsertWithoutContactsInput
-    connect?: BaseLeadWhereUniqueInput
-    update?: XOR<XOR<BaseLeadUpdateToOneWithWhereWithoutContactsInput, BaseLeadUpdateWithoutContactsInput>, BaseLeadUncheckedUpdateWithoutContactsInput>
+  export type LeadUpdateOneRequiredWithoutContactsNestedInput = {
+    create?: XOR<LeadCreateWithoutContactsInput, LeadUncheckedCreateWithoutContactsInput>
+    connectOrCreate?: LeadCreateOrConnectWithoutContactsInput
+    upsert?: LeadUpsertWithoutContactsInput
+    connect?: LeadWhereUniqueInput
+    update?: XOR<XOR<LeadUpdateToOneWithWhereWithoutContactsInput, LeadUpdateWithoutContactsInput>, LeadUncheckedUpdateWithoutContactsInput>
   }
 
-  export type BaseLeadCreateNestedOneWithoutLinksInput = {
-    create?: XOR<BaseLeadCreateWithoutLinksInput, BaseLeadUncheckedCreateWithoutLinksInput>
-    connectOrCreate?: BaseLeadCreateOrConnectWithoutLinksInput
-    connect?: BaseLeadWhereUniqueInput
+  export type LeadCreateNestedOneWithoutLinksInput = {
+    create?: XOR<LeadCreateWithoutLinksInput, LeadUncheckedCreateWithoutLinksInput>
+    connectOrCreate?: LeadCreateOrConnectWithoutLinksInput
+    connect?: LeadWhereUniqueInput
   }
 
-  export type BaseLeadUpdateOneRequiredWithoutLinksNestedInput = {
-    create?: XOR<BaseLeadCreateWithoutLinksInput, BaseLeadUncheckedCreateWithoutLinksInput>
-    connectOrCreate?: BaseLeadCreateOrConnectWithoutLinksInput
-    upsert?: BaseLeadUpsertWithoutLinksInput
-    connect?: BaseLeadWhereUniqueInput
-    update?: XOR<XOR<BaseLeadUpdateToOneWithWhereWithoutLinksInput, BaseLeadUpdateWithoutLinksInput>, BaseLeadUncheckedUpdateWithoutLinksInput>
+  export type LeadUpdateOneRequiredWithoutLinksNestedInput = {
+    create?: XOR<LeadCreateWithoutLinksInput, LeadUncheckedCreateWithoutLinksInput>
+    connectOrCreate?: LeadCreateOrConnectWithoutLinksInput
+    upsert?: LeadUpsertWithoutLinksInput
+    connect?: LeadWhereUniqueInput
+    update?: XOR<XOR<LeadUpdateToOneWithWhereWithoutLinksInput, LeadUpdateWithoutLinksInput>, LeadUncheckedUpdateWithoutLinksInput>
   }
 
-  export type BaseLeadCreateNestedOneWithoutSharedLeadsInput = {
-    create?: XOR<BaseLeadCreateWithoutSharedLeadsInput, BaseLeadUncheckedCreateWithoutSharedLeadsInput>
-    connectOrCreate?: BaseLeadCreateOrConnectWithoutSharedLeadsInput
-    connect?: BaseLeadWhereUniqueInput
+  export type LeadCreateNestedOneWithoutSharedLeadsInput = {
+    create?: XOR<LeadCreateWithoutSharedLeadsInput, LeadUncheckedCreateWithoutSharedLeadsInput>
+    connectOrCreate?: LeadCreateOrConnectWithoutSharedLeadsInput
+    connect?: LeadWhereUniqueInput
   }
 
   export type AccountCreateNestedOneWithoutOwnedSharedLeadsInput = {
@@ -73867,12 +73867,12 @@ export namespace Prisma {
     set?: $Enums.LeadPriority
   }
 
-  export type BaseLeadUpdateOneRequiredWithoutSharedLeadsNestedInput = {
-    create?: XOR<BaseLeadCreateWithoutSharedLeadsInput, BaseLeadUncheckedCreateWithoutSharedLeadsInput>
-    connectOrCreate?: BaseLeadCreateOrConnectWithoutSharedLeadsInput
-    upsert?: BaseLeadUpsertWithoutSharedLeadsInput
-    connect?: BaseLeadWhereUniqueInput
-    update?: XOR<XOR<BaseLeadUpdateToOneWithWhereWithoutSharedLeadsInput, BaseLeadUpdateWithoutSharedLeadsInput>, BaseLeadUncheckedUpdateWithoutSharedLeadsInput>
+  export type LeadUpdateOneRequiredWithoutSharedLeadsNestedInput = {
+    create?: XOR<LeadCreateWithoutSharedLeadsInput, LeadUncheckedCreateWithoutSharedLeadsInput>
+    connectOrCreate?: LeadCreateOrConnectWithoutSharedLeadsInput
+    upsert?: LeadUpsertWithoutSharedLeadsInput
+    connect?: LeadWhereUniqueInput
+    update?: XOR<XOR<LeadUpdateToOneWithWhereWithoutSharedLeadsInput, LeadUpdateWithoutSharedLeadsInput>, LeadUncheckedUpdateWithoutSharedLeadsInput>
   }
 
   export type AccountUpdateOneRequiredWithoutOwnedSharedLeadsNestedInput = {
@@ -73911,18 +73911,18 @@ export namespace Prisma {
     deleteMany?: LeadActivityScalarWhereInput | LeadActivityScalarWhereInput[]
   }
 
-  export type SharedLeadsCreateNestedOneWithoutActivitiesInput = {
-    create?: XOR<SharedLeadsCreateWithoutActivitiesInput, SharedLeadsUncheckedCreateWithoutActivitiesInput>
-    connectOrCreate?: SharedLeadsCreateOrConnectWithoutActivitiesInput
-    connect?: SharedLeadsWhereUniqueInput
+  export type LeadsAssignedCreateNestedOneWithoutActivitiesInput = {
+    create?: XOR<LeadsAssignedCreateWithoutActivitiesInput, LeadsAssignedUncheckedCreateWithoutActivitiesInput>
+    connectOrCreate?: LeadsAssignedCreateOrConnectWithoutActivitiesInput
+    connect?: LeadsAssignedWhereUniqueInput
   }
 
-  export type SharedLeadsUpdateOneRequiredWithoutActivitiesNestedInput = {
-    create?: XOR<SharedLeadsCreateWithoutActivitiesInput, SharedLeadsUncheckedCreateWithoutActivitiesInput>
-    connectOrCreate?: SharedLeadsCreateOrConnectWithoutActivitiesInput
-    upsert?: SharedLeadsUpsertWithoutActivitiesInput
-    connect?: SharedLeadsWhereUniqueInput
-    update?: XOR<XOR<SharedLeadsUpdateToOneWithWhereWithoutActivitiesInput, SharedLeadsUpdateWithoutActivitiesInput>, SharedLeadsUncheckedUpdateWithoutActivitiesInput>
+  export type LeadsAssignedUpdateOneRequiredWithoutActivitiesNestedInput = {
+    create?: XOR<LeadsAssignedCreateWithoutActivitiesInput, LeadsAssignedUncheckedCreateWithoutActivitiesInput>
+    connectOrCreate?: LeadsAssignedCreateOrConnectWithoutActivitiesInput
+    upsert?: LeadsAssignedUpsertWithoutActivitiesInput
+    connect?: LeadsAssignedWhereUniqueInput
+    update?: XOR<XOR<LeadsAssignedUpdateToOneWithWhereWithoutActivitiesInput, LeadsAssignedUpdateWithoutActivitiesInput>, LeadsAssignedUncheckedUpdateWithoutActivitiesInput>
   }
 
   export type MortgageRequestCreatecontactMethodsInput = {
@@ -75397,8 +75397,8 @@ export namespace Prisma {
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeCreateNestedManyWithoutAccountInput
@@ -75423,8 +75423,8 @@ export namespace Prisma {
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedUncheckedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingUncheckedCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertUncheckedCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeUncheckedCreateNestedManyWithoutAccountInput
@@ -75454,8 +75454,8 @@ export namespace Prisma {
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeCreateNestedManyWithoutAccountInput
@@ -75480,8 +75480,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedUncheckedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingUncheckedCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertUncheckedCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeUncheckedCreateNestedManyWithoutAccountInput
@@ -75549,7 +75549,7 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type BaseLeadCreateWithoutBelongsToAccountInput = {
+  export type LeadCreateWithoutBelongsToAccountInput = {
     id?: string
     firstName: string
     lastName: string
@@ -75558,12 +75558,12 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     links?: ClientLinkCreateNestedManyWithoutClientInput
-    sharedLeads?: SharedLeadsCreateNestedManyWithoutBaseLeadInput
+    sharedLeads?: LeadsAssignedCreateNestedManyWithoutBaseLeadInput
     contacts?: ClientContactCreateNestedManyWithoutClientInput
     propertyOwners?: PropertyOwnerCreateNestedManyWithoutOwnerClientInput
   }
 
-  export type BaseLeadUncheckedCreateWithoutBelongsToAccountInput = {
+  export type LeadUncheckedCreateWithoutBelongsToAccountInput = {
     id?: string
     firstName: string
     lastName: string
@@ -75572,33 +75572,33 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     links?: ClientLinkUncheckedCreateNestedManyWithoutClientInput
-    sharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutBaseLeadInput
+    sharedLeads?: LeadsAssignedUncheckedCreateNestedManyWithoutBaseLeadInput
     contacts?: ClientContactUncheckedCreateNestedManyWithoutClientInput
     propertyOwners?: PropertyOwnerUncheckedCreateNestedManyWithoutOwnerClientInput
   }
 
-  export type BaseLeadCreateOrConnectWithoutBelongsToAccountInput = {
-    where: BaseLeadWhereUniqueInput
-    create: XOR<BaseLeadCreateWithoutBelongsToAccountInput, BaseLeadUncheckedCreateWithoutBelongsToAccountInput>
+  export type LeadCreateOrConnectWithoutBelongsToAccountInput = {
+    where: LeadWhereUniqueInput
+    create: XOR<LeadCreateWithoutBelongsToAccountInput, LeadUncheckedCreateWithoutBelongsToAccountInput>
   }
 
-  export type BaseLeadCreateManyBelongsToAccountInputEnvelope = {
-    data: BaseLeadCreateManyBelongsToAccountInput | BaseLeadCreateManyBelongsToAccountInput[]
+  export type LeadCreateManyBelongsToAccountInputEnvelope = {
+    data: LeadCreateManyBelongsToAccountInput | LeadCreateManyBelongsToAccountInput[]
     skipDuplicates?: boolean
   }
 
-  export type SharedLeadsCreateWithoutOwnerAccountInput = {
+  export type LeadsAssignedCreateWithoutOwnerAccountInput = {
     id?: string
     type: $Enums.LeadType
     requirements?: NullableJsonNullValueInput | InputJsonValue
     priority?: $Enums.LeadPriority
     createdAt?: Date | string
     updatedAt?: Date | string
-    baseLead: BaseLeadCreateNestedOneWithoutSharedLeadsInput
+    baseLead: LeadCreateNestedOneWithoutSharedLeadsInput
     activities?: LeadActivityCreateNestedManyWithoutLeadInput
   }
 
-  export type SharedLeadsUncheckedCreateWithoutOwnerAccountInput = {
+  export type LeadsAssignedUncheckedCreateWithoutOwnerAccountInput = {
     id?: string
     baseLeadId: string
     type: $Enums.LeadType
@@ -75609,13 +75609,13 @@ export namespace Prisma {
     activities?: LeadActivityUncheckedCreateNestedManyWithoutLeadInput
   }
 
-  export type SharedLeadsCreateOrConnectWithoutOwnerAccountInput = {
-    where: SharedLeadsWhereUniqueInput
-    create: XOR<SharedLeadsCreateWithoutOwnerAccountInput, SharedLeadsUncheckedCreateWithoutOwnerAccountInput>
+  export type LeadsAssignedCreateOrConnectWithoutOwnerAccountInput = {
+    where: LeadsAssignedWhereUniqueInput
+    create: XOR<LeadsAssignedCreateWithoutOwnerAccountInput, LeadsAssignedUncheckedCreateWithoutOwnerAccountInput>
   }
 
-  export type SharedLeadsCreateManyOwnerAccountInputEnvelope = {
-    data: SharedLeadsCreateManyOwnerAccountInput | SharedLeadsCreateManyOwnerAccountInput[]
+  export type LeadsAssignedCreateManyOwnerAccountInputEnvelope = {
+    data: LeadsAssignedCreateManyOwnerAccountInput | LeadsAssignedCreateManyOwnerAccountInput[]
     skipDuplicates?: boolean
   }
 
@@ -75919,8 +75919,8 @@ export namespace Prisma {
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUpdateManyWithoutAccountNestedInput
@@ -75945,8 +75945,8 @@ export namespace Prisma {
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUncheckedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUncheckedUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUncheckedUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUncheckedUpdateManyWithoutAccountNestedInput
@@ -76032,64 +76032,64 @@ export namespace Prisma {
     data: XOR<AgencyAgentMapUpdateManyMutationInput, AgencyAgentMapUncheckedUpdateManyWithoutAgentInput>
   }
 
-  export type BaseLeadUpsertWithWhereUniqueWithoutBelongsToAccountInput = {
-    where: BaseLeadWhereUniqueInput
-    update: XOR<BaseLeadUpdateWithoutBelongsToAccountInput, BaseLeadUncheckedUpdateWithoutBelongsToAccountInput>
-    create: XOR<BaseLeadCreateWithoutBelongsToAccountInput, BaseLeadUncheckedCreateWithoutBelongsToAccountInput>
+  export type LeadUpsertWithWhereUniqueWithoutBelongsToAccountInput = {
+    where: LeadWhereUniqueInput
+    update: XOR<LeadUpdateWithoutBelongsToAccountInput, LeadUncheckedUpdateWithoutBelongsToAccountInput>
+    create: XOR<LeadCreateWithoutBelongsToAccountInput, LeadUncheckedCreateWithoutBelongsToAccountInput>
   }
 
-  export type BaseLeadUpdateWithWhereUniqueWithoutBelongsToAccountInput = {
-    where: BaseLeadWhereUniqueInput
-    data: XOR<BaseLeadUpdateWithoutBelongsToAccountInput, BaseLeadUncheckedUpdateWithoutBelongsToAccountInput>
+  export type LeadUpdateWithWhereUniqueWithoutBelongsToAccountInput = {
+    where: LeadWhereUniqueInput
+    data: XOR<LeadUpdateWithoutBelongsToAccountInput, LeadUncheckedUpdateWithoutBelongsToAccountInput>
   }
 
-  export type BaseLeadUpdateManyWithWhereWithoutBelongsToAccountInput = {
-    where: BaseLeadScalarWhereInput
-    data: XOR<BaseLeadUpdateManyMutationInput, BaseLeadUncheckedUpdateManyWithoutBelongsToAccountInput>
+  export type LeadUpdateManyWithWhereWithoutBelongsToAccountInput = {
+    where: LeadScalarWhereInput
+    data: XOR<LeadUpdateManyMutationInput, LeadUncheckedUpdateManyWithoutBelongsToAccountInput>
   }
 
-  export type BaseLeadScalarWhereInput = {
-    AND?: BaseLeadScalarWhereInput | BaseLeadScalarWhereInput[]
-    OR?: BaseLeadScalarWhereInput[]
-    NOT?: BaseLeadScalarWhereInput | BaseLeadScalarWhereInput[]
-    id?: StringFilter<"BaseLead"> | string
-    belongsTo?: StringFilter<"BaseLead"> | string
-    firstName?: StringFilter<"BaseLead"> | string
-    lastName?: StringFilter<"BaseLead"> | string
-    contact?: JsonFilter<"BaseLead">
-    source?: StringNullableFilter<"BaseLead"> | string | null
-    createdAt?: DateTimeFilter<"BaseLead"> | Date | string
-    updatedAt?: DateTimeFilter<"BaseLead"> | Date | string
+  export type LeadScalarWhereInput = {
+    AND?: LeadScalarWhereInput | LeadScalarWhereInput[]
+    OR?: LeadScalarWhereInput[]
+    NOT?: LeadScalarWhereInput | LeadScalarWhereInput[]
+    id?: StringFilter<"Lead"> | string
+    belongsTo?: StringFilter<"Lead"> | string
+    firstName?: StringFilter<"Lead"> | string
+    lastName?: StringFilter<"Lead"> | string
+    contact?: JsonFilter<"Lead">
+    source?: StringNullableFilter<"Lead"> | string | null
+    createdAt?: DateTimeFilter<"Lead"> | Date | string
+    updatedAt?: DateTimeFilter<"Lead"> | Date | string
   }
 
-  export type SharedLeadsUpsertWithWhereUniqueWithoutOwnerAccountInput = {
-    where: SharedLeadsWhereUniqueInput
-    update: XOR<SharedLeadsUpdateWithoutOwnerAccountInput, SharedLeadsUncheckedUpdateWithoutOwnerAccountInput>
-    create: XOR<SharedLeadsCreateWithoutOwnerAccountInput, SharedLeadsUncheckedCreateWithoutOwnerAccountInput>
+  export type LeadsAssignedUpsertWithWhereUniqueWithoutOwnerAccountInput = {
+    where: LeadsAssignedWhereUniqueInput
+    update: XOR<LeadsAssignedUpdateWithoutOwnerAccountInput, LeadsAssignedUncheckedUpdateWithoutOwnerAccountInput>
+    create: XOR<LeadsAssignedCreateWithoutOwnerAccountInput, LeadsAssignedUncheckedCreateWithoutOwnerAccountInput>
   }
 
-  export type SharedLeadsUpdateWithWhereUniqueWithoutOwnerAccountInput = {
-    where: SharedLeadsWhereUniqueInput
-    data: XOR<SharedLeadsUpdateWithoutOwnerAccountInput, SharedLeadsUncheckedUpdateWithoutOwnerAccountInput>
+  export type LeadsAssignedUpdateWithWhereUniqueWithoutOwnerAccountInput = {
+    where: LeadsAssignedWhereUniqueInput
+    data: XOR<LeadsAssignedUpdateWithoutOwnerAccountInput, LeadsAssignedUncheckedUpdateWithoutOwnerAccountInput>
   }
 
-  export type SharedLeadsUpdateManyWithWhereWithoutOwnerAccountInput = {
-    where: SharedLeadsScalarWhereInput
-    data: XOR<SharedLeadsUpdateManyMutationInput, SharedLeadsUncheckedUpdateManyWithoutOwnerAccountInput>
+  export type LeadsAssignedUpdateManyWithWhereWithoutOwnerAccountInput = {
+    where: LeadsAssignedScalarWhereInput
+    data: XOR<LeadsAssignedUpdateManyMutationInput, LeadsAssignedUncheckedUpdateManyWithoutOwnerAccountInput>
   }
 
-  export type SharedLeadsScalarWhereInput = {
-    AND?: SharedLeadsScalarWhereInput | SharedLeadsScalarWhereInput[]
-    OR?: SharedLeadsScalarWhereInput[]
-    NOT?: SharedLeadsScalarWhereInput | SharedLeadsScalarWhereInput[]
-    id?: StringFilter<"SharedLeads"> | string
-    baseLeadId?: StringFilter<"SharedLeads"> | string
-    type?: EnumLeadTypeFilter<"SharedLeads"> | $Enums.LeadType
-    requirements?: JsonNullableFilter<"SharedLeads">
-    priority?: EnumLeadPriorityFilter<"SharedLeads"> | $Enums.LeadPriority
-    owner?: StringFilter<"SharedLeads"> | string
-    createdAt?: DateTimeFilter<"SharedLeads"> | Date | string
-    updatedAt?: DateTimeFilter<"SharedLeads"> | Date | string
+  export type LeadsAssignedScalarWhereInput = {
+    AND?: LeadsAssignedScalarWhereInput | LeadsAssignedScalarWhereInput[]
+    OR?: LeadsAssignedScalarWhereInput[]
+    NOT?: LeadsAssignedScalarWhereInput | LeadsAssignedScalarWhereInput[]
+    id?: StringFilter<"LeadsAssigned"> | string
+    baseLeadId?: StringFilter<"LeadsAssigned"> | string
+    type?: EnumLeadTypeFilter<"LeadsAssigned"> | $Enums.LeadType
+    requirements?: JsonNullableFilter<"LeadsAssigned">
+    priority?: EnumLeadPriorityFilter<"LeadsAssigned"> | $Enums.LeadPriority
+    owner?: StringFilter<"LeadsAssigned"> | string
+    createdAt?: DateTimeFilter<"LeadsAssigned"> | Date | string
+    updatedAt?: DateTimeFilter<"LeadsAssigned"> | Date | string
   }
 
   export type IntelligenceMappingUpsertWithWhereUniqueWithoutAccountInput = {
@@ -76419,7 +76419,7 @@ export namespace Prisma {
   export type PropertyOwnerCreateWithoutPropertyInput = {
     id?: string
     isPrimaryOwner?: boolean
-    ownerClient: BaseLeadCreateNestedOneWithoutPropertyOwnersInput
+    ownerClient: LeadCreateNestedOneWithoutPropertyOwnersInput
   }
 
   export type PropertyOwnerUncheckedCreateWithoutPropertyInput = {
@@ -78305,7 +78305,7 @@ export namespace Prisma {
     create: XOR<ListingCreateWithoutOwnersInput, ListingUncheckedCreateWithoutOwnersInput>
   }
 
-  export type BaseLeadCreateWithoutPropertyOwnersInput = {
+  export type LeadCreateWithoutPropertyOwnersInput = {
     id?: string
     firstName: string
     lastName: string
@@ -78314,12 +78314,12 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     links?: ClientLinkCreateNestedManyWithoutClientInput
-    sharedLeads?: SharedLeadsCreateNestedManyWithoutBaseLeadInput
+    sharedLeads?: LeadsAssignedCreateNestedManyWithoutBaseLeadInput
     contacts?: ClientContactCreateNestedManyWithoutClientInput
     belongsToAccount: AccountCreateNestedOneWithoutBaseLeadsBelongingToInput
   }
 
-  export type BaseLeadUncheckedCreateWithoutPropertyOwnersInput = {
+  export type LeadUncheckedCreateWithoutPropertyOwnersInput = {
     id?: string
     belongsTo: string
     firstName: string
@@ -78329,13 +78329,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     links?: ClientLinkUncheckedCreateNestedManyWithoutClientInput
-    sharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutBaseLeadInput
+    sharedLeads?: LeadsAssignedUncheckedCreateNestedManyWithoutBaseLeadInput
     contacts?: ClientContactUncheckedCreateNestedManyWithoutClientInput
   }
 
-  export type BaseLeadCreateOrConnectWithoutPropertyOwnersInput = {
-    where: BaseLeadWhereUniqueInput
-    create: XOR<BaseLeadCreateWithoutPropertyOwnersInput, BaseLeadUncheckedCreateWithoutPropertyOwnersInput>
+  export type LeadCreateOrConnectWithoutPropertyOwnersInput = {
+    where: LeadWhereUniqueInput
+    create: XOR<LeadCreateWithoutPropertyOwnersInput, LeadUncheckedCreateWithoutPropertyOwnersInput>
   }
 
   export type ListingUpsertWithoutOwnersInput = {
@@ -78439,18 +78439,18 @@ export namespace Prisma {
     representatives?: ListingsRepresentativesUncheckedUpdateManyWithoutListingNestedInput
   }
 
-  export type BaseLeadUpsertWithoutPropertyOwnersInput = {
-    update: XOR<BaseLeadUpdateWithoutPropertyOwnersInput, BaseLeadUncheckedUpdateWithoutPropertyOwnersInput>
-    create: XOR<BaseLeadCreateWithoutPropertyOwnersInput, BaseLeadUncheckedCreateWithoutPropertyOwnersInput>
-    where?: BaseLeadWhereInput
+  export type LeadUpsertWithoutPropertyOwnersInput = {
+    update: XOR<LeadUpdateWithoutPropertyOwnersInput, LeadUncheckedUpdateWithoutPropertyOwnersInput>
+    create: XOR<LeadCreateWithoutPropertyOwnersInput, LeadUncheckedCreateWithoutPropertyOwnersInput>
+    where?: LeadWhereInput
   }
 
-  export type BaseLeadUpdateToOneWithWhereWithoutPropertyOwnersInput = {
-    where?: BaseLeadWhereInput
-    data: XOR<BaseLeadUpdateWithoutPropertyOwnersInput, BaseLeadUncheckedUpdateWithoutPropertyOwnersInput>
+  export type LeadUpdateToOneWithWhereWithoutPropertyOwnersInput = {
+    where?: LeadWhereInput
+    data: XOR<LeadUpdateWithoutPropertyOwnersInput, LeadUncheckedUpdateWithoutPropertyOwnersInput>
   }
 
-  export type BaseLeadUpdateWithoutPropertyOwnersInput = {
+  export type LeadUpdateWithoutPropertyOwnersInput = {
     id?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
@@ -78459,12 +78459,12 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     links?: ClientLinkUpdateManyWithoutClientNestedInput
-    sharedLeads?: SharedLeadsUpdateManyWithoutBaseLeadNestedInput
+    sharedLeads?: LeadsAssignedUpdateManyWithoutBaseLeadNestedInput
     contacts?: ClientContactUpdateManyWithoutClientNestedInput
     belongsToAccount?: AccountUpdateOneRequiredWithoutBaseLeadsBelongingToNestedInput
   }
 
-  export type BaseLeadUncheckedUpdateWithoutPropertyOwnersInput = {
+  export type LeadUncheckedUpdateWithoutPropertyOwnersInput = {
     id?: StringFieldUpdateOperationsInput | string
     belongsTo?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
@@ -78474,7 +78474,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     links?: ClientLinkUncheckedUpdateManyWithoutClientNestedInput
-    sharedLeads?: SharedLeadsUncheckedUpdateManyWithoutBaseLeadNestedInput
+    sharedLeads?: LeadsAssignedUncheckedUpdateManyWithoutBaseLeadNestedInput
     contacts?: ClientContactUncheckedUpdateManyWithoutClientNestedInput
   }
 
@@ -78589,8 +78589,8 @@ export namespace Prisma {
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeCreateNestedManyWithoutAccountInput
@@ -78615,8 +78615,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedUncheckedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingUncheckedCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertUncheckedCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeUncheckedCreateNestedManyWithoutAccountInput
@@ -78758,8 +78758,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUpdateManyWithoutAccountNestedInput
@@ -78784,8 +78784,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUncheckedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUncheckedUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUncheckedUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUncheckedUpdateManyWithoutAccountNestedInput
@@ -79101,8 +79101,8 @@ export namespace Prisma {
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertCreateNestedManyWithoutAccountInput
     createdListingChanges?: ListingChangeCreateNestedManyWithoutCreatedByInput
@@ -79127,8 +79127,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedUncheckedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingUncheckedCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertUncheckedCreateNestedManyWithoutAccountInput
     createdListingChanges?: ListingChangeUncheckedCreateNestedManyWithoutCreatedByInput
@@ -79158,8 +79158,8 @@ export namespace Prisma {
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeCreateNestedManyWithoutAccountInput
@@ -79184,8 +79184,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedUncheckedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingUncheckedCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertUncheckedCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeUncheckedCreateNestedManyWithoutAccountInput
@@ -79215,8 +79215,8 @@ export namespace Prisma {
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeCreateNestedManyWithoutAccountInput
@@ -79241,8 +79241,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedUncheckedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingUncheckedCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertUncheckedCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeUncheckedCreateNestedManyWithoutAccountInput
@@ -79272,8 +79272,8 @@ export namespace Prisma {
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeCreateNestedManyWithoutAccountInput
@@ -79298,8 +79298,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedUncheckedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingUncheckedCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertUncheckedCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeUncheckedCreateNestedManyWithoutAccountInput
@@ -79441,8 +79441,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUpdateManyWithoutAccountNestedInput
     createdListingChanges?: ListingChangeUpdateManyWithoutCreatedByNestedInput
@@ -79467,8 +79467,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUncheckedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUncheckedUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUncheckedUpdateManyWithoutAccountNestedInput
     createdListingChanges?: ListingChangeUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -79504,8 +79504,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUpdateManyWithoutAccountNestedInput
@@ -79530,8 +79530,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUncheckedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUncheckedUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUncheckedUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUncheckedUpdateManyWithoutAccountNestedInput
@@ -79567,8 +79567,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUpdateManyWithoutAccountNestedInput
@@ -79593,8 +79593,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUncheckedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUncheckedUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUncheckedUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUncheckedUpdateManyWithoutAccountNestedInput
@@ -79630,8 +79630,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUpdateManyWithoutAccountNestedInput
@@ -79656,8 +79656,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUncheckedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUncheckedUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUncheckedUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUncheckedUpdateManyWithoutAccountNestedInput
@@ -79862,8 +79862,8 @@ export namespace Prisma {
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeCreateNestedManyWithoutAccountInput
@@ -79888,8 +79888,8 @@ export namespace Prisma {
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedUncheckedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingUncheckedCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertUncheckedCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeUncheckedCreateNestedManyWithoutAccountInput
@@ -79919,8 +79919,8 @@ export namespace Prisma {
     workingProfileAccount?: AccountCreateNestedOneWithoutWorkingProfileOfInput
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
-    baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeCreateNestedManyWithoutAccountInput
@@ -79945,8 +79945,8 @@ export namespace Prisma {
     accessRows?: AccountAccessUncheckedCreateNestedManyWithoutAccountInput
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedUncheckedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingUncheckedCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertUncheckedCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeUncheckedCreateNestedManyWithoutAccountInput
@@ -79987,8 +79987,8 @@ export namespace Prisma {
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUpdateManyWithoutAccountNestedInput
@@ -80013,8 +80013,8 @@ export namespace Prisma {
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUncheckedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUncheckedUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUncheckedUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUncheckedUpdateManyWithoutAccountNestedInput
@@ -80050,8 +80050,8 @@ export namespace Prisma {
     workingProfileAccount?: AccountUpdateOneWithoutWorkingProfileOfNestedInput
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
-    baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUpdateManyWithoutAccountNestedInput
@@ -80076,8 +80076,8 @@ export namespace Prisma {
     accessRows?: AccountAccessUncheckedUpdateManyWithoutAccountNestedInput
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUncheckedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUncheckedUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUncheckedUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUncheckedUpdateManyWithoutAccountNestedInput
@@ -80575,7 +80575,7 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type SharedLeadsCreateWithoutBaseLeadInput = {
+  export type LeadsAssignedCreateWithoutBaseLeadInput = {
     id?: string
     type: $Enums.LeadType
     requirements?: NullableJsonNullValueInput | InputJsonValue
@@ -80586,7 +80586,7 @@ export namespace Prisma {
     activities?: LeadActivityCreateNestedManyWithoutLeadInput
   }
 
-  export type SharedLeadsUncheckedCreateWithoutBaseLeadInput = {
+  export type LeadsAssignedUncheckedCreateWithoutBaseLeadInput = {
     id?: string
     type: $Enums.LeadType
     requirements?: NullableJsonNullValueInput | InputJsonValue
@@ -80597,13 +80597,13 @@ export namespace Prisma {
     activities?: LeadActivityUncheckedCreateNestedManyWithoutLeadInput
   }
 
-  export type SharedLeadsCreateOrConnectWithoutBaseLeadInput = {
-    where: SharedLeadsWhereUniqueInput
-    create: XOR<SharedLeadsCreateWithoutBaseLeadInput, SharedLeadsUncheckedCreateWithoutBaseLeadInput>
+  export type LeadsAssignedCreateOrConnectWithoutBaseLeadInput = {
+    where: LeadsAssignedWhereUniqueInput
+    create: XOR<LeadsAssignedCreateWithoutBaseLeadInput, LeadsAssignedUncheckedCreateWithoutBaseLeadInput>
   }
 
-  export type SharedLeadsCreateManyBaseLeadInputEnvelope = {
-    data: SharedLeadsCreateManyBaseLeadInput | SharedLeadsCreateManyBaseLeadInput[]
+  export type LeadsAssignedCreateManyBaseLeadInputEnvelope = {
+    data: LeadsAssignedCreateManyBaseLeadInput | LeadsAssignedCreateManyBaseLeadInput[]
     skipDuplicates?: boolean
   }
 
@@ -80667,7 +80667,7 @@ export namespace Prisma {
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
-    ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
+    ownedSharedLeads?: LeadsAssignedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeCreateNestedManyWithoutAccountInput
@@ -80693,7 +80693,7 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
-    ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
+    ownedSharedLeads?: LeadsAssignedUncheckedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingUncheckedCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertUncheckedCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeUncheckedCreateNestedManyWithoutAccountInput
@@ -80733,20 +80733,20 @@ export namespace Prisma {
     clientId?: StringFilter<"ClientLink"> | string
   }
 
-  export type SharedLeadsUpsertWithWhereUniqueWithoutBaseLeadInput = {
-    where: SharedLeadsWhereUniqueInput
-    update: XOR<SharedLeadsUpdateWithoutBaseLeadInput, SharedLeadsUncheckedUpdateWithoutBaseLeadInput>
-    create: XOR<SharedLeadsCreateWithoutBaseLeadInput, SharedLeadsUncheckedCreateWithoutBaseLeadInput>
+  export type LeadsAssignedUpsertWithWhereUniqueWithoutBaseLeadInput = {
+    where: LeadsAssignedWhereUniqueInput
+    update: XOR<LeadsAssignedUpdateWithoutBaseLeadInput, LeadsAssignedUncheckedUpdateWithoutBaseLeadInput>
+    create: XOR<LeadsAssignedCreateWithoutBaseLeadInput, LeadsAssignedUncheckedCreateWithoutBaseLeadInput>
   }
 
-  export type SharedLeadsUpdateWithWhereUniqueWithoutBaseLeadInput = {
-    where: SharedLeadsWhereUniqueInput
-    data: XOR<SharedLeadsUpdateWithoutBaseLeadInput, SharedLeadsUncheckedUpdateWithoutBaseLeadInput>
+  export type LeadsAssignedUpdateWithWhereUniqueWithoutBaseLeadInput = {
+    where: LeadsAssignedWhereUniqueInput
+    data: XOR<LeadsAssignedUpdateWithoutBaseLeadInput, LeadsAssignedUncheckedUpdateWithoutBaseLeadInput>
   }
 
-  export type SharedLeadsUpdateManyWithWhereWithoutBaseLeadInput = {
-    where: SharedLeadsScalarWhereInput
-    data: XOR<SharedLeadsUpdateManyMutationInput, SharedLeadsUncheckedUpdateManyWithoutBaseLeadInput>
+  export type LeadsAssignedUpdateManyWithWhereWithoutBaseLeadInput = {
+    where: LeadsAssignedScalarWhereInput
+    data: XOR<LeadsAssignedUpdateManyMutationInput, LeadsAssignedUncheckedUpdateManyWithoutBaseLeadInput>
   }
 
   export type ClientContactUpsertWithWhereUniqueWithoutClientInput = {
@@ -80818,7 +80818,7 @@ export namespace Prisma {
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
-    ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUpdateManyWithoutAccountNestedInput
@@ -80844,7 +80844,7 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
-    ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUncheckedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUncheckedUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUncheckedUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUncheckedUpdateManyWithoutAccountNestedInput
@@ -80854,7 +80854,7 @@ export namespace Prisma {
     listingRepresentatives?: ListingsRepresentativesUncheckedUpdateManyWithoutRepresentativeNestedInput
   }
 
-  export type BaseLeadCreateWithoutContactsInput = {
+  export type LeadCreateWithoutContactsInput = {
     id?: string
     firstName: string
     lastName: string
@@ -80863,12 +80863,12 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     links?: ClientLinkCreateNestedManyWithoutClientInput
-    sharedLeads?: SharedLeadsCreateNestedManyWithoutBaseLeadInput
+    sharedLeads?: LeadsAssignedCreateNestedManyWithoutBaseLeadInput
     propertyOwners?: PropertyOwnerCreateNestedManyWithoutOwnerClientInput
     belongsToAccount: AccountCreateNestedOneWithoutBaseLeadsBelongingToInput
   }
 
-  export type BaseLeadUncheckedCreateWithoutContactsInput = {
+  export type LeadUncheckedCreateWithoutContactsInput = {
     id?: string
     belongsTo: string
     firstName: string
@@ -80878,27 +80878,27 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     links?: ClientLinkUncheckedCreateNestedManyWithoutClientInput
-    sharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutBaseLeadInput
+    sharedLeads?: LeadsAssignedUncheckedCreateNestedManyWithoutBaseLeadInput
     propertyOwners?: PropertyOwnerUncheckedCreateNestedManyWithoutOwnerClientInput
   }
 
-  export type BaseLeadCreateOrConnectWithoutContactsInput = {
-    where: BaseLeadWhereUniqueInput
-    create: XOR<BaseLeadCreateWithoutContactsInput, BaseLeadUncheckedCreateWithoutContactsInput>
+  export type LeadCreateOrConnectWithoutContactsInput = {
+    where: LeadWhereUniqueInput
+    create: XOR<LeadCreateWithoutContactsInput, LeadUncheckedCreateWithoutContactsInput>
   }
 
-  export type BaseLeadUpsertWithoutContactsInput = {
-    update: XOR<BaseLeadUpdateWithoutContactsInput, BaseLeadUncheckedUpdateWithoutContactsInput>
-    create: XOR<BaseLeadCreateWithoutContactsInput, BaseLeadUncheckedCreateWithoutContactsInput>
-    where?: BaseLeadWhereInput
+  export type LeadUpsertWithoutContactsInput = {
+    update: XOR<LeadUpdateWithoutContactsInput, LeadUncheckedUpdateWithoutContactsInput>
+    create: XOR<LeadCreateWithoutContactsInput, LeadUncheckedCreateWithoutContactsInput>
+    where?: LeadWhereInput
   }
 
-  export type BaseLeadUpdateToOneWithWhereWithoutContactsInput = {
-    where?: BaseLeadWhereInput
-    data: XOR<BaseLeadUpdateWithoutContactsInput, BaseLeadUncheckedUpdateWithoutContactsInput>
+  export type LeadUpdateToOneWithWhereWithoutContactsInput = {
+    where?: LeadWhereInput
+    data: XOR<LeadUpdateWithoutContactsInput, LeadUncheckedUpdateWithoutContactsInput>
   }
 
-  export type BaseLeadUpdateWithoutContactsInput = {
+  export type LeadUpdateWithoutContactsInput = {
     id?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
@@ -80907,12 +80907,12 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     links?: ClientLinkUpdateManyWithoutClientNestedInput
-    sharedLeads?: SharedLeadsUpdateManyWithoutBaseLeadNestedInput
+    sharedLeads?: LeadsAssignedUpdateManyWithoutBaseLeadNestedInput
     propertyOwners?: PropertyOwnerUpdateManyWithoutOwnerClientNestedInput
     belongsToAccount?: AccountUpdateOneRequiredWithoutBaseLeadsBelongingToNestedInput
   }
 
-  export type BaseLeadUncheckedUpdateWithoutContactsInput = {
+  export type LeadUncheckedUpdateWithoutContactsInput = {
     id?: StringFieldUpdateOperationsInput | string
     belongsTo?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
@@ -80922,11 +80922,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     links?: ClientLinkUncheckedUpdateManyWithoutClientNestedInput
-    sharedLeads?: SharedLeadsUncheckedUpdateManyWithoutBaseLeadNestedInput
+    sharedLeads?: LeadsAssignedUncheckedUpdateManyWithoutBaseLeadNestedInput
     propertyOwners?: PropertyOwnerUncheckedUpdateManyWithoutOwnerClientNestedInput
   }
 
-  export type BaseLeadCreateWithoutLinksInput = {
+  export type LeadCreateWithoutLinksInput = {
     id?: string
     firstName: string
     lastName: string
@@ -80934,13 +80934,13 @@ export namespace Prisma {
     source?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    sharedLeads?: SharedLeadsCreateNestedManyWithoutBaseLeadInput
+    sharedLeads?: LeadsAssignedCreateNestedManyWithoutBaseLeadInput
     contacts?: ClientContactCreateNestedManyWithoutClientInput
     propertyOwners?: PropertyOwnerCreateNestedManyWithoutOwnerClientInput
     belongsToAccount: AccountCreateNestedOneWithoutBaseLeadsBelongingToInput
   }
 
-  export type BaseLeadUncheckedCreateWithoutLinksInput = {
+  export type LeadUncheckedCreateWithoutLinksInput = {
     id?: string
     belongsTo: string
     firstName: string
@@ -80949,28 +80949,28 @@ export namespace Prisma {
     source?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    sharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutBaseLeadInput
+    sharedLeads?: LeadsAssignedUncheckedCreateNestedManyWithoutBaseLeadInput
     contacts?: ClientContactUncheckedCreateNestedManyWithoutClientInput
     propertyOwners?: PropertyOwnerUncheckedCreateNestedManyWithoutOwnerClientInput
   }
 
-  export type BaseLeadCreateOrConnectWithoutLinksInput = {
-    where: BaseLeadWhereUniqueInput
-    create: XOR<BaseLeadCreateWithoutLinksInput, BaseLeadUncheckedCreateWithoutLinksInput>
+  export type LeadCreateOrConnectWithoutLinksInput = {
+    where: LeadWhereUniqueInput
+    create: XOR<LeadCreateWithoutLinksInput, LeadUncheckedCreateWithoutLinksInput>
   }
 
-  export type BaseLeadUpsertWithoutLinksInput = {
-    update: XOR<BaseLeadUpdateWithoutLinksInput, BaseLeadUncheckedUpdateWithoutLinksInput>
-    create: XOR<BaseLeadCreateWithoutLinksInput, BaseLeadUncheckedCreateWithoutLinksInput>
-    where?: BaseLeadWhereInput
+  export type LeadUpsertWithoutLinksInput = {
+    update: XOR<LeadUpdateWithoutLinksInput, LeadUncheckedUpdateWithoutLinksInput>
+    create: XOR<LeadCreateWithoutLinksInput, LeadUncheckedCreateWithoutLinksInput>
+    where?: LeadWhereInput
   }
 
-  export type BaseLeadUpdateToOneWithWhereWithoutLinksInput = {
-    where?: BaseLeadWhereInput
-    data: XOR<BaseLeadUpdateWithoutLinksInput, BaseLeadUncheckedUpdateWithoutLinksInput>
+  export type LeadUpdateToOneWithWhereWithoutLinksInput = {
+    where?: LeadWhereInput
+    data: XOR<LeadUpdateWithoutLinksInput, LeadUncheckedUpdateWithoutLinksInput>
   }
 
-  export type BaseLeadUpdateWithoutLinksInput = {
+  export type LeadUpdateWithoutLinksInput = {
     id?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
@@ -80978,13 +80978,13 @@ export namespace Prisma {
     source?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sharedLeads?: SharedLeadsUpdateManyWithoutBaseLeadNestedInput
+    sharedLeads?: LeadsAssignedUpdateManyWithoutBaseLeadNestedInput
     contacts?: ClientContactUpdateManyWithoutClientNestedInput
     propertyOwners?: PropertyOwnerUpdateManyWithoutOwnerClientNestedInput
     belongsToAccount?: AccountUpdateOneRequiredWithoutBaseLeadsBelongingToNestedInput
   }
 
-  export type BaseLeadUncheckedUpdateWithoutLinksInput = {
+  export type LeadUncheckedUpdateWithoutLinksInput = {
     id?: StringFieldUpdateOperationsInput | string
     belongsTo?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
@@ -80993,12 +80993,12 @@ export namespace Prisma {
     source?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    sharedLeads?: SharedLeadsUncheckedUpdateManyWithoutBaseLeadNestedInput
+    sharedLeads?: LeadsAssignedUncheckedUpdateManyWithoutBaseLeadNestedInput
     contacts?: ClientContactUncheckedUpdateManyWithoutClientNestedInput
     propertyOwners?: PropertyOwnerUncheckedUpdateManyWithoutOwnerClientNestedInput
   }
 
-  export type BaseLeadCreateWithoutSharedLeadsInput = {
+  export type LeadCreateWithoutSharedLeadsInput = {
     id?: string
     firstName: string
     lastName: string
@@ -81012,7 +81012,7 @@ export namespace Prisma {
     belongsToAccount: AccountCreateNestedOneWithoutBaseLeadsBelongingToInput
   }
 
-  export type BaseLeadUncheckedCreateWithoutSharedLeadsInput = {
+  export type LeadUncheckedCreateWithoutSharedLeadsInput = {
     id?: string
     belongsTo: string
     firstName: string
@@ -81026,9 +81026,9 @@ export namespace Prisma {
     propertyOwners?: PropertyOwnerUncheckedCreateNestedManyWithoutOwnerClientInput
   }
 
-  export type BaseLeadCreateOrConnectWithoutSharedLeadsInput = {
-    where: BaseLeadWhereUniqueInput
-    create: XOR<BaseLeadCreateWithoutSharedLeadsInput, BaseLeadUncheckedCreateWithoutSharedLeadsInput>
+  export type LeadCreateOrConnectWithoutSharedLeadsInput = {
+    where: LeadWhereUniqueInput
+    create: XOR<LeadCreateWithoutSharedLeadsInput, LeadUncheckedCreateWithoutSharedLeadsInput>
   }
 
   export type AccountCreateWithoutOwnedSharedLeadsInput = {
@@ -81047,7 +81047,7 @@ export namespace Prisma {
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
+    baseLeadsBelongingTo?: LeadCreateNestedManyWithoutBelongsToAccountInput
     intelligenceMappings?: IntelligenceMappingCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeCreateNestedManyWithoutAccountInput
@@ -81073,7 +81073,7 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
+    baseLeadsBelongingTo?: LeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
     intelligenceMappings?: IntelligenceMappingUncheckedCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertUncheckedCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeUncheckedCreateNestedManyWithoutAccountInput
@@ -81112,18 +81112,18 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type BaseLeadUpsertWithoutSharedLeadsInput = {
-    update: XOR<BaseLeadUpdateWithoutSharedLeadsInput, BaseLeadUncheckedUpdateWithoutSharedLeadsInput>
-    create: XOR<BaseLeadCreateWithoutSharedLeadsInput, BaseLeadUncheckedCreateWithoutSharedLeadsInput>
-    where?: BaseLeadWhereInput
+  export type LeadUpsertWithoutSharedLeadsInput = {
+    update: XOR<LeadUpdateWithoutSharedLeadsInput, LeadUncheckedUpdateWithoutSharedLeadsInput>
+    create: XOR<LeadCreateWithoutSharedLeadsInput, LeadUncheckedCreateWithoutSharedLeadsInput>
+    where?: LeadWhereInput
   }
 
-  export type BaseLeadUpdateToOneWithWhereWithoutSharedLeadsInput = {
-    where?: BaseLeadWhereInput
-    data: XOR<BaseLeadUpdateWithoutSharedLeadsInput, BaseLeadUncheckedUpdateWithoutSharedLeadsInput>
+  export type LeadUpdateToOneWithWhereWithoutSharedLeadsInput = {
+    where?: LeadWhereInput
+    data: XOR<LeadUpdateWithoutSharedLeadsInput, LeadUncheckedUpdateWithoutSharedLeadsInput>
   }
 
-  export type BaseLeadUpdateWithoutSharedLeadsInput = {
+  export type LeadUpdateWithoutSharedLeadsInput = {
     id?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
@@ -81137,7 +81137,7 @@ export namespace Prisma {
     belongsToAccount?: AccountUpdateOneRequiredWithoutBaseLeadsBelongingToNestedInput
   }
 
-  export type BaseLeadUncheckedUpdateWithoutSharedLeadsInput = {
+  export type LeadUncheckedUpdateWithoutSharedLeadsInput = {
     id?: StringFieldUpdateOperationsInput | string
     belongsTo?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
@@ -81178,7 +81178,7 @@ export namespace Prisma {
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
+    baseLeadsBelongingTo?: LeadUpdateManyWithoutBelongsToAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUpdateManyWithoutAccountNestedInput
@@ -81204,7 +81204,7 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
+    baseLeadsBelongingTo?: LeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUncheckedUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUncheckedUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUncheckedUpdateManyWithoutAccountNestedInput
@@ -81241,18 +81241,18 @@ export namespace Prisma {
     activityBy?: StringFilter<"LeadActivity"> | string
   }
 
-  export type SharedLeadsCreateWithoutActivitiesInput = {
+  export type LeadsAssignedCreateWithoutActivitiesInput = {
     id?: string
     type: $Enums.LeadType
     requirements?: NullableJsonNullValueInput | InputJsonValue
     priority?: $Enums.LeadPriority
     createdAt?: Date | string
     updatedAt?: Date | string
-    baseLead: BaseLeadCreateNestedOneWithoutSharedLeadsInput
+    baseLead: LeadCreateNestedOneWithoutSharedLeadsInput
     ownerAccount: AccountCreateNestedOneWithoutOwnedSharedLeadsInput
   }
 
-  export type SharedLeadsUncheckedCreateWithoutActivitiesInput = {
+  export type LeadsAssignedUncheckedCreateWithoutActivitiesInput = {
     id?: string
     baseLeadId: string
     type: $Enums.LeadType
@@ -81263,34 +81263,34 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type SharedLeadsCreateOrConnectWithoutActivitiesInput = {
-    where: SharedLeadsWhereUniqueInput
-    create: XOR<SharedLeadsCreateWithoutActivitiesInput, SharedLeadsUncheckedCreateWithoutActivitiesInput>
+  export type LeadsAssignedCreateOrConnectWithoutActivitiesInput = {
+    where: LeadsAssignedWhereUniqueInput
+    create: XOR<LeadsAssignedCreateWithoutActivitiesInput, LeadsAssignedUncheckedCreateWithoutActivitiesInput>
   }
 
-  export type SharedLeadsUpsertWithoutActivitiesInput = {
-    update: XOR<SharedLeadsUpdateWithoutActivitiesInput, SharedLeadsUncheckedUpdateWithoutActivitiesInput>
-    create: XOR<SharedLeadsCreateWithoutActivitiesInput, SharedLeadsUncheckedCreateWithoutActivitiesInput>
-    where?: SharedLeadsWhereInput
+  export type LeadsAssignedUpsertWithoutActivitiesInput = {
+    update: XOR<LeadsAssignedUpdateWithoutActivitiesInput, LeadsAssignedUncheckedUpdateWithoutActivitiesInput>
+    create: XOR<LeadsAssignedCreateWithoutActivitiesInput, LeadsAssignedUncheckedCreateWithoutActivitiesInput>
+    where?: LeadsAssignedWhereInput
   }
 
-  export type SharedLeadsUpdateToOneWithWhereWithoutActivitiesInput = {
-    where?: SharedLeadsWhereInput
-    data: XOR<SharedLeadsUpdateWithoutActivitiesInput, SharedLeadsUncheckedUpdateWithoutActivitiesInput>
+  export type LeadsAssignedUpdateToOneWithWhereWithoutActivitiesInput = {
+    where?: LeadsAssignedWhereInput
+    data: XOR<LeadsAssignedUpdateWithoutActivitiesInput, LeadsAssignedUncheckedUpdateWithoutActivitiesInput>
   }
 
-  export type SharedLeadsUpdateWithoutActivitiesInput = {
+  export type LeadsAssignedUpdateWithoutActivitiesInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumLeadTypeFieldUpdateOperationsInput | $Enums.LeadType
     requirements?: NullableJsonNullValueInput | InputJsonValue
     priority?: EnumLeadPriorityFieldUpdateOperationsInput | $Enums.LeadPriority
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    baseLead?: BaseLeadUpdateOneRequiredWithoutSharedLeadsNestedInput
+    baseLead?: LeadUpdateOneRequiredWithoutSharedLeadsNestedInput
     ownerAccount?: AccountUpdateOneRequiredWithoutOwnedSharedLeadsNestedInput
   }
 
-  export type SharedLeadsUncheckedUpdateWithoutActivitiesInput = {
+  export type LeadsAssignedUncheckedUpdateWithoutActivitiesInput = {
     id?: StringFieldUpdateOperationsInput | string
     baseLeadId?: StringFieldUpdateOperationsInput | string
     type?: EnumLeadTypeFieldUpdateOperationsInput | $Enums.LeadType
@@ -81354,8 +81354,8 @@ export namespace Prisma {
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeCreateNestedManyWithoutAccountInput
@@ -81380,8 +81380,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedUncheckedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingUncheckedCreateNestedManyWithoutAccountInput
     intelligenceAlerts?: IntelligenceAlertUncheckedCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeUncheckedCreateNestedManyWithoutAccountInput
@@ -81453,8 +81453,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUpdateManyWithoutAccountNestedInput
@@ -81479,8 +81479,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUncheckedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUncheckedUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUncheckedUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUncheckedUpdateManyWithoutAccountNestedInput
@@ -82664,8 +82664,8 @@ export namespace Prisma {
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedCreateNestedManyWithoutOwnerAccountInput
     intelligenceAlerts?: IntelligenceAlertCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeCreateNestedManyWithoutAccountInput
     createdListingChanges?: ListingChangeCreateNestedManyWithoutCreatedByInput
@@ -82690,8 +82690,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedUncheckedCreateNestedManyWithoutOwnerAccountInput
     intelligenceAlerts?: IntelligenceAlertUncheckedCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeUncheckedCreateNestedManyWithoutAccountInput
     createdListingChanges?: ListingChangeUncheckedCreateNestedManyWithoutCreatedByInput
@@ -82791,8 +82791,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUpdateManyWithoutAccountNestedInput
     createdListingChanges?: ListingChangeUpdateManyWithoutCreatedByNestedInput
@@ -82817,8 +82817,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUncheckedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUncheckedUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUncheckedUpdateManyWithoutAccountNestedInput
     createdListingChanges?: ListingChangeUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -82927,8 +82927,8 @@ export namespace Prisma {
     workingProfileOf?: AccountCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeCreateNestedManyWithoutAccountInput
     createdListingChanges?: ListingChangeCreateNestedManyWithoutCreatedByInput
@@ -82953,8 +82953,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedCreateNestedManyWithoutWorkingProfileAccountInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgencyInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedCreateNestedManyWithoutAgentInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
-    ownedSharedLeads?: SharedLeadsUncheckedCreateNestedManyWithoutOwnerAccountInput
+    baseLeadsBelongingTo?: LeadUncheckedCreateNestedManyWithoutBelongsToAccountInput
+    ownedSharedLeads?: LeadsAssignedUncheckedCreateNestedManyWithoutOwnerAccountInput
     intelligenceMappings?: IntelligenceMappingUncheckedCreateNestedManyWithoutAccountInput
     propertyChanges?: ListingChangeUncheckedCreateNestedManyWithoutAccountInput
     createdListingChanges?: ListingChangeUncheckedCreateNestedManyWithoutCreatedByInput
@@ -83063,8 +83063,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUpdateManyWithoutAccountNestedInput
     createdListingChanges?: ListingChangeUpdateManyWithoutCreatedByNestedInput
@@ -83089,8 +83089,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUncheckedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUncheckedUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUncheckedUpdateManyWithoutAccountNestedInput
     createdListingChanges?: ListingChangeUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -83363,7 +83363,7 @@ export namespace Prisma {
     isAdmin?: boolean
   }
 
-  export type BaseLeadCreateManyBelongsToAccountInput = {
+  export type LeadCreateManyBelongsToAccountInput = {
     id?: string
     firstName: string
     lastName: string
@@ -83373,7 +83373,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type SharedLeadsCreateManyOwnerAccountInput = {
+  export type LeadsAssignedCreateManyOwnerAccountInput = {
     id?: string
     baseLeadId: string
     type: $Enums.LeadType
@@ -83504,8 +83504,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUpdateManyWithoutAccountNestedInput
@@ -83530,8 +83530,8 @@ export namespace Prisma {
     workingProfileOf?: AccountUncheckedUpdateManyWithoutWorkingProfileAccountNestedInput
     agencyAgentMapAsAgency?: AgencyAgentMapUncheckedUpdateManyWithoutAgencyNestedInput
     agencyAgentMapAsAgent?: AgencyAgentMapUncheckedUpdateManyWithoutAgentNestedInput
-    baseLeadsBelongingTo?: BaseLeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
-    ownedSharedLeads?: SharedLeadsUncheckedUpdateManyWithoutOwnerAccountNestedInput
+    baseLeadsBelongingTo?: LeadUncheckedUpdateManyWithoutBelongsToAccountNestedInput
+    ownedSharedLeads?: LeadsAssignedUncheckedUpdateManyWithoutOwnerAccountNestedInput
     intelligenceMappings?: IntelligenceMappingUncheckedUpdateManyWithoutAccountNestedInput
     intelligenceAlerts?: IntelligenceAlertUncheckedUpdateManyWithoutAccountNestedInput
     propertyChanges?: ListingChangeUncheckedUpdateManyWithoutAccountNestedInput
@@ -83596,7 +83596,7 @@ export namespace Prisma {
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
   }
 
-  export type BaseLeadUpdateWithoutBelongsToAccountInput = {
+  export type LeadUpdateWithoutBelongsToAccountInput = {
     id?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
@@ -83605,12 +83605,12 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     links?: ClientLinkUpdateManyWithoutClientNestedInput
-    sharedLeads?: SharedLeadsUpdateManyWithoutBaseLeadNestedInput
+    sharedLeads?: LeadsAssignedUpdateManyWithoutBaseLeadNestedInput
     contacts?: ClientContactUpdateManyWithoutClientNestedInput
     propertyOwners?: PropertyOwnerUpdateManyWithoutOwnerClientNestedInput
   }
 
-  export type BaseLeadUncheckedUpdateWithoutBelongsToAccountInput = {
+  export type LeadUncheckedUpdateWithoutBelongsToAccountInput = {
     id?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
@@ -83619,12 +83619,12 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     links?: ClientLinkUncheckedUpdateManyWithoutClientNestedInput
-    sharedLeads?: SharedLeadsUncheckedUpdateManyWithoutBaseLeadNestedInput
+    sharedLeads?: LeadsAssignedUncheckedUpdateManyWithoutBaseLeadNestedInput
     contacts?: ClientContactUncheckedUpdateManyWithoutClientNestedInput
     propertyOwners?: PropertyOwnerUncheckedUpdateManyWithoutOwnerClientNestedInput
   }
 
-  export type BaseLeadUncheckedUpdateManyWithoutBelongsToAccountInput = {
+  export type LeadUncheckedUpdateManyWithoutBelongsToAccountInput = {
     id?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
@@ -83634,18 +83634,18 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type SharedLeadsUpdateWithoutOwnerAccountInput = {
+  export type LeadsAssignedUpdateWithoutOwnerAccountInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumLeadTypeFieldUpdateOperationsInput | $Enums.LeadType
     requirements?: NullableJsonNullValueInput | InputJsonValue
     priority?: EnumLeadPriorityFieldUpdateOperationsInput | $Enums.LeadPriority
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    baseLead?: BaseLeadUpdateOneRequiredWithoutSharedLeadsNestedInput
+    baseLead?: LeadUpdateOneRequiredWithoutSharedLeadsNestedInput
     activities?: LeadActivityUpdateManyWithoutLeadNestedInput
   }
 
-  export type SharedLeadsUncheckedUpdateWithoutOwnerAccountInput = {
+  export type LeadsAssignedUncheckedUpdateWithoutOwnerAccountInput = {
     id?: StringFieldUpdateOperationsInput | string
     baseLeadId?: StringFieldUpdateOperationsInput | string
     type?: EnumLeadTypeFieldUpdateOperationsInput | $Enums.LeadType
@@ -83656,7 +83656,7 @@ export namespace Prisma {
     activities?: LeadActivityUncheckedUpdateManyWithoutLeadNestedInput
   }
 
-  export type SharedLeadsUncheckedUpdateManyWithoutOwnerAccountInput = {
+  export type LeadsAssignedUncheckedUpdateManyWithoutOwnerAccountInput = {
     id?: StringFieldUpdateOperationsInput | string
     baseLeadId?: StringFieldUpdateOperationsInput | string
     type?: EnumLeadTypeFieldUpdateOperationsInput | $Enums.LeadType
@@ -84003,7 +84003,7 @@ export namespace Prisma {
   export type PropertyOwnerUpdateWithoutPropertyInput = {
     id?: StringFieldUpdateOperationsInput | string
     isPrimaryOwner?: BoolFieldUpdateOperationsInput | boolean
-    ownerClient?: BaseLeadUpdateOneRequiredWithoutPropertyOwnersNestedInput
+    ownerClient?: LeadUpdateOneRequiredWithoutPropertyOwnersNestedInput
   }
 
   export type PropertyOwnerUncheckedUpdateWithoutPropertyInput = {
@@ -84269,7 +84269,7 @@ export namespace Prisma {
     trackerId: string
   }
 
-  export type SharedLeadsCreateManyBaseLeadInput = {
+  export type LeadsAssignedCreateManyBaseLeadInput = {
     id?: string
     type: $Enums.LeadType
     requirements?: NullableJsonNullValueInput | InputJsonValue
@@ -84306,7 +84306,7 @@ export namespace Prisma {
     trackerId?: StringFieldUpdateOperationsInput | string
   }
 
-  export type SharedLeadsUpdateWithoutBaseLeadInput = {
+  export type LeadsAssignedUpdateWithoutBaseLeadInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumLeadTypeFieldUpdateOperationsInput | $Enums.LeadType
     requirements?: NullableJsonNullValueInput | InputJsonValue
@@ -84317,7 +84317,7 @@ export namespace Prisma {
     activities?: LeadActivityUpdateManyWithoutLeadNestedInput
   }
 
-  export type SharedLeadsUncheckedUpdateWithoutBaseLeadInput = {
+  export type LeadsAssignedUncheckedUpdateWithoutBaseLeadInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumLeadTypeFieldUpdateOperationsInput | $Enums.LeadType
     requirements?: NullableJsonNullValueInput | InputJsonValue
@@ -84328,7 +84328,7 @@ export namespace Prisma {
     activities?: LeadActivityUncheckedUpdateManyWithoutLeadNestedInput
   }
 
-  export type SharedLeadsUncheckedUpdateManyWithoutBaseLeadInput = {
+  export type LeadsAssignedUncheckedUpdateManyWithoutBaseLeadInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumLeadTypeFieldUpdateOperationsInput | $Enums.LeadType
     requirements?: NullableJsonNullValueInput | InputJsonValue

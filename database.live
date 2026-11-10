@@ -147,7 +147,7 @@ Fields:
 > denormalized_capability: jsonb;
 > role_name: text;
 
-Table: lead_base, Model: BaseLead
+Table: leads, Model: Lead
 Fields:
 > id: text PK, NOT NULL;
 > belongsTo: text NOT NULL, references accounts.id;
@@ -161,7 +161,7 @@ Fields:
 Table: lead_contacts, Model: ClientContact
 Fields:
 > id: text PK, NOT NULL;
-> client_id: text NOT NULL, references lead_base.id;
+> client_id: text NOT NULL, references leads.id;
 > type: text NOT NULL;
 > value: text NOT NULL;
 
@@ -169,7 +169,7 @@ Table: lead_links, Model: ClientLink
 Fields:
 > id: text PK, NOT NULL;
 > trackerId: text NOT NULL;
-> clientId: text NOT NULL, references lead_base.id;
+> clientId: text NOT NULL, references leads.id;
 
 Table: competitors, Model: Competitor
 Fields:
@@ -287,7 +287,7 @@ Fields:
 Table: lead_activity, Model: LeadActivity
 Fields:
 > id: text PK, NOT NULL;
-> leadId: text NOT NULL, references lead_shared.id;
+> leadId: text NOT NULL, references leads_assigned.id;
 > data: jsonb NOT NULL;
 > activityOn: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > activityBy: text NOT NULL;
@@ -439,7 +439,7 @@ Table: property_owner, Model: PropertyOwner
 Fields:
 > id: text PK, NOT NULL;
 > property_id: text NOT NULL, UNIQUE property_owner_property_id_owner_client_id_key(property_id, owner_client_id), references listings.id;
-> owner_client_id: text NOT NULL, UNIQUE property_owner_property_id_owner_client_id_key(property_id, owner_client_id), references lead_base.id;
+> owner_client_id: text NOT NULL, UNIQUE property_owner_property_id_owner_client_id_key(property_id, owner_client_id), references leads.id;
 > is_primary_owner: boolean NOT NULL, default: false;
 
 Table: listings_representatives, Model: ListingsRepresentatives
@@ -523,10 +523,10 @@ Fields:
 > propertyId: text NOT NULL, references listings.id;
 > savedAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 
-Table: lead_shared, Model: SharedLeads
+Table: leads_assigned, Model: LeadsAssigned
 Fields:
 > id: text PK, NOT NULL;
-> baseLeadId: text NOT NULL, references lead_base.id;
+> baseLeadId: text NOT NULL, references leads.id;
 > type: LeadType NOT NULL;
 > requirements: jsonb;
 > priority: LeadPriority NOT NULL, default: 'MEDIUM'::"LeadPriority";

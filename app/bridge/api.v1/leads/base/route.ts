@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
     const { limit, offset } = getPagination(request);
     const where = canViewAll ? {} : { belongsTo: accountId };
     const [records, total] = await Promise.all([
-      prisma.baseLead.findMany({
+      prisma.lead.findMany({
         where,
         include: {
           contacts: true,
@@ -92,7 +92,7 @@ export async function GET(request: NextRequest) {
         skip: offset,
         take: limit,
       }),
-      prisma.baseLead.count({ where }),
+      prisma.lead.count({ where }),
     ]);
 
     const data = records.map(({ contacts, sharedLeads, contact, ...lead }) => {

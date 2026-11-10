@@ -405,7 +405,7 @@ exports.Prisma.ListingsViewScalarFieldEnum = {
   viewedOn: 'viewedOn'
 };
 
-exports.Prisma.BaseLeadScalarFieldEnum = {
+exports.Prisma.LeadScalarFieldEnum = {
   id: 'id',
   belongsTo: 'belongsTo',
   firstName: 'firstName',
@@ -429,7 +429,7 @@ exports.Prisma.ClientLinkScalarFieldEnum = {
   clientId: 'clientId'
 };
 
-exports.Prisma.SharedLeadsScalarFieldEnum = {
+exports.Prisma.LeadsAssignedScalarFieldEnum = {
   id: 'id',
   baseLeadId: 'baseLeadId',
   type: 'type',
@@ -808,10 +808,10 @@ exports.Prisma.ModelName = {
   NaturalSearch: 'NaturalSearch',
   ListingsSaved: 'ListingsSaved',
   ListingsView: 'ListingsView',
-  BaseLead: 'BaseLead',
+  Lead: 'Lead',
   ClientContact: 'ClientContact',
   ClientLink: 'ClientLink',
-  SharedLeads: 'SharedLeads',
+  LeadsAssigned: 'LeadsAssigned',
   LeadActivity: 'LeadActivity',
   Conversation: 'Conversation',
   UserPreference: 'UserPreference',

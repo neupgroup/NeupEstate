@@ -84,14 +84,14 @@ export async function GET(request: NextRequest) {
 
     stage = 'shared-leads-query';
     const [leads, total] = await Promise.all([
-      prisma.sharedLeads.findMany({
+      prisma.leadsAssigned.findMany({
         where,
         include: { baseLead: { include: { contacts: true } } },
         orderBy: { createdAt: 'desc' },
         skip: offset,
         take: limit,
       }),
-      prisma.sharedLeads.count({ where }),
+      prisma.leadsAssigned.count({ where }),
     ]);
 
     stage = 'response-mapping';
