@@ -9,7 +9,6 @@
  */
 
 import {
-  RewriteListingDetailsInputSchema,
   type RewriteListingDetailsInput,
   RewriteListingDetailsOutputSchema,
   type RewriteListingDetailsOutput,

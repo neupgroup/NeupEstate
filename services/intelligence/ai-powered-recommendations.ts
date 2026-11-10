@@ -8,10 +8,9 @@
  * - recommendProperties - A function that handles the filter generation process.
  */
 
-import { z } from 'zod';
 import { getPrompt } from '@/services/intelligence/prompts';
 import type { RecommendListingsInput, RecommendListingsOutput } from '@/types';
-import { RecommendListingsInputSchema, RecommendListingsOutputSchema } from '@/types';
+import { RecommendListingsOutputSchema } from '@/types';
 import { generateText } from './unified-generation-service';
 
 
