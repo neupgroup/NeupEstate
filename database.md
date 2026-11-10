@@ -490,18 +490,6 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - divergence: model MortgageRequest maps to table mortgage_requests
 - divergence based on fields: database has 12 fields; Prisma model has 12 persisted scalar fields; difference 0
 
-### public.newsletter_subscriptions (NewsletterSubscription)
-
-- purpose: Stores newsletter subscriber email addresses.
-- usage: Used by newsletter signup and subscription management flows.
-
-- id text PK, NOT NULL
-- email text NOT NULL, UNIQUE newsletter_subscriptions_email_key(email)
-- createdAt timestamp(3) NOT NULL, default CURRENT_TIMESTAMP
-
-- divergence: model NewsletterSubscription maps to table newsletter_subscriptions
-- divergence based on fields: database has 3 fields; Prisma model has 3 persisted scalar fields; difference 0
-
 ### public.problems (Problem)
 
 - purpose: Stores application problem/error reports with context, stack, and details.

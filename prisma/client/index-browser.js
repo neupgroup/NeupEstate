@@ -596,12 +596,6 @@ exports.Prisma.InquiryScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
-exports.Prisma.NewsletterSubscriptionScalarFieldEnum = {
-  id: 'id',
-  email: 'email',
-  createdAt: 'createdAt'
-};
-
 exports.Prisma.AuthzRoleScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -896,7 +890,6 @@ exports.Prisma.ModelName = {
   Problem: 'Problem',
   SitemapEntry: 'SitemapEntry',
   Inquiry: 'Inquiry',
-  NewsletterSubscription: 'NewsletterSubscription',
   AuthzRole: 'AuthzRole',
   Application: 'Application',
   AccountAccess: 'AccountAccess',

@@ -315,12 +315,6 @@ Fields:
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > updatedAt: timestamp(3) NOT NULL;
 
-Table: newsletter_subscriptions, Model: NewsletterSubscription
-Fields:
-> id: text PK, NOT NULL;
-> email: text NOT NULL, UNIQUE newsletter_subscriptions_email_key(email);
-> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
-
 Table: problems, Model: Problem
 Fields:
 > id: text PK, NOT NULL;
