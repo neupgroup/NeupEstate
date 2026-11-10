@@ -64,10 +64,10 @@ export type ListingCommercial = $Result.DefaultSelection<Prisma.$ListingCommerci
  */
 export type PropertyOwner = $Result.DefaultSelection<Prisma.$PropertyOwnerPayload>
 /**
- * Model ListingRepresentative
+ * Model ListingsRepresentatives
  * 
  */
-export type ListingRepresentative = $Result.DefaultSelection<Prisma.$ListingRepresentativePayload>
+export type ListingsRepresentatives = $Result.DefaultSelection<Prisma.$ListingsRepresentativesPayload>
 /**
  * Model ListingsDocuments
  * 
@@ -614,14 +614,14 @@ export class PrismaClient<
   get propertyOwner(): Prisma.PropertyOwnerDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.listingRepresentative`: Exposes CRUD operations for the **ListingRepresentative** model.
+   * `prisma.listingsRepresentatives`: Exposes CRUD operations for the **ListingsRepresentatives** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more ListingRepresentatives
-    * const listingRepresentatives = await prisma.listingRepresentative.findMany()
+    * // Fetch zero or more ListingsRepresentatives
+    * const listingsRepresentatives = await prisma.listingsRepresentatives.findMany()
     * ```
     */
-  get listingRepresentative(): Prisma.ListingRepresentativeDelegate<ExtArgs, ClientOptions>;
+  get listingsRepresentatives(): Prisma.ListingsRepresentativesDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.listingsDocuments`: Exposes CRUD operations for the **ListingsDocuments** model.
@@ -1436,7 +1436,7 @@ export namespace Prisma {
     PropertyLandDetail: 'PropertyLandDetail',
     ListingCommercial: 'ListingCommercial',
     PropertyOwner: 'PropertyOwner',
-    ListingRepresentative: 'ListingRepresentative',
+    ListingsRepresentatives: 'ListingsRepresentatives',
     ListingsDocuments: 'ListingsDocuments',
     ListingChange: 'ListingChange',
     Agency: 'Agency',
@@ -1489,7 +1489,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "location" | "account" | "activity" | "listing" | "propertyLink" | "listingHouse" | "listingApartment" | "propertyLandDetail" | "listingCommercial" | "propertyOwner" | "listingRepresentative" | "listingsDocuments" | "listingChange" | "agency" | "agencyMap" | "agencyAgentMap" | "agencyCustomization" | "agent" | "review" | "requirement" | "naturalSearch" | "listingsSaved" | "listingsView" | "baseLead" | "clientContact" | "clientLink" | "sharedLeads" | "leadActivity" | "conversation" | "userPreference" | "mortgageRequest" | "salesRequest" | "visitRequest" | "sitemapEntry" | "inquiry" | "authzRole" | "accountAccess" | "roleCapability" | "authzAccountAccessGrant" | "authzAssetsAccessGrant" | "competitor" | "competitorSource" | "competitorPage" | "competitorListing" | "propertyCompetitionMap" | "competitorTracking" | "intelligenceMapping" | "intelligenceAlert"
+      modelProps: "location" | "account" | "activity" | "listing" | "propertyLink" | "listingHouse" | "listingApartment" | "propertyLandDetail" | "listingCommercial" | "propertyOwner" | "listingsRepresentatives" | "listingsDocuments" | "listingChange" | "agency" | "agencyMap" | "agencyAgentMap" | "agencyCustomization" | "agent" | "review" | "requirement" | "naturalSearch" | "listingsSaved" | "listingsView" | "baseLead" | "clientContact" | "clientLink" | "sharedLeads" | "leadActivity" | "conversation" | "userPreference" | "mortgageRequest" | "salesRequest" | "visitRequest" | "sitemapEntry" | "inquiry" | "authzRole" | "accountAccess" | "roleCapability" | "authzAccountAccessGrant" | "authzAssetsAccessGrant" | "competitor" | "competitorSource" | "competitorPage" | "competitorListing" | "propertyCompetitionMap" | "competitorTracking" | "intelligenceMapping" | "intelligenceAlert"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2233,77 +2233,77 @@ export namespace Prisma {
           }
         }
       }
-      ListingRepresentative: {
-        payload: Prisma.$ListingRepresentativePayload<ExtArgs>
-        fields: Prisma.ListingRepresentativeFieldRefs
+      ListingsRepresentatives: {
+        payload: Prisma.$ListingsRepresentativesPayload<ExtArgs>
+        fields: Prisma.ListingsRepresentativesFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.ListingRepresentativeFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingRepresentativePayload> | null
+            args: Prisma.ListingsRepresentativesFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsRepresentativesPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.ListingRepresentativeFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingRepresentativePayload>
+            args: Prisma.ListingsRepresentativesFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsRepresentativesPayload>
           }
           findFirst: {
-            args: Prisma.ListingRepresentativeFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingRepresentativePayload> | null
+            args: Prisma.ListingsRepresentativesFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsRepresentativesPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.ListingRepresentativeFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingRepresentativePayload>
+            args: Prisma.ListingsRepresentativesFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsRepresentativesPayload>
           }
           findMany: {
-            args: Prisma.ListingRepresentativeFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingRepresentativePayload>[]
+            args: Prisma.ListingsRepresentativesFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsRepresentativesPayload>[]
           }
           create: {
-            args: Prisma.ListingRepresentativeCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingRepresentativePayload>
+            args: Prisma.ListingsRepresentativesCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsRepresentativesPayload>
           }
           createMany: {
-            args: Prisma.ListingRepresentativeCreateManyArgs<ExtArgs>
+            args: Prisma.ListingsRepresentativesCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.ListingRepresentativeCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingRepresentativePayload>[]
+            args: Prisma.ListingsRepresentativesCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsRepresentativesPayload>[]
           }
           delete: {
-            args: Prisma.ListingRepresentativeDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingRepresentativePayload>
+            args: Prisma.ListingsRepresentativesDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsRepresentativesPayload>
           }
           update: {
-            args: Prisma.ListingRepresentativeUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingRepresentativePayload>
+            args: Prisma.ListingsRepresentativesUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsRepresentativesPayload>
           }
           deleteMany: {
-            args: Prisma.ListingRepresentativeDeleteManyArgs<ExtArgs>
+            args: Prisma.ListingsRepresentativesDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.ListingRepresentativeUpdateManyArgs<ExtArgs>
+            args: Prisma.ListingsRepresentativesUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.ListingRepresentativeUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingRepresentativePayload>[]
+            args: Prisma.ListingsRepresentativesUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsRepresentativesPayload>[]
           }
           upsert: {
-            args: Prisma.ListingRepresentativeUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ListingRepresentativePayload>
+            args: Prisma.ListingsRepresentativesUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ListingsRepresentativesPayload>
           }
           aggregate: {
-            args: Prisma.ListingRepresentativeAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateListingRepresentative>
+            args: Prisma.ListingsRepresentativesAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateListingsRepresentatives>
           }
           groupBy: {
-            args: Prisma.ListingRepresentativeGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ListingRepresentativeGroupByOutputType>[]
+            args: Prisma.ListingsRepresentativesGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ListingsRepresentativesGroupByOutputType>[]
           }
           count: {
-            args: Prisma.ListingRepresentativeCountArgs<ExtArgs>
-            result: $Utils.Optional<ListingRepresentativeCountAggregateOutputType> | number
+            args: Prisma.ListingsRepresentativesCountArgs<ExtArgs>
+            result: $Utils.Optional<ListingsRepresentativesCountAggregateOutputType> | number
           }
         }
       }
@@ -5163,7 +5163,7 @@ export namespace Prisma {
     propertyLandDetail?: PropertyLandDetailOmit
     listingCommercial?: ListingCommercialOmit
     propertyOwner?: PropertyOwnerOmit
-    listingRepresentative?: ListingRepresentativeOmit
+    listingsRepresentatives?: ListingsRepresentativesOmit
     listingsDocuments?: ListingsDocumentsOmit
     listingChange?: ListingChangeOmit
     agency?: AgencyOmit
@@ -5451,7 +5451,7 @@ export namespace Prisma {
    * AccountCountOutputType without action
    */
   export type AccountCountOutputTypeCountListingRepresentativesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ListingRepresentativeWhereInput
+    where?: ListingsRepresentativesWhereInput
   }
 
 
@@ -5554,7 +5554,7 @@ export namespace Prisma {
    * ListingCountOutputType without action
    */
   export type ListingCountOutputTypeCountRepresentativesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ListingRepresentativeWhereInput
+    where?: ListingsRepresentativesWhereInput
   }
 
 
@@ -7358,7 +7358,7 @@ export namespace Prisma {
       createdListingChanges: Prisma.$ListingChangePayload<ExtArgs>[]
       propertyChangesForProfile: Prisma.$ListingChangePayload<ExtArgs>[]
       propertyChangesByWorkingProfile: Prisma.$ListingChangePayload<ExtArgs>[]
-      listingRepresentatives: Prisma.$ListingRepresentativePayload<ExtArgs>[]
+      listingRepresentatives: Prisma.$ListingsRepresentativesPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7779,7 +7779,7 @@ export namespace Prisma {
     createdListingChanges<T extends Account$createdListingChangesArgs<ExtArgs> = {}>(args?: Subset<T, Account$createdListingChangesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingChangePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     propertyChangesForProfile<T extends Account$propertyChangesForProfileArgs<ExtArgs> = {}>(args?: Subset<T, Account$propertyChangesForProfileArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingChangePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     propertyChangesByWorkingProfile<T extends Account$propertyChangesByWorkingProfileArgs<ExtArgs> = {}>(args?: Subset<T, Account$propertyChangesByWorkingProfileArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingChangePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    listingRepresentatives<T extends Account$listingRepresentativesArgs<ExtArgs> = {}>(args?: Subset<T, Account$listingRepresentativesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingRepresentativePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    listingRepresentatives<T extends Account$listingRepresentativesArgs<ExtArgs> = {}>(args?: Subset<T, Account$listingRepresentativesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingsRepresentativesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8532,23 +8532,23 @@ export namespace Prisma {
    */
   export type Account$listingRepresentativesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingRepresentative
+     * Select specific fields to fetch from the ListingsRepresentatives
      */
-    select?: ListingRepresentativeSelect<ExtArgs> | null
+    select?: ListingsRepresentativesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingRepresentative
+     * Omit specific fields from the ListingsRepresentatives
      */
-    omit?: ListingRepresentativeOmit<ExtArgs> | null
+    omit?: ListingsRepresentativesOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingRepresentativeInclude<ExtArgs> | null
-    where?: ListingRepresentativeWhereInput
-    orderBy?: ListingRepresentativeOrderByWithRelationInput | ListingRepresentativeOrderByWithRelationInput[]
-    cursor?: ListingRepresentativeWhereUniqueInput
+    include?: ListingsRepresentativesInclude<ExtArgs> | null
+    where?: ListingsRepresentativesWhereInput
+    orderBy?: ListingsRepresentativesOrderByWithRelationInput | ListingsRepresentativesOrderByWithRelationInput[]
+    cursor?: ListingsRepresentativesWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: ListingRepresentativeScalarFieldEnum | ListingRepresentativeScalarFieldEnum[]
+    distinct?: ListingsRepresentativesScalarFieldEnum | ListingsRepresentativesScalarFieldEnum[]
   }
 
   /**
@@ -10096,7 +10096,7 @@ export namespace Prisma {
       savedBy: Prisma.$ListingsSavedPayload<ExtArgs>[]
       views: Prisma.$ListingsViewPayload<ExtArgs>[]
       competitionMaps: Prisma.$PropertyCompetitionMapPayload<ExtArgs>[]
-      representatives: Prisma.$ListingRepresentativePayload<ExtArgs>[]
+      representatives: Prisma.$ListingsRepresentativesPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -10536,7 +10536,7 @@ export namespace Prisma {
     savedBy<T extends Listing$savedByArgs<ExtArgs> = {}>(args?: Subset<T, Listing$savedByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingsSavedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     views<T extends Listing$viewsArgs<ExtArgs> = {}>(args?: Subset<T, Listing$viewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingsViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     competitionMaps<T extends Listing$competitionMapsArgs<ExtArgs> = {}>(args?: Subset<T, Listing$competitionMapsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PropertyCompetitionMapPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    representatives<T extends Listing$representativesArgs<ExtArgs> = {}>(args?: Subset<T, Listing$representativesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingRepresentativePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    representatives<T extends Listing$representativesArgs<ExtArgs> = {}>(args?: Subset<T, Listing$representativesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingsRepresentativesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11269,23 +11269,23 @@ export namespace Prisma {
    */
   export type Listing$representativesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingRepresentative
+     * Select specific fields to fetch from the ListingsRepresentatives
      */
-    select?: ListingRepresentativeSelect<ExtArgs> | null
+    select?: ListingsRepresentativesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingRepresentative
+     * Omit specific fields from the ListingsRepresentatives
      */
-    omit?: ListingRepresentativeOmit<ExtArgs> | null
+    omit?: ListingsRepresentativesOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingRepresentativeInclude<ExtArgs> | null
-    where?: ListingRepresentativeWhereInput
-    orderBy?: ListingRepresentativeOrderByWithRelationInput | ListingRepresentativeOrderByWithRelationInput[]
-    cursor?: ListingRepresentativeWhereUniqueInput
+    include?: ListingsRepresentativesInclude<ExtArgs> | null
+    where?: ListingsRepresentativesWhereInput
+    orderBy?: ListingsRepresentativesOrderByWithRelationInput | ListingsRepresentativesOrderByWithRelationInput[]
+    cursor?: ListingsRepresentativesWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: ListingRepresentativeScalarFieldEnum | ListingRepresentativeScalarFieldEnum[]
+    distinct?: ListingsRepresentativesScalarFieldEnum | ListingsRepresentativesScalarFieldEnum[]
   }
 
   /**
@@ -18224,16 +18224,16 @@ export namespace Prisma {
 
 
   /**
-   * Model ListingRepresentative
+   * Model ListingsRepresentatives
    */
 
-  export type AggregateListingRepresentative = {
-    _count: ListingRepresentativeCountAggregateOutputType | null
-    _min: ListingRepresentativeMinAggregateOutputType | null
-    _max: ListingRepresentativeMaxAggregateOutputType | null
+  export type AggregateListingsRepresentatives = {
+    _count: ListingsRepresentativesCountAggregateOutputType | null
+    _min: ListingsRepresentativesMinAggregateOutputType | null
+    _max: ListingsRepresentativesMaxAggregateOutputType | null
   }
 
-  export type ListingRepresentativeMinAggregateOutputType = {
+  export type ListingsRepresentativesMinAggregateOutputType = {
     id: string | null
     listingId: string | null
     representativeId: string | null
@@ -18241,7 +18241,7 @@ export namespace Prisma {
     status: string | null
   }
 
-  export type ListingRepresentativeMaxAggregateOutputType = {
+  export type ListingsRepresentativesMaxAggregateOutputType = {
     id: string | null
     listingId: string | null
     representativeId: string | null
@@ -18249,7 +18249,7 @@ export namespace Prisma {
     status: string | null
   }
 
-  export type ListingRepresentativeCountAggregateOutputType = {
+  export type ListingsRepresentativesCountAggregateOutputType = {
     id: number
     listingId: number
     representativeId: number
@@ -18259,7 +18259,7 @@ export namespace Prisma {
   }
 
 
-  export type ListingRepresentativeMinAggregateInputType = {
+  export type ListingsRepresentativesMinAggregateInputType = {
     id?: true
     listingId?: true
     representativeId?: true
@@ -18267,7 +18267,7 @@ export namespace Prisma {
     status?: true
   }
 
-  export type ListingRepresentativeMaxAggregateInputType = {
+  export type ListingsRepresentativesMaxAggregateInputType = {
     id?: true
     listingId?: true
     representativeId?: true
@@ -18275,7 +18275,7 @@ export namespace Prisma {
     status?: true
   }
 
-  export type ListingRepresentativeCountAggregateInputType = {
+  export type ListingsRepresentativesCountAggregateInputType = {
     id?: true
     listingId?: true
     representativeId?: true
@@ -18284,104 +18284,104 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type ListingRepresentativeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsRepresentativesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which ListingRepresentative to aggregate.
+     * Filter which ListingsRepresentatives to aggregate.
      */
-    where?: ListingRepresentativeWhereInput
+    where?: ListingsRepresentativesWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ListingRepresentatives to fetch.
+     * Determine the order of ListingsRepresentatives to fetch.
      */
-    orderBy?: ListingRepresentativeOrderByWithRelationInput | ListingRepresentativeOrderByWithRelationInput[]
+    orderBy?: ListingsRepresentativesOrderByWithRelationInput | ListingsRepresentativesOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: ListingRepresentativeWhereUniqueInput
+    cursor?: ListingsRepresentativesWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ListingRepresentatives from the position of the cursor.
+     * Take `±n` ListingsRepresentatives from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ListingRepresentatives.
+     * Skip the first `n` ListingsRepresentatives.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned ListingRepresentatives
+     * Count returned ListingsRepresentatives
     **/
-    _count?: true | ListingRepresentativeCountAggregateInputType
+    _count?: true | ListingsRepresentativesCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: ListingRepresentativeMinAggregateInputType
+    _min?: ListingsRepresentativesMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: ListingRepresentativeMaxAggregateInputType
+    _max?: ListingsRepresentativesMaxAggregateInputType
   }
 
-  export type GetListingRepresentativeAggregateType<T extends ListingRepresentativeAggregateArgs> = {
-        [P in keyof T & keyof AggregateListingRepresentative]: P extends '_count' | 'count'
+  export type GetListingsRepresentativesAggregateType<T extends ListingsRepresentativesAggregateArgs> = {
+        [P in keyof T & keyof AggregateListingsRepresentatives]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateListingRepresentative[P]>
-      : GetScalarType<T[P], AggregateListingRepresentative[P]>
+        : GetScalarType<T[P], AggregateListingsRepresentatives[P]>
+      : GetScalarType<T[P], AggregateListingsRepresentatives[P]>
   }
 
 
 
 
-  export type ListingRepresentativeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ListingRepresentativeWhereInput
-    orderBy?: ListingRepresentativeOrderByWithAggregationInput | ListingRepresentativeOrderByWithAggregationInput[]
-    by: ListingRepresentativeScalarFieldEnum[] | ListingRepresentativeScalarFieldEnum
-    having?: ListingRepresentativeScalarWhereWithAggregatesInput
+  export type ListingsRepresentativesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ListingsRepresentativesWhereInput
+    orderBy?: ListingsRepresentativesOrderByWithAggregationInput | ListingsRepresentativesOrderByWithAggregationInput[]
+    by: ListingsRepresentativesScalarFieldEnum[] | ListingsRepresentativesScalarFieldEnum
+    having?: ListingsRepresentativesScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: ListingRepresentativeCountAggregateInputType | true
-    _min?: ListingRepresentativeMinAggregateInputType
-    _max?: ListingRepresentativeMaxAggregateInputType
+    _count?: ListingsRepresentativesCountAggregateInputType | true
+    _min?: ListingsRepresentativesMinAggregateInputType
+    _max?: ListingsRepresentativesMaxAggregateInputType
   }
 
-  export type ListingRepresentativeGroupByOutputType = {
+  export type ListingsRepresentativesGroupByOutputType = {
     id: string
     listingId: string
     representativeId: string
     role: $Enums.PropertyRepresentativeRole
     status: string | null
-    _count: ListingRepresentativeCountAggregateOutputType | null
-    _min: ListingRepresentativeMinAggregateOutputType | null
-    _max: ListingRepresentativeMaxAggregateOutputType | null
+    _count: ListingsRepresentativesCountAggregateOutputType | null
+    _min: ListingsRepresentativesMinAggregateOutputType | null
+    _max: ListingsRepresentativesMaxAggregateOutputType | null
   }
 
-  type GetListingRepresentativeGroupByPayload<T extends ListingRepresentativeGroupByArgs> = Prisma.PrismaPromise<
+  type GetListingsRepresentativesGroupByPayload<T extends ListingsRepresentativesGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<ListingRepresentativeGroupByOutputType, T['by']> &
+      PickEnumerable<ListingsRepresentativesGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof ListingRepresentativeGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof ListingsRepresentativesGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], ListingRepresentativeGroupByOutputType[P]>
-            : GetScalarType<T[P], ListingRepresentativeGroupByOutputType[P]>
+              : GetScalarType<T[P], ListingsRepresentativesGroupByOutputType[P]>
+            : GetScalarType<T[P], ListingsRepresentativesGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type ListingRepresentativeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type ListingsRepresentativesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     listingId?: boolean
     representativeId?: boolean
@@ -18389,9 +18389,9 @@ export namespace Prisma {
     status?: boolean
     listing?: boolean | ListingDefaultArgs<ExtArgs>
     representative?: boolean | AccountDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["listingRepresentative"]>
+  }, ExtArgs["result"]["listingsRepresentatives"]>
 
-  export type ListingRepresentativeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type ListingsRepresentativesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     listingId?: boolean
     representativeId?: boolean
@@ -18399,9 +18399,9 @@ export namespace Prisma {
     status?: boolean
     listing?: boolean | ListingDefaultArgs<ExtArgs>
     representative?: boolean | AccountDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["listingRepresentative"]>
+  }, ExtArgs["result"]["listingsRepresentatives"]>
 
-  export type ListingRepresentativeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type ListingsRepresentativesSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     listingId?: boolean
     representativeId?: boolean
@@ -18409,9 +18409,9 @@ export namespace Prisma {
     status?: boolean
     listing?: boolean | ListingDefaultArgs<ExtArgs>
     representative?: boolean | AccountDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["listingRepresentative"]>
+  }, ExtArgs["result"]["listingsRepresentatives"]>
 
-  export type ListingRepresentativeSelectScalar = {
+  export type ListingsRepresentativesSelectScalar = {
     id?: boolean
     listingId?: boolean
     representativeId?: boolean
@@ -18419,22 +18419,22 @@ export namespace Prisma {
     status?: boolean
   }
 
-  export type ListingRepresentativeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "listingId" | "representativeId" | "role" | "status", ExtArgs["result"]["listingRepresentative"]>
-  export type ListingRepresentativeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsRepresentativesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "listingId" | "representativeId" | "role" | "status", ExtArgs["result"]["listingsRepresentatives"]>
+  export type ListingsRepresentativesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     listing?: boolean | ListingDefaultArgs<ExtArgs>
     representative?: boolean | AccountDefaultArgs<ExtArgs>
   }
-  export type ListingRepresentativeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsRepresentativesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     listing?: boolean | ListingDefaultArgs<ExtArgs>
     representative?: boolean | AccountDefaultArgs<ExtArgs>
   }
-  export type ListingRepresentativeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsRepresentativesIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     listing?: boolean | ListingDefaultArgs<ExtArgs>
     representative?: boolean | AccountDefaultArgs<ExtArgs>
   }
 
-  export type $ListingRepresentativePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "ListingRepresentative"
+  export type $ListingsRepresentativesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ListingsRepresentatives"
     objects: {
       listing: Prisma.$ListingPayload<ExtArgs>
       representative: Prisma.$AccountPayload<ExtArgs>
@@ -18445,136 +18445,136 @@ export namespace Prisma {
       representativeId: string
       role: $Enums.PropertyRepresentativeRole
       status: string | null
-    }, ExtArgs["result"]["listingRepresentative"]>
+    }, ExtArgs["result"]["listingsRepresentatives"]>
     composites: {}
   }
 
-  type ListingRepresentativeGetPayload<S extends boolean | null | undefined | ListingRepresentativeDefaultArgs> = $Result.GetResult<Prisma.$ListingRepresentativePayload, S>
+  type ListingsRepresentativesGetPayload<S extends boolean | null | undefined | ListingsRepresentativesDefaultArgs> = $Result.GetResult<Prisma.$ListingsRepresentativesPayload, S>
 
-  type ListingRepresentativeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<ListingRepresentativeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ListingRepresentativeCountAggregateInputType | true
+  type ListingsRepresentativesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ListingsRepresentativesFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ListingsRepresentativesCountAggregateInputType | true
     }
 
-  export interface ListingRepresentativeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ListingRepresentative'], meta: { name: 'ListingRepresentative' } }
+  export interface ListingsRepresentativesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ListingsRepresentatives'], meta: { name: 'ListingsRepresentatives' } }
     /**
-     * Find zero or one ListingRepresentative that matches the filter.
-     * @param {ListingRepresentativeFindUniqueArgs} args - Arguments to find a ListingRepresentative
+     * Find zero or one ListingsRepresentatives that matches the filter.
+     * @param {ListingsRepresentativesFindUniqueArgs} args - Arguments to find a ListingsRepresentatives
      * @example
-     * // Get one ListingRepresentative
-     * const listingRepresentative = await prisma.listingRepresentative.findUnique({
+     * // Get one ListingsRepresentatives
+     * const listingsRepresentatives = await prisma.listingsRepresentatives.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends ListingRepresentativeFindUniqueArgs>(args: SelectSubset<T, ListingRepresentativeFindUniqueArgs<ExtArgs>>): Prisma__ListingRepresentativeClient<$Result.GetResult<Prisma.$ListingRepresentativePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends ListingsRepresentativesFindUniqueArgs>(args: SelectSubset<T, ListingsRepresentativesFindUniqueArgs<ExtArgs>>): Prisma__ListingsRepresentativesClient<$Result.GetResult<Prisma.$ListingsRepresentativesPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one ListingRepresentative that matches the filter or throw an error with `error.code='P2025'`
+     * Find one ListingsRepresentatives that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {ListingRepresentativeFindUniqueOrThrowArgs} args - Arguments to find a ListingRepresentative
+     * @param {ListingsRepresentativesFindUniqueOrThrowArgs} args - Arguments to find a ListingsRepresentatives
      * @example
-     * // Get one ListingRepresentative
-     * const listingRepresentative = await prisma.listingRepresentative.findUniqueOrThrow({
+     * // Get one ListingsRepresentatives
+     * const listingsRepresentatives = await prisma.listingsRepresentatives.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends ListingRepresentativeFindUniqueOrThrowArgs>(args: SelectSubset<T, ListingRepresentativeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ListingRepresentativeClient<$Result.GetResult<Prisma.$ListingRepresentativePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends ListingsRepresentativesFindUniqueOrThrowArgs>(args: SelectSubset<T, ListingsRepresentativesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ListingsRepresentativesClient<$Result.GetResult<Prisma.$ListingsRepresentativesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first ListingRepresentative that matches the filter.
+     * Find the first ListingsRepresentatives that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingRepresentativeFindFirstArgs} args - Arguments to find a ListingRepresentative
+     * @param {ListingsRepresentativesFindFirstArgs} args - Arguments to find a ListingsRepresentatives
      * @example
-     * // Get one ListingRepresentative
-     * const listingRepresentative = await prisma.listingRepresentative.findFirst({
+     * // Get one ListingsRepresentatives
+     * const listingsRepresentatives = await prisma.listingsRepresentatives.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends ListingRepresentativeFindFirstArgs>(args?: SelectSubset<T, ListingRepresentativeFindFirstArgs<ExtArgs>>): Prisma__ListingRepresentativeClient<$Result.GetResult<Prisma.$ListingRepresentativePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends ListingsRepresentativesFindFirstArgs>(args?: SelectSubset<T, ListingsRepresentativesFindFirstArgs<ExtArgs>>): Prisma__ListingsRepresentativesClient<$Result.GetResult<Prisma.$ListingsRepresentativesPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first ListingRepresentative that matches the filter or
+     * Find the first ListingsRepresentatives that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingRepresentativeFindFirstOrThrowArgs} args - Arguments to find a ListingRepresentative
+     * @param {ListingsRepresentativesFindFirstOrThrowArgs} args - Arguments to find a ListingsRepresentatives
      * @example
-     * // Get one ListingRepresentative
-     * const listingRepresentative = await prisma.listingRepresentative.findFirstOrThrow({
+     * // Get one ListingsRepresentatives
+     * const listingsRepresentatives = await prisma.listingsRepresentatives.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends ListingRepresentativeFindFirstOrThrowArgs>(args?: SelectSubset<T, ListingRepresentativeFindFirstOrThrowArgs<ExtArgs>>): Prisma__ListingRepresentativeClient<$Result.GetResult<Prisma.$ListingRepresentativePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends ListingsRepresentativesFindFirstOrThrowArgs>(args?: SelectSubset<T, ListingsRepresentativesFindFirstOrThrowArgs<ExtArgs>>): Prisma__ListingsRepresentativesClient<$Result.GetResult<Prisma.$ListingsRepresentativesPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more ListingRepresentatives that matches the filter.
+     * Find zero or more ListingsRepresentatives that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingRepresentativeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {ListingsRepresentativesFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all ListingRepresentatives
-     * const listingRepresentatives = await prisma.listingRepresentative.findMany()
+     * // Get all ListingsRepresentatives
+     * const listingsRepresentatives = await prisma.listingsRepresentatives.findMany()
      * 
-     * // Get first 10 ListingRepresentatives
-     * const listingRepresentatives = await prisma.listingRepresentative.findMany({ take: 10 })
+     * // Get first 10 ListingsRepresentatives
+     * const listingsRepresentatives = await prisma.listingsRepresentatives.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const listingRepresentativeWithIdOnly = await prisma.listingRepresentative.findMany({ select: { id: true } })
+     * const listingsRepresentativesWithIdOnly = await prisma.listingsRepresentatives.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends ListingRepresentativeFindManyArgs>(args?: SelectSubset<T, ListingRepresentativeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingRepresentativePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends ListingsRepresentativesFindManyArgs>(args?: SelectSubset<T, ListingsRepresentativesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingsRepresentativesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a ListingRepresentative.
-     * @param {ListingRepresentativeCreateArgs} args - Arguments to create a ListingRepresentative.
+     * Create a ListingsRepresentatives.
+     * @param {ListingsRepresentativesCreateArgs} args - Arguments to create a ListingsRepresentatives.
      * @example
-     * // Create one ListingRepresentative
-     * const ListingRepresentative = await prisma.listingRepresentative.create({
+     * // Create one ListingsRepresentatives
+     * const ListingsRepresentatives = await prisma.listingsRepresentatives.create({
      *   data: {
-     *     // ... data to create a ListingRepresentative
+     *     // ... data to create a ListingsRepresentatives
      *   }
      * })
      * 
      */
-    create<T extends ListingRepresentativeCreateArgs>(args: SelectSubset<T, ListingRepresentativeCreateArgs<ExtArgs>>): Prisma__ListingRepresentativeClient<$Result.GetResult<Prisma.$ListingRepresentativePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends ListingsRepresentativesCreateArgs>(args: SelectSubset<T, ListingsRepresentativesCreateArgs<ExtArgs>>): Prisma__ListingsRepresentativesClient<$Result.GetResult<Prisma.$ListingsRepresentativesPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many ListingRepresentatives.
-     * @param {ListingRepresentativeCreateManyArgs} args - Arguments to create many ListingRepresentatives.
+     * Create many ListingsRepresentatives.
+     * @param {ListingsRepresentativesCreateManyArgs} args - Arguments to create many ListingsRepresentatives.
      * @example
-     * // Create many ListingRepresentatives
-     * const listingRepresentative = await prisma.listingRepresentative.createMany({
+     * // Create many ListingsRepresentatives
+     * const listingsRepresentatives = await prisma.listingsRepresentatives.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends ListingRepresentativeCreateManyArgs>(args?: SelectSubset<T, ListingRepresentativeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends ListingsRepresentativesCreateManyArgs>(args?: SelectSubset<T, ListingsRepresentativesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many ListingRepresentatives and returns the data saved in the database.
-     * @param {ListingRepresentativeCreateManyAndReturnArgs} args - Arguments to create many ListingRepresentatives.
+     * Create many ListingsRepresentatives and returns the data saved in the database.
+     * @param {ListingsRepresentativesCreateManyAndReturnArgs} args - Arguments to create many ListingsRepresentatives.
      * @example
-     * // Create many ListingRepresentatives
-     * const listingRepresentative = await prisma.listingRepresentative.createManyAndReturn({
+     * // Create many ListingsRepresentatives
+     * const listingsRepresentatives = await prisma.listingsRepresentatives.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many ListingRepresentatives and only return the `id`
-     * const listingRepresentativeWithIdOnly = await prisma.listingRepresentative.createManyAndReturn({
+     * // Create many ListingsRepresentatives and only return the `id`
+     * const listingsRepresentativesWithIdOnly = await prisma.listingsRepresentatives.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -18584,28 +18584,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends ListingRepresentativeCreateManyAndReturnArgs>(args?: SelectSubset<T, ListingRepresentativeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingRepresentativePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends ListingsRepresentativesCreateManyAndReturnArgs>(args?: SelectSubset<T, ListingsRepresentativesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingsRepresentativesPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a ListingRepresentative.
-     * @param {ListingRepresentativeDeleteArgs} args - Arguments to delete one ListingRepresentative.
+     * Delete a ListingsRepresentatives.
+     * @param {ListingsRepresentativesDeleteArgs} args - Arguments to delete one ListingsRepresentatives.
      * @example
-     * // Delete one ListingRepresentative
-     * const ListingRepresentative = await prisma.listingRepresentative.delete({
+     * // Delete one ListingsRepresentatives
+     * const ListingsRepresentatives = await prisma.listingsRepresentatives.delete({
      *   where: {
-     *     // ... filter to delete one ListingRepresentative
+     *     // ... filter to delete one ListingsRepresentatives
      *   }
      * })
      * 
      */
-    delete<T extends ListingRepresentativeDeleteArgs>(args: SelectSubset<T, ListingRepresentativeDeleteArgs<ExtArgs>>): Prisma__ListingRepresentativeClient<$Result.GetResult<Prisma.$ListingRepresentativePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends ListingsRepresentativesDeleteArgs>(args: SelectSubset<T, ListingsRepresentativesDeleteArgs<ExtArgs>>): Prisma__ListingsRepresentativesClient<$Result.GetResult<Prisma.$ListingsRepresentativesPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one ListingRepresentative.
-     * @param {ListingRepresentativeUpdateArgs} args - Arguments to update one ListingRepresentative.
+     * Update one ListingsRepresentatives.
+     * @param {ListingsRepresentativesUpdateArgs} args - Arguments to update one ListingsRepresentatives.
      * @example
-     * // Update one ListingRepresentative
-     * const listingRepresentative = await prisma.listingRepresentative.update({
+     * // Update one ListingsRepresentatives
+     * const listingsRepresentatives = await prisma.listingsRepresentatives.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -18615,30 +18615,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends ListingRepresentativeUpdateArgs>(args: SelectSubset<T, ListingRepresentativeUpdateArgs<ExtArgs>>): Prisma__ListingRepresentativeClient<$Result.GetResult<Prisma.$ListingRepresentativePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends ListingsRepresentativesUpdateArgs>(args: SelectSubset<T, ListingsRepresentativesUpdateArgs<ExtArgs>>): Prisma__ListingsRepresentativesClient<$Result.GetResult<Prisma.$ListingsRepresentativesPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more ListingRepresentatives.
-     * @param {ListingRepresentativeDeleteManyArgs} args - Arguments to filter ListingRepresentatives to delete.
+     * Delete zero or more ListingsRepresentatives.
+     * @param {ListingsRepresentativesDeleteManyArgs} args - Arguments to filter ListingsRepresentatives to delete.
      * @example
-     * // Delete a few ListingRepresentatives
-     * const { count } = await prisma.listingRepresentative.deleteMany({
+     * // Delete a few ListingsRepresentatives
+     * const { count } = await prisma.listingsRepresentatives.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends ListingRepresentativeDeleteManyArgs>(args?: SelectSubset<T, ListingRepresentativeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends ListingsRepresentativesDeleteManyArgs>(args?: SelectSubset<T, ListingsRepresentativesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more ListingRepresentatives.
+     * Update zero or more ListingsRepresentatives.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingRepresentativeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {ListingsRepresentativesUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many ListingRepresentatives
-     * const listingRepresentative = await prisma.listingRepresentative.updateMany({
+     * // Update many ListingsRepresentatives
+     * const listingsRepresentatives = await prisma.listingsRepresentatives.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -18648,14 +18648,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends ListingRepresentativeUpdateManyArgs>(args: SelectSubset<T, ListingRepresentativeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends ListingsRepresentativesUpdateManyArgs>(args: SelectSubset<T, ListingsRepresentativesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more ListingRepresentatives and returns the data updated in the database.
-     * @param {ListingRepresentativeUpdateManyAndReturnArgs} args - Arguments to update many ListingRepresentatives.
+     * Update zero or more ListingsRepresentatives and returns the data updated in the database.
+     * @param {ListingsRepresentativesUpdateManyAndReturnArgs} args - Arguments to update many ListingsRepresentatives.
      * @example
-     * // Update many ListingRepresentatives
-     * const listingRepresentative = await prisma.listingRepresentative.updateManyAndReturn({
+     * // Update many ListingsRepresentatives
+     * const listingsRepresentatives = await prisma.listingsRepresentatives.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -18664,8 +18664,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more ListingRepresentatives and only return the `id`
-     * const listingRepresentativeWithIdOnly = await prisma.listingRepresentative.updateManyAndReturn({
+     * // Update zero or more ListingsRepresentatives and only return the `id`
+     * const listingsRepresentativesWithIdOnly = await prisma.listingsRepresentatives.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -18678,56 +18678,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends ListingRepresentativeUpdateManyAndReturnArgs>(args: SelectSubset<T, ListingRepresentativeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingRepresentativePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends ListingsRepresentativesUpdateManyAndReturnArgs>(args: SelectSubset<T, ListingsRepresentativesUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ListingsRepresentativesPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one ListingRepresentative.
-     * @param {ListingRepresentativeUpsertArgs} args - Arguments to update or create a ListingRepresentative.
+     * Create or update one ListingsRepresentatives.
+     * @param {ListingsRepresentativesUpsertArgs} args - Arguments to update or create a ListingsRepresentatives.
      * @example
-     * // Update or create a ListingRepresentative
-     * const listingRepresentative = await prisma.listingRepresentative.upsert({
+     * // Update or create a ListingsRepresentatives
+     * const listingsRepresentatives = await prisma.listingsRepresentatives.upsert({
      *   create: {
-     *     // ... data to create a ListingRepresentative
+     *     // ... data to create a ListingsRepresentatives
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the ListingRepresentative we want to update
+     *     // ... the filter for the ListingsRepresentatives we want to update
      *   }
      * })
      */
-    upsert<T extends ListingRepresentativeUpsertArgs>(args: SelectSubset<T, ListingRepresentativeUpsertArgs<ExtArgs>>): Prisma__ListingRepresentativeClient<$Result.GetResult<Prisma.$ListingRepresentativePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends ListingsRepresentativesUpsertArgs>(args: SelectSubset<T, ListingsRepresentativesUpsertArgs<ExtArgs>>): Prisma__ListingsRepresentativesClient<$Result.GetResult<Prisma.$ListingsRepresentativesPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of ListingRepresentatives.
+     * Count the number of ListingsRepresentatives.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingRepresentativeCountArgs} args - Arguments to filter ListingRepresentatives to count.
+     * @param {ListingsRepresentativesCountArgs} args - Arguments to filter ListingsRepresentatives to count.
      * @example
-     * // Count the number of ListingRepresentatives
-     * const count = await prisma.listingRepresentative.count({
+     * // Count the number of ListingsRepresentatives
+     * const count = await prisma.listingsRepresentatives.count({
      *   where: {
-     *     // ... the filter for the ListingRepresentatives we want to count
+     *     // ... the filter for the ListingsRepresentatives we want to count
      *   }
      * })
     **/
-    count<T extends ListingRepresentativeCountArgs>(
-      args?: Subset<T, ListingRepresentativeCountArgs>,
+    count<T extends ListingsRepresentativesCountArgs>(
+      args?: Subset<T, ListingsRepresentativesCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], ListingRepresentativeCountAggregateOutputType>
+          : GetScalarType<T['select'], ListingsRepresentativesCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a ListingRepresentative.
+     * Allows you to perform aggregations operations on a ListingsRepresentatives.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingRepresentativeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {ListingsRepresentativesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -18747,13 +18747,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends ListingRepresentativeAggregateArgs>(args: Subset<T, ListingRepresentativeAggregateArgs>): Prisma.PrismaPromise<GetListingRepresentativeAggregateType<T>>
+    aggregate<T extends ListingsRepresentativesAggregateArgs>(args: Subset<T, ListingsRepresentativesAggregateArgs>): Prisma.PrismaPromise<GetListingsRepresentativesAggregateType<T>>
 
     /**
-     * Group by ListingRepresentative.
+     * Group by ListingsRepresentatives.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {ListingRepresentativeGroupByArgs} args - Group by arguments.
+     * @param {ListingsRepresentativesGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -18768,14 +18768,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends ListingRepresentativeGroupByArgs,
+      T extends ListingsRepresentativesGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ListingRepresentativeGroupByArgs['orderBy'] }
-        : { orderBy?: ListingRepresentativeGroupByArgs['orderBy'] },
+        ? { orderBy: ListingsRepresentativesGroupByArgs['orderBy'] }
+        : { orderBy?: ListingsRepresentativesGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -18824,20 +18824,20 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, ListingRepresentativeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetListingRepresentativeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, ListingsRepresentativesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetListingsRepresentativesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the ListingRepresentative model
+   * Fields of the ListingsRepresentatives model
    */
-  readonly fields: ListingRepresentativeFieldRefs;
+  readonly fields: ListingsRepresentativesFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for ListingRepresentative.
+   * The delegate class that acts as a "Promise-like" for ListingsRepresentatives.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__ListingRepresentativeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__ListingsRepresentativesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     listing<T extends ListingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ListingDefaultArgs<ExtArgs>>): Prisma__ListingClient<$Result.GetResult<Prisma.$ListingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     representative<T extends AccountDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AccountDefaultArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -18867,430 +18867,430 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the ListingRepresentative model
+   * Fields of the ListingsRepresentatives model
    */
-  interface ListingRepresentativeFieldRefs {
-    readonly id: FieldRef<"ListingRepresentative", 'String'>
-    readonly listingId: FieldRef<"ListingRepresentative", 'String'>
-    readonly representativeId: FieldRef<"ListingRepresentative", 'String'>
-    readonly role: FieldRef<"ListingRepresentative", 'PropertyRepresentativeRole'>
-    readonly status: FieldRef<"ListingRepresentative", 'String'>
+  interface ListingsRepresentativesFieldRefs {
+    readonly id: FieldRef<"ListingsRepresentatives", 'String'>
+    readonly listingId: FieldRef<"ListingsRepresentatives", 'String'>
+    readonly representativeId: FieldRef<"ListingsRepresentatives", 'String'>
+    readonly role: FieldRef<"ListingsRepresentatives", 'PropertyRepresentativeRole'>
+    readonly status: FieldRef<"ListingsRepresentatives", 'String'>
   }
     
 
   // Custom InputTypes
   /**
-   * ListingRepresentative findUnique
+   * ListingsRepresentatives findUnique
    */
-  export type ListingRepresentativeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsRepresentativesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingRepresentative
+     * Select specific fields to fetch from the ListingsRepresentatives
      */
-    select?: ListingRepresentativeSelect<ExtArgs> | null
+    select?: ListingsRepresentativesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingRepresentative
+     * Omit specific fields from the ListingsRepresentatives
      */
-    omit?: ListingRepresentativeOmit<ExtArgs> | null
+    omit?: ListingsRepresentativesOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingRepresentativeInclude<ExtArgs> | null
+    include?: ListingsRepresentativesInclude<ExtArgs> | null
     /**
-     * Filter, which ListingRepresentative to fetch.
+     * Filter, which ListingsRepresentatives to fetch.
      */
-    where: ListingRepresentativeWhereUniqueInput
+    where: ListingsRepresentativesWhereUniqueInput
   }
 
   /**
-   * ListingRepresentative findUniqueOrThrow
+   * ListingsRepresentatives findUniqueOrThrow
    */
-  export type ListingRepresentativeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsRepresentativesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingRepresentative
+     * Select specific fields to fetch from the ListingsRepresentatives
      */
-    select?: ListingRepresentativeSelect<ExtArgs> | null
+    select?: ListingsRepresentativesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingRepresentative
+     * Omit specific fields from the ListingsRepresentatives
      */
-    omit?: ListingRepresentativeOmit<ExtArgs> | null
+    omit?: ListingsRepresentativesOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingRepresentativeInclude<ExtArgs> | null
+    include?: ListingsRepresentativesInclude<ExtArgs> | null
     /**
-     * Filter, which ListingRepresentative to fetch.
+     * Filter, which ListingsRepresentatives to fetch.
      */
-    where: ListingRepresentativeWhereUniqueInput
+    where: ListingsRepresentativesWhereUniqueInput
   }
 
   /**
-   * ListingRepresentative findFirst
+   * ListingsRepresentatives findFirst
    */
-  export type ListingRepresentativeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsRepresentativesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingRepresentative
+     * Select specific fields to fetch from the ListingsRepresentatives
      */
-    select?: ListingRepresentativeSelect<ExtArgs> | null
+    select?: ListingsRepresentativesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingRepresentative
+     * Omit specific fields from the ListingsRepresentatives
      */
-    omit?: ListingRepresentativeOmit<ExtArgs> | null
+    omit?: ListingsRepresentativesOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingRepresentativeInclude<ExtArgs> | null
+    include?: ListingsRepresentativesInclude<ExtArgs> | null
     /**
-     * Filter, which ListingRepresentative to fetch.
+     * Filter, which ListingsRepresentatives to fetch.
      */
-    where?: ListingRepresentativeWhereInput
+    where?: ListingsRepresentativesWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ListingRepresentatives to fetch.
+     * Determine the order of ListingsRepresentatives to fetch.
      */
-    orderBy?: ListingRepresentativeOrderByWithRelationInput | ListingRepresentativeOrderByWithRelationInput[]
+    orderBy?: ListingsRepresentativesOrderByWithRelationInput | ListingsRepresentativesOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for ListingRepresentatives.
+     * Sets the position for searching for ListingsRepresentatives.
      */
-    cursor?: ListingRepresentativeWhereUniqueInput
+    cursor?: ListingsRepresentativesWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ListingRepresentatives from the position of the cursor.
+     * Take `±n` ListingsRepresentatives from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ListingRepresentatives.
+     * Skip the first `n` ListingsRepresentatives.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of ListingRepresentatives.
+     * Filter by unique combinations of ListingsRepresentatives.
      */
-    distinct?: ListingRepresentativeScalarFieldEnum | ListingRepresentativeScalarFieldEnum[]
+    distinct?: ListingsRepresentativesScalarFieldEnum | ListingsRepresentativesScalarFieldEnum[]
   }
 
   /**
-   * ListingRepresentative findFirstOrThrow
+   * ListingsRepresentatives findFirstOrThrow
    */
-  export type ListingRepresentativeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsRepresentativesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingRepresentative
+     * Select specific fields to fetch from the ListingsRepresentatives
      */
-    select?: ListingRepresentativeSelect<ExtArgs> | null
+    select?: ListingsRepresentativesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingRepresentative
+     * Omit specific fields from the ListingsRepresentatives
      */
-    omit?: ListingRepresentativeOmit<ExtArgs> | null
+    omit?: ListingsRepresentativesOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingRepresentativeInclude<ExtArgs> | null
+    include?: ListingsRepresentativesInclude<ExtArgs> | null
     /**
-     * Filter, which ListingRepresentative to fetch.
+     * Filter, which ListingsRepresentatives to fetch.
      */
-    where?: ListingRepresentativeWhereInput
+    where?: ListingsRepresentativesWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ListingRepresentatives to fetch.
+     * Determine the order of ListingsRepresentatives to fetch.
      */
-    orderBy?: ListingRepresentativeOrderByWithRelationInput | ListingRepresentativeOrderByWithRelationInput[]
+    orderBy?: ListingsRepresentativesOrderByWithRelationInput | ListingsRepresentativesOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for ListingRepresentatives.
+     * Sets the position for searching for ListingsRepresentatives.
      */
-    cursor?: ListingRepresentativeWhereUniqueInput
+    cursor?: ListingsRepresentativesWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ListingRepresentatives from the position of the cursor.
+     * Take `±n` ListingsRepresentatives from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ListingRepresentatives.
+     * Skip the first `n` ListingsRepresentatives.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of ListingRepresentatives.
+     * Filter by unique combinations of ListingsRepresentatives.
      */
-    distinct?: ListingRepresentativeScalarFieldEnum | ListingRepresentativeScalarFieldEnum[]
+    distinct?: ListingsRepresentativesScalarFieldEnum | ListingsRepresentativesScalarFieldEnum[]
   }
 
   /**
-   * ListingRepresentative findMany
+   * ListingsRepresentatives findMany
    */
-  export type ListingRepresentativeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsRepresentativesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingRepresentative
+     * Select specific fields to fetch from the ListingsRepresentatives
      */
-    select?: ListingRepresentativeSelect<ExtArgs> | null
+    select?: ListingsRepresentativesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingRepresentative
+     * Omit specific fields from the ListingsRepresentatives
      */
-    omit?: ListingRepresentativeOmit<ExtArgs> | null
+    omit?: ListingsRepresentativesOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingRepresentativeInclude<ExtArgs> | null
+    include?: ListingsRepresentativesInclude<ExtArgs> | null
     /**
-     * Filter, which ListingRepresentatives to fetch.
+     * Filter, which ListingsRepresentatives to fetch.
      */
-    where?: ListingRepresentativeWhereInput
+    where?: ListingsRepresentativesWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of ListingRepresentatives to fetch.
+     * Determine the order of ListingsRepresentatives to fetch.
      */
-    orderBy?: ListingRepresentativeOrderByWithRelationInput | ListingRepresentativeOrderByWithRelationInput[]
+    orderBy?: ListingsRepresentativesOrderByWithRelationInput | ListingsRepresentativesOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing ListingRepresentatives.
+     * Sets the position for listing ListingsRepresentatives.
      */
-    cursor?: ListingRepresentativeWhereUniqueInput
+    cursor?: ListingsRepresentativesWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` ListingRepresentatives from the position of the cursor.
+     * Take `±n` ListingsRepresentatives from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` ListingRepresentatives.
+     * Skip the first `n` ListingsRepresentatives.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of ListingRepresentatives.
+     * Filter by unique combinations of ListingsRepresentatives.
      */
-    distinct?: ListingRepresentativeScalarFieldEnum | ListingRepresentativeScalarFieldEnum[]
+    distinct?: ListingsRepresentativesScalarFieldEnum | ListingsRepresentativesScalarFieldEnum[]
   }
 
   /**
-   * ListingRepresentative create
+   * ListingsRepresentatives create
    */
-  export type ListingRepresentativeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsRepresentativesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingRepresentative
+     * Select specific fields to fetch from the ListingsRepresentatives
      */
-    select?: ListingRepresentativeSelect<ExtArgs> | null
+    select?: ListingsRepresentativesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingRepresentative
+     * Omit specific fields from the ListingsRepresentatives
      */
-    omit?: ListingRepresentativeOmit<ExtArgs> | null
+    omit?: ListingsRepresentativesOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingRepresentativeInclude<ExtArgs> | null
+    include?: ListingsRepresentativesInclude<ExtArgs> | null
     /**
-     * The data needed to create a ListingRepresentative.
+     * The data needed to create a ListingsRepresentatives.
      */
-    data: XOR<ListingRepresentativeCreateInput, ListingRepresentativeUncheckedCreateInput>
+    data: XOR<ListingsRepresentativesCreateInput, ListingsRepresentativesUncheckedCreateInput>
   }
 
   /**
-   * ListingRepresentative createMany
+   * ListingsRepresentatives createMany
    */
-  export type ListingRepresentativeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsRepresentativesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many ListingRepresentatives.
+     * The data used to create many ListingsRepresentatives.
      */
-    data: ListingRepresentativeCreateManyInput | ListingRepresentativeCreateManyInput[]
+    data: ListingsRepresentativesCreateManyInput | ListingsRepresentativesCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * ListingRepresentative createManyAndReturn
+   * ListingsRepresentatives createManyAndReturn
    */
-  export type ListingRepresentativeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsRepresentativesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingRepresentative
+     * Select specific fields to fetch from the ListingsRepresentatives
      */
-    select?: ListingRepresentativeSelectCreateManyAndReturn<ExtArgs> | null
+    select?: ListingsRepresentativesSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingRepresentative
+     * Omit specific fields from the ListingsRepresentatives
      */
-    omit?: ListingRepresentativeOmit<ExtArgs> | null
+    omit?: ListingsRepresentativesOmit<ExtArgs> | null
     /**
-     * The data used to create many ListingRepresentatives.
+     * The data used to create many ListingsRepresentatives.
      */
-    data: ListingRepresentativeCreateManyInput | ListingRepresentativeCreateManyInput[]
+    data: ListingsRepresentativesCreateManyInput | ListingsRepresentativesCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingRepresentativeIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: ListingsRepresentativesIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * ListingRepresentative update
+   * ListingsRepresentatives update
    */
-  export type ListingRepresentativeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsRepresentativesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingRepresentative
+     * Select specific fields to fetch from the ListingsRepresentatives
      */
-    select?: ListingRepresentativeSelect<ExtArgs> | null
+    select?: ListingsRepresentativesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingRepresentative
+     * Omit specific fields from the ListingsRepresentatives
      */
-    omit?: ListingRepresentativeOmit<ExtArgs> | null
+    omit?: ListingsRepresentativesOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingRepresentativeInclude<ExtArgs> | null
+    include?: ListingsRepresentativesInclude<ExtArgs> | null
     /**
-     * The data needed to update a ListingRepresentative.
+     * The data needed to update a ListingsRepresentatives.
      */
-    data: XOR<ListingRepresentativeUpdateInput, ListingRepresentativeUncheckedUpdateInput>
+    data: XOR<ListingsRepresentativesUpdateInput, ListingsRepresentativesUncheckedUpdateInput>
     /**
-     * Choose, which ListingRepresentative to update.
+     * Choose, which ListingsRepresentatives to update.
      */
-    where: ListingRepresentativeWhereUniqueInput
+    where: ListingsRepresentativesWhereUniqueInput
   }
 
   /**
-   * ListingRepresentative updateMany
+   * ListingsRepresentatives updateMany
    */
-  export type ListingRepresentativeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsRepresentativesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update ListingRepresentatives.
+     * The data used to update ListingsRepresentatives.
      */
-    data: XOR<ListingRepresentativeUpdateManyMutationInput, ListingRepresentativeUncheckedUpdateManyInput>
+    data: XOR<ListingsRepresentativesUpdateManyMutationInput, ListingsRepresentativesUncheckedUpdateManyInput>
     /**
-     * Filter which ListingRepresentatives to update
+     * Filter which ListingsRepresentatives to update
      */
-    where?: ListingRepresentativeWhereInput
+    where?: ListingsRepresentativesWhereInput
     /**
-     * Limit how many ListingRepresentatives to update.
+     * Limit how many ListingsRepresentatives to update.
      */
     limit?: number
   }
 
   /**
-   * ListingRepresentative updateManyAndReturn
+   * ListingsRepresentatives updateManyAndReturn
    */
-  export type ListingRepresentativeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsRepresentativesUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingRepresentative
+     * Select specific fields to fetch from the ListingsRepresentatives
      */
-    select?: ListingRepresentativeSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: ListingsRepresentativesSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingRepresentative
+     * Omit specific fields from the ListingsRepresentatives
      */
-    omit?: ListingRepresentativeOmit<ExtArgs> | null
+    omit?: ListingsRepresentativesOmit<ExtArgs> | null
     /**
-     * The data used to update ListingRepresentatives.
+     * The data used to update ListingsRepresentatives.
      */
-    data: XOR<ListingRepresentativeUpdateManyMutationInput, ListingRepresentativeUncheckedUpdateManyInput>
+    data: XOR<ListingsRepresentativesUpdateManyMutationInput, ListingsRepresentativesUncheckedUpdateManyInput>
     /**
-     * Filter which ListingRepresentatives to update
+     * Filter which ListingsRepresentatives to update
      */
-    where?: ListingRepresentativeWhereInput
+    where?: ListingsRepresentativesWhereInput
     /**
-     * Limit how many ListingRepresentatives to update.
+     * Limit how many ListingsRepresentatives to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingRepresentativeIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: ListingsRepresentativesIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * ListingRepresentative upsert
+   * ListingsRepresentatives upsert
    */
-  export type ListingRepresentativeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsRepresentativesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingRepresentative
+     * Select specific fields to fetch from the ListingsRepresentatives
      */
-    select?: ListingRepresentativeSelect<ExtArgs> | null
+    select?: ListingsRepresentativesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingRepresentative
+     * Omit specific fields from the ListingsRepresentatives
      */
-    omit?: ListingRepresentativeOmit<ExtArgs> | null
+    omit?: ListingsRepresentativesOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingRepresentativeInclude<ExtArgs> | null
+    include?: ListingsRepresentativesInclude<ExtArgs> | null
     /**
-     * The filter to search for the ListingRepresentative to update in case it exists.
+     * The filter to search for the ListingsRepresentatives to update in case it exists.
      */
-    where: ListingRepresentativeWhereUniqueInput
+    where: ListingsRepresentativesWhereUniqueInput
     /**
-     * In case the ListingRepresentative found by the `where` argument doesn't exist, create a new ListingRepresentative with this data.
+     * In case the ListingsRepresentatives found by the `where` argument doesn't exist, create a new ListingsRepresentatives with this data.
      */
-    create: XOR<ListingRepresentativeCreateInput, ListingRepresentativeUncheckedCreateInput>
+    create: XOR<ListingsRepresentativesCreateInput, ListingsRepresentativesUncheckedCreateInput>
     /**
-     * In case the ListingRepresentative was found with the provided `where` argument, update it with this data.
+     * In case the ListingsRepresentatives was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<ListingRepresentativeUpdateInput, ListingRepresentativeUncheckedUpdateInput>
+    update: XOR<ListingsRepresentativesUpdateInput, ListingsRepresentativesUncheckedUpdateInput>
   }
 
   /**
-   * ListingRepresentative delete
+   * ListingsRepresentatives delete
    */
-  export type ListingRepresentativeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsRepresentativesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingRepresentative
+     * Select specific fields to fetch from the ListingsRepresentatives
      */
-    select?: ListingRepresentativeSelect<ExtArgs> | null
+    select?: ListingsRepresentativesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingRepresentative
+     * Omit specific fields from the ListingsRepresentatives
      */
-    omit?: ListingRepresentativeOmit<ExtArgs> | null
+    omit?: ListingsRepresentativesOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingRepresentativeInclude<ExtArgs> | null
+    include?: ListingsRepresentativesInclude<ExtArgs> | null
     /**
-     * Filter which ListingRepresentative to delete.
+     * Filter which ListingsRepresentatives to delete.
      */
-    where: ListingRepresentativeWhereUniqueInput
+    where: ListingsRepresentativesWhereUniqueInput
   }
 
   /**
-   * ListingRepresentative deleteMany
+   * ListingsRepresentatives deleteMany
    */
-  export type ListingRepresentativeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsRepresentativesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which ListingRepresentatives to delete
+     * Filter which ListingsRepresentatives to delete
      */
-    where?: ListingRepresentativeWhereInput
+    where?: ListingsRepresentativesWhereInput
     /**
-     * Limit how many ListingRepresentatives to delete.
+     * Limit how many ListingsRepresentatives to delete.
      */
     limit?: number
   }
 
   /**
-   * ListingRepresentative without action
+   * ListingsRepresentatives without action
    */
-  export type ListingRepresentativeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ListingsRepresentativesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the ListingRepresentative
+     * Select specific fields to fetch from the ListingsRepresentatives
      */
-    select?: ListingRepresentativeSelect<ExtArgs> | null
+    select?: ListingsRepresentativesSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the ListingRepresentative
+     * Omit specific fields from the ListingsRepresentatives
      */
-    omit?: ListingRepresentativeOmit<ExtArgs> | null
+    omit?: ListingsRepresentativesOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ListingRepresentativeInclude<ExtArgs> | null
+    include?: ListingsRepresentativesInclude<ExtArgs> | null
   }
 
 
@@ -60495,7 +60495,7 @@ export namespace Prisma {
   export type PropertyOwnerScalarFieldEnum = (typeof PropertyOwnerScalarFieldEnum)[keyof typeof PropertyOwnerScalarFieldEnum]
 
 
-  export const ListingRepresentativeScalarFieldEnum: {
+  export const ListingsRepresentativesScalarFieldEnum: {
     id: 'id',
     listingId: 'listingId',
     representativeId: 'representativeId',
@@ -60503,7 +60503,7 @@ export namespace Prisma {
     status: 'status'
   };
 
-  export type ListingRepresentativeScalarFieldEnum = (typeof ListingRepresentativeScalarFieldEnum)[keyof typeof ListingRepresentativeScalarFieldEnum]
+  export type ListingsRepresentativesScalarFieldEnum = (typeof ListingsRepresentativesScalarFieldEnum)[keyof typeof ListingsRepresentativesScalarFieldEnum]
 
 
   export const ListingsDocumentsScalarFieldEnum: {
@@ -61410,7 +61410,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeListRelationFilter
     propertyChangesForProfile?: ListingChangeListRelationFilter
     propertyChangesByWorkingProfile?: ListingChangeListRelationFilter
-    listingRepresentatives?: ListingRepresentativeListRelationFilter
+    listingRepresentatives?: ListingsRepresentativesListRelationFilter
   }
 
   export type AccountOrderByWithRelationInput = {
@@ -61438,7 +61438,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeOrderByRelationAggregateInput
     propertyChangesForProfile?: ListingChangeOrderByRelationAggregateInput
     propertyChangesByWorkingProfile?: ListingChangeOrderByRelationAggregateInput
-    listingRepresentatives?: ListingRepresentativeOrderByRelationAggregateInput
+    listingRepresentatives?: ListingsRepresentativesOrderByRelationAggregateInput
   }
 
   export type AccountWhereUniqueInput = Prisma.AtLeast<{
@@ -61469,7 +61469,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeListRelationFilter
     propertyChangesForProfile?: ListingChangeListRelationFilter
     propertyChangesByWorkingProfile?: ListingChangeListRelationFilter
-    listingRepresentatives?: ListingRepresentativeListRelationFilter
+    listingRepresentatives?: ListingsRepresentativesListRelationFilter
   }, "id" | "neupId">
 
   export type AccountOrderByWithAggregationInput = {
@@ -61610,7 +61610,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedListRelationFilter
     views?: ListingsViewListRelationFilter
     competitionMaps?: PropertyCompetitionMapListRelationFilter
-    representatives?: ListingRepresentativeListRelationFilter
+    representatives?: ListingsRepresentativesListRelationFilter
   }
 
   export type ListingOrderByWithRelationInput = {
@@ -61657,7 +61657,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedOrderByRelationAggregateInput
     views?: ListingsViewOrderByRelationAggregateInput
     competitionMaps?: PropertyCompetitionMapOrderByRelationAggregateInput
-    representatives?: ListingRepresentativeOrderByRelationAggregateInput
+    representatives?: ListingsRepresentativesOrderByRelationAggregateInput
   }
 
   export type ListingWhereUniqueInput = Prisma.AtLeast<{
@@ -61707,7 +61707,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedListRelationFilter
     views?: ListingsViewListRelationFilter
     competitionMaps?: PropertyCompetitionMapListRelationFilter
-    representatives?: ListingRepresentativeListRelationFilter
+    representatives?: ListingsRepresentativesListRelationFilter
   }, "id">
 
   export type ListingOrderByWithAggregationInput = {
@@ -62239,20 +62239,20 @@ export namespace Prisma {
     isPrimaryOwner?: BoolWithAggregatesFilter<"PropertyOwner"> | boolean
   }
 
-  export type ListingRepresentativeWhereInput = {
-    AND?: ListingRepresentativeWhereInput | ListingRepresentativeWhereInput[]
-    OR?: ListingRepresentativeWhereInput[]
-    NOT?: ListingRepresentativeWhereInput | ListingRepresentativeWhereInput[]
-    id?: StringFilter<"ListingRepresentative"> | string
-    listingId?: StringFilter<"ListingRepresentative"> | string
-    representativeId?: StringFilter<"ListingRepresentative"> | string
-    role?: EnumPropertyRepresentativeRoleFilter<"ListingRepresentative"> | $Enums.PropertyRepresentativeRole
-    status?: StringNullableFilter<"ListingRepresentative"> | string | null
+  export type ListingsRepresentativesWhereInput = {
+    AND?: ListingsRepresentativesWhereInput | ListingsRepresentativesWhereInput[]
+    OR?: ListingsRepresentativesWhereInput[]
+    NOT?: ListingsRepresentativesWhereInput | ListingsRepresentativesWhereInput[]
+    id?: StringFilter<"ListingsRepresentatives"> | string
+    listingId?: StringFilter<"ListingsRepresentatives"> | string
+    representativeId?: StringFilter<"ListingsRepresentatives"> | string
+    role?: EnumPropertyRepresentativeRoleFilter<"ListingsRepresentatives"> | $Enums.PropertyRepresentativeRole
+    status?: StringNullableFilter<"ListingsRepresentatives"> | string | null
     listing?: XOR<ListingScalarRelationFilter, ListingWhereInput>
     representative?: XOR<AccountScalarRelationFilter, AccountWhereInput>
   }
 
-  export type ListingRepresentativeOrderByWithRelationInput = {
+  export type ListingsRepresentativesOrderByWithRelationInput = {
     id?: SortOrder
     listingId?: SortOrder
     representativeId?: SortOrder
@@ -62262,39 +62262,39 @@ export namespace Prisma {
     representative?: AccountOrderByWithRelationInput
   }
 
-  export type ListingRepresentativeWhereUniqueInput = Prisma.AtLeast<{
+  export type ListingsRepresentativesWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    AND?: ListingRepresentativeWhereInput | ListingRepresentativeWhereInput[]
-    OR?: ListingRepresentativeWhereInput[]
-    NOT?: ListingRepresentativeWhereInput | ListingRepresentativeWhereInput[]
-    listingId?: StringFilter<"ListingRepresentative"> | string
-    representativeId?: StringFilter<"ListingRepresentative"> | string
-    role?: EnumPropertyRepresentativeRoleFilter<"ListingRepresentative"> | $Enums.PropertyRepresentativeRole
-    status?: StringNullableFilter<"ListingRepresentative"> | string | null
+    AND?: ListingsRepresentativesWhereInput | ListingsRepresentativesWhereInput[]
+    OR?: ListingsRepresentativesWhereInput[]
+    NOT?: ListingsRepresentativesWhereInput | ListingsRepresentativesWhereInput[]
+    listingId?: StringFilter<"ListingsRepresentatives"> | string
+    representativeId?: StringFilter<"ListingsRepresentatives"> | string
+    role?: EnumPropertyRepresentativeRoleFilter<"ListingsRepresentatives"> | $Enums.PropertyRepresentativeRole
+    status?: StringNullableFilter<"ListingsRepresentatives"> | string | null
     listing?: XOR<ListingScalarRelationFilter, ListingWhereInput>
     representative?: XOR<AccountScalarRelationFilter, AccountWhereInput>
   }, "id">
 
-  export type ListingRepresentativeOrderByWithAggregationInput = {
+  export type ListingsRepresentativesOrderByWithAggregationInput = {
     id?: SortOrder
     listingId?: SortOrder
     representativeId?: SortOrder
     role?: SortOrder
     status?: SortOrderInput | SortOrder
-    _count?: ListingRepresentativeCountOrderByAggregateInput
-    _max?: ListingRepresentativeMaxOrderByAggregateInput
-    _min?: ListingRepresentativeMinOrderByAggregateInput
+    _count?: ListingsRepresentativesCountOrderByAggregateInput
+    _max?: ListingsRepresentativesMaxOrderByAggregateInput
+    _min?: ListingsRepresentativesMinOrderByAggregateInput
   }
 
-  export type ListingRepresentativeScalarWhereWithAggregatesInput = {
-    AND?: ListingRepresentativeScalarWhereWithAggregatesInput | ListingRepresentativeScalarWhereWithAggregatesInput[]
-    OR?: ListingRepresentativeScalarWhereWithAggregatesInput[]
-    NOT?: ListingRepresentativeScalarWhereWithAggregatesInput | ListingRepresentativeScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"ListingRepresentative"> | string
-    listingId?: StringWithAggregatesFilter<"ListingRepresentative"> | string
-    representativeId?: StringWithAggregatesFilter<"ListingRepresentative"> | string
-    role?: EnumPropertyRepresentativeRoleWithAggregatesFilter<"ListingRepresentative"> | $Enums.PropertyRepresentativeRole
-    status?: StringNullableWithAggregatesFilter<"ListingRepresentative"> | string | null
+  export type ListingsRepresentativesScalarWhereWithAggregatesInput = {
+    AND?: ListingsRepresentativesScalarWhereWithAggregatesInput | ListingsRepresentativesScalarWhereWithAggregatesInput[]
+    OR?: ListingsRepresentativesScalarWhereWithAggregatesInput[]
+    NOT?: ListingsRepresentativesScalarWhereWithAggregatesInput | ListingsRepresentativesScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ListingsRepresentatives"> | string
+    listingId?: StringWithAggregatesFilter<"ListingsRepresentatives"> | string
+    representativeId?: StringWithAggregatesFilter<"ListingsRepresentatives"> | string
+    role?: EnumPropertyRepresentativeRoleWithAggregatesFilter<"ListingsRepresentatives"> | $Enums.PropertyRepresentativeRole
+    status?: StringNullableWithAggregatesFilter<"ListingsRepresentatives"> | string | null
   }
 
   export type ListingsDocumentsWhereInput = {
@@ -65117,7 +65117,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountUncheckedCreateInput = {
@@ -65144,7 +65144,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUncheckedCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeUncheckedCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountUpdateInput = {
@@ -65171,7 +65171,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AccountUncheckedUpdateInput = {
@@ -65198,7 +65198,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUncheckedUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUncheckedUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUncheckedUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AccountCreateManyInput = {
@@ -65348,7 +65348,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesCreateNestedManyWithoutListingInput
   }
 
   export type ListingUncheckedCreateInput = {
@@ -65394,7 +65394,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutListingInput
   }
 
   export type ListingUpdateInput = {
@@ -65440,7 +65440,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUpdateManyWithoutListingNestedInput
   }
 
   export type ListingUncheckedUpdateInput = {
@@ -65486,7 +65486,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUncheckedUpdateManyWithoutListingNestedInput
   }
 
   export type ListingCreateManyInput = {
@@ -66069,7 +66069,7 @@ export namespace Prisma {
     isPrimaryOwner?: BoolFieldUpdateOperationsInput | boolean
   }
 
-  export type ListingRepresentativeCreateInput = {
+  export type ListingsRepresentativesCreateInput = {
     id?: string
     role: $Enums.PropertyRepresentativeRole
     status?: string | null
@@ -66077,7 +66077,7 @@ export namespace Prisma {
     representative: AccountCreateNestedOneWithoutListingRepresentativesInput
   }
 
-  export type ListingRepresentativeUncheckedCreateInput = {
+  export type ListingsRepresentativesUncheckedCreateInput = {
     id?: string
     listingId: string
     representativeId: string
@@ -66085,7 +66085,7 @@ export namespace Prisma {
     status?: string | null
   }
 
-  export type ListingRepresentativeUpdateInput = {
+  export type ListingsRepresentativesUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     role?: EnumPropertyRepresentativeRoleFieldUpdateOperationsInput | $Enums.PropertyRepresentativeRole
     status?: NullableStringFieldUpdateOperationsInput | string | null
@@ -66093,7 +66093,7 @@ export namespace Prisma {
     representative?: AccountUpdateOneRequiredWithoutListingRepresentativesNestedInput
   }
 
-  export type ListingRepresentativeUncheckedUpdateInput = {
+  export type ListingsRepresentativesUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     listingId?: StringFieldUpdateOperationsInput | string
     representativeId?: StringFieldUpdateOperationsInput | string
@@ -66101,7 +66101,7 @@ export namespace Prisma {
     status?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type ListingRepresentativeCreateManyInput = {
+  export type ListingsRepresentativesCreateManyInput = {
     id?: string
     listingId: string
     representativeId: string
@@ -66109,13 +66109,13 @@ export namespace Prisma {
     status?: string | null
   }
 
-  export type ListingRepresentativeUpdateManyMutationInput = {
+  export type ListingsRepresentativesUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     role?: EnumPropertyRepresentativeRoleFieldUpdateOperationsInput | $Enums.PropertyRepresentativeRole
     status?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type ListingRepresentativeUncheckedUpdateManyInput = {
+  export type ListingsRepresentativesUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     listingId?: StringFieldUpdateOperationsInput | string
     representativeId?: StringFieldUpdateOperationsInput | string
@@ -69373,10 +69373,10 @@ export namespace Prisma {
     none?: ListingChangeWhereInput
   }
 
-  export type ListingRepresentativeListRelationFilter = {
-    every?: ListingRepresentativeWhereInput
-    some?: ListingRepresentativeWhereInput
-    none?: ListingRepresentativeWhereInput
+  export type ListingsRepresentativesListRelationFilter = {
+    every?: ListingsRepresentativesWhereInput
+    some?: ListingsRepresentativesWhereInput
+    none?: ListingsRepresentativesWhereInput
   }
 
   export type AccountAccessOrderByRelationAggregateInput = {
@@ -69411,7 +69411,7 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type ListingRepresentativeOrderByRelationAggregateInput = {
+  export type ListingsRepresentativesOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -70243,7 +70243,7 @@ export namespace Prisma {
     isNot?: AccountWhereInput
   }
 
-  export type ListingRepresentativeCountOrderByAggregateInput = {
+  export type ListingsRepresentativesCountOrderByAggregateInput = {
     id?: SortOrder
     listingId?: SortOrder
     representativeId?: SortOrder
@@ -70251,7 +70251,7 @@ export namespace Prisma {
     status?: SortOrder
   }
 
-  export type ListingRepresentativeMaxOrderByAggregateInput = {
+  export type ListingsRepresentativesMaxOrderByAggregateInput = {
     id?: SortOrder
     listingId?: SortOrder
     representativeId?: SortOrder
@@ -70259,7 +70259,7 @@ export namespace Prisma {
     status?: SortOrder
   }
 
-  export type ListingRepresentativeMinOrderByAggregateInput = {
+  export type ListingsRepresentativesMinOrderByAggregateInput = {
     id?: SortOrder
     listingId?: SortOrder
     representativeId?: SortOrder
@@ -72103,11 +72103,11 @@ export namespace Prisma {
     connect?: ListingChangeWhereUniqueInput | ListingChangeWhereUniqueInput[]
   }
 
-  export type ListingRepresentativeCreateNestedManyWithoutRepresentativeInput = {
-    create?: XOR<ListingRepresentativeCreateWithoutRepresentativeInput, ListingRepresentativeUncheckedCreateWithoutRepresentativeInput> | ListingRepresentativeCreateWithoutRepresentativeInput[] | ListingRepresentativeUncheckedCreateWithoutRepresentativeInput[]
-    connectOrCreate?: ListingRepresentativeCreateOrConnectWithoutRepresentativeInput | ListingRepresentativeCreateOrConnectWithoutRepresentativeInput[]
-    createMany?: ListingRepresentativeCreateManyRepresentativeInputEnvelope
-    connect?: ListingRepresentativeWhereUniqueInput | ListingRepresentativeWhereUniqueInput[]
+  export type ListingsRepresentativesCreateNestedManyWithoutRepresentativeInput = {
+    create?: XOR<ListingsRepresentativesCreateWithoutRepresentativeInput, ListingsRepresentativesUncheckedCreateWithoutRepresentativeInput> | ListingsRepresentativesCreateWithoutRepresentativeInput[] | ListingsRepresentativesUncheckedCreateWithoutRepresentativeInput[]
+    connectOrCreate?: ListingsRepresentativesCreateOrConnectWithoutRepresentativeInput | ListingsRepresentativesCreateOrConnectWithoutRepresentativeInput[]
+    createMany?: ListingsRepresentativesCreateManyRepresentativeInputEnvelope
+    connect?: ListingsRepresentativesWhereUniqueInput | ListingsRepresentativesWhereUniqueInput[]
   }
 
   export type AccountAccessUncheckedCreateNestedManyWithoutAccountInput = {
@@ -72194,11 +72194,11 @@ export namespace Prisma {
     connect?: ListingChangeWhereUniqueInput | ListingChangeWhereUniqueInput[]
   }
 
-  export type ListingRepresentativeUncheckedCreateNestedManyWithoutRepresentativeInput = {
-    create?: XOR<ListingRepresentativeCreateWithoutRepresentativeInput, ListingRepresentativeUncheckedCreateWithoutRepresentativeInput> | ListingRepresentativeCreateWithoutRepresentativeInput[] | ListingRepresentativeUncheckedCreateWithoutRepresentativeInput[]
-    connectOrCreate?: ListingRepresentativeCreateOrConnectWithoutRepresentativeInput | ListingRepresentativeCreateOrConnectWithoutRepresentativeInput[]
-    createMany?: ListingRepresentativeCreateManyRepresentativeInputEnvelope
-    connect?: ListingRepresentativeWhereUniqueInput | ListingRepresentativeWhereUniqueInput[]
+  export type ListingsRepresentativesUncheckedCreateNestedManyWithoutRepresentativeInput = {
+    create?: XOR<ListingsRepresentativesCreateWithoutRepresentativeInput, ListingsRepresentativesUncheckedCreateWithoutRepresentativeInput> | ListingsRepresentativesCreateWithoutRepresentativeInput[] | ListingsRepresentativesUncheckedCreateWithoutRepresentativeInput[]
+    connectOrCreate?: ListingsRepresentativesCreateOrConnectWithoutRepresentativeInput | ListingsRepresentativesCreateOrConnectWithoutRepresentativeInput[]
+    createMany?: ListingsRepresentativesCreateManyRepresentativeInputEnvelope
+    connect?: ListingsRepresentativesWhereUniqueInput | ListingsRepresentativesWhereUniqueInput[]
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -72383,18 +72383,18 @@ export namespace Prisma {
     deleteMany?: ListingChangeScalarWhereInput | ListingChangeScalarWhereInput[]
   }
 
-  export type ListingRepresentativeUpdateManyWithoutRepresentativeNestedInput = {
-    create?: XOR<ListingRepresentativeCreateWithoutRepresentativeInput, ListingRepresentativeUncheckedCreateWithoutRepresentativeInput> | ListingRepresentativeCreateWithoutRepresentativeInput[] | ListingRepresentativeUncheckedCreateWithoutRepresentativeInput[]
-    connectOrCreate?: ListingRepresentativeCreateOrConnectWithoutRepresentativeInput | ListingRepresentativeCreateOrConnectWithoutRepresentativeInput[]
-    upsert?: ListingRepresentativeUpsertWithWhereUniqueWithoutRepresentativeInput | ListingRepresentativeUpsertWithWhereUniqueWithoutRepresentativeInput[]
-    createMany?: ListingRepresentativeCreateManyRepresentativeInputEnvelope
-    set?: ListingRepresentativeWhereUniqueInput | ListingRepresentativeWhereUniqueInput[]
-    disconnect?: ListingRepresentativeWhereUniqueInput | ListingRepresentativeWhereUniqueInput[]
-    delete?: ListingRepresentativeWhereUniqueInput | ListingRepresentativeWhereUniqueInput[]
-    connect?: ListingRepresentativeWhereUniqueInput | ListingRepresentativeWhereUniqueInput[]
-    update?: ListingRepresentativeUpdateWithWhereUniqueWithoutRepresentativeInput | ListingRepresentativeUpdateWithWhereUniqueWithoutRepresentativeInput[]
-    updateMany?: ListingRepresentativeUpdateManyWithWhereWithoutRepresentativeInput | ListingRepresentativeUpdateManyWithWhereWithoutRepresentativeInput[]
-    deleteMany?: ListingRepresentativeScalarWhereInput | ListingRepresentativeScalarWhereInput[]
+  export type ListingsRepresentativesUpdateManyWithoutRepresentativeNestedInput = {
+    create?: XOR<ListingsRepresentativesCreateWithoutRepresentativeInput, ListingsRepresentativesUncheckedCreateWithoutRepresentativeInput> | ListingsRepresentativesCreateWithoutRepresentativeInput[] | ListingsRepresentativesUncheckedCreateWithoutRepresentativeInput[]
+    connectOrCreate?: ListingsRepresentativesCreateOrConnectWithoutRepresentativeInput | ListingsRepresentativesCreateOrConnectWithoutRepresentativeInput[]
+    upsert?: ListingsRepresentativesUpsertWithWhereUniqueWithoutRepresentativeInput | ListingsRepresentativesUpsertWithWhereUniqueWithoutRepresentativeInput[]
+    createMany?: ListingsRepresentativesCreateManyRepresentativeInputEnvelope
+    set?: ListingsRepresentativesWhereUniqueInput | ListingsRepresentativesWhereUniqueInput[]
+    disconnect?: ListingsRepresentativesWhereUniqueInput | ListingsRepresentativesWhereUniqueInput[]
+    delete?: ListingsRepresentativesWhereUniqueInput | ListingsRepresentativesWhereUniqueInput[]
+    connect?: ListingsRepresentativesWhereUniqueInput | ListingsRepresentativesWhereUniqueInput[]
+    update?: ListingsRepresentativesUpdateWithWhereUniqueWithoutRepresentativeInput | ListingsRepresentativesUpdateWithWhereUniqueWithoutRepresentativeInput[]
+    updateMany?: ListingsRepresentativesUpdateManyWithWhereWithoutRepresentativeInput | ListingsRepresentativesUpdateManyWithWhereWithoutRepresentativeInput[]
+    deleteMany?: ListingsRepresentativesScalarWhereInput | ListingsRepresentativesScalarWhereInput[]
   }
 
   export type AccountAccessUncheckedUpdateManyWithoutAccountNestedInput = {
@@ -72565,18 +72565,18 @@ export namespace Prisma {
     deleteMany?: ListingChangeScalarWhereInput | ListingChangeScalarWhereInput[]
   }
 
-  export type ListingRepresentativeUncheckedUpdateManyWithoutRepresentativeNestedInput = {
-    create?: XOR<ListingRepresentativeCreateWithoutRepresentativeInput, ListingRepresentativeUncheckedCreateWithoutRepresentativeInput> | ListingRepresentativeCreateWithoutRepresentativeInput[] | ListingRepresentativeUncheckedCreateWithoutRepresentativeInput[]
-    connectOrCreate?: ListingRepresentativeCreateOrConnectWithoutRepresentativeInput | ListingRepresentativeCreateOrConnectWithoutRepresentativeInput[]
-    upsert?: ListingRepresentativeUpsertWithWhereUniqueWithoutRepresentativeInput | ListingRepresentativeUpsertWithWhereUniqueWithoutRepresentativeInput[]
-    createMany?: ListingRepresentativeCreateManyRepresentativeInputEnvelope
-    set?: ListingRepresentativeWhereUniqueInput | ListingRepresentativeWhereUniqueInput[]
-    disconnect?: ListingRepresentativeWhereUniqueInput | ListingRepresentativeWhereUniqueInput[]
-    delete?: ListingRepresentativeWhereUniqueInput | ListingRepresentativeWhereUniqueInput[]
-    connect?: ListingRepresentativeWhereUniqueInput | ListingRepresentativeWhereUniqueInput[]
-    update?: ListingRepresentativeUpdateWithWhereUniqueWithoutRepresentativeInput | ListingRepresentativeUpdateWithWhereUniqueWithoutRepresentativeInput[]
-    updateMany?: ListingRepresentativeUpdateManyWithWhereWithoutRepresentativeInput | ListingRepresentativeUpdateManyWithWhereWithoutRepresentativeInput[]
-    deleteMany?: ListingRepresentativeScalarWhereInput | ListingRepresentativeScalarWhereInput[]
+  export type ListingsRepresentativesUncheckedUpdateManyWithoutRepresentativeNestedInput = {
+    create?: XOR<ListingsRepresentativesCreateWithoutRepresentativeInput, ListingsRepresentativesUncheckedCreateWithoutRepresentativeInput> | ListingsRepresentativesCreateWithoutRepresentativeInput[] | ListingsRepresentativesUncheckedCreateWithoutRepresentativeInput[]
+    connectOrCreate?: ListingsRepresentativesCreateOrConnectWithoutRepresentativeInput | ListingsRepresentativesCreateOrConnectWithoutRepresentativeInput[]
+    upsert?: ListingsRepresentativesUpsertWithWhereUniqueWithoutRepresentativeInput | ListingsRepresentativesUpsertWithWhereUniqueWithoutRepresentativeInput[]
+    createMany?: ListingsRepresentativesCreateManyRepresentativeInputEnvelope
+    set?: ListingsRepresentativesWhereUniqueInput | ListingsRepresentativesWhereUniqueInput[]
+    disconnect?: ListingsRepresentativesWhereUniqueInput | ListingsRepresentativesWhereUniqueInput[]
+    delete?: ListingsRepresentativesWhereUniqueInput | ListingsRepresentativesWhereUniqueInput[]
+    connect?: ListingsRepresentativesWhereUniqueInput | ListingsRepresentativesWhereUniqueInput[]
+    update?: ListingsRepresentativesUpdateWithWhereUniqueWithoutRepresentativeInput | ListingsRepresentativesUpdateWithWhereUniqueWithoutRepresentativeInput[]
+    updateMany?: ListingsRepresentativesUpdateManyWithWhereWithoutRepresentativeInput | ListingsRepresentativesUpdateManyWithWhereWithoutRepresentativeInput[]
+    deleteMany?: ListingsRepresentativesScalarWhereInput | ListingsRepresentativesScalarWhereInput[]
   }
 
   export type ListingCreatemetaTagsInput = {
@@ -72673,11 +72673,11 @@ export namespace Prisma {
     connect?: PropertyCompetitionMapWhereUniqueInput | PropertyCompetitionMapWhereUniqueInput[]
   }
 
-  export type ListingRepresentativeCreateNestedManyWithoutListingInput = {
-    create?: XOR<ListingRepresentativeCreateWithoutListingInput, ListingRepresentativeUncheckedCreateWithoutListingInput> | ListingRepresentativeCreateWithoutListingInput[] | ListingRepresentativeUncheckedCreateWithoutListingInput[]
-    connectOrCreate?: ListingRepresentativeCreateOrConnectWithoutListingInput | ListingRepresentativeCreateOrConnectWithoutListingInput[]
-    createMany?: ListingRepresentativeCreateManyListingInputEnvelope
-    connect?: ListingRepresentativeWhereUniqueInput | ListingRepresentativeWhereUniqueInput[]
+  export type ListingsRepresentativesCreateNestedManyWithoutListingInput = {
+    create?: XOR<ListingsRepresentativesCreateWithoutListingInput, ListingsRepresentativesUncheckedCreateWithoutListingInput> | ListingsRepresentativesCreateWithoutListingInput[] | ListingsRepresentativesUncheckedCreateWithoutListingInput[]
+    connectOrCreate?: ListingsRepresentativesCreateOrConnectWithoutListingInput | ListingsRepresentativesCreateOrConnectWithoutListingInput[]
+    createMany?: ListingsRepresentativesCreateManyListingInputEnvelope
+    connect?: ListingsRepresentativesWhereUniqueInput | ListingsRepresentativesWhereUniqueInput[]
   }
 
   export type ListingHouseUncheckedCreateNestedOneWithoutPropertyInput = {
@@ -72760,11 +72760,11 @@ export namespace Prisma {
     connect?: PropertyCompetitionMapWhereUniqueInput | PropertyCompetitionMapWhereUniqueInput[]
   }
 
-  export type ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput = {
-    create?: XOR<ListingRepresentativeCreateWithoutListingInput, ListingRepresentativeUncheckedCreateWithoutListingInput> | ListingRepresentativeCreateWithoutListingInput[] | ListingRepresentativeUncheckedCreateWithoutListingInput[]
-    connectOrCreate?: ListingRepresentativeCreateOrConnectWithoutListingInput | ListingRepresentativeCreateOrConnectWithoutListingInput[]
-    createMany?: ListingRepresentativeCreateManyListingInputEnvelope
-    connect?: ListingRepresentativeWhereUniqueInput | ListingRepresentativeWhereUniqueInput[]
+  export type ListingsRepresentativesUncheckedCreateNestedManyWithoutListingInput = {
+    create?: XOR<ListingsRepresentativesCreateWithoutListingInput, ListingsRepresentativesUncheckedCreateWithoutListingInput> | ListingsRepresentativesCreateWithoutListingInput[] | ListingsRepresentativesUncheckedCreateWithoutListingInput[]
+    connectOrCreate?: ListingsRepresentativesCreateOrConnectWithoutListingInput | ListingsRepresentativesCreateOrConnectWithoutListingInput[]
+    createMany?: ListingsRepresentativesCreateManyListingInputEnvelope
+    connect?: ListingsRepresentativesWhereUniqueInput | ListingsRepresentativesWhereUniqueInput[]
   }
 
   export type EnumPropertyTypeFieldUpdateOperationsInput = {
@@ -72969,18 +72969,18 @@ export namespace Prisma {
     deleteMany?: PropertyCompetitionMapScalarWhereInput | PropertyCompetitionMapScalarWhereInput[]
   }
 
-  export type ListingRepresentativeUpdateManyWithoutListingNestedInput = {
-    create?: XOR<ListingRepresentativeCreateWithoutListingInput, ListingRepresentativeUncheckedCreateWithoutListingInput> | ListingRepresentativeCreateWithoutListingInput[] | ListingRepresentativeUncheckedCreateWithoutListingInput[]
-    connectOrCreate?: ListingRepresentativeCreateOrConnectWithoutListingInput | ListingRepresentativeCreateOrConnectWithoutListingInput[]
-    upsert?: ListingRepresentativeUpsertWithWhereUniqueWithoutListingInput | ListingRepresentativeUpsertWithWhereUniqueWithoutListingInput[]
-    createMany?: ListingRepresentativeCreateManyListingInputEnvelope
-    set?: ListingRepresentativeWhereUniqueInput | ListingRepresentativeWhereUniqueInput[]
-    disconnect?: ListingRepresentativeWhereUniqueInput | ListingRepresentativeWhereUniqueInput[]
-    delete?: ListingRepresentativeWhereUniqueInput | ListingRepresentativeWhereUniqueInput[]
-    connect?: ListingRepresentativeWhereUniqueInput | ListingRepresentativeWhereUniqueInput[]
-    update?: ListingRepresentativeUpdateWithWhereUniqueWithoutListingInput | ListingRepresentativeUpdateWithWhereUniqueWithoutListingInput[]
-    updateMany?: ListingRepresentativeUpdateManyWithWhereWithoutListingInput | ListingRepresentativeUpdateManyWithWhereWithoutListingInput[]
-    deleteMany?: ListingRepresentativeScalarWhereInput | ListingRepresentativeScalarWhereInput[]
+  export type ListingsRepresentativesUpdateManyWithoutListingNestedInput = {
+    create?: XOR<ListingsRepresentativesCreateWithoutListingInput, ListingsRepresentativesUncheckedCreateWithoutListingInput> | ListingsRepresentativesCreateWithoutListingInput[] | ListingsRepresentativesUncheckedCreateWithoutListingInput[]
+    connectOrCreate?: ListingsRepresentativesCreateOrConnectWithoutListingInput | ListingsRepresentativesCreateOrConnectWithoutListingInput[]
+    upsert?: ListingsRepresentativesUpsertWithWhereUniqueWithoutListingInput | ListingsRepresentativesUpsertWithWhereUniqueWithoutListingInput[]
+    createMany?: ListingsRepresentativesCreateManyListingInputEnvelope
+    set?: ListingsRepresentativesWhereUniqueInput | ListingsRepresentativesWhereUniqueInput[]
+    disconnect?: ListingsRepresentativesWhereUniqueInput | ListingsRepresentativesWhereUniqueInput[]
+    delete?: ListingsRepresentativesWhereUniqueInput | ListingsRepresentativesWhereUniqueInput[]
+    connect?: ListingsRepresentativesWhereUniqueInput | ListingsRepresentativesWhereUniqueInput[]
+    update?: ListingsRepresentativesUpdateWithWhereUniqueWithoutListingInput | ListingsRepresentativesUpdateWithWhereUniqueWithoutListingInput[]
+    updateMany?: ListingsRepresentativesUpdateManyWithWhereWithoutListingInput | ListingsRepresentativesUpdateManyWithWhereWithoutListingInput[]
+    deleteMany?: ListingsRepresentativesScalarWhereInput | ListingsRepresentativesScalarWhereInput[]
   }
 
   export type ListingHouseUncheckedUpdateOneWithoutPropertyNestedInput = {
@@ -73135,18 +73135,18 @@ export namespace Prisma {
     deleteMany?: PropertyCompetitionMapScalarWhereInput | PropertyCompetitionMapScalarWhereInput[]
   }
 
-  export type ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput = {
-    create?: XOR<ListingRepresentativeCreateWithoutListingInput, ListingRepresentativeUncheckedCreateWithoutListingInput> | ListingRepresentativeCreateWithoutListingInput[] | ListingRepresentativeUncheckedCreateWithoutListingInput[]
-    connectOrCreate?: ListingRepresentativeCreateOrConnectWithoutListingInput | ListingRepresentativeCreateOrConnectWithoutListingInput[]
-    upsert?: ListingRepresentativeUpsertWithWhereUniqueWithoutListingInput | ListingRepresentativeUpsertWithWhereUniqueWithoutListingInput[]
-    createMany?: ListingRepresentativeCreateManyListingInputEnvelope
-    set?: ListingRepresentativeWhereUniqueInput | ListingRepresentativeWhereUniqueInput[]
-    disconnect?: ListingRepresentativeWhereUniqueInput | ListingRepresentativeWhereUniqueInput[]
-    delete?: ListingRepresentativeWhereUniqueInput | ListingRepresentativeWhereUniqueInput[]
-    connect?: ListingRepresentativeWhereUniqueInput | ListingRepresentativeWhereUniqueInput[]
-    update?: ListingRepresentativeUpdateWithWhereUniqueWithoutListingInput | ListingRepresentativeUpdateWithWhereUniqueWithoutListingInput[]
-    updateMany?: ListingRepresentativeUpdateManyWithWhereWithoutListingInput | ListingRepresentativeUpdateManyWithWhereWithoutListingInput[]
-    deleteMany?: ListingRepresentativeScalarWhereInput | ListingRepresentativeScalarWhereInput[]
+  export type ListingsRepresentativesUncheckedUpdateManyWithoutListingNestedInput = {
+    create?: XOR<ListingsRepresentativesCreateWithoutListingInput, ListingsRepresentativesUncheckedCreateWithoutListingInput> | ListingsRepresentativesCreateWithoutListingInput[] | ListingsRepresentativesUncheckedCreateWithoutListingInput[]
+    connectOrCreate?: ListingsRepresentativesCreateOrConnectWithoutListingInput | ListingsRepresentativesCreateOrConnectWithoutListingInput[]
+    upsert?: ListingsRepresentativesUpsertWithWhereUniqueWithoutListingInput | ListingsRepresentativesUpsertWithWhereUniqueWithoutListingInput[]
+    createMany?: ListingsRepresentativesCreateManyListingInputEnvelope
+    set?: ListingsRepresentativesWhereUniqueInput | ListingsRepresentativesWhereUniqueInput[]
+    disconnect?: ListingsRepresentativesWhereUniqueInput | ListingsRepresentativesWhereUniqueInput[]
+    delete?: ListingsRepresentativesWhereUniqueInput | ListingsRepresentativesWhereUniqueInput[]
+    connect?: ListingsRepresentativesWhereUniqueInput | ListingsRepresentativesWhereUniqueInput[]
+    update?: ListingsRepresentativesUpdateWithWhereUniqueWithoutListingInput | ListingsRepresentativesUpdateWithWhereUniqueWithoutListingInput[]
+    updateMany?: ListingsRepresentativesUpdateManyWithWhereWithoutListingInput | ListingsRepresentativesUpdateManyWithWhereWithoutListingInput[]
+    deleteMany?: ListingsRepresentativesScalarWhereInput | ListingsRepresentativesScalarWhereInput[]
   }
 
   export type ListingCreateNestedOneWithoutLinksInput = {
@@ -75188,7 +75188,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesCreateNestedManyWithoutListingInput
   }
 
   export type ListingUncheckedCreateWithoutLocationRecordInput = {
@@ -75233,7 +75233,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutListingInput
   }
 
   export type ListingCreateOrConnectWithoutLocationRecordInput = {
@@ -75405,7 +75405,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountUncheckedCreateWithoutWorkingProfileOfInput = {
@@ -75431,7 +75431,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUncheckedCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeUncheckedCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountCreateOrConnectWithoutWorkingProfileOfInput = {
@@ -75462,7 +75462,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountUncheckedCreateWithoutWorkingProfileAccountInput = {
@@ -75488,7 +75488,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUncheckedCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeUncheckedCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountCreateOrConnectWithoutWorkingProfileAccountInput = {
@@ -75843,27 +75843,27 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ListingRepresentativeCreateWithoutRepresentativeInput = {
+  export type ListingsRepresentativesCreateWithoutRepresentativeInput = {
     id?: string
     role: $Enums.PropertyRepresentativeRole
     status?: string | null
     listing: ListingCreateNestedOneWithoutRepresentativesInput
   }
 
-  export type ListingRepresentativeUncheckedCreateWithoutRepresentativeInput = {
+  export type ListingsRepresentativesUncheckedCreateWithoutRepresentativeInput = {
     id?: string
     listingId: string
     role: $Enums.PropertyRepresentativeRole
     status?: string | null
   }
 
-  export type ListingRepresentativeCreateOrConnectWithoutRepresentativeInput = {
-    where: ListingRepresentativeWhereUniqueInput
-    create: XOR<ListingRepresentativeCreateWithoutRepresentativeInput, ListingRepresentativeUncheckedCreateWithoutRepresentativeInput>
+  export type ListingsRepresentativesCreateOrConnectWithoutRepresentativeInput = {
+    where: ListingsRepresentativesWhereUniqueInput
+    create: XOR<ListingsRepresentativesCreateWithoutRepresentativeInput, ListingsRepresentativesUncheckedCreateWithoutRepresentativeInput>
   }
 
-  export type ListingRepresentativeCreateManyRepresentativeInputEnvelope = {
-    data: ListingRepresentativeCreateManyRepresentativeInput | ListingRepresentativeCreateManyRepresentativeInput[]
+  export type ListingsRepresentativesCreateManyRepresentativeInputEnvelope = {
+    data: ListingsRepresentativesCreateManyRepresentativeInput | ListingsRepresentativesCreateManyRepresentativeInput[]
     skipDuplicates?: boolean
   }
 
@@ -75927,7 +75927,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AccountUncheckedUpdateWithoutWorkingProfileOfInput = {
@@ -75953,7 +75953,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUncheckedUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUncheckedUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUncheckedUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AccountUpsertWithWhereUniqueWithoutWorkingProfileAccountInput = {
@@ -76236,31 +76236,31 @@ export namespace Prisma {
     data: XOR<ListingChangeUpdateManyMutationInput, ListingChangeUncheckedUpdateManyWithoutWorkingProfileInput>
   }
 
-  export type ListingRepresentativeUpsertWithWhereUniqueWithoutRepresentativeInput = {
-    where: ListingRepresentativeWhereUniqueInput
-    update: XOR<ListingRepresentativeUpdateWithoutRepresentativeInput, ListingRepresentativeUncheckedUpdateWithoutRepresentativeInput>
-    create: XOR<ListingRepresentativeCreateWithoutRepresentativeInput, ListingRepresentativeUncheckedCreateWithoutRepresentativeInput>
+  export type ListingsRepresentativesUpsertWithWhereUniqueWithoutRepresentativeInput = {
+    where: ListingsRepresentativesWhereUniqueInput
+    update: XOR<ListingsRepresentativesUpdateWithoutRepresentativeInput, ListingsRepresentativesUncheckedUpdateWithoutRepresentativeInput>
+    create: XOR<ListingsRepresentativesCreateWithoutRepresentativeInput, ListingsRepresentativesUncheckedCreateWithoutRepresentativeInput>
   }
 
-  export type ListingRepresentativeUpdateWithWhereUniqueWithoutRepresentativeInput = {
-    where: ListingRepresentativeWhereUniqueInput
-    data: XOR<ListingRepresentativeUpdateWithoutRepresentativeInput, ListingRepresentativeUncheckedUpdateWithoutRepresentativeInput>
+  export type ListingsRepresentativesUpdateWithWhereUniqueWithoutRepresentativeInput = {
+    where: ListingsRepresentativesWhereUniqueInput
+    data: XOR<ListingsRepresentativesUpdateWithoutRepresentativeInput, ListingsRepresentativesUncheckedUpdateWithoutRepresentativeInput>
   }
 
-  export type ListingRepresentativeUpdateManyWithWhereWithoutRepresentativeInput = {
-    where: ListingRepresentativeScalarWhereInput
-    data: XOR<ListingRepresentativeUpdateManyMutationInput, ListingRepresentativeUncheckedUpdateManyWithoutRepresentativeInput>
+  export type ListingsRepresentativesUpdateManyWithWhereWithoutRepresentativeInput = {
+    where: ListingsRepresentativesScalarWhereInput
+    data: XOR<ListingsRepresentativesUpdateManyMutationInput, ListingsRepresentativesUncheckedUpdateManyWithoutRepresentativeInput>
   }
 
-  export type ListingRepresentativeScalarWhereInput = {
-    AND?: ListingRepresentativeScalarWhereInput | ListingRepresentativeScalarWhereInput[]
-    OR?: ListingRepresentativeScalarWhereInput[]
-    NOT?: ListingRepresentativeScalarWhereInput | ListingRepresentativeScalarWhereInput[]
-    id?: StringFilter<"ListingRepresentative"> | string
-    listingId?: StringFilter<"ListingRepresentative"> | string
-    representativeId?: StringFilter<"ListingRepresentative"> | string
-    role?: EnumPropertyRepresentativeRoleFilter<"ListingRepresentative"> | $Enums.PropertyRepresentativeRole
-    status?: StringNullableFilter<"ListingRepresentative"> | string | null
+  export type ListingsRepresentativesScalarWhereInput = {
+    AND?: ListingsRepresentativesScalarWhereInput | ListingsRepresentativesScalarWhereInput[]
+    OR?: ListingsRepresentativesScalarWhereInput[]
+    NOT?: ListingsRepresentativesScalarWhereInput | ListingsRepresentativesScalarWhereInput[]
+    id?: StringFilter<"ListingsRepresentatives"> | string
+    listingId?: StringFilter<"ListingsRepresentatives"> | string
+    representativeId?: StringFilter<"ListingsRepresentatives"> | string
+    role?: EnumPropertyRepresentativeRoleFilter<"ListingsRepresentatives"> | $Enums.PropertyRepresentativeRole
+    status?: StringNullableFilter<"ListingsRepresentatives"> | string | null
   }
 
   export type LocationCreateWithoutListingsInput = {
@@ -76618,27 +76618,27 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ListingRepresentativeCreateWithoutListingInput = {
+  export type ListingsRepresentativesCreateWithoutListingInput = {
     id?: string
     role: $Enums.PropertyRepresentativeRole
     status?: string | null
     representative: AccountCreateNestedOneWithoutListingRepresentativesInput
   }
 
-  export type ListingRepresentativeUncheckedCreateWithoutListingInput = {
+  export type ListingsRepresentativesUncheckedCreateWithoutListingInput = {
     id?: string
     representativeId: string
     role: $Enums.PropertyRepresentativeRole
     status?: string | null
   }
 
-  export type ListingRepresentativeCreateOrConnectWithoutListingInput = {
-    where: ListingRepresentativeWhereUniqueInput
-    create: XOR<ListingRepresentativeCreateWithoutListingInput, ListingRepresentativeUncheckedCreateWithoutListingInput>
+  export type ListingsRepresentativesCreateOrConnectWithoutListingInput = {
+    where: ListingsRepresentativesWhereUniqueInput
+    create: XOR<ListingsRepresentativesCreateWithoutListingInput, ListingsRepresentativesUncheckedCreateWithoutListingInput>
   }
 
-  export type ListingRepresentativeCreateManyListingInputEnvelope = {
-    data: ListingRepresentativeCreateManyListingInput | ListingRepresentativeCreateManyListingInput[]
+  export type ListingsRepresentativesCreateManyListingInputEnvelope = {
+    data: ListingsRepresentativesCreateManyListingInput | ListingsRepresentativesCreateManyListingInput[]
     skipDuplicates?: boolean
   }
 
@@ -77018,20 +77018,20 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"PropertyCompetitionMap"> | Date | string
   }
 
-  export type ListingRepresentativeUpsertWithWhereUniqueWithoutListingInput = {
-    where: ListingRepresentativeWhereUniqueInput
-    update: XOR<ListingRepresentativeUpdateWithoutListingInput, ListingRepresentativeUncheckedUpdateWithoutListingInput>
-    create: XOR<ListingRepresentativeCreateWithoutListingInput, ListingRepresentativeUncheckedCreateWithoutListingInput>
+  export type ListingsRepresentativesUpsertWithWhereUniqueWithoutListingInput = {
+    where: ListingsRepresentativesWhereUniqueInput
+    update: XOR<ListingsRepresentativesUpdateWithoutListingInput, ListingsRepresentativesUncheckedUpdateWithoutListingInput>
+    create: XOR<ListingsRepresentativesCreateWithoutListingInput, ListingsRepresentativesUncheckedCreateWithoutListingInput>
   }
 
-  export type ListingRepresentativeUpdateWithWhereUniqueWithoutListingInput = {
-    where: ListingRepresentativeWhereUniqueInput
-    data: XOR<ListingRepresentativeUpdateWithoutListingInput, ListingRepresentativeUncheckedUpdateWithoutListingInput>
+  export type ListingsRepresentativesUpdateWithWhereUniqueWithoutListingInput = {
+    where: ListingsRepresentativesWhereUniqueInput
+    data: XOR<ListingsRepresentativesUpdateWithoutListingInput, ListingsRepresentativesUncheckedUpdateWithoutListingInput>
   }
 
-  export type ListingRepresentativeUpdateManyWithWhereWithoutListingInput = {
-    where: ListingRepresentativeScalarWhereInput
-    data: XOR<ListingRepresentativeUpdateManyMutationInput, ListingRepresentativeUncheckedUpdateManyWithoutListingInput>
+  export type ListingsRepresentativesUpdateManyWithWhereWithoutListingInput = {
+    where: ListingsRepresentativesScalarWhereInput
+    data: XOR<ListingsRepresentativesUpdateManyMutationInput, ListingsRepresentativesUncheckedUpdateManyWithoutListingInput>
   }
 
   export type ListingCreateWithoutLinksInput = {
@@ -77076,7 +77076,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesCreateNestedManyWithoutListingInput
   }
 
   export type ListingUncheckedCreateWithoutLinksInput = {
@@ -77121,7 +77121,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutListingInput
   }
 
   export type ListingCreateOrConnectWithoutLinksInput = {
@@ -77171,7 +77171,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesCreateNestedManyWithoutListingInput
   }
 
   export type ListingUncheckedCreateWithoutLinkedByInput = {
@@ -77216,7 +77216,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutListingInput
   }
 
   export type ListingCreateOrConnectWithoutLinkedByInput = {
@@ -77277,7 +77277,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUpdateManyWithoutListingNestedInput
   }
 
   export type ListingUncheckedUpdateWithoutLinksInput = {
@@ -77322,7 +77322,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUncheckedUpdateManyWithoutListingNestedInput
   }
 
   export type ListingUpsertWithoutLinkedByInput = {
@@ -77378,7 +77378,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUpdateManyWithoutListingNestedInput
   }
 
   export type ListingUncheckedUpdateWithoutLinkedByInput = {
@@ -77423,7 +77423,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUncheckedUpdateManyWithoutListingNestedInput
   }
 
   export type ListingCreateWithoutHouseDetailInput = {
@@ -77468,7 +77468,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesCreateNestedManyWithoutListingInput
   }
 
   export type ListingUncheckedCreateWithoutHouseDetailInput = {
@@ -77513,7 +77513,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutListingInput
   }
 
   export type ListingCreateOrConnectWithoutHouseDetailInput = {
@@ -77574,7 +77574,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUpdateManyWithoutListingNestedInput
   }
 
   export type ListingUncheckedUpdateWithoutHouseDetailInput = {
@@ -77619,7 +77619,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUncheckedUpdateManyWithoutListingNestedInput
   }
 
   export type ListingCreateWithoutApartmentDetailInput = {
@@ -77664,7 +77664,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesCreateNestedManyWithoutListingInput
   }
 
   export type ListingUncheckedCreateWithoutApartmentDetailInput = {
@@ -77709,7 +77709,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutListingInput
   }
 
   export type ListingCreateOrConnectWithoutApartmentDetailInput = {
@@ -77770,7 +77770,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUpdateManyWithoutListingNestedInput
   }
 
   export type ListingUncheckedUpdateWithoutApartmentDetailInput = {
@@ -77815,7 +77815,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUncheckedUpdateManyWithoutListingNestedInput
   }
 
   export type ListingCreateWithoutLandDetailInput = {
@@ -77860,7 +77860,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesCreateNestedManyWithoutListingInput
   }
 
   export type ListingUncheckedCreateWithoutLandDetailInput = {
@@ -77905,7 +77905,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutListingInput
   }
 
   export type ListingCreateOrConnectWithoutLandDetailInput = {
@@ -77966,7 +77966,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUpdateManyWithoutListingNestedInput
   }
 
   export type ListingUncheckedUpdateWithoutLandDetailInput = {
@@ -78011,7 +78011,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUncheckedUpdateManyWithoutListingNestedInput
   }
 
   export type ListingCreateWithoutCommercialDetailInput = {
@@ -78056,7 +78056,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesCreateNestedManyWithoutListingInput
   }
 
   export type ListingUncheckedCreateWithoutCommercialDetailInput = {
@@ -78101,7 +78101,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutListingInput
   }
 
   export type ListingCreateOrConnectWithoutCommercialDetailInput = {
@@ -78162,7 +78162,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUpdateManyWithoutListingNestedInput
   }
 
   export type ListingUncheckedUpdateWithoutCommercialDetailInput = {
@@ -78207,7 +78207,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUncheckedUpdateManyWithoutListingNestedInput
   }
 
   export type ListingCreateWithoutOwnersInput = {
@@ -78252,7 +78252,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesCreateNestedManyWithoutListingInput
   }
 
   export type ListingUncheckedCreateWithoutOwnersInput = {
@@ -78297,7 +78297,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutListingInput
   }
 
   export type ListingCreateOrConnectWithoutOwnersInput = {
@@ -78391,7 +78391,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUpdateManyWithoutListingNestedInput
   }
 
   export type ListingUncheckedUpdateWithoutOwnersInput = {
@@ -78436,7 +78436,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUncheckedUpdateManyWithoutListingNestedInput
   }
 
   export type BaseLeadUpsertWithoutPropertyOwnersInput = {
@@ -78836,7 +78836,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesCreateNestedManyWithoutListingInput
   }
 
   export type ListingUncheckedCreateWithoutDocumentsInput = {
@@ -78881,7 +78881,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutListingInput
   }
 
   export type ListingCreateOrConnectWithoutDocumentsInput = {
@@ -78942,7 +78942,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUpdateManyWithoutListingNestedInput
   }
 
   export type ListingUncheckedUpdateWithoutDocumentsInput = {
@@ -78987,7 +78987,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUncheckedUpdateManyWithoutListingNestedInput
   }
 
   export type ListingCreateWithoutChangesInput = {
@@ -79032,7 +79032,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesCreateNestedManyWithoutListingInput
   }
 
   export type ListingUncheckedCreateWithoutChangesInput = {
@@ -79077,7 +79077,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutListingInput
   }
 
   export type ListingCreateOrConnectWithoutChangesInput = {
@@ -79108,7 +79108,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountUncheckedCreateWithoutPropertyChangesInput = {
@@ -79134,7 +79134,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUncheckedCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeUncheckedCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountCreateOrConnectWithoutPropertyChangesInput = {
@@ -79165,7 +79165,7 @@ export namespace Prisma {
     propertyChanges?: ListingChangeCreateNestedManyWithoutAccountInput
     propertyChangesForProfile?: ListingChangeCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountUncheckedCreateWithoutCreatedListingChangesInput = {
@@ -79191,7 +79191,7 @@ export namespace Prisma {
     propertyChanges?: ListingChangeUncheckedCreateNestedManyWithoutAccountInput
     propertyChangesForProfile?: ListingChangeUncheckedCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountCreateOrConnectWithoutCreatedListingChangesInput = {
@@ -79222,7 +79222,7 @@ export namespace Prisma {
     propertyChanges?: ListingChangeCreateNestedManyWithoutAccountInput
     createdListingChanges?: ListingChangeCreateNestedManyWithoutCreatedByInput
     propertyChangesByWorkingProfile?: ListingChangeCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountUncheckedCreateWithoutPropertyChangesForProfileInput = {
@@ -79248,7 +79248,7 @@ export namespace Prisma {
     propertyChanges?: ListingChangeUncheckedCreateNestedManyWithoutAccountInput
     createdListingChanges?: ListingChangeUncheckedCreateNestedManyWithoutCreatedByInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountCreateOrConnectWithoutPropertyChangesForProfileInput = {
@@ -79279,7 +79279,7 @@ export namespace Prisma {
     propertyChanges?: ListingChangeCreateNestedManyWithoutAccountInput
     createdListingChanges?: ListingChangeCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeCreateNestedManyWithoutCreatedForInput
-    listingRepresentatives?: ListingRepresentativeCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountUncheckedCreateWithoutPropertyChangesByWorkingProfileInput = {
@@ -79305,7 +79305,7 @@ export namespace Prisma {
     propertyChanges?: ListingChangeUncheckedCreateNestedManyWithoutAccountInput
     createdListingChanges?: ListingChangeUncheckedCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeUncheckedCreateNestedManyWithoutCreatedForInput
-    listingRepresentatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountCreateOrConnectWithoutPropertyChangesByWorkingProfileInput = {
@@ -79366,7 +79366,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUpdateManyWithoutListingNestedInput
   }
 
   export type ListingUncheckedUpdateWithoutChangesInput = {
@@ -79411,7 +79411,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUncheckedUpdateManyWithoutListingNestedInput
   }
 
   export type AccountUpsertWithoutPropertyChangesInput = {
@@ -79448,7 +79448,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AccountUncheckedUpdateWithoutPropertyChangesInput = {
@@ -79474,7 +79474,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUncheckedUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUncheckedUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUncheckedUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AccountUpsertWithoutCreatedListingChangesInput = {
@@ -79511,7 +79511,7 @@ export namespace Prisma {
     propertyChanges?: ListingChangeUpdateManyWithoutAccountNestedInput
     propertyChangesForProfile?: ListingChangeUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AccountUncheckedUpdateWithoutCreatedListingChangesInput = {
@@ -79537,7 +79537,7 @@ export namespace Prisma {
     propertyChanges?: ListingChangeUncheckedUpdateManyWithoutAccountNestedInput
     propertyChangesForProfile?: ListingChangeUncheckedUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUncheckedUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AccountUpsertWithoutPropertyChangesForProfileInput = {
@@ -79574,7 +79574,7 @@ export namespace Prisma {
     propertyChanges?: ListingChangeUpdateManyWithoutAccountNestedInput
     createdListingChanges?: ListingChangeUpdateManyWithoutCreatedByNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AccountUncheckedUpdateWithoutPropertyChangesForProfileInput = {
@@ -79600,7 +79600,7 @@ export namespace Prisma {
     propertyChanges?: ListingChangeUncheckedUpdateManyWithoutAccountNestedInput
     createdListingChanges?: ListingChangeUncheckedUpdateManyWithoutCreatedByNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUncheckedUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AccountUpsertWithoutPropertyChangesByWorkingProfileInput = {
@@ -79637,7 +79637,7 @@ export namespace Prisma {
     propertyChanges?: ListingChangeUpdateManyWithoutAccountNestedInput
     createdListingChanges?: ListingChangeUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUpdateManyWithoutCreatedForNestedInput
-    listingRepresentatives?: ListingRepresentativeUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AccountUncheckedUpdateWithoutPropertyChangesByWorkingProfileInput = {
@@ -79663,7 +79663,7 @@ export namespace Prisma {
     propertyChanges?: ListingChangeUncheckedUpdateManyWithoutAccountNestedInput
     createdListingChanges?: ListingChangeUncheckedUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUncheckedUpdateManyWithoutCreatedForNestedInput
-    listingRepresentatives?: ListingRepresentativeUncheckedUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AgencyMapCreateWithoutAgencyInput = {
@@ -79870,7 +79870,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountUncheckedCreateWithoutAgencyAgentMapAsAgencyInput = {
@@ -79896,7 +79896,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUncheckedCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeUncheckedCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountCreateOrConnectWithoutAgencyAgentMapAsAgencyInput = {
@@ -79927,7 +79927,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountUncheckedCreateWithoutAgencyAgentMapAsAgentInput = {
@@ -79953,7 +79953,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUncheckedCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeUncheckedCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountCreateOrConnectWithoutAgencyAgentMapAsAgentInput = {
@@ -79995,7 +79995,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AccountUncheckedUpdateWithoutAgencyAgentMapAsAgencyInput = {
@@ -80021,7 +80021,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUncheckedUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUncheckedUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUncheckedUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AccountUpsertWithoutAgencyAgentMapAsAgentInput = {
@@ -80058,7 +80058,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AccountUncheckedUpdateWithoutAgencyAgentMapAsAgentInput = {
@@ -80084,7 +80084,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUncheckedUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUncheckedUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUncheckedUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AgencyCreateWithoutCustomizationsInput = {
@@ -80205,7 +80205,7 @@ export namespace Prisma {
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesCreateNestedManyWithoutListingInput
   }
 
   export type ListingUncheckedCreateWithoutSavedByInput = {
@@ -80250,7 +80250,7 @@ export namespace Prisma {
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutListingInput
   }
 
   export type ListingCreateOrConnectWithoutSavedByInput = {
@@ -80311,7 +80311,7 @@ export namespace Prisma {
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUpdateManyWithoutListingNestedInput
   }
 
   export type ListingUncheckedUpdateWithoutSavedByInput = {
@@ -80356,7 +80356,7 @@ export namespace Prisma {
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUncheckedUpdateManyWithoutListingNestedInput
   }
 
   export type ListingCreateWithoutViewsInput = {
@@ -80401,7 +80401,7 @@ export namespace Prisma {
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
     savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesCreateNestedManyWithoutListingInput
   }
 
   export type ListingUncheckedCreateWithoutViewsInput = {
@@ -80446,7 +80446,7 @@ export namespace Prisma {
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
     savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     competitionMaps?: PropertyCompetitionMapUncheckedCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutListingInput
   }
 
   export type ListingCreateOrConnectWithoutViewsInput = {
@@ -80507,7 +80507,7 @@ export namespace Prisma {
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
     savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUpdateManyWithoutListingNestedInput
   }
 
   export type ListingUncheckedUpdateWithoutViewsInput = {
@@ -80552,7 +80552,7 @@ export namespace Prisma {
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
     savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUncheckedUpdateManyWithoutListingNestedInput
   }
 
   export type ClientLinkCreateWithoutClientInput = {
@@ -80674,7 +80674,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountUncheckedCreateWithoutBaseLeadsBelongingToInput = {
@@ -80700,7 +80700,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUncheckedCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeUncheckedCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountCreateOrConnectWithoutBaseLeadsBelongingToInput = {
@@ -80825,7 +80825,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AccountUncheckedUpdateWithoutBaseLeadsBelongingToInput = {
@@ -80851,7 +80851,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUncheckedUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUncheckedUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUncheckedUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type BaseLeadCreateWithoutContactsInput = {
@@ -81054,7 +81054,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountUncheckedCreateWithoutOwnedSharedLeadsInput = {
@@ -81080,7 +81080,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUncheckedCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeUncheckedCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountCreateOrConnectWithoutOwnedSharedLeadsInput = {
@@ -81185,7 +81185,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AccountUncheckedUpdateWithoutOwnedSharedLeadsInput = {
@@ -81211,7 +81211,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUncheckedUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUncheckedUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUncheckedUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type LeadActivityUpsertWithWhereUniqueWithoutLeadInput = {
@@ -81362,7 +81362,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountUncheckedCreateWithoutAccessRowsInput = {
@@ -81388,7 +81388,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUncheckedCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeUncheckedCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountCreateOrConnectWithoutAccessRowsInput = {
@@ -81461,7 +81461,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AccountUncheckedUpdateWithoutAccessRowsInput = {
@@ -81487,7 +81487,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUncheckedUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUncheckedUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUncheckedUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AuthzRoleUpsertWithoutAccessRowsInput = {
@@ -82330,7 +82330,7 @@ export namespace Prisma {
     linkedBy?: PropertyLinkCreateNestedManyWithoutSecondaryInput
     savedBy?: ListingsSavedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesCreateNestedManyWithoutListingInput
   }
 
   export type ListingUncheckedCreateWithoutCompetitionMapsInput = {
@@ -82375,7 +82375,7 @@ export namespace Prisma {
     linkedBy?: PropertyLinkUncheckedCreateNestedManyWithoutSecondaryInput
     savedBy?: ListingsSavedUncheckedCreateNestedManyWithoutPropertyInput
     views?: ListingsViewUncheckedCreateNestedManyWithoutPropertyInput
-    representatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutListingInput
+    representatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutListingInput
   }
 
   export type ListingCreateOrConnectWithoutCompetitionMapsInput = {
@@ -82475,7 +82475,7 @@ export namespace Prisma {
     linkedBy?: PropertyLinkUpdateManyWithoutSecondaryNestedInput
     savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUpdateManyWithoutListingNestedInput
   }
 
   export type ListingUncheckedUpdateWithoutCompetitionMapsInput = {
@@ -82520,7 +82520,7 @@ export namespace Prisma {
     linkedBy?: PropertyLinkUncheckedUpdateManyWithoutSecondaryNestedInput
     savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUncheckedUpdateManyWithoutListingNestedInput
   }
 
   export type CompetitorListingUpsertWithoutPropertyMapsInput = {
@@ -82671,7 +82671,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountUncheckedCreateWithoutIntelligenceMappingsInput = {
@@ -82697,7 +82697,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUncheckedCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeUncheckedCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountCreateOrConnectWithoutIntelligenceMappingsInput = {
@@ -82798,7 +82798,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AccountUncheckedUpdateWithoutIntelligenceMappingsInput = {
@@ -82824,7 +82824,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUncheckedUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUncheckedUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUncheckedUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type CompetitorUpsertWithoutIntelligenceMappingsInput = {
@@ -82934,7 +82934,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountUncheckedCreateWithoutIntelligenceAlertsInput = {
@@ -82960,7 +82960,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUncheckedCreateNestedManyWithoutCreatedByInput
     propertyChangesForProfile?: ListingChangeUncheckedCreateNestedManyWithoutCreatedForInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedCreateNestedManyWithoutWorkingProfileInput
-    listingRepresentatives?: ListingRepresentativeUncheckedCreateNestedManyWithoutRepresentativeInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedCreateNestedManyWithoutRepresentativeInput
   }
 
   export type AccountCreateOrConnectWithoutIntelligenceAlertsInput = {
@@ -83070,7 +83070,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AccountUncheckedUpdateWithoutIntelligenceAlertsInput = {
@@ -83096,7 +83096,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUncheckedUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUncheckedUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUncheckedUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type CompetitorUpsertWithoutIntelligenceAlertsInput = {
@@ -83250,7 +83250,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUpdateManyWithoutListingNestedInput
   }
 
   export type ListingUncheckedUpdateWithoutLocationRecordInput = {
@@ -83295,7 +83295,7 @@ export namespace Prisma {
     savedBy?: ListingsSavedUncheckedUpdateManyWithoutPropertyNestedInput
     views?: ListingsViewUncheckedUpdateManyWithoutPropertyNestedInput
     competitionMaps?: PropertyCompetitionMapUncheckedUpdateManyWithoutPropertyNestedInput
-    representatives?: ListingRepresentativeUncheckedUpdateManyWithoutListingNestedInput
+    representatives?: ListingsRepresentativesUncheckedUpdateManyWithoutListingNestedInput
   }
 
   export type ListingUncheckedUpdateManyWithoutLocationRecordInput = {
@@ -83464,7 +83464,7 @@ export namespace Prisma {
     approvedOn?: Date | string | null
   }
 
-  export type ListingRepresentativeCreateManyRepresentativeInput = {
+  export type ListingsRepresentativesCreateManyRepresentativeInput = {
     id?: string
     listingId: string
     role: $Enums.PropertyRepresentativeRole
@@ -83512,7 +83512,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AccountUncheckedUpdateWithoutWorkingProfileAccountInput = {
@@ -83538,7 +83538,7 @@ export namespace Prisma {
     createdListingChanges?: ListingChangeUncheckedUpdateManyWithoutCreatedByNestedInput
     propertyChangesForProfile?: ListingChangeUncheckedUpdateManyWithoutCreatedForNestedInput
     propertyChangesByWorkingProfile?: ListingChangeUncheckedUpdateManyWithoutWorkingProfileNestedInput
-    listingRepresentatives?: ListingRepresentativeUncheckedUpdateManyWithoutRepresentativeNestedInput
+    listingRepresentatives?: ListingsRepresentativesUncheckedUpdateManyWithoutRepresentativeNestedInput
   }
 
   export type AccountUncheckedUpdateManyWithoutWorkingProfileAccountInput = {
@@ -83911,21 +83911,21 @@ export namespace Prisma {
     approvedOn?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type ListingRepresentativeUpdateWithoutRepresentativeInput = {
+  export type ListingsRepresentativesUpdateWithoutRepresentativeInput = {
     id?: StringFieldUpdateOperationsInput | string
     role?: EnumPropertyRepresentativeRoleFieldUpdateOperationsInput | $Enums.PropertyRepresentativeRole
     status?: NullableStringFieldUpdateOperationsInput | string | null
     listing?: ListingUpdateOneRequiredWithoutRepresentativesNestedInput
   }
 
-  export type ListingRepresentativeUncheckedUpdateWithoutRepresentativeInput = {
+  export type ListingsRepresentativesUncheckedUpdateWithoutRepresentativeInput = {
     id?: StringFieldUpdateOperationsInput | string
     listingId?: StringFieldUpdateOperationsInput | string
     role?: EnumPropertyRepresentativeRoleFieldUpdateOperationsInput | $Enums.PropertyRepresentativeRole
     status?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type ListingRepresentativeUncheckedUpdateManyWithoutRepresentativeInput = {
+  export type ListingsRepresentativesUncheckedUpdateManyWithoutRepresentativeInput = {
     id?: StringFieldUpdateOperationsInput | string
     listingId?: StringFieldUpdateOperationsInput | string
     role?: EnumPropertyRepresentativeRoleFieldUpdateOperationsInput | $Enums.PropertyRepresentativeRole
@@ -83993,7 +83993,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type ListingRepresentativeCreateManyListingInput = {
+  export type ListingsRepresentativesCreateManyListingInput = {
     id?: string
     representativeId: string
     role: $Enums.PropertyRepresentativeRole
@@ -84183,21 +84183,21 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ListingRepresentativeUpdateWithoutListingInput = {
+  export type ListingsRepresentativesUpdateWithoutListingInput = {
     id?: StringFieldUpdateOperationsInput | string
     role?: EnumPropertyRepresentativeRoleFieldUpdateOperationsInput | $Enums.PropertyRepresentativeRole
     status?: NullableStringFieldUpdateOperationsInput | string | null
     representative?: AccountUpdateOneRequiredWithoutListingRepresentativesNestedInput
   }
 
-  export type ListingRepresentativeUncheckedUpdateWithoutListingInput = {
+  export type ListingsRepresentativesUncheckedUpdateWithoutListingInput = {
     id?: StringFieldUpdateOperationsInput | string
     representativeId?: StringFieldUpdateOperationsInput | string
     role?: EnumPropertyRepresentativeRoleFieldUpdateOperationsInput | $Enums.PropertyRepresentativeRole
     status?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type ListingRepresentativeUncheckedUpdateManyWithoutListingInput = {
+  export type ListingsRepresentativesUncheckedUpdateManyWithoutListingInput = {
     id?: StringFieldUpdateOperationsInput | string
     representativeId?: StringFieldUpdateOperationsInput | string
     role?: EnumPropertyRepresentativeRoleFieldUpdateOperationsInput | $Enums.PropertyRepresentativeRole

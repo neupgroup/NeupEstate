@@ -115,7 +115,7 @@ model Account {
   createdListingChanges       ListingChange[] @relation("ListingChangeCreatedBy")
   propertyChangesForProfile    ListingChange[] @relation("ListingChangeCreatedFor")
   propertyChangesByWorkingProfile ListingChange[] @relation("ListingChangeWorkingProfile")
-  listingRepresentatives ListingRepresentative[]
+  listingRepresentatives ListingsRepresentatives[]
 
   @@index([workingProfile])
   @@map("accounts")
@@ -182,7 +182,7 @@ model Listing {
   savedBy            ListingsSaved[]
   views              ListingsView[]
   competitionMaps    PropertyCompetitionMap[]
-  representatives    ListingRepresentative[]
+  representatives    ListingsRepresentatives[]
 
   @@index([type], map: "listings_type_idx")
   @@index([purpose], map: "listings_purpose_idx")
@@ -291,7 +291,7 @@ model PropertyOwner {
   @@map("property_owner")
 }
 
-model ListingRepresentative {
+model ListingsRepresentatives {
   id               String                     @id @default(cuid())
   listingId        String                     @map("listing_id")
   representativeId String                     @map("representative_id")
@@ -301,9 +301,9 @@ model ListingRepresentative {
   listing          Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
   representative  Account  @relation(fields: [representativeId], references: [id], onDelete: Cascade)
 
-  @@index([listingId])
-  @@index([representativeId])
-  @@map("listing_representatives")
+  @@index([listingId], map: "listings_representatives_listing_id_idx")
+  @@index([representativeId], map: "listings_representatives_representative_id_idx")
+  @@map("listings_representatives")
 }
 
 model ListingsDocuments {

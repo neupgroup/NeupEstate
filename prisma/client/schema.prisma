@@ -91,31 +91,31 @@ model Location {
 // ============================================================================
 
 model Account {
-  id                              String                  @id // ssid from NeupID Silent SSO
-  neupId                          String?                 @unique @map("neupid")
-  accountType                     String                  @map("type")
-  createdOn                       DateTime                @default(now()) @map("created_on")
-  accessedOn                      DateTime                @default(now()) @map("accessed_on")
-  displayName                     String?                 @map("display_name") // denormalized from NeupID — set on first create
-  displayImage                    String?                 @map("display_image") // denormalized from NeupID — set on first create
-  coverImage                      String?                 @map("cover_image")
+  id                              String                    @id // ssid from NeupID Silent SSO
+  neupId                          String?                   @unique @map("neupid")
+  accountType                     String                    @map("type")
+  createdOn                       DateTime                  @default(now()) @map("created_on")
+  accessedOn                      DateTime                  @default(now()) @map("accessed_on")
+  displayName                     String?                   @map("display_name") // denormalized from NeupID — set on first create
+  displayImage                    String?                   @map("display_image") // denormalized from NeupID — set on first create
+  coverImage                      String?                   @map("cover_image")
   bio                             String?
-  workingProfile                  String?                 @map("working_profile")
-  moreDetails                     Json?                   @map("more_details") @db.JsonB
+  workingProfile                  String?                   @map("working_profile")
+  moreDetails                     Json?                     @map("more_details") @db.JsonB
   accessRows                      AccountAccess[]
-  workingProfileAccount           Account?                @relation("AccountWorkingProfile", fields: [workingProfile], references: [id], onDelete: SetNull)
-  workingProfileOf                Account[]               @relation("AccountWorkingProfile")
-  agencyAgentMapAsAgency          AgencyAgentMap[]        @relation("AgencyAgentMapAgency")
-  agencyAgentMapAsAgent           AgencyAgentMap[]        @relation("AgencyAgentMapAgent")
-  baseLeadsBelongingTo            BaseLead[]              @relation("BaseLeadBelongsTo")
-  ownedSharedLeads                SharedLeads[]           @relation("SharedLeadsOwner")
+  workingProfileAccount           Account?                  @relation("AccountWorkingProfile", fields: [workingProfile], references: [id], onDelete: SetNull)
+  workingProfileOf                Account[]                 @relation("AccountWorkingProfile")
+  agencyAgentMapAsAgency          AgencyAgentMap[]          @relation("AgencyAgentMapAgency")
+  agencyAgentMapAsAgent           AgencyAgentMap[]          @relation("AgencyAgentMapAgent")
+  baseLeadsBelongingTo            BaseLead[]                @relation("BaseLeadBelongsTo")
+  ownedSharedLeads                SharedLeads[]             @relation("SharedLeadsOwner")
   intelligenceMappings            IntelligenceMapping[]
   intelligenceAlerts              IntelligenceAlert[]
   propertyChanges                 ListingChange[]
-  createdListingChanges           ListingChange[]         @relation("ListingChangeCreatedBy")
-  propertyChangesForProfile       ListingChange[]         @relation("ListingChangeCreatedFor")
-  propertyChangesByWorkingProfile ListingChange[]         @relation("ListingChangeWorkingProfile")
-  listingRepresentatives          ListingRepresentative[]
+  createdListingChanges           ListingChange[]           @relation("ListingChangeCreatedBy")
+  propertyChangesForProfile       ListingChange[]           @relation("ListingChangeCreatedFor")
+  propertyChangesByWorkingProfile ListingChange[]           @relation("ListingChangeWorkingProfile")
+  listingRepresentatives          ListingsRepresentatives[]
 
   @@index([workingProfile])
   @@map("accounts")
@@ -177,12 +177,12 @@ model Listing {
   owners           PropertyOwner[]
   documents        ListingsDocuments[]
   changes          ListingChange[]
-  links            PropertyLink[]           @relation("PrimaryLinks")
-  linkedBy         PropertyLink[]           @relation("SecondaryLinks")
+  links            PropertyLink[]            @relation("PrimaryLinks")
+  linkedBy         PropertyLink[]            @relation("SecondaryLinks")
   savedBy          ListingsSaved[]
   views            ListingsView[]
   competitionMaps  PropertyCompetitionMap[]
-  representatives  ListingRepresentative[]
+  representatives  ListingsRepresentatives[]
 
   @@index([type], map: "listings_type_idx")
   @@index([purpose], map: "listings_purpose_idx")
@@ -291,7 +291,7 @@ model PropertyOwner {
   @@map("property_owner")
 }
 
-model ListingRepresentative {
+model ListingsRepresentatives {
   id               String                     @id @default(cuid())
   listingId        String                     @map("listing_id")
   representativeId String                     @map("representative_id")
@@ -301,9 +301,9 @@ model ListingRepresentative {
   listing        Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
   representative Account @relation(fields: [representativeId], references: [id], onDelete: Cascade)
 
-  @@index([listingId])
-  @@index([representativeId])
-  @@map("listing_representatives")
+  @@index([listingId], map: "listings_representatives_listing_id_idx")
+  @@index([representativeId], map: "listings_representatives_representative_id_idx")
+  @@map("listings_representatives")
 }
 
 model ListingsDocuments {
