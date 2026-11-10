@@ -1,0 +1,14 @@
+ALTER TABLE public.property_representatives RENAME TO listing_representatives;
+ALTER TABLE public.listing_representatives RENAME COLUMN property_id TO listing_id;
+
+ALTER INDEX IF EXISTS public.property_representatives_property_id_idx
+  RENAME TO listing_representatives_listing_id_idx;
+ALTER INDEX IF EXISTS public.property_representatives_representative_id_idx
+  RENAME TO listing_representatives_representative_id_idx;
+
+ALTER TABLE public.listing_representatives
+  RENAME CONSTRAINT property_representatives_pkey TO listing_representatives_pkey;
+ALTER TABLE public.listing_representatives
+  RENAME CONSTRAINT property_representatives_property_id_fkey TO listing_representatives_listing_id_fkey;
+ALTER TABLE public.listing_representatives
+  RENAME CONSTRAINT property_representatives_representative_id_fkey TO listing_representatives_representative_id_fkey;

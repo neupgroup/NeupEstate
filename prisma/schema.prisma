@@ -115,7 +115,7 @@ model Account {
   createdListingChanges       ListingChange[] @relation("ListingChangeCreatedBy")
   propertyChangesForProfile    ListingChange[] @relation("ListingChangeCreatedFor")
   propertyChangesByWorkingProfile ListingChange[] @relation("ListingChangeWorkingProfile")
-  propertyRepresentatives ListingRepresentative[]
+  listingRepresentatives ListingRepresentative[]
 
   @@index([workingProfile])
   @@map("accounts")
@@ -293,17 +293,17 @@ model PropertyOwner {
 
 model ListingRepresentative {
   id               String                     @id @default(cuid())
-  propertyId       String                     @map("property_id")
+  listingId        String                     @map("listing_id")
   representativeId String                     @map("representative_id")
   role             PropertyRepresentativeRole
   status           String?
 
-  property         Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  listing          Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
   representative  Account  @relation(fields: [representativeId], references: [id], onDelete: Cascade)
 
-  @@index([propertyId])
+  @@index([listingId])
   @@index([representativeId])
-  @@map("property_representatives")
+  @@map("listing_representatives")
 }
 
 model ListingDocument {

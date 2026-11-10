@@ -442,11 +442,11 @@ Fields:
 > owner_client_id: text NOT NULL, UNIQUE property_owner_property_id_owner_client_id_key(property_id, owner_client_id), references lead_base.id;
 > is_primary_owner: boolean NOT NULL, default: false;
 
-Table: property_representatives, Model: PropertyRepresentative
+Table: listing_representatives, Model: ListingRepresentative
 Fields:
 > id: text PK, NOT NULL;
-> property_id: text NOT NULL, INDEX property_representatives_property_id_idx(property_id), references listings.id;
-> representative_id: text NOT NULL, INDEX property_representatives_representative_id_idx(representative_id), references accounts.id;
+> listing_id: text NOT NULL, INDEX listing_representatives_listing_id_idx(listing_id), references listings.id;
+> representative_id: text NOT NULL, INDEX listing_representatives_representative_id_idx(representative_id), references accounts.id;
 > role: enum(propertyOwner, listingOwner, listingParty, listingOwner.propertyOwner) NOT NULL;
 > status: text;
 

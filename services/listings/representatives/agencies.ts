@@ -12,7 +12,7 @@ export async function getListingAgencyRepresentative(propertyId?: string | null)
   if (!id) return [];
   const entry = await prisma.listingRepresentative.findFirst({
     where: {
-      propertyId: id,
+      listingId: id,
       role: 'listingOwner',
       representative: { accountType: { in: ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'] } },
     },
