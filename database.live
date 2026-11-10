@@ -171,7 +171,7 @@ Fields:
 > trackerId: text NOT NULL;
 > clientId: text NOT NULL, references lead_base.id;
 
-Table: competitor, Model: Competitor
+Table: competitors, Model: Competitor
 Fields:
 > id: text PK, NOT NULL;
 > name: text NOT NULL;
@@ -195,12 +195,12 @@ Fields:
 > loggedOn: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > updatedAt: timestamp(3) NOT NULL;
-> competitorId: text NOT NULL, references competitor.id;
+> competitorId: text NOT NULL, references competitors.id;
 
 Table: competitor_pages, Model: CompetitorPage
 Fields:
 > id: text PK, NOT NULL;
-> competitorId: text NOT NULL, references competitor.id;
+> competitorId: text NOT NULL, references competitors.id;
 > title: text NOT NULL;
 > description: text;
 > source: text NOT NULL;
@@ -215,7 +215,7 @@ Fields:
 Table: competitor_sources, Model: CompetitorSource
 Fields:
 > id: text PK, NOT NULL;
-> competitorId: text NOT NULL, references competitor.id;
+> competitorId: text NOT NULL, references competitors.id;
 > type: text NOT NULL;
 > value: text NOT NULL;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
@@ -266,7 +266,7 @@ Fields:
 > id: text PK, NOT NULL;
 > map_id: text NOT NULL, references intelligence_mapping.id;
 > account_id: text NOT NULL, references accounts.id;
-> listing_id: text NOT NULL, references competitor.id;
+> listing_id: text NOT NULL, references competitors.id;
 > status: text;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > updatedAt: timestamp(3) NOT NULL;
@@ -278,7 +278,7 @@ Fields:
 > c_location: text;
 > c_min_budget: integer;
 > c_max_budget: integer;
-> c_competitor: text references competitor.id;
+> c_competitor: text references competitors.id;
 > c_type: text;
 > c_purpose: text NOT NULL;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;

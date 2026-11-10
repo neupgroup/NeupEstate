@@ -872,7 +872,7 @@ model Competitor {
   intelligenceMappings IntelligenceMapping[]
   intelligenceAlerts    IntelligenceAlert[]
 
-  @@map("competitor")
+  @@map("competitors")
 }
 
 model CompetitorSource {

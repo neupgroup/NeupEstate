@@ -259,7 +259,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - divergence: model ClientLink maps to table client_link
 - divergence based on fields: database has 3 fields; Prisma model has 3 persisted scalar fields; difference 0
 
-### public.competitor (Competitor)
+### public.competitors (Competitor)
 
 - purpose: Stores competitor entities used for market and listing intelligence.
 - usage: Used by competitor management, intelligence criteria, competitor pages/listings/sources, and alerts.
@@ -271,7 +271,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - updatedAt timestamp(3) NOT NULL
 - crawlRules jsonb
 
-- divergence: model Competitor maps to table competitor
+- divergence: model Competitor maps to table competitors
 - divergence based on fields: database has 6 fields; Prisma model has 6 persisted scalar fields; difference 0
 
 ### public.competitor_listings (CompetitorListing)
@@ -292,7 +292,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - loggedOn timestamp(3) NOT NULL, default CURRENT_TIMESTAMP
 - createdAt timestamp(3) NOT NULL, default CURRENT_TIMESTAMP
 - updatedAt timestamp(3) NOT NULL
-- competitorId text NOT NULL, FK competitor_listings_competitorId_fkey -> public.competitor(id)
+- competitorId text NOT NULL, FK competitor_listings_competitorId_fkey -> public.competitors(id)
 
 - divergence: model CompetitorListing maps to table competitor_listings
 - divergence based on fields: database has 14 fields; Prisma model has 14 persisted scalar fields; difference 0
@@ -303,7 +303,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - usage: Used by competitor crawling/logging services, tracking, and listing extraction.
 
 - id text PK, NOT NULL
-- competitorId text NOT NULL, FK competitor_properties_competitorId_fkey -> public.competitor(id)
+- competitorId text NOT NULL, FK competitor_properties_competitorId_fkey -> public.competitors(id)
 - title text NOT NULL
 - description text
 - source text NOT NULL
@@ -324,7 +324,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - usage: Used by competitor source create/delete flows and crawl setup.
 
 - id text PK, NOT NULL
-- competitorId text NOT NULL, FK competitor_sources_competitorId_fkey -> public.competitor(id)
+- competitorId text NOT NULL, FK competitor_sources_competitorId_fkey -> public.competitors(id)
 - type text NOT NULL
 - value text NOT NULL
 - createdAt timestamp(3) NOT NULL, default CURRENT_TIMESTAMP
@@ -414,7 +414,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - id text PK, NOT NULL
 - map_id text NOT NULL, FK intelligence_alerts_map_id_fkey -> public.intelligence_mapping(id)
 - account_id text NOT NULL, FK intelligence_alerts_account_id_fkey -> public.account(id)
-- listing_id text NOT NULL, FK intelligence_alerts_listing_id_fkey -> public.competitor(id)
+- listing_id text NOT NULL, FK intelligence_alerts_listing_id_fkey -> public.competitors(id)
 - status text
 - createdAt timestamp(3) NOT NULL, default CURRENT_TIMESTAMP
 - updatedAt timestamp(3) NOT NULL
@@ -432,7 +432,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - c_location text
 - c_min_budget integer
 - c_max_budget integer
-- c_competitor text FK intelligence_mapping_c_competitor_fkey -> public.competitor(id)
+- c_competitor text FK intelligence_mapping_c_competitor_fkey -> public.competitors(id)
 - c_type text
 - c_purpose text NOT NULL
 - createdAt timestamp(3) NOT NULL, default CURRENT_TIMESTAMP
