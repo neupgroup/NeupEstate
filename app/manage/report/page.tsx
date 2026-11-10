@@ -119,7 +119,7 @@ async function getAgencyReportData(agencyAccountId: string) {
       status: true,
       isApproved: true,
       createdAt: true,
-      priceAmount: true,
+      priceListed: true,
       priceCurrency: true,
       type: true,
       purpose: true,
@@ -199,7 +199,7 @@ async function getAgencyReportData(agencyAccountId: string) {
   const pendingListings = listings.filter((property) => !property.isApproved).length;
   const { usdRates } = await getDisplayConfiguration();
   const totalListingValueUsd = listings.reduce((sum, property) => {
-    const amount = Number(property.priceAmount || 0);
+    const amount = Number(property.priceListed || 0);
     const currency = property.priceCurrency?.toUpperCase() || 'NPR';
     const rate = usdRates[currency];
     return sum + (rate ? amount / rate : 0);

@@ -455,7 +455,7 @@ export function mapRecord(record: any): Listing {
     : [];
   const images = mediaImages;
 
-  const priceAmount = record.priceAmount == null ? null : Number(record.priceAmount);
+  const priceAmount = record.priceListed == null ? null : Number(record.priceListed);
   const priceCurrency = record.priceCurrency ?? null;
   const priceBasis = record.priceBasis ?? null;
   const pricingMetadata = getListingPricingMetadata(record.pricing);

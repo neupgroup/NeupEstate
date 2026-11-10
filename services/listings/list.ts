@@ -173,8 +173,8 @@ export async function getPaginatedListings(opts: {
         ],
       });
     }
-    if (Number.isFinite(filters.minPrice)) where.priceAmount = { ...where.priceAmount, gte: filters.minPrice };
-    if (Number.isFinite(filters.maxPrice)) where.priceAmount = { ...where.priceAmount, lte: filters.maxPrice };
+    if (Number.isFinite(filters.minPrice)) where.priceListed = { ...where.priceListed, gte: filters.minPrice };
+    if (Number.isFinite(filters.maxPrice)) where.priceListed = { ...where.priceListed, lte: filters.maxPrice };
     if (opts.ownerAccountId) where.owners = { some: { ownerClientId: opts.ownerAccountId } };
     if (opts.agentAccountId) ownershipClauses.push({ representatives: { some: { role: 'listingOwner', representativeId: opts.agentAccountId } } });
     if (opts.agencyIds?.length) ownershipClauses.push({ representatives: { some: { role: 'listingOwner', representativeId: { in: opts.agencyIds } } } });
@@ -337,7 +337,7 @@ export async function getFeaturedProjects(limit = 4): Promise<Listing[]> {
  */
 export async function getPremiumListings(limit = 4): Promise<Listing[]> {
   try {
-    const records = await prisma.listing.findMany({ where: { status: PROPERTY_STATUS.ACTIVE, priceAmount: { gt: 0 } }, orderBy: { priceAmount: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
+    const records = await prisma.listing.findMany({ where: { status: PROPERTY_STATUS.ACTIVE, priceListed: { gt: 0 } }, orderBy: { priceListed: 'desc' }, take: limit, include: PROPERTY_INCLUDE });
     return hydrateListingAccountLabels(records.map(mapRecord));
   } catch (e) { await logger().type('getPremiumProperties').data({ error: String(e), details: {} }).log(); return []; }
 }

@@ -121,7 +121,7 @@ async function migrateListingPricing() {
         if (apply) {
           await pool.query(`
             UPDATE "listings"
-            SET "priceBasis" = $1::"ListingPriceBasis", "priceCurrency" = $2, "priceAmount" = $3::numeric
+            SET "priceBasis" = $1::"ListingPriceBasis", "priceCurrency" = $2, "priceListed" = $3::numeric
             WHERE "id" = $4
           `, [pricingBasis.basis, price.currency, priceAmount, listingId]);
         }
@@ -132,7 +132,7 @@ async function migrateListingPricing() {
       SELECT id AS listing_id, "displayPrice" AS amount, "displayPriceUnit" AS legacy_basis,
              currency, pricing
       FROM "listings"
-      WHERE "priceAmount" IS NULL AND "displayPrice" > 0
+      WHERE "priceListed" IS NULL AND "displayPrice" > 0
       ORDER BY id
     `);
     for (const row of legacyRows) {
@@ -181,8 +181,8 @@ async function migrateListingPricing() {
       if (apply) {
         await pool.query(`
           UPDATE "listings"
-          SET "priceBasis" = $1::"ListingPriceBasis", "priceCurrency" = $2, "priceAmount" = $3::numeric
-          WHERE "id" = $4 AND "priceAmount" IS NULL
+          SET "priceBasis" = $1::"ListingPriceBasis", "priceCurrency" = $2, "priceListed" = $3::numeric
+          WHERE "id" = $4 AND "priceListed" IS NULL
         `, [pricingBasis.basis, price.currency, priceAmount, row.listing_id]);
       }
       updated += 1;

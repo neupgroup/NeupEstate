@@ -152,7 +152,8 @@ model Listing {
   displayPriceUnit   String          @db.VarChar(24)
   priceBasis         ListingPriceBasis?
   priceCurrency      String?         @db.VarChar(3)
-  priceAmount        Decimal?        @db.Decimal(22, 10)
+  priceListed        Decimal?        @db.Decimal(22, 10)
+  priceNegotiable    Boolean?
   geoLocation        String          @db.VarChar(63)
   location           String          @db.Uuid
   locationRecord     Location        @relation(fields: [location], references: [id], onDelete: Restrict, onUpdate: Cascade)
