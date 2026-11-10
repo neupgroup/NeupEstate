@@ -675,22 +675,6 @@ model Message {
 }
 
 // ============================================================================
-// Site Content
-// ============================================================================
-
-model SiteContent {
-  id        String   @id @default(cuid())
-  key       String   @unique
-  value     String
-  section   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([section])
-  @@map("site_content")
-}
-
-// ============================================================================
 // User Preferences
 // ============================================================================
 

@@ -551,15 +551,6 @@ Fields:
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > updatedAt: timestamp(3) NOT NULL;
 
-Table: site_content, Model: SiteContent
-Fields:
-> id: text PK, NOT NULL;
-> key: text NOT NULL, UNIQUE site_content_key_key(key);
-> value: text NOT NULL;
-> section: text;
-> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
-> updatedAt: timestamp(3) NOT NULL;
-
 Table: sitemaps, Model: SitemapEntry
 Fields:
 > id: text PK, NOT NULL;
