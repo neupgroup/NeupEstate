@@ -467,16 +467,6 @@ Fields:
 > role: enum(propertyOwner, listingOwner, listingParty, listingOwner.propertyOwner) NOT NULL;
 > status: text;
 
-Table: property_price, Model: PropertyPrice
-Fields:
-> id: text PK, NOT NULL;
-> propertyId: text NOT NULL, references listings.id;
-> for: text NOT NULL;
-> currency: varchar(10) NOT NULL;
-> unit: text NOT NULL;
-> price: numeric(18,2) NOT NULL;
-> priceUnit: varchar(24) NOT NULL;
-
 Table: property_requests, Model: PropertyRequest
 Fields:
 > id: text PK, NOT NULL;

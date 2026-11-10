@@ -174,7 +174,6 @@ model Listing {
   apartmentDetail    ListingApartment?
   landDetail         PropertyLandDetail?
   commercialDetail   ListingCommercial?
-  prices             PropertyPrice[]
   owners             PropertyOwner[]
   documents          ListingDocument[]
   changes            ListingChange[]
@@ -275,21 +274,6 @@ model ListingCommercial {
   property      Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 
   @@map("listings_commercial")
-}
-
-model PropertyPrice {
-  id         String   @id @default(cuid())
-  propertyId String
-  for        String
-  currency   String   @db.VarChar(10)
-  unit       String
-  price      Decimal  @db.Decimal(18, 2)
-  priceUnit  String   @db.VarChar(24)
-
-  property   Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-
-  @@index([propertyId])
-  @@map("property_price")
 }
 
 model PropertyOwner {
