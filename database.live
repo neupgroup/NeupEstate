@@ -492,7 +492,7 @@ Fields:
 Indexes:
 > natural_searches_id_idx(id);
 
-Table: review, Model: Review
+Table: reviews, Model: Review
 Fields:
 > id: text PK, NOT NULL;
 > reviewedBy: text NOT NULL;

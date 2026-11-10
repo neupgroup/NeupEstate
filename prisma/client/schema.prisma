@@ -461,7 +461,7 @@ model Review {
   responseOn DateTime?
 
   @@index([reviewedBy])
-  @@map("review")
+  @@map("reviews")
 }
 
 // ============================================================================

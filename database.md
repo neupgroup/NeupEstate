@@ -793,7 +793,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - divergence: model Requirement maps to table requirements
 - divergence based on fields: database has 13 fields; Prisma model has 13 persisted scalar fields; difference 0
 
-### public.review (Review)
+### public.reviews (Review)
 
 - purpose: Stores customer reviews, ratings, optional responses, and featured status.
 - usage: Used by review display/admin workflows and site content sections.
@@ -807,7 +807,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - responseBy text
 - responseOn timestamp(3)
 
-- divergence: model Review maps to table review
+- divergence: model Review maps to table reviews
 - divergence based on fields: database has 8 fields; Prisma model has 8 persisted scalar fields; difference 0
 
 ### public.sales_requests (SalesRequest)
