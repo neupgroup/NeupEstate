@@ -183,7 +183,7 @@ Fields:
 Table: competitor_listings, Model: CompetitorListing
 Fields:
 > id: text PK, NOT NULL;
-> competitorPageId: text NOT NULL, UNIQUE competitor_listings_competitorPageId_key(competitorPageId), references competitor_pages.id;
+> competitorPageId: text NOT NULL, UNIQUE competitor_listings_competitorPageId_key(competitorPageId);
 > title: text NOT NULL;
 > description: text;
 > purpose: text NOT NULL;
@@ -197,21 +197,6 @@ Fields:
 > updatedAt: timestamp(3) NOT NULL;
 > competitorId: text NOT NULL, references competitors.id;
 
-Table: competitor_pages, Model: CompetitorPage
-Fields:
-> id: text PK, NOT NULL;
-> competitorId: text NOT NULL, references competitors.id;
-> title: text NOT NULL;
-> description: text;
-> source: text NOT NULL;
-> details: jsonb;
-> listedOn: timestamp(3);
-> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
-> updatedAt: timestamp(3) NOT NULL;
-> visibleHtml: text;
-> lastLoggedStatus: text;
-> lastLoggedOn: timestamp(3);
-
 Table: competitor_sources, Model: CompetitorSource
 Fields:
 > id: text PK, NOT NULL;
@@ -223,7 +208,7 @@ Fields:
 Table: competitor_tracking, Model: CompetitorTracking
 Fields:
 > id: text PK, NOT NULL;
-> competitorPageId: text NOT NULL, references competitor_pages.id;
+> competitorPageId: text NOT NULL;
 > ourPropertyId: text;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 
