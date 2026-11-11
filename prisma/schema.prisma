@@ -904,7 +904,7 @@ model CompetitorListing {
 
   @@index([competitorId])
   @@index([loggedOn])
-  @@map("competitor_listings")
+  @@map("competitors_listings")
 }
 
 model PropertyCompetitionMap {

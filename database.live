@@ -180,10 +180,10 @@ Fields:
 > updatedAt: timestamp(3) NOT NULL;
 > crawlRules: jsonb;
 
-Table: competitor_listings, Model: CompetitorListing
+Table: competitors_listings, Model: CompetitorListing
 Fields:
 > id: text PK, NOT NULL;
-> competitorPageId: text NOT NULL, UNIQUE competitor_listings_competitorPageId_key(competitorPageId);
+> competitorPageId: text NOT NULL, UNIQUE competitors_listings_competitorPageId_key(competitorPageId);
 > title: text NOT NULL;
 > description: text;
 > purpose: text NOT NULL;
@@ -336,7 +336,7 @@ Table: property_competition_map, Model: PropertyCompetitionMap
 Fields:
 > id: text PK, NOT NULL;
 > property_id: text NOT NULL, references listings.id;
-> competitor_property_id: text NOT NULL, references competitor_listings.id;
+> competitor_property_id: text NOT NULL, references competitors_listings.id;
 > status: text NOT NULL, default: 'UNVERIFIED'::text;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > updatedAt: timestamp(3) NOT NULL;
