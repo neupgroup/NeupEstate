@@ -856,7 +856,7 @@ model CompetitorSource {
   competitor   Competitor @relation(fields: [competitorId], references: [id], onDelete: Cascade)
 
   @@index([competitorId])
-  @@map("competitor_sources")
+  @@map("competitors_sources")
 }
 
 model CompetitorPage {

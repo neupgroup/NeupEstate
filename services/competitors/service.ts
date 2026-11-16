@@ -67,7 +67,7 @@ export async function getCompetitors(): Promise<Competitor[]> {
         '[]'::json
       ) AS sources
       FROM "competitors" c
-      LEFT JOIN "competitor_sources" cs ON cs."competitorId" = c.id
+      LEFT JOIN "competitors_sources" cs ON cs."competitorId" = c.id
       GROUP BY c.id
       ORDER BY c."createdAt" DESC
     `;
@@ -85,7 +85,7 @@ export async function getCompetitorById(id: string): Promise<Competitor | null> 
         '[]'::json
       ) AS sources
       FROM "competitors" c
-      LEFT JOIN "competitor_sources" cs ON cs."competitorId" = c.id
+      LEFT JOIN "competitors_sources" cs ON cs."competitorId" = c.id
       WHERE c.id = ${id}
       GROUP BY c.id
       LIMIT 1
