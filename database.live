@@ -51,7 +51,7 @@ Fields:
 
 Table: agencies, Model: Agency
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > name: text NOT NULL;
 > logoUrl: text;
 > registeredName: text;
@@ -74,7 +74,7 @@ Fields:
 Table: agency_customization, Model: AgencyCustomization
 Fields:
 > id: text PK, NOT NULL;
-> agencyId: text NOT NULL, UNIQUE agency_customization_agencyId_customizeFor_key(agencyId, customizeFor), references agencies.id;
+> agencyId: uuid NOT NULL, UNIQUE agency_customization_agencyId_customizeFor_key(agencyId, customizeFor), references agencies.id;
 > customizeFor: text NOT NULL, UNIQUE agency_customization_agencyId_customizeFor_key(agencyId, customizeFor);
 > customization: jsonb NOT NULL;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
@@ -83,7 +83,7 @@ Fields:
 Table: agency_map, Model: AgencyMap
 Fields:
 > id: text PK, NOT NULL;
-> agencyAccountId: text NOT NULL, references agencies.id;
+> agencyAccountId: uuid NOT NULL, references agencies.id;
 > accountId: text NOT NULL;
 > role: text NOT NULL;
 > lockIn: boolean NOT NULL, default: false;

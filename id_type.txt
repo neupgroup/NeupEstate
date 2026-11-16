@@ -63,9 +63,9 @@ Table: listings_logs
 ID field: id (UUID)
 Generation: PostgreSQL UUID (gen_random_uuid()).
 
-Table: agencies
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+(done) Table: agencies
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs and referencing columns are converted by migration 20261129190000_agencies_id_to_postgres_uuid.
 
 Table: agency_map
 ID field: id (text)

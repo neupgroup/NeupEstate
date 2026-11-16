@@ -61147,7 +61147,7 @@ export namespace Prisma {
     AND?: AgencyWhereInput | AgencyWhereInput[]
     OR?: AgencyWhereInput[]
     NOT?: AgencyWhereInput | AgencyWhereInput[]
-    id?: StringFilter<"Agency"> | string
+    id?: UuidFilter<"Agency"> | string
     name?: StringFilter<"Agency"> | string
     logoUrl?: StringNullableFilter<"Agency"> | string | null
     registeredName?: StringNullableFilter<"Agency"> | string | null
@@ -61218,7 +61218,7 @@ export namespace Prisma {
     AND?: AgencyScalarWhereWithAggregatesInput | AgencyScalarWhereWithAggregatesInput[]
     OR?: AgencyScalarWhereWithAggregatesInput[]
     NOT?: AgencyScalarWhereWithAggregatesInput | AgencyScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Agency"> | string
+    id?: UuidWithAggregatesFilter<"Agency"> | string
     name?: StringWithAggregatesFilter<"Agency"> | string
     logoUrl?: StringNullableWithAggregatesFilter<"Agency"> | string | null
     registeredName?: StringNullableWithAggregatesFilter<"Agency"> | string | null
@@ -61236,7 +61236,7 @@ export namespace Prisma {
     OR?: AgencyMapWhereInput[]
     NOT?: AgencyMapWhereInput | AgencyMapWhereInput[]
     id?: StringFilter<"AgencyMap"> | string
-    agencyAccountId?: StringFilter<"AgencyMap"> | string
+    agencyAccountId?: UuidFilter<"AgencyMap"> | string
     accountId?: StringFilter<"AgencyMap"> | string
     role?: StringFilter<"AgencyMap"> | string
     lockIn?: BoolFilter<"AgencyMap"> | boolean
@@ -61257,7 +61257,7 @@ export namespace Prisma {
     AND?: AgencyMapWhereInput | AgencyMapWhereInput[]
     OR?: AgencyMapWhereInput[]
     NOT?: AgencyMapWhereInput | AgencyMapWhereInput[]
-    agencyAccountId?: StringFilter<"AgencyMap"> | string
+    agencyAccountId?: UuidFilter<"AgencyMap"> | string
     accountId?: StringFilter<"AgencyMap"> | string
     role?: StringFilter<"AgencyMap"> | string
     lockIn?: BoolFilter<"AgencyMap"> | boolean
@@ -61280,7 +61280,7 @@ export namespace Prisma {
     OR?: AgencyMapScalarWhereWithAggregatesInput[]
     NOT?: AgencyMapScalarWhereWithAggregatesInput | AgencyMapScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"AgencyMap"> | string
-    agencyAccountId?: StringWithAggregatesFilter<"AgencyMap"> | string
+    agencyAccountId?: UuidWithAggregatesFilter<"AgencyMap"> | string
     accountId?: StringWithAggregatesFilter<"AgencyMap"> | string
     role?: StringWithAggregatesFilter<"AgencyMap"> | string
     lockIn?: BoolWithAggregatesFilter<"AgencyMap"> | boolean
@@ -61350,7 +61350,7 @@ export namespace Prisma {
     OR?: AgencyCustomizationWhereInput[]
     NOT?: AgencyCustomizationWhereInput | AgencyCustomizationWhereInput[]
     id?: StringFilter<"AgencyCustomization"> | string
-    agencyId?: StringFilter<"AgencyCustomization"> | string
+    agencyId?: UuidFilter<"AgencyCustomization"> | string
     customizeFor?: StringFilter<"AgencyCustomization"> | string
     customization?: JsonFilter<"AgencyCustomization">
     createdAt?: DateTimeFilter<"AgencyCustomization"> | Date | string
@@ -61374,7 +61374,7 @@ export namespace Prisma {
     AND?: AgencyCustomizationWhereInput | AgencyCustomizationWhereInput[]
     OR?: AgencyCustomizationWhereInput[]
     NOT?: AgencyCustomizationWhereInput | AgencyCustomizationWhereInput[]
-    agencyId?: StringFilter<"AgencyCustomization"> | string
+    agencyId?: UuidFilter<"AgencyCustomization"> | string
     customizeFor?: StringFilter<"AgencyCustomization"> | string
     customization?: JsonFilter<"AgencyCustomization">
     createdAt?: DateTimeFilter<"AgencyCustomization"> | Date | string
@@ -61399,7 +61399,7 @@ export namespace Prisma {
     OR?: AgencyCustomizationScalarWhereWithAggregatesInput[]
     NOT?: AgencyCustomizationScalarWhereWithAggregatesInput | AgencyCustomizationScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"AgencyCustomization"> | string
-    agencyId?: StringWithAggregatesFilter<"AgencyCustomization"> | string
+    agencyId?: UuidWithAggregatesFilter<"AgencyCustomization"> | string
     customizeFor?: StringWithAggregatesFilter<"AgencyCustomization"> | string
     customization?: JsonWithAggregatesFilter<"AgencyCustomization">
     createdAt?: DateTimeWithAggregatesFilter<"AgencyCustomization"> | Date | string
@@ -78082,7 +78082,7 @@ export namespace Prisma {
     OR?: AgencyMapScalarWhereInput[]
     NOT?: AgencyMapScalarWhereInput | AgencyMapScalarWhereInput[]
     id?: StringFilter<"AgencyMap"> | string
-    agencyAccountId?: StringFilter<"AgencyMap"> | string
+    agencyAccountId?: UuidFilter<"AgencyMap"> | string
     accountId?: StringFilter<"AgencyMap"> | string
     role?: StringFilter<"AgencyMap"> | string
     lockIn?: BoolFilter<"AgencyMap"> | boolean
@@ -78109,7 +78109,7 @@ export namespace Prisma {
     OR?: AgencyCustomizationScalarWhereInput[]
     NOT?: AgencyCustomizationScalarWhereInput | AgencyCustomizationScalarWhereInput[]
     id?: StringFilter<"AgencyCustomization"> | string
-    agencyId?: StringFilter<"AgencyCustomization"> | string
+    agencyId?: UuidFilter<"AgencyCustomization"> | string
     customizeFor?: StringFilter<"AgencyCustomization"> | string
     customization?: JsonFilter<"AgencyCustomization">
     createdAt?: DateTimeFilter<"AgencyCustomization"> | Date | string

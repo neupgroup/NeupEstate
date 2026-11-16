@@ -356,7 +356,7 @@ model ListingChange {
 // ============================================================================
 
 model Agency {
-  id             String   @id @default(cuid())
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name           String
   logoUrl        String?
   registeredName String?
@@ -377,7 +377,7 @@ model Agency {
 
 model AgencyMap {
   id              String  @id @default(cuid())
-  agencyAccountId String // references Account.id — the agency's own account
+  agencyAccountId String  @db.Uuid // references Account.id — the agency's own account
   accountId       String // references Account.id — the member account
   role            String // e.g. "admin" | "agent" | "viewer"
   lockIn          Boolean @default(false)
@@ -409,7 +409,7 @@ model AgencyAgentMap {
 
 model AgencyCustomization {
   id            String   @id @default(cuid())
-  agencyId      String // references Agency.id (the agency's account id)
+  agencyId      String   @db.Uuid // references Agency.id (the agency's account id)
   customizeFor  String // "lead" | "property"
   customization Json // { required: string[], optional: string[] }
   createdAt     DateTime @default(now())
