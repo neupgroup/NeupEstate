@@ -643,7 +643,7 @@ model LeadsActivity {
 // ============================================================================
 
 model UserPreference {
-  id                      String   @id @default(cuid())
+  id                      String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   accountId               String   @unique
   updatedAt               DateTime @updatedAt
   preferences             Json     @default("{}")
@@ -664,7 +664,7 @@ model UserPreference {
 // ============================================================================
 
 model MortgageRequest {
-  id             String   @id @default(cuid())
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name           String
   email          String
   phone          String
@@ -681,7 +681,7 @@ model MortgageRequest {
 }
 
 model SalesRequest {
-  id               String   @id @default(cuid())
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name             String
   email            String
   phone            String
@@ -696,7 +696,7 @@ model SalesRequest {
 }
 
 model VisitRequest {
-  id            String   @id @default(cuid())
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   propertyId    String
   propertyTitle String
   agentId       String
@@ -720,7 +720,7 @@ model VisitRequest {
 // ============================================================================
 
 model SitemapEntry {
-  id        String    @id @default(cuid())
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   url       String    @unique
   priority  Float     @default(0.5)
   frequency String    @default("weekly")
@@ -732,7 +732,7 @@ model SitemapEntry {
 }
 
 model Inquiry {
-  id            String   @id @default(cuid())
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   propertyId    String
   propertyTitle String
   agentName     String?

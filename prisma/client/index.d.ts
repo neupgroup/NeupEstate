@@ -62194,7 +62194,7 @@ export namespace Prisma {
     AND?: UserPreferenceWhereInput | UserPreferenceWhereInput[]
     OR?: UserPreferenceWhereInput[]
     NOT?: UserPreferenceWhereInput | UserPreferenceWhereInput[]
-    id?: StringFilter<"UserPreference"> | string
+    id?: UuidFilter<"UserPreference"> | string
     accountId?: StringFilter<"UserPreference"> | string
     updatedAt?: DateTimeFilter<"UserPreference"> | Date | string
     preferences?: JsonFilter<"UserPreference">
@@ -62265,7 +62265,7 @@ export namespace Prisma {
     AND?: UserPreferenceScalarWhereWithAggregatesInput | UserPreferenceScalarWhereWithAggregatesInput[]
     OR?: UserPreferenceScalarWhereWithAggregatesInput[]
     NOT?: UserPreferenceScalarWhereWithAggregatesInput | UserPreferenceScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"UserPreference"> | string
+    id?: UuidWithAggregatesFilter<"UserPreference"> | string
     accountId?: StringWithAggregatesFilter<"UserPreference"> | string
     updatedAt?: DateTimeWithAggregatesFilter<"UserPreference"> | Date | string
     preferences?: JsonWithAggregatesFilter<"UserPreference">
@@ -62283,7 +62283,7 @@ export namespace Prisma {
     AND?: MortgageRequestWhereInput | MortgageRequestWhereInput[]
     OR?: MortgageRequestWhereInput[]
     NOT?: MortgageRequestWhereInput | MortgageRequestWhereInput[]
-    id?: StringFilter<"MortgageRequest"> | string
+    id?: UuidFilter<"MortgageRequest"> | string
     name?: StringFilter<"MortgageRequest"> | string
     email?: StringFilter<"MortgageRequest"> | string
     phone?: StringFilter<"MortgageRequest"> | string
@@ -62354,7 +62354,7 @@ export namespace Prisma {
     AND?: MortgageRequestScalarWhereWithAggregatesInput | MortgageRequestScalarWhereWithAggregatesInput[]
     OR?: MortgageRequestScalarWhereWithAggregatesInput[]
     NOT?: MortgageRequestScalarWhereWithAggregatesInput | MortgageRequestScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"MortgageRequest"> | string
+    id?: UuidWithAggregatesFilter<"MortgageRequest"> | string
     name?: StringWithAggregatesFilter<"MortgageRequest"> | string
     email?: StringWithAggregatesFilter<"MortgageRequest"> | string
     phone?: StringWithAggregatesFilter<"MortgageRequest"> | string
@@ -62372,7 +62372,7 @@ export namespace Prisma {
     AND?: SalesRequestWhereInput | SalesRequestWhereInput[]
     OR?: SalesRequestWhereInput[]
     NOT?: SalesRequestWhereInput | SalesRequestWhereInput[]
-    id?: StringFilter<"SalesRequest"> | string
+    id?: UuidFilter<"SalesRequest"> | string
     name?: StringFilter<"SalesRequest"> | string
     email?: StringFilter<"SalesRequest"> | string
     phone?: StringFilter<"SalesRequest"> | string
@@ -62433,7 +62433,7 @@ export namespace Prisma {
     AND?: SalesRequestScalarWhereWithAggregatesInput | SalesRequestScalarWhereWithAggregatesInput[]
     OR?: SalesRequestScalarWhereWithAggregatesInput[]
     NOT?: SalesRequestScalarWhereWithAggregatesInput | SalesRequestScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"SalesRequest"> | string
+    id?: UuidWithAggregatesFilter<"SalesRequest"> | string
     name?: StringWithAggregatesFilter<"SalesRequest"> | string
     email?: StringWithAggregatesFilter<"SalesRequest"> | string
     phone?: StringWithAggregatesFilter<"SalesRequest"> | string
@@ -62449,7 +62449,7 @@ export namespace Prisma {
     AND?: VisitRequestWhereInput | VisitRequestWhereInput[]
     OR?: VisitRequestWhereInput[]
     NOT?: VisitRequestWhereInput | VisitRequestWhereInput[]
-    id?: StringFilter<"VisitRequest"> | string
+    id?: UuidFilter<"VisitRequest"> | string
     propertyId?: StringFilter<"VisitRequest"> | string
     propertyTitle?: StringFilter<"VisitRequest"> | string
     agentId?: StringFilter<"VisitRequest"> | string
@@ -62522,7 +62522,7 @@ export namespace Prisma {
     AND?: VisitRequestScalarWhereWithAggregatesInput | VisitRequestScalarWhereWithAggregatesInput[]
     OR?: VisitRequestScalarWhereWithAggregatesInput[]
     NOT?: VisitRequestScalarWhereWithAggregatesInput | VisitRequestScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"VisitRequest"> | string
+    id?: UuidWithAggregatesFilter<"VisitRequest"> | string
     propertyId?: StringWithAggregatesFilter<"VisitRequest"> | string
     propertyTitle?: StringWithAggregatesFilter<"VisitRequest"> | string
     agentId?: StringWithAggregatesFilter<"VisitRequest"> | string
@@ -62541,7 +62541,7 @@ export namespace Prisma {
     AND?: SitemapEntryWhereInput | SitemapEntryWhereInput[]
     OR?: SitemapEntryWhereInput[]
     NOT?: SitemapEntryWhereInput | SitemapEntryWhereInput[]
-    id?: StringFilter<"SitemapEntry"> | string
+    id?: UuidFilter<"SitemapEntry"> | string
     url?: StringFilter<"SitemapEntry"> | string
     priority?: FloatFilter<"SitemapEntry"> | number
     frequency?: StringFilter<"SitemapEntry"> | string
@@ -62592,7 +62592,7 @@ export namespace Prisma {
     AND?: SitemapEntryScalarWhereWithAggregatesInput | SitemapEntryScalarWhereWithAggregatesInput[]
     OR?: SitemapEntryScalarWhereWithAggregatesInput[]
     NOT?: SitemapEntryScalarWhereWithAggregatesInput | SitemapEntryScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"SitemapEntry"> | string
+    id?: UuidWithAggregatesFilter<"SitemapEntry"> | string
     url?: StringWithAggregatesFilter<"SitemapEntry"> | string
     priority?: FloatWithAggregatesFilter<"SitemapEntry"> | number
     frequency?: StringWithAggregatesFilter<"SitemapEntry"> | string
@@ -62605,7 +62605,7 @@ export namespace Prisma {
     AND?: InquiryWhereInput | InquiryWhereInput[]
     OR?: InquiryWhereInput[]
     NOT?: InquiryWhereInput | InquiryWhereInput[]
-    id?: StringFilter<"Inquiry"> | string
+    id?: UuidFilter<"Inquiry"> | string
     propertyId?: StringFilter<"Inquiry"> | string
     propertyTitle?: StringFilter<"Inquiry"> | string
     agentName?: StringNullableFilter<"Inquiry"> | string | null
@@ -62666,7 +62666,7 @@ export namespace Prisma {
     AND?: InquiryScalarWhereWithAggregatesInput | InquiryScalarWhereWithAggregatesInput[]
     OR?: InquiryScalarWhereWithAggregatesInput[]
     NOT?: InquiryScalarWhereWithAggregatesInput | InquiryScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Inquiry"> | string
+    id?: UuidWithAggregatesFilter<"Inquiry"> | string
     propertyId?: StringWithAggregatesFilter<"Inquiry"> | string
     propertyTitle?: StringWithAggregatesFilter<"Inquiry"> | string
     agentName?: StringNullableWithAggregatesFilter<"Inquiry"> | string | null

@@ -214,7 +214,7 @@ Fields:
 
 Table: inquiries, Model: Inquiry
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > propertyId: text NOT NULL;
 > propertyTitle: text NOT NULL;
 > agentName: text;
@@ -258,7 +258,7 @@ Fields:
 
 Table: mortgage_requests, Model: MortgageRequest
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > name: text NOT NULL;
 > email: text NOT NULL;
 > phone: text NOT NULL;
@@ -469,7 +469,7 @@ Fields:
 
 Table: sales_requests, Model: SalesRequest
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > name: text NOT NULL;
 > email: text NOT NULL;
 > phone: text NOT NULL;
@@ -500,7 +500,7 @@ Fields:
 
 Table: sitemaps, Model: SitemapEntry
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > url: text NOT NULL, UNIQUE sitemaps_url_key(url);
 > priority: double precision NOT NULL, default: 0.5;
 > frequency: text NOT NULL, default: 'weekly'::text;
@@ -526,7 +526,7 @@ Fields:
 
 Table: user_preferences, Model: UserPreference
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > accountId: text NOT NULL, UNIQUE user_preferences_accountId_key(accountId);
 > updatedAt: timestamp(3) NOT NULL;
 > preferences: jsonb NOT NULL, default: '{}'::jsonb;
@@ -541,7 +541,7 @@ Fields:
 
 Table: visit_requests, Model: VisitRequest
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > propertyId: text NOT NULL;
 > propertyTitle: text NOT NULL;
 > agentId: text NOT NULL;
