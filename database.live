@@ -183,6 +183,7 @@ Fields:
 Table: competitors_listings, Model: CompetitorListing
 Fields:
 > id: uuid PK, NOT NULL, default: gen_random_uuid();
+> competitorId: uuid NOT NULL, references competitors.id;
 > competitorPageId: text NOT NULL, UNIQUE competitors_listings_competitorPageId_key(competitorPageId);
 > title: text NOT NULL;
 > description: text;
@@ -195,7 +196,21 @@ Fields:
 > loggedOn: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > updatedAt: timestamp(3) NOT NULL;
+
+Table: competitor_pages, Model: CompetitorPage
+Fields:
+> id: text PK, NOT NULL;
 > competitorId: uuid NOT NULL, references competitors.id;
+> title: text NOT NULL;
+> description: text;
+> source: text NOT NULL;
+> visibleHtml: text;
+> lastLoggedStatus: text;
+> lastLoggedOn: timestamp(3);
+> details: jsonb;
+> listedOn: timestamp(3);
+> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
+> updatedAt: timestamp(3) NOT NULL;
 
 Table: competitor_sources, Model: CompetitorSource
 Fields:

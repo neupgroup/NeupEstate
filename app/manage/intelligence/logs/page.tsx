@@ -22,7 +22,7 @@
  *
  * ::private
  *
- * The page reads from `competitor_pages` and left-joins `competitor_listings`
+ * The page reads from `competitor_pages` and left-joins `competitors_listings`
  * so status can be derived without extra per-row queries.
  *
  * The top pipeline card is intentionally action-oriented: it explains the crawl,
@@ -63,7 +63,7 @@ export default async function ListingsIntelligencePage({
       p.*,
       l.id AS "listingId"
     FROM "competitor_pages" p
-    LEFT JOIN "competitor_listings" l ON l."competitorPageId" = p.id
+    LEFT JOIN "competitors_listings" l ON l."competitorPageId" = p.id
     ORDER BY p."createdAt" DESC
   `;
   const resolvedSearchParams = await searchParams;

@@ -43,7 +43,7 @@ export default async function IntelligenceListingDetailPage({
       p."lastLoggedOn" AS "sourceLastLoggedOn",
       p."listedOn" AS "sourceListedOn",
       p.details AS "sourceDetails"
-    FROM "competitor_listings" l
+    FROM "competitors_listings" l
     LEFT JOIN "competitor_pages" p ON p.id = l."competitorPageId"
     WHERE l.id = ${id}
     LIMIT 1

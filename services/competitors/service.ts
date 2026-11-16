@@ -253,7 +253,7 @@ export async function getCompetitorListingByPageId(competitorPageId: string): Pr
   try {
     const rows = await prisma.$queryRaw<Array<any>>`
       SELECT *
-      FROM "competitor_listings"
+      FROM "competitors_listings"
       WHERE "competitorPageId" = ${competitorPageId}
       LIMIT 1
     `;
@@ -278,7 +278,7 @@ export async function upsertCompetitorListing(data: {
 }): Promise<string> {
   const existingRows = await prisma.$queryRaw<Array<{ id: string }>>`
     SELECT "id"
-    FROM "competitor_listings"
+      FROM "competitors_listings"
     WHERE "competitorPageId" = ${data.competitorPageId}
     LIMIT 1
   `;
@@ -300,7 +300,7 @@ export async function upsertCompetitorListing(data: {
 
   if (existing) {
     await prisma.$executeRaw`
-      UPDATE "competitor_listings"
+      UPDATE "competitors_listings"
       SET
         "competitorId" = ${payload.competitorId},
         "title" = ${payload.title},
@@ -318,7 +318,7 @@ export async function upsertCompetitorListing(data: {
   }
 
   const insertedRows = await prisma.$queryRaw<Array<{ id: string }>>`
-    INSERT INTO "competitor_listings" (
+    INSERT INTO "competitors_listings" (
       "id",
       "competitorId",
       "competitorPageId",

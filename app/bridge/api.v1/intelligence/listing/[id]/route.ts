@@ -1,7 +1,7 @@
 /**
  * GET /bridge/api.v1/intelligence/listing/[id]
  *
- * Returns a converted competitor listing by competitor_listings.id, with the
+ * Returns a converted competitor listing by competitors_listings.id, with the
  * source page joined in for metadata.
  */
 
@@ -34,7 +34,7 @@ const getHandler = async (
         p."lastLoggedOn" AS "sourceLastLoggedOn",
         p."listedOn" AS "sourceListedOn",
         p.details AS "sourceDetails"
-      FROM "competitor_listings" l
+      FROM "competitors_listings" l
       LEFT JOIN "competitor_pages" p ON p.id = l."competitorPageId"
       WHERE l.id = ${id}
       LIMIT 1
