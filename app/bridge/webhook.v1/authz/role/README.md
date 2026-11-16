@@ -185,11 +185,9 @@ tokens are rejected with `400`.
   targetAccountId: string;
   roleId: string;
   portfolioId?: string | null;
-  permissions?: object;
 }
 ```
 
-`permissions` stores the resolved role permissions and capabilities associated with this grant.
 
 ### `authz_assets_access_grant`
 ```typescript

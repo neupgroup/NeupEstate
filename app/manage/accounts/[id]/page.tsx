@@ -47,36 +47,18 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
     : `/manage/listings?account=${encodeURIComponent(accountId)}`;
   const accountRoleGrants = await prisma.authzAccountAccessGrant.findMany({
     where: { ownerAccountId: accountId, targetAccountId: accountId },
-    select: { roleId: true, permissions: true },
+    select: { roleId: true },
     orderBy: { roleId: 'asc' },
   });
-  const roles = accountRoleGrants.map((grant) => {
-    const snapshot = grant.permissions && typeof grant.permissions === 'object' && !Array.isArray(grant.permissions)
-      ? grant.permissions as Record<string, unknown>
-      : {};
-    const role = snapshot.role && typeof snapshot.role === 'object'
-      ? snapshot.role as Record<string, unknown>
-      : {};
-    const assignment = snapshot.accountAccess && typeof snapshot.accountAccess === 'object'
-      ? snapshot.accountAccess as Record<string, unknown>
-      : {};
-    const updatedOn = typeof assignment.updatedOn === 'string'
-      ? new Date(assignment.updatedOn)
-      : new Date(0);
-
-    return {
-      id: grant.roleId,
-      name: typeof role.name === 'string' ? role.name : grant.roleId,
-      description: typeof role.description === 'string' ? role.description : null,
-      scope: typeof role.scope === 'string' ? role.scope : null,
-      permissions: snapshot.permissions,
-      updatedOn,
-    };
-  });
-  const permissions = [...new Set(accountRoleGrants.flatMap((grant) => {
-    if (!grant.permissions || typeof grant.permissions !== 'object' || Array.isArray(grant.permissions)) return [];
-    return normalizePermissions((grant.permissions as Record<string, unknown>).permissions);
-  }))];
+  const roleIds = [...new Set(accountRoleGrants.map((grant) => grant.roleId))];
+  const roles = roleIds.length > 0
+    ? await prisma.authzRole.findMany({
+        where: { id: { in: roleIds } },
+        select: { id: true, name: true, description: true, scope: true, permissions: true, updatedOn: true },
+        orderBy: { id: 'asc' },
+      })
+    : [];
+  const permissions = [...new Set(roles.flatMap((role) => normalizePermissions(role.permissions)))];
   const roleIds = roles.map((role) => role.id);
 
   const [requirements, savedListings, ownedListings, recentActivity, remoteUsersResult] = await Promise.all([

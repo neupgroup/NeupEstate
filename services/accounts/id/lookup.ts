@@ -226,14 +226,18 @@ export async function refreshAccountDisplayInfo(
 
     const syncedAccessRows = await prisma.authzAccountAccessGrant.findMany({
       where: { ownerAccountId: id, targetAccountId: id },
-      select: { roleId: true, permissions: true },
+      select: { roleId: true },
     });
+    const roleIds = [...new Set(syncedAccessRows.map((row) => row.roleId))];
+    const syncedRoles = roleIds.length > 0
+      ? await prisma.authzRole.findMany({
+          where: { id: { in: roleIds }, appId },
+          select: { permissions: true },
+        })
+      : [];
     const permissions = [
       ...new Set(
-        syncedAccessRows.flatMap((row) => {
-          const snapshot = row.permissions as { permissions?: unknown };
-          return normalizePermissions(snapshot?.permissions);
-        })
+        syncedRoles.flatMap((role) => normalizePermissions(role.permissions))
       ),
     ];
 

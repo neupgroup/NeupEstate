@@ -537,8 +537,7 @@ exports.Prisma.AuthzAccountAccessGrantScalarFieldEnum = {
   ownerAccountId: 'ownerAccountId',
   targetAccountId: 'targetAccountId',
   roleId: 'roleId',
-  portfolioId: 'portfolioId',
-  permissions: 'permissions'
+  portfolioId: 'portfolioId'
 };
 
 exports.Prisma.AuthzAssetsAccessGrantScalarFieldEnum = {

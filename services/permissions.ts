@@ -30,7 +30,6 @@ import { notFound } from 'next/navigation';
 import { prisma } from '@neup/core/database/prisma';
 import { getAuthenticatedAccount } from '@/services/auth/account';
 import { PERMISSIONS, type PermissionName } from '@/services/permission-names';;
-import { getGrantAppId } from '@/services/authorization/account-grants';
 
 type ManageLayoutPermissionState = {
   canDashboard: boolean;
@@ -122,15 +121,16 @@ export async function getCurrentAccountPermissionNames(): Promise<string[]> {
       ownerAccountId: accountId,
       targetAccountId: accountId,
     },
-    select: { permissions: true },
+    select: { roleId: true },
   });
 
-  const permissions: string[] = [];
-  for (const row of accessRows) {
-    if (getGrantAppId(row.permissions) !== appId) continue;
-    const snapshot = row.permissions as Record<string, unknown>;
-    permissions.push(...coercePermissionList(snapshot.permissions, appId));
-  }
+  const roleIds = [...new Set(accessRows.map((row) => row.roleId))];
+  if (roleIds.length === 0) return [];
+  const roles = await prisma.authzRole.findMany({
+    where: { id: { in: roleIds }, appId },
+    select: { permissions: true },
+  });
+  const permissions = roles.flatMap((role) => coercePermissionList(role.permissions, appId));
 
   return Array.from(toPermissionSet(permissions)).sort();
 }

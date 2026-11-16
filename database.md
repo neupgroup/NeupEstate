@@ -128,10 +128,9 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - target_account_id text NOT NULL
 - role_id text NOT NULL
 - portfolio_id text
-- permissions jsonb NOT NULL, default '{}'::jsonb
 
 - divergence: model AuthzAccountAccessGrant maps to table authz_account_access_grant; mapped fields: ownerAccountId->owner_account_id, targetAccountId->target_account_id, roleId->role_id, portfolioId->portfolio_id
-- divergence based on fields: database has 5 fields; Prisma model has 5 persisted scalar fields; difference 0
+- divergence based on fields: database has 5 fields; Prisma model has 4 persisted scalar fields; difference 1
 
 ### public.authz_assets_access_grant (AuthzAssetsAccessGrant)
 

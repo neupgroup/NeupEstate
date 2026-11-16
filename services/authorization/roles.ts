@@ -108,14 +108,10 @@ export async function insertAccountAccessGrant(data: {
   targetAccountId: string;
   roleId: string;
   portfolioId?: string | null;
-  permissions?: Prisma.InputJsonValue | null;
 }, db: AuthzDbClient = prisma): Promise<string> {
   try {
     const record = await db.authzAccountAccessGrant.create({
-      data: {
-        ...data,
-        permissions: data.permissions === null ? Prisma.JsonNull : data.permissions,
-      },
+      data,
     });
     return record.id;
   } catch (e) {
@@ -130,7 +126,6 @@ export async function updateAccountAccessGrant(
     targetAccountId: string;
     roleId: string;
     portfolioId: string | null;
-    permissions: Prisma.InputJsonValue | null;
   }>,
   db: AuthzDbClient = prisma,
 ): Promise<void> {
@@ -142,9 +137,6 @@ export async function updateAccountAccessGrant(
         ...(data.targetAccountId !== undefined && { targetAccountId: data.targetAccountId }),
         ...(data.roleId !== undefined && { roleId: data.roleId }),
         ...(data.portfolioId !== undefined && { portfolioId: data.portfolioId }),
-        ...(Object.prototype.hasOwnProperty.call(data, 'permissions') && {
-          permissions: data.permissions === null ? Prisma.JsonNull : data.permissions,
-        }),
       },
     });
   } catch (e) {

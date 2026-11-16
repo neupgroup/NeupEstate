@@ -760,7 +760,6 @@ model AuthzAccountAccessGrant {
   targetAccountId String  @map("target_account_id")
   roleId          String  @map("role_id")
   portfolioId     String? @map("portfolio_id")
-  permissions     Json    @default("{}")
 
   @@index([ownerAccountId], map: "authz_account_access_grant_owner_account_id_idx")
   @@index([targetAccountId], map: "authz_account_access_grant_target_account_id_idx")

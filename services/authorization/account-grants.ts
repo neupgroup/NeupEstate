@@ -14,7 +14,7 @@ export type SyncedAccountRole = {
   permissions: string[];
 };
 
-// Replace an account's role grants for one app with the latest synced role snapshots.
+// Replace an account's role grants for one app using role IDs as the grant data.
 export async function replaceAccountRoleGrants(
   accountIds: string[],
   appId: string,
@@ -23,28 +23,20 @@ export async function replaceAccountRoleGrants(
 ): Promise<void> {
   const uniqueAccountIds = [...new Set(accountIds.filter(Boolean))];
   const roleIds = roles.map((role) => role.id);
-  const capabilities = roleIds.length > 0
-    ? await db.roleCapability.findMany({
-        where: { roleId: { in: roleIds } },
-        select: {
-          id: true,
-          roleId: true,
-          capabilityId: true,
-          scope: true,
-          roleName: true,
-          denormalizedCapability: true,
-        },
-      })
-    : [];
-
   for (const accountId of uniqueAccountIds) {
     const currentGrants = await db.authzAccountAccessGrant.findMany({
       where: { ownerAccountId: accountId, targetAccountId: accountId },
-      select: { id: true, permissions: true },
+      select: { id: true, roleId: true },
     });
-    const obsoleteIds = currentGrants
-      .filter((grant) => getGrantAppId(grant.permissions) === appId)
-      .map((grant) => grant.id);
+    const currentRoleIds = [...new Set(currentGrants.map((grant) => grant.roleId))];
+    const appRoles = currentRoleIds.length > 0
+      ? await db.authzRole.findMany({
+          where: { id: { in: currentRoleIds }, appId },
+          select: { id: true },
+        })
+      : [];
+    const appRoleIds = new Set(appRoles.map((role) => role.id));
+    const obsoleteIds = currentGrants.filter((grant) => appRoleIds.has(grant.roleId)).map((grant) => grant.id);
 
     if (obsoleteIds.length > 0) {
       await db.authzAccountAccessGrant.deleteMany({ where: { id: { in: obsoleteIds } } });
@@ -58,44 +50,7 @@ export async function replaceAccountRoleGrants(
         targetAccountId: accountId,
         roleId: role.id,
         portfolioId: null,
-        permissions: toJsonValue({
-          accountAccess: { appId, updatedOn: new Date().toISOString() },
-          role: {
-            id: role.id,
-            name: role.name,
-            description: role.description,
-            appId,
-            scope: role.scope,
-            acquisitionType: role.acquisitionType,
-            approvalPolicy: role.approvalPolicy,
-            applicableFor: role.applicableFor,
-          },
-          permissions: role.permissions,
-          capabilities: capabilities
-            .filter((capability) => capability.roleId === role.id)
-            .map((capability) => ({
-              id: capability.id,
-              capabilityId: capability.capabilityId,
-              scope: capability.scope,
-              roleName: capability.roleName,
-              capability: capability.denormalizedCapability,
-            })),
-        }),
       })),
     });
   }
-}
-
-// Read the app identifier embedded in a grant's permission snapshot.
-export function getGrantAppId(value: unknown): string | null {
-  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
-  const accountAccess = (value as Record<string, unknown>).accountAccess;
-  if (!accountAccess || typeof accountAccess !== 'object' || Array.isArray(accountAccess)) return null;
-  const appId = (accountAccess as Record<string, unknown>).appId;
-  return typeof appId === 'string' ? appId : null;
-}
-
-// Remove undefined values before passing permission snapshots to Prisma JSON fields.
-function toJsonValue(value: Record<string, unknown>): Prisma.InputJsonValue {
-  return JSON.parse(JSON.stringify(value)) as Prisma.InputJsonValue;
 }
