@@ -60871,7 +60871,7 @@ export namespace Prisma {
     AND?: PropertyOwnerWhereInput | PropertyOwnerWhereInput[]
     OR?: PropertyOwnerWhereInput[]
     NOT?: PropertyOwnerWhereInput | PropertyOwnerWhereInput[]
-    id?: StringFilter<"PropertyOwner"> | string
+    id?: UuidFilter<"PropertyOwner"> | string
     propertyId?: StringFilter<"PropertyOwner"> | string
     ownerClientId?: StringFilter<"PropertyOwner"> | string
     isPrimaryOwner?: BoolFilter<"PropertyOwner"> | boolean
@@ -60915,7 +60915,7 @@ export namespace Prisma {
     AND?: PropertyOwnerScalarWhereWithAggregatesInput | PropertyOwnerScalarWhereWithAggregatesInput[]
     OR?: PropertyOwnerScalarWhereWithAggregatesInput[]
     NOT?: PropertyOwnerScalarWhereWithAggregatesInput | PropertyOwnerScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"PropertyOwner"> | string
+    id?: UuidWithAggregatesFilter<"PropertyOwner"> | string
     propertyId?: StringWithAggregatesFilter<"PropertyOwner"> | string
     ownerClientId?: StringWithAggregatesFilter<"PropertyOwner"> | string
     isPrimaryOwner?: BoolWithAggregatesFilter<"PropertyOwner"> | boolean
@@ -75190,7 +75190,7 @@ export namespace Prisma {
     AND?: PropertyOwnerScalarWhereInput | PropertyOwnerScalarWhereInput[]
     OR?: PropertyOwnerScalarWhereInput[]
     NOT?: PropertyOwnerScalarWhereInput | PropertyOwnerScalarWhereInput[]
-    id?: StringFilter<"PropertyOwner"> | string
+    id?: UuidFilter<"PropertyOwner"> | string
     propertyId?: StringFilter<"PropertyOwner"> | string
     ownerClientId?: StringFilter<"PropertyOwner"> | string
     isPrimaryOwner?: BoolFilter<"PropertyOwner"> | boolean

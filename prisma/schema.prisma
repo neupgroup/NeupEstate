@@ -277,7 +277,7 @@ model ListingCommercial {
 }
 
 model PropertyOwner {
-  id             String    @id @default(cuid())
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   propertyId     String    @map("property_id")
   ownerClientId  String    @map("owner_client_id")
   isPrimaryOwner Boolean   @default(false) @map("is_primary_owner")

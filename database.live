@@ -401,7 +401,7 @@ Fields:
 
 Table: property_owner, Model: PropertyOwner
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > property_id: text NOT NULL, UNIQUE property_owner_property_id_owner_client_id_key(property_id, owner_client_id), references listings.id;
 > owner_client_id: text NOT NULL, UNIQUE property_owner_property_id_owner_client_id_key(property_id, owner_client_id), references leads.id;
 > is_primary_owner: boolean NOT NULL, default: false;

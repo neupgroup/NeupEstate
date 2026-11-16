@@ -19,19 +19,19 @@ Generation: Supplied ID; UUID column, no database or Prisma generation default.
 ID field: id (text)
 Generation: Supplied ID; documented as the NeupID Silent SSO subject.
 
-Table: activity
+(done) Table: activity
 ID field: id (UUID)
 Generation: PostgreSQL UUID (gen_random_uuid());
 
-(todo) Table: listings
+(done) Table: listings
 ID field: id (UUID)
 Generation: PostgreSQL UUID (gen_random_uuid()).
 
 (done) Table: property_link
 ID field: id (UUID)
-Generation: PostgreSQL UUID (gen_random_uuid()); 
+Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261129150000_property_link_id_to_postgres_uuid.
 
-(referenced_id -> will be done) Table: listings_details__house
+(referenced_id:auto_converted) Table: listings_details__house
 ID field: listings_id (UUID primary key)
 Generation: Inherited UUID; same ID as the parent listings.id.
 
@@ -48,8 +48,8 @@ ID field: listings_id (UUID primary key)
 Generation: Inherited UUID; same ID as the parent listings.id.
 
 Table: property_owner
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261129160000_property_owner_id_to_postgres_uuid.
 
 Table: listings_representatives
 ID field: id (text)
