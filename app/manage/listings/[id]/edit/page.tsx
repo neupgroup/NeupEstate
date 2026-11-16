@@ -12,7 +12,7 @@ import { cancelListingChangeDraftAction } from '@/services/listings/single/revie
 import { getCurrentAccountId } from '@/services/identity';
 import { getListingById } from "@/services/listings/view";
 import { getListingSlugId } from '@/services/listings/slug';
-import { listAccounts } from "@/services/accounts/list";
+import { getAccountInfo } from "@/services/accounts/info";
 import { useAgencyCustomization } from '@/inapp/agency-customization/use-agency-customization';
 import { getListingFormPricing } from '@/services/listings/action-helpers';
 
@@ -532,7 +532,7 @@ export default function EditListingPage() {
         async function loadData() {
             const [propertyData, userData, resolvedAccountId, capabilities] = await Promise.all([
                 getListingById(propertyId, { includeInactive: true }),
-                listAccounts(),
+                getAccountInfo(),
                 getCurrentAccountId(),
                 getListingEditCapabilitiesAction(),
             ]);

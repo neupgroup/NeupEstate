@@ -14,7 +14,7 @@ import { getCurrentAccountId } from '@/services/identity';
 
 import { Form } from '@/components/ui/form';
 import { useToast } from '@neup/core/hooks/useToast';
-import { listAccounts } from '@/services/accounts/list';
+import { getAccountInfo } from '@/services/accounts/info';
 import { useAgencyCustomization } from '@/inapp/agency-customization/use-agency-customization';
 import { evaluateAgencyCustomization } from '@/inapp/agency-customization/evaluate-agency-customization';
 
@@ -134,7 +134,7 @@ export default function CreateListingPage() {
     useEffect(() => {
         async function loadContext() {
             const [userList, currentId, draftResult, postingContextResult] = await Promise.all([
-                listAccounts(),
+                getAccountInfo(),
                 getCurrentAccountId(),
                 requestedChangeId
                     ? getCurrentListingCreateDraftAction(requestedChangeId)

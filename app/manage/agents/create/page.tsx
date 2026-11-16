@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { appendCurrentProjectParamV1 } from '@/components/manage-nav';
 import { CreateAgentSchema, type CreateAgentFormValues, type User } from '@/types';
 import { createAgentAction } from '@/services/agents';
-import { listAccounts } from '@/services/accounts/list';
+import { getAccountInfo } from '@/services/accounts/info';
 
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@neup/components/ui/input';
@@ -27,7 +27,7 @@ export default function CreateAgentPage() {
 
     useEffect(() => {
         async function fetchUsers() {
-            const userList = await listAccounts();
+            const userList = await getAccountInfo();
             setUsers(userList);
         }
         fetchUsers();
