@@ -37,7 +37,7 @@ Table: account_access, Model: AccountAccess
 Fields:
 > account_id: text PK, NOT NULL, references accounts.id;
 > app_id: text PK, NOT NULL;
-> role_id: text PK, NOT NULL, references authz_role.id;
+> role_id: uuid PK, NOT NULL, references authz_role.id;
 > updated_on: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 
 Table: activity, Model: Activity
@@ -110,7 +110,7 @@ Fields:
 
 Table: authz_account_access_grant, Model: AuthzAccountAccessGrant
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > owner_account_id: text NOT NULL;
 > target_account_id: text NOT NULL;
 > role_id: text NOT NULL;
@@ -118,7 +118,7 @@ Fields:
 
 Table: authz_assets_access_grant, Model: AuthzAssetsAccessGrant
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > asset_id: text NOT NULL;
 > account_id: text NOT NULL;
 > role_id: text NOT NULL;
@@ -127,7 +127,7 @@ Fields:
 
 Table: authz_role, Model: AuthzRole
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > name: text NOT NULL;
 > description: text;
 > app_id: text NOT NULL;
@@ -140,7 +140,7 @@ Fields:
 
 Table: authz_role_capability, Model: RoleCapability
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > role_id: text NOT NULL;
 > capability_id: text NOT NULL;
 > scope: text;
@@ -173,7 +173,7 @@ Fields:
 
 Table: competitors, Model: Competitor
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > name: text NOT NULL;
 > description: text;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
@@ -182,7 +182,7 @@ Fields:
 
 Table: competitors_listings, Model: CompetitorListing
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > competitorPageId: text NOT NULL, UNIQUE competitors_listings_competitorPageId_key(competitorPageId);
 > title: text NOT NULL;
 > description: text;
@@ -195,19 +195,19 @@ Fields:
 > loggedOn: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > updatedAt: timestamp(3) NOT NULL;
-> competitorId: text NOT NULL, references competitors.id;
+> competitorId: uuid NOT NULL, references competitors.id;
 
 Table: competitor_sources, Model: CompetitorSource
 Fields:
-> id: text PK, NOT NULL;
-> competitorId: text NOT NULL, references competitors.id;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
+> competitorId: uuid NOT NULL, references competitors.id;
 > type: text NOT NULL;
 > value: text NOT NULL;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 
 Table: competitor_tracking, Model: CompetitorTracking
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > competitorPageId: text NOT NULL;
 > ourPropertyId: text;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
@@ -228,21 +228,21 @@ Fields:
 Table: intelligence_alerts, Model: IntelligenceAlert
 Fields:
 > id: text PK, NOT NULL;
-> map_id: text NOT NULL, references intelligence_mapping.id;
+> map_id: uuid NOT NULL, references intelligence_mapping.id;
 > account_id: text NOT NULL, references accounts.id;
-> listing_id: text NOT NULL, references competitors.id;
+> listing_id: uuid NOT NULL, references competitors.id;
 > status: text;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > updatedAt: timestamp(3) NOT NULL;
 
 Table: intelligence_mapping, Model: IntelligenceMapping
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > account_id: text NOT NULL, references accounts.id;
 > c_location: text;
 > c_min_budget: integer;
 > c_max_budget: integer;
-> c_competitor: text references competitors.id;
+> c_competitor: uuid references competitors.id;
 > c_type: text;
 > c_purpose: text NOT NULL;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
@@ -334,9 +334,9 @@ Fields:
 
 Table: property_competition_map, Model: PropertyCompetitionMap
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > property_id: text NOT NULL, references listings.id;
-> competitor_property_id: text NOT NULL, references competitors_listings.id;
+> competitor_property_id: uuid NOT NULL, references competitors_listings.id;
 > status: text NOT NULL, default: 'UNVERIFIED'::text;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > updatedAt: timestamp(3) NOT NULL;

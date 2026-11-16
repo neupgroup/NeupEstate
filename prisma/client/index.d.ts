@@ -62682,7 +62682,7 @@ export namespace Prisma {
     AND?: AuthzRoleWhereInput | AuthzRoleWhereInput[]
     OR?: AuthzRoleWhereInput[]
     NOT?: AuthzRoleWhereInput | AuthzRoleWhereInput[]
-    id?: StringFilter<"AuthzRole"> | string
+    id?: UuidFilter<"AuthzRole"> | string
     name?: StringFilter<"AuthzRole"> | string
     description?: StringNullableFilter<"AuthzRole"> | string | null
     appId?: StringFilter<"AuthzRole"> | string
@@ -62746,7 +62746,7 @@ export namespace Prisma {
     AND?: AuthzRoleScalarWhereWithAggregatesInput | AuthzRoleScalarWhereWithAggregatesInput[]
     OR?: AuthzRoleScalarWhereWithAggregatesInput[]
     NOT?: AuthzRoleScalarWhereWithAggregatesInput | AuthzRoleScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"AuthzRole"> | string
+    id?: UuidWithAggregatesFilter<"AuthzRole"> | string
     name?: StringWithAggregatesFilter<"AuthzRole"> | string
     description?: StringNullableWithAggregatesFilter<"AuthzRole"> | string | null
     appId?: StringWithAggregatesFilter<"AuthzRole"> | string
@@ -62764,7 +62764,7 @@ export namespace Prisma {
     NOT?: AccountAccessWhereInput | AccountAccessWhereInput[]
     accountId?: StringFilter<"AccountAccess"> | string
     appId?: StringFilter<"AccountAccess"> | string
-    roleId?: StringFilter<"AccountAccess"> | string
+    roleId?: UuidFilter<"AccountAccess"> | string
     updatedOn?: DateTimeFilter<"AccountAccess"> | Date | string
     account?: XOR<AccountScalarRelationFilter, AccountWhereInput>
     role?: XOR<AuthzRoleScalarRelationFilter, AuthzRoleWhereInput>
@@ -62786,7 +62786,7 @@ export namespace Prisma {
     NOT?: AccountAccessWhereInput | AccountAccessWhereInput[]
     accountId?: StringFilter<"AccountAccess"> | string
     appId?: StringFilter<"AccountAccess"> | string
-    roleId?: StringFilter<"AccountAccess"> | string
+    roleId?: UuidFilter<"AccountAccess"> | string
     updatedOn?: DateTimeFilter<"AccountAccess"> | Date | string
     account?: XOR<AccountScalarRelationFilter, AccountWhereInput>
     role?: XOR<AuthzRoleScalarRelationFilter, AuthzRoleWhereInput>
@@ -62808,7 +62808,7 @@ export namespace Prisma {
     NOT?: AccountAccessScalarWhereWithAggregatesInput | AccountAccessScalarWhereWithAggregatesInput[]
     accountId?: StringWithAggregatesFilter<"AccountAccess"> | string
     appId?: StringWithAggregatesFilter<"AccountAccess"> | string
-    roleId?: StringWithAggregatesFilter<"AccountAccess"> | string
+    roleId?: UuidWithAggregatesFilter<"AccountAccess"> | string
     updatedOn?: DateTimeWithAggregatesFilter<"AccountAccess"> | Date | string
   }
 
@@ -62816,7 +62816,7 @@ export namespace Prisma {
     AND?: RoleCapabilityWhereInput | RoleCapabilityWhereInput[]
     OR?: RoleCapabilityWhereInput[]
     NOT?: RoleCapabilityWhereInput | RoleCapabilityWhereInput[]
-    id?: StringFilter<"RoleCapability"> | string
+    id?: UuidFilter<"RoleCapability"> | string
     roleId?: StringFilter<"RoleCapability"> | string
     capabilityId?: StringFilter<"RoleCapability"> | string
     scope?: StringNullableFilter<"RoleCapability"> | string | null
@@ -62861,7 +62861,7 @@ export namespace Prisma {
     AND?: RoleCapabilityScalarWhereWithAggregatesInput | RoleCapabilityScalarWhereWithAggregatesInput[]
     OR?: RoleCapabilityScalarWhereWithAggregatesInput[]
     NOT?: RoleCapabilityScalarWhereWithAggregatesInput | RoleCapabilityScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"RoleCapability"> | string
+    id?: UuidWithAggregatesFilter<"RoleCapability"> | string
     roleId?: StringWithAggregatesFilter<"RoleCapability"> | string
     capabilityId?: StringWithAggregatesFilter<"RoleCapability"> | string
     scope?: StringNullableWithAggregatesFilter<"RoleCapability"> | string | null
@@ -62873,7 +62873,7 @@ export namespace Prisma {
     AND?: AuthzAccountAccessGrantWhereInput | AuthzAccountAccessGrantWhereInput[]
     OR?: AuthzAccountAccessGrantWhereInput[]
     NOT?: AuthzAccountAccessGrantWhereInput | AuthzAccountAccessGrantWhereInput[]
-    id?: StringFilter<"AuthzAccountAccessGrant"> | string
+    id?: UuidFilter<"AuthzAccountAccessGrant"> | string
     ownerAccountId?: StringFilter<"AuthzAccountAccessGrant"> | string
     targetAccountId?: StringFilter<"AuthzAccountAccessGrant"> | string
     roleId?: StringFilter<"AuthzAccountAccessGrant"> | string
@@ -62914,7 +62914,7 @@ export namespace Prisma {
     AND?: AuthzAccountAccessGrantScalarWhereWithAggregatesInput | AuthzAccountAccessGrantScalarWhereWithAggregatesInput[]
     OR?: AuthzAccountAccessGrantScalarWhereWithAggregatesInput[]
     NOT?: AuthzAccountAccessGrantScalarWhereWithAggregatesInput | AuthzAccountAccessGrantScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"AuthzAccountAccessGrant"> | string
+    id?: UuidWithAggregatesFilter<"AuthzAccountAccessGrant"> | string
     ownerAccountId?: StringWithAggregatesFilter<"AuthzAccountAccessGrant"> | string
     targetAccountId?: StringWithAggregatesFilter<"AuthzAccountAccessGrant"> | string
     roleId?: StringWithAggregatesFilter<"AuthzAccountAccessGrant"> | string
@@ -62925,7 +62925,7 @@ export namespace Prisma {
     AND?: AuthzAssetsAccessGrantWhereInput | AuthzAssetsAccessGrantWhereInput[]
     OR?: AuthzAssetsAccessGrantWhereInput[]
     NOT?: AuthzAssetsAccessGrantWhereInput | AuthzAssetsAccessGrantWhereInput[]
-    id?: StringFilter<"AuthzAssetsAccessGrant"> | string
+    id?: UuidFilter<"AuthzAssetsAccessGrant"> | string
     assetId?: StringFilter<"AuthzAssetsAccessGrant"> | string
     accountId?: StringFilter<"AuthzAssetsAccessGrant"> | string
     roleId?: StringFilter<"AuthzAssetsAccessGrant"> | string
@@ -62970,7 +62970,7 @@ export namespace Prisma {
     AND?: AuthzAssetsAccessGrantScalarWhereWithAggregatesInput | AuthzAssetsAccessGrantScalarWhereWithAggregatesInput[]
     OR?: AuthzAssetsAccessGrantScalarWhereWithAggregatesInput[]
     NOT?: AuthzAssetsAccessGrantScalarWhereWithAggregatesInput | AuthzAssetsAccessGrantScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"AuthzAssetsAccessGrant"> | string
+    id?: UuidWithAggregatesFilter<"AuthzAssetsAccessGrant"> | string
     assetId?: StringWithAggregatesFilter<"AuthzAssetsAccessGrant"> | string
     accountId?: StringWithAggregatesFilter<"AuthzAssetsAccessGrant"> | string
     roleId?: StringWithAggregatesFilter<"AuthzAssetsAccessGrant"> | string
@@ -62982,7 +62982,7 @@ export namespace Prisma {
     AND?: CompetitorWhereInput | CompetitorWhereInput[]
     OR?: CompetitorWhereInput[]
     NOT?: CompetitorWhereInput | CompetitorWhereInput[]
-    id?: StringFilter<"Competitor"> | string
+    id?: UuidFilter<"Competitor"> | string
     name?: StringFilter<"Competitor"> | string
     description?: StringNullableFilter<"Competitor"> | string | null
     crawlRules?: JsonNullableFilter<"Competitor">
@@ -63042,7 +63042,7 @@ export namespace Prisma {
     AND?: CompetitorScalarWhereWithAggregatesInput | CompetitorScalarWhereWithAggregatesInput[]
     OR?: CompetitorScalarWhereWithAggregatesInput[]
     NOT?: CompetitorScalarWhereWithAggregatesInput | CompetitorScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Competitor"> | string
+    id?: UuidWithAggregatesFilter<"Competitor"> | string
     name?: StringWithAggregatesFilter<"Competitor"> | string
     description?: StringNullableWithAggregatesFilter<"Competitor"> | string | null
     crawlRules?: JsonNullableWithAggregatesFilter<"Competitor">
@@ -63054,8 +63054,8 @@ export namespace Prisma {
     AND?: CompetitorSourceWhereInput | CompetitorSourceWhereInput[]
     OR?: CompetitorSourceWhereInput[]
     NOT?: CompetitorSourceWhereInput | CompetitorSourceWhereInput[]
-    id?: StringFilter<"CompetitorSource"> | string
-    competitorId?: StringFilter<"CompetitorSource"> | string
+    id?: UuidFilter<"CompetitorSource"> | string
+    competitorId?: UuidFilter<"CompetitorSource"> | string
     type?: StringFilter<"CompetitorSource"> | string
     value?: StringFilter<"CompetitorSource"> | string
     createdAt?: DateTimeFilter<"CompetitorSource"> | Date | string
@@ -63076,7 +63076,7 @@ export namespace Prisma {
     AND?: CompetitorSourceWhereInput | CompetitorSourceWhereInput[]
     OR?: CompetitorSourceWhereInput[]
     NOT?: CompetitorSourceWhereInput | CompetitorSourceWhereInput[]
-    competitorId?: StringFilter<"CompetitorSource"> | string
+    competitorId?: UuidFilter<"CompetitorSource"> | string
     type?: StringFilter<"CompetitorSource"> | string
     value?: StringFilter<"CompetitorSource"> | string
     createdAt?: DateTimeFilter<"CompetitorSource"> | Date | string
@@ -63098,8 +63098,8 @@ export namespace Prisma {
     AND?: CompetitorSourceScalarWhereWithAggregatesInput | CompetitorSourceScalarWhereWithAggregatesInput[]
     OR?: CompetitorSourceScalarWhereWithAggregatesInput[]
     NOT?: CompetitorSourceScalarWhereWithAggregatesInput | CompetitorSourceScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"CompetitorSource"> | string
-    competitorId?: StringWithAggregatesFilter<"CompetitorSource"> | string
+    id?: UuidWithAggregatesFilter<"CompetitorSource"> | string
+    competitorId?: UuidWithAggregatesFilter<"CompetitorSource"> | string
     type?: StringWithAggregatesFilter<"CompetitorSource"> | string
     value?: StringWithAggregatesFilter<"CompetitorSource"> | string
     createdAt?: DateTimeWithAggregatesFilter<"CompetitorSource"> | Date | string
@@ -63205,8 +63205,8 @@ export namespace Prisma {
     AND?: CompetitorListingWhereInput | CompetitorListingWhereInput[]
     OR?: CompetitorListingWhereInput[]
     NOT?: CompetitorListingWhereInput | CompetitorListingWhereInput[]
-    id?: StringFilter<"CompetitorListing"> | string
-    competitorId?: StringFilter<"CompetitorListing"> | string
+    id?: UuidFilter<"CompetitorListing"> | string
+    competitorId?: UuidFilter<"CompetitorListing"> | string
     competitorPageId?: StringFilter<"CompetitorListing"> | string
     title?: StringFilter<"CompetitorListing"> | string
     description?: StringNullableFilter<"CompetitorListing"> | string | null
@@ -63250,7 +63250,7 @@ export namespace Prisma {
     AND?: CompetitorListingWhereInput | CompetitorListingWhereInput[]
     OR?: CompetitorListingWhereInput[]
     NOT?: CompetitorListingWhereInput | CompetitorListingWhereInput[]
-    competitorId?: StringFilter<"CompetitorListing"> | string
+    competitorId?: UuidFilter<"CompetitorListing"> | string
     title?: StringFilter<"CompetitorListing"> | string
     description?: StringNullableFilter<"CompetitorListing"> | string | null
     purpose?: StringFilter<"CompetitorListing"> | string
@@ -63291,8 +63291,8 @@ export namespace Prisma {
     AND?: CompetitorListingScalarWhereWithAggregatesInput | CompetitorListingScalarWhereWithAggregatesInput[]
     OR?: CompetitorListingScalarWhereWithAggregatesInput[]
     NOT?: CompetitorListingScalarWhereWithAggregatesInput | CompetitorListingScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"CompetitorListing"> | string
-    competitorId?: StringWithAggregatesFilter<"CompetitorListing"> | string
+    id?: UuidWithAggregatesFilter<"CompetitorListing"> | string
+    competitorId?: UuidWithAggregatesFilter<"CompetitorListing"> | string
     competitorPageId?: StringWithAggregatesFilter<"CompetitorListing"> | string
     title?: StringWithAggregatesFilter<"CompetitorListing"> | string
     description?: StringNullableWithAggregatesFilter<"CompetitorListing"> | string | null
@@ -63311,9 +63311,9 @@ export namespace Prisma {
     AND?: PropertyCompetitionMapWhereInput | PropertyCompetitionMapWhereInput[]
     OR?: PropertyCompetitionMapWhereInput[]
     NOT?: PropertyCompetitionMapWhereInput | PropertyCompetitionMapWhereInput[]
-    id?: StringFilter<"PropertyCompetitionMap"> | string
+    id?: UuidFilter<"PropertyCompetitionMap"> | string
     propertyId?: StringFilter<"PropertyCompetitionMap"> | string
-    competitorListingId?: StringFilter<"PropertyCompetitionMap"> | string
+    competitorListingId?: UuidFilter<"PropertyCompetitionMap"> | string
     status?: EnumPropertyCompetitionStatusFilter<"PropertyCompetitionMap"> | $Enums.PropertyCompetitionStatus
     createdAt?: DateTimeFilter<"PropertyCompetitionMap"> | Date | string
     updatedAt?: DateTimeFilter<"PropertyCompetitionMap"> | Date | string
@@ -63338,7 +63338,7 @@ export namespace Prisma {
     OR?: PropertyCompetitionMapWhereInput[]
     NOT?: PropertyCompetitionMapWhereInput | PropertyCompetitionMapWhereInput[]
     propertyId?: StringFilter<"PropertyCompetitionMap"> | string
-    competitorListingId?: StringFilter<"PropertyCompetitionMap"> | string
+    competitorListingId?: UuidFilter<"PropertyCompetitionMap"> | string
     status?: EnumPropertyCompetitionStatusFilter<"PropertyCompetitionMap"> | $Enums.PropertyCompetitionStatus
     createdAt?: DateTimeFilter<"PropertyCompetitionMap"> | Date | string
     updatedAt?: DateTimeFilter<"PropertyCompetitionMap"> | Date | string
@@ -63362,9 +63362,9 @@ export namespace Prisma {
     AND?: PropertyCompetitionMapScalarWhereWithAggregatesInput | PropertyCompetitionMapScalarWhereWithAggregatesInput[]
     OR?: PropertyCompetitionMapScalarWhereWithAggregatesInput[]
     NOT?: PropertyCompetitionMapScalarWhereWithAggregatesInput | PropertyCompetitionMapScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"PropertyCompetitionMap"> | string
+    id?: UuidWithAggregatesFilter<"PropertyCompetitionMap"> | string
     propertyId?: StringWithAggregatesFilter<"PropertyCompetitionMap"> | string
-    competitorListingId?: StringWithAggregatesFilter<"PropertyCompetitionMap"> | string
+    competitorListingId?: UuidWithAggregatesFilter<"PropertyCompetitionMap"> | string
     status?: EnumPropertyCompetitionStatusWithAggregatesFilter<"PropertyCompetitionMap"> | $Enums.PropertyCompetitionStatus
     createdAt?: DateTimeWithAggregatesFilter<"PropertyCompetitionMap"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"PropertyCompetitionMap"> | Date | string
@@ -63374,7 +63374,7 @@ export namespace Prisma {
     AND?: CompetitorTrackingWhereInput | CompetitorTrackingWhereInput[]
     OR?: CompetitorTrackingWhereInput[]
     NOT?: CompetitorTrackingWhereInput | CompetitorTrackingWhereInput[]
-    id?: StringFilter<"CompetitorTracking"> | string
+    id?: UuidFilter<"CompetitorTracking"> | string
     competitorPageId?: StringFilter<"CompetitorTracking"> | string
     ourListingId?: StringNullableFilter<"CompetitorTracking"> | string | null
     createdAt?: DateTimeFilter<"CompetitorTracking"> | Date | string
@@ -63414,7 +63414,7 @@ export namespace Prisma {
     AND?: CompetitorTrackingScalarWhereWithAggregatesInput | CompetitorTrackingScalarWhereWithAggregatesInput[]
     OR?: CompetitorTrackingScalarWhereWithAggregatesInput[]
     NOT?: CompetitorTrackingScalarWhereWithAggregatesInput | CompetitorTrackingScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"CompetitorTracking"> | string
+    id?: UuidWithAggregatesFilter<"CompetitorTracking"> | string
     competitorPageId?: StringWithAggregatesFilter<"CompetitorTracking"> | string
     ourListingId?: StringNullableWithAggregatesFilter<"CompetitorTracking"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"CompetitorTracking"> | Date | string
@@ -63424,12 +63424,12 @@ export namespace Prisma {
     AND?: IntelligenceMappingWhereInput | IntelligenceMappingWhereInput[]
     OR?: IntelligenceMappingWhereInput[]
     NOT?: IntelligenceMappingWhereInput | IntelligenceMappingWhereInput[]
-    id?: StringFilter<"IntelligenceMapping"> | string
+    id?: UuidFilter<"IntelligenceMapping"> | string
     accountId?: StringFilter<"IntelligenceMapping"> | string
     cLocation?: StringNullableFilter<"IntelligenceMapping"> | string | null
     cMinBudget?: IntNullableFilter<"IntelligenceMapping"> | number | null
     cMaxBudget?: IntNullableFilter<"IntelligenceMapping"> | number | null
-    cCompetitorId?: StringNullableFilter<"IntelligenceMapping"> | string | null
+    cCompetitorId?: UuidNullableFilter<"IntelligenceMapping"> | string | null
     cType?: StringNullableFilter<"IntelligenceMapping"> | string | null
     cPurpose?: StringFilter<"IntelligenceMapping"> | string
     createdAt?: DateTimeFilter<"IntelligenceMapping"> | Date | string
@@ -63464,7 +63464,7 @@ export namespace Prisma {
     cLocation?: StringNullableFilter<"IntelligenceMapping"> | string | null
     cMinBudget?: IntNullableFilter<"IntelligenceMapping"> | number | null
     cMaxBudget?: IntNullableFilter<"IntelligenceMapping"> | number | null
-    cCompetitorId?: StringNullableFilter<"IntelligenceMapping"> | string | null
+    cCompetitorId?: UuidNullableFilter<"IntelligenceMapping"> | string | null
     cType?: StringNullableFilter<"IntelligenceMapping"> | string | null
     cPurpose?: StringFilter<"IntelligenceMapping"> | string
     createdAt?: DateTimeFilter<"IntelligenceMapping"> | Date | string
@@ -63496,12 +63496,12 @@ export namespace Prisma {
     AND?: IntelligenceMappingScalarWhereWithAggregatesInput | IntelligenceMappingScalarWhereWithAggregatesInput[]
     OR?: IntelligenceMappingScalarWhereWithAggregatesInput[]
     NOT?: IntelligenceMappingScalarWhereWithAggregatesInput | IntelligenceMappingScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"IntelligenceMapping"> | string
+    id?: UuidWithAggregatesFilter<"IntelligenceMapping"> | string
     accountId?: StringWithAggregatesFilter<"IntelligenceMapping"> | string
     cLocation?: StringNullableWithAggregatesFilter<"IntelligenceMapping"> | string | null
     cMinBudget?: IntNullableWithAggregatesFilter<"IntelligenceMapping"> | number | null
     cMaxBudget?: IntNullableWithAggregatesFilter<"IntelligenceMapping"> | number | null
-    cCompetitorId?: StringNullableWithAggregatesFilter<"IntelligenceMapping"> | string | null
+    cCompetitorId?: UuidNullableWithAggregatesFilter<"IntelligenceMapping"> | string | null
     cType?: StringNullableWithAggregatesFilter<"IntelligenceMapping"> | string | null
     cPurpose?: StringWithAggregatesFilter<"IntelligenceMapping"> | string
     createdAt?: DateTimeWithAggregatesFilter<"IntelligenceMapping"> | Date | string
@@ -63513,9 +63513,9 @@ export namespace Prisma {
     OR?: IntelligenceAlertWhereInput[]
     NOT?: IntelligenceAlertWhereInput | IntelligenceAlertWhereInput[]
     id?: StringFilter<"IntelligenceAlert"> | string
-    mapId?: StringFilter<"IntelligenceAlert"> | string
+    mapId?: UuidFilter<"IntelligenceAlert"> | string
     accountId?: StringFilter<"IntelligenceAlert"> | string
-    listingId?: StringFilter<"IntelligenceAlert"> | string
+    listingId?: UuidFilter<"IntelligenceAlert"> | string
     status?: StringNullableFilter<"IntelligenceAlert"> | string | null
     createdAt?: DateTimeFilter<"IntelligenceAlert"> | Date | string
     updatedAt?: DateTimeFilter<"IntelligenceAlert"> | Date | string
@@ -63542,9 +63542,9 @@ export namespace Prisma {
     AND?: IntelligenceAlertWhereInput | IntelligenceAlertWhereInput[]
     OR?: IntelligenceAlertWhereInput[]
     NOT?: IntelligenceAlertWhereInput | IntelligenceAlertWhereInput[]
-    mapId?: StringFilter<"IntelligenceAlert"> | string
+    mapId?: UuidFilter<"IntelligenceAlert"> | string
     accountId?: StringFilter<"IntelligenceAlert"> | string
-    listingId?: StringFilter<"IntelligenceAlert"> | string
+    listingId?: UuidFilter<"IntelligenceAlert"> | string
     status?: StringNullableFilter<"IntelligenceAlert"> | string | null
     createdAt?: DateTimeFilter<"IntelligenceAlert"> | Date | string
     updatedAt?: DateTimeFilter<"IntelligenceAlert"> | Date | string
@@ -63571,9 +63571,9 @@ export namespace Prisma {
     OR?: IntelligenceAlertScalarWhereWithAggregatesInput[]
     NOT?: IntelligenceAlertScalarWhereWithAggregatesInput | IntelligenceAlertScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"IntelligenceAlert"> | string
-    mapId?: StringWithAggregatesFilter<"IntelligenceAlert"> | string
+    mapId?: UuidWithAggregatesFilter<"IntelligenceAlert"> | string
     accountId?: StringWithAggregatesFilter<"IntelligenceAlert"> | string
-    listingId?: StringWithAggregatesFilter<"IntelligenceAlert"> | string
+    listingId?: UuidWithAggregatesFilter<"IntelligenceAlert"> | string
     status?: StringNullableWithAggregatesFilter<"IntelligenceAlert"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"IntelligenceAlert"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"IntelligenceAlert"> | Date | string
@@ -74234,7 +74234,7 @@ export namespace Prisma {
     NOT?: AccountAccessScalarWhereInput | AccountAccessScalarWhereInput[]
     accountId?: StringFilter<"AccountAccess"> | string
     appId?: StringFilter<"AccountAccess"> | string
-    roleId?: StringFilter<"AccountAccess"> | string
+    roleId?: UuidFilter<"AccountAccess"> | string
     updatedOn?: DateTimeFilter<"AccountAccess"> | Date | string
   }
 
@@ -74457,12 +74457,12 @@ export namespace Prisma {
     AND?: IntelligenceMappingScalarWhereInput | IntelligenceMappingScalarWhereInput[]
     OR?: IntelligenceMappingScalarWhereInput[]
     NOT?: IntelligenceMappingScalarWhereInput | IntelligenceMappingScalarWhereInput[]
-    id?: StringFilter<"IntelligenceMapping"> | string
+    id?: UuidFilter<"IntelligenceMapping"> | string
     accountId?: StringFilter<"IntelligenceMapping"> | string
     cLocation?: StringNullableFilter<"IntelligenceMapping"> | string | null
     cMinBudget?: IntNullableFilter<"IntelligenceMapping"> | number | null
     cMaxBudget?: IntNullableFilter<"IntelligenceMapping"> | number | null
-    cCompetitorId?: StringNullableFilter<"IntelligenceMapping"> | string | null
+    cCompetitorId?: UuidNullableFilter<"IntelligenceMapping"> | string | null
     cType?: StringNullableFilter<"IntelligenceMapping"> | string | null
     cPurpose?: StringFilter<"IntelligenceMapping"> | string
     createdAt?: DateTimeFilter<"IntelligenceMapping"> | Date | string
@@ -74490,9 +74490,9 @@ export namespace Prisma {
     OR?: IntelligenceAlertScalarWhereInput[]
     NOT?: IntelligenceAlertScalarWhereInput | IntelligenceAlertScalarWhereInput[]
     id?: StringFilter<"IntelligenceAlert"> | string
-    mapId?: StringFilter<"IntelligenceAlert"> | string
+    mapId?: UuidFilter<"IntelligenceAlert"> | string
     accountId?: StringFilter<"IntelligenceAlert"> | string
-    listingId?: StringFilter<"IntelligenceAlert"> | string
+    listingId?: UuidFilter<"IntelligenceAlert"> | string
     status?: StringNullableFilter<"IntelligenceAlert"> | string | null
     createdAt?: DateTimeFilter<"IntelligenceAlert"> | Date | string
     updatedAt?: DateTimeFilter<"IntelligenceAlert"> | Date | string
@@ -75355,9 +75355,9 @@ export namespace Prisma {
     AND?: PropertyCompetitionMapScalarWhereInput | PropertyCompetitionMapScalarWhereInput[]
     OR?: PropertyCompetitionMapScalarWhereInput[]
     NOT?: PropertyCompetitionMapScalarWhereInput | PropertyCompetitionMapScalarWhereInput[]
-    id?: StringFilter<"PropertyCompetitionMap"> | string
+    id?: UuidFilter<"PropertyCompetitionMap"> | string
     propertyId?: StringFilter<"PropertyCompetitionMap"> | string
-    competitorListingId?: StringFilter<"PropertyCompetitionMap"> | string
+    competitorListingId?: UuidFilter<"PropertyCompetitionMap"> | string
     status?: EnumPropertyCompetitionStatusFilter<"PropertyCompetitionMap"> | $Enums.PropertyCompetitionStatus
     createdAt?: DateTimeFilter<"PropertyCompetitionMap"> | Date | string
     updatedAt?: DateTimeFilter<"PropertyCompetitionMap"> | Date | string
@@ -80066,8 +80066,8 @@ export namespace Prisma {
     AND?: CompetitorSourceScalarWhereInput | CompetitorSourceScalarWhereInput[]
     OR?: CompetitorSourceScalarWhereInput[]
     NOT?: CompetitorSourceScalarWhereInput | CompetitorSourceScalarWhereInput[]
-    id?: StringFilter<"CompetitorSource"> | string
-    competitorId?: StringFilter<"CompetitorSource"> | string
+    id?: UuidFilter<"CompetitorSource"> | string
+    competitorId?: UuidFilter<"CompetitorSource"> | string
     type?: StringFilter<"CompetitorSource"> | string
     value?: StringFilter<"CompetitorSource"> | string
     createdAt?: DateTimeFilter<"CompetitorSource"> | Date | string
@@ -80127,8 +80127,8 @@ export namespace Prisma {
     AND?: CompetitorListingScalarWhereInput | CompetitorListingScalarWhereInput[]
     OR?: CompetitorListingScalarWhereInput[]
     NOT?: CompetitorListingScalarWhereInput | CompetitorListingScalarWhereInput[]
-    id?: StringFilter<"CompetitorListing"> | string
-    competitorId?: StringFilter<"CompetitorListing"> | string
+    id?: UuidFilter<"CompetitorListing"> | string
+    competitorId?: UuidFilter<"CompetitorListing"> | string
     competitorPageId?: StringFilter<"CompetitorListing"> | string
     title?: StringFilter<"CompetitorListing"> | string
     description?: StringNullableFilter<"CompetitorListing"> | string | null
@@ -80392,7 +80392,7 @@ export namespace Prisma {
     AND?: CompetitorTrackingScalarWhereInput | CompetitorTrackingScalarWhereInput[]
     OR?: CompetitorTrackingScalarWhereInput[]
     NOT?: CompetitorTrackingScalarWhereInput | CompetitorTrackingScalarWhereInput[]
-    id?: StringFilter<"CompetitorTracking"> | string
+    id?: UuidFilter<"CompetitorTracking"> | string
     competitorPageId?: StringFilter<"CompetitorTracking"> | string
     ourListingId?: StringNullableFilter<"CompetitorTracking"> | string | null
     createdAt?: DateTimeFilter<"CompetitorTracking"> | Date | string

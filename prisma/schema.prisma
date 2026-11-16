@@ -752,7 +752,7 @@ model Inquiry {
 // ============================================================================
 
 model AuthzRole {
-  id          String   @id @default(uuid())
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name        String
   description String?
   appId       String   @map("app_id")
@@ -771,7 +771,7 @@ model AuthzRole {
 model AccountAccess {
   accountId String   @map("account_id")
   appId     String   @map("app_id")
-  roleId    String   @map("role_id")
+  roleId    String   @map("role_id") @db.Uuid
   updatedOn DateTime @updatedAt @map("updated_on")
 
   account Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
@@ -784,7 +784,7 @@ model AccountAccess {
 }
 
 model RoleCapability {
-  id                     String  @id @default(uuid())
+  id                     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   roleId                 String  @map("role_id")
   capabilityId           String  @map("capability_id")
   scope                  String?
@@ -797,7 +797,7 @@ model RoleCapability {
 }
 
 model AuthzAccountAccessGrant {
-  id              String  @id @default(uuid())
+  id              String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   ownerAccountId  String  @map("owner_account_id")
   targetAccountId String  @map("target_account_id")
   roleId          String  @map("role_id")
@@ -810,7 +810,7 @@ model AuthzAccountAccessGrant {
 }
 
 model AuthzAssetsAccessGrant {
-  id          String  @id @default(uuid())
+  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   assetId     String  @map("asset_id")
   accountId   String  @map("account_id")
   roleId      String  @map("role_id")
@@ -830,7 +830,7 @@ model AuthzAssetsAccessGrant {
 // ============================================================================
 
 model Competitor {
-  id          String               @id @default(cuid())
+  id          String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name        String
   description String?
   crawlRules  Json?
@@ -847,8 +847,8 @@ model Competitor {
 }
 
 model CompetitorSource {
-  id           String     @id @default(cuid())
-  competitorId String
+  id           String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  competitorId String     @db.Uuid
   type         String     // sitemap | link | manual
   value        String
   createdAt    DateTime   @default(now())
@@ -883,8 +883,8 @@ model CompetitorPage {
 }
 
 model CompetitorListing {
-  id               String         @id @default(cuid())
-  competitorId     String
+  id               String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  competitorId     String         @db.Uuid
   competitorPageId String         @unique
   title            String
   description      String?
@@ -908,9 +908,9 @@ model CompetitorListing {
 }
 
 model PropertyCompetitionMap {
-  id                String   @id @default(cuid())
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   propertyId        String   @map("property_id")
-  competitorListingId String @map("competitor_property_id")
+  competitorListingId String @map("competitor_property_id") @db.Uuid
   status            PropertyCompetitionStatus @default(UNVERIFIED)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
@@ -924,7 +924,7 @@ model PropertyCompetitionMap {
 }
 
 model CompetitorTracking {
-  id                   String             @id @default(cuid())
+  id                   String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   competitorPageId     String
   ourListingId        String?
   createdAt            DateTime           @default(now())
@@ -937,12 +937,12 @@ model CompetitorTracking {
 }
 
 model IntelligenceMapping {
-  id           String   @id @default(cuid())
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   accountId    String   @map("account_id")
   cLocation    String?  @map("c_location")
   cMinBudget   Int?     @map("c_min_budget")
   cMaxBudget   Int?     @map("c_max_budget")
-  cCompetitorId String? @map("c_competitor")
+  cCompetitorId String? @map("c_competitor") @db.Uuid
   cType        String?  @map("c_type")
   cPurpose     String   @map("c_purpose")
   createdAt    DateTime @default(now())
@@ -959,9 +959,9 @@ model IntelligenceMapping {
 
 model IntelligenceAlert {
   id          String   @id @default(cuid())
-  mapId       String   @map("map_id")
+  mapId       String   @map("map_id") @db.Uuid
   accountId   String   @map("account_id")
-  listingId   String   @map("listing_id")
+  listingId   String   @map("listing_id") @db.Uuid
   status      String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

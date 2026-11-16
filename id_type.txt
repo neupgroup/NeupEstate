@@ -148,55 +148,55 @@ ID field: id (UUID)
 Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261130160000_inquiries_id_to_postgres_uuid.
 
 Table: authz_role
-ID field: id (text)
-Generation: App UUID (Prisma Client).
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing IDs and account_access.role_id are converted by migration 20261130170000_authz_role_id_to_postgres_uuid.
 
 Table: account_access
 ID fields: account_id, app_id, role_id (composite primary key)
 Generation: No standalone ID field.
 
 Table: authz_role_capability
-ID field: id (text)
-Generation: App UUID (Prisma Client).
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing IDs are converted by migration 20261130180000_authz_role_capability_id_to_postgres_uuid.
 
 Table: authz_account_access_grant
-ID field: id (text)
-Generation: App UUID (Prisma Client).
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing IDs are converted by migration 20261130190000_authz_account_access_grant_id_to_postgres_uuid.
 
 Table: authz_assets_access_grant
-ID field: id (text)
-Generation: App UUID (Prisma Client).
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing IDs are converted by migration 20261130200000_authz_assets_access_grant_id_to_postgres_uuid.
 
 Table: competitors
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing IDs and referencing columns are converted by migration 20261130210000_competitors_id_to_postgres_uuid.
 
 Table: competitor_sources
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing IDs are converted by migration 20261130220000_competitor_sources_id_to_postgres_uuid.
 
 Table: competitor_pages
 ID field: id (text)
-Generation: App CUID (Prisma Client).
+Generation: App CUID (Prisma Client); table was dropped by migration 20261111130000_drop_competitor_pages and is not part of the current live schema.
 
 Table: competitors_listings
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing IDs and property_competition_map references are converted by migration 20261130230000_competitors_listings_id_to_postgres_uuid.
 
 Table: property_competition_map
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing IDs are converted by migration 20261201000000_property_competition_map_id_to_postgres_uuid.
 
 Table: competitor_tracking
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing IDs are converted by migration 20261201010000_competitor_tracking_id_to_postgres_uuid.
 
 Table: intelligence_mapping
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing IDs and intelligence_alerts references are converted by migration 20261201020000_intelligence_mapping_id_to_postgres_uuid.
 
 Table: intelligence_alerts
 ID field: id (text)
-Generation: App CUID (Prisma Client).
+Generation: App CUID (Prisma Client); map_id and listing_id become UUID references through migrations 20261201020000_intelligence_mapping_id_to_postgres_uuid and 20261130210000_competitors_id_to_postgres_uuid.
 
 Tables present in database.live but not modeled in the current Prisma schema are excluded; this file tracks current Prisma models.
