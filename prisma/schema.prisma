@@ -138,7 +138,7 @@ model Activity {
 // ============================================================================
 
 model Listing {
-  id                 String          @id @default(cuid())
+  id                 String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   slug               String
   title              String          @db.VarChar(255)
   description        String
@@ -194,8 +194,8 @@ model Listing {
 
 model PropertyLink {
   id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  primaryId   String
-  secondaryId String
+  primaryId   String   @db.Uuid
+  secondaryId String   @db.Uuid
 
   primary     Listing @relation("PrimaryLinks", fields: [primaryId], references: [id], onDelete: Cascade)
   secondary   Listing @relation("SecondaryLinks", fields: [secondaryId], references: [id], onDelete: Cascade)
@@ -204,7 +204,7 @@ model PropertyLink {
 }
 
 model ListingHouse {
-  listingsId       String   @id @unique(map: "listings_details__house_listings_id_key") @map("listings_id")
+  listingsId       String   @id @unique(map: "listings_details__house_listings_id_key") @map("listings_id") @db.Uuid
   bedrooms         Int
   bathrooms        Int
   floors           Int
@@ -225,7 +225,7 @@ model ListingHouse {
 }
 
 model ListingApartment {
-  listingsId       String   @id @unique(map: "listings_details__apartment_listings_id_key") @map("listings_id")
+  listingsId       String   @id @unique(map: "listings_details__apartment_listings_id_key") @map("listings_id") @db.Uuid
   bedrooms         Int
   bathrooms        Int
   onFloor          Int
@@ -247,7 +247,7 @@ model ListingApartment {
 }
 
 model PropertyLandDetail {
-  listingsId            String   @id @unique(map: "listings_details__land_listings_id_key") @map("listings_id")
+  listingsId            String   @id @unique(map: "listings_details__land_listings_id_key") @map("listings_id") @db.Uuid
   area                  Decimal  @db.Decimal(18, 8)
   facing                String   @db.VarChar(50)
   roadAccess            Decimal  @db.Decimal(18, 8)
@@ -263,7 +263,7 @@ model PropertyLandDetail {
 }
 
 model ListingCommercial {
-  listingsId    String   @id @unique(map: "listings_details__commercial_listings_id_key") @map("listings_id")
+  listingsId    String   @id @unique(map: "listings_details__commercial_listings_id_key") @map("listings_id") @db.Uuid
   floor         Int
   washrooms     Int
   parkingSpots  Int
@@ -278,7 +278,7 @@ model ListingCommercial {
 
 model PropertyOwner {
   id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  propertyId     String    @map("property_id")
+  propertyId     String    @map("property_id") @db.Uuid
   ownerClientId  String    @db.Uuid @map("owner_client_id")
   isPrimaryOwner Boolean   @default(false) @map("is_primary_owner")
 
@@ -293,7 +293,7 @@ model PropertyOwner {
 
 model ListingsRepresentatives {
   id               String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  listingId        String                     @map("listing_id")
+  listingId        String                     @map("listing_id") @db.Uuid
   representativeId String                     @map("representative_id")
   role             PropertyRepresentativeRole
   status           String?
@@ -308,7 +308,7 @@ model ListingsRepresentatives {
 
 model ListingsDocuments {
   id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  propertyId String
+  propertyId String   @db.Uuid
   name       String
   urls       Json
   sortOrder  Int      @default(0)
@@ -320,8 +320,8 @@ model ListingsDocuments {
 }
 
 model ListingChange {
-  id               String   @id @default(cuid())
-  propertyId       String?  @map("listing_id")
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  propertyId       String?  @map("listing_id") @db.Uuid
   accountId        String?  @map("requested_by")
   createdById      String?  @map("created_by_id")
   createdForId     String?  @map("created_for_id")
@@ -512,7 +512,7 @@ model NaturalSearch {
 model ListingsSaved {
   id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   accountId  String
-  propertyId String
+  propertyId String   @db.Uuid
   savedAt    DateTime @default(now())
 
   property   Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
@@ -525,7 +525,7 @@ model ListingsSaved {
 model ListingsView {
   id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   accountId  String
-  propertyId String
+  propertyId String   @db.Uuid
   onType     String
   viewedAt   DateTime @default(now())
   timeViewed Int
@@ -909,7 +909,7 @@ model CompetitorListing {
 
 model PropertyCompetitionMap {
   id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  propertyId        String   @map("property_id")
+  propertyId        String   @map("property_id") @db.Uuid
   competitorListingId String @map("competitor_property_id") @db.Uuid
   status            PropertyCompetitionStatus @default(UNVERIFIED)
   createdAt         DateTime @default(now())
@@ -958,7 +958,7 @@ model IntelligenceMapping {
 }
 
 model IntelligenceAlert {
-  id          String   @id @default(cuid())
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   mapId       String   @map("map_id") @db.Uuid
   accountId   String   @map("account_id")
   listingId   String   @map("listing_id") @db.Uuid
