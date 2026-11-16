@@ -60249,7 +60249,7 @@ export namespace Prisma {
     AND?: ListingWhereInput | ListingWhereInput[]
     OR?: ListingWhereInput[]
     NOT?: ListingWhereInput | ListingWhereInput[]
-    id?: StringFilter<"Listing"> | string
+    id?: UuidFilter<"Listing"> | string
     slug?: StringFilter<"Listing"> | string
     title?: StringFilter<"Listing"> | string
     description?: StringFilter<"Listing"> | string
@@ -60434,7 +60434,7 @@ export namespace Prisma {
     AND?: ListingScalarWhereWithAggregatesInput | ListingScalarWhereWithAggregatesInput[]
     OR?: ListingScalarWhereWithAggregatesInput[]
     NOT?: ListingScalarWhereWithAggregatesInput | ListingScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Listing"> | string
+    id?: UuidWithAggregatesFilter<"Listing"> | string
     slug?: StringWithAggregatesFilter<"Listing"> | string
     title?: StringWithAggregatesFilter<"Listing"> | string
     description?: StringWithAggregatesFilter<"Listing"> | string
@@ -60471,8 +60471,8 @@ export namespace Prisma {
     OR?: PropertyLinkWhereInput[]
     NOT?: PropertyLinkWhereInput | PropertyLinkWhereInput[]
     id?: UuidFilter<"PropertyLink"> | string
-    primaryId?: StringFilter<"PropertyLink"> | string
-    secondaryId?: StringFilter<"PropertyLink"> | string
+    primaryId?: UuidFilter<"PropertyLink"> | string
+    secondaryId?: UuidFilter<"PropertyLink"> | string
     primary?: XOR<ListingScalarRelationFilter, ListingWhereInput>
     secondary?: XOR<ListingScalarRelationFilter, ListingWhereInput>
   }
@@ -60490,8 +60490,8 @@ export namespace Prisma {
     AND?: PropertyLinkWhereInput | PropertyLinkWhereInput[]
     OR?: PropertyLinkWhereInput[]
     NOT?: PropertyLinkWhereInput | PropertyLinkWhereInput[]
-    primaryId?: StringFilter<"PropertyLink"> | string
-    secondaryId?: StringFilter<"PropertyLink"> | string
+    primaryId?: UuidFilter<"PropertyLink"> | string
+    secondaryId?: UuidFilter<"PropertyLink"> | string
     primary?: XOR<ListingScalarRelationFilter, ListingWhereInput>
     secondary?: XOR<ListingScalarRelationFilter, ListingWhereInput>
   }, "id">
@@ -60510,15 +60510,15 @@ export namespace Prisma {
     OR?: PropertyLinkScalarWhereWithAggregatesInput[]
     NOT?: PropertyLinkScalarWhereWithAggregatesInput | PropertyLinkScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"PropertyLink"> | string
-    primaryId?: StringWithAggregatesFilter<"PropertyLink"> | string
-    secondaryId?: StringWithAggregatesFilter<"PropertyLink"> | string
+    primaryId?: UuidWithAggregatesFilter<"PropertyLink"> | string
+    secondaryId?: UuidWithAggregatesFilter<"PropertyLink"> | string
   }
 
   export type ListingHouseWhereInput = {
     AND?: ListingHouseWhereInput | ListingHouseWhereInput[]
     OR?: ListingHouseWhereInput[]
     NOT?: ListingHouseWhereInput | ListingHouseWhereInput[]
-    listingsId?: StringFilter<"ListingHouse"> | string
+    listingsId?: UuidFilter<"ListingHouse"> | string
     bedrooms?: IntFilter<"ListingHouse"> | number
     bathrooms?: IntFilter<"ListingHouse"> | number
     floors?: IntFilter<"ListingHouse"> | number
@@ -60600,7 +60600,7 @@ export namespace Prisma {
     AND?: ListingHouseScalarWhereWithAggregatesInput | ListingHouseScalarWhereWithAggregatesInput[]
     OR?: ListingHouseScalarWhereWithAggregatesInput[]
     NOT?: ListingHouseScalarWhereWithAggregatesInput | ListingHouseScalarWhereWithAggregatesInput[]
-    listingsId?: StringWithAggregatesFilter<"ListingHouse"> | string
+    listingsId?: UuidWithAggregatesFilter<"ListingHouse"> | string
     bedrooms?: IntWithAggregatesFilter<"ListingHouse"> | number
     bathrooms?: IntWithAggregatesFilter<"ListingHouse"> | number
     floors?: IntWithAggregatesFilter<"ListingHouse"> | number
@@ -60620,7 +60620,7 @@ export namespace Prisma {
     AND?: ListingApartmentWhereInput | ListingApartmentWhereInput[]
     OR?: ListingApartmentWhereInput[]
     NOT?: ListingApartmentWhereInput | ListingApartmentWhereInput[]
-    listingsId?: StringFilter<"ListingApartment"> | string
+    listingsId?: UuidFilter<"ListingApartment"> | string
     bedrooms?: IntFilter<"ListingApartment"> | number
     bathrooms?: IntFilter<"ListingApartment"> | number
     onFloor?: IntFilter<"ListingApartment"> | number
@@ -60706,7 +60706,7 @@ export namespace Prisma {
     AND?: ListingApartmentScalarWhereWithAggregatesInput | ListingApartmentScalarWhereWithAggregatesInput[]
     OR?: ListingApartmentScalarWhereWithAggregatesInput[]
     NOT?: ListingApartmentScalarWhereWithAggregatesInput | ListingApartmentScalarWhereWithAggregatesInput[]
-    listingsId?: StringWithAggregatesFilter<"ListingApartment"> | string
+    listingsId?: UuidWithAggregatesFilter<"ListingApartment"> | string
     bedrooms?: IntWithAggregatesFilter<"ListingApartment"> | number
     bathrooms?: IntWithAggregatesFilter<"ListingApartment"> | number
     onFloor?: IntWithAggregatesFilter<"ListingApartment"> | number
@@ -60727,7 +60727,7 @@ export namespace Prisma {
     AND?: PropertyLandDetailWhereInput | PropertyLandDetailWhereInput[]
     OR?: PropertyLandDetailWhereInput[]
     NOT?: PropertyLandDetailWhereInput | PropertyLandDetailWhereInput[]
-    listingsId?: StringFilter<"PropertyLandDetail"> | string
+    listingsId?: UuidFilter<"PropertyLandDetail"> | string
     area?: DecimalFilter<"PropertyLandDetail"> | Decimal | DecimalJsLike | number | string
     facing?: StringFilter<"PropertyLandDetail"> | string
     roadAccess?: DecimalFilter<"PropertyLandDetail"> | Decimal | DecimalJsLike | number | string
@@ -60789,7 +60789,7 @@ export namespace Prisma {
     AND?: PropertyLandDetailScalarWhereWithAggregatesInput | PropertyLandDetailScalarWhereWithAggregatesInput[]
     OR?: PropertyLandDetailScalarWhereWithAggregatesInput[]
     NOT?: PropertyLandDetailScalarWhereWithAggregatesInput | PropertyLandDetailScalarWhereWithAggregatesInput[]
-    listingsId?: StringWithAggregatesFilter<"PropertyLandDetail"> | string
+    listingsId?: UuidWithAggregatesFilter<"PropertyLandDetail"> | string
     area?: DecimalWithAggregatesFilter<"PropertyLandDetail"> | Decimal | DecimalJsLike | number | string
     facing?: StringWithAggregatesFilter<"PropertyLandDetail"> | string
     roadAccess?: DecimalWithAggregatesFilter<"PropertyLandDetail"> | Decimal | DecimalJsLike | number | string
@@ -60804,7 +60804,7 @@ export namespace Prisma {
     AND?: ListingCommercialWhereInput | ListingCommercialWhereInput[]
     OR?: ListingCommercialWhereInput[]
     NOT?: ListingCommercialWhereInput | ListingCommercialWhereInput[]
-    listingsId?: StringFilter<"ListingCommercial"> | string
+    listingsId?: UuidFilter<"ListingCommercial"> | string
     floor?: IntFilter<"ListingCommercial"> | number
     washrooms?: IntFilter<"ListingCommercial"> | number
     parkingSpots?: IntFilter<"ListingCommercial"> | number
@@ -60858,7 +60858,7 @@ export namespace Prisma {
     AND?: ListingCommercialScalarWhereWithAggregatesInput | ListingCommercialScalarWhereWithAggregatesInput[]
     OR?: ListingCommercialScalarWhereWithAggregatesInput[]
     NOT?: ListingCommercialScalarWhereWithAggregatesInput | ListingCommercialScalarWhereWithAggregatesInput[]
-    listingsId?: StringWithAggregatesFilter<"ListingCommercial"> | string
+    listingsId?: UuidWithAggregatesFilter<"ListingCommercial"> | string
     floor?: IntWithAggregatesFilter<"ListingCommercial"> | number
     washrooms?: IntWithAggregatesFilter<"ListingCommercial"> | number
     parkingSpots?: IntWithAggregatesFilter<"ListingCommercial"> | number
@@ -60872,7 +60872,7 @@ export namespace Prisma {
     OR?: PropertyOwnerWhereInput[]
     NOT?: PropertyOwnerWhereInput | PropertyOwnerWhereInput[]
     id?: UuidFilter<"PropertyOwner"> | string
-    propertyId?: StringFilter<"PropertyOwner"> | string
+    propertyId?: UuidFilter<"PropertyOwner"> | string
     ownerClientId?: UuidFilter<"PropertyOwner"> | string
     isPrimaryOwner?: BoolFilter<"PropertyOwner"> | boolean
     property?: XOR<ListingScalarRelationFilter, ListingWhereInput>
@@ -60894,7 +60894,7 @@ export namespace Prisma {
     AND?: PropertyOwnerWhereInput | PropertyOwnerWhereInput[]
     OR?: PropertyOwnerWhereInput[]
     NOT?: PropertyOwnerWhereInput | PropertyOwnerWhereInput[]
-    propertyId?: StringFilter<"PropertyOwner"> | string
+    propertyId?: UuidFilter<"PropertyOwner"> | string
     ownerClientId?: UuidFilter<"PropertyOwner"> | string
     isPrimaryOwner?: BoolFilter<"PropertyOwner"> | boolean
     property?: XOR<ListingScalarRelationFilter, ListingWhereInput>
@@ -60916,7 +60916,7 @@ export namespace Prisma {
     OR?: PropertyOwnerScalarWhereWithAggregatesInput[]
     NOT?: PropertyOwnerScalarWhereWithAggregatesInput | PropertyOwnerScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"PropertyOwner"> | string
-    propertyId?: StringWithAggregatesFilter<"PropertyOwner"> | string
+    propertyId?: UuidWithAggregatesFilter<"PropertyOwner"> | string
     ownerClientId?: UuidWithAggregatesFilter<"PropertyOwner"> | string
     isPrimaryOwner?: BoolWithAggregatesFilter<"PropertyOwner"> | boolean
   }
@@ -60926,7 +60926,7 @@ export namespace Prisma {
     OR?: ListingsRepresentativesWhereInput[]
     NOT?: ListingsRepresentativesWhereInput | ListingsRepresentativesWhereInput[]
     id?: UuidFilter<"ListingsRepresentatives"> | string
-    listingId?: StringFilter<"ListingsRepresentatives"> | string
+    listingId?: UuidFilter<"ListingsRepresentatives"> | string
     representativeId?: StringFilter<"ListingsRepresentatives"> | string
     role?: EnumPropertyRepresentativeRoleFilter<"ListingsRepresentatives"> | $Enums.PropertyRepresentativeRole
     status?: StringNullableFilter<"ListingsRepresentatives"> | string | null
@@ -60949,7 +60949,7 @@ export namespace Prisma {
     AND?: ListingsRepresentativesWhereInput | ListingsRepresentativesWhereInput[]
     OR?: ListingsRepresentativesWhereInput[]
     NOT?: ListingsRepresentativesWhereInput | ListingsRepresentativesWhereInput[]
-    listingId?: StringFilter<"ListingsRepresentatives"> | string
+    listingId?: UuidFilter<"ListingsRepresentatives"> | string
     representativeId?: StringFilter<"ListingsRepresentatives"> | string
     role?: EnumPropertyRepresentativeRoleFilter<"ListingsRepresentatives"> | $Enums.PropertyRepresentativeRole
     status?: StringNullableFilter<"ListingsRepresentatives"> | string | null
@@ -60973,7 +60973,7 @@ export namespace Prisma {
     OR?: ListingsRepresentativesScalarWhereWithAggregatesInput[]
     NOT?: ListingsRepresentativesScalarWhereWithAggregatesInput | ListingsRepresentativesScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"ListingsRepresentatives"> | string
-    listingId?: StringWithAggregatesFilter<"ListingsRepresentatives"> | string
+    listingId?: UuidWithAggregatesFilter<"ListingsRepresentatives"> | string
     representativeId?: StringWithAggregatesFilter<"ListingsRepresentatives"> | string
     role?: EnumPropertyRepresentativeRoleWithAggregatesFilter<"ListingsRepresentatives"> | $Enums.PropertyRepresentativeRole
     status?: StringNullableWithAggregatesFilter<"ListingsRepresentatives"> | string | null
@@ -60984,7 +60984,7 @@ export namespace Prisma {
     OR?: ListingsDocumentsWhereInput[]
     NOT?: ListingsDocumentsWhereInput | ListingsDocumentsWhereInput[]
     id?: UuidFilter<"ListingsDocuments"> | string
-    propertyId?: StringFilter<"ListingsDocuments"> | string
+    propertyId?: UuidFilter<"ListingsDocuments"> | string
     name?: StringFilter<"ListingsDocuments"> | string
     urls?: JsonFilter<"ListingsDocuments">
     sortOrder?: IntFilter<"ListingsDocuments"> | number
@@ -61005,7 +61005,7 @@ export namespace Prisma {
     AND?: ListingsDocumentsWhereInput | ListingsDocumentsWhereInput[]
     OR?: ListingsDocumentsWhereInput[]
     NOT?: ListingsDocumentsWhereInput | ListingsDocumentsWhereInput[]
-    propertyId?: StringFilter<"ListingsDocuments"> | string
+    propertyId?: UuidFilter<"ListingsDocuments"> | string
     name?: StringFilter<"ListingsDocuments"> | string
     urls?: JsonFilter<"ListingsDocuments">
     sortOrder?: IntFilter<"ListingsDocuments"> | number
@@ -61030,7 +61030,7 @@ export namespace Prisma {
     OR?: ListingsDocumentsScalarWhereWithAggregatesInput[]
     NOT?: ListingsDocumentsScalarWhereWithAggregatesInput | ListingsDocumentsScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"ListingsDocuments"> | string
-    propertyId?: StringWithAggregatesFilter<"ListingsDocuments"> | string
+    propertyId?: UuidWithAggregatesFilter<"ListingsDocuments"> | string
     name?: StringWithAggregatesFilter<"ListingsDocuments"> | string
     urls?: JsonWithAggregatesFilter<"ListingsDocuments">
     sortOrder?: IntWithAggregatesFilter<"ListingsDocuments"> | number
@@ -61040,8 +61040,8 @@ export namespace Prisma {
     AND?: ListingChangeWhereInput | ListingChangeWhereInput[]
     OR?: ListingChangeWhereInput[]
     NOT?: ListingChangeWhereInput | ListingChangeWhereInput[]
-    id?: StringFilter<"ListingChange"> | string
-    propertyId?: StringNullableFilter<"ListingChange"> | string | null
+    id?: UuidFilter<"ListingChange"> | string
+    propertyId?: UuidNullableFilter<"ListingChange"> | string | null
     accountId?: StringNullableFilter<"ListingChange"> | string | null
     createdById?: StringNullableFilter<"ListingChange"> | string | null
     createdForId?: StringNullableFilter<"ListingChange"> | string | null
@@ -61086,7 +61086,7 @@ export namespace Prisma {
     AND?: ListingChangeWhereInput | ListingChangeWhereInput[]
     OR?: ListingChangeWhereInput[]
     NOT?: ListingChangeWhereInput | ListingChangeWhereInput[]
-    propertyId?: StringNullableFilter<"ListingChange"> | string | null
+    propertyId?: UuidNullableFilter<"ListingChange"> | string | null
     accountId?: StringNullableFilter<"ListingChange"> | string | null
     createdById?: StringNullableFilter<"ListingChange"> | string | null
     createdForId?: StringNullableFilter<"ListingChange"> | string | null
@@ -61128,8 +61128,8 @@ export namespace Prisma {
     AND?: ListingChangeScalarWhereWithAggregatesInput | ListingChangeScalarWhereWithAggregatesInput[]
     OR?: ListingChangeScalarWhereWithAggregatesInput[]
     NOT?: ListingChangeScalarWhereWithAggregatesInput | ListingChangeScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"ListingChange"> | string
-    propertyId?: StringNullableWithAggregatesFilter<"ListingChange"> | string | null
+    id?: UuidWithAggregatesFilter<"ListingChange"> | string
+    propertyId?: UuidNullableWithAggregatesFilter<"ListingChange"> | string | null
     accountId?: StringNullableWithAggregatesFilter<"ListingChange"> | string | null
     createdById?: StringNullableWithAggregatesFilter<"ListingChange"> | string | null
     createdForId?: StringNullableWithAggregatesFilter<"ListingChange"> | string | null
@@ -61771,7 +61771,7 @@ export namespace Prisma {
     NOT?: ListingsSavedWhereInput | ListingsSavedWhereInput[]
     id?: UuidFilter<"ListingsSaved"> | string
     accountId?: StringFilter<"ListingsSaved"> | string
-    propertyId?: StringFilter<"ListingsSaved"> | string
+    propertyId?: UuidFilter<"ListingsSaved"> | string
     savedAt?: DateTimeFilter<"ListingsSaved"> | Date | string
     property?: XOR<ListingScalarRelationFilter, ListingWhereInput>
   }
@@ -61790,7 +61790,7 @@ export namespace Prisma {
     OR?: ListingsSavedWhereInput[]
     NOT?: ListingsSavedWhereInput | ListingsSavedWhereInput[]
     accountId?: StringFilter<"ListingsSaved"> | string
-    propertyId?: StringFilter<"ListingsSaved"> | string
+    propertyId?: UuidFilter<"ListingsSaved"> | string
     savedAt?: DateTimeFilter<"ListingsSaved"> | Date | string
     property?: XOR<ListingScalarRelationFilter, ListingWhereInput>
   }, "id">
@@ -61811,7 +61811,7 @@ export namespace Prisma {
     NOT?: ListingsSavedScalarWhereWithAggregatesInput | ListingsSavedScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"ListingsSaved"> | string
     accountId?: StringWithAggregatesFilter<"ListingsSaved"> | string
-    propertyId?: StringWithAggregatesFilter<"ListingsSaved"> | string
+    propertyId?: UuidWithAggregatesFilter<"ListingsSaved"> | string
     savedAt?: DateTimeWithAggregatesFilter<"ListingsSaved"> | Date | string
   }
 
@@ -61821,7 +61821,7 @@ export namespace Prisma {
     NOT?: ListingsViewWhereInput | ListingsViewWhereInput[]
     id?: UuidFilter<"ListingsView"> | string
     accountId?: StringFilter<"ListingsView"> | string
-    propertyId?: StringFilter<"ListingsView"> | string
+    propertyId?: UuidFilter<"ListingsView"> | string
     onType?: StringFilter<"ListingsView"> | string
     viewedAt?: DateTimeFilter<"ListingsView"> | Date | string
     timeViewed?: IntFilter<"ListingsView"> | number
@@ -61846,7 +61846,7 @@ export namespace Prisma {
     OR?: ListingsViewWhereInput[]
     NOT?: ListingsViewWhereInput | ListingsViewWhereInput[]
     accountId?: StringFilter<"ListingsView"> | string
-    propertyId?: StringFilter<"ListingsView"> | string
+    propertyId?: UuidFilter<"ListingsView"> | string
     onType?: StringFilter<"ListingsView"> | string
     viewedAt?: DateTimeFilter<"ListingsView"> | Date | string
     timeViewed?: IntFilter<"ListingsView"> | number
@@ -61875,7 +61875,7 @@ export namespace Prisma {
     NOT?: ListingsViewScalarWhereWithAggregatesInput | ListingsViewScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"ListingsView"> | string
     accountId?: StringWithAggregatesFilter<"ListingsView"> | string
-    propertyId?: StringWithAggregatesFilter<"ListingsView"> | string
+    propertyId?: UuidWithAggregatesFilter<"ListingsView"> | string
     onType?: StringWithAggregatesFilter<"ListingsView"> | string
     viewedAt?: DateTimeWithAggregatesFilter<"ListingsView"> | Date | string
     timeViewed?: IntWithAggregatesFilter<"ListingsView"> | number
@@ -63312,7 +63312,7 @@ export namespace Prisma {
     OR?: PropertyCompetitionMapWhereInput[]
     NOT?: PropertyCompetitionMapWhereInput | PropertyCompetitionMapWhereInput[]
     id?: UuidFilter<"PropertyCompetitionMap"> | string
-    propertyId?: StringFilter<"PropertyCompetitionMap"> | string
+    propertyId?: UuidFilter<"PropertyCompetitionMap"> | string
     competitorListingId?: UuidFilter<"PropertyCompetitionMap"> | string
     status?: EnumPropertyCompetitionStatusFilter<"PropertyCompetitionMap"> | $Enums.PropertyCompetitionStatus
     createdAt?: DateTimeFilter<"PropertyCompetitionMap"> | Date | string
@@ -63337,7 +63337,7 @@ export namespace Prisma {
     AND?: PropertyCompetitionMapWhereInput | PropertyCompetitionMapWhereInput[]
     OR?: PropertyCompetitionMapWhereInput[]
     NOT?: PropertyCompetitionMapWhereInput | PropertyCompetitionMapWhereInput[]
-    propertyId?: StringFilter<"PropertyCompetitionMap"> | string
+    propertyId?: UuidFilter<"PropertyCompetitionMap"> | string
     competitorListingId?: UuidFilter<"PropertyCompetitionMap"> | string
     status?: EnumPropertyCompetitionStatusFilter<"PropertyCompetitionMap"> | $Enums.PropertyCompetitionStatus
     createdAt?: DateTimeFilter<"PropertyCompetitionMap"> | Date | string
@@ -63363,7 +63363,7 @@ export namespace Prisma {
     OR?: PropertyCompetitionMapScalarWhereWithAggregatesInput[]
     NOT?: PropertyCompetitionMapScalarWhereWithAggregatesInput | PropertyCompetitionMapScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"PropertyCompetitionMap"> | string
-    propertyId?: StringWithAggregatesFilter<"PropertyCompetitionMap"> | string
+    propertyId?: UuidWithAggregatesFilter<"PropertyCompetitionMap"> | string
     competitorListingId?: UuidWithAggregatesFilter<"PropertyCompetitionMap"> | string
     status?: EnumPropertyCompetitionStatusWithAggregatesFilter<"PropertyCompetitionMap"> | $Enums.PropertyCompetitionStatus
     createdAt?: DateTimeWithAggregatesFilter<"PropertyCompetitionMap"> | Date | string
@@ -63512,7 +63512,7 @@ export namespace Prisma {
     AND?: IntelligenceAlertWhereInput | IntelligenceAlertWhereInput[]
     OR?: IntelligenceAlertWhereInput[]
     NOT?: IntelligenceAlertWhereInput | IntelligenceAlertWhereInput[]
-    id?: StringFilter<"IntelligenceAlert"> | string
+    id?: UuidFilter<"IntelligenceAlert"> | string
     mapId?: UuidFilter<"IntelligenceAlert"> | string
     accountId?: StringFilter<"IntelligenceAlert"> | string
     listingId?: UuidFilter<"IntelligenceAlert"> | string
@@ -63570,7 +63570,7 @@ export namespace Prisma {
     AND?: IntelligenceAlertScalarWhereWithAggregatesInput | IntelligenceAlertScalarWhereWithAggregatesInput[]
     OR?: IntelligenceAlertScalarWhereWithAggregatesInput[]
     NOT?: IntelligenceAlertScalarWhereWithAggregatesInput | IntelligenceAlertScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"IntelligenceAlert"> | string
+    id?: UuidWithAggregatesFilter<"IntelligenceAlert"> | string
     mapId?: UuidWithAggregatesFilter<"IntelligenceAlert"> | string
     accountId?: StringWithAggregatesFilter<"IntelligenceAlert"> | string
     listingId?: UuidWithAggregatesFilter<"IntelligenceAlert"> | string
@@ -73673,7 +73673,7 @@ export namespace Prisma {
     AND?: ListingScalarWhereInput | ListingScalarWhereInput[]
     OR?: ListingScalarWhereInput[]
     NOT?: ListingScalarWhereInput | ListingScalarWhereInput[]
-    id?: StringFilter<"Listing"> | string
+    id?: UuidFilter<"Listing"> | string
     slug?: StringFilter<"Listing"> | string
     title?: StringFilter<"Listing"> | string
     description?: StringFilter<"Listing"> | string
@@ -74489,7 +74489,7 @@ export namespace Prisma {
     AND?: IntelligenceAlertScalarWhereInput | IntelligenceAlertScalarWhereInput[]
     OR?: IntelligenceAlertScalarWhereInput[]
     NOT?: IntelligenceAlertScalarWhereInput | IntelligenceAlertScalarWhereInput[]
-    id?: StringFilter<"IntelligenceAlert"> | string
+    id?: UuidFilter<"IntelligenceAlert"> | string
     mapId?: UuidFilter<"IntelligenceAlert"> | string
     accountId?: StringFilter<"IntelligenceAlert"> | string
     listingId?: UuidFilter<"IntelligenceAlert"> | string
@@ -74518,8 +74518,8 @@ export namespace Prisma {
     AND?: ListingChangeScalarWhereInput | ListingChangeScalarWhereInput[]
     OR?: ListingChangeScalarWhereInput[]
     NOT?: ListingChangeScalarWhereInput | ListingChangeScalarWhereInput[]
-    id?: StringFilter<"ListingChange"> | string
-    propertyId?: StringNullableFilter<"ListingChange"> | string | null
+    id?: UuidFilter<"ListingChange"> | string
+    propertyId?: UuidNullableFilter<"ListingChange"> | string | null
     accountId?: StringNullableFilter<"ListingChange"> | string | null
     createdById?: StringNullableFilter<"ListingChange"> | string | null
     createdForId?: StringNullableFilter<"ListingChange"> | string | null
@@ -74602,7 +74602,7 @@ export namespace Prisma {
     OR?: ListingsRepresentativesScalarWhereInput[]
     NOT?: ListingsRepresentativesScalarWhereInput | ListingsRepresentativesScalarWhereInput[]
     id?: UuidFilter<"ListingsRepresentatives"> | string
-    listingId?: StringFilter<"ListingsRepresentatives"> | string
+    listingId?: UuidFilter<"ListingsRepresentatives"> | string
     representativeId?: StringFilter<"ListingsRepresentatives"> | string
     role?: EnumPropertyRepresentativeRoleFilter<"ListingsRepresentatives"> | $Enums.PropertyRepresentativeRole
     status?: StringNullableFilter<"ListingsRepresentatives"> | string | null
@@ -75191,7 +75191,7 @@ export namespace Prisma {
     OR?: PropertyOwnerScalarWhereInput[]
     NOT?: PropertyOwnerScalarWhereInput | PropertyOwnerScalarWhereInput[]
     id?: UuidFilter<"PropertyOwner"> | string
-    propertyId?: StringFilter<"PropertyOwner"> | string
+    propertyId?: UuidFilter<"PropertyOwner"> | string
     ownerClientId?: UuidFilter<"PropertyOwner"> | string
     isPrimaryOwner?: BoolFilter<"PropertyOwner"> | boolean
   }
@@ -75217,7 +75217,7 @@ export namespace Prisma {
     OR?: ListingsDocumentsScalarWhereInput[]
     NOT?: ListingsDocumentsScalarWhereInput | ListingsDocumentsScalarWhereInput[]
     id?: UuidFilter<"ListingsDocuments"> | string
-    propertyId?: StringFilter<"ListingsDocuments"> | string
+    propertyId?: UuidFilter<"ListingsDocuments"> | string
     name?: StringFilter<"ListingsDocuments"> | string
     urls?: JsonFilter<"ListingsDocuments">
     sortOrder?: IntFilter<"ListingsDocuments"> | number
@@ -75260,8 +75260,8 @@ export namespace Prisma {
     OR?: PropertyLinkScalarWhereInput[]
     NOT?: PropertyLinkScalarWhereInput | PropertyLinkScalarWhereInput[]
     id?: UuidFilter<"PropertyLink"> | string
-    primaryId?: StringFilter<"PropertyLink"> | string
-    secondaryId?: StringFilter<"PropertyLink"> | string
+    primaryId?: UuidFilter<"PropertyLink"> | string
+    secondaryId?: UuidFilter<"PropertyLink"> | string
   }
 
   export type PropertyLinkUpsertWithWhereUniqueWithoutSecondaryInput = {
@@ -75302,7 +75302,7 @@ export namespace Prisma {
     NOT?: ListingsSavedScalarWhereInput | ListingsSavedScalarWhereInput[]
     id?: UuidFilter<"ListingsSaved"> | string
     accountId?: StringFilter<"ListingsSaved"> | string
-    propertyId?: StringFilter<"ListingsSaved"> | string
+    propertyId?: UuidFilter<"ListingsSaved"> | string
     savedAt?: DateTimeFilter<"ListingsSaved"> | Date | string
   }
 
@@ -75328,7 +75328,7 @@ export namespace Prisma {
     NOT?: ListingsViewScalarWhereInput | ListingsViewScalarWhereInput[]
     id?: UuidFilter<"ListingsView"> | string
     accountId?: StringFilter<"ListingsView"> | string
-    propertyId?: StringFilter<"ListingsView"> | string
+    propertyId?: UuidFilter<"ListingsView"> | string
     onType?: StringFilter<"ListingsView"> | string
     viewedAt?: DateTimeFilter<"ListingsView"> | Date | string
     timeViewed?: IntFilter<"ListingsView"> | number
@@ -75356,7 +75356,7 @@ export namespace Prisma {
     OR?: PropertyCompetitionMapScalarWhereInput[]
     NOT?: PropertyCompetitionMapScalarWhereInput | PropertyCompetitionMapScalarWhereInput[]
     id?: UuidFilter<"PropertyCompetitionMap"> | string
-    propertyId?: StringFilter<"PropertyCompetitionMap"> | string
+    propertyId?: UuidFilter<"PropertyCompetitionMap"> | string
     competitorListingId?: UuidFilter<"PropertyCompetitionMap"> | string
     status?: EnumPropertyCompetitionStatusFilter<"PropertyCompetitionMap"> | $Enums.PropertyCompetitionStatus
     createdAt?: DateTimeFilter<"PropertyCompetitionMap"> | Date | string

@@ -227,7 +227,7 @@ Fields:
 
 Table: intelligence_alerts, Model: IntelligenceAlert
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > map_id: uuid NOT NULL, references intelligence_mapping.id;
 > account_id: text NOT NULL, references accounts.id;
 > listing_id: uuid NOT NULL, references competitors.id;
@@ -273,7 +273,7 @@ Fields:
 
 Table: listings, Model: Listing
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > slug: text NOT NULL, INDEX listings_slug_idx(slug);
 > title: varchar(255) NOT NULL;
 > description: text NOT NULL;
@@ -306,7 +306,7 @@ Fields:
 
 Table: listings_details__apartment, Model: ListingApartment
 Fields:
-> listings_id: text PK, NOT NULL, UNIQUE listings_details__apartment_listings_id_key(listings_id), references listings.id;
+> listings_id: uuid PK, NOT NULL, UNIQUE listings_details__apartment_listings_id_key(listings_id), references listings.id;
 > bedrooms: integer NOT NULL;
 > bathrooms: integer NOT NULL;
 > onFloor: integer NOT NULL;
@@ -324,7 +324,7 @@ Fields:
 
 Table: listings_details__commercial, Model: ListingCommercial
 Fields:
-> listings_id: text PK, NOT NULL, UNIQUE listings_details__commercial_listings_id_key(listings_id), references listings.id;
+> listings_id: uuid PK, NOT NULL, UNIQUE listings_details__commercial_listings_id_key(listings_id), references listings.id;
 > floor: integer NOT NULL;
 > washrooms: integer NOT NULL;
 > parkingSpots: integer NOT NULL;
@@ -335,7 +335,7 @@ Fields:
 Table: property_competition_map, Model: PropertyCompetitionMap
 Fields:
 > id: uuid PK, NOT NULL, default: gen_random_uuid();
-> property_id: text NOT NULL, references listings.id;
+> property_id: uuid NOT NULL, references listings.id;
 > competitor_property_id: uuid NOT NULL, references competitors_listings.id;
 > status: text NOT NULL, default: 'UNVERIFIED'::text;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
@@ -344,14 +344,14 @@ Fields:
 Table: listings_documents, Model: ListingsDocuments
 Fields:
 > id: uuid PK, NOT NULL, default: gen_random_uuid();
-> propertyId: text NOT NULL, references listings.id;
+> propertyId: uuid NOT NULL, references listings.id;
 > name: text NOT NULL;
 > urls: jsonb NOT NULL;
 > sortOrder: integer NOT NULL, default: 0;
 
 Table: listings_details__house, Model: ListingHouse
 Fields:
-> listings_id: text PK, NOT NULL, UNIQUE listings_details__house_listings_id_key(listings_id), references listings.id;
+> listings_id: uuid PK, NOT NULL, UNIQUE listings_details__house_listings_id_key(listings_id), references listings.id;
 > bedrooms: integer NOT NULL;
 > bathrooms: integer NOT NULL;
 > floors: integer NOT NULL;
@@ -368,7 +368,7 @@ Fields:
 
 Table: listings_details__land, Model: PropertyLandDetail
 Fields:
-> listings_id: text PK, NOT NULL, UNIQUE listings_details__land_listings_id_key(listings_id), references listings.id;
+> listings_id: uuid PK, NOT NULL, UNIQUE listings_details__land_listings_id_key(listings_id), references listings.id;
 > area: numeric(18,8) NOT NULL;
 > facing: varchar(50) NOT NULL;
 > roadAccess: numeric(18,8) NOT NULL;
@@ -381,13 +381,13 @@ Fields:
 Table: property_link, Model: PropertyLink
 Fields:
 > id: uuid PK, NOT NULL, default: gen_random_uuid();
-> primaryId: text NOT NULL, references listings.id;
-> secondaryId: text NOT NULL, references listings.id;
+> primaryId: uuid NOT NULL, references listings.id;
+> secondaryId: uuid NOT NULL, references listings.id;
 
 Table: listings_logs, Model: ListingChange
 Fields:
-> id: text PK, NOT NULL;
-> listing_id: text, references listings.id ON DELETE SET NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
+> listing_id: uuid, references listings.id ON DELETE SET NULL;
 > data: jsonb NOT NULL;
 > requested_by: text, references accounts.id ON DELETE SET NULL;
 > status: enum(creation_draft, creation_pending, creating, changing, deleting, approved, accepted, rejected) NOT NULL;
@@ -402,14 +402,14 @@ Fields:
 Table: property_owner, Model: PropertyOwner
 Fields:
 > id: uuid PK, NOT NULL, default: gen_random_uuid();
-> property_id: text NOT NULL, UNIQUE property_owner_property_id_owner_client_id_key(property_id, owner_client_id), references listings.id;
+> property_id: uuid NOT NULL, UNIQUE property_owner_property_id_owner_client_id_key(property_id, owner_client_id), references listings.id;
 > owner_client_id: uuid NOT NULL, UNIQUE property_owner_property_id_owner_client_id_key(property_id, owner_client_id), references leads.id;
 > is_primary_owner: boolean NOT NULL, default: false;
 
 Table: listings_representatives, Model: ListingsRepresentatives
 Fields:
 > id: uuid PK, NOT NULL, default: gen_random_uuid();
-> listing_id: text NOT NULL, INDEX listings_representatives_listing_id_idx(listing_id), references listings.id;
+> listing_id: uuid NOT NULL, INDEX listings_representatives_listing_id_idx(listing_id), references listings.id;
 > representative_id: text NOT NULL, INDEX listings_representatives_representative_id_idx(representative_id), references accounts.id;
 > role: enum(propertyOwner, listingOwner, listingParty, listingOwner.propertyOwner) NOT NULL;
 > status: text;
@@ -418,7 +418,7 @@ Table: listings_views, Model: ListingsView
 Fields:
 > id: uuid PK, NOT NULL, default: gen_random_uuid();
 > accountId: text NOT NULL;
-> propertyId: text NOT NULL, references listings.id;
+> propertyId: uuid NOT NULL, references listings.id;
 > onType: text NOT NULL;
 > viewedAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > timeViewed: integer NOT NULL;
@@ -484,7 +484,7 @@ Table: listings_saved, Model: ListingsSaved
 Fields:
 > id: uuid PK, NOT NULL, default: gen_random_uuid();
 > accountId: text NOT NULL;
-> propertyId: text NOT NULL, references listings.id;
+> propertyId: uuid NOT NULL, references listings.id;
 > savedAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 
 Table: leads_assigned, Model: LeadsAssigned
