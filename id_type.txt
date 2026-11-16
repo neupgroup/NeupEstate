@@ -67,21 +67,21 @@ Generation: PostgreSQL UUID (gen_random_uuid()).
 ID field: id (UUID)
 Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs and referencing columns are converted by migration 20261129190000_agencies_id_to_postgres_uuid.
 
-Table: agency_map
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+(doing) Table: agency_map
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261129200000_agency_map_id_to_postgres_uuid.
 
 Table: agency_agent_map
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261129210000_agency_agent_map_id_to_postgres_uuid.
 
 Table: agency_customization
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261129220000_agency_customization_id_to_postgres_uuid.
 
 Table: agents
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261129230000_agents_id_to_postgres_uuid.
 
 Table: reviews
 ID field: id (text)

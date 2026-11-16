@@ -376,7 +376,7 @@ model Agency {
 }
 
 model AgencyMap {
-  id              String  @id @default(cuid())
+  id              String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   agencyAccountId String  @db.Uuid // references Account.id — the agency's own account
   accountId       String // references Account.id — the member account
   role            String // e.g. "admin" | "agent" | "viewer"
@@ -390,7 +390,7 @@ model AgencyMap {
 }
 
 model AgencyAgentMap {
-  id       String  @id @default(cuid())
+  id       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   agencyId String  @map("agency_id")
   agentId  String  @map("agent_id")
   status   String  @default("invited")
@@ -408,7 +408,7 @@ model AgencyAgentMap {
 }
 
 model AgencyCustomization {
-  id            String   @id @default(cuid())
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   agencyId      String   @db.Uuid // references Agency.id (the agency's account id)
   customizeFor  String // "lead" | "property"
   customization Json // { required: string[], optional: string[] }
@@ -423,7 +423,7 @@ model AgencyCustomization {
 }
 
 model Agent {
-  id                String   @id @default(cuid())
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name              String
   slug              String?  @unique
   location          String?

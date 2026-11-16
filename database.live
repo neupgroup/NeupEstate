@@ -65,7 +65,7 @@ Fields:
 
 Table: agency_agent_map, Model: AgencyAgentMap
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > agency_id: text NOT NULL, UNIQUE agency_agent_map_agency_id_agent_id_key(agency_id, agent_id), references accounts.id;
 > agent_id: text NOT NULL, UNIQUE agency_agent_map_agency_id_agent_id_key(agency_id, agent_id), references accounts.id;
 > status: text NOT NULL, default: 'invited'::text;
@@ -73,7 +73,7 @@ Fields:
 
 Table: agency_customization, Model: AgencyCustomization
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > agencyId: uuid NOT NULL, UNIQUE agency_customization_agencyId_customizeFor_key(agencyId, customizeFor), references agencies.id;
 > customizeFor: text NOT NULL, UNIQUE agency_customization_agencyId_customizeFor_key(agencyId, customizeFor);
 > customization: jsonb NOT NULL;
@@ -82,7 +82,7 @@ Fields:
 
 Table: agency_map, Model: AgencyMap
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > agencyAccountId: uuid NOT NULL, references agencies.id;
 > accountId: text NOT NULL;
 > role: text NOT NULL;
@@ -90,7 +90,7 @@ Fields:
 
 Table: agents, Model: Agent
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > name: text NOT NULL;
 > slug: text UNIQUE agents_slug_key(slug);
 > location: text;
