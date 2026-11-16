@@ -165,7 +165,8 @@ export async function setWorkingProfileAction(accountId: string): Promise<Action
     await prisma.account.update({
       where: { id: actorId },
       data: {
-        workingProfile: accountId,
+        // A null working profile means the signed-in account is active.
+        workingProfile: accountId === actorId ? null : accountId,
         accessedOn: new Date(),
       },
     });
