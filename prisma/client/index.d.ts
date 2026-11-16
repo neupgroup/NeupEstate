@@ -60873,7 +60873,7 @@ export namespace Prisma {
     NOT?: PropertyOwnerWhereInput | PropertyOwnerWhereInput[]
     id?: UuidFilter<"PropertyOwner"> | string
     propertyId?: StringFilter<"PropertyOwner"> | string
-    ownerClientId?: StringFilter<"PropertyOwner"> | string
+    ownerClientId?: UuidFilter<"PropertyOwner"> | string
     isPrimaryOwner?: BoolFilter<"PropertyOwner"> | boolean
     property?: XOR<ListingScalarRelationFilter, ListingWhereInput>
     ownerClient?: XOR<LeadScalarRelationFilter, LeadWhereInput>
@@ -60895,7 +60895,7 @@ export namespace Prisma {
     OR?: PropertyOwnerWhereInput[]
     NOT?: PropertyOwnerWhereInput | PropertyOwnerWhereInput[]
     propertyId?: StringFilter<"PropertyOwner"> | string
-    ownerClientId?: StringFilter<"PropertyOwner"> | string
+    ownerClientId?: UuidFilter<"PropertyOwner"> | string
     isPrimaryOwner?: BoolFilter<"PropertyOwner"> | boolean
     property?: XOR<ListingScalarRelationFilter, ListingWhereInput>
     ownerClient?: XOR<LeadScalarRelationFilter, LeadWhereInput>
@@ -60917,7 +60917,7 @@ export namespace Prisma {
     NOT?: PropertyOwnerScalarWhereWithAggregatesInput | PropertyOwnerScalarWhereWithAggregatesInput[]
     id?: UuidWithAggregatesFilter<"PropertyOwner"> | string
     propertyId?: StringWithAggregatesFilter<"PropertyOwner"> | string
-    ownerClientId?: StringWithAggregatesFilter<"PropertyOwner"> | string
+    ownerClientId?: UuidWithAggregatesFilter<"PropertyOwner"> | string
     isPrimaryOwner?: BoolWithAggregatesFilter<"PropertyOwner"> | boolean
   }
 
@@ -61819,7 +61819,7 @@ export namespace Prisma {
     AND?: ListingsViewWhereInput | ListingsViewWhereInput[]
     OR?: ListingsViewWhereInput[]
     NOT?: ListingsViewWhereInput | ListingsViewWhereInput[]
-    id?: StringFilter<"ListingsView"> | string
+    id?: UuidFilter<"ListingsView"> | string
     accountId?: StringFilter<"ListingsView"> | string
     propertyId?: StringFilter<"ListingsView"> | string
     onType?: StringFilter<"ListingsView"> | string
@@ -61873,7 +61873,7 @@ export namespace Prisma {
     AND?: ListingsViewScalarWhereWithAggregatesInput | ListingsViewScalarWhereWithAggregatesInput[]
     OR?: ListingsViewScalarWhereWithAggregatesInput[]
     NOT?: ListingsViewScalarWhereWithAggregatesInput | ListingsViewScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"ListingsView"> | string
+    id?: UuidWithAggregatesFilter<"ListingsView"> | string
     accountId?: StringWithAggregatesFilter<"ListingsView"> | string
     propertyId?: StringWithAggregatesFilter<"ListingsView"> | string
     onType?: StringWithAggregatesFilter<"ListingsView"> | string
@@ -61886,7 +61886,7 @@ export namespace Prisma {
     AND?: LeadWhereInput | LeadWhereInput[]
     OR?: LeadWhereInput[]
     NOT?: LeadWhereInput | LeadWhereInput[]
-    id?: StringFilter<"Lead"> | string
+    id?: UuidFilter<"Lead"> | string
     belongsTo?: StringFilter<"Lead"> | string
     firstName?: StringFilter<"Lead"> | string
     lastName?: StringFilter<"Lead"> | string
@@ -61954,7 +61954,7 @@ export namespace Prisma {
     AND?: LeadScalarWhereWithAggregatesInput | LeadScalarWhereWithAggregatesInput[]
     OR?: LeadScalarWhereWithAggregatesInput[]
     NOT?: LeadScalarWhereWithAggregatesInput | LeadScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Lead"> | string
+    id?: UuidWithAggregatesFilter<"Lead"> | string
     belongsTo?: StringWithAggregatesFilter<"Lead"> | string
     firstName?: StringWithAggregatesFilter<"Lead"> | string
     lastName?: StringWithAggregatesFilter<"Lead"> | string
@@ -61968,8 +61968,8 @@ export namespace Prisma {
     AND?: LeadsContactsWhereInput | LeadsContactsWhereInput[]
     OR?: LeadsContactsWhereInput[]
     NOT?: LeadsContactsWhereInput | LeadsContactsWhereInput[]
-    id?: StringFilter<"LeadsContacts"> | string
-    clientId?: StringFilter<"LeadsContacts"> | string
+    id?: UuidFilter<"LeadsContacts"> | string
+    clientId?: UuidFilter<"LeadsContacts"> | string
     type?: StringFilter<"LeadsContacts"> | string
     value?: StringFilter<"LeadsContacts"> | string
     client?: XOR<LeadScalarRelationFilter, LeadWhereInput>
@@ -61988,7 +61988,7 @@ export namespace Prisma {
     AND?: LeadsContactsWhereInput | LeadsContactsWhereInput[]
     OR?: LeadsContactsWhereInput[]
     NOT?: LeadsContactsWhereInput | LeadsContactsWhereInput[]
-    clientId?: StringFilter<"LeadsContacts"> | string
+    clientId?: UuidFilter<"LeadsContacts"> | string
     type?: StringFilter<"LeadsContacts"> | string
     value?: StringFilter<"LeadsContacts"> | string
     client?: XOR<LeadScalarRelationFilter, LeadWhereInput>
@@ -62008,8 +62008,8 @@ export namespace Prisma {
     AND?: LeadsContactsScalarWhereWithAggregatesInput | LeadsContactsScalarWhereWithAggregatesInput[]
     OR?: LeadsContactsScalarWhereWithAggregatesInput[]
     NOT?: LeadsContactsScalarWhereWithAggregatesInput | LeadsContactsScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"LeadsContacts"> | string
-    clientId?: StringWithAggregatesFilter<"LeadsContacts"> | string
+    id?: UuidWithAggregatesFilter<"LeadsContacts"> | string
+    clientId?: UuidWithAggregatesFilter<"LeadsContacts"> | string
     type?: StringWithAggregatesFilter<"LeadsContacts"> | string
     value?: StringWithAggregatesFilter<"LeadsContacts"> | string
   }
@@ -62018,9 +62018,9 @@ export namespace Prisma {
     AND?: LeadsAssignmentsWhereInput | LeadsAssignmentsWhereInput[]
     OR?: LeadsAssignmentsWhereInput[]
     NOT?: LeadsAssignmentsWhereInput | LeadsAssignmentsWhereInput[]
-    id?: StringFilter<"LeadsAssignments"> | string
+    id?: UuidFilter<"LeadsAssignments"> | string
     trackerId?: StringFilter<"LeadsAssignments"> | string
-    clientId?: StringFilter<"LeadsAssignments"> | string
+    clientId?: UuidFilter<"LeadsAssignments"> | string
     client?: XOR<LeadScalarRelationFilter, LeadWhereInput>
   }
 
@@ -62037,7 +62037,7 @@ export namespace Prisma {
     OR?: LeadsAssignmentsWhereInput[]
     NOT?: LeadsAssignmentsWhereInput | LeadsAssignmentsWhereInput[]
     trackerId?: StringFilter<"LeadsAssignments"> | string
-    clientId?: StringFilter<"LeadsAssignments"> | string
+    clientId?: UuidFilter<"LeadsAssignments"> | string
     client?: XOR<LeadScalarRelationFilter, LeadWhereInput>
   }, "id">
 
@@ -62054,17 +62054,17 @@ export namespace Prisma {
     AND?: LeadsAssignmentsScalarWhereWithAggregatesInput | LeadsAssignmentsScalarWhereWithAggregatesInput[]
     OR?: LeadsAssignmentsScalarWhereWithAggregatesInput[]
     NOT?: LeadsAssignmentsScalarWhereWithAggregatesInput | LeadsAssignmentsScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"LeadsAssignments"> | string
+    id?: UuidWithAggregatesFilter<"LeadsAssignments"> | string
     trackerId?: StringWithAggregatesFilter<"LeadsAssignments"> | string
-    clientId?: StringWithAggregatesFilter<"LeadsAssignments"> | string
+    clientId?: UuidWithAggregatesFilter<"LeadsAssignments"> | string
   }
 
   export type LeadsAssignedWhereInput = {
     AND?: LeadsAssignedWhereInput | LeadsAssignedWhereInput[]
     OR?: LeadsAssignedWhereInput[]
     NOT?: LeadsAssignedWhereInput | LeadsAssignedWhereInput[]
-    id?: StringFilter<"LeadsAssigned"> | string
-    baseLeadId?: StringFilter<"LeadsAssigned"> | string
+    id?: UuidFilter<"LeadsAssigned"> | string
+    baseLeadId?: UuidFilter<"LeadsAssigned"> | string
     type?: EnumLeadTypeFilter<"LeadsAssigned"> | $Enums.LeadType
     requirements?: JsonNullableFilter<"LeadsAssigned">
     priority?: EnumLeadPriorityFilter<"LeadsAssigned"> | $Enums.LeadPriority
@@ -62095,7 +62095,7 @@ export namespace Prisma {
     AND?: LeadsAssignedWhereInput | LeadsAssignedWhereInput[]
     OR?: LeadsAssignedWhereInput[]
     NOT?: LeadsAssignedWhereInput | LeadsAssignedWhereInput[]
-    baseLeadId?: StringFilter<"LeadsAssigned"> | string
+    baseLeadId?: UuidFilter<"LeadsAssigned"> | string
     type?: EnumLeadTypeFilter<"LeadsAssigned"> | $Enums.LeadType
     requirements?: JsonNullableFilter<"LeadsAssigned">
     priority?: EnumLeadPriorityFilter<"LeadsAssigned"> | $Enums.LeadPriority
@@ -62125,8 +62125,8 @@ export namespace Prisma {
     AND?: LeadsAssignedScalarWhereWithAggregatesInput | LeadsAssignedScalarWhereWithAggregatesInput[]
     OR?: LeadsAssignedScalarWhereWithAggregatesInput[]
     NOT?: LeadsAssignedScalarWhereWithAggregatesInput | LeadsAssignedScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"LeadsAssigned"> | string
-    baseLeadId?: StringWithAggregatesFilter<"LeadsAssigned"> | string
+    id?: UuidWithAggregatesFilter<"LeadsAssigned"> | string
+    baseLeadId?: UuidWithAggregatesFilter<"LeadsAssigned"> | string
     type?: EnumLeadTypeWithAggregatesFilter<"LeadsAssigned"> | $Enums.LeadType
     requirements?: JsonNullableWithAggregatesFilter<"LeadsAssigned">
     priority?: EnumLeadPriorityWithAggregatesFilter<"LeadsAssigned"> | $Enums.LeadPriority
@@ -62139,8 +62139,8 @@ export namespace Prisma {
     AND?: LeadsActivityWhereInput | LeadsActivityWhereInput[]
     OR?: LeadsActivityWhereInput[]
     NOT?: LeadsActivityWhereInput | LeadsActivityWhereInput[]
-    id?: StringFilter<"LeadsActivity"> | string
-    leadId?: StringFilter<"LeadsActivity"> | string
+    id?: UuidFilter<"LeadsActivity"> | string
+    leadId?: UuidFilter<"LeadsActivity"> | string
     data?: JsonFilter<"LeadsActivity">
     activityOn?: DateTimeFilter<"LeadsActivity"> | Date | string
     activityBy?: StringFilter<"LeadsActivity"> | string
@@ -62161,7 +62161,7 @@ export namespace Prisma {
     AND?: LeadsActivityWhereInput | LeadsActivityWhereInput[]
     OR?: LeadsActivityWhereInput[]
     NOT?: LeadsActivityWhereInput | LeadsActivityWhereInput[]
-    leadId?: StringFilter<"LeadsActivity"> | string
+    leadId?: UuidFilter<"LeadsActivity"> | string
     data?: JsonFilter<"LeadsActivity">
     activityOn?: DateTimeFilter<"LeadsActivity"> | Date | string
     activityBy?: StringFilter<"LeadsActivity"> | string
@@ -62183,8 +62183,8 @@ export namespace Prisma {
     AND?: LeadsActivityScalarWhereWithAggregatesInput | LeadsActivityScalarWhereWithAggregatesInput[]
     OR?: LeadsActivityScalarWhereWithAggregatesInput[]
     NOT?: LeadsActivityScalarWhereWithAggregatesInput | LeadsActivityScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"LeadsActivity"> | string
-    leadId?: StringWithAggregatesFilter<"LeadsActivity"> | string
+    id?: UuidWithAggregatesFilter<"LeadsActivity"> | string
+    leadId?: UuidWithAggregatesFilter<"LeadsActivity"> | string
     data?: JsonWithAggregatesFilter<"LeadsActivity">
     activityOn?: DateTimeWithAggregatesFilter<"LeadsActivity"> | Date | string
     activityBy?: StringWithAggregatesFilter<"LeadsActivity"> | string
@@ -74397,7 +74397,7 @@ export namespace Prisma {
     AND?: LeadScalarWhereInput | LeadScalarWhereInput[]
     OR?: LeadScalarWhereInput[]
     NOT?: LeadScalarWhereInput | LeadScalarWhereInput[]
-    id?: StringFilter<"Lead"> | string
+    id?: UuidFilter<"Lead"> | string
     belongsTo?: StringFilter<"Lead"> | string
     firstName?: StringFilter<"Lead"> | string
     lastName?: StringFilter<"Lead"> | string
@@ -74427,8 +74427,8 @@ export namespace Prisma {
     AND?: LeadsAssignedScalarWhereInput | LeadsAssignedScalarWhereInput[]
     OR?: LeadsAssignedScalarWhereInput[]
     NOT?: LeadsAssignedScalarWhereInput | LeadsAssignedScalarWhereInput[]
-    id?: StringFilter<"LeadsAssigned"> | string
-    baseLeadId?: StringFilter<"LeadsAssigned"> | string
+    id?: UuidFilter<"LeadsAssigned"> | string
+    baseLeadId?: UuidFilter<"LeadsAssigned"> | string
     type?: EnumLeadTypeFilter<"LeadsAssigned"> | $Enums.LeadType
     requirements?: JsonNullableFilter<"LeadsAssigned">
     priority?: EnumLeadPriorityFilter<"LeadsAssigned"> | $Enums.LeadPriority
@@ -75192,7 +75192,7 @@ export namespace Prisma {
     NOT?: PropertyOwnerScalarWhereInput | PropertyOwnerScalarWhereInput[]
     id?: UuidFilter<"PropertyOwner"> | string
     propertyId?: StringFilter<"PropertyOwner"> | string
-    ownerClientId?: StringFilter<"PropertyOwner"> | string
+    ownerClientId?: UuidFilter<"PropertyOwner"> | string
     isPrimaryOwner?: BoolFilter<"PropertyOwner"> | boolean
   }
 
@@ -75326,7 +75326,7 @@ export namespace Prisma {
     AND?: ListingsViewScalarWhereInput | ListingsViewScalarWhereInput[]
     OR?: ListingsViewScalarWhereInput[]
     NOT?: ListingsViewScalarWhereInput | ListingsViewScalarWhereInput[]
-    id?: StringFilter<"ListingsView"> | string
+    id?: UuidFilter<"ListingsView"> | string
     accountId?: StringFilter<"ListingsView"> | string
     propertyId?: StringFilter<"ListingsView"> | string
     onType?: StringFilter<"ListingsView"> | string
@@ -79073,9 +79073,9 @@ export namespace Prisma {
     AND?: LeadsAssignmentsScalarWhereInput | LeadsAssignmentsScalarWhereInput[]
     OR?: LeadsAssignmentsScalarWhereInput[]
     NOT?: LeadsAssignmentsScalarWhereInput | LeadsAssignmentsScalarWhereInput[]
-    id?: StringFilter<"LeadsAssignments"> | string
+    id?: UuidFilter<"LeadsAssignments"> | string
     trackerId?: StringFilter<"LeadsAssignments"> | string
-    clientId?: StringFilter<"LeadsAssignments"> | string
+    clientId?: UuidFilter<"LeadsAssignments"> | string
   }
 
   export type LeadsAssignedUpsertWithWhereUniqueWithoutBaseLeadInput = {
@@ -79114,8 +79114,8 @@ export namespace Prisma {
     AND?: LeadsContactsScalarWhereInput | LeadsContactsScalarWhereInput[]
     OR?: LeadsContactsScalarWhereInput[]
     NOT?: LeadsContactsScalarWhereInput | LeadsContactsScalarWhereInput[]
-    id?: StringFilter<"LeadsContacts"> | string
-    clientId?: StringFilter<"LeadsContacts"> | string
+    id?: UuidFilter<"LeadsContacts"> | string
+    clientId?: UuidFilter<"LeadsContacts"> | string
     type?: StringFilter<"LeadsContacts"> | string
     value?: StringFilter<"LeadsContacts"> | string
   }
@@ -79579,8 +79579,8 @@ export namespace Prisma {
     AND?: LeadsActivityScalarWhereInput | LeadsActivityScalarWhereInput[]
     OR?: LeadsActivityScalarWhereInput[]
     NOT?: LeadsActivityScalarWhereInput | LeadsActivityScalarWhereInput[]
-    id?: StringFilter<"LeadsActivity"> | string
-    leadId?: StringFilter<"LeadsActivity"> | string
+    id?: UuidFilter<"LeadsActivity"> | string
+    leadId?: UuidFilter<"LeadsActivity"> | string
     data?: JsonFilter<"LeadsActivity">
     activityOn?: DateTimeFilter<"LeadsActivity"> | Date | string
     activityBy?: StringFilter<"LeadsActivity"> | string

@@ -149,7 +149,7 @@ Fields:
 
 Table: leads, Model: Lead
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > belongsTo: text NOT NULL, references accounts.id;
 > firstName: text NOT NULL;
 > lastName: text NOT NULL;
@@ -160,16 +160,16 @@ Fields:
 
 Table: leads_contacts, Model: LeadsContacts
 Fields:
-> id: text PK, NOT NULL;
-> client_id: text NOT NULL, references leads.id;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
+> client_id: uuid NOT NULL, references leads.id;
 > type: text NOT NULL;
 > value: text NOT NULL;
 
 Table: leads_assignments, Model: LeadsAssignments
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > trackerId: text NOT NULL;
-> clientId: text NOT NULL, references leads.id;
+> clientId: uuid NOT NULL, references leads.id;
 
 Table: competitors, Model: Competitor
 Fields:
@@ -250,8 +250,8 @@ Fields:
 
 Table: leads_activity, Model: LeadsActivity
 Fields:
-> id: text PK, NOT NULL;
-> leadId: text NOT NULL, references leads_assigned.id;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
+> leadId: uuid NOT NULL, references leads_assigned.id;
 > data: jsonb NOT NULL;
 > activityOn: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 > activityBy: text NOT NULL;
@@ -403,7 +403,7 @@ Table: property_owner, Model: PropertyOwner
 Fields:
 > id: uuid PK, NOT NULL, default: gen_random_uuid();
 > property_id: text NOT NULL, UNIQUE property_owner_property_id_owner_client_id_key(property_id, owner_client_id), references listings.id;
-> owner_client_id: text NOT NULL, UNIQUE property_owner_property_id_owner_client_id_key(property_id, owner_client_id), references leads.id;
+> owner_client_id: uuid NOT NULL, UNIQUE property_owner_property_id_owner_client_id_key(property_id, owner_client_id), references leads.id;
 > is_primary_owner: boolean NOT NULL, default: false;
 
 Table: listings_representatives, Model: ListingsRepresentatives
@@ -416,7 +416,7 @@ Fields:
 
 Table: listings_views, Model: ListingsView
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > accountId: text NOT NULL;
 > propertyId: text NOT NULL, references listings.id;
 > onType: text NOT NULL;
@@ -489,8 +489,8 @@ Fields:
 
 Table: leads_assigned, Model: LeadsAssigned
 Fields:
-> id: text PK, NOT NULL;
-> baseLeadId: text NOT NULL, references leads.id;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
+> baseLeadId: uuid NOT NULL, references leads.id;
 > type: LeadType NOT NULL;
 > requirements: jsonb;
 > priority: LeadPriority NOT NULL, default: 'MEDIUM'::"LeadPriority";

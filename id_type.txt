@@ -100,28 +100,28 @@ ID field: id (UUID)
 Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261130040000_listings_saved_id_to_postgres_uuid.
 
 Table: listings_views
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261130050000_listings_views_id_to_postgres_uuid.
 
 Table: leads
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261130060000_leads_id_to_postgres_uuid.
 
 Table: leads_contacts
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261130070000_leads_contacts_id_to_postgres_uuid.
 
 Table: leads_assignments
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261130080000_leads_assignments_id_to_postgres_uuid.
 
 Table: leads_assigned
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261130090000_leads_assigned_id_to_postgres_uuid.
 
 Table: leads_activity
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261130100000_leads_activity_id_to_postgres_uuid.
 
 Table: user_preferences
 ID field: id (text)

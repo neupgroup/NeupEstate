@@ -279,7 +279,7 @@ model ListingCommercial {
 model PropertyOwner {
   id             String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   propertyId     String  @map("property_id")
-  ownerClientId  String  @map("owner_client_id")
+  ownerClientId  String  @map("owner_client_id") @db.Uuid
   isPrimaryOwner Boolean @default(false) @map("is_primary_owner")
 
   property    Listing @relation(fields: [propertyId], references: [id], onDelete: Cascade)
@@ -523,7 +523,7 @@ model ListingsSaved {
 }
 
 model ListingsView {
-  id         String   @id @default(cuid())
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   accountId  String
   propertyId String
   onType     String
@@ -557,7 +557,7 @@ enum LeadPriority {
 }
 
 model Lead {
-  id        String   @id @default(cuid())
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   belongsTo String
   firstName String
   lastName  String
@@ -578,8 +578,8 @@ model Lead {
 }
 
 model LeadsContacts {
-  id       String @id @default(cuid())
-  clientId String @map("client_id")
+  id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  clientId String @map("client_id") @db.Uuid
   type     String
   value    String
 
@@ -591,9 +591,9 @@ model LeadsContacts {
 }
 
 model LeadsAssignments {
-  id        String @id @default(cuid())
+  id        String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   trackerId String
-  clientId  String
+  clientId  String @db.Uuid
 
   client Lead @relation(fields: [clientId], references: [id], onDelete: Cascade)
 
@@ -603,8 +603,8 @@ model LeadsAssignments {
 }
 
 model LeadsAssigned {
-  id           String       @id @default(cuid())
-  baseLeadId   String
+  id           String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  baseLeadId   String       @db.Uuid
   type         LeadType
   requirements Json?
   priority     LeadPriority @default(MEDIUM)
@@ -624,8 +624,8 @@ model LeadsAssigned {
 }
 
 model LeadsActivity {
-  id         String   @id @default(cuid())
-  leadId     String
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  leadId     String   @db.Uuid
   data       Json
   activityOn DateTime @default(now())
   activityBy String
