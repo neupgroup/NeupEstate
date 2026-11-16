@@ -22,14 +22,14 @@ function ManageNavigation({ permissions, workingProfile, pathname }: {
   workingProfile: string | null;
   pathname: string;
 }) {
-  const visibleItems = manageNav.filter(item => item.type === 'heading' || permissions[item.href] !== false);
+  const visibleItems = manageNav.filter(item => item.type !== 'link' || permissions[item.href] !== false);
   const activeHref = getLongestMatchingManageNavHrefV1(pathname, visibleItems);
 
   return (
     <nav aria-label="Management" className="space-y-1 py-4">
       {visibleItems.map((item, index) => {
-        if (item.type === 'heading') {
-          return <p key={`heading-${index}`} className="px-3 pt-4 text-xs font-semibold uppercase text-muted-foreground">{item.label}</p>;
+        if (item.type === 'heading' || item.type === 'group') {
+          return <p key={`${item.type}-${index}`} className={`px-3 pt-4 text-xs font-semibold uppercase text-muted-foreground ${item.type === 'group' ? 'text-primary' : ''}`}>{item.label}</p>;
         }
         const Icon = item.icon;
         return (

@@ -98,7 +98,7 @@ export default async function IntelligencePage() {
           {alerts.length === 0 ? (
             <p className="text-sm text-muted-foreground">
               No alerts yet. Add criteria in the{' '}
-              <Link href="/manage/intelligence/criteria" className="text-primary underline">
+          <Link href="/manage/intelligence/criterias" className="text-primary underline">
                 Criteria
               </Link>
               {' '}page to start tracking matches.

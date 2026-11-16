@@ -122,7 +122,7 @@ export function HeaderV1({
 
   const renderManageNav = () =>
     manageNav.map((item, i) => {
-      if (item.type === "heading") {
+      if (item.type === "heading" || item.type === "group") {
         return (
           <p key={`h-${i}`} className="px-2 pt-3 pb-0.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             {item.label}

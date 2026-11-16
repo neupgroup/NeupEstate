@@ -53,7 +53,7 @@ export function ManageSidebar(props: Props) {
   return (
     <nav className="flex flex-col gap-1 px-0 py-6" aria-label="Management navigation">
       {manageNav.map((item, index) => {
-        if (item.type === "heading") {
+        if (item.type === "heading" || item.type === "group") {
           return (
             <Kicker key={`${item.label}-${index}`} className="mt-3 px-2 pb-1 first:mt-0">
               {item.label}

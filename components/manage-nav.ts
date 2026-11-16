@@ -26,16 +26,21 @@ import {
   UserCog,
   UserRound,
   Users,
+  Activity,
+  ClipboardList,
+  DollarSign,
+  RefreshCw,
+  Swords,
 } from "lucide-react";
 
 export type ManageNavItem =
   | { type: "link"; href: string; label: string; icon: ComponentType<{ className?: string }>; external?: boolean }
-  | { type: "heading"; label: string };
+  | { type: "heading"; label: string }
+  | { type: "group"; label: string };
 
 export const manageNav: ManageNavItem[] = [
   { type: "link", href: "/manage", label: "Dashboard", icon: LayoutDashboard },
   { type: "link", href: "/manage/analytics", label: "Analytics", icon: LineChart },
-  { type: "link", href: "/manage/intelligence", label: "Intelligence", icon: BarChart2 },
   { type: "link", href: "/manage/schedule", label: "Schedule", icon: CalendarCheck },
   { type: "heading", label: "Property" },
   { type: "link", href: "/manage/listings", label: "Properties", icon: Home },
@@ -48,6 +53,16 @@ export const manageNav: ManageNavItem[] = [
   { type: "link", href: "/manage/leads/base", label: "Base Leads", icon: Flame },
   { type: "link", href: "/manage/leads/shared", label: "Shared Leads", icon: Users },
   { type: "link", href: "/manage/leads/alerts", label: "Alerts", icon: Bell },
+  { type: "group", label: "Intelligence" },
+  { type: "link", href: "/manage/intelligence", label: "Home", icon: BarChart2 },
+  { type: "link", href: "/manage/intelligence/listings", label: "Listings", icon: ClipboardList },
+  { type: "link", href: "/manage/intelligence/updates", label: "Updates", icon: RefreshCw },
+  { type: "link", href: "/manage/intelligence/criterias", label: "Criteria", icon: Bell },
+  { type: "group", label: "Competitors" },
+  { type: "link", href: "/manage/competitors", label: "Home", icon: Swords },
+  { type: "link", href: "/manage/competitors/listings", label: "Listings", icon: Home },
+  { type: "link", href: "/manage/competitors/sales", label: "Sales", icon: DollarSign },
+  { type: "link", href: "/manage/competitors/activity", label: "Activity", icon: Activity },
   { type: "heading", label: "CRM" },
   { type: "link", href: "/manage/inquiries", label: "Inquiries", icon: FileQuestion },
   { type: "link", href: "/manage/saved", label: "Saved Properties", icon: Bookmark },
