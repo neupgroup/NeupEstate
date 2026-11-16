@@ -2,6 +2,11 @@
   "name": "neupestate",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "npm@12.2.2",
+  "engines": {
+    "node": ">=26.13.1",
+    "npm": ">=12.2.2"
+  },
   "scripts": {
     "neup.cloner": "test -d ./@neup/setup || (mkdir -p ./@neup && cd ./@neup && git clone --depth 1 --single-branch --branch main https://github.com/neupgroup/nextjs.setup.git nextjs.setup && mv nextjs.setup setup)",
     "setup": "npm run neup.cloner && cd ./@neup && chmod +x ./setup/index.sh && ./setup/index.sh",
@@ -16,9 +21,6 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "db:seed:locations": "tsx prisma/seed-locations.ts"
-  },
-  "engines": {
-    "node": ">=20.9.0"
   },
   "dependencies": {
     "@grpc/grpc-js": "1.12.6",
@@ -64,7 +66,7 @@
     "leaflet": "^1.9.4",
     "lucide-react": "^0.475.0",
     "mongodb": "^6.8.0",
-    "next": "16.4.3",
+    "next": "16.4.6",
     "nprogress": "^0.2.0",
     "patch-package": "^8.0.0",
     "pg": "^8.17.2",
@@ -89,7 +91,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.39.1",
-    "eslint-config-next": "^16.2.1",
+    "eslint-config-next": "16.4.6",
     "prisma": "7.8.0",
     "typescript": "5.8.3"
   }
