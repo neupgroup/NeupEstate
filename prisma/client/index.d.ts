@@ -61524,7 +61524,7 @@ export namespace Prisma {
     AND?: ReviewWhereInput | ReviewWhereInput[]
     OR?: ReviewWhereInput[]
     NOT?: ReviewWhereInput | ReviewWhereInput[]
-    id?: StringFilter<"Review"> | string
+    id?: UuidFilter<"Review"> | string
     reviewedBy?: StringFilter<"Review"> | string
     rating?: IntFilter<"Review"> | number
     review?: StringFilter<"Review"> | string
@@ -61579,7 +61579,7 @@ export namespace Prisma {
     AND?: ReviewScalarWhereWithAggregatesInput | ReviewScalarWhereWithAggregatesInput[]
     OR?: ReviewScalarWhereWithAggregatesInput[]
     NOT?: ReviewScalarWhereWithAggregatesInput | ReviewScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Review"> | string
+    id?: UuidWithAggregatesFilter<"Review"> | string
     reviewedBy?: StringWithAggregatesFilter<"Review"> | string
     rating?: IntWithAggregatesFilter<"Review"> | number
     review?: StringWithAggregatesFilter<"Review"> | string
@@ -61593,7 +61593,7 @@ export namespace Prisma {
     AND?: RequirementWhereInput | RequirementWhereInput[]
     OR?: RequirementWhereInput[]
     NOT?: RequirementWhereInput | RequirementWhereInput[]
-    id?: StringFilter<"Requirement"> | string
+    id?: UuidFilter<"Requirement"> | string
     userId?: StringFilter<"Requirement"> | string
     minBudget?: IntNullableFilter<"Requirement"> | number | null
     maxBudget?: IntNullableFilter<"Requirement"> | number | null
@@ -61696,7 +61696,7 @@ export namespace Prisma {
     AND?: RequirementScalarWhereWithAggregatesInput | RequirementScalarWhereWithAggregatesInput[]
     OR?: RequirementScalarWhereWithAggregatesInput[]
     NOT?: RequirementScalarWhereWithAggregatesInput | RequirementScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Requirement"> | string
+    id?: UuidWithAggregatesFilter<"Requirement"> | string
     userId?: StringWithAggregatesFilter<"Requirement"> | string
     minBudget?: IntNullableWithAggregatesFilter<"Requirement"> | number | null
     maxBudget?: IntNullableWithAggregatesFilter<"Requirement"> | number | null
@@ -61722,7 +61722,7 @@ export namespace Prisma {
     AND?: NaturalSearchWhereInput | NaturalSearchWhereInput[]
     OR?: NaturalSearchWhereInput[]
     NOT?: NaturalSearchWhereInput | NaturalSearchWhereInput[]
-    id?: StringFilter<"NaturalSearch"> | string
+    id?: UuidFilter<"NaturalSearch"> | string
     title?: StringFilter<"NaturalSearch"> | string
     value?: JsonFilter<"NaturalSearch">
     createdAt?: DateTimeFilter<"NaturalSearch"> | Date | string
@@ -61759,7 +61759,7 @@ export namespace Prisma {
     AND?: NaturalSearchScalarWhereWithAggregatesInput | NaturalSearchScalarWhereWithAggregatesInput[]
     OR?: NaturalSearchScalarWhereWithAggregatesInput[]
     NOT?: NaturalSearchScalarWhereWithAggregatesInput | NaturalSearchScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"NaturalSearch"> | string
+    id?: UuidWithAggregatesFilter<"NaturalSearch"> | string
     title?: StringWithAggregatesFilter<"NaturalSearch"> | string
     value?: JsonWithAggregatesFilter<"NaturalSearch">
     createdAt?: DateTimeWithAggregatesFilter<"NaturalSearch"> | Date | string
@@ -61769,7 +61769,7 @@ export namespace Prisma {
     AND?: ListingsSavedWhereInput | ListingsSavedWhereInput[]
     OR?: ListingsSavedWhereInput[]
     NOT?: ListingsSavedWhereInput | ListingsSavedWhereInput[]
-    id?: StringFilter<"ListingsSaved"> | string
+    id?: UuidFilter<"ListingsSaved"> | string
     accountId?: StringFilter<"ListingsSaved"> | string
     propertyId?: StringFilter<"ListingsSaved"> | string
     savedAt?: DateTimeFilter<"ListingsSaved"> | Date | string
@@ -61809,7 +61809,7 @@ export namespace Prisma {
     AND?: ListingsSavedScalarWhereWithAggregatesInput | ListingsSavedScalarWhereWithAggregatesInput[]
     OR?: ListingsSavedScalarWhereWithAggregatesInput[]
     NOT?: ListingsSavedScalarWhereWithAggregatesInput | ListingsSavedScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"ListingsSaved"> | string
+    id?: UuidWithAggregatesFilter<"ListingsSaved"> | string
     accountId?: StringWithAggregatesFilter<"ListingsSaved"> | string
     propertyId?: StringWithAggregatesFilter<"ListingsSaved"> | string
     savedAt?: DateTimeWithAggregatesFilter<"ListingsSaved"> | Date | string
@@ -75300,7 +75300,7 @@ export namespace Prisma {
     AND?: ListingsSavedScalarWhereInput | ListingsSavedScalarWhereInput[]
     OR?: ListingsSavedScalarWhereInput[]
     NOT?: ListingsSavedScalarWhereInput | ListingsSavedScalarWhereInput[]
-    id?: StringFilter<"ListingsSaved"> | string
+    id?: UuidFilter<"ListingsSaved"> | string
     accountId?: StringFilter<"ListingsSaved"> | string
     propertyId?: StringFilter<"ListingsSaved"> | string
     savedAt?: DateTimeFilter<"ListingsSaved"> | Date | string

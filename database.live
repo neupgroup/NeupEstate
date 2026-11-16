@@ -426,7 +426,7 @@ Fields:
 
 Table: requirements, Model: Requirement
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > userId: text NOT NULL;
 > minBudget: integer;
 > maxBudget: integer;
@@ -449,7 +449,7 @@ Fields:
 
 Table: natural_searches, Model: NaturalSearch
 Fields:
-> id: text PK, NOT NULL, default: cuid();
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > title: text NOT NULL, UNIQUE natural_searches_title_key(title);
 > value: jsonb NOT NULL;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
@@ -458,7 +458,7 @@ Indexes:
 
 Table: reviews, Model: Review
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > reviewedBy: text NOT NULL;
 > rating: integer NOT NULL;
 > review: varchar(255) NOT NULL;
@@ -482,7 +482,7 @@ Fields:
 
 Table: listings_saved, Model: ListingsSaved
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > accountId: text NOT NULL;
 > propertyId: text NOT NULL, references listings.id;
 > savedAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;

@@ -451,7 +451,7 @@ model Agent {
 // ============================================================================
 
 model Review {
-  id         String    @id @default(cuid())
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   reviewedBy String
   rating     Int
   review     String    @db.VarChar(255)
@@ -469,7 +469,7 @@ model Review {
 // ============================================================================
 
 model Requirement {
-  id             String   @id @default(cuid())
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId         String
   minBudget      Int?
   maxBudget      Int?
@@ -496,7 +496,7 @@ model Requirement {
 }
 
 model NaturalSearch {
-  id        String   @id @default(cuid())
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title     String   @unique
   value     Json     @db.JsonB
   createdAt DateTime @default(now())
@@ -510,7 +510,7 @@ model NaturalSearch {
 // ============================================================================
 
 model ListingsSaved {
-  id         String   @id @default(cuid())
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   accountId  String
   propertyId String
   savedAt    DateTime @default(now())

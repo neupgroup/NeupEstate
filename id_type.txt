@@ -67,37 +67,37 @@ Generation: PostgreSQL UUID (gen_random_uuid()).
 ID field: id (UUID)
 Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs and referencing columns are converted by migration 20261129190000_agencies_id_to_postgres_uuid.
 
-(doing) Table: agency_map
+(done) Table: agency_map
 ID field: id (UUID)
 Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261129200000_agency_map_id_to_postgres_uuid.
 
-Table: agency_agent_map
+(done) Table: agency_agent_map
 ID field: id (UUID)
 Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261129210000_agency_agent_map_id_to_postgres_uuid.
 
-Table: agency_customization
+(done) Table: agency_customization
 ID field: id (UUID)
 Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261129220000_agency_customization_id_to_postgres_uuid.
 
-Table: agents
+(done) Table: agents
 ID field: id (UUID)
 Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261129230000_agents_id_to_postgres_uuid.
 
-Table: reviews
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+(done) Table: reviews
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261130010000_reviews_id_to_postgres_uuid.
 
-Table: requirements
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+(done) Table: requirements
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261130020000_requirements_id_to_postgres_uuid.
 
-Table: natural_searches
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+(done) Table: natural_searches
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261130030000_natural_searches_id_to_postgres_uuid.
 
-Table: listings_saved
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+(done) Table: listings_saved
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261130040000_listings_saved_id_to_postgres_uuid.
 
 Table: listings_views
 ID field: id (text)
