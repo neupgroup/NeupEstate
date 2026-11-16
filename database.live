@@ -220,7 +220,7 @@ Fields:
 > value: text NOT NULL;
 > createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
 
-Table: competitor_tracking, Model: CompetitorTracking
+Table: competitors_tracking, Model: CompetitorTracking
 Fields:
 > id: uuid PK, NOT NULL, default: gen_random_uuid();
 > competitorPageId: text NOT NULL;

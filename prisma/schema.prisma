@@ -933,7 +933,7 @@ model CompetitorTracking {
 
   @@index([competitorPageId])
   @@index([ourListingId])
-  @@map("competitor_tracking")
+  @@map("competitors_tracking")
 }
 
 model IntelligenceMapping {
