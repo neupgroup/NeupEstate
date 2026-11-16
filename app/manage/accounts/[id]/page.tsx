@@ -50,10 +50,10 @@ export default async function ManageAccountPage({ params }: { params: Promise<{ 
     select: { roleId: true },
     orderBy: { roleId: 'asc' },
   });
-  const roleIds = [...new Set(accountRoleGrants.map((grant) => grant.roleId))];
-  const roles = roleIds.length > 0
+  const assignedRoleIds = [...new Set(accountRoleGrants.map((grant) => grant.roleId))];
+  const roles = assignedRoleIds.length > 0
     ? await prisma.authzRole.findMany({
-        where: { id: { in: roleIds } },
+        where: { id: { in: assignedRoleIds } },
         select: { id: true, name: true, description: true, scope: true, permissions: true, updatedOn: true },
         orderBy: { id: 'asc' },
       })
