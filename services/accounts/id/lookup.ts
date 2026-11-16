@@ -6,6 +6,7 @@ import { Prisma } from '@neup/core/database/prisma';
 import { prisma } from '@neup/core/database/prisma';
 import { getAccountInformation, getSignedAccountInformation } from '@/services/accounts/lookup';
 import type { Account } from '@/types';
+import { replaceAccountRoleGrants } from '@/services/authorization/account-grants';
 
 /**
  * Ensures an account row exists for the given ssid and returns it.
@@ -220,39 +221,19 @@ export async function refreshAccountDisplayInfo(
         },
       });
 
-      await tx.accountAccess.deleteMany({
-        where: {
-          accountId: id,
-          appId,
-        },
-      });
-
-      if (remoteRoles.length > 0) {
-        await tx.accountAccess.createMany({
-          data: remoteRoles.map((role) => ({
-            accountId: id,
-            appId,
-            roleId: role.id,
-          })),
-          skipDuplicates: true,
-        });
-      }
+      await replaceAccountRoleGrants([id], appId, remoteRoles, tx);
     });
 
-    const syncedAccessRows = await prisma.accountAccess.findMany({
-      where: { accountId: id },
-      select: {
-        roleId: true,
-        role: {
-          select: {
-            permissions: true,
-          },
-        },
-      },
+    const syncedAccessRows = await prisma.authzAccountAccessGrant.findMany({
+      where: { ownerAccountId: id, targetAccountId: id },
+      select: { roleId: true, permissions: true },
     });
     const permissions = [
       ...new Set(
-        syncedAccessRows.flatMap((row) => normalizePermissions(row.role?.permissions))
+        syncedAccessRows.flatMap((row) => {
+          const snapshot = row.permissions as { permissions?: unknown };
+          return normalizePermissions(snapshot?.permissions);
+        })
       ),
     ];
 
@@ -388,7 +369,6 @@ function extractRemoteRoles(body: unknown): NormalizedRemoteRole[] {
 export async function deleteAccountAndData(id: string): Promise<void> {
   try {
     await prisma.$transaction([
-      prisma.accountAccess.deleteMany({ where: { accountId: id } }),
       prisma.authzAccountAccessGrant.deleteMany({ where: { OR: [{ ownerAccountId: id }, { targetAccountId: id }] } }),
       prisma.authzAssetsAccessGrant.deleteMany({ where: { accountId: id } }),
       prisma.agencyAgentMap.deleteMany({ where: { OR: [{ agencyId: id }, { agentId: id }] } }),

@@ -8,7 +8,7 @@ current authenticated account.
 ::public
 
 Use this service instead of `@/logica/auth/*` inside this app. It resolves the
-current app id, reads permission data from `authz_role` and `account_access`,
+current app id, reads permission data from `authz_role` and `authz_account_access_grant`,
 and exposes permission checks for pages, layouts, and server actions.
 
 ::public end
@@ -30,6 +30,7 @@ import { notFound } from 'next/navigation';
 import { prisma } from '@neup/core/database/prisma';
 import { getAuthenticatedAccount } from '@/services/auth/account';
 import { PERMISSIONS, type PermissionName } from '@/services/permission-names';;
+import { getGrantAppId } from '@/services/authorization/account-grants';
 
 type ManageLayoutPermissionState = {
   canDashboard: boolean;
@@ -74,10 +75,13 @@ function normalizePermissionName(permission: string, appId: string): string {
 }
 
 function coercePermissionList(value: unknown, appId: string): string[] {
-  if (!Array.isArray(value)) return [];
+  const entries = Array.isArray(value)
+    ? value.filter((entry): entry is string => typeof entry === 'string')
+    : value && typeof value === 'object'
+      ? Object.entries(value as Record<string, unknown>).filter(([, allowed]) => allowed === true).map(([name]) => name)
+      : [];
 
-  return value
-    .filter((entry): entry is string => typeof entry === 'string')
+  return entries
     .map((entry) => normalizePermissionName(entry, appId))
     .filter(Boolean);
 }
@@ -113,23 +117,19 @@ export async function getCurrentAccountPermissionNames(): Promise<string[]> {
   const accountId = await getCurrentAccountId();
   if (!accountId) return [];
 
-  const accessRows = (await prisma.accountAccess.findMany({
+  const accessRows = await prisma.authzAccountAccessGrant.findMany({
     where: {
-      accountId,
-      appId,
+      ownerAccountId: accountId,
+      targetAccountId: accountId,
     },
-    select: {
-      role: {
-        select: {
-          permissions: true,
-        },
-      },
-    },
-  })) as Array<{ role: { permissions: unknown } }>;
+    select: { permissions: true },
+  });
 
   const permissions: string[] = [];
   for (const row of accessRows) {
-    permissions.push(...coercePermissionList(row.role.permissions, appId));
+    if (getGrantAppId(row.permissions) !== appId) continue;
+    const snapshot = row.permissions as Record<string, unknown>;
+    permissions.push(...coercePermissionList(snapshot.permissions, appId));
   }
 
   return Array.from(toPermissionSet(permissions)).sort();

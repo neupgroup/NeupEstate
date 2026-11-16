@@ -114,7 +114,7 @@ export async function insertAccountAccessGrant(data: {
     const record = await db.authzAccountAccessGrant.create({
       data: {
         ...data,
-        permissions: data.permissions === null ? Prisma.DbNull : data.permissions,
+        permissions: data.permissions === null ? Prisma.JsonNull : data.permissions,
       },
     });
     return record.id;
@@ -143,7 +143,7 @@ export async function updateAccountAccessGrant(
         ...(data.roleId !== undefined && { roleId: data.roleId }),
         ...(data.portfolioId !== undefined && { portfolioId: data.portfolioId }),
         ...(Object.prototype.hasOwnProperty.call(data, 'permissions') && {
-          permissions: data.permissions === null ? Prisma.DbNull : data.permissions,
+          permissions: data.permissions === null ? Prisma.JsonNull : data.permissions,
         }),
       },
     });

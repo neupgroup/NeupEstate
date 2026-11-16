@@ -1,6 +1,7 @@
 import { createDecipheriv, createHash, createHmac, timingSafeEqual } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { Prisma, prisma } from "@neup/core/database/prisma";
+import { replaceAccountRoleGrants } from "@/services/authorization/account-grants";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -336,23 +337,7 @@ async function persistAccountUpdate(
   });
 
   if (rolesWereProvided) {
-    await tx.accountAccess.deleteMany({
-      where: {
-        accountId,
-        appId: payload.appId,
-      },
-    });
-
-    if (normalizedRoles.length > 0) {
-      await tx.accountAccess.createMany({
-        data: normalizedRoles.map((role) => ({
-          accountId,
-          appId: payload.appId,
-          roleId: role.id,
-        })),
-        skipDuplicates: true,
-      });
-    }
+    await replaceAccountRoleGrants([accountId], payload.appId, normalizedRoles, tx);
   }
 
   if (
@@ -379,25 +364,7 @@ async function persistAccountUpdate(
     });
 
     if (rolesWereProvided && secondaryAccountIds.length > 0) {
-      await tx.accountAccess.deleteMany({
-        where: {
-          accountId: { in: secondaryAccountIds },
-          appId: payload.appId,
-        },
-      });
-
-      if (normalizedRoles.length > 0) {
-        await tx.accountAccess.createMany({
-          data: secondaryAccountIds.flatMap((secondaryAccountId) =>
-            normalizedRoles.map((role) => ({
-              accountId: secondaryAccountId,
-              appId: payload.appId,
-              roleId: role.id,
-            }))
-          ),
-          skipDuplicates: true,
-        });
-      }
+      await replaceAccountRoleGrants(secondaryAccountIds, payload.appId, normalizedRoles, tx);
     }
   }
 }

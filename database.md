@@ -29,7 +29,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 ### public.account (Account)
 
 - purpose: Canonical local account/profile record for NeupID users, agencies, agents, and working-profile context.
-- usage: Used across auth, account management, agency/team flows, bridge account lookup/webhooks, saved/viewed cleanup, and authorization through `account_access`.
+- usage: Used across auth, account management, agency/team flows, bridge account lookup/webhooks, saved/viewed cleanup, and account authorization grants.
 
 - id text PK, NOT NULL
 - accountType text NOT NULL
@@ -43,18 +43,6 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 
 - divergence: model Account maps to table account; mapped fields: neupId->neup_id, createdOn->created_on, accessedOn->accessed_on, workingProfile->working_profile
 - divergence based on fields: database has 9 fields; Prisma model has 9 persisted scalar fields; difference 0
-
-### public.account_access (AccountAccess)
-
-- purpose: Join table assigning one or more authorization roles to an account for an app.
-- usage: Used by permission resolution, account detail pages, account deletion cleanup, and authz synchronization.
-
-- account_id text PK, NOT NULL, FK account_access_account_id_fkey -> public.account(id)
-- app_id text PK, NOT NULL
-- role_id text PK, NOT NULL, FK account_access_role_id_fkey -> public.authz_role(id)
-- updated_on timestamp(3) NOT NULL, default CURRENT_TIMESTAMP
-- divergence: model AccountAccess maps to table account_access; mapped fields: accountId->account_id, appId->app_id, roleId->role_id, updatedOn->updated_on
-- divergence based on fields: database has 4 fields; Prisma model has 4 persisted scalar fields; difference 0
 
 ### public.activity (Activity)
 
@@ -140,6 +128,7 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - target_account_id text NOT NULL
 - role_id text NOT NULL
 - portfolio_id text
+- permissions jsonb NOT NULL, default '{}'::jsonb
 
 - divergence: model AuthzAccountAccessGrant maps to table authz_account_access_grant; mapped fields: ownerAccountId->owner_account_id, targetAccountId->target_account_id, roleId->role_id, portfolioId->portfolio_id
 - divergence based on fields: database has 5 fields; Prisma model has 5 persisted scalar fields; difference 0

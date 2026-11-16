@@ -523,13 +523,6 @@ exports.Prisma.AuthzRoleScalarFieldEnum = {
   updatedOn: 'updatedOn'
 };
 
-exports.Prisma.AccountAccessScalarFieldEnum = {
-  accountId: 'accountId',
-  appId: 'appId',
-  roleId: 'roleId',
-  updatedOn: 'updatedOn'
-};
-
 exports.Prisma.RoleCapabilityScalarFieldEnum = {
   id: 'id',
   roleId: 'roleId',
@@ -779,7 +772,6 @@ exports.Prisma.ModelName = {
   SitemapEntry: 'SitemapEntry',
   Inquiry: 'Inquiry',
   AuthzRole: 'AuthzRole',
-  AccountAccess: 'AccountAccess',
   RoleCapability: 'RoleCapability',
   AuthzAccountAccessGrant: 'AuthzAccountAccessGrant',
   AuthzAssetsAccessGrant: 'AuthzAssetsAccessGrant',

@@ -102,7 +102,6 @@ model Account {
   bio          String?
   workingProfile String? @map("working_profile")
   moreDetails  Json?     @map("more_details") @db.JsonB
-  accessRows   AccountAccess[]
   workingProfileAccount Account? @relation("AccountWorkingProfile", fields: [workingProfile], references: [id], onDelete: SetNull)
   workingProfileOf Account[] @relation("AccountWorkingProfile")
   agencyAgentMapAsAgency AgencyAgentMap[] @relation("AgencyAgentMapAgency")
@@ -739,24 +738,7 @@ model AuthzRole {
   permissions Json?
   updatedOn   DateTime @updatedAt
 
-  accessRows  AccountAccess[]
-
   @@map("authz_role")
-}
-
-model AccountAccess {
-  accountId String   @map("account_id")
-  appId     String   @map("app_id")
-  roleId    String   @map("role_id") @db.Uuid
-  updatedOn DateTime @updatedAt @map("updated_on")
-
-  account Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  role    AuthzRole @relation(fields: [roleId], references: [id], onDelete: Cascade)
-
-  @@id([accountId, appId, roleId])
-  @@index([appId], map: "account_access_app_id_idx")
-  @@index([roleId], map: "account_access_role_id_idx")
-  @@map("account_access")
 }
 
 model RoleCapability {
