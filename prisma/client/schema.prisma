@@ -307,7 +307,7 @@ model ListingsRepresentatives {
 }
 
 model ListingsDocuments {
-  id         String @id @default(cuid())
+  id         String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   propertyId String
   name       String
   urls       Json

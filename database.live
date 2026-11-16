@@ -343,7 +343,7 @@ Fields:
 
 Table: listings_documents, Model: ListingsDocuments
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > propertyId: text NOT NULL, references listings.id;
 > name: text NOT NULL;
 > urls: jsonb NOT NULL;

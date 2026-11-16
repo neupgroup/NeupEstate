@@ -60983,7 +60983,7 @@ export namespace Prisma {
     AND?: ListingsDocumentsWhereInput | ListingsDocumentsWhereInput[]
     OR?: ListingsDocumentsWhereInput[]
     NOT?: ListingsDocumentsWhereInput | ListingsDocumentsWhereInput[]
-    id?: StringFilter<"ListingsDocuments"> | string
+    id?: UuidFilter<"ListingsDocuments"> | string
     propertyId?: StringFilter<"ListingsDocuments"> | string
     name?: StringFilter<"ListingsDocuments"> | string
     urls?: JsonFilter<"ListingsDocuments">
@@ -61029,7 +61029,7 @@ export namespace Prisma {
     AND?: ListingsDocumentsScalarWhereWithAggregatesInput | ListingsDocumentsScalarWhereWithAggregatesInput[]
     OR?: ListingsDocumentsScalarWhereWithAggregatesInput[]
     NOT?: ListingsDocumentsScalarWhereWithAggregatesInput | ListingsDocumentsScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"ListingsDocuments"> | string
+    id?: UuidWithAggregatesFilter<"ListingsDocuments"> | string
     propertyId?: StringWithAggregatesFilter<"ListingsDocuments"> | string
     name?: StringWithAggregatesFilter<"ListingsDocuments"> | string
     urls?: JsonWithAggregatesFilter<"ListingsDocuments">
@@ -75216,7 +75216,7 @@ export namespace Prisma {
     AND?: ListingsDocumentsScalarWhereInput | ListingsDocumentsScalarWhereInput[]
     OR?: ListingsDocumentsScalarWhereInput[]
     NOT?: ListingsDocumentsScalarWhereInput | ListingsDocumentsScalarWhereInput[]
-    id?: StringFilter<"ListingsDocuments"> | string
+    id?: UuidFilter<"ListingsDocuments"> | string
     propertyId?: StringFilter<"ListingsDocuments"> | string
     name?: StringFilter<"ListingsDocuments"> | string
     urls?: JsonFilter<"ListingsDocuments">

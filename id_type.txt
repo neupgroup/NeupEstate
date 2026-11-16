@@ -51,13 +51,13 @@ Generation: Inherited UUID; same ID as the parent listings.id.
 ID field: id (UUID)
 Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261129160000_property_owner_id_to_postgres_uuid.
 
-(doing) Table: listings_representatives
+(done) Table: listings_representatives
 ID field: id (UUID)
 Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261129170000_listings_representatives_id_to_postgres_uuid.
 
-Table: listings_documents
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+(done) Table: listings_documents
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261129180000_listings_documents_id_to_postgres_uuid.
 
 Table: listings_logs
 ID field: id (UUID)
