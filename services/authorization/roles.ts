@@ -108,9 +108,15 @@ export async function insertAccountAccessGrant(data: {
   targetAccountId: string;
   roleId: string;
   portfolioId?: string | null;
+  permissions?: Prisma.InputJsonValue | null;
 }, db: AuthzDbClient = prisma): Promise<string> {
   try {
-    const record = await db.authzAccountAccessGrant.create({ data });
+    const record = await db.authzAccountAccessGrant.create({
+      data: {
+        ...data,
+        permissions: data.permissions === null ? Prisma.DbNull : data.permissions,
+      },
+    });
     return record.id;
   } catch (e) {
     throw new Error('Failed to insert account access grant.');
@@ -124,11 +130,23 @@ export async function updateAccountAccessGrant(
     targetAccountId: string;
     roleId: string;
     portfolioId: string | null;
+    permissions: Prisma.InputJsonValue | null;
   }>,
   db: AuthzDbClient = prisma,
 ): Promise<void> {
   try {
-    await db.authzAccountAccessGrant.update({ where: { id }, data });
+    await db.authzAccountAccessGrant.update({
+      where: { id },
+      data: {
+        ...(data.ownerAccountId !== undefined && { ownerAccountId: data.ownerAccountId }),
+        ...(data.targetAccountId !== undefined && { targetAccountId: data.targetAccountId }),
+        ...(data.roleId !== undefined && { roleId: data.roleId }),
+        ...(data.portfolioId !== undefined && { portfolioId: data.portfolioId }),
+        ...(Object.prototype.hasOwnProperty.call(data, 'permissions') && {
+          permissions: data.permissions === null ? Prisma.DbNull : data.permissions,
+        }),
+      },
+    });
   } catch (e) {
     throw new Error('Failed to update account access grant.');
   }

@@ -46633,6 +46633,7 @@ export namespace Prisma {
     targetAccountId: number
     roleId: number
     portfolioId: number
+    permissions: number
     _all: number
   }
 
@@ -46659,6 +46660,7 @@ export namespace Prisma {
     targetAccountId?: true
     roleId?: true
     portfolioId?: true
+    permissions?: true
     _all?: true
   }
 
@@ -46740,6 +46742,7 @@ export namespace Prisma {
     targetAccountId: string
     roleId: string
     portfolioId: string | null
+    permissions: JsonValue
     _count: AuthzAccountAccessGrantCountAggregateOutputType | null
     _min: AuthzAccountAccessGrantMinAggregateOutputType | null
     _max: AuthzAccountAccessGrantMaxAggregateOutputType | null
@@ -46765,6 +46768,7 @@ export namespace Prisma {
     targetAccountId?: boolean
     roleId?: boolean
     portfolioId?: boolean
+    permissions?: boolean
   }, ExtArgs["result"]["authzAccountAccessGrant"]>
 
   export type AuthzAccountAccessGrantSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -46773,6 +46777,7 @@ export namespace Prisma {
     targetAccountId?: boolean
     roleId?: boolean
     portfolioId?: boolean
+    permissions?: boolean
   }, ExtArgs["result"]["authzAccountAccessGrant"]>
 
   export type AuthzAccountAccessGrantSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -46781,6 +46786,7 @@ export namespace Prisma {
     targetAccountId?: boolean
     roleId?: boolean
     portfolioId?: boolean
+    permissions?: boolean
   }, ExtArgs["result"]["authzAccountAccessGrant"]>
 
   export type AuthzAccountAccessGrantSelectScalar = {
@@ -46789,9 +46795,10 @@ export namespace Prisma {
     targetAccountId?: boolean
     roleId?: boolean
     portfolioId?: boolean
+    permissions?: boolean
   }
 
-  export type AuthzAccountAccessGrantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "ownerAccountId" | "targetAccountId" | "roleId" | "portfolioId", ExtArgs["result"]["authzAccountAccessGrant"]>
+  export type AuthzAccountAccessGrantOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "ownerAccountId" | "targetAccountId" | "roleId" | "portfolioId" | "permissions", ExtArgs["result"]["authzAccountAccessGrant"]>
 
   export type $AuthzAccountAccessGrantPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "AuthzAccountAccessGrant"
@@ -46802,6 +46809,7 @@ export namespace Prisma {
       targetAccountId: string
       roleId: string
       portfolioId: string | null
+      permissions: Prisma.JsonValue
     }, ExtArgs["result"]["authzAccountAccessGrant"]>
     composites: {}
   }
@@ -47230,6 +47238,7 @@ export namespace Prisma {
     readonly targetAccountId: FieldRef<"AuthzAccountAccessGrant", 'String'>
     readonly roleId: FieldRef<"AuthzAccountAccessGrant", 'String'>
     readonly portfolioId: FieldRef<"AuthzAccountAccessGrant", 'String'>
+    readonly permissions: FieldRef<"AuthzAccountAccessGrant", 'Json'>
   }
     
 
@@ -58294,7 +58303,8 @@ export namespace Prisma {
     ownerAccountId: 'ownerAccountId',
     targetAccountId: 'targetAccountId',
     roleId: 'roleId',
-    portfolioId: 'portfolioId'
+    portfolioId: 'portfolioId',
+    permissions: 'permissions'
   };
 
   export type AuthzAccountAccessGrantScalarFieldEnum = (typeof AuthzAccountAccessGrantScalarFieldEnum)[keyof typeof AuthzAccountAccessGrantScalarFieldEnum]
@@ -61468,6 +61478,7 @@ export namespace Prisma {
     targetAccountId?: StringFilter<"AuthzAccountAccessGrant"> | string
     roleId?: StringFilter<"AuthzAccountAccessGrant"> | string
     portfolioId?: StringNullableFilter<"AuthzAccountAccessGrant"> | string | null
+    permissions?: JsonFilter<"AuthzAccountAccessGrant">
   }
 
   export type AuthzAccountAccessGrantOrderByWithRelationInput = {
@@ -61476,6 +61487,7 @@ export namespace Prisma {
     targetAccountId?: SortOrder
     roleId?: SortOrder
     portfolioId?: SortOrderInput | SortOrder
+    permissions?: SortOrder
   }
 
   export type AuthzAccountAccessGrantWhereUniqueInput = Prisma.AtLeast<{
@@ -61487,6 +61499,7 @@ export namespace Prisma {
     targetAccountId?: StringFilter<"AuthzAccountAccessGrant"> | string
     roleId?: StringFilter<"AuthzAccountAccessGrant"> | string
     portfolioId?: StringNullableFilter<"AuthzAccountAccessGrant"> | string | null
+    permissions?: JsonFilter<"AuthzAccountAccessGrant">
   }, "id">
 
   export type AuthzAccountAccessGrantOrderByWithAggregationInput = {
@@ -61495,6 +61508,7 @@ export namespace Prisma {
     targetAccountId?: SortOrder
     roleId?: SortOrder
     portfolioId?: SortOrderInput | SortOrder
+    permissions?: SortOrder
     _count?: AuthzAccountAccessGrantCountOrderByAggregateInput
     _max?: AuthzAccountAccessGrantMaxOrderByAggregateInput
     _min?: AuthzAccountAccessGrantMinOrderByAggregateInput
@@ -61509,6 +61523,7 @@ export namespace Prisma {
     targetAccountId?: StringWithAggregatesFilter<"AuthzAccountAccessGrant"> | string
     roleId?: StringWithAggregatesFilter<"AuthzAccountAccessGrant"> | string
     portfolioId?: StringNullableWithAggregatesFilter<"AuthzAccountAccessGrant"> | string | null
+    permissions?: JsonWithAggregatesFilter<"AuthzAccountAccessGrant">
   }
 
   export type AuthzAssetsAccessGrantWhereInput = {
@@ -65219,6 +65234,7 @@ export namespace Prisma {
     targetAccountId: string
     roleId: string
     portfolioId?: string | null
+    permissions?: JsonNullValueInput | InputJsonValue
   }
 
   export type AuthzAccountAccessGrantUncheckedCreateInput = {
@@ -65227,6 +65243,7 @@ export namespace Prisma {
     targetAccountId: string
     roleId: string
     portfolioId?: string | null
+    permissions?: JsonNullValueInput | InputJsonValue
   }
 
   export type AuthzAccountAccessGrantUpdateInput = {
@@ -65235,6 +65252,7 @@ export namespace Prisma {
     targetAccountId?: StringFieldUpdateOperationsInput | string
     roleId?: StringFieldUpdateOperationsInput | string
     portfolioId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: JsonNullValueInput | InputJsonValue
   }
 
   export type AuthzAccountAccessGrantUncheckedUpdateInput = {
@@ -65243,6 +65261,7 @@ export namespace Prisma {
     targetAccountId?: StringFieldUpdateOperationsInput | string
     roleId?: StringFieldUpdateOperationsInput | string
     portfolioId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: JsonNullValueInput | InputJsonValue
   }
 
   export type AuthzAccountAccessGrantCreateManyInput = {
@@ -65251,6 +65270,7 @@ export namespace Prisma {
     targetAccountId: string
     roleId: string
     portfolioId?: string | null
+    permissions?: JsonNullValueInput | InputJsonValue
   }
 
   export type AuthzAccountAccessGrantUpdateManyMutationInput = {
@@ -65259,6 +65279,7 @@ export namespace Prisma {
     targetAccountId?: StringFieldUpdateOperationsInput | string
     roleId?: StringFieldUpdateOperationsInput | string
     portfolioId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: JsonNullValueInput | InputJsonValue
   }
 
   export type AuthzAccountAccessGrantUncheckedUpdateManyInput = {
@@ -65267,6 +65288,7 @@ export namespace Prisma {
     targetAccountId?: StringFieldUpdateOperationsInput | string
     roleId?: StringFieldUpdateOperationsInput | string
     portfolioId?: NullableStringFieldUpdateOperationsInput | string | null
+    permissions?: JsonNullValueInput | InputJsonValue
   }
 
   export type AuthzAssetsAccessGrantCreateInput = {
@@ -68238,6 +68260,7 @@ export namespace Prisma {
     targetAccountId?: SortOrder
     roleId?: SortOrder
     portfolioId?: SortOrder
+    permissions?: SortOrder
   }
 
   export type AuthzAccountAccessGrantMaxOrderByAggregateInput = {
