@@ -415,9 +415,9 @@ export async function replaceListingOwners(propertyId: string, owners: CreateLis
 
 async function replaceListingRepresentatives(propertyId: string, agencyId?: string | null, listingOwnerId?: string | null) {
   const representativeIds = [...new Set([agencyId, listingOwnerId].filter((id): id is string => Boolean(id?.trim())).map((id) => id.trim()))];
-  await prisma.listingRepresentative.deleteMany({ where: { listingId: propertyId, role: 'listingOwner' } });
+  await prisma.listingsRepresentatives.deleteMany({ where: { listingId: propertyId, role: 'listingOwner' } });
   if (!representativeIds.length) return;
-  await prisma.listingRepresentative.createMany({
+  await prisma.listingsRepresentatives.createMany({
     data: representativeIds.map((representativeId) => ({
       listingId: propertyId,
       representativeId,

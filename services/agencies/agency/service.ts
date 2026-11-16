@@ -164,13 +164,13 @@ export async function getPublicAgencyAccounts({
             },
             _count: { agentId: true },
           }),
-          prisma.listingRepresentative.groupBy({
-            by: ['representativeId'],
+          prisma.listingsRepresentatives.groupBy({
+              by: ['representativeId'],
             where: {
               role: 'listingOwner',
               representativeId: { in: agencyIds },
             },
-            _count: { propertyId: true },
+            _count: { listingId: true },
           }),
         ])
       : [[], []];
@@ -180,7 +180,7 @@ export async function getPublicAgencyAccounts({
     );
     const propertyCountMap = new Map(
       propertyCounts
-        .map((entry) => [entry.representativeId, entry._count.propertyId]),
+        .map((entry) => [entry.representativeId, entry._count.listingId]),
     );
 
     return records.map((record) =>

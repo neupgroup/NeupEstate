@@ -10,7 +10,7 @@ export type AgencyRepresentative = {
 export async function getListingAgencyRepresentative(propertyId?: string | null): Promise<AgencyRepresentative[]> {
   const id = propertyId?.trim();
   if (!id) return [];
-  const entry = await prisma.listingRepresentative.findFirst({
+  const entry = await prisma.listingsRepresentatives.findFirst({
     where: {
       listingId: id,
       role: 'listingOwner',

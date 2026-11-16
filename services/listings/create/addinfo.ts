@@ -1,4 +1,4 @@
-import { prisma } from '@neup/core/database/prisma';
+import { Prisma, prisma } from '@neup/core/database/prisma';
 import { CreateListingSchema, areaValueToSqm, type ApartmentUnit, type CreateListingFormValues, type CreateListingInput, type LandDetails, type PlotDetails } from '@/types';
 import { resolveListingCreateContext, type ListingCreateContext } from '@/services/listings/create/context';
 import { cleanPricing, firstPositivePrice, formatLocationString, normalizeOwnerEntries } from '@/services/listings/action-helpers';
@@ -6,6 +6,15 @@ import { getListingCreationRequirements, type ListingCreationInitialization } fr
 
 export type CreateListingContext = Pick<ListingCreateContext, 'actorAccountId'> & { actorId?: string; postingAgencyId?: string | null; workingProfileId?: string | null };
 export type CreateListingResult = { requestId: string };
+
+// Convert validated JSON-compatible values to Prisma's accepted JSON input type.
+function toPrismaJsonValue(value: unknown): Prisma.InputJsonValue {
+  const serializedValue = JSON.stringify(value);
+  if (serializedValue === undefined) {
+    throw new Error('Listing data must be JSON serializable.');
+  }
+  return JSON.parse(serializedValue) as Prisma.InputJsonValue;
+}
 
 // Merge a dotted request key into a nested listing-data object without replacing sibling values.
 function setNestedValue(target: Record<string, unknown>, path: string, value: unknown): void {
@@ -148,7 +157,7 @@ export async function addListingCreationInfo(input: {
     const submittedRecord = await prisma.listingChange.findUniqueOrThrow({ where: { id: submitted.requestId }, select: { data: true } });
     await prisma.listingChange.update({
       where: { id: submitted.requestId },
-      data: { data: { ...(submittedRecord.data as Record<string, unknown>), _guidedFormData: { ...completeParse.data, location: current.location } } },
+      data: { data: toPrismaJsonValue({ ...(submittedRecord.data as Record<string, unknown>), _guidedFormData: { ...completeParse.data, location: current.location } }) },
     });
     return {
       creationId: request.id,
@@ -162,7 +171,7 @@ export async function addListingCreationInfo(input: {
   await prisma.listingChange.update({
     where: { id: request.id },
     data: {
-      data: current,
+      data: toPrismaJsonValue(current),
       status: complete ? 'creation_pending' : 'creation_draft',
       modifiedOn: new Date(),
       createdById: request.createdById,

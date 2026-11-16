@@ -16,7 +16,7 @@ export async function getListingAgentRepresentatives(input: {
   includeAgents?: boolean;
   includeSupportingAgents?: boolean;
 }): Promise<AgentRepresentative[]> {
-  const propertyRepresentatives = await prisma.listingRepresentative.findMany({
+  const propertyRepresentatives = await prisma.listingsRepresentatives.findMany({
     where: { listingId: input.propertyId, role: { in: ['listingOwner', 'listingParty'] } },
     include: { representative: { select: { id: true, accountType: true, displayName: true, displayImage: true } } },
   });

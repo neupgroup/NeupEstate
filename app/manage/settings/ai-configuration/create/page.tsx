@@ -1,26 +1,15 @@
-
-
-import { PromptEditForm } from '@/components/manage/prompt-edit-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@neup/components/ui/card';
-import { getModels } from '@/services/intelligence/models';
 
-export default async function CreatePromptPage() {
-    const models = await getModels();
-    
+export default function CreatePromptPage() {
     return (
-        <div className="max-w-3xl mx-auto">
+        <div className="mx-auto max-w-3xl">
             <Card>
                 <CardHeader>
-                    <CardTitle>Create New Prompt</CardTitle>
-                    <CardDescription>
-                        Define a new prompt for an AI agent. The ID must be unique and in camelCase.
-                    </CardDescription>
+                    <CardTitle>AI Prompt Configuration</CardTitle>
+                    <CardDescription>AI prompts are maintained alongside their flows in the codebase.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <PromptEditForm
-                        mode="create"
-                        models={models}
-                    />
+                    Add new prompt definitions to the relevant service under services/intelligence.
                 </CardContent>
             </Card>
         </div>

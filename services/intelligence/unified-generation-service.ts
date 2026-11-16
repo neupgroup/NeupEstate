@@ -1,157 +1,63 @@
-
-
 'use server';
 
-/**
- * @fileOverview A shared service for generating structured text with Google AI.
- *
- * The generateText entry point compiles prompts, calls the Gemini REST API,
- * and validates the returned JSON.
- */
-
 import * as Handlebars from 'handlebars';
+import { createNiaResponse } from '@neup/logica/intelligence/responses';
 import { z } from 'zod';
 
-/**
- * Compiles a Handlebars prompt template with the given input data.
- * @param promptText The raw Handlebars template string.
- * @param input The data to inject into the template.
- * @returns The compiled prompt as a string.
- */
-function compilePrompt(promptText: string, input: Record<string, any>): string {
-    const template = Handlebars.compile(promptText);
-    return template(input);
-}
-
-function getGoogleAiApiKey(): string {
-    const apiKey =
-        process.env.GEMINI_API_KEY ||
-        process.env.GOOGLE_AI_API_KEY ||
-        process.env.GOOGLE_API_KEY;
-
-    if (!apiKey?.trim()) {
-        throw new Error('Missing Google AI API key.');
-    }
-
-    return apiKey.trim();
-}
-
-function resolveGoogleModel(model?: string | null): string {
-    const normalizedModel = model?.trim();
-    return normalizedModel || 'gemini-2.5-flash-lite';
-}
-
-function withJsonOutputInstruction(prompt: string): string {
-    return `${prompt}
-
-Return only valid JSON that matches the requested output shape. Do not wrap the JSON in Markdown.`;
-}
-
 interface GenerateTextInput {
-    model: string; // The model name, e.g., 'gemini-2.5-flash'
+    model?: string;
     promptText: string;
     inputData: Record<string, any>;
     outputSchema: z.ZodTypeAny;
 }
 
-/**
- * Unified function to generate text from a specified AI provider and model.
- * It compiles the prompt and sends the request directly to Google AI.
- *
- * @param {GenerateTextInput} options - The options for the text generation.
- * @returns A promise that resolves to the generated text content.
- */
-export async function generateText<T>(options: GenerateTextInput): Promise<T> {
-    const { model: modelIdentifier, promptText, inputData, outputSchema } = options;
-    
-    // Step 1: Compile the prompt with provided data
-    const compiledPrompt = compilePrompt(promptText, inputData);
+/** Compiles a prompt template with its flow-specific input values. */
+function compilePrompt(promptText: string, input: Record<string, any>): string {
+    return Handlebars.compile(promptText)(input);
+}
 
-    let generatedJsonString: string;
+/** Adds the shared structured-output requirement used by all AI flows. */
+function addJsonOutputInstruction(prompt: string): string {
+    return `${prompt}\n\nReturn only valid JSON matching the requested output. Do not wrap it in Markdown.`;
+}
 
-    // Step 2: Make the generation call using the model identifier
+/** Extracts one JSON object or array from the model's text response. */
+function parseJsonOutput(responseText: string): unknown {
+    const normalizedResponse = responseText.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
     try {
-        const resolvedModel = resolveGoogleModel(modelIdentifier);
-
-        const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(resolvedModel)}:generateContent`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-goog-api-key': getGoogleAiApiKey(),
-                },
-                body: JSON.stringify({
-                    contents: [{ role: 'user', parts: [{ text: withJsonOutputInstruction(compiledPrompt) }] }],
-                    generationConfig: { responseMimeType: 'application/json' },
-                }),
-                signal: AbortSignal.timeout(120_000),
-            },
-        );
-        if (!response.ok) {
-            throw new Error(`Google AI request failed (HTTP ${response.status}).`);
-        }
-        const result = await response.json() as {
-            candidates?: Array<{
-                content?: { parts?: Array<{ text?: string; thought?: boolean }> };
-                finishReason?: string;
-            }>;
-            promptFeedback?: { blockReason?: string };
-        };
-        const candidate = result.candidates?.[0];
-        if (result.promptFeedback?.blockReason) {
-            throw new Error(`Google AI blocked the prompt: ${result.promptFeedback.blockReason}.`);
-        }
-        if (candidate?.finishReason && candidate.finishReason !== 'STOP') {
-            throw new Error(`Google AI generation ended with ${candidate.finishReason}.`);
-        }
-        generatedJsonString = candidate?.content?.parts
-            ?.filter((part) => !part.thought)
-            .map((part) => part.text ?? '')
-            .join('') ?? '';
-        if (!generatedJsonString.trim()) {
-            throw new Error('Google AI returned no text.');
-        }
-
-    } catch (error: any) {
-        throw new Error(`AI generation failed: ${error.message}`);
+        return JSON.parse(normalizedResponse) as unknown;
+    } catch {
+        const firstObject = normalizedResponse.indexOf('{');
+        const firstArray = normalizedResponse.indexOf('[');
+        const start = firstObject === -1 ? firstArray : firstArray === -1 ? firstObject : Math.min(firstObject, firstArray);
+        const last = Math.max(normalizedResponse.lastIndexOf('}'), normalizedResponse.lastIndexOf(']'));
+        if (start < 0 || last < start) throw new Error('No complete JSON object or array was returned.');
+        return JSON.parse(normalizedResponse.slice(start, last + 1)) as unknown;
     }
+}
 
+/** Sends a structured AI request through the shared Nia Assist response service. */
+export async function generateText<T>(options: GenerateTextInput): Promise<T> {
+    const compiledPrompt = compilePrompt(options.promptText, options.inputData);
+    const response = await createNiaResponse({
+        model: options.model?.trim() || 'auto',
+        failover: true,
+        stream: false,
+        input: [
+            { type: 'text', role: 'developer', text: addJsonOutputInstruction(compiledPrompt) },
+            { type: 'text', role: 'user', text: `Input data: ${JSON.stringify(options.inputData)}` },
+        ],
+    });
+    const responseText = response.data.output
+        .filter((item) => item.type === 'text')
+        .map((item) => item.value)
+        .join('\n')
+        .trim();
+    if (!responseText) throw new Error('Nia returned no text.');
 
-    // Step 3: Parse and validate the output against the provided Zod schema
     try {
-        // Find the start of the JSON object/array
-        const startIndex = generatedJsonString.indexOf('{');
-        const arrayStartIndex = generatedJsonString.indexOf('[');
-        
-        let actualStartIndex = -1;
-        
-        if (startIndex !== -1 && arrayStartIndex !== -1) {
-            actualStartIndex = Math.min(startIndex, arrayStartIndex);
-        } else if (startIndex !== -1) {
-            actualStartIndex = startIndex;
-        } else {
-            actualStartIndex = arrayStartIndex;
-        }
-
-        if (actualStartIndex === -1) {
-            throw new Error("No JSON object or array found in the response string.");
-        }
-        
-        // Find the end of the JSON object/array
-        const lastBrace = generatedJsonString.lastIndexOf('}');
-        const lastBracket = generatedJsonString.lastIndexOf(']');
-        const actualEndIndex = Math.max(lastBrace, lastBracket);
-
-        if (actualEndIndex === -1) {
-            throw new Error("Could not find the end of the JSON object or array.");
-        }
-
-        const jsonString = generatedJsonString.substring(actualStartIndex, actualEndIndex + 1);
-
-        const jsonOutput = JSON.parse(jsonString);
-        return outputSchema.parse(jsonOutput) as T;
-    } catch (error) {
+        return options.outputSchema.parse(parseJsonOutput(responseText)) as T;
+    } catch {
         throw new Error('AI returned a response with an invalid format.');
     }
 }
