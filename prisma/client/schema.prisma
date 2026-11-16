@@ -292,7 +292,7 @@ model PropertyOwner {
 }
 
 model ListingsRepresentatives {
-  id               String                     @id @default(cuid())
+  id               String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   listingId        String                     @map("listing_id")
   representativeId String                     @map("representative_id")
   role             PropertyRepresentativeRole

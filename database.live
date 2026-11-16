@@ -408,7 +408,7 @@ Fields:
 
 Table: listings_representatives, Model: ListingsRepresentatives
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > listing_id: text NOT NULL, INDEX listings_representatives_listing_id_idx(listing_id), references listings.id;
 > representative_id: text NOT NULL, INDEX listings_representatives_representative_id_idx(representative_id), references accounts.id;
 > role: enum(propertyOwner, listingOwner, listingParty, listingOwner.propertyOwner) NOT NULL;

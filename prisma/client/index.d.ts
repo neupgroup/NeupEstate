@@ -60925,7 +60925,7 @@ export namespace Prisma {
     AND?: ListingsRepresentativesWhereInput | ListingsRepresentativesWhereInput[]
     OR?: ListingsRepresentativesWhereInput[]
     NOT?: ListingsRepresentativesWhereInput | ListingsRepresentativesWhereInput[]
-    id?: StringFilter<"ListingsRepresentatives"> | string
+    id?: UuidFilter<"ListingsRepresentatives"> | string
     listingId?: StringFilter<"ListingsRepresentatives"> | string
     representativeId?: StringFilter<"ListingsRepresentatives"> | string
     role?: EnumPropertyRepresentativeRoleFilter<"ListingsRepresentatives"> | $Enums.PropertyRepresentativeRole
@@ -60972,7 +60972,7 @@ export namespace Prisma {
     AND?: ListingsRepresentativesScalarWhereWithAggregatesInput | ListingsRepresentativesScalarWhereWithAggregatesInput[]
     OR?: ListingsRepresentativesScalarWhereWithAggregatesInput[]
     NOT?: ListingsRepresentativesScalarWhereWithAggregatesInput | ListingsRepresentativesScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"ListingsRepresentatives"> | string
+    id?: UuidWithAggregatesFilter<"ListingsRepresentatives"> | string
     listingId?: StringWithAggregatesFilter<"ListingsRepresentatives"> | string
     representativeId?: StringWithAggregatesFilter<"ListingsRepresentatives"> | string
     role?: EnumPropertyRepresentativeRoleWithAggregatesFilter<"ListingsRepresentatives"> | $Enums.PropertyRepresentativeRole
@@ -74601,7 +74601,7 @@ export namespace Prisma {
     AND?: ListingsRepresentativesScalarWhereInput | ListingsRepresentativesScalarWhereInput[]
     OR?: ListingsRepresentativesScalarWhereInput[]
     NOT?: ListingsRepresentativesScalarWhereInput | ListingsRepresentativesScalarWhereInput[]
-    id?: StringFilter<"ListingsRepresentatives"> | string
+    id?: UuidFilter<"ListingsRepresentatives"> | string
     listingId?: StringFilter<"ListingsRepresentatives"> | string
     representativeId?: StringFilter<"ListingsRepresentatives"> | string
     role?: EnumPropertyRepresentativeRoleFilter<"ListingsRepresentatives"> | $Enums.PropertyRepresentativeRole

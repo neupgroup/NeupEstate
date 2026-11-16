@@ -47,13 +47,13 @@ Table: listings_details__commercial
 ID field: listings_id (UUID primary key)
 Generation: Inherited UUID; same ID as the parent listings.id.
 
-Table: property_owner
+(done) Table: property_owner
 ID field: id (UUID)
 Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261129160000_property_owner_id_to_postgres_uuid.
 
-Table: listings_representatives
-ID field: id (text)
-Generation: App CUID (Prisma Client).
+(doing) Table: listings_representatives
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()); existing CUIDs are converted by migration 20261129170000_listings_representatives_id_to_postgres_uuid.
 
 Table: listings_documents
 ID field: id (text)
