@@ -45,7 +45,8 @@ export default async function PublicSwitchPage({
   for (const [key, value] of Object.entries(resolvedSearchParams)) {
     if (value !== undefined) accountQuery.set(key, Array.isArray(value) ? value[0] : value);
   }
-  accountQuery.set('account', signedInAccountId);
+  // Omitting account selects the signed-in account as the active context.
+  accountQuery.delete('account');
 
   return (
     <main className="mx-auto w-full max-w-2xl space-y-6 px-4 py-12">
@@ -62,8 +63,8 @@ export default async function PublicSwitchPage({
           <li>
             <Link
               href={`/switch?${accountQuery.toString()}`}
-              aria-current={selectedAccount === signedInAccountId ? 'page' : undefined}
-              className={`flex items-center gap-3 px-4 py-4 transition-colors hover:bg-muted/50 focus-visible:bg-muted/50 focus-visible:outline-none ${selectedAccount === signedInAccountId ? 'bg-primary/10' : ''}`}
+              aria-current={!selectedAccount || selectedAccount === signedInAccountId ? 'page' : undefined}
+              className={`flex items-center gap-3 px-4 py-4 transition-colors hover:bg-muted/50 focus-visible:bg-muted/50 focus-visible:outline-none ${!selectedAccount || selectedAccount === signedInAccountId ? 'bg-primary/10' : ''}`}
             >
               <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-md bg-muted text-muted-foreground">
                 {account?.displayImage ? <img src={account.displayImage} alt="" className="h-full w-full object-cover" /> : <Layers3 className="h-5 w-5" />}
