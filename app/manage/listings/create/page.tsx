@@ -95,7 +95,7 @@ export default function CreateListingPage() {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    const requestedChangeId = searchParams.get('changeId')?.trim() || null;
+    const requestedChangeId = searchParams.get('changeId')?.trim() || searchParams.get('creation')?.trim() || null;
     const { toast } = useToast();
     const [isPending, startTransition] = useTransition();
     const [users, setUsers] = React.useState<User[]>([]);

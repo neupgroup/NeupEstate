@@ -1,0 +1,202 @@
+Database table primary ID fields and generation
+===============================================
+
+Source: Prisma models in prisma/schema.prisma. Table names use the mapped database table name.
+
+Legend
+------
+PostgreSQL UUID     = PostgreSQL generates a native UUID with gen_random_uuid().
+App UUID            = Prisma Client generates a UUID with @default(uuid()).
+App CUID            = Prisma Client generates a CUID with @default(cuid()); this is not a UUID.
+Supplied ID         = supplied by an external system/caller; no generation default is declared.
+Inherited UUID      = UUID primary key value is supplied from the referenced parent listing ID.
+
+(done) Table: locations
+ID field: id (UUID)
+Generation: Supplied ID; UUID column, no database or Prisma generation default.
+
+(done) Table: accounts
+ID field: id (text)
+Generation: Supplied ID; documented as the NeupID Silent SSO subject.
+
+(doing) Table: activity
+ID field: id (text)
+Generation: App CUID (Prisma Client). -> Converting to UUID
+
+(todo) Table: listings
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()).
+
+(todo) Table: property_link
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+(referenced_id -> will be done) Table: listings_details__house
+ID field: listings_id (UUID primary key)
+Generation: Inherited UUID; same ID as the parent listings.id.
+
+Table: listings_details__apartment
+ID field: listings_id (UUID primary key)
+Generation: Inherited UUID; same ID as the parent listings.id.
+
+Table: listings_details__land
+ID field: listings_id (UUID primary key)
+Generation: Inherited UUID; same ID as the parent listings.id.
+
+Table: listings_details__commercial
+ID field: listings_id (UUID primary key)
+Generation: Inherited UUID; same ID as the parent listings.id.
+
+Table: property_owner
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: listings_representatives
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: listings_documents
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: listings_logs
+ID field: id (UUID)
+Generation: PostgreSQL UUID (gen_random_uuid()).
+
+Table: agencies
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: agency_map
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: agency_agent_map
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: agency_customization
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: agents
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: reviews
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: requirements
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: natural_searches
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: listings_saved
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: listings_views
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: leads
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: leads_contacts
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: leads_assignments
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: leads_assigned
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: leads_activity
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: user_preferences
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: mortgage_requests
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: sales_requests
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: visit_requests
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: sitemaps
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: inquiries
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: authz_role
+ID field: id (text)
+Generation: App UUID (Prisma Client).
+
+Table: account_access
+ID fields: account_id, app_id, role_id (composite primary key)
+Generation: No standalone ID field.
+
+Table: authz_role_capability
+ID field: id (text)
+Generation: App UUID (Prisma Client).
+
+Table: authz_account_access_grant
+ID field: id (text)
+Generation: App UUID (Prisma Client).
+
+Table: authz_assets_access_grant
+ID field: id (text)
+Generation: App UUID (Prisma Client).
+
+Table: competitors
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: competitor_sources
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: competitor_pages
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: competitors_listings
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: property_competition_map
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: competitor_tracking
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: intelligence_mapping
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Table: intelligence_alerts
+ID field: id (text)
+Generation: App CUID (Prisma Client).
+
+Tables present in database.live but not modeled in the current Prisma schema are excluded; this file tracks current Prisma models.

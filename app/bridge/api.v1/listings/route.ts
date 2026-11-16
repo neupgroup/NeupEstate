@@ -31,27 +31,28 @@ Example response for `status=rejected`: `{"success":true,"listings":[{"id":"prop
 GET response fields include `success`, `listings`, `totalCount`, `offset`,
 `limit`, and `appliedFilters`.
 
-POST creates a property submission as an awaiting-review draft. The request
-body must include `accountId` and a `property` object, or the equivalent
-account header and property payload. The response includes `requestId` and
-the review `status`.
+POST is the guided listing creation API. The first request initializes a
+creation ID. Later requests pass that ID and incremental listing fields; the
+response returns typed `required` descriptors and `requiredKeys`. The actor
+is resolved from a verified `x-auth` token or `auth` cookie.
 
 ::public end
 
 ::private
 
-The collection route delegates GET filtering/pagination and POST validation to
-the bridge property service.
+The collection route handles GET listing search and POST listing creation.
 
 ::private end
 
 ::end
 */
 import { NextRequest } from 'next/server';
-import { submitListingCreation } from '@/services/listings/create';
+import { addListingCreationInfo, getListingCreationRequirements, initializeListingCreation } from '@/services/listings/create';
+import { prisma } from '@neup/core/database/prisma';
+import { getAuthenticatedAccount } from '@/services/auth/account';
 import { listListings } from '@/services/listings/list';
 import { searchListings } from '@/services/listings/search';
-import { CreateListingSchema, ListingFiltersSchema, type CreateListingFormValues } from '@/types';
+import { ListingFiltersSchema } from '@/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -143,18 +144,6 @@ function readTrimmedText(value: unknown): string | undefined {
   return typeof value === 'string' ? value.trim() : undefined;
 }
 
-// Resolve the acting account from the request body or account header.
-function readActorAccountId(body: Record<string, unknown>, request: NextRequest): string | undefined {
-  return readTrimmedText(body.accountId) || readTrimmedText(request.headers.get('accountId'));
-}
-
-// Resolve the posting agency from supported request fields and headers.
-function readPostingAgencyId(body: Record<string, unknown>, request: NextRequest): string | undefined {
-  return readTrimmedText(body.postingAgencyId)
-    || readTrimmedText(request.headers.get('postingAgencyId'))
-    || readTrimmedText(request.headers.get('agencyId'));
-}
-
 // Resolve the active working profile from body, query, or supported headers.
 function readWorkingProfileId(body: Record<string, unknown>, request: NextRequest): string | undefined {
   return readTrimmedText(body.workingProfileId)
@@ -164,14 +153,16 @@ function readWorkingProfileId(body: Record<string, unknown>, request: NextReques
     || readTrimmedText(request.headers.get('workingProfile'));
 }
 
-// Accept either a nested property object or top-level property fields.
-function readListingSubmission(body: Record<string, unknown>): unknown {
-  if (body.listing && typeof body.listing === 'object' && !Array.isArray(body.listing)) {
-    return body.listing;
-  }
-
-  const requestMetadata = ['accountId', 'workingProfileId', 'workingProfile', 'postingAgencyId'];
-  return Object.fromEntries(Object.entries(body).filter(([key]) => !requestMetadata.includes(key)));
+// Collect incremental listing values from URL parameters, preserving simple array inputs.
+function readCreationQueryPatch(params: URLSearchParams): Record<string, unknown> {
+  const metadata = new Set(['mode', 'id', 'creation', 'accountId', 'workingProfileId', 'workingProfile', 'postingAgencyId']);
+  const patch: Record<string, unknown> = {};
+  params.forEach((value, key) => {
+    if (!metadata.has(key)) patch[key] = ['types', 'images'].includes(key)
+      ? value.split(',').map((item) => item.trim()).filter(Boolean)
+      : value;
+  });
+  return patch;
 }
 
 /* ::neup.documentation::bridge-listings-get-handler
@@ -279,27 +270,62 @@ const postHandler = async (req: NextRequest) => {
       ? body as Record<string, unknown>
       : {};
     const workingProfileId = readWorkingProfileId(requestBody, req);
-    const actorId = readActorAccountId(requestBody, req);
-    const postingAgencyId = readPostingAgencyId(requestBody, req);
-    const parsedListing = CreateListingSchema.safeParse(readListingSubmission(requestBody));
-    if (!parsedListing.success) {
-      return Response.json({
-        success: false,
-        error: 'Invalid property.',
-        details: parsedListing.error.flatten().fieldErrors,
-      }, { status: 400 });
+    const hasAuthCredential = Boolean(req.headers.get('x-auth')?.trim() || req.cookies.get('auth')?.value);
+    if (!hasAuthCredential) return Response.json({ success: false, error: { code: 'unauthenticated', description: 'Provide a valid x-auth token or auth cookie.' } }, { status: 401 });
+    const authResult = await getAuthenticatedAccount();
+    if (!authResult.success || !authResult.account.aid.trim()) {
+      return Response.json({ success: false, error: { code: 'unauthenticated', description: 'The x-auth token or auth cookie is invalid or expired.' } }, { status: 401 });
     }
-    const property: CreateListingFormValues = parsedListing.data;
-    if (!actorId) return Response.json({ success: false, error: 'Provide accountId in the request body or headers.' }, { status: 400 });
-    const result = await submitListingCreation(property, {
-      actorAccountId: actorId,
-      postingAgencyId: postingAgencyId ?? null,
-      workingProfileId: workingProfileId ?? null,
+    const actorId = authResult.account.aid;
+
+    const creationId = readTrimmedText(requestBody.id)
+      ?? readTrimmedText(requestBody.creationId)
+      ?? readTrimmedText(req.nextUrl.searchParams.get('id'))
+      ?? readTrimmedText(req.nextUrl.searchParams.get('creation'));
+    if (!creationId) {
+      const initialized = await initializeListingCreation({ actorAccountId: actorId, workingProfileId });
+      return Response.json({ success: true, response: { ...initialized, requiredKeys: initialized.required.map(({ key }) => key) } }, { status: 201 });
+    }
+
+    const patchValue = requestBody.data && typeof requestBody.data === 'object' && !Array.isArray(requestBody.data)
+      ? requestBody.data as Record<string, unknown>
+      : requestBody.listing && typeof requestBody.listing === 'object' && !Array.isArray(requestBody.listing)
+        ? requestBody.listing as Record<string, unknown>
+        : requestBody;
+    const bodyPatch = Object.fromEntries(Object.entries(patchValue).filter(([key]) => ![
+      'mode', 'id', 'creation', 'creationId', 'accountId', 'workingProfileId', 'postingAgencyId', 'data', 'listing',
+    ].includes(key)));
+    const patch = { ...readCreationQueryPatch(req.nextUrl.searchParams), ...bodyPatch };
+    if (Object.keys(patch).length) {
+      const updated = await addListingCreationInfo({ creationId, actorAccountId: actorId, patch });
+      return Response.json({ success: true, response: { ...updated, requiredKeys: updated.required.map(({ key }) => key) } });
+    }
+
+    const record = await prisma.listingChange.findFirst({
+      where: { id: creationId, accountId: actorId, status: { in: ['creation_draft', 'creation_pending'] }, isApproved: null },
+      select: { id: true, status: true, data: true },
     });
-    return Response.json({ success: true, requestId: result.requestId, status: 'awaiting review' });
+    if (!record) return Response.json({ success: false, error: { code: 'creation_not_found', description: 'Creation request not found or unavailable.' } }, { status: 404 });
+    const stored = record.data && typeof record.data === 'object' && !Array.isArray(record.data) ? record.data as Record<string, unknown> : {};
+    const data = stored._guidedFormData && typeof stored._guidedFormData === 'object' && !Array.isArray(stored._guidedFormData)
+      ? stored._guidedFormData as Record<string, unknown>
+      : stored;
+    const complete = record.status === 'creation_pending';
+    const required = complete ? [] : getListingCreationRequirements(data);
+    const response = {
+      creationId: record.id,
+      stage: complete ? 'ready_for_review' : data.stage ?? 'initialized',
+      type: typeof data.category === 'string' ? data.category : null,
+      purpose: typeof data.purpose === 'string' ? data.purpose : null,
+      required,
+      requiredKeys: required.map(({ key }) => key),
+      complete,
+    };
+    return Response.json({ success: true, response });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Failed to create property draft.';
-    return Response.json({ success: false, error: message }, { status: message === 'Account not found.' ? 404 : 400 });
+    const details = (error as { details?: unknown })?.details;
+    return Response.json({ success: false, error: { code: 'listing_creation_failed', description: message, ...(details ? { details } : {}) } }, { status: message.includes('not found') ? 404 : 400 });
   }
 };
 

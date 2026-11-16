@@ -122,7 +122,7 @@ model Account {
 }
 
 model Activity {
-  id         String   @id @default(cuid())
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   accountId  String
   title      String
   details    Json
@@ -904,7 +904,7 @@ model CompetitorListing {
 
   @@index([competitorId])
   @@index([loggedOn])
-  @@map("competitor_listings")
+  @@map("competitors_listings")
 }
 
 model PropertyCompetitionMap {

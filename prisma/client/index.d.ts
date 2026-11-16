@@ -60192,7 +60192,7 @@ export namespace Prisma {
     AND?: ActivityWhereInput | ActivityWhereInput[]
     OR?: ActivityWhereInput[]
     NOT?: ActivityWhereInput | ActivityWhereInput[]
-    id?: StringFilter<"Activity"> | string
+    id?: UuidFilter<"Activity"> | string
     accountId?: StringFilter<"Activity"> | string
     title?: StringFilter<"Activity"> | string
     details?: JsonFilter<"Activity">
@@ -60237,7 +60237,7 @@ export namespace Prisma {
     AND?: ActivityScalarWhereWithAggregatesInput | ActivityScalarWhereWithAggregatesInput[]
     OR?: ActivityScalarWhereWithAggregatesInput[]
     NOT?: ActivityScalarWhereWithAggregatesInput | ActivityScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Activity"> | string
+    id?: UuidWithAggregatesFilter<"Activity"> | string
     accountId?: StringWithAggregatesFilter<"Activity"> | string
     title?: StringWithAggregatesFilter<"Activity"> | string
     details?: JsonWithAggregatesFilter<"Activity">

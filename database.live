@@ -42,7 +42,7 @@ Fields:
 
 Table: activity, Model: Activity
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > accountId: text NOT NULL;
 > title: text NOT NULL;
 > details: jsonb NOT NULL;

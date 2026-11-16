@@ -651,6 +651,7 @@ export async function reviewListingChangeAction(input: {
         'transferToId',
         'created_by',
         'transfer_to',
+        '_guidedFormData',
       ]);
       const acceptedFields = input.acceptedFields?.length ? input.acceptedFields : Object.keys(requestData);
       const acceptedData = acceptedFields
