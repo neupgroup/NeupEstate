@@ -81,7 +81,7 @@ export async function getAccountProfile(id: string) {
     }),
     account.agencyAgentMapAsAgent.map(({ agency }) => agency),
     account.accountType === 'individual.agent'
-      ? prisma.agent.findFirst({ where: { userId: id }, select: { email: true, phone: true } })
+      ? prisma.account.findUnique({ where: { id }, select: { moreDetails: true } })
       : Promise.resolve(null),
     isAgencyAccount
       ? prisma.agency.findUnique({ where: { id }, select: { contactEmail: true, contactPhone: true } })
@@ -111,10 +111,22 @@ export async function getAccountProfile(id: string) {
     },
     agencies,
     contact: {
-      email: agentContact?.email ?? agencyContact?.contactEmail ?? null,
-      phone: agentContact?.phone ?? agencyContact?.contactPhone ?? null,
+      email: getAgentContact(agentContact?.moreDetails).email ?? agencyContact?.contactEmail ?? null,
+      phone: getAgentContact(agentContact?.moreDetails).phone ?? agencyContact?.contactPhone ?? null,
     },
     listings: { count: propertyCount },
+  };
+}
+
+// Read agent contact details from the account's namespaced profile metadata.
+function getAgentContact(moreDetails: unknown): { email?: string; phone?: string } {
+  if (!moreDetails || typeof moreDetails !== 'object' || Array.isArray(moreDetails)) return {};
+  const profile = (moreDetails as Record<string, unknown>).agentProfile;
+  if (!profile || typeof profile !== 'object' || Array.isArray(profile)) return {};
+  const agentProfile = profile as Record<string, unknown>;
+  return {
+    email: typeof agentProfile.email === 'string' ? agentProfile.email : undefined,
+    phone: typeof agentProfile.phone === 'string' ? agentProfile.phone : undefined,
   };
 }
 

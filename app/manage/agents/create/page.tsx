@@ -23,7 +23,7 @@ export default function CreateAgentPage() {
     const { toast } = useToast();
     const [isPending, startTransition] = useTransition();
     const [users, setUsers] = useState<User[]>([]);
-    const [isRegistered, setIsRegistered] = useState(false);
+    const [isRegistered, setIsRegistered] = useState(true);
 
     useEffect(() => {
         async function fetchUsers() {
@@ -36,7 +36,7 @@ export default function CreateAgentPage() {
     const form = useForm<CreateAgentFormValues>({
         resolver: zodResolver(CreateAgentSchema),
         defaultValues: {
-            registered: false,
+            registered: true,
             location: '',
             name: '',
             email: '',
@@ -102,6 +102,7 @@ export default function CreateAgentPage() {
                                 <FormControl>
                                     <Switch
                                         checked={field.value}
+                                            disabled
                                         onCheckedChange={(checked) => {
                                             field.onChange(checked);
                                             setIsRegistered(checked);

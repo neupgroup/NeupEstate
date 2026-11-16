@@ -32,11 +32,11 @@ export async function getListingAgentRepresentatives(input: {
     ...(input.includeSupportingAgents ? supportingAgentIds : []),
   ])];
 
-  const [agentRecords, acceptedAgentLinks] = candidateAgentIds.length
+  const [agentAccounts, acceptedAgentLinks] = candidateAgentIds.length
     ? await Promise.all([
-        prisma.agent.findMany({
-          where: { userId: { in: candidateAgentIds } },
-          select: { userId: true },
+        prisma.account.findMany({
+          where: { id: { in: candidateAgentIds }, accountType: 'individual.agent' },
+          select: { id: true },
         }),
         prisma.agencyAgentMap.findMany({
           where: { agentId: { in: candidateAgentIds }, status: 'accepted' },
@@ -45,7 +45,7 @@ export async function getListingAgentRepresentatives(input: {
       ])
     : [[], []];
   const mappedAgentIds = new Set<string>([
-    ...agentRecords.map((agent) => agent.userId).filter((id): id is string => Boolean(id)),
+    ...agentAccounts.map((account) => account.id),
     ...acceptedAgentLinks.map((link) => link.agentId),
   ]);
   const listingOwnerIsAgent = Boolean(listingOwnerAccount) || (listingOwnerId ? mappedAgentIds.has(listingOwnerId) : false);

@@ -88,26 +88,6 @@ Fields:
 > role: text NOT NULL;
 > lockIn: boolean NOT NULL, default: false;
 
-Table: agents, Model: Agent
-Fields:
-> id: uuid PK, NOT NULL, default: gen_random_uuid();
-> name: text NOT NULL;
-> slug: text UNIQUE agents_slug_key(slug);
-> location: text;
-> registered: boolean NOT NULL, default: false;
-> userId: text;
-> email: text;
-> phone: text;
-> about: text;
-> photoUrl: text;
-> specializations: text[] default ARRAY[]::text[];
-> availabilityHours: text;
-> timeSlotDuration: integer;
-> unavailability: jsonb;
-> agencyId: text;
-> createdAt: timestamp(3) NOT NULL, default: CURRENT_TIMESTAMP;
-> updatedAt: timestamp(3) NOT NULL;
-
 Table: authz_account_access_grant, Model: AuthzAccountAccessGrant
 Fields:
 > id: uuid PK, NOT NULL, default: gen_random_uuid();

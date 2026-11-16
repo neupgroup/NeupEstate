@@ -198,7 +198,7 @@ export function EditAgentForm({ agent, users }: EditAgentFormProps) {
                                                 field.onChange(checked);
                                                 setIsRegistered(checked);
                                             }}
-                                            disabled={!isEditing}
+                                            disabled
                                         />
                                     </FormControl>
                                 </FormItem>
@@ -212,7 +212,7 @@ export function EditAgentForm({ agent, users }: EditAgentFormProps) {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Select User</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!isEditing}>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value} disabled>
                                             <FormControl>
                                                 <SelectTrigger>
                                                     <SelectValue placeholder="Select a registered user to link" />

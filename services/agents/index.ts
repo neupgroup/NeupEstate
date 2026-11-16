@@ -5,7 +5,6 @@ import type { Agent, CreateAgentFormValues, UpdateAgentFormValues } from "@/type
 import { CreateAgentSchema, UpdateAgentSchema } from "@/types";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { prisma } from '@neup/core/database/prisma';
 import { requireIdentity } from '@/services/listings/action-helpers';
 
 export async function searchAgentsByLocationAction(
@@ -30,17 +29,10 @@ export async function createAgentAction(
   try {
     await requireIdentity();
     const validatedData = CreateAgentSchema.parse(data);
-    const agentId = await createAgentService(validatedData);
-    if (validatedData.registered && validatedData.userId) {
-      const agentAccount = await prisma.account.findUnique({
-        where: { id: validatedData.userId },
-        select: { accountType: true },
-      });
-      await prisma.account.updateMany({
-        where: { id: validatedData.userId },
-        data: { accountType: "individual.agent" },
-      });
+    if (!validatedData.registered || !validatedData.userId) {
+      return { success: false, error: 'Choose an existing account. Standalone agent profiles are no longer supported.', agentId: null };
     }
+    const agentId = await createAgentService(validatedData);
     revalidatePath('/manage/team');
     return { success: true, agentId, error: null };
   } catch (e: any) {
@@ -58,6 +50,9 @@ export async function updateAgentAction(
   try {
     await requireIdentity();
     const validatedData = UpdateAgentSchema.parse(data);
+    if (!validatedData.registered) {
+      return { success: false, error: 'Agent profiles must belong to an account.' };
+    }
     await updateAgentService(id, validatedData);
     revalidatePath('/manage/team');
     revalidatePath(`/manage/agents/${id}/edit`);
@@ -72,6 +67,7 @@ export async function updateAgentAction(
 
 export async function deleteAgentAction(agentId: string) {
     try {
+        await requireIdentity();
         await deleteAgentService(agentId);
         revalidatePath('/manage/team');
         return { success: true };

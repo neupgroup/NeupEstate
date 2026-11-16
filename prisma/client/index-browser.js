@@ -327,26 +327,6 @@ exports.Prisma.AgencyCustomizationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.AgentScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  slug: 'slug',
-  location: 'location',
-  registered: 'registered',
-  userId: 'userId',
-  email: 'email',
-  phone: 'phone',
-  about: 'about',
-  photoUrl: 'photoUrl',
-  specializations: 'specializations',
-  availabilityHours: 'availabilityHours',
-  timeSlotDuration: 'timeSlotDuration',
-  unavailability: 'unavailability',
-  agencyId: 'agencyId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.ReviewScalarFieldEnum = {
   id: 'id',
   reviewedBy: 'reviewedBy',
@@ -781,7 +761,6 @@ exports.Prisma.ModelName = {
   AgencyMap: 'AgencyMap',
   AgencyAgentMap: 'AgencyAgentMap',
   AgencyCustomization: 'AgencyCustomization',
-  Agent: 'Agent',
   Review: 'Review',
   Requirement: 'Requirement',
   NaturalSearch: 'NaturalSearch',

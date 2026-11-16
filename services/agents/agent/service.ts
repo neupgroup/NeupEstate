@@ -2,213 +2,182 @@
 
 import { prisma } from '@neup/core/database/prisma';
 import type { Agent, CreateAgentFormValues, UpdateAgentFormValues } from '@/types';
-import slugify from 'slugify';
-import { filter, type Filters } from '@/services/agents/filter';
+import type { Filters } from '@/services/agents/filter';
+import { filter } from '@/services/agents/filter';
 
-function mapRecord(r: any): Agent {
-  return {
-    id:             r.id,
-    name:           r.name || 'Unnamed Agent',
-    slug:           r.slug || r.id,
-    location:       r.location || '',
-    registered:     Boolean(r.registered),
-    contact:        { email: r.email || undefined, phone: r.phone || undefined },
-    userId:         r.userId || undefined,
-    photoUrl:       r.photoUrl || undefined,
-    about:          r.about || undefined,
-    specializations: r.specializations || [],
-    availability_hours:  r.availabilityHours || undefined,
-    time_slot_duration:  r.timeSlotDuration ?? undefined,
-    unavailability:      r.unavailability || undefined,
-  };
-}
+type AgentProfile = {
+  location?: string;
+  email?: string;
+  phone?: string;
+  about?: string;
+  photoUrl?: string;
+  specializations?: string[];
+  availabilityHours?: string;
+  timeSlotDuration?: number;
+  unavailability?: Agent['unavailability'];
+};
 
-function mapAccountRecord(record: {
+type AccountAgent = {
   id: string;
   neupId: string | null;
   displayName: string | null;
   displayImage: string | null;
-}): Agent {
+  moreDetails: unknown;
+};
+
+// Read the optional agent profile stored inside the account's JSON details.
+function getAgentProfile(moreDetails: unknown): AgentProfile {
+  if (!moreDetails || typeof moreDetails !== 'object' || Array.isArray(moreDetails)) return {};
+  const profile = (moreDetails as Record<string, unknown>).agentProfile;
+  return profile && typeof profile === 'object' && !Array.isArray(profile)
+    ? profile as AgentProfile
+    : {};
+}
+
+// Convert the shared account record into the legacy public agent response shape.
+function mapAccountAgent(account: AccountAgent): Agent {
+  const profile = getAgentProfile(account.moreDetails);
   return {
-    id: record.id,
-    name: record.displayName?.trim() || record.neupId?.trim() || record.id,
-    slug: record.neupId?.trim() || record.id,
-    location: '',
+    id: account.id,
+    name: account.displayName?.trim() || account.neupId || account.id,
+    slug: account.neupId || account.id,
+    location: typeof profile.location === 'string' ? profile.location : '',
     registered: true,
-    contact: {},
-    userId: record.id,
-    photoUrl: record.displayImage?.trim() || undefined,
-    about: undefined,
-    specializations: [],
-    availability_hours: undefined,
-    time_slot_duration: undefined,
-    unavailability: undefined,
+    userId: account.id,
+    contact: { email: profile.email, phone: profile.phone },
+    photoUrl: profile.photoUrl || account.displayImage || undefined,
+    about: profile.about,
+    specializations: Array.isArray(profile.specializations) ? profile.specializations : [],
+    availability_hours: profile.availabilityHours,
+    time_slot_duration: profile.timeSlotDuration,
+    unavailability: profile.unavailability,
   };
 }
 
-async function getAccountBackedAgents(options: { limit?: number; offset?: number; filters?: Filters } = {}): Promise<Agent[]> {
-  const accounts = await prisma.account.findMany({
-    where: filter(options.filters),
-    take: options.limit,
-    skip: options.offset,
-    select: {
-      id: true,
-      neupId: true,
-      displayName: true,
-      displayImage: true,
-      accessedOn: true,
-    },
-    orderBy: [{ accessedOn: 'desc' }, { createdOn: 'desc' }, { id: 'asc' }],
-  });
-
-  return accounts.map(mapAccountRecord);
+// Get the full account metadata object before updating its agent profile.
+function getAccountAgentProfile(moreDetails: unknown): Record<string, unknown> {
+  if (!moreDetails || typeof moreDetails !== 'object' || Array.isArray(moreDetails)) return {};
+  return moreDetails as Record<string, unknown>;
 }
 
-async function uniqueSlug(name: string, excludeId?: string): Promise<string> {
-  const base = slugify(name, { lower: true, strict: true, remove: /[*+~.()'\"!:@]/g });
-  let slug = base;
-  let i = 1;
-  while (true) {
-    const existing = await prisma.agent.findFirst({ where: { slug } });
-    if (!existing || existing.id === excludeId) return slug;
-    slug = `${base}-${++i}`;
+// List agent accounts and project their account profile fields for current callers.
+export async function getAgents(options: { limit?: number; offset?: number; filters?: Filters } = {}): Promise<Agent[]> {
+  try {
+    const accounts = await prisma.account.findMany({
+      where: filter(options.filters),
+      take: options.limit ?? 100,
+      skip: options.offset ?? 0,
+      select: { id: true, neupId: true, displayName: true, displayImage: true, moreDetails: true },
+      orderBy: [{ accessedOn: 'desc' }, { createdOn: 'desc' }, { id: 'asc' }],
+    });
+    return accounts.map(mapAccountAgent);
+  } catch {
+    return [];
   }
 }
 
-export async function getAgents({ limit = 100, offset = 0, filters = {} }: { limit?: number; offset?: number; filters?: Filters } = {}): Promise<Agent[]> {
-  try {
-    return await getAccountBackedAgents({ limit, offset, filters });
-  } catch (e) { return []; }
-}
-
+// Count account records that are registered as agents.
 export async function getAgentCount(filters: Filters = {}): Promise<number> {
   try {
     return await prisma.account.count({ where: filter(filters) });
-  } catch (e) {
+  } catch {
     return 0;
   }
 }
 
+// Resolve one registered agent by its account ID.
 export async function getAgentById(id: string): Promise<Agent | null> {
   try {
     const account = await prisma.account.findUnique({
       where: { id },
-      select: {
-        id: true,
-        neupId: true,
-        displayName: true,
-        displayImage: true,
-        accountType: true,
-      },
+      select: { id: true, neupId: true, displayName: true, displayImage: true, moreDetails: true, accountType: true },
     });
-    if (account && account.accountType === 'individual.agent') {
-      return mapAccountRecord(account);
-    }
-
-    const record = await prisma.agent.findUnique({ where: { id } });
-    return record ? mapRecord(record) : null;
-  } catch (e) { return null; }
+    return account?.accountType === 'individual.agent' ? mapAccountAgent(account) : null;
+  } catch {
+    return null;
+  }
 }
 
+// Resolve one registered agent by its NeupID handle or account ID.
 export async function getAgentBySlug(slug: string): Promise<Agent | null> {
   try {
     const account = await prisma.account.findFirst({
-      where: {
-        OR: [
-          { neupId: slug },
-          { id: slug },
-        ],
-      },
-      select: {
-        id: true,
-        neupId: true,
-        displayName: true,
-        displayImage: true,
-        accountType: true,
-      },
+      where: { accountType: 'individual.agent', OR: [{ neupId: slug }, { id: slug }] },
+      select: { id: true, neupId: true, displayName: true, displayImage: true, moreDetails: true },
     });
-    if (account && account.accountType === 'individual.agent') {
-      return mapAccountRecord(account);
-    }
-
-    const record = await prisma.agent.findFirst({ where: { slug } });
-    if (record) return mapRecord(record);
-    return getAgentById(slug);
-  } catch (e) { return null; }
+    return account ? mapAccountAgent(account) : null;
+  } catch {
+    return null;
+  }
 }
 
+// Search agent account profiles by their stored operating location.
 export async function getAgentsByLocation(location: string): Promise<Agent[]> {
-  try {
-    const records = await prisma.agent.findMany({ where: { location: { contains: location, mode: 'insensitive' } }, orderBy: { createdAt: 'desc' } });
-    return records.map(mapRecord);
-  } catch (e) { return []; }
+  const query = location.trim().toLocaleLowerCase();
+  if (!query) return [];
+  return (await getAgents({ limit: 200 })).filter((agent) => agent.location.toLocaleLowerCase().includes(query));
 }
 
-export async function createAgent(d: CreateAgentFormValues): Promise<string> {
-  try {
-    const specializations = typeof d.specializations === 'string'
-      ? d.specializations.split(',').map((s) => s.trim()).filter(Boolean)
-      : d.specializations || [];
+// Promote an existing account to agent and save its agent-specific profile details.
+export async function createAgent(data: CreateAgentFormValues): Promise<string> {
+  if (!data.registered || !data.userId) throw new Error('Select an existing account to make it an agent.');
+  const account = await prisma.account.findUnique({
+    where: { id: data.userId },
+    select: { id: true, moreDetails: true },
+  });
+  if (!account) throw new Error('The selected account was not found.');
 
-    const name = d.registered
-      ? (await prisma.agent.findFirst())?.name ?? (d as any).name ?? 'Agent'
-      : (d as any).name;
-
-    const slug = await uniqueSlug(name || 'agent');
-
-    const agent = await prisma.agent.create({
-      data: {
-        name:             name || 'Agent',
-        slug,
-        location:         d.location || null,
-        registered:       Boolean(d.registered),
-        userId:           d.userId || null,
-        email:            (d as any).contact?.email || (d as any).email || null,
-        phone:            (d as any).contact?.phone || (d as any).phone || null,
-        about:            d.about || null,
-        photoUrl:         (d as any).photoUrl || null,
-        specializations,
-        availabilityHours: d.availability_hours || null,
-        timeSlotDuration:  d.time_slot_duration ?? null,
-        unavailability:    d.unavailability || null,
-      },
-    });
-    return agent.id;
-  } catch (e) { throw new Error('Failed to create agent.'); }
+  const existing = getAccountAgentProfile(account.moreDetails);
+  const profile = { ...getAgentProfile(account.moreDetails), ...toAgentProfile(data) };
+  await prisma.account.update({
+    where: { id: account.id },
+    data: {
+      accountType: 'individual.agent',
+      moreDetails: toJsonValue({ ...existing, agentProfile: profile }),
+    },
+  });
+  return account.id;
 }
 
-export async function updateAgent(id: string, d: UpdateAgentFormValues): Promise<void> {
-  try {
-    const specializations = typeof d.specializations === 'string'
-      ? d.specializations.split(',').map((s) => s.trim()).filter(Boolean)
-      : d.specializations || [];
-
-    const name = (d as any).name || 'agent';
-    const slug = await uniqueSlug(name, id);
-
-    await prisma.agent.update({
-      where: { id },
-      data: {
-        name,
-        slug,
-        location:         d.location || null,
-        registered:       Boolean(d.registered),
-        userId:           d.userId || null,
-        email:            (d as any).contact?.email || (d as any).email || null,
-        phone:            (d as any).contact?.phone || (d as any).phone || null,
-        about:            d.about || null,
-        photoUrl:         (d as any).photoUrl || null,
-        specializations,
-        availabilityHours: d.availability_hours || null,
-        timeSlotDuration:  d.time_slot_duration ?? null,
-        unavailability:    d.unavailability || null,
-      },
-    });
-  } catch (e) { throw new Error('Failed to update agent.'); }
+// Update profile details stored on an existing agent account.
+export async function updateAgent(id: string, data: UpdateAgentFormValues): Promise<void> {
+  const account = await prisma.account.findUnique({ where: { id }, select: { moreDetails: true, accountType: true } });
+  if (!account || account.accountType !== 'individual.agent') throw new Error('Agent account not found.');
+  const moreDetails = getAccountAgentProfile(account.moreDetails);
+  const profile = { ...getAgentProfile(account.moreDetails), ...toAgentProfile(data) };
+  await prisma.account.update({
+    where: { id },
+    data: { moreDetails: toJsonValue({ ...moreDetails, agentProfile: profile }) },
+  });
 }
 
+// Remove the agent role and profile metadata without deleting the account.
 export async function deleteAgent(id: string): Promise<void> {
-  try {
-    await prisma.agent.delete({ where: { id } });
-  } catch (e) { throw new Error('Failed to delete agent.'); }
+  const account = await prisma.account.findUnique({ where: { id }, select: { moreDetails: true, accountType: true } });
+  if (!account || account.accountType !== 'individual.agent') return;
+  const moreDetails = getAccountAgentProfile(account.moreDetails);
+  delete moreDetails.agentProfile;
+  await prisma.account.update({ where: { id }, data: { accountType: 'individual', moreDetails: toJsonValue(moreDetails) } });
+}
+
+// Normalize form values into the account's JSON agent-profile shape.
+function toAgentProfile(data: CreateAgentFormValues | UpdateAgentFormValues): AgentProfile {
+  return {
+    location: data.location,
+    email: data.registered ? undefined : data.email,
+    phone: data.registered ? undefined : data.phone,
+    about: data.about,
+    photoUrl: data.registered ? undefined : data.photoUrl,
+    specializations: typeof data.specializations === 'string'
+      ? data.specializations.split(',').map((item) => item.trim()).filter(Boolean)
+      : data.specializations ?? [],
+    availabilityHours: data.availability_hours || undefined,
+    timeSlotDuration: data.time_slot_duration,
+    unavailability: data.unavailability,
+  };
+}
+
+// Strip undefined form fields before persisting JSON through Prisma.
+function toJsonValue(value: Record<string, unknown>) {
+  return JSON.parse(JSON.stringify(value));
 }

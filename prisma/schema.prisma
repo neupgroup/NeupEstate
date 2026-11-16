@@ -422,30 +422,6 @@ model AgencyCustomization {
   @@map("agency_customization")
 }
 
-model Agent {
-  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name              String
-  slug              String?  @unique
-  location          String?
-  registered        Boolean  @default(false)
-  userId            String?
-  email             String?
-  phone             String?
-  about             String?
-  photoUrl          String?
-  specializations   String[] @default([])
-  availabilityHours String?
-  timeSlotDuration  Int?
-  unavailability    Json?
-  agencyId          String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-
-  @@index([agencyId])
-  @@index([slug])
-  @@map("agents")
-}
-
 // ============================================================================
 // Reviews
 // ============================================================================

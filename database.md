@@ -130,31 +130,6 @@ Generated from the live PostgreSQL database and compared against `prisma/schema.
 - divergence: model AgencyMap maps to table agency_map
 - divergence based on fields: database has 5 fields; Prisma model has 5 persisted scalar fields; difference 0
 
-### public.agents (Agent)
-
-- purpose: Stores public agent directory/profile records independent of the account table.
-- usage: Used by agent listing/profile services and agent-facing public pages.
-
-- id text PK, NOT NULL
-- name text NOT NULL
-- slug text UNIQUE agents_slug_key(slug)
-- location text
-- registered boolean NOT NULL, default false
-- userId text
-- email text
-- phone text
-- about text
-- photoUrl text
-- specializations text[] default ARRAY[]::text[]
-- availabilityHours text
-- timeSlotDuration integer
-- unavailability jsonb
-- agencyId text
-- createdAt timestamp(3) NOT NULL, default CURRENT_TIMESTAMP
-- updatedAt timestamp(3) NOT NULL
-- divergence: model Agent maps to table agents
-- divergence based on fields: database has 17 fields; Prisma model has 17 persisted scalar fields; difference 0
-
 ### public.authz_account_access_grant (AuthzAccountAccessGrant)
 
 - purpose: Stores account-to-account access grants for authorization delegation.
