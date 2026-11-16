@@ -193,7 +193,7 @@ model Listing {
 }
 
 model PropertyLink {
-  id          String   @id @default(cuid())
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   primaryId   String
   secondaryId String
 

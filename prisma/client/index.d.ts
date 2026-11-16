@@ -60470,7 +60470,7 @@ export namespace Prisma {
     AND?: PropertyLinkWhereInput | PropertyLinkWhereInput[]
     OR?: PropertyLinkWhereInput[]
     NOT?: PropertyLinkWhereInput | PropertyLinkWhereInput[]
-    id?: StringFilter<"PropertyLink"> | string
+    id?: UuidFilter<"PropertyLink"> | string
     primaryId?: StringFilter<"PropertyLink"> | string
     secondaryId?: StringFilter<"PropertyLink"> | string
     primary?: XOR<ListingScalarRelationFilter, ListingWhereInput>
@@ -60509,7 +60509,7 @@ export namespace Prisma {
     AND?: PropertyLinkScalarWhereWithAggregatesInput | PropertyLinkScalarWhereWithAggregatesInput[]
     OR?: PropertyLinkScalarWhereWithAggregatesInput[]
     NOT?: PropertyLinkScalarWhereWithAggregatesInput | PropertyLinkScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"PropertyLink"> | string
+    id?: UuidWithAggregatesFilter<"PropertyLink"> | string
     primaryId?: StringWithAggregatesFilter<"PropertyLink"> | string
     secondaryId?: StringWithAggregatesFilter<"PropertyLink"> | string
   }
@@ -75259,7 +75259,7 @@ export namespace Prisma {
     AND?: PropertyLinkScalarWhereInput | PropertyLinkScalarWhereInput[]
     OR?: PropertyLinkScalarWhereInput[]
     NOT?: PropertyLinkScalarWhereInput | PropertyLinkScalarWhereInput[]
-    id?: StringFilter<"PropertyLink"> | string
+    id?: UuidFilter<"PropertyLink"> | string
     primaryId?: StringFilter<"PropertyLink"> | string
     secondaryId?: StringFilter<"PropertyLink"> | string
   }

@@ -380,7 +380,7 @@ Fields:
 
 Table: property_link, Model: PropertyLink
 Fields:
-> id: text PK, NOT NULL;
+> id: uuid PK, NOT NULL, default: gen_random_uuid();
 > primaryId: text NOT NULL, references listings.id;
 > secondaryId: text NOT NULL, references listings.id;
 
