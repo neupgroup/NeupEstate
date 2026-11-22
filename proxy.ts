@@ -52,6 +52,11 @@ function addBridgeCorsHeaders(response: NextResponse): NextResponse {
   return response;
 }
 
+// Match bridge endpoints whether Next exposes the base path in the pathname or not.
+function isBridgePath(pathname: string): boolean {
+  return pathname.startsWith('/bridge/') || pathname.startsWith('/estate/bridge/');
+}
+
 // ---------------------------------------------------------------------------
 // Redirect helpers
 // ---------------------------------------------------------------------------
@@ -74,7 +79,7 @@ export default async function proxy(request: NextRequest) {
   requestHeaders.set('x-next-pathname', pathname);
   const pass = () => {
     const response = NextResponse.next({ request: { headers: requestHeaders } });
-    return pathname.startsWith('/bridge/') ? addBridgeCorsHeaders(response) : response;
+    return isBridgePath(pathname) ? addBridgeCorsHeaders(response) : response;
   };
 
   // Sitemap routes must remain directly accessible, including when the app
@@ -82,7 +87,7 @@ export default async function proxy(request: NextRequest) {
   if (pathname.startsWith('/sitemap') || pathname.startsWith('/estate/sitemap')) return pass();
 
   // Bridge routes always pass through.
-  if (pathname.startsWith('/bridge/')) {
+  if (isBridgePath(pathname)) {
     if (request.method === 'OPTIONS') {
       return addBridgeCorsHeaders(new NextResponse(null, { status: 204 }));
     }
@@ -135,5 +140,5 @@ export default async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next(?:/.*)?|bridge(?:/.*)?|robots\\.txt$|sitemap\\.xml$|sitemap(?:/.*)?|favicon\\.ico$|humans\\.txt$|\\.well-known(?:/.*)?).*)'],
+  matcher: ['/((?!_next(?:/.*)?|robots\\.txt$|sitemap\\.xml$|sitemap(?:/.*)?|favicon\\.ico$|humans\\.txt$|\\.well-known(?:/.*)?).*)'],
 };
