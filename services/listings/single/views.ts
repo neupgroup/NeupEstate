@@ -12,6 +12,7 @@ export async function logListingViews(userId: string, events: ListingActivityEve
   try {
     if (!userId || events.length === 0) return { success: true };
     const parsedSlug = slug ? parseListingSlugId(slug) : null;
+    if (slug && !parsedSlug) return { success: false, error: 'A canonical slug--id listing identifier is required.' };
     const property = parsedSlug
       ? await prisma.listing.findFirst({ where: { id: parsedSlug.id, slug: parsedSlug.slug }, select: { id: true } })
       : null;

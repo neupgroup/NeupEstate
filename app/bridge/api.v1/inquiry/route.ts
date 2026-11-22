@@ -42,10 +42,9 @@ import { createInquiry, InquiryServiceError } from '@/services/inquiry/create';
 
 export const dynamic = 'force-dynamic';
 
-// Resolve the listing identifier from the listing query or JSON body field.
-function readListingSlug(request: NextRequest, body: Record<string, unknown>): string {
-  return request.nextUrl.searchParams.get('listing')?.trim()
-    || (typeof body.listing === 'string' ? body.listing.trim() : '');
+// Read the listing identifier from its documented query-string location only.
+function readListingSlug(request: NextRequest): string {
+  return request.nextUrl.searchParams.get('listing') ?? '';
 }
 
 // Build the optional contact fields accepted by the inquiry service.
@@ -70,7 +69,14 @@ const postHandler = async (req: NextRequest) => {
       body = {};
     }
 
-    const slug = readListingSlug(req, body);
+    if (typeof body.listing === 'string' || 'slug' in body) {
+      return NextResponse.json(
+        { success: false, error: "Listing identifier must be provided once as the 'listing' query parameter." },
+        { status: 400 },
+      );
+    }
+
+    const slug = readListingSlug(req);
 
     const inquiryId = await createInquiry(
       typeof body.account_id === 'string' ? body.account_id : undefined,

@@ -1,6 +1,6 @@
 /*
 ::neup.documentation::bridge-listings-item
-::api GET|PATCH /bridge/api.v1/listings/[slug]
+::api GET|PATCH|DELETE /bridge/api.v1/listings/[slug]
 
 ::public
 
@@ -19,7 +19,7 @@ supporting agent. Example request:
 Example response:
 `{"success":true,"property":{"slug":"modern-home--550e8400-e29b-41d4-a716-446655440000","representatives":[{"id":"account-id","type":"agent","role":"listingOwner","name":"Agent Name","image":"https://example.com/agent.jpg"},{"id":"supporting-account-id","type":"agent","role":"supportingAgent","name":"Supporting Agent","image":"https://example.com/supporting-agent.jpg"},{"id":"agency-id","type":"agency","name":"Agency Name","image":"https://example.com/logo.jpg"},{"id":"owner-id","type":"owner","name":"Property Owner","isPrimaryOwner":true}]}}`.
 
-PATCH submits an edit request for the property identified by `slug`. The body
+PATCH submits an edit request for the property identified by `slug`. DELETE removes the property identified by the canonical slug--id value. The body
 may include `accountId`, posting context fields, and a `property` or `data`
 object. Edits are submitted for review and return a `requestId` and status.
 GET returns the primary price as one `price` object with `currency`, `basis`,
@@ -137,7 +137,7 @@ function readListingCode(request: NextRequest): string | undefined {
 ::end */
 const getHandler = async (req: NextRequest, context: Context) => {
   try {
-    const slug = (await context.params).slug?.trim();
+    const slug = (await context.params).slug;
     const parsedSlug = parseListingSlugId(slug);
     const propertyCode = readListingCode(req);
     const includeParam = req.nextUrl.searchParams.get('include') ?? req.nextUrl.searchParams.get('fields');

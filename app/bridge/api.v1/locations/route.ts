@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
 
   const limit = Math.min(requestedLimit, MAX_LIMIT);
   const id = params.get('id')?.trim();
-  const slug = params.get('slug')?.trim();
+  const slug = params.get('slug');
   const type = params.get('type')?.trim();
   const status = params.get('status')?.trim();
   const query = params.get('query')?.trim();
@@ -83,7 +83,7 @@ export async function GET(request: NextRequest) {
           childOf: true,
           postalCode: true,
           status: true,
-          parent: { select: { id: true, title: true, type: true } },
+          parent: { select: { id: true, title: true, slug: true, type: true } },
         },
       }),
       prisma.location.count({ where }),

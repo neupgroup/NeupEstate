@@ -25,8 +25,11 @@ const postHandler = async (request: NextRequest) => {
       events: ListingActivityEvent[];
     };
 
-    if (!events) {
+    if (!Array.isArray(events) || events.length === 0) {
       return NextResponse.json({ message: 'Missing required fields.' }, { status: 400 });
+    }
+    if (slug !== undefined && typeof slug !== 'string') {
+      return NextResponse.json({ success: false, error: 'slug must be a non-empty canonical listing slug--id value.' }, { status: 400 });
     }
 
     const token = await getAuthCookieServer();
@@ -40,7 +43,10 @@ const postHandler = async (request: NextRequest) => {
       return NextResponse.json({ success: false, error: 'Invalid token' }, { status: 401 });
     }
 
-    await logListingViews(userId, events, slug);
+    const result = await logListingViews(userId, events, slug);
+    if (!result.success) {
+      return NextResponse.json({ success: false, error: result.error || 'Unable to record activity.' }, { status: result.error === 'Property not found.' ? 404 : 400 });
+    }
 
     return NextResponse.json({ message: 'Activity received.' }, { status: 202 });
   } catch (error) {
