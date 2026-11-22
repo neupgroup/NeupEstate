@@ -37,11 +37,13 @@ async function verifyJwt(token: string): Promise<{ payload: JwtPayload | null; r
 // ---------------------------------------------------------------------------
 
 const NEUPID_BASE = 'https://neupgroup.com/account';
+
+// Constants for the bridge CORS headers.
 const switchPaths = new Set(['/switch']);
 const BRIDGE_CORS_METHODS = 'GET, POST, PUT, PATCH, DELETE, OPTIONS';
 const BRIDGE_CORS_HEADERS = 'Content-Type, Authorization, X-Requested-With';
 
-// Add public cross-origin access to bridge responses only.
+// Add public cross-origin access to /bridge endpoints.
 function addBridgeCorsHeaders(response: NextResponse): NextResponse {
   response.headers.set('Access-Control-Allow-Origin', '*');
   response.headers.set('Access-Control-Allow-Methods', BRIDGE_CORS_METHODS);
