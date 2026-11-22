@@ -1,6 +1,6 @@
 /*
 ::neup.documentation::bridge-listings-item
-::api GET|PATCH /bridge/api.v1/listings/[id]
+::api GET|PATCH /bridge/api.v1/listings/[slug]
 
 ::public
 
@@ -17,7 +17,7 @@ images. Agent entries also include a `role` identifying the listing owner or a
 supporting agent. Example request:
 `GET /bridge/api.v1/listings/modern-home--property-id?include=representatives.*`.
 Example response:
-`{"success":true,"property":{"id":"property-id","representatives":[{"id":"account-id","type":"agent","role":"listingOwner","name":"Agent Name","image":"https://example.com/agent.jpg"},{"id":"supporting-account-id","type":"agent","role":"supportingAgent","name":"Supporting Agent","image":"https://example.com/supporting-agent.jpg"},{"id":"agency-id","type":"agency","name":"Agency Name","image":"https://example.com/logo.jpg"},{"id":"owner-id","type":"owner","name":"Property Owner","isPrimaryOwner":true}]}}`.
+`{"success":true,"property":{"slug":"modern-home--property-id","representatives":[{"id":"account-id","type":"agent","role":"listingOwner","name":"Agent Name","image":"https://example.com/agent.jpg"},{"id":"supporting-account-id","type":"agent","role":"supportingAgent","name":"Supporting Agent","image":"https://example.com/supporting-agent.jpg"},{"id":"agency-id","type":"agency","name":"Agency Name","image":"https://example.com/logo.jpg"},{"id":"owner-id","type":"owner","name":"Property Owner","isPrimaryOwner":true}]}}`.
 
 PATCH submits an edit request for the property identified by `slug`. The body
 may include `accountId`, posting context fields, and a `property` or `data`
@@ -43,9 +43,10 @@ import { deleteListing } from '@/services/listings/single/delete';
 import { getListingAgentRepresentatives } from '@/services/listings/representatives/agents';
 import { getListingAgencyRepresentative } from '@/services/listings/representatives/agencies';
 import { getListingOwnerRepresentatives } from '@/services/listings/representatives/owners';
+import { parseListingSlugId } from '@/services/listings/slug';
 
 export const dynamic = 'force-dynamic';
-type Context = { params: Promise<{ id: string }> };
+type Context = { params: Promise<{ slug: string }> };
 
 type ListingRepresentativeSelection = {
   all: boolean;
@@ -132,11 +133,12 @@ function readListingCode(request: NextRequest): string | undefined {
 }
 
 /* ::neup.documentation::bridge-listings-id-get-handler
-::function GET property details by id
+::function GET property details by canonical slug--id
 ::end */
 const getHandler = async (req: NextRequest, context: Context) => {
   try {
-    const slug = (await context.params).id?.trim();
+    const slug = (await context.params).slug?.trim();
+    const parsedSlug = parseListingSlugId(slug);
     const propertyCode = readListingCode(req);
     const includeParam = req.nextUrl.searchParams.get('include') ?? req.nextUrl.searchParams.get('fields');
     let includes: ReturnType<typeof parseListingIncludes>;
@@ -152,7 +154,11 @@ const getHandler = async (req: NextRequest, context: Context) => {
     const property = await getListing({ slug, propertyCode, fields });
     if (!property) return Response.json({ success: false, error: 'Property not found.' }, { status: 404 });
     const supportingAgentIds = (property.details as any)?.supportingAgents ?? [];
+    const listingDatabaseId = parsedSlug?.id;
+    if (!listingDatabaseId) return Response.json({ success: false, error: 'A canonical slug--id listing identifier is required.' }, { status: 400 });
     const propertyFields = { ...property };
+    delete propertyFields.id;
+    propertyFields.slug = slug;
     delete propertyFields.agent;
     delete propertyFields.listingAgent;
     delete propertyFields.listingAgentId;
@@ -164,7 +170,7 @@ const getHandler = async (req: NextRequest, context: Context) => {
     const { representatives: representativeSelection } = includes;
     const [agentRepresentatives, agencyRepresentatives, ownerRepresentatives] = await Promise.all([
       getListingAgentRepresentatives({
-        propertyId: property.id ?? '',
+        slug,
         listingOwnerId: typeof property.listingAgentId === 'string' ? property.listingAgentId : null,
         supportingAgentIds: Array.isArray(supportingAgentIds) ? supportingAgentIds : [],
         includeListingOwner: representativeSelection.all || representativeSelection.listingOwner,
@@ -172,7 +178,7 @@ const getHandler = async (req: NextRequest, context: Context) => {
         includeSupportingAgents: representativeSelection.all || representativeSelection.agents,
       }),
       representativeSelection.all || representativeSelection.agency
-        ? getListingAgencyRepresentative(property.id)
+        ? getListingAgencyRepresentative(slug)
         : Promise.resolve([]),
       representativeSelection.all || representativeSelection.owners
         ? Promise.resolve(getListingOwnerRepresentatives(Array.isArray(property.owners) ? property.owners : []))
@@ -195,7 +201,7 @@ const getHandler = async (req: NextRequest, context: Context) => {
 const patchHandler = async (req: NextRequest, context: Context) => {
   try {
     const body = await req.json().catch(() => ({}));
-    const slug = (await context.params).id;
+    const slug = (await context.params).slug;
     const accountId = typeof body?.accountId === 'string' ? body.accountId.trim() : req.headers.get('accountId')?.trim();
     const data = body?.listing && typeof body.listing === 'object' ? body.listing : body?.data && typeof body.data === 'object' ? body.data : body;
     if (!accountId) return Response.json({ success: false, error: 'Provide accountId in the request body or headers.' }, { status: 400 });
@@ -218,7 +224,7 @@ const deleteHandler = async (req: NextRequest, context: Context) => {
       ? body.accountId.trim()
       : req.nextUrl.searchParams.get('accountId')?.trim() || req.headers.get('accountId')?.trim();
     if (!actorAccountId) return Response.json({ success: false, error: 'Provide accountId in the request body, query, or headers.' }, { status: 400 });
-    await deleteListing({ slug: (await context.params).id }, { actorAccountId });
+    await deleteListing({ slug: (await context.params).slug }, { actorAccountId });
     return Response.json({ success: true }, { status: 200 });
   } catch (err) {
     return Response.json({ success: false, error: 'Failed to delete property.' }, { status: 500 });

@@ -1,4 +1,5 @@
 import { prisma } from '@neup/core/database/prisma';
+import { parseListingSlugId } from '@/services/listings/slug';
 
 export type AgentRepresentative = {
   id: string;
@@ -9,15 +10,19 @@ export type AgentRepresentative = {
 };
 
 export async function getListingAgentRepresentatives(input: {
-  propertyId: string;
+  slug: string;
   listingOwnerId?: string | null;
   supportingAgentIds?: Array<string | { id?: string }>;
   includeListingOwner?: boolean;
   includeAgents?: boolean;
   includeSupportingAgents?: boolean;
 }): Promise<AgentRepresentative[]> {
+  const parsedSlug = parseListingSlugId(input.slug);
+  if (!parsedSlug) return [];
+  const property = await prisma.listing.findFirst({ where: { id: parsedSlug.id, slug: parsedSlug.slug }, select: { id: true } });
+  if (!property) return [];
   const propertyRepresentatives = await prisma.listingsRepresentatives.findMany({
-    where: { listingId: input.propertyId, role: { in: ['listingOwner', 'listingParty'] } },
+    where: { listingId: property.id, role: { in: ['listingOwner', 'listingParty'] } },
     include: { representative: { select: { id: true, accountType: true, displayName: true, displayImage: true } } },
   });
   const listingOwner = propertyRepresentatives.find((entry) => entry.role === 'listingOwner' && entry.representative.accountType === 'individual.agent');

@@ -23,7 +23,7 @@ export function ActivityTracker() {
     });
 
     const propertyPathValue = pathname.startsWith('/listings/') ? pathname.split('/')[2] : undefined;
-    const propertyId = propertyPathValue ? parseListingSlugId(propertyPathValue)?.id ?? propertyPathValue : undefined;
+    const listingSlug = propertyPathValue && parseListingSlugId(propertyPathValue) ? propertyPathValue : undefined;
 
     const sendData = useCallback(async () => {
         const now = Date.now();
@@ -40,7 +40,7 @@ export function ActivityTracker() {
                 await fetch(makeAppPath('/bridge/api.v1/activities'), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ events: activityEvents.current, propertyId }),
+                    body: JSON.stringify({ events: activityEvents.current, slug: listingSlug }),
                 });
             } catch {
                 // Silently fail - activity tracking should not break the user experience
@@ -50,7 +50,7 @@ export function ActivityTracker() {
 
         pageViewRef.current = { path: pathname, startTime: now, activeDuration: 0 };
 
-    }, [propertyId, pathname]);
+    }, [listingSlug, pathname]);
 
     const handleUserActivity = useCallback(() => {
         lastActivityTime.current = Date.now();

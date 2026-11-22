@@ -18,6 +18,7 @@ import { requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';
 import { prisma } from '@neup/core/database/prisma';
 import { mcpSuccess } from './_shared';
+import { getListingSlugId } from '@/services/listings/slug';
 
 /* Registers property search and saved-property tools on the shared MCP server. */
 export function registerListingTools(server: McpServer, actorAccountId: string, format?: string): void {
@@ -41,8 +42,9 @@ export function registerListingTools(server: McpServer, actorAccountId: string, 
   }, async ({ page, pageSize, ...filters }) => {
     try {
       const result = await getPaginatedListings({ filters, page, limit: pageSize });
+      const data = result.listings.map(({ id, slug, ...listing }) => ({ ...listing, slug: getListingSlugId({ id, slug }) }));
       return mcpSuccess({
-        data: result.listings,
+        data,
         pagination: {
           page,
           pageSize,
@@ -72,8 +74,9 @@ export function registerListingTools(server: McpServer, actorAccountId: string, 
         getListingsSaved(actorAccountId, offset, limit),
         prisma.listingsSaved.count({ where }),
       ]);
+      const publicData = data.map(({ id, slug, ...listing }) => ({ ...listing, slug: getListingSlugId({ id, slug }) }));
       return mcpSuccess({
-        data,
+        data: publicData,
         pagination: { limit, offset, total, hasMore: offset + data.length < total },
       }, format);
     } catch (error) {

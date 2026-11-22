@@ -6,12 +6,12 @@ import { requirePermission } from '@/services/permissions';;
 import { revalidatePath } from 'next/cache';
 import { toggleSavedListing } from '../../view';
 
-export async function unsave(accountId: string, propertyId: string): Promise<{ saved: boolean }> {
+export async function unsave(accountId: string, slug: string): Promise<{ saved: boolean }> {
   await requirePermission(PERMISSIONS.estate.listing.save);
   const identity = await getIdentity();
   const verifiedUserId = identity.authenticated ? identity.account.accountId : accountId;
   if (!verifiedUserId) throw new Error('User ID is required to unsave a property.');
-  const result = await toggleSavedListing(verifiedUserId, propertyId);
+  const result = await toggleSavedListing(verifiedUserId, slug);
   revalidatePath('/saved');
   revalidatePath('/manage/saved');
   return result;

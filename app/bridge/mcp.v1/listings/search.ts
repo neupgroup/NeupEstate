@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { ListingPurposeSchema, ListingCategorySchema, ListingUsageTypeSchema } from '@/types/listing';
 import { getPaginatedListings } from '@/services/listings/list';
 import { mcpError, mcpSuccess, type McpToolServer } from '../_shared';
+import { getListingSlugId } from '@/services/listings/slug';
 
 /* Registers a bounded search tool for active property listings. */
 export function registerSearchListingsTool(server: McpToolServer, format?: string): void {
@@ -18,7 +19,8 @@ export function registerSearchListingsTool(server: McpToolServer, format?: strin
   }, async ({ page, pageSize, ...filters }) => {
     try {
       const result = await getPaginatedListings({ filters, page, limit: pageSize });
-      return mcpSuccess({ data: result.listings, pagination: { page, pageSize, total: result.totalCount, hasMore: page * pageSize < result.totalCount }, appliedFilters: filters }, format);
+      const data = result.listings.map(({ id, slug, ...listing }) => ({ ...listing, slug: getListingSlugId({ id, slug }) }));
+      return mcpSuccess({ data, pagination: { page, pageSize, total: result.totalCount, hasMore: page * pageSize < result.totalCount }, appliedFilters: filters }, format);
     } catch (error) { return mcpError(error, 'Failed to search properties.'); }
   });
 }

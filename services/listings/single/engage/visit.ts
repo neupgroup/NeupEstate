@@ -5,6 +5,7 @@ import { prisma } from '@neup/core/database/prisma';
 import type { VisitRequest, CreateVisitRequestFormValues } from '@/types';
 import { getListingBySlug } from '../../view';
 import { getAgentById } from '@/services/agents/agent/service';
+import { getListingSlugId } from '@/services/listings/slug';
 
 
 export async function createVisitRequest(data: CreateVisitRequestFormValues): Promise<string> {
@@ -50,13 +51,17 @@ export async function getVisitRequests({ limit = 20, offset = 0 }: { limit?: num
             take: limit,
             skip: offset,
         });
-        return requests.map(r => ({
-            ...r,
-            phone: r.phone ?? undefined,
-            preferred_date: r.preferredDate,
-            preferred_time: r.preferredTime ?? undefined,
-            status: r.status as VisitRequest['status'],
-            createdAt: r.createdAt.toISOString(),
+        const listingIds = [...new Set(requests.map((request) => request.propertyId))];
+        const listings = listingIds.length ? await prisma.listing.findMany({ where: { id: { in: listingIds } }, select: { id: true, slug: true } }) : [];
+        const slugById = new Map(listings.map((listing) => [listing.id, getListingSlugId(listing)]));
+        return requests.map(({ propertyId, preferredDate, preferredTime, createdAt, ...request }) => ({
+            ...request,
+            ...(slugById.has(propertyId) ? { slug: slugById.get(propertyId) } : {}),
+            phone: request.phone ?? undefined,
+            preferred_date: preferredDate,
+            preferred_time: preferredTime ?? undefined,
+            status: request.status as VisitRequest['status'],
+            createdAt: createdAt.toISOString(),
         }));
     } catch (error) {
         return [];

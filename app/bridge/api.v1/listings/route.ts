@@ -26,7 +26,7 @@ All supported property fields are returned by default, including `status`.
 `include` (or `fields`) may be used to select a subset of those fields.
 
 Example request: `GET /bridge/api.v1/listings` returns active properties by default with `limit` 15 and `offset` 0. `GET /bridge/api.v1/listings?status=rejected&limit=15` returns rejected properties only.
-Example response for `status=rejected`: `{"success":true,"listings":[{"id":"property-id","status":"REJECTED"}],"totalCount":1,"limit":15,"offset":0,"appliedFilters":{"status":["rejected"]}}`.
+Example response for `status=rejected`: `{"success":true,"listings":[{"slug":"modern-home--property-id","status":"REJECTED"}],"totalCount":1,"limit":15,"offset":0,"appliedFilters":{"status":["rejected"]}}`. Use that `slug` value for a listing detail, update, delete, save, or inquiry request.
 
 GET response fields include `success`, `listings`, `totalCount`, `offset`,
 `limit`, and `appliedFilters`.
@@ -53,6 +53,7 @@ import { getAuthenticatedAccount } from '@/services/auth/account';
 import { listListings } from '@/services/listings/list';
 import { searchListings } from '@/services/listings/search';
 import { ListingFiltersSchema } from '@/types';
+import { getListingSlugId } from '@/services/listings/slug';
 
 export const dynamic = 'force-dynamic';
 
@@ -80,8 +81,6 @@ function readOptionalParameter(params: URLSearchParams, key: string): string | u
 function buildListingFilterInput(params: URLSearchParams): Record<string, unknown> {
   return {
     searchTerm: params.get('search') || params.get('q') || params.get('query') || undefined,
-    id: readOptionalParameter(params, 'id'),
-    ids: readListParameter(params, 'ids'),
     minPrice: readOptionalParameter(params, 'minPrice'),
     maxPrice: readOptionalParameter(params, 'maxPrice'),
     location: readOptionalParameter(params, 'location'),
@@ -144,6 +143,14 @@ function readTrimmedText(value: unknown): string | undefined {
   return typeof value === 'string' ? value.trim() : undefined;
 }
 
+// Replace the internal listing key with the canonical public listing identifier.
+function toPublicListing(listing: Record<string, unknown>): Record<string, unknown> {
+  const id = typeof listing.id === 'string' ? listing.id : '';
+  const slug = typeof listing.slug === 'string' ? listing.slug : null;
+  const { id: _id, ...publicListing } = listing;
+  return { ...publicListing, slug: id ? getListingSlugId({ id, slug }) : slug };
+}
+
 // Resolve the active working profile from body, query, or supported headers.
 function readWorkingProfileId(body: Record<string, unknown>, request: NextRequest): string | undefined {
   return readTrimmedText(body.workingProfileId)
@@ -172,6 +179,7 @@ const getHandler = async (req: NextRequest) => {
   try {
     const q = req.nextUrl.searchParams;
     const requestedStatuses = q.has('status') ? q.get('status')!.split(',').map((status) => status.trim().toLowerCase()) : undefined;
+    if (q.has('id') || q.has('ids')) return Response.json({ success: false, error: 'Listing IDs are not accepted. Address a listing by its canonical slug--id value.' }, { status: 400 });
     const allowedStatuses = new Set(['draft', 'drafts', 'pending', 'rejected', 'approved', 'active', 'sold', 'rented', 'archived', 'awaiting_creation', 'awaiting_deletion']);
     if (requestedStatuses && (!requestedStatuses.length || requestedStatuses.some((status) => !status || !allowedStatuses.has(status)))) {
       return Response.json({ success: false, error: 'Invalid status filter.', allowedStatuses: [...allowedStatuses] }, { status: 400 });
@@ -228,7 +236,7 @@ const getHandler = async (req: NextRequest) => {
 
       return Response.json({
         success: true,
-        listings,
+        listings: listings.map((listing) => toPublicListing(listing as Record<string, unknown>)),
         totalCount: result.data.totalCount,
         limit,
         offset,
@@ -248,7 +256,7 @@ const getHandler = async (req: NextRequest) => {
     });
     return Response.json({
       success: true,
-      listings: result.listings,
+      listings: result.listings.map((listing) => toPublicListing(listing)),
       totalCount: result.totalCount,
       limit,
       offset,

@@ -2,6 +2,7 @@ import { prisma } from '@neup/core/database/prisma';
 import type { Listing } from '@/types';
 import { PROPERTY_INCLUDE, hydrateListingAccountLabels, mapRecord, pickListingFields, resolveBridgeListingFields } from '@/services/listings/shared';
 import { parseListingSlugId } from '@/services/listings/slug';
+import { getListingSlugId } from '@/services/listings/slug';
 
 export type GetListingInput = { slug?: string; propertyCode?: string; fields?: string[] };
 
@@ -29,7 +30,9 @@ export async function getListing(input: GetListingInput): Promise<(Partial<Listi
     });
     if (!record || !record.isApproved) return null;
     const [property] = await hydrateListingAccountLabels([mapRecord(record)]);
-    const selectedListing = pickListingFields(property, resolveBridgeListingFields(input.fields));
+    const selectedListing = pickListingFields(property, resolveBridgeListingFields(input.fields).filter((field) => field !== 'id'));
+    delete selectedListing.id;
+    selectedListing.slug = getListingSlugId(property);
     return selectedListing;
   } catch (error) {
     throw error;

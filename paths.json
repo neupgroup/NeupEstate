@@ -97,9 +97,9 @@
       "source": "app/bridge/api.v1/listings/route.ts"
     },
     {
-      "path": "/bridge/api.v1/listings/[id]",
+      "path": "/bridge/api.v1/listings/[slug]",
       "methods": ["GET", "PATCH", "DELETE"],
-      "source": "app/bridge/api.v1/listings/[id]/route.ts"
+      "source": "app/bridge/api.v1/listings/[slug]/route.ts"
     },
     {
       "path": "/bridge/api.v1/listings/account/[accountId]/[collection]",

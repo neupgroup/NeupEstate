@@ -1,4 +1,5 @@
 import { prisma } from '@neup/core/database/prisma';
+import { parseListingSlugId } from '@/services/listings/slug';
 
 export type AgencyRepresentative = {
   id: string;
@@ -7,12 +8,14 @@ export type AgencyRepresentative = {
   image: string | null;
 };
 
-export async function getListingAgencyRepresentative(propertyId?: string | null): Promise<AgencyRepresentative[]> {
-  const id = propertyId?.trim();
-  if (!id) return [];
+export async function getListingAgencyRepresentative(slug?: string | null): Promise<AgencyRepresentative[]> {
+  const parsedSlug = slug ? parseListingSlugId(slug) : null;
+  if (!parsedSlug) return [];
+  const property = await prisma.listing.findFirst({ where: { id: parsedSlug.id, slug: parsedSlug.slug }, select: { id: true } });
+  if (!property) return [];
   const entry = await prisma.listingsRepresentatives.findFirst({
     where: {
-      listingId: id,
+      listingId: property.id,
       role: 'listingOwner',
       representative: { accountType: { in: ['brand', 'brand.agency', 'subbrand', 'subbrand.agency'] } },
     },

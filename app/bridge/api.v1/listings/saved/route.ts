@@ -5,7 +5,7 @@
 
 GET lists saved-property records for `account=me` or an account ID. Viewing
 another account's list requires manage.account.view. Results contain property
-IDs; use GET /bridge/api.v1/listings/[id] for property details.
+listing identifiers; use GET /bridge/api.v1/listings/[id] for property details.
 
 POST body: { "slug": "property-slug--property-id" }. DELETE accepts either
 `id` (the saved record ID) or `slug` as a query parameter and only affects the
@@ -21,6 +21,7 @@ import { requireIdentity } from '@/services/listings/action-helpers';
 import { hasPermission, requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';
 import { parseListingSlugId } from '@/services/listings/slug';
+import { getListingSlugId } from '@/services/listings/slug';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,7 +32,7 @@ async function resolveListingId(slug: string): Promise<string | null> {
   const parsedSlug = parseListingSlugId(slug);
   const property = parsedSlug
     ? await prisma.listing.findFirst({ where: { id: parsedSlug.id, slug: parsedSlug.slug }, select: { id: true } })
-    : await prisma.listing.findFirst({ where: { slug }, select: { id: true } });
+    : null;
   return property?.id ?? null;
 }
 
@@ -69,7 +70,7 @@ function errorResponse(error: unknown) {
 /**
  * GET /bridge/api.v1/listings/saved?account=me
  * GET /bridge/api.v1/listings/saved?account=<accountId>&limit=25&offset=0
- * Returns { data: [{ id, accountId, propertyId, savedAt }], pagination }.
+ * Returns { data: [{ id, accountId, slug, savedAt }], pagination }.
  */
 export async function GET(request: NextRequest) {
   try {
@@ -79,10 +80,16 @@ export async function GET(request: NextRequest) {
     if (accountId === currentAccountId) await requirePermission(PERMISSIONS.estate.listing.save);
     const { limit, offset } = getPagination(request);
     const where = { accountId };
-    const [data, total] = await Promise.all([
-      prisma.listingsSaved.findMany({ where, orderBy: { savedAt: 'desc' }, skip: offset, take: limit }),
+    const [records, total] = await Promise.all([
+      prisma.listingsSaved.findMany({ where, orderBy: { savedAt: 'desc' }, skip: offset, take: limit, include: { property: { select: { id: true, slug: true } } } }),
       prisma.listingsSaved.count({ where }),
     ]);
+    const data = records.map(({ property, ...saved }) => ({
+      id: saved.id,
+      accountId: saved.accountId,
+      slug: getListingSlugId({ id: property.id, slug: property.slug }),
+      savedAt: saved.savedAt,
+    }));
     return NextResponse.json({ data, pagination: { limit, offset, total, hasMore: offset + data.length < total } });
   } catch (error) {
     return errorResponse(error);

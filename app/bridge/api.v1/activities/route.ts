@@ -20,8 +20,8 @@ export const dynamic = 'force-dynamic';
 const postHandler = async (request: NextRequest) => {
   try {
     const body = await request.json();
-    const { propertyId, events } = body as {
-      propertyId?: string;
+    const { slug, events } = body as {
+      slug?: string;
       events: ListingActivityEvent[];
     };
 
@@ -40,7 +40,7 @@ const postHandler = async (request: NextRequest) => {
       return NextResponse.json({ success: false, error: 'Invalid token' }, { status: 401 });
     }
 
-    await logListingViews(userId, events, propertyId);
+    await logListingViews(userId, events, slug);
 
     return NextResponse.json({ message: 'Activity received.' }, { status: 202 });
   } catch (error) {

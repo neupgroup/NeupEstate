@@ -15,11 +15,12 @@ defaults to 15 and cannot exceed 15.
 import { NextRequest, NextResponse } from 'next/server';
 import { ListingFiltersSchema } from '@/types';
 import { searchListings } from '@/services/listings/search';
+import { getListingSlugId } from '@/services/listings/slug';
 
 export const dynamic = 'force-dynamic';
 
 const SEARCH_PARAMETERS = new Set([
-  'q', 'query', 'search', 'searchTerm', 'search_term', 'id', 'ids', 'status', 'statuses',
+  'q', 'query', 'search', 'searchTerm', 'search_term', 'status', 'statuses',
   'minPrice', 'maxPrice', 'location', 'purpose', 'category', 'type', 'minArea', 'maxArea',
   'agencyName', 'listingAgent', 'isOwnerListing', 'postedAfter', 'postedBefore', 'minFloors',
   'maxFloors', 'minRoadAccess', 'maxRoadAccess', 'bedrooms', 'bathrooms', 'kitchens',
@@ -47,7 +48,7 @@ type SearchInput = {
 
 // Convert URL list values to the same arrays accepted in POST filter objects.
 function parseQueryValue(value: string, key: string): unknown {
-  if (['purpose', 'category', 'type', 'listingBy', 'tags', 'ids'].includes(key)) {
+  if (['purpose', 'category', 'type', 'listingBy', 'tags'].includes(key)) {
     return value.split(',').map((item) => item.trim()).filter(Boolean);
   }
   if (key === 'isOwnerListing') return value === 'true' ? true : value === 'false' ? false : value;
@@ -106,6 +107,9 @@ async function runSearch(input: SearchInput) {
   }
 
   const filters = input.filters ?? {};
+  if ('id' in filters || 'ids' in filters) {
+    return NextResponse.json({ success: false, error: 'Listing IDs are not accepted. Address a listing by its canonical slug--id value.' }, { status: 400 });
+  }
   const parsedFilters = ListingFiltersSchema.safeParse(filters);
   if (!parsedFilters.success) {
     return NextResponse.json({ success: false, error: 'Invalid search filters.', details: parsedFilters.error.flatten().fieldErrors }, { status: 400 });
@@ -127,7 +131,7 @@ async function runSearch(input: SearchInput) {
 
   return NextResponse.json({
     success: true,
-    listings: result.data.listings,
+    listings: result.data.listings.map(({ id, slug, ...listing }) => ({ ...listing, slug: getListingSlugId({ id, slug }) })),
     totalCount: result.data.totalCount,
     offset,
     limit,

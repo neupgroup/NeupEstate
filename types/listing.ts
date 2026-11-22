@@ -540,7 +540,7 @@ export type CreateVisitRequestFormValues = z.infer<typeof CreateVisitRequestSche
 
 export interface VisitRequest {
     id: string;
-    propertyId: string;
+    slug?: string;
     propertyTitle: string; // Denormalized
     agentId: string; // Denormalized
     agentName: string; // Denormalized
