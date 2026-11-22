@@ -26,7 +26,7 @@ All supported property fields are returned by default, including `status`.
 `include` (or `fields`) may be used to select a subset of those fields.
 
 Example request: `GET /bridge/api.v1/listings` returns active properties by default with `limit` 15 and `offset` 0. `GET /bridge/api.v1/listings?status=rejected&limit=15` returns rejected properties only.
-Example response for `status=rejected`: `{"success":true,"listings":[{"slug":"modern-home--property-id","status":"REJECTED"}],"totalCount":1,"limit":15,"offset":0,"appliedFilters":{"status":["rejected"]}}`. Use that `slug` value for a listing detail, update, delete, save, or inquiry request.
+Example response for `status=rejected`: `{"success":true,"listings":[{"slug":"modern-home--550e8400-e29b-41d4-a716-446655440000","status":"REJECTED"}],"totalCount":1,"limit":15,"offset":0,"appliedFilters":{"status":["rejected"]}}`. Use that `slug` value for a listing detail, update, delete, save, or inquiry request.
 
 GET response fields include `success`, `listings`, `totalCount`, `offset`,
 `limit`, and `appliedFilters`.

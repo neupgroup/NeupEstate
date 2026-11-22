@@ -15,9 +15,9 @@ and includes the listing owner when that account is an agent;
 agent. Representative entries include `id`, a `type`, and available names and
 images. Agent entries also include a `role` identifying the listing owner or a
 supporting agent. Example request:
-`GET /bridge/api.v1/listings/modern-home--property-id?include=representatives.*`.
+`GET /bridge/api.v1/listings/modern-home--550e8400-e29b-41d4-a716-446655440000?include=representatives.*`.
 Example response:
-`{"success":true,"property":{"slug":"modern-home--property-id","representatives":[{"id":"account-id","type":"agent","role":"listingOwner","name":"Agent Name","image":"https://example.com/agent.jpg"},{"id":"supporting-account-id","type":"agent","role":"supportingAgent","name":"Supporting Agent","image":"https://example.com/supporting-agent.jpg"},{"id":"agency-id","type":"agency","name":"Agency Name","image":"https://example.com/logo.jpg"},{"id":"owner-id","type":"owner","name":"Property Owner","isPrimaryOwner":true}]}}`.
+`{"success":true,"property":{"slug":"modern-home--550e8400-e29b-41d4-a716-446655440000","representatives":[{"id":"account-id","type":"agent","role":"listingOwner","name":"Agent Name","image":"https://example.com/agent.jpg"},{"id":"supporting-account-id","type":"agent","role":"supportingAgent","name":"Supporting Agent","image":"https://example.com/supporting-agent.jpg"},{"id":"agency-id","type":"agency","name":"Agency Name","image":"https://example.com/logo.jpg"},{"id":"owner-id","type":"owner","name":"Property Owner","isPrimaryOwner":true}]}}`.
 
 PATCH submits an edit request for the property identified by `slug`. The body
 may include `accountId`, posting context fields, and a `property` or `data`

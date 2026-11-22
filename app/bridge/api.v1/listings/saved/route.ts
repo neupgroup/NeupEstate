@@ -7,7 +7,7 @@ GET lists saved-property records for `account=me` or an account ID. Viewing
 another account's list requires manage.account.view. Results contain property
 listing identifiers; use GET /bridge/api.v1/listings/[id] for property details.
 
-POST body: { "slug": "property-slug--property-id" }. DELETE accepts either
+POST body: { "slug": "modern-home--550e8400-e29b-41d4-a716-446655440000" }. DELETE accepts either
 `id` (the saved record ID) or `slug` as a query parameter and only affects the
 authenticated account.
 
@@ -98,7 +98,7 @@ export async function GET(request: NextRequest) {
 
 /**
  * POST /bridge/api.v1/listings/saved
- * JSON body: { "slug": "property-slug--property-id" }. Saves for the current account.
+ * JSON body: { "slug": "modern-home--550e8400-e29b-41d4-a716-446655440000" }. Saves for the current account.
  */
 export async function POST(request: NextRequest) {
   try {
