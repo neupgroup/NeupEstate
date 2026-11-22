@@ -7,8 +7,8 @@ GET lists saved-property records for `account=me` or an account ID. Viewing
 another account's list requires manage.account.view. Results contain property
 IDs; use GET /bridge/api.v1/listings/[id] for property details.
 
-POST body: { "propertyId": "property_id" }. DELETE accepts either `id` (the
-saved record ID) or `propertyId` as a query parameter and only affects the
+POST body: { "slug": "property-slug--property-id" }. DELETE accepts either
+`id` (the saved record ID) or `slug` as a query parameter and only affects the
 authenticated account.
 
 ::public end
@@ -20,10 +20,20 @@ import { prisma } from '@neup/core/database/prisma';
 import { requireIdentity } from '@/services/listings/action-helpers';
 import { hasPermission, requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';
+import { parseListingSlugId } from '@/services/listings/slug';
 
 export const dynamic = 'force-dynamic';
 
-const SaveListingSchema = z.object({ propertyId: z.string().min(1) });
+const SaveListingSchema = z.object({ slug: z.string().min(1) });
+
+// Resolve the canonical public listing identifier before storing its internal relation key.
+async function resolveListingId(slug: string): Promise<string | null> {
+  const parsedSlug = parseListingSlugId(slug);
+  const property = parsedSlug
+    ? await prisma.listing.findFirst({ where: { id: parsedSlug.id, slug: parsedSlug.slug }, select: { id: true } })
+    : await prisma.listing.findFirst({ where: { slug }, select: { id: true } });
+  return property?.id ?? null;
+}
 
 // Read validated pagination values from the request URL.
 function getPagination(request: NextRequest) {
@@ -81,7 +91,7 @@ export async function GET(request: NextRequest) {
 
 /**
  * POST /bridge/api.v1/listings/saved
- * JSON body: { "propertyId": "property_id" }. Saves for the current account.
+ * JSON body: { "slug": "property-slug--property-id" }. Saves for the current account.
  */
 export async function POST(request: NextRequest) {
   try {
@@ -95,30 +105,32 @@ export async function POST(request: NextRequest) {
     }
     const parsed = SaveListingSchema.safeParse(body);
     if (!parsed.success) return NextResponse.json({ success: false, error: 'Invalid saved property.', details: parsed.error.flatten().fieldErrors }, { status: 400 });
-    const property = await prisma.listing.findUnique({ where: { id: parsed.data.propertyId }, select: { id: true } });
-    if (!property) return NextResponse.json({ success: false, error: 'Property not found.' }, { status: 404 });
-    const existing = await prisma.listingsSaved.findFirst({ where: { accountId, propertyId: parsed.data.propertyId } });
-    const data = existing ?? await prisma.listingsSaved.create({ data: { accountId, propertyId: parsed.data.propertyId } });
+    const propertyId = await resolveListingId(parsed.data.slug);
+    if (!propertyId) return NextResponse.json({ success: false, error: 'Property not found.' }, { status: 404 });
+    const existing = await prisma.listingsSaved.findFirst({ where: { accountId, propertyId } });
+    const data = existing ?? await prisma.listingsSaved.create({ data: { accountId, propertyId } });
     return NextResponse.json({ success: true, data }, { status: existing ? 200 : 201 });
   } catch (error) {
     return errorResponse(error);
   }
 }
 
-/** DELETE /bridge/api.v1/listings/saved?id=<savedId> or ?propertyId=<propertyId> */
+/** DELETE /bridge/api.v1/listings/saved?id=<savedId> or ?slug=<listingSlugId> */
 export async function DELETE(request: NextRequest) {
   try {
     await requirePermission(PERMISSIONS.estate.listing.save);
     const accountId = await requireIdentity();
     const params = request.nextUrl.searchParams;
     const id = params.get('id');
-    const propertyId = params.get('propertyId');
-    if (Boolean(id) === Boolean(propertyId)) {
-      return NextResponse.json({ success: false, error: 'Provide exactly one of id or propertyId.' }, { status: 400 });
+    const slug = params.get('slug');
+    if (Boolean(id) === Boolean(slug)) {
+      return NextResponse.json({ success: false, error: 'Provide exactly one of id or slug.' }, { status: 400 });
     }
+    const propertyId = slug ? await resolveListingId(slug) : null;
+    if (slug && !propertyId) return NextResponse.json({ success: false, error: 'Property not found.' }, { status: 404 });
     const result = await prisma.listingsSaved.deleteMany({ where: { accountId, ...(id ? { id } : { propertyId: propertyId! }) } });
     if (!result.count) return NextResponse.json({ success: false, error: 'Saved property not found.' }, { status: 404 });
-    return NextResponse.json({ success: true, ...(id ? { id } : { propertyId }) });
+    return NextResponse.json({ success: true, ...(id ? { id } : { slug }) });
   } catch (error) {
     return errorResponse(error);
   }

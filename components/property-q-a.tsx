@@ -43,7 +43,7 @@ function getCookie(name: string): string | null {
 
 
 interface ListingQAProps {
-    propertyId: string;
+    slug: string;
     agentName?: string;
     agentImage?: string;
     agentPhone?: string;
@@ -51,7 +51,7 @@ interface ListingQAProps {
     flat?: boolean;
 }
 
-export function ListingQA({ propertyId, agentName = "Property Agent", agentImage, agentPhone, agentEmail, flat = false }: ListingQAProps) {
+export function ListingQA({ slug, agentName = "Property Agent", agentImage, agentPhone, agentEmail, flat = false }: ListingQAProps) {
     const { user } = useSession();
     const { toast } = useToast();
     const [isSubmitting, startSubmitting] = useTransition();
@@ -65,7 +65,7 @@ export function ListingQA({ propertyId, agentName = "Property Agent", agentImage
     const form = useForm<CreateInquiryFormValues>({
         resolver: zodResolver(CreateInquirySchema),
         defaultValues: {
-            propertyId: propertyId,
+            slug,
             name: "",
             email: "",
             phone: "",

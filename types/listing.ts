@@ -528,7 +528,7 @@ export interface SalesRequest {
 export const VisitRequestStatusSchema = z.enum(['new', 'confirmed', 'completed', 'cancelled']);
 
 export const CreateVisitRequestSchema = z.object({
-  propertyId: z.string(),
+  slug: z.string().min(1),
   name: z.string().min(2, "Name is required."),
   email: z.string().email("Please enter a valid email address."),
   phone: z.string().optional(),

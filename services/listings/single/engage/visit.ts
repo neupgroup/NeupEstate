@@ -3,14 +3,14 @@
 
 import { prisma } from '@neup/core/database/prisma';
 import type { VisitRequest, CreateVisitRequestFormValues } from '@/types';
-import { getListingById } from '../../view';
+import { getListingBySlug } from '../../view';
 import { getAgentById } from '@/services/agents/agent/service';
 
 
 export async function createVisitRequest(data: CreateVisitRequestFormValues): Promise<string> {
 
     try {
-        const property = await getListingById(data.propertyId);
+        const property = await getListingBySlug(data.slug);
         if (!property || !(property as any).listingAgent) {
             throw new Error(`Property or its listing agent not found.`);
         }
@@ -24,7 +24,7 @@ export async function createVisitRequest(data: CreateVisitRequestFormValues): Pr
 
         const request = await prisma.visitRequest.create({
             data: {
-                propertyId: data.propertyId,
+                propertyId: property.id,
                 propertyTitle: property.title,
                 agentId: agent.id,
                 agentName: agent.name,

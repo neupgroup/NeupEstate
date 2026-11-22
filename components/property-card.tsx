@@ -55,7 +55,7 @@ export function ListingCard({ property, propertyCount, reviewCount, rating }: Li
         return;
       }
       setIsCheckingFavorite(true);
-      const saved = await isSaved(currentUserId, property.id);
+      const saved = await isSaved(currentUserId, slugOrId);
       setIsFavorited(saved);
       setIsCheckingFavorite(false);
     }
@@ -74,7 +74,7 @@ export function ListingCard({ property, propertyCount, reviewCount, rating }: Li
     }
     startToggleTransition(async () => {
       try {
-                const result = await save(userId, property.id);
+                const result = await save(userId, slugOrId);
         setIsFavorited(result.saved);
         toast({ name: "default",
           title: result.saved ? "Property Saved" : "Property Unsaved",

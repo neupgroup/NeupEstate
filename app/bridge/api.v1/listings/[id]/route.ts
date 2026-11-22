@@ -4,8 +4,8 @@
 
 ::public
 
-GET returns the detailed public payload for one approved property. The `id`
-path parameter identifies the property. Use `representatives.*` to return the
+GET returns the detailed public payload for one approved property. The `slug`
+path parameter must be the canonical `slug--id` identifier. Use `representatives.*` to return the
 listing owner, agents, agency, and property owners. Select a subset with
 `representatives.listingOwner`, `representatives.agents`,
 `representatives.agent`, `representatives.agency`, or
@@ -15,11 +15,11 @@ and includes the listing owner when that account is an agent;
 agent. Representative entries include `id`, a `type`, and available names and
 images. Agent entries also include a `role` identifying the listing owner or a
 supporting agent. Example request:
-`GET /bridge/api.v1/listings/property-id?include=representatives.*`.
+`GET /bridge/api.v1/listings/modern-home--property-id?include=representatives.*`.
 Example response:
 `{"success":true,"property":{"id":"property-id","representatives":[{"id":"account-id","type":"agent","role":"listingOwner","name":"Agent Name","image":"https://example.com/agent.jpg"},{"id":"supporting-account-id","type":"agent","role":"supportingAgent","name":"Supporting Agent","image":"https://example.com/supporting-agent.jpg"},{"id":"agency-id","type":"agency","name":"Agency Name","image":"https://example.com/logo.jpg"},{"id":"owner-id","type":"owner","name":"Property Owner","isPrimaryOwner":true}]}}`.
 
-PATCH submits an edit request for the property identified by `id`. The body
+PATCH submits an edit request for the property identified by `slug`. The body
 may include `accountId`, posting context fields, and a `property` or `data`
 object. Edits are submitted for review and return a `requestId` and status.
 GET returns the primary price as one `price` object with `currency`, `basis`,
@@ -29,7 +29,7 @@ and `amount`; multi-price basis maps are not part of the listing response.
 
 ::private
 
-The item route supplies the path `id` to the bridge property view/edit
+The item route supplies the canonical path `slug` to the bridge property view/edit
 handlers; clients no longer need `/view` or `/edit` endpoints.
 
 ::private end
@@ -136,8 +136,7 @@ function readListingCode(request: NextRequest): string | undefined {
 ::end */
 const getHandler = async (req: NextRequest, context: Context) => {
   try {
-    const routeId = (await context.params).id?.trim();
-    const propertyId = routeId || req.nextUrl.searchParams.get('propertyId')?.trim() || req.headers.get('propertyId')?.trim();
+    const slug = (await context.params).id?.trim();
     const propertyCode = readListingCode(req);
     const includeParam = req.nextUrl.searchParams.get('include') ?? req.nextUrl.searchParams.get('fields');
     let includes: ReturnType<typeof parseListingIncludes>;
@@ -150,7 +149,7 @@ const getHandler = async (req: NextRequest, context: Context) => {
       ...(includes.fields ?? []),
       ...(includes.representatives.all || includes.representatives.owners ? ['owners'] : []),
     ])];
-    const property = await getListing({ propertyId, propertyCode, fields });
+    const property = await getListing({ slug, propertyCode, fields });
     if (!property) return Response.json({ success: false, error: 'Property not found.' }, { status: 404 });
     const supportingAgentIds = (property.details as any)?.supportingAgents ?? [];
     const propertyFields = { ...property };
@@ -165,7 +164,7 @@ const getHandler = async (req: NextRequest, context: Context) => {
     const { representatives: representativeSelection } = includes;
     const [agentRepresentatives, agencyRepresentatives, ownerRepresentatives] = await Promise.all([
       getListingAgentRepresentatives({
-        propertyId: property.id ?? routeId,
+        propertyId: property.id ?? '',
         listingOwnerId: typeof property.listingAgentId === 'string' ? property.listingAgentId : null,
         supportingAgentIds: Array.isArray(supportingAgentIds) ? supportingAgentIds : [],
         includeListingOwner: representativeSelection.all || representativeSelection.listingOwner,
@@ -191,16 +190,16 @@ const getHandler = async (req: NextRequest, context: Context) => {
 };
 
 /* ::neup.documentation::bridge-listings-id-patch-handler
-::function PATCH edit property by id
+::function PATCH edit property by slug
 ::end */
 const patchHandler = async (req: NextRequest, context: Context) => {
   try {
     const body = await req.json().catch(() => ({}));
-    const propertyId = (await context.params).id;
+    const slug = (await context.params).id;
     const accountId = typeof body?.accountId === 'string' ? body.accountId.trim() : req.headers.get('accountId')?.trim();
     const data = body?.listing && typeof body.listing === 'object' ? body.listing : body?.data && typeof body.data === 'object' ? body.data : body;
     if (!accountId) return Response.json({ success: false, error: 'Provide accountId in the request body or headers.' }, { status: 400 });
-    const result = await updateListing({ propertyId, accountId, data });
+    const result = await updateListing({ slug, accountId, data });
     return Response.json({ success: true, requestId: result.requestId, status: 'awaiting review' });
   }
   catch (err) {
@@ -219,7 +218,7 @@ const deleteHandler = async (req: NextRequest, context: Context) => {
       ? body.accountId.trim()
       : req.nextUrl.searchParams.get('accountId')?.trim() || req.headers.get('accountId')?.trim();
     if (!actorAccountId) return Response.json({ success: false, error: 'Provide accountId in the request body, query, or headers.' }, { status: 400 });
-    await deleteListing({ propertyId: (await context.params).id }, { actorAccountId });
+    await deleteListing({ slug: (await context.params).id }, { actorAccountId });
     return Response.json({ success: true }, { status: 200 });
   } catch (err) {
     return Response.json({ success: false, error: 'Failed to delete property.' }, { status: 500 });

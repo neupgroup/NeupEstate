@@ -12,7 +12,7 @@ export function registerVisitRequestTools(server: McpToolServer, actorAccountId:
     title: 'Request a property visit',
     description: 'Submits a visit request for an approved property. Provide contact information and a preferred date; normalize other natural language dates to YYYY-MM-DD before calling. Accepted lowercase date tokens are today, tomorrow, in3days, 12amtoday, 12pmtoday, inXdays (X is a non-negative integer), in3hours, and in30minutes. For 12amtoday or 12pmtoday, use 00:00 or 12:00 as preferred_time. The property’s listing agent is resolved by the existing service.',
     inputSchema: {
-      propertyId: CreateVisitRequestSchema.shape.propertyId.describe('ID of the property to visit.'),
+      slug: CreateVisitRequestSchema.shape.slug.describe('Canonical listing identifier in slug--id format.'),
       name: CreateVisitRequestSchema.shape.name,
       email: CreateVisitRequestSchema.shape.email,
       phone: CreateVisitRequestSchema.shape.phone,

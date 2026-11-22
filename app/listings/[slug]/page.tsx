@@ -153,7 +153,7 @@ export async function generateMetadata(
   let property: Listing | null = null;
   
   try {
-    property = await getListingBySlug(slug) || await getListingById(slug);
+    property = await getListingBySlug(slug);
   } catch (error) {
   }
 
@@ -312,13 +312,7 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
   let property;
   
   try {
-    // First, try to find the property by its slug.
     property = await getListingBySlug(slug);
-
-    // If no property is found by slug, it might be an old URL using just the ID.
-    if (!property) {
-      property = await getListingById(slug);
-    }
   } catch (e) {
     notFound();
   }
@@ -436,7 +430,7 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
         <div className="property-detail-body grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,2.15fr)_minmax(260px,0.85fr)]">
           <div className="property-page-sections space-y-8">
             <ResponsiveListingQA
-                propertyId={property.id}
+                slug={getListingSlugId(property)}
                 agentName={property.listingAgent || (property.isOwnerListing ? primaryOwnerName : property.agency.name)}
                 agentImage={property.listingAgentImage || property.agency.logoUrl}
                 agentPhone={property.agency.contactPhone || undefined}
@@ -667,7 +661,7 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
 
           <div className="property-detail-sidebar hidden lg:block">
             <div className="sticky top-24 space-y-4">
-              <ListingQA propertyId={property.id} agentName={property.listingAgent || (property.isOwnerListing ? primaryOwnerName : property.agency.name)} agentImage={property.listingAgentImage || property.agency.logoUrl} agentPhone={property.agency.contactPhone || undefined} agentEmail={property.agency.contactEmail || undefined} />
+              <ListingQA slug={getListingSlugId(property)} agentName={property.listingAgent || (property.isOwnerListing ? primaryOwnerName : property.agency.name)} agentImage={property.listingAgentImage || property.agency.logoUrl} agentPhone={property.agency.contactPhone || undefined} agentEmail={property.agency.contactEmail || undefined} />
             </div>
           </div>
         </div>

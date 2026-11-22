@@ -16,6 +16,7 @@ import { updateListing } from '@/services/listings/single/update';
 import { CreateListingSchema } from '@/types';
 import { requirePermission } from '@/services/permissions';
 import { PERMISSIONS } from '@/services/permission-names';
+import { parseListingSlugId } from '@/services/listings/slug';
 
 const propertyUpdateSchema = CreateListingSchema.partial();
 
@@ -25,12 +26,14 @@ export function registerListingUpdateTool(server: McpServer, actorAccountId: str
     title: 'Submit property update',
     description: 'Submits a partial edit for an approved property. The edit is saved for review and returns a request ID. Only properties represented by the authenticated account can be updated.',
     inputSchema: {
-      propertyId: z.string().trim().min(1),
+      slug: z.string().trim().min(1),
       data: z.record(z.unknown()).describe('Partial property form fields to change.'),
     },
     annotations: { readOnlyHint: false, destructiveHint: false, openWorldHint: false },
-  }, async ({ propertyId, data }) => {
+  }, async ({ slug, data }) => {
     try {
+      const parsedSlug = parseListingSlugId(slug);
+      if (!parsedSlug) return toolError('Provide the canonical listing slug--id identifier.');
       await requirePermission(PERMISSIONS.estate.listing.update);
       const parsed = propertyUpdateSchema.safeParse(data);
       if (!parsed.success) {
@@ -39,14 +42,15 @@ export function registerListingUpdateTool(server: McpServer, actorAccountId: str
 
       const property = await prisma.listing.findFirst({
         where: {
-          id: propertyId,
+          slug: parsedSlug.slug,
+          id: parsedSlug.id,
           representatives: { some: { representativeId: actorAccountId } },
         },
         select: { id: true },
       });
       if (!property) return toolError('Property not found or not editable by this account.');
 
-      const result = await updateListing({ propertyId, accountId: actorAccountId, data: parsed.data });
+      const result = await updateListing({ slug, accountId: actorAccountId, data: parsed.data });
       const resultData = { success: true, requestId: result.requestId, status: 'awaiting review' };
       const response = format === undefined ? resultData : { ...resultData, format };
       return {

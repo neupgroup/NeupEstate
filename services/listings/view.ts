@@ -40,13 +40,13 @@ export async function getListingBySlug(slug: string, opts: { includeInactive?: b
   try {
     const parsed = parseListingSlugId(slug);
     const record = parsed
-      ? await prisma.listing.findUnique({ where: { id: parsed.id }, include: PROPERTY_INCLUDE })
-      : await prisma.listing.findFirst({ where: { slug }, include: PROPERTY_INCLUDE });
+      ? await prisma.listing.findFirst({ where: { id: parsed.id, slug: parsed.slug }, include: PROPERTY_INCLUDE })
+      : null;
     if (record) {
       const [p] = await hydrateListingAccountLabels([mapRecord(record)]);
       return opts.includeInactive ? p : (p.isApproved ? p : null);
     }
-    return getListingById(slug, opts);
+    return null;
   } catch (e) { return null; }
 }
 
@@ -203,7 +203,9 @@ export async function getListingLogs(propertyId: string): Promise<Array<{
  */
 export async function isListingSaved(userId: string, propertyId: string): Promise<boolean> {
   try {
-    const existing = await prisma.listingsSaved.findFirst({ where: { accountId: userId, propertyId } });
+    const resolvedId = await resolveListingDatabaseId(propertyId);
+    if (!resolvedId) return false;
+    const existing = await prisma.listingsSaved.findFirst({ where: { accountId: userId, propertyId: resolvedId } });
     return Boolean(existing);
   } catch (e) { return false; }
 }
@@ -217,14 +219,25 @@ export async function isListingSaved(userId: string, propertyId: string): Promis
  */
 export async function toggleSavedListing(userId: string, propertyId: string): Promise<{ saved: boolean }> {
   try {
-    const existing = await prisma.listingsSaved.findFirst({ where: { accountId: userId, propertyId } });
+    const resolvedId = await resolveListingDatabaseId(propertyId);
+    if (!resolvedId) throw new Error('Property not found.');
+    const existing = await prisma.listingsSaved.findFirst({ where: { accountId: userId, propertyId: resolvedId } });
     if (existing) {
-      await prisma.listingsSaved.deleteMany({ where: { accountId: userId, propertyId } });
+      await prisma.listingsSaved.deleteMany({ where: { accountId: userId, propertyId: resolvedId } });
       return { saved: false };
     }
-    await prisma.listingsSaved.create({ data: { accountId: userId, propertyId } });
+    await prisma.listingsSaved.create({ data: { accountId: userId, propertyId: resolvedId } });
     return { saved: true };
   } catch (e) { throw new Error('Failed to toggle saved property.'); }
+}
+
+// Resolve the canonical listing identifier to the database key used by saved-listing relations.
+async function resolveListingDatabaseId(identifier: string): Promise<string | null> {
+  const parsed = parseListingSlugId(identifier);
+  const listing = parsed
+    ? await prisma.listing.findFirst({ where: { id: parsed.id, slug: parsed.slug }, select: { id: true } })
+    : null;
+  return listing?.id ?? null;
 }
 
 

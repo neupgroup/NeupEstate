@@ -1,6 +1,6 @@
 "use server";
 
-import { getListingById } from '@/services/listings';
+import { getListingBySlug } from '@/services/listings';
 import type { CreateInquiryFormValues, InquiryStatus, UpdatePromptFormValues, CreatePromptFormValues, CreateAIModelFormValues, UpdateAIModelFormValues } from "@/types";
 import { CreateInquirySchema, UpdatePromptSchema, CreatePromptSchema, CreateAIModelSchema, UpdateAIModelSchema } from "@/types";
 import { revalidatePath } from "next/cache";
@@ -15,10 +15,10 @@ import { PERMISSIONS } from '@/services/permission-names';
 import { requireIdentity } from '@/services/listings/action-helpers';
 
 export async function suggestListingQuestionsAction(
-  propertyId: string
+  slug: string
 ): Promise<{ success: boolean; questions?: string[]; error?: string }> {
   try {
-    const property = await getListingById(propertyId);
+    const property = await getListingBySlug(slug);
     if (!property) {
       return { success: false, error: 'Property not found.' };
     }
@@ -41,6 +41,8 @@ export async function createInquiryAction(
   try {
     await requirePermission(PERMISSIONS.public.propertyInquire);
     const actorId = await requireIdentity();
+    const property = await getListingBySlug(data.slug);
+    if (!property) return { success: false, error: 'Property not found.' };
     const validatedData = CreateInquirySchema.parse({ ...data, submittedBy: actorId });
     await createInquiryService(actorId, "property", validatedData);
     revalidatePath('/manage/inquiries');

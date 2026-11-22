@@ -1,22 +1,22 @@
 import { prisma } from '@neup/core/database/prisma';
 import type { CreateInquiryFormValues } from '@/types';
-import { getListingById } from '@/services/listings/view';
+import { getListingBySlug } from '@/services/listings/view';
 
 export class InquiryServiceError extends Error { status: number; constructor(message: string, status: number) { super(message); this.name = 'InquiryServiceError'; this.status = status; } }
 export type InquiryType = 'property' | 'bridge';
-export type InquiryData = CreateInquiryFormValues | { propertyId: string; phone?: string; email?: string; message?: string; name?: string };
+export type InquiryData = { slug: string; name?: string; email?: string; phone?: string; message?: string; question?: string; submittedBy?: string };
 
 export async function createInquiry(accountId: string | undefined, type: InquiryType, data: InquiryData): Promise<string> {
-  const propertyId = data.propertyId?.trim() || '';
-  if (!propertyId) throw new InquiryServiceError('Property is required.', 400);
+  const slug = data.slug?.trim() || '';
+  if (!slug) throw new InquiryServiceError('Property slug is required.', 400);
   try {
-    const property = await getListingById(propertyId, { includeInactive: type === 'bridge' });
+    const property = await getListingBySlug(slug, { includeInactive: type === 'bridge' });
     if (!property) throw new InquiryServiceError('Property not found.', 404);
+    const propertyId = property.id;
     const isBridge = type === 'bridge';
     const bridgeData = data as Extract<InquiryData, { message?: string }>;
     if (isBridge && !bridgeData.phone?.trim() && !bridgeData.email?.trim()) throw new InquiryServiceError('Provide at least phone or email.', 400);
-    const formData = data as CreateInquiryFormValues;
-    const inquiry = await prisma.inquiry.create({ data: { propertyId, propertyTitle: property.title, agentName: property.listingAgent || property.agency.name || null, name: isBridge ? bridgeData.name?.trim() || 'Unknown' : formData.name, email: isBridge ? bridgeData.email?.trim() || '' : formData.email, phone: (isBridge ? bridgeData.phone : formData.phone)?.trim() || null, question: isBridge ? bridgeData.message?.trim() || '' : formData.question, status: 'new' } });
+    const inquiry = await prisma.inquiry.create({ data: { propertyId, propertyTitle: property.title, agentName: property.listingAgent || property.agency.name || null, name: data.name?.trim() || 'Unknown', email: data.email?.trim() || '', phone: data.phone?.trim() || null, question: (data.message ?? data.question)?.trim() || '', status: 'new' } });
     return inquiry.id;
   } catch (error) {
     if (error instanceof InquiryServiceError) throw error;

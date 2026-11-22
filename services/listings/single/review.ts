@@ -62,7 +62,7 @@ export async function approveListingAction(propertyId: string) {
  * Callers should provide the typed values described by the signature; transport-specific parsing and response handling remain outside this service.
  */
 export async function deleteListingAction(propertyId: string) {
-  try { await requirePermission(PERMISSIONS.estate.listing.drop); const actorAccountId = await requireIdentity(); await deleteListing({ propertyId }, { actorAccountId }); revalidatePath('/manage/listings'); return { success: true }; }
+  try { await requirePermission(PERMISSIONS.estate.listing.drop); const actorAccountId = await requireIdentity(); const property = await getListingById(propertyId, { includeInactive: true }); if (!property) throw new Error('Property not found.'); await deleteListing({ slug: `${property.slug}--${property.id}` }, { actorAccountId }); revalidatePath('/manage/listings'); return { success: true }; }
   catch (error) { return { success: false, error: 'Failed to delete property.' }; }
 }
 

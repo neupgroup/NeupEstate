@@ -6,7 +6,7 @@ export const InquiryStatusSchema = z.enum(['new', 'replied', 'closed']);
 export type InquiryStatus = z.infer<typeof InquiryStatusSchema>;
 
 export const CreateInquirySchema = z.object({
-  propertyId: z.string(),
+  slug: z.string().min(1),
   name: z.string().min(2, "Name is required."),
   email: z.string().email("Please enter a valid email address."),
   phone: z.string().optional(),

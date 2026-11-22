@@ -10,7 +10,7 @@
  * message content.
  *
  * Inputs:
- * - `POST /bridge/api.v1/inquiry?listing=<listingId>`
+ * - `POST /bridge/api.v1/inquiry?listing=<slug--id>`
  * - JSON body fields: `phone`, `email`, `message`, `name`, `account_id`
  *
  * Validation:
@@ -43,15 +43,15 @@ import { createInquiry, InquiryServiceError } from '@/services/inquiry/create';
 export const dynamic = 'force-dynamic';
 
 // Resolve the listing identifier from the listing query or JSON body field.
-function readListingId(request: NextRequest, body: Record<string, unknown>): string {
+function readListingSlug(request: NextRequest, body: Record<string, unknown>): string {
   return request.nextUrl.searchParams.get('listing')?.trim()
     || (typeof body.listing === 'string' ? body.listing.trim() : '');
 }
 
 // Build the optional contact fields accepted by the inquiry service.
-function buildInquiryContact(body: Record<string, unknown>, propertyId: string) {
+function buildInquiryContact(body: Record<string, unknown>, slug: string) {
   return {
-    propertyId,
+    slug,
     phone: typeof body.phone === 'string' ? body.phone : undefined,
     email: typeof body.email === 'string' ? body.email : undefined,
     message: typeof body.message === 'string' ? body.message : undefined,
@@ -70,12 +70,12 @@ const postHandler = async (req: NextRequest) => {
       body = {};
     }
 
-    const propertyId = readListingId(req, body);
+    const slug = readListingSlug(req, body);
 
     const inquiryId = await createInquiry(
       typeof body.account_id === 'string' ? body.account_id : undefined,
       "bridge",
-      buildInquiryContact(body, propertyId),
+      buildInquiryContact(body, slug),
     );
 
     revalidatePath('/manage/inquiries');

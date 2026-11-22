@@ -582,7 +582,9 @@ export async function cancelListingChangeDraftAction(changeId: string): Promise<
     }
 
     if ((draft.status === 'creation_draft' || draft.status === 'creation_pending' || draft.status === 'creating') && draft.propertyId) {
-      await deleteListingService({ propertyId: draft.propertyId }, { actorAccountId: accountId });
+      const property = await getListingById(draft.propertyId, { includeInactive: true });
+      if (!property) return { success: false, error: 'Property not found.' };
+      await deleteListingService({ slug: `${property.slug}--${property.id}` }, { actorAccountId: accountId });
       return { success: true };
     }
 
@@ -719,7 +721,9 @@ export async function reviewListingChangeAction(input: {
             modifiedOn: new Date(),
           },
         });
-        await deleteListingService({ propertyId: request.propertyId }, { actorAccountId: accountId });
+        const property = await getListingById(request.propertyId, { includeInactive: true });
+        if (!property) return { success: false, error: 'Property not found.' };
+        await deleteListingService({ slug: `${property.slug}--${property.id}` }, { actorAccountId: accountId });
         revalidatePath('/manage/listings');
         return { success: true, propertyId: null };
       } else {

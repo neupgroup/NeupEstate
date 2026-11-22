@@ -45,10 +45,6 @@ export default async function ListingGalleryPage({
 
   try {
     property = await getListingBySlug(slug);
-
-    if (!property) {
-      property = await getListingById(slug);
-    }
   } catch (error) {
     notFound();
   }
