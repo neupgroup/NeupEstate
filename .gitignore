@@ -54,7 +54,5 @@ certificates
 *.log
 
 # Neup standard sdk system.
-@neup/core
-@neup/logica
-@neup/components
-@neup/setup
+@neup
+@neup/*
