@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
     root: process.cwd(),
   },
 
+  experimental: {
+    agentUpgrade: 'security',
+  },
+
   typescript: {
     ignoreBuildErrors: false, // keep this strict in production
   },
