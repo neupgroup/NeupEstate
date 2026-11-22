@@ -38,6 +38,17 @@ async function verifyJwt(token: string): Promise<{ payload: JwtPayload | null; r
 
 const NEUPID_BASE = 'https://neupgroup.com/account';
 const switchPaths = new Set(['/switch']);
+const BRIDGE_CORS_METHODS = 'GET, POST, PUT, PATCH, DELETE, OPTIONS';
+const BRIDGE_CORS_HEADERS = 'Content-Type, Authorization, X-Requested-With';
+
+// Add public cross-origin access to bridge responses only.
+function addBridgeCorsHeaders(response: NextResponse): NextResponse {
+  response.headers.set('Access-Control-Allow-Origin', '*');
+  response.headers.set('Access-Control-Allow-Methods', BRIDGE_CORS_METHODS);
+  response.headers.set('Access-Control-Allow-Headers', BRIDGE_CORS_HEADERS);
+  response.headers.set('Access-Control-Max-Age', '86400');
+  return response;
+}
 
 // ---------------------------------------------------------------------------
 // Redirect helpers
@@ -59,14 +70,22 @@ export default async function proxy(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
   // Only propagate a trusted x-auth token after verifying the session cookie.
   requestHeaders.set('x-next-pathname', pathname);
-  const pass = () => NextResponse.next({ request: { headers: requestHeaders } });
+  const pass = () => {
+    const response = NextResponse.next({ request: { headers: requestHeaders } });
+    return pathname.startsWith('/bridge/') ? addBridgeCorsHeaders(response) : response;
+  };
 
   // Sitemap routes must remain directly accessible, including when the app
   // is mounted below its configured base path.
   if (pathname.startsWith('/sitemap') || pathname.startsWith('/estate/sitemap')) return pass();
 
   // Bridge routes always pass through.
-  if (pathname.startsWith('/bridge')) return pass();
+  if (pathname.startsWith('/bridge/')) {
+    if (request.method === 'OPTIONS') {
+      return addBridgeCorsHeaders(new NextResponse(null, { status: 204 }));
+    }
+    return pass();
+  }
 
   // Static assets always pass through.
   if (pathname.startsWith('/_next') || pathname === '/favicon.ico' || pathname.startsWith('/.well-known')) return pass();
