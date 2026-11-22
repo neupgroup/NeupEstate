@@ -23,7 +23,7 @@ export async function getListing(input: GetListingInput): Promise<(Partial<Listi
     const record = await prisma.listing.findFirst({
       where: parsedSlug
         ? { id: parsedSlug.id, slug: parsedSlug.slug }
-        : !slug && propertyCode
+        : propertyCode
           ? { customId: propertyCode }
           : { id: '__invalid_listing_identifier__' },
       include: PROPERTY_INCLUDE,

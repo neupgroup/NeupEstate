@@ -151,14 +151,14 @@ const getHandler = async (req: NextRequest, context: Context) => {
       ...(includes.fields ?? []),
       ...(includes.representatives.all || includes.representatives.owners ? ['owners'] : []),
     ])];
-    const property = await getListing({ slug, propertyCode, fields });
+    const property = await getListing({ slug: parsedSlug ? slug : undefined, propertyCode, fields });
     if (!property) return Response.json({ success: false, error: 'Property not found.' }, { status: 404 });
     const supportingAgentIds = (property.details as any)?.supportingAgents ?? [];
-    const listingDatabaseId = parsedSlug?.id;
-    if (!listingDatabaseId) return Response.json({ success: false, error: 'A canonical slug--id listing identifier is required.' }, { status: 400 });
+    const canonicalSlug = typeof property.slug === 'string' ? property.slug : null;
+    if (!canonicalSlug || !parseListingSlugId(canonicalSlug)) return Response.json({ success: false, error: 'A canonical slug--id listing identifier is required.' }, { status: 400 });
     const propertyFields = { ...property };
     delete propertyFields.id;
-    propertyFields.slug = slug;
+    propertyFields.slug = canonicalSlug;
     delete propertyFields.agent;
     delete propertyFields.listingAgent;
     delete propertyFields.listingAgentId;
@@ -170,7 +170,7 @@ const getHandler = async (req: NextRequest, context: Context) => {
     const { representatives: representativeSelection } = includes;
     const [agentRepresentatives, agencyRepresentatives, ownerRepresentatives] = await Promise.all([
       getListingAgentRepresentatives({
-        slug,
+        slug: canonicalSlug,
         listingOwnerId: typeof property.listingAgentId === 'string' ? property.listingAgentId : null,
         supportingAgentIds: Array.isArray(supportingAgentIds) ? supportingAgentIds : [],
         includeListingOwner: representativeSelection.all || representativeSelection.listingOwner,
@@ -178,7 +178,7 @@ const getHandler = async (req: NextRequest, context: Context) => {
         includeSupportingAgents: representativeSelection.all || representativeSelection.agents,
       }),
       representativeSelection.all || representativeSelection.agency
-        ? getListingAgencyRepresentative(slug)
+        ? getListingAgencyRepresentative(canonicalSlug)
         : Promise.resolve([]),
       representativeSelection.all || representativeSelection.owners
         ? Promise.resolve(getListingOwnerRepresentatives(Array.isArray(property.owners) ? property.owners : []))
