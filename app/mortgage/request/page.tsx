@@ -56,7 +56,6 @@ export default async function RequestMortgagePage() {
                             priority
                             sizes="(min-width: 1024px) 45vw, 100vw"
                             className="object-cover"
-                            fallbackSrc="https://placehold.co/1200x900.png"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                         <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8">

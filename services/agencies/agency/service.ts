@@ -38,7 +38,7 @@ function mapPublicAgencyAccount(
     id: record.id,
     neupId: record.neupId ?? null,
     name: record.displayName?.trim() || record.id,
-    logoUrl: record.displayImage || 'https://placehold.co/200x80.png',
+    logoUrl: record.displayImage || '',
     agentCount: counts?.agentCount ?? 0,
     propertyCount: counts?.propertyCount ?? 0,
   };
@@ -87,7 +87,7 @@ function mapRecord(a: any): Agency {
   return {
     id:             a.id,
     name:           a.name,
-    logoUrl:        a.logoUrl || 'https://placehold.co/200x80.png',
+    logoUrl:        a.logoUrl || '',
     registeredName: a.registeredName || undefined,
     contactEmail:   a.contactEmail || undefined,
     contactPhone:   a.contactPhone || undefined,

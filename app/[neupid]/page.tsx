@@ -52,12 +52,11 @@ export default async function PublicAccountProfilePage({
           <div className="max-w-2xl">
             <div className="flex items-center gap-5">
               <SafeImage
-                src={profile.image || 'https://placehold.co/160x160.png'}
+                src={profile.image || ''}
                 alt={`${profile.name} profile`}
                 width={96}
                 height={96}
                 className="h-20 w-20 rounded-2xl border border-border bg-card object-cover shadow-sm sm:h-24 sm:w-24"
-                fallbackSrc="https://placehold.co/160x160.png"
               />
               <div>
                 <p className="mb-2 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/5 px-3 py-1.5 text-sm font-medium text-primary">
@@ -146,13 +145,12 @@ export default async function PublicAccountProfilePage({
           </div>
           <div className="relative min-h-[300px] overflow-hidden rounded-3xl border border-primary/10 bg-muted shadow-lg sm:min-h-[410px]">
             <SafeImage
-              src={profile.cover || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=85'}
+              src={profile.cover || ''}
               alt={`Property cover for ${profile.name}`}
               fill
               priority
               sizes="(min-width: 1024px) 50vw, 100vw"
               className="object-cover"
-              fallbackSrc="https://placehold.co/1200x900.png"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
             <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8">
@@ -201,7 +199,7 @@ export default async function PublicAccountProfilePage({
               {account.agencies.map((agency) => (
                 <Card key={agency.id} className="bg-background text-card-foreground">
                   <CardContent className="flex items-center gap-4 p-4">
-                    <SafeImage src={agency.image || 'https://placehold.co/96x96.png'} alt={`${agency.name} logo`} width={56} height={56} className="h-14 w-14 rounded-lg border bg-white p-1 object-contain" fallbackSrc="https://placehold.co/96x96.png" />
+                    <SafeImage src={agency.image || ''} alt={`${agency.name} logo`} width={56} height={56} className="h-14 w-14 rounded-lg border bg-white p-1 object-contain" />
                     <div className="min-w-0">
                       {agency.neupid ? (
                         <Link href={`/@${encodeURIComponent(agency.neupid)}`} className="font-semibold hover:underline">{agency.name}</Link>
@@ -235,7 +233,7 @@ export default async function PublicAccountProfilePage({
                 return (
                   <Card key={agent.id} className="bg-background text-card-foreground">
                     <CardContent className="flex items-center gap-4 p-4">
-                      <SafeImage src={agent.display_image || 'https://placehold.co/96x96.png'} alt={`${displayName} profile`} width={56} height={56} className="h-14 w-14 rounded-full border bg-white object-cover" fallbackSrc="https://placehold.co/96x96.png" />
+                      <SafeImage src={agent.display_image || ''} alt={`${displayName} profile`} width={56} height={56} className="h-14 w-14 rounded-full border bg-white object-cover" />
                       <div className="min-w-0">
                         {agentHref ? <Link href={agentHref} className="font-semibold hover:underline">{displayName}</Link> : <p className="font-semibold">{displayName}</p>}
                         <p className="mt-1 text-sm text-muted-foreground">Real estate agent</p>

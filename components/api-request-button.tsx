@@ -112,7 +112,6 @@ export function ApiRequestButton() {
                         height={48}
                         className="rounded-lg object-contain border"
                         data-ai-hint="brand logo"
-                        fallbackSrc="https://placehold.co/48x48.png"
                       />
                       <div className="flex-1">
                         <CardTitle className="text-lg">{brand.displayName}</CardTitle>

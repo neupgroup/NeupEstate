@@ -4,7 +4,7 @@ import {z} from 'zod';
 import type {Agency, User} from './personnel';
 import type {ExtractedListingData} from './ai';
 
-const allowedImageHosts = ['placehold.co', 'lalpurjanepal.com.np'];
+const allowedImageHosts = ['lalpurjanepal.com.np'];
 
 function isValidImageUrl(url: string): boolean {
     if (!url) return true; // Allow empty strings, they will be filtered out later
@@ -431,7 +431,7 @@ export const CreateListingSchema = z.object({
         .refine(
             (images) => images ? images.every(isValidImageUrl) : true,
             {
-                message: "One or more image URLs are from an unauthorized domain. Please use allowed domains like placehold.co, lalpurjanepal.com.np, or neupgroup.com."
+                message: "One or more image URLs are from an unauthorized domain. Please use an approved image domain such as lalpurjanepal.com.np or neupgroup.com."
             }
         ),
 });

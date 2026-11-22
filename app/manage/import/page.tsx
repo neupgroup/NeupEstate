@@ -65,10 +65,7 @@ const exampleData = {
         name: 'Demo Realty',
         email: 'imports@example.com',
       },
-      media: [
-        { url: 'https://placehold.co/900x600.png' },
-        { url: 'https://placehold.co/900x601.png' },
-      ],
+      media: [],
     },
   ],
   districts: [

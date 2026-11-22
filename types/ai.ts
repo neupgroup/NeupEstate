@@ -36,7 +36,7 @@ export const RecommendedListingSchema = z.object({
   bathrooms: z.number().describe('The number of bathrooms in the property.'),
   squareFootage: z.number().describe('The square footage of the property.'),
   description: z.string().describe('A short description of the property.'),
-  imageUrl: z.string().describe('URL of an image of the property. Must be a placeholder from https://placehold.co, for example: https://placehold.co/600x400.png.'),
+  imageUrl: z.string().describe('URL of a real image of the property supplied by the user or source data. Never use a placeholder or sample image URL.'),
 });
 export type RecommendedListing = z.infer<typeof RecommendedListingSchema>;
 

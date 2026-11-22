@@ -533,7 +533,7 @@ export function mapRecord(record: any): Listing {
     type:             record.type === PROPERTY_TYPE.COMMERCIAL ? 'Commercial' : 'Residential',
     images,
     amenities:        normalizeStringArray(record.amenities),
-    agency:           agencyRepresentative ? { id: agencyRepresentative.id, name: agencyRepresentative.displayName || agencyRepresentative.id, logoUrl: agencyRepresentative.displayImage || 'https://placehold.co/200x80.png' } : { id: 'unknown', name: 'Owner', logoUrl: 'https://placehold.co/200x80.png' },
+    agency:           agencyRepresentative ? { id: agencyRepresentative.id, name: agencyRepresentative.displayName || agencyRepresentative.id, logoUrl: agencyRepresentative.displayImage || '' } : { id: 'unknown', name: 'Owner', logoUrl: '' },
     listingAgent:     listingAgentRepresentative?.id,
     listingAgentId:   listingAgentRepresentative?.id,
     isOwnerListing:   !agencyRepresentative,

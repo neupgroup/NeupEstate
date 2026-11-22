@@ -32,21 +32,12 @@ interface ListingCardProps {
   rating?: number;
 }
 
-const FALLBACK_IMAGES = [
-    'https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-    'https://media.istockphoto.com/id/1026205392/photo/beautiful-luxury-home-exterior-at-twilight.jpg?s=612x612&w=0&k=20&c=HOCqYY0noIVxnp5uQf1MJJEVpsH_d4WtVQ6-OwVoeDo=',
-    'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmVhdXRpZnVsJTIwaG91c2V8ZW58MHx8MHx8fDA%3D',
-    'https://media.istockphoto.com/id/1255835530/photo/modern-custom-suburban-home-exterior.jpg?s=612x612&w=0&k=20&c=0Dqjm3NunXjZtWVpsUvNKg2A4rK2gMvJ-827nb4AMU4='
-];
-
-
 export function ListingCard({ property, propertyCount, reviewCount, rating }: ListingCardProps) {
   const [isFavorited, setIsFavorited] = useState(false);
   const [isCheckingFavorite, setIsCheckingFavorite] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
   const [isTogglingFavorite, startToggleTransition] = useTransition();
   const [userId, setUserId] = useState<string | null>(null);
-  const [fallbackImage, setFallbackImage] = useState<string | null>(null);
   const { toast } = useToast();
   
   const imageUrl = property.images && property.images.length > 0 ? property.images[0] : null;
@@ -54,8 +45,6 @@ export function ListingCard({ property, propertyCount, reviewCount, rating }: Li
 
   useEffect(() => {
     setIsMounted(true);
-    // Set fallback image on client mount to avoid hydration mismatch
-    setFallbackImage(FALLBACK_IMAGES[Math.floor(Math.random() * FALLBACK_IMAGES.length)]);
     // Prefer aid from auth_accounts; fall back to temp_account_id
     const currentUserId = getClientAccountId();
     setUserId(currentUserId);
@@ -113,13 +102,12 @@ export function ListingCard({ property, propertyCount, reviewCount, rating }: Li
       <CardHeader className="relative block p-0">
         <Link href={`/listings/${slugOrId}`} className="block overflow-hidden">
           <SafeImage
-            src={imageUrl || fallbackImage || "https://placehold.co/600x400.png"}
+            src={imageUrl || ""}
             alt={property.title}
             width={600}
             height={400}
             className="h-40 w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
             data-ai-hint="house exterior"
-            fallbackSrc={fallbackImage || "https://placehold.co/600x400.png"}
           />
 
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/50 via-black/15 to-transparent" />

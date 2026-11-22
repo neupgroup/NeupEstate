@@ -32,7 +32,7 @@ export default async function AgentsPage() {
             </Link>
           </div>
           <div className="relative min-h-[300px] overflow-hidden rounded-3xl border border-primary/10 bg-muted shadow-lg sm:min-h-[410px]">
-            <SafeImage src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=85" alt="Real estate professionals discussing a property" fill priority sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" fallbackSrc="https://placehold.co/1200x900.png" />
+            <SafeImage src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=85" alt="Real estate professionals discussing a property" fill priority sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
             <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8">
               <p className="text-sm font-medium text-white/80">Your property journey, supported</p>
@@ -63,7 +63,6 @@ export default async function AgentsPage() {
                             height={300}
                             className="h-48 w-full object-cover"
                             data-ai-hint="person portrait"
-                            fallbackSrc="https://placehold.co/400x300.png"
                         />
                     </CardHeader>
                 </Link>

@@ -199,7 +199,6 @@ export function BrandAccountCard({
             width={48}
             height={48}
             className="h-full w-full object-cover"
-            fallbackSrc="https://placehold.co/48x48.png"
           />
         ) : (
           <Building className="h-5 w-5 text-muted-foreground" />

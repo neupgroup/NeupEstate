@@ -28,7 +28,6 @@ export function ListingImageCarousel({ images, title }: ListingImageCarouselProp
               className="w-full h-96 object-cover"
               data-ai-hint="house interior"
               priority={index === 0}
-              fallbackSrc="https://placehold.co/1200x800.png"
             />
           </CarouselItem>
         ))}

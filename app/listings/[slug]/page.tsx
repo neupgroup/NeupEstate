@@ -167,7 +167,7 @@ export async function generateMetadata(
   const siteName = 'Neup.Estate';
   const title = `${property.title} | ${siteName}`;
   const description = stripHtml(property.description).substring(0, 160);
-  const imageUrl = Array.isArray(property.images) && property.images.length > 0 ? property.images[0] : 'https://placehold.co/1200x630.png';
+  const imageUrl = Array.isArray(property.images) && property.images.length > 0 ? property.images[0] : '';
   const propertyUrl = buildPublicAppUrl(undefined, `/listings/${getListingSlugId(property)}`);
 
   return {
@@ -482,7 +482,6 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
                             width={24}
                             height={24}
                             className="h-6 w-6"
-                            fallbackSrc="https://placehold.co/24x24.png"
                         />
                         <span className="text-sm font-medium">{amenity}</span>
                       </div>

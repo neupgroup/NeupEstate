@@ -24,7 +24,7 @@ export default async function AgenciesPage() {
             </a>
           </div>
           <div className="relative min-h-[300px] overflow-hidden rounded-3xl border border-primary/10 bg-muted shadow-lg sm:min-h-[410px]">
-            <SafeImage src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=85" alt="Modern office buildings representing real estate agencies" fill priority sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" fallbackSrc="https://placehold.co/1200x900.png" />
+            <SafeImage src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=85" alt="Modern office buildings representing real estate agencies" fill priority sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
             <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8">
               <p className="text-sm font-medium text-white/80">Local teams. Shared expertise.</p>
@@ -57,7 +57,6 @@ export default async function AgenciesPage() {
                       height={64}
                       className="h-16 w-16 object-contain rounded-md border p-1 bg-white"
                       data-ai-hint="company logo"
-                      fallbackSrc="https://placehold.co/64x64.png"
                     />
                     <div className="flex-1">
                       <CardTitle className="text-xl font-headline">

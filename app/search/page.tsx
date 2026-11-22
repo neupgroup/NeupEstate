@@ -9,9 +9,9 @@ import { Card, CardContent } from "@neup/components/ui/card";
 
 // Mock data for featured collections
 const mockFeaturedCollections = [
-    { id: 'luxury-penthouses-2024', name: 'Luxury Penthouses 2024', description: 'The finest high-rise living available this year.', propertyCount: 8, coverImage: 'https://placehold.co/600x400.png', dataAiHint: 'luxury penthouse city' },
-    { id: 'starter-homes', name: 'Top Starter Homes', description: 'Affordable and beautiful homes perfect for first-time buyers.', propertyCount: 12, coverImage: 'https://placehold.co/600x400.png', dataAiHint: 'suburban house' },
-    { id: 'commercial-hotspots', name: 'Commercial Hotspots', description: 'Prime locations for your next business venture.', propertyCount: 15, coverImage: 'https://placehold.co/600x400.png', dataAiHint: 'modern office building' },
+    { id: 'luxury-penthouses-2024', name: 'Luxury Penthouses 2024', description: 'The finest high-rise living available this year.', propertyCount: 8, coverImage: '', dataAiHint: 'luxury penthouse city' },
+    { id: 'starter-homes', name: 'Top Starter Homes', description: 'Affordable and beautiful homes perfect for first-time buyers.', propertyCount: 12, coverImage: '', dataAiHint: 'suburban house' },
+    { id: 'commercial-hotspots', name: 'Commercial Hotspots', description: 'Prime locations for your next business venture.', propertyCount: 15, coverImage: '', dataAiHint: 'modern office building' },
 ];
 
 
@@ -36,7 +36,6 @@ function FeaturedCollections() {
                                     width={128}
                                     height={128}
                                     className="h-32 w-32 object-cover rounded-lg"
-                                    fallbackSrc="https://placehold.co/128x128.png"
                                 />
                                 <div className="flex-grow">
                                     <h3 className="text-xl font-semibold">{collection.name}</h3>
